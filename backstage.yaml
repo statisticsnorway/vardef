@@ -1,0 +1,35 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: vardef
+  title: Vardef
+  description: |
+    Variable definitions service at Statistics Norway
+  tags:
+    - metadata
+  annotations:
+    github.com/project-slug: statisticsnorway/vardef
+spec:
+  type: service
+  owner: dapla-metadata-developers
+  lifecycle: experimental
+  system: metadata
+  providesApis:
+    - vardef-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: vardef-api
+  title: Vardef API
+  description: |
+    Variable definitions API
+  tags:
+    - metadata
+spec:
+  type: openapi
+  system: metadata
+  owner: dapla-metadata-developers
+  lifecycle: experimental
+  definition:
+   $text: ./openapi/vardef-openapi-spec.yaml

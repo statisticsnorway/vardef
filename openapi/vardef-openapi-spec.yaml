@@ -3,7 +3,7 @@ info:
   title: Variable Definitions
   x-audience: external-public
   description: |-
-    Specification of the API for variable definitions. This is part of the Metadata system at Statistics Norway.
+    API for variable definitions. This is part of the Metadata system at Statistics Norway.
   contact:
     email: mmw@ssb.no
   license:

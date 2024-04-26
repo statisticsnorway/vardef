@@ -24,6 +24,12 @@ paths:
       description: Paginated list of all public variable definitions.
       operationId: get_variables
       parameters:
+        - name: language
+          in: query
+          description: "Specify the language in which data will be presented."
+          schema:
+            enum: ["nb", "nn", "en"]
+            default: "nb"
         - name: classification_uri
           in: query
           description: "Return only variable definitions which reference this classification."
@@ -39,10 +45,14 @@ paths:
           in: query
           description: "Return variable definitions with the given status."
           schema:
-            enum: [
-                  "PUBLISHED_EXTERNAL",
-                  "DEPRECATED"
-              ]
+            type: array
+            items:
+              type: string
+              enum: [
+                    "PUBLISHED_EXTERNAL",
+                    "DEPRECATED"
+                ]
+              default: ["PUBLISHED_EXTERNAL"]
         - name: subject_field
           in: query
           description: "Return only variable definitions which are used in this subject field."
@@ -95,10 +105,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/variable'
-        '401':
-          description: Not authenticated
-        '403':
-          description: Not authorized
         '400':
           description: "Invalid request"
       security:
@@ -211,10 +217,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/variable'
-        '401':
-          description: Not authenticated
-        '403':
-          description: Not authorized
         '400':
           description: "Invalid request"
       security:
@@ -266,10 +268,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/variable'
-        '401':
-          description: Not authenticated
-        '403':
-          description: Not authorized
         '400':
           description: "Invalid request"
       security:
@@ -404,9 +402,9 @@ components:
                   ]
               }
           },
-          "subject_field":{
-              "title": "Subject field(s)",
-              "description": "A list of one or more subject fields that the variable is used in. Se KLASS https://www.ssb.no/klass/klassifikasjoner/15",
+          "subject_fields":{
+              "title": "Subject fields",
+              "description": "A list of subject fields that the variable is used in. Valid values defined by https://www.ssb.no/klass/klassifikasjoner/618",
               "type": "array",
               "items": {
                   "type": "object",
@@ -441,9 +439,8 @@ components:
           },
           "measurement_type": {
               "title": "Measurement type",
-              "description": "Type of measurement for the variable, e.g. length, volume, currency",
+              "description": "Type of measurement for the variable, e.g. length, volume, currency. Valid values defined by: https://www.ssb.no/klass/klassifikasjoner/303/koder",
               "type": "string",
-              "$comment": "TODO: Enum based on codelist from KLASS? https://www.ssb.no/klass/klassifikasjoner/303/koder"
           },
           "valid_from": {
               "title": "Valid from",
@@ -541,6 +538,8 @@ components:
         "short_name",
         "definition",
         "valid_from",
+        "unit_type",
+        "direct_person_identifying"
         ],
       $defs: {
         "language_texts": {

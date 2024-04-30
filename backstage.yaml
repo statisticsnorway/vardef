@@ -33,3 +33,15 @@ spec:
   lifecycle: experimental
   definition:
    $text: ./openapi/vardef-openapi-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: metadata
+  title: Metadata
+  description: Statistics Norway's Metadata system
+  tags:
+    - metadata
+spec:
+  owner: dapla-metadata-developers
+  domain: fellesfunksjoner

@@ -1,0 +1,79 @@
+# This workflow will build and push a new Docker image to the default Artifact Registry in SSB.
+#
+# Overview:
+# 1. Authenticate to Google Cloud
+# 2. Authenticate to Artifact Registry
+# 3. Build and publish a docker image to Google Artifact Registry
+# 
+# To configure this workflow:
+# 1. Change the values for the IMAGE_NAME and TEAM_NAME environment variables (below).
+# 2. The image will be tagged with the git commit hash and latest. To override the default tags, add tags to the build_metadata step.
+#
+# This workflow is tailored for SSB´s setup, however if you wish to use this in a non SSB context ensure/change the following:
+# 1. Create GitHub secrets for GAR_PROJECT_NUMBER and GAR_PROJECT_ID (Number and ID for the Artifact Registry project).
+# 2. Create and configure Workload Identity Federation for GitHub.
+
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.GAR_PROJECT_ID }}
+  IMAGE_NAME: vardef
+  TEAM_NAME: metadata
+  TAG: ${{ github.ref_name }}-${{ github.sha }}
+
+jobs:
+
+  build:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+    - uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v2.1.2
+      with:
+        workload_identity_provider: "projects/${{ secrets.GAR_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/gh-actions/providers/gh-actions"
+        service_account: "gh-actions-${{ env.TEAM_NAME}}@${{ secrets.GAR_PROJECT_ID }}.iam.gserviceaccount.com"
+        token_format: access_token
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Artifact Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: "oauth2accesstoken"
+        password: "${{ steps.auth.outputs.access_token }}"
+
+    - name: Extract build metadata for Docker
+      id: build_metadata
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.TEAM_NAME }}-docker/${{ env.IMAGE_NAME }}
+        tags: |
+          type=raw,value={{branch}}-{{sha}}
+          type=raw,value=latest
+          type=raw,value={{branch}}-{{date 'YYYYMMDDHHmmss'}}
+
+    - name: Build and push docker image to Artifact Registry
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        provenance: false
+        file: Dockerfile
+        push: true
+        tags: ${{ steps.build_metadata.outputs.tags }}
+        labels: ${{ steps.build_metadata.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max

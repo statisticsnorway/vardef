@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: no.ssb.metadata
+testFramework: junit
+sourceLanguage: kotlin
+buildTool: gradle_kotlin
+features: [app-name, data, data-mongodb-reactive, gradle, hamcrest, http-client-test, junit, kotlin, kotlin-application, ksp, logback, micronaut-aot, micronaut-build, micronaut-http-validation, netty-server, openapi, readme, security-annotations, security-jwt, serialization-jackson, shade, static-resources, swagger-ui, test-resources, yaml, yaml-build]

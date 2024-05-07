@@ -4,12 +4,11 @@ WORKDIR gradle/src
 COPY . .
 RUN ./gradlew build
 
-# Run
 FROM openjdk:21-jre-alpine
-WORKDIR /src
+WORKDIR gradle/src
 COPY --from=builder gradle/src/build/libs/*.jar ./app.jar
 
-RUN apk add --update --no-cache fontconfig ttf-dejavu && rm -rf /var/cache/apk/*
-
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/home/app/application.jar"]
+ENV PORT=8080
+EXPOSE $PORT
+WORKDIR app
+CMD ["app.jar"]

@@ -23,4 +23,10 @@ class VardefTest {
         assertThat(testBool).withFailMessage("True can never be false", testBool, false).isTrue()
     }
 
+    @Test
+    fun testInCorrectLinting(){
+           val num = 500
+        assertThat(num).isEqualTo(500)
+    }
+
 }

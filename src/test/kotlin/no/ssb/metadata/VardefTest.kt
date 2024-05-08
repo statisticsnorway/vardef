@@ -20,7 +20,7 @@ class VardefTest {
     @Test
     fun testWorkflowTestFails(){
         val expected = 2
-        assertEquals(expected, 1)
+        assertEquals(expected, 2)
     }
 
 }

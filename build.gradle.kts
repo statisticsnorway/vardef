@@ -1,4 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
@@ -38,7 +37,7 @@ dependencies {
     runtimeOnly("org.mongodb:mongodb-driver-reactivestreams")
     runtimeOnly("org.yaml:snakeyaml")
     testImplementation("io.micronaut:micronaut-http-client")
-    testImplementation("org.hamcrest:hamcrest")
+    testImplementation("org.assertj:assertj-core")
     aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.2"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
@@ -72,27 +71,6 @@ micronaut {
         optimizeNetty = true
         replaceLogbackXml = true
         configurationProperties.put("micronaut.security.jwks.enabled","false")
-    }
-}
-
-tasks.test {
-    // Configure logging for the test task
-    testLogging {
-        // Set the logging level
-        events("passed", "skipped", "failed")
-
-        // Specify how exceptions should be formatted in the logs
-        exceptionFormat = TestExceptionFormat.FULL
-
-        // Optionally, set the output destinations for test logs
-        // For example, you can output to the console and/or a file
-        // You can also configure the log level for different destinations
-        // For example, you might want more detailed logs in a file than in the console
-        outputs.upToDateWhen { false }
-        showExceptions = true
-        showCauses = true
-        showStackTraces = true
-        showStandardStreams = true
     }
 }
 

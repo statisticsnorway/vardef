@@ -48,7 +48,6 @@ java {
     sourceCompatibility = JavaVersion.toVersion("21")
 }
 
-
 graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
@@ -72,9 +71,25 @@ micronaut {
     }
 }
 
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "no.ssb.metadata.ApplicationKt"
+    }
+
+    // To avoid the duplicate handling strategy error
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // To add all of the dependencies otherwise a "NoClassDefFoundError" error
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
 
 
 tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
-    baseImage.set("amazoncorretto:21.0.3-al2023")
+    jdkVersion = "21"
 }
 

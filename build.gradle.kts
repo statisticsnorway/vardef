@@ -1,3 +1,4 @@
+
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.23"
@@ -11,7 +12,7 @@ plugins {
 version = "0.1"
 group = "no.ssb.metadata"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
+val kotlinVersion= project.properties["kotlinVersion"]
 repositories {
     mavenCentral()
 }
@@ -28,6 +29,7 @@ dependencies {
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("ch.qos.logback:logback-classic")
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")
@@ -35,11 +37,10 @@ dependencies {
     runtimeOnly("org.mongodb:mongodb-driver-reactivestreams")
     runtimeOnly("org.yaml:snakeyaml")
     testImplementation("io.micronaut:micronaut-http-client")
-    testImplementation("org.hamcrest:hamcrest")
+    testImplementation("org.assertj:assertj-core")
     aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.2"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
-
 
 application {
     mainClass = "no.ssb.metadata.ApplicationKt"
@@ -93,3 +94,9 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
     jdkVersion = "21"
 }
 
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+    }
+}

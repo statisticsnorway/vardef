@@ -1,10 +1,10 @@
 package no.ssb.metadata
 import io.micronaut.runtime.EmbeddedApplication
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.*
+
 
 @MicronautTest(transactional = false)
 class VardefTest {
@@ -14,13 +14,13 @@ class VardefTest {
 
     @Test
     fun testItWorks() {
-        Assertions.assertTrue(application.isRunning)
+        assertThat(application.isRunning).isTrue()
     }
 
     @Test
     fun testWorkflowTestFails(){
-        val expected = 2
-        assertEquals(expected, 1)
+        val testBool = true
+        assertThat(testBool).withFailMessage("True can never be false", testBool, false).isFalse()
     }
 
 }

@@ -4,6 +4,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import jakarta.inject.Inject
+import org.junit.jupiter.api.Assertions.assertEquals
 
 @MicronautTest(transactional = false)
 class VardefTest {
@@ -14,6 +15,12 @@ class VardefTest {
     @Test
     fun testItWorks() {
         Assertions.assertTrue(application.isRunning)
+    }
+
+    @Test
+    fun testWorkflowTestFails(){
+        val expected = 2
+        assertEquals(expected, 1)
     }
 
 }

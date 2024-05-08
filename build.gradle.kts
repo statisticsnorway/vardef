@@ -42,7 +42,6 @@ dependencies {
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
 
-
 application {
     mainClass = "no.ssb.metadata.ApplicationKt"
 }
@@ -78,3 +77,9 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
     jdkVersion = "21"
 }
 
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+    }
+}

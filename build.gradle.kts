@@ -81,6 +81,6 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
 tasks.named<Test>("test") {
     useJUnitPlatform()
     testLogging {
-        events("passed","failed")
+        events("passed", "skipped", "failed", "standardOut", "standardError")
     }
 }

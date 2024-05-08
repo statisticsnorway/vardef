@@ -15,10 +15,9 @@
 
 name: Docker Image CI
 
-# Comment out for now so that failing job is not run every time we push
-# on:
-#  push:
-#    branches: [ "main" ]
+on:
+ push:
+   branches: [ "main" ]
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.GAR_PROJECT_ID }}

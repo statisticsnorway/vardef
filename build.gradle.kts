@@ -17,18 +17,22 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     ksp("io.micronaut.data:micronaut-data-document-processor")
     ksp("io.micronaut:micronaut-http-validation")
     ksp("io.micronaut.openapi:micronaut-openapi")
     ksp("io.micronaut.security:micronaut-security-annotations")
     ksp("io.micronaut.serde:micronaut-serde-processor")
+    implementation("io.micronaut.mongodb:micronaut-mongo-reactive")
     implementation("io.micronaut.data:micronaut-data-mongodb")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("io.micrometer:context-propagation")
+    implementation("io.micronaut.reactor:micronaut-reactor")
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")

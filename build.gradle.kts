@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.23"
@@ -73,6 +75,26 @@ micronaut {
     }
 }
 
+tasks.test {
+    // Configure logging for the test task
+    testLogging {
+        // Set the logging level
+        events("passed", "skipped", "failed")
+
+        // Specify how exceptions should be formatted in the logs
+        exceptionFormat = TestExceptionFormat.FULL
+
+        // Optionally, set the output destinations for test logs
+        // For example, you can output to the console and/or a file
+        // You can also configure the log level for different destinations
+        // For example, you might want more detailed logs in a file than in the console
+        outputs.upToDateWhen { false }
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+        showStandardStreams = true
+    }
+}
 
 tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
     jdkVersion = "21"

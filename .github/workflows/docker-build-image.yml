@@ -16,8 +16,8 @@
 name: Docker Image CI
 
 on:
- push:
-   branches: [ "main" ]
+  push:
+    branches: [ "main" ]
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.GAR_PROJECT_ID }}

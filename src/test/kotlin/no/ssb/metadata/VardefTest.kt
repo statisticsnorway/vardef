@@ -29,4 +29,9 @@ class VardefTest {
         assertThat(num).isEqualTo(500)
     }
 
+    @Test
+    fun testTrue(){
+        assertThat(false).isFalse()
+    }
+
 }

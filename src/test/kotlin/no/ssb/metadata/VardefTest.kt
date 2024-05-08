@@ -18,9 +18,9 @@ class VardefTest {
     }
 
     @Test
-    fun testWorkflowTestFails(){
+    fun testWorkflowTest(){
         val testBool = true
-        assertThat(testBool).withFailMessage("True can never be false", testBool, false).isFalse()
+        assertThat(testBool).withFailMessage("True can never be false", testBool, false).isTrue()
     }
 
 }

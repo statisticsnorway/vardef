@@ -7,6 +7,8 @@ plugins {
     id("io.micronaut.application") version "4.3.8"
     id("io.micronaut.test-resources") version "4.3.8"
     id("io.micronaut.aot") version "4.3.8"
+    id("jacoco")
+    id("org.sonarqube") version "3.5.0.2730"
 }
 
 version = "0.1"
@@ -80,7 +82,7 @@ tasks.withType<Jar> {
     // To avoid the duplicate handling strategy error
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // To add all of the dependencies otherwise a "NoClassDefFoundError" error
+    // To add all the dependencies otherwise a "NoClassDefFoundError" error
     from(sourceSets.main.get().output)
 
     dependsOn(configurations.runtimeClasspath)
@@ -94,9 +96,16 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
     jdkVersion = "21"
 }
 
+tasks.jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
 tasks.named<Test>("test") {
     useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed", "standardOut", "standardError")
     }
+    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }

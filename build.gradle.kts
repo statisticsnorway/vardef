@@ -9,12 +9,13 @@ plugins {
     id("io.micronaut.aot") version "4.3.8"
     id("jacoco")
     id("org.sonarqube") version "3.5.0.2730"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 version = "0.1"
 group = "no.ssb.metadata"
 
-val kotlinVersion= project.properties["kotlinVersion"]
+val kotlinVersion = project.properties["kotlinVersion"]
 repositories {
     mavenCentral()
 }
@@ -29,8 +30,8 @@ dependencies {
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("ch.qos.logback:logback-classic")
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
@@ -60,8 +61,8 @@ micronaut {
         annotations("no.ssb.metadata.*")
     }
     aot {
-    // Please review carefully the optimizations enabled below
-    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        // Please review carefully the optimizations enabled below
+        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
         optimizeServiceLoading = false
         convertYamlToJava = false
         precomputeOperations = true
@@ -70,7 +71,7 @@ micronaut {
         deduceEnvironment = true
         optimizeNetty = true
         replaceLogbackXml = true
-        configurationProperties.put("micronaut.security.jwks.enabled","false")
+        configurationProperties.put("micronaut.security.jwks.enabled", "false")
     }
 }
 
@@ -90,7 +91,6 @@ tasks.withType<Jar> {
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
     })
 }
-
 
 tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
     jdkVersion = "21"

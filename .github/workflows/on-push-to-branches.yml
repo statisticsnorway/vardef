@@ -27,6 +27,14 @@ jobs:
       - name: Build and test project
         run: ./gradlew build
 
+  ktlint:
+    name: ktlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: run ktlint check
+        run: ./gradlew ktlintCheck
+      
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest

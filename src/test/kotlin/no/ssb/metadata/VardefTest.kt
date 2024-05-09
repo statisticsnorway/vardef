@@ -25,7 +25,7 @@ class VardefTest {
     @Test
     fun testInCorrectLinting() {
         val num = 500
-            assertThat(num).isEqualTo(500)
+        assertThat(num).isEqualTo(500)
     }
 
     @Test

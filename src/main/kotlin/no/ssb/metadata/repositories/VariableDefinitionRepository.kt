@@ -5,6 +5,5 @@ import io.micronaut.data.repository.CrudRepository
 import no.ssb.metadata.models.VariableDefinition
 import org.bson.types.ObjectId
 
-
 @MongoRepository(databaseName = "vardef")
 interface VariableDefinitionRepository : CrudRepository<VariableDefinition, ObjectId>

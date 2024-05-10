@@ -9,18 +9,23 @@ import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
 
 @OpenAPIDefinition(
-    info = Info(
+    info =
+        Info(
             title = "Variable Definitions",
             description = "",
             version = "0.1",
             license = License(name = "MIT License", url = "https://opensource.org/licenses/MIT"),
             contact = Contact(email = "mmw@ssb.no"),
-            extensions = arrayOf(
-                Extension(properties = arrayOf(
-                    ExtensionProperty(name = "x-audience", value = "external-public")
-                ))
-            )
-    )
+            extensions =
+                arrayOf(
+                    Extension(
+                        properties =
+                            arrayOf(
+                                ExtensionProperty(name = "x-audience", value = "external-public"),
+                            ),
+                    ),
+                ),
+        ),
 )
 object Api
 

@@ -8,6 +8,7 @@ import io.micronaut.serde.annotation.Serdeable
 import io.swagger.v3.oas.annotations.media.Schema
 import org.bson.types.ObjectId
 
+@Suppress("ktlint:standard:max-line-length")
 @MappedEntity
 @Serdeable
 @Schema(

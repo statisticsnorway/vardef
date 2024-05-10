@@ -1,7 +1,11 @@
 package no.ssb.metadata.controllers
 
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.annotation.*
+import io.micronaut.http.annotation.Body
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Status
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -15,7 +19,6 @@ import no.ssb.metadata.repositories.VariableDefinitionRepository
 @Controller("/variables")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariablesController {
-
     @Inject
     lateinit var vardefService: VariableDefinitionRepository
 
@@ -28,7 +31,9 @@ class VariablesController {
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request. See the message for more details.")
-    open fun createVariableDefinition(@Body @Valid vardef: VariableDefinition): VariableDefinition {
+    fun createVariableDefinition(
+        @Body @Valid vardef: VariableDefinition,
+    ): VariableDefinition {
         return vardefService.save(vardef)
     }
 }

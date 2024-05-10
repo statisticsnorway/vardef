@@ -20,7 +20,6 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     ksp("io.micronaut.data:micronaut-data-document-processor")
     ksp("io.micronaut:micronaut-http-validation")
@@ -32,8 +31,8 @@ dependencies {
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("io.micrometer:context-propagation")
     implementation("ch.qos.logback:logback-classic")
     compileOnly("io.micronaut:micronaut-http-client")

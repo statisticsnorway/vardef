@@ -34,6 +34,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  
+      - name: Run coverage report
+        run: ./gradlew jacocoTestReport
+        
       - name: SonarCloud Scan
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any

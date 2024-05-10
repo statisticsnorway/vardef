@@ -1,4 +1,3 @@
 
 
-rootProject.name="vardef"
-
+rootProject.name = "vardef"

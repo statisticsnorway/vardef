@@ -1,0 +1,47 @@
+# Deploy to staging environment for an individual PR
+
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: vardef-pr-{{ pr-number }}
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  image: "{{ image }}"  # Injected from  the Github Action
+  port: 8040
+
+  replicas:
+    disableAutoScaling: true
+    max: 1
+    min: 1
+
+  accessPolicy:
+    outbound:
+      external:
+        - host: data.ssb.no
+        - host: www.ssb.no
+
+  resources:
+    limits:
+      memory: 2Gi
+    requests:
+      memory: 1Gi
+
+  ttl: 1h
+
+  prometheus:
+    enabled: false
+
+  ingresses:
+    - https://vardef-pr-{{ pr-number }}.external.staging.ssb.cloud.nais.io
+
+  liveness:
+    path: /healthz/live
+    port: 8040
+  readiness:
+    path: /healthz/ready
+    port: 8040
+  startup:
+    path: /healthz/startup
+    port: 8040

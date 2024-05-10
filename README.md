@@ -16,9 +16,9 @@
 - [https://swagger.io/tools/swagger-ui/](https://swagger.io/tools/swagger-ui/)
 
 
-## Feature hamcrest documentation
+## Feature assertJ documentation
 
-- [https://hamcrest.org/JavaHamcrest/](https://hamcrest.org/JavaHamcrest/)
+- [https://assertj.github.io/doc/](https://assertj.github.io/doc/)
 
 
 ## Feature security-jwt documentation

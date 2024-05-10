@@ -22,9 +22,8 @@ import io.swagger.v3.oas.annotations.info.License
             )
     )
 )
-object Api {
-}
-fun main(args: Array<String>) {
-	run(*args)
-}
+object Api
 
+fun main(args: Array<String>) {
+    run(*args)
+}

@@ -1,3 +1,4 @@
+
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.23"
@@ -6,13 +7,15 @@ plugins {
     id("io.micronaut.application") version "4.3.8"
     id("io.micronaut.test-resources") version "4.3.8"
     id("io.micronaut.aot") version "4.3.8"
-    id("io.micronaut.docker") version "4.3.8"
+    id("jacoco")
+    id("org.sonarqube") version "5.0.0.4638"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 version = "0.1"
 group = "no.ssb.metadata"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
+val kotlinVersion = project.properties["kotlinVersion"]
 repositories {
     mavenCentral()
 }
@@ -32,6 +35,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("io.micrometer:context-propagation")
+    implementation("ch.qos.logback:logback-classic")
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")
@@ -39,10 +43,10 @@ dependencies {
     runtimeOnly("org.mongodb:mongodb-driver-reactivestreams")
     runtimeOnly("org.yaml:snakeyaml")
     testImplementation("io.micronaut:micronaut-http-client")
+    testImplementation("org.assertj:assertj-core")
     aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.2"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
-
 
 application {
     mainClass = "no.ssb.metadata.ApplicationKt"
@@ -50,7 +54,6 @@ application {
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
 }
-
 
 graalvmNative.toolchainDetection = false
 micronaut {
@@ -61,8 +64,8 @@ micronaut {
         annotations("no.ssb.metadata.*")
     }
     aot {
-    // Please review carefully the optimizations enabled below
-    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        // Please review carefully the optimizations enabled below
+        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
         optimizeServiceLoading = false
         convertYamlToJava = false
         precomputeOperations = true
@@ -71,12 +74,49 @@ micronaut {
         deduceEnvironment = true
         optimizeNetty = true
         replaceLogbackXml = true
-        configurationProperties.put("micronaut.security.jwks.enabled","false")
+        configurationProperties.put("micronaut.security.jwks.enabled", "false")
     }
 }
 
+sonarqube {
+    properties {
+        property("sonar.organization", "statisticsnorway")
+        property("sonar.projectKey", "statisticsnorway_vardef")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "no.ssb.metadata.ApplicationKt"
+    }
+
+    // To avoid the duplicate handling strategy error
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // To add all the dependencies otherwise a "NoClassDefFoundError" error
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
 
 tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
     jdkVersion = "21"
 }
 
+tasks.jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+    }
+    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}

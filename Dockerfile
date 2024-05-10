@@ -1,14 +1,7 @@
-# Build 
-FROM openjdk:21-jdk-alpine as builder
-WORKDIR gradle/src
-COPY . .
-RUN ./gradlew build
+FROM amazoncorretto:21-al2023-headless
 
-FROM openjdk:21-jre-alpine
-WORKDIR gradle/src
-COPY --from=builder gradle/src/build/libs/*.jar ./app.jar
+COPY ./build/libs/vardef-0.1.jar /usr/share/vardef/
 
-ENV PORT=8080
-EXPOSE $PORT
-WORKDIR app
-CMD ["app.jar"]
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/usr/share/vardef/vardef-0.1.jar"]

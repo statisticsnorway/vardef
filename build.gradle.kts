@@ -75,6 +75,14 @@ micronaut {
     }
 }
 
+sonarqube {
+    properties {
+        property("sonar.organization", "statisticsnorway")
+        property("sonar.projectKey", "statisticsnorway_vardef")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
+
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "no.ssb.metadata.ApplicationKt"

@@ -30,7 +30,8 @@ jobs:
         run: ./gradlew build
       
       - name: Run coverage report
-        run: ./gradlew jacocoTestReport
+        #run: ./gradlew jacocoTestReport
+        run: ./gradlew test jacocoTestReport sonar
         
       - name: SonarCloud Scan
         env: 
@@ -39,3 +40,4 @@ jobs:
         # No need to run SonarCloud analysis if dependabot update or token not defined
         if: env.SONAR_TOKEN != '' && (github.actor != 'dependabot[bot]')
         uses: SonarSource/sonarcloud-github-action@v2.1.1
+    

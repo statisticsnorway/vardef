@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=statisticsnorway_vardef&metric=alert_status&token=79f0f015e790535ba615f2453b32a5a22abdde98)](https://sonarcloud.io/summary/new_code?id=statisticsnorway_vardef)
+
 ## Micronaut 4.4.2 Documentation
 
 - [User Guide](https://docs.micronaut.io/4.4.2/guide/index.html)

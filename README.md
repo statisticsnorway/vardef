@@ -70,3 +70,5 @@
 
 
 ## Feature Jacoco
+
+- [Jacoco gradle plugin documentation](https://docs.gradle.org/current/userguide/jacoco_plugin.html)

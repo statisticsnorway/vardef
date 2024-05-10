@@ -21,14 +21,9 @@ micronaut:
       redoc:
         paths: classpath:META-INF/swagger/views/redoc
         mapping: /redoc/**
-
   openapi:
     property:
       naming:
         strategy: SNAKE_CASE
-
-redoc:
-  enabled: true
-
-mongodb:
-  uri: mongodb://localhost:27017
+    views:
+      spec: "redoc.enabled=true,swagger-ui.enabled=true"

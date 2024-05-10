@@ -109,3 +109,16 @@ tasks.named<Test>("test") {
     }
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
+
+tasks.withType<JacocoReport> {
+    dependsOn(tasks.withType<Test>())
+    reports { xml.required = true }
+}
+
+sonarqube {
+    properties {
+        property("sonar.organization", "statisticsnorway")
+        property("sonar.projectKey", "statisticsnorway_vardef")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}

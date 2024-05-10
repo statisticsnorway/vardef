@@ -30,8 +30,7 @@ jobs:
         run: ./gradlew build
       
       - name: Run coverage report
-        #run: ./gradlew jacocoTestReport
-        run: ./gradlew test jacocoTestReport sonar
+        run: ./gradlew jacocoTestReport
         
       - name: SonarCloud Scan
         env: 

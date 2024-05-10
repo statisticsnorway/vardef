@@ -52,6 +52,13 @@ java {
     sourceCompatibility = JavaVersion.toVersion("21")
 }
 
+sonarqube {
+    properties {
+        property("sonar.organization", "statisticsnorway")
+        property("sonar.projectKey", "statisticsnorway_vardef")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
 graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")

@@ -1,6 +1,6 @@
 FROM amazoncorretto:21-al2023-headless
 
-COPY vardef-0.1.jar /usr/share/vardef/
+COPY ./build/libs/vardef-0.1.jar /usr/share/vardef/
 
 EXPOSE 8080
 

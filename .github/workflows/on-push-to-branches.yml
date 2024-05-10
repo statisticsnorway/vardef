@@ -26,6 +26,14 @@ jobs:
 
       - name: Build and test project
         run: ./gradlew build
+
+      - name: Copy Jar file
+        run: mv build/libs/$(ls build/libs) vardef-0.1.jar
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: jar-file
+          path: vardef-0.1.jar
       
   sonarcloud:
     name: SonarCloud

@@ -59,6 +59,7 @@ jobs:
 
   docker-build:
     name: Docker build
+    needs: build-branch
     permissions:
       contents: "read"
       id-token: "write"

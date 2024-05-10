@@ -8,7 +8,6 @@ plugins {
     id("io.micronaut.test-resources") version "4.3.8"
     id("io.micronaut.aot") version "4.3.8"
     id("jacoco")
-    id("org.sonarqube") version "3.5.0.2730"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 

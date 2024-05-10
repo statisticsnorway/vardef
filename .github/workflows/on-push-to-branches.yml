@@ -27,13 +27,6 @@ jobs:
       - name: Build and test project
         run: ./gradlew build
       
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  
       - name: Run coverage report
         run: ./gradlew jacocoTestReport
         

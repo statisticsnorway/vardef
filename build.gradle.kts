@@ -35,6 +35,7 @@ dependencies {
     implementation("io.micronaut.reactor:micronaut-reactor")
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
+    compileOnly("com.fasterxml.jackson.core:jackson-databind")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     runtimeOnly("org.mongodb:mongodb-driver-reactivestreams")

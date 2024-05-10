@@ -1,4 +1,4 @@
-package no.ssb.metadata
+package no.ssb.metadata.controllers
 
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
@@ -6,20 +6,20 @@ import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
-import reactor.core.publisher.Mono
 import no.ssb.metadata.models.VariableDefinition
-import no.ssb.metadata.models.VariableDefinitionRepository
-import org.reactivestreams.Publisher
+import no.ssb.metadata.repositories.VariableDefinitionRepository
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Validated
 @Controller("/variables")
-class VardefController {
+class VariablesController {
 
     @Inject
     lateinit var vardefService: VariableDefinitionRepository
 
     @Get()
-    fun list(): Publisher<VariableDefinition> {
+    fun list(): Flux<VariableDefinition> {
         return vardefService.list()
     }
 

@@ -65,6 +65,7 @@
 
 ## Feature ktlint documentation
 
+- [ktlint documentation version 1.2.1](https://pinterest.github.io/ktlint/1.2.1/)
 - [ktlint documentation](https://github.com/pinterest/ktlint)
 - [ktlint gradle plugin documentation](https://github.com/JLLeitschuh/ktlint-gradle)
 - run './gradlew ktlintCheck' for checking code locally

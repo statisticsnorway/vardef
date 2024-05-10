@@ -9,7 +9,7 @@ metadata:
     team: dapla-metadata
 spec:
   image: "{{ image }}"  # Injected from  the Github Action
-  port: 8040
+  port: 8080
 
   replicas:
     disableAutoScaling: true
@@ -38,10 +38,10 @@ spec:
 
   liveness:
     path: /healthz/live
-    port: 8040
+    port: 8080
   readiness:
     path: /healthz/ready
-    port: 8040
+    port: 8080
   startup:
     path: /healthz/startup
-    port: 8040
+    port: 8080

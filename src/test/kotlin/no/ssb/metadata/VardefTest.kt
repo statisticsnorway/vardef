@@ -29,7 +29,7 @@ class VardefTest {
     }
 
     @Test
-    fun testTrueFalse() {
+    fun testTrueFalse2() {
         assertThat(false).isFalse()
     }
 }

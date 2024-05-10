@@ -30,11 +30,12 @@ env:
   TAG: ${{ github.head_ref }}-${{ github.sha }}
 
 jobs:
-
   build-branch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
     steps:
-
       - name: Check out code
         uses: actions/checkout@v4
 

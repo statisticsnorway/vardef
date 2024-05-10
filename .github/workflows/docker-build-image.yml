@@ -53,8 +53,8 @@ jobs:
       - name: Upload build JAR
         uses: actions/upload-artifact@v2
         with:
-          name: build
-          path: build
+          name: build/libs
+          path: build/libs
 
 
   docker-build:
@@ -104,8 +104,8 @@ jobs:
       - name: Download gradle build result
         uses: actions/download-artifact@v2
         with:
-          name: build
-          path: build
+          name: build/libs
+          path: build/libs
 
       - name: Build and push
         uses: docker/build-push-action@v5

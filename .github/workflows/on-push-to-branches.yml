@@ -26,3 +26,18 @@ jobs:
 
       - name: Build and test project
         run: ./gradlew build
+      
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  
+      - name: SonarCloud Scan
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # No need to run SonarCloud analysis if dependabot update or token not defined
+        if: env.SONAR_TOKEN != '' && (github.actor != 'dependabot[bot]')
+        uses: SonarSource/sonarcloud-github-action@v2.1.1

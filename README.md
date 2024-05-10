@@ -63,4 +63,10 @@
 
 ## Feature ktlint documentation
 
+- [ktlint documentation](https://github.com/pinterest/ktlint)
+- [ktlint gradle plugin documentation](https://github.com/JLLeitschuh/ktlint-gradle)
+- run './gradlew ktlintCheck' for checking code locally
+- run './gradlew ktlintFormat' to correct formatting issues locally
+
+
 ## Feature Jacoco

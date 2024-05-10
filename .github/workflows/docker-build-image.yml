@@ -17,12 +17,12 @@ name: Docker Image CI
 
 
 on:
-  push:
-    branches: [ "main" ]
-  # pull_request:
-  #   paths:
-  #     - "src/vardef/**"
-  #     - ".nais/staging-pr.yaml"
+  pull_request:
+    paths:
+      - "src/vardef/**"
+      - ".nais/staging-pr.yaml"
+  # push:
+  #   branches: [ "main" ]
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/nais-management-b3a7/dapla-metadata

@@ -29,10 +29,6 @@ jobs:
       - name: Build and test project
         run: ./gradlew build
       
-      - name: Run coverage report
-        run: gradle test jacocoTestReport sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
-        # run: ./gradlew jacocoTestReport
-        
       - name: SonarCloud Scan
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any

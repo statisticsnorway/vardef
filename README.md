@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=statisticsnorway_vardef&metric=alert_status&token=79f0f015e790535ba615f2453b32a5a22abdde98)](https://sonarcloud.io/summary/new_code?id=statisticsnorway_vardef)
+
 ## Micronaut 4.4.2 Documentation
 
 - [User Guide](https://docs.micronaut.io/4.4.2/guide/index.html)
@@ -61,4 +63,15 @@
 
 - [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
 
+## Feature ktlint documentation
 
+- [ktlint documentation version 1.2.1](https://pinterest.github.io/ktlint/1.2.1/)
+- [ktlint documentation](https://github.com/pinterest/ktlint)
+- [ktlint gradle plugin documentation](https://github.com/JLLeitschuh/ktlint-gradle)
+- run './gradlew ktlintCheck' for checking code locally
+- run './gradlew ktlintFormat' to correct formatting issues locally
+
+
+## Feature Jacoco
+
+- [Jacoco gradle plugin documentation](https://docs.gradle.org/current/userguide/jacoco_plugin.html)

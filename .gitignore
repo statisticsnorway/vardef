@@ -5,7 +5,8 @@ build/
 target/
 out/
 .micronaut/
-.idea
+.idea/*
+!.idea/runConfigurations
 *.iml
 *.ipr
 *.iws

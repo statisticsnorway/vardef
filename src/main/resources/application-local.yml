@@ -1,0 +1,5 @@
+# Config for running vardef in local dev environments
+
+logger:
+  levels:
+    root: DEBUG

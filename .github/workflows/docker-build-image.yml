@@ -19,8 +19,6 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-      - "src/vardef/**"
-      - ".nais/staging.yaml"
 
 
 env:

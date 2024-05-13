@@ -19,6 +19,8 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+      - "src/vardef/**"
+      - ".nais/staging.yaml"
 
 
 env:
@@ -46,7 +48,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build and test project
-        run: ./gradlew build
+        run: ./gradlew shadowjar
 
       - name: Upload build JAR
         uses: actions/upload-artifact@v2
@@ -135,5 +137,5 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: staging
           RESOURCE: .nais/staging.yaml
-          VAR: image=${{ needs.docker-build.outputs.image-tag }}
+          VAR: image=${{ needs.docker-build.outputs.image-tag }},pr-number=${{github.event.number}}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

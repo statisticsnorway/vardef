@@ -3,7 +3,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: vardef-pr-{{ pr-number }}
+  name: vardef
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
@@ -16,27 +16,23 @@ spec:
     max: 1
     min: 1
 
-  accessPolicy:
-    outbound:
-      external:
-        - host: data.ssb.no
-        - host: www.ssb.no
-
-  resources:
-    limits:
-      memory: 2Gi
-    requests:
-      memory: 1Gi
-
-  ttl: 1h
-
   prometheus:
     enabled: false
 
   ingresses:
-    - https://vardef-pr-{{ pr-number }}.external.staging.ssb.cloud.nais.io
+    - https://vardef.staging.ssb.cloud.nais.io
 
   liveness:
+<<<<<<< HEAD:.nais/staging.yaml
+    path: /swagger-ui
+    port: 8040
+  readiness:
+    path: /swagger-ui
+    port: 8040
+  startup:
+    path: /swagger-ui
+    port: 8040
+=======
     path: /healthz/live
     port: 8080
   readiness:
@@ -45,3 +41,4 @@ spec:
   startup:
     path: /healthz/startup
     port: 8080
+>>>>>>> origin/main:.nais/staging-pr.yaml

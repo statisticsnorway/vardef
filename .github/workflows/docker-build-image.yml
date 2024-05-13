@@ -17,12 +17,11 @@ name: Docker Image CI
 
 
 on:
-  pull_request:
-    paths:
+  push:
+    branches: [ "main" ]
       - "src/vardef/**"
-      - ".nais/staging-pr.yaml"
-  # push:
-  #   branches: [ "main" ]
+      - ".nais/staging.yaml"
+
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/nais-management-b3a7/dapla-metadata
@@ -137,6 +136,6 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: staging
-          RESOURCE: .nais/staging-pr.yaml
-          VAR: image=${{ needs.docker-build.outputs.image-tag }},pr-number=${{github.event.number}}
+          RESOURCE: .nais/staging.yaml
+          VAR: image=${{ needs.docker-build.outputs.image-tag }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

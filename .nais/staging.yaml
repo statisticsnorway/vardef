@@ -23,22 +23,11 @@ spec:
     - https://vardef.staging.ssb.cloud.nais.io
 
   liveness:
-<<<<<<< HEAD:.nais/staging.yaml
     path: /swagger-ui
-    port: 8040
-  readiness:
-    path: /swagger-ui
-    port: 8040
-  startup:
-    path: /swagger-ui
-    port: 8040
-=======
-    path: /healthz/live
     port: 8080
   readiness:
-    path: /healthz/ready
+    path: /swagger-ui
     port: 8080
   startup:
-    path: /healthz/startup
+    path: /swagger-ui
     port: 8080
->>>>>>> origin/main:.nais/staging-pr.yaml

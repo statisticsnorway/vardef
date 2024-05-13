@@ -37,11 +37,11 @@ spec:
     - https://vardef-pr-{{ pr-number }}.external.staging.ssb.cloud.nais.io
 
   liveness:
-    path: /healthz/live
+    path: /swagger-ui
     port: 8040
   readiness:
-    path: /healthz/ready
+    path: /swagger-ui
     port: 8040
   startup:
-    path: /healthz/startup
+    path: /swagger-ui
     port: 8040

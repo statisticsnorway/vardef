@@ -24,10 +24,11 @@ paths:
       description: Paginated list of all public variable definitions.
       operationId: get_variables
       parameters:
-        - name: language
-          in: query
+        - name: Accept-Language
+          in: header
           description: "Specify the language in which data will be presented."
           schema:
+            type: string
             enum: ["nb", "nn", "en"]
             default: "nb"
         - name: classification_uri
@@ -41,18 +42,6 @@ paths:
           description: "Return only variable definitions which specify this Unit type."
           schema:
             type: enum
-        - name: status
-          in: query
-          description: "Return variable definitions with the given status."
-          schema:
-            type: array
-            items:
-              type: string
-              enum: [
-                    "PUBLISHED_EXTERNAL",
-                    "DEPRECATED"
-                ]
-              default: ["PUBLISHED_EXTERNAL"]
         - name: subject_field
           in: query
           description: "Return only variable definitions which are used in this subject field."
@@ -273,51 +262,25 @@ paths:
       security:
         - admin_auth:
             - write:variables
-  /variables/internal:
+  /variables/{status}:
     get:
       tags:
         - variables
-      summary: Get all internal variable definitions
-      description: Paginated list of internal variable definitions.
-      operationId: get_internal_variables
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/variable'
-      security:
-        - admin_auth:
-            - read:internal:variables
-  /variables/draft:
-    get:
-      tags:
-        - variables
-      summary: Get all draft variable definitions. Returns only definitions which the user is authorized to see (Owner section in SSB)
+      summary: Get all variable definitions with the given status. Returns only definitions which the user is authorized to see. Authorization is based on the status of the variable. For DRAFT status, only members of the owning section may read the definition. For PUBLISHED_INTERNAL, PUBLISHED_EXTERNAL and DEPRECATED, any SSB employee may read the definition.
       description: Paginated list of draft variable definitions.
       operationId: get_draft_variables
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/variable'
-      security:
-        - admin_auth:
-            - read:internal:variables
-  /variables/deprecated:
-    get:
-      tags:
-        - variables
-      summary: Get all deprecated variable definitions
-      description: Paginated list of deprecated variable definitions.
-      operationId: get_deprecated_variables
+      parameters:
+        - name: status
+          in: query
+          description: "Return variable definitions with the given status."
+          schema:
+            type: string
+            enum: [
+              "draft",
+              "published-internal",
+              "published-external",
+              "deprecated"
+            ]
       responses:
         '200':
           description: Successful operation

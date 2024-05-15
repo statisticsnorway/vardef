@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
 class VariablesControllerTest {
     @Test
     fun testVariables(spec: RequestSpecification) {
-
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -21,4 +20,4 @@ class VariablesControllerTest {
     }
 }
 
-//.body("{\"name\":\"name\",\"shortName\":\"value\",\"definition\":\"value\"}")
+// .body("{\"name\":\"name\",\"shortName\":\"value\",\"definition\":\"value\"}")

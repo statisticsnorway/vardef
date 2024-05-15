@@ -7,7 +7,6 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
 import org.bson.types.ObjectId
 
-
 @MappedEntity
 @Serdeable
 data class VariableDefinition(
@@ -16,7 +15,7 @@ data class VariableDefinition(
     @JsonIgnore
     var id: ObjectId?,
     var name: String,
-    //var name: Map<SupportedLanguages, String>,
-    //var shortName: String?,
-    //var definition: Map<SupportedLanguages, String>
+    // var name: Map<SupportedLanguages, String>,
+    // var shortName: String?,
+    // var definition: Map<SupportedLanguages, String>
 )

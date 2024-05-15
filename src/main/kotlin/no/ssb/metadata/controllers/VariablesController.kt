@@ -30,5 +30,4 @@ class VariablesController {
     ): VariableDefinition {
         return vardefService.save(vardef)
     }
-
 }

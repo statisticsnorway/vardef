@@ -18,6 +18,15 @@ class VariablesControllerTest {
             .then()
             .statusCode(201)
     }
+
+    @Test
+    fun testGetVariables(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variables")
+            .then()
+            .statusCode(200)
+    }
 }
 
 // .body("{\"name\":\"name\",\"shortName\":\"value\",\"definition\":\"value\"}")

@@ -3,6 +3,7 @@ package no.ssb.metadata.controllers
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Status
 import io.micronaut.scheduling.TaskExecutors
@@ -20,6 +21,11 @@ import no.ssb.metadata.repositories.VariableDefinitionRepository
 class VariablesController {
     @Inject
     lateinit var vardefService: VariableDefinitionRepository
+
+    @Get()
+    fun list(): List<VariableDefinition> {
+        return vardefService.findAll().toList()
+    }
 
     @Post()
     @Status(HttpStatus.CREATED)

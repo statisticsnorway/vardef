@@ -9,19 +9,20 @@ import org.junit.jupiter.api.Test
 @MicronautTest
 class VariablesControllerTest {
     @Test
+    @Suppress("ktlint:standard:max-line-length")
     fun testVariables(spec: RequestSpecification) {
-
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body("{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"value\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"value\",\"nb\":\"value\",\"nn\":\"value\" }}")
+            .body(
+                "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"value\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"value\",\"nb\":\"value\",\"nn\":\"value\" }}",
+            )
             .`when`()
             .post("/variables")
             .then()
             .statusCode(201)
             .body("shortName", equalTo("Bank"))
             .body("name.nb", equalTo("Bankforbindelser"))
-
     }
 
     @Test
@@ -33,4 +34,3 @@ class VariablesControllerTest {
             .statusCode(200)
     }
 }
-

@@ -16,5 +16,5 @@ data class VariableDefinition(
     var id: ObjectId?,
     var name: Map<SupportedLanguages, String>,
     var shortName: String?,
-    var definition: Map<SupportedLanguages, String>
+    var definition: Map<SupportedLanguages, String>,
 )

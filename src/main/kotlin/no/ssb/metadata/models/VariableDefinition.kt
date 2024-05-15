@@ -14,8 +14,7 @@ data class VariableDefinition(
     @GeneratedValue
     @JsonIgnore
     var id: ObjectId?,
-    var name: String,
-    // var name: Map<SupportedLanguages, String>,
-    // var shortName: String?,
-    // var definition: Map<SupportedLanguages, String>
+    var name: Map<SupportedLanguages, String>,
+    var shortName: String?,
+    var definition: Map<SupportedLanguages, String>
 )

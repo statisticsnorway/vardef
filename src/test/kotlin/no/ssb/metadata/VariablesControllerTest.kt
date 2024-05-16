@@ -5,6 +5,7 @@ import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
+import no.ssb.metadata.controllers.VariablesController
 import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test
 @MicronautTest
 class VariablesControllerTest
     @Inject
-    constructor(val vardefService: VariableDefinitionService) {
+    constructor(val vardefService: VariableDefinitionService, val variablesController: VariablesController) {
         // setup tests
         // run testcontainer - with data?
         @Test
@@ -58,16 +59,31 @@ class VariablesControllerTest
         fun getVariablesByLanguage(spec: RequestSpecification) {
             val response =
                 spec
-            given()
-                .contentType(ContentType.JSON)
-                .header("Accept-Language", "nb")
-                .get("/variables/nb").then().assertThat().statusCode(200)
+                    .`when`()
+                    .contentType(ContentType.JSON)
+                    .header("Accept-Language", "nb")
+                    .get("/variables/nb")
+                    .then()
+                    .assertThat().statusCode(200)
         }
 
         @Test
         fun testMethod() {
             val result = vardefService.findByLanguage("nb")
-            assertThat(result[0].name).isEqualTo("Bankforbindelser")
-            assertThat(result[0].definition).isEqualTo("Definisjon av penger")
+            assertThat(result[0].name).isEqualTo("Bank direktør")
+            assertThat(result[0].definition).isEqualTo("Pengestrøm")
         }
+
+        @Test
+        fun testGetName() {
+            val valList = vardefService.findAll()
+            val result = vardefService.getName(valList[0],"nb")
+            assertThat(result).isEqualTo("Bankmedlem")
+        }
+
+        @Test
+        fun testGetResult() {
+            val valList = variablesController.findAllNorwegian("nb")
+            assertThat(valList[0].shortName).isEqualTo("bankDir")
+    }
     }

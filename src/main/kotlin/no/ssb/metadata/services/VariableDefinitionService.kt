@@ -14,7 +14,6 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
 
     fun findByLanguage(language: String): List<VariableDefinitionRequest> {
         val variables = findAll()
-        println(variables)
         val result: MutableList<VariableDefinitionRequest> = mutableListOf()
         val variableDefinitionRequest = VariableDefinitionRequest("", "", "")
         for (variable in variables) {
@@ -26,7 +25,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
         return result
     }
 
-    private fun getName(
+    fun getName(
         variableDefinition: VariableDefinition,
         language: String,
     ): String? {
@@ -39,7 +38,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
         return null
     }
 
-    private fun getDefinition(
+    fun getDefinition(
         variableDefinition: VariableDefinition,
         language: String,
     ): String? {

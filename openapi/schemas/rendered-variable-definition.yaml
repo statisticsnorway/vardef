@@ -1,0 +1,154 @@
+type: object
+properties:
+  name:
+    title: Name
+    description: Name of the variable
+    type: string
+  short_name:
+    title: Short name
+    description: Recommended short name
+    $comment: ' Alphanumeric limited to a-z, A-Z, 0-9, - (hyphen) and _ (underscore)'
+    type: string
+  definition:
+    title: Definition
+    description: Definition of the variable
+    type: string
+  classification_uri:
+    title: Classification or code list URI
+    description: Link (URI) to valid classification or code list
+    type: string
+    format: uri
+  unit_type:
+    title: Unit type(s)
+    description: A list of one or more unit types, e.g. person, vehicle, household.
+    $comment: See list of Statistics Norways unit types https://www.ssb.no/en/metadata/definisjoner-av-statistiske-enheter
+    type: array
+    items:
+      type: string
+      enum:
+      - ARBEIDSULYKKE
+      - ADRESSE
+      - BOLIG
+      - BYGNING
+      - EIENDOM
+      - FAMILIE
+      - FORETAK
+      - FYLKE_FORVALTNING
+      - FYLKE_GEOGRAFISK
+      - HAVNEANLOEP
+      - HUSHOLDNING
+      - KJOERETOEY
+      - KOMMUNE_FORVALTNING
+      - KOMMUNE_GEOGRAFISK
+      - KURS
+      - LOVBRUDD
+      - PERSON
+      - SKIP
+      - STATLIGE_VIRKSOMHETER
+      - STORFE
+      - TRAFIKKULYKKE
+      - TRANSAKSJON
+      - VALG
+      - VARE_TJENESTE
+      - VERDIPAPIR
+      - VIRKSOMHET
+  subject_fields:
+    title: Subject fields
+    description: A list of subject fields that the variable is used in. Valid values
+      defined by https://www.ssb.no/klass/klassifikasjoner/618
+    type: array
+    items:
+      type: object
+      properties:
+        code:
+          title: Subject field code
+          type: string
+        name:
+          title: Subject field name
+          $ref: language-texts.json
+  direct_person_identifying:
+    title: Direct Person identifying Information (DPI)
+    description: Direct Person identifying Information (DPI)
+    type: boolean
+  variable_status:
+    title: Status of the variable
+    description: Status of the Life cycle of the variable
+    type: string
+    enum:
+    - DRAFT
+    - PUBLISHED_INTERNAL
+    - PUBLISHED_EXTERNAL
+    - DEPRECATED
+    default: DRAFT
+  measurement_type:
+    title: Measurement type
+    description: 'Type of measurement for the variable, e.g. length, volume, currency.
+      Valid values defined by: https://www.ssb.no/klass/klassifikasjoner/303/koder'
+    type: string
+  valid_from:
+    title: Valid from
+    description: The variable definition is valid from this date inclusive
+    type: string
+    format: date
+  valid_until:
+    title: Valid until
+    description: The variable definition is valid until this date inclusive
+    type: string
+    format: date
+  external_reference_uri:
+    title: External reference (URI)
+    description: A link (URI) to an external definition/documentation
+    type: string
+    format: uri
+  relevant_variable_definition_uri:
+    title: Related variable(s)
+    description: Link(s) to related definitions of variables - a list of one or more
+      definitions. For example if after-tax income is a derived variable then it could
+      be relevant to link to definitions of income from work, property income etc.
+    type: array
+    items:
+      type: string
+      format: uri
+  id:
+    title: Identifier
+    description: Unique identifier for the variable definition
+    type: string
+    pattern: ^[a-z0-9]{8}$
+    readOnly: true
+  owner:
+    title: Owner
+    description: Division in Statistics Norway which is responsible for the variable.
+    type: object
+    properties:
+      code:
+        title: Owner division, number
+        type: string
+      name:
+        title: Owner division, name
+        type: string
+  contact_person:
+    title: Contact person
+    description: Contact person name and initials (SSB identifier)
+    $ref: person.json
+  created_at:
+    title: Created date
+    description: Date on which the variable was created
+    type: string
+    format: date-time
+    readOnly: true
+  created_by:
+    title: Created by person
+    description: Person that created the variable, name and initials (SSB identifier)
+    $ref: person.json
+    readOnly: true
+  last_updated_at:
+    title: Last updated date
+    description: Date on which the variable was last updated
+    type: string
+    format: date-time
+    readOnly: true
+  last_updated_by:
+    title: Last updated by
+    description: Person that last updated the variable, name and initials (SSB identifier)
+    $ref: person.json
+    readOnly: true

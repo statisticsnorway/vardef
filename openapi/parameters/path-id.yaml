@@ -1,0 +1,10 @@
+name: id
+in: path
+description: ID of variable definition to update
+required: true
+schema:
+  type: string
+  pattern: "^[a-z0-9]{8}$"
+examples:
+  id_example:
+    value: enkb87pj

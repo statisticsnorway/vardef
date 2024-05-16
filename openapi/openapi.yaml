@@ -8,7 +8,7 @@ info:
     email: mmw@ssb.no
   license:
     name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 0.1.0
 servers:
   - url: https://metadata.ssb.no
@@ -23,14 +23,9 @@ paths:
       summary: Get all public variable definitions
       description: Paginated list of all public variable definitions.
       operationId: get_variables
+      security: []   # Public endpoint, does not require authentication
       parameters:
-        - name: Accept-Language
-          in: header
-          description: "Specify the language in which data will be presented."
-          schema:
-            type: string
-            enum: ["nb", "nn", "en"]
-            default: "nb"
+        - $ref: "parameters/header-accept-language.yaml"
         - name: classification_uri
           in: query
           description: "Return only variable definitions which reference this classification."
@@ -41,7 +36,7 @@ paths:
           in: query
           description: "Return only variable definitions which specify this Unit type."
           schema:
-            type: enum
+            type: string
         - name: subject_field
           in: query
           description: "Return only variable definitions which are used in this subject field."
@@ -74,7 +69,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "schemas/input-variable-definition-schema.json"
+                  $ref: "schemas/rendered-variable-definition.yaml"
+        '400':
+          description: "Invalid request"
   /variables/public/{id}:
     get:
       tags:
@@ -82,6 +79,7 @@ paths:
       summary: Get one variable definition by ID
       description: One variable definition.
       operationId: get_variable_by_id
+      security: []   # Public endpoint, does not require authentication
       parameters:
         - name: id
           in: path
@@ -96,47 +94,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "schemas/input-variable-definition-schema.json"
+                $ref: "schemas/rendered-variable-definition.yaml"
         '404':
           description: Variable not found
-    patch:
-      tags:
-        - variables
-      summary: Update a variable definition
-      description: Update an existing variable definition by Id
-      operationId: update_variable
-      parameters:
-        - name: id
-          in: path
-          description: ID of variable definition to update
-          required: true
-          schema:
-            type: string
-            pattern: "^[a-z0-9]{8}$"
-          examples:
-            id_example:
-              value: enkb87pj
-      requestBody:
-        description: Update an existing variable definition by Id
-        content:
-          application/json:
-            schema:
-              $ref: "schemas/input-variable-definition-schema.json"
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "schemas/input-variable-definition-schema.json"
-        '404':
-          description: Variable not found
-        '400':
-          description: "Invalid request"
-      security:
-        - admin_auth:
-            - write:variables
-  /variables/{id}/versions:
+  /variables/{status}/{id}/versions:
     get:
       tags:
         - variables
@@ -144,13 +105,8 @@ paths:
       summary: Get all versions of this variable
       operationId: get_versions_of_variable_by_id
       parameters:
-        - name: id
-          in: path
-          description: ID of variable definition to return
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: "parameters/path-id.yaml"
+        - $ref: "parameters/path-status.yaml"
       responses:
         '200':
           description: Successful operation
@@ -159,9 +115,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "schemas/input-variable-definition-schema.json"
+                  $ref: "schemas/rendered-variable-definition.yaml"
         '404':
           description: Variable not found
+      security:
+        - bearerAuth: []
     post:
       tags:
         - variables
@@ -169,25 +127,27 @@ paths:
       summary: Create a variable definition version
       description: Create a variable definition version
       operationId: create_variable_version
+      parameters:
+        - $ref: "parameters/path-id.yaml"
+        - $ref: "parameters/path-status.yaml"
       requestBody:
         description: Create a new variable definition version
         content:
           application/json:
             schema:
-              $ref: "schemas/input-variable-definition-schema.json"
+              $ref: "schemas/rendered-variable-definition.yaml"
       responses:
         '201':
           description: Variable definition version created
           content:
             application/json:
               schema:
-                $ref: "schemas/input-variable-definition-schema.json"
+                $ref: "schemas/rendered-variable-definition.yaml"
         '400':
           description: "Invalid request"
       security:
-        - admin_auth:
-            - write:variables
-  /variables/{id}/children:
+        - bearerAuth: []
+  /variables/{status}/{id}/children:
     get:
       tags:
         - variables
@@ -195,13 +155,8 @@ paths:
       summary: Get all children of this variable
       operationId: get_children_of_variable_by_id
       parameters:
-        - name: id
-          in: path
-          description: ID of variable definition to return
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: "parameters/path-id.yaml"
+        - $ref: "parameters/path-status.yaml"
       responses:
         '200':
           description: Successful operation
@@ -210,9 +165,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "schemas/input-variable-definition-schema.json"
+                  $ref: "schemas/rendered-variable-definition.yaml"
         '404':
           description: Variable not found
+      security:
+        - bearerAuth: []
     post:
       tags:
         - variables
@@ -220,24 +177,26 @@ paths:
       summary: Create a derivative variable definition
       description: Create a derivative variable definition
       operationId: create_derivative_variable
+      parameters:
+        - $ref: "parameters/path-id.yaml"
+        - $ref: "parameters/path-status.yaml"
       requestBody:
         description: Create a new derivative variable definition
         content:
           application/json:
             schema:
-              $ref: "schemas/input-variable-definition-schema.json"
+              $ref: "schemas/input-variable-definition-schema.yaml"
       responses:
         '201':
           description: Derivative variable definition created
           content:
             application/json:
               schema:
-                $ref: "schemas/input-variable-definition-schema.json"
+                $ref: "schemas/input-variable-definition-schema.yaml"
         '400':
           description: "Invalid request"
       security:
-        - admin_auth:
-            - write:variables
+        - bearerAuth: []
   /variables/draft:
     post:
       tags:
@@ -250,38 +209,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "schemas/input-variable-definition-schema.json"
+              $ref: "schemas/input-variable-definition-schema.yaml"
       responses:
         '201':
           description: Variable definition created
           content:
             application/json:
               schema:
-                $ref: "schemas/input-variable-definition-schema.json"
+                $ref: "schemas/rendered-variable-definition.yaml"
         '400':
           description: "Invalid request"
       security:
-        - admin_auth:
-            - write:variables
+        - bearerAuth: []
   /variables/{status}:
     get:
       tags:
         - variables
-      summary: Get all variable definitions with the given status. Returns only definitions which the user is authorized to see. Authorization is based on the status of the variable. For DRAFT status, only members of the owning section may read the definition. For PUBLISHED_INTERNAL, PUBLISHED_EXTERNAL and DEPRECATED, any SSB employee may read the definition.
-      description: Paginated list of draft variable definitions.
+      summary: Paginated list of draft variable definitions.
+      description: Get all variable definitions with the given status. Returns only definitions which the user is authorized to see. Authorization is based on the status of the variable. For DRAFT status, only members of the owning section may read the definition. For PUBLISHED_INTERNAL, PUBLISHED_EXTERNAL and DEPRECATED, any SSB employee may read the definition.
       operationId: get_draft_variables
       parameters:
-        - name: status
-          in: query
-          description: "Return variable definitions with the given status."
-          schema:
-            type: string
-            enum: [
-              "draft",
-              "internal",
-              "public",
-              "deprecated"
-            ]
+        - "$ref": "parameters/path-status.yaml"
       responses:
         '200':
           description: Successful operation
@@ -290,14 +238,66 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "schemas/input-variable-definition-schema.json"
+                  $ref: "schemas/input-variable-definition-schema.yaml"
+        '404':
+          description: "Status not found"
+        '400':
+          description: "Invalid request"
       security:
-        - admin_auth:
-            - read:internal:variables
+        - bearerAuth: []
 
+  /variables/{status}/{id}:
+    get:
+      tags:
+        - variables
+      summary: Get one variable definition by ID
+      description: One variable definition.
+      operationId: get_variable_by_status_and_id
+      parameters:
+        - $ref: "parameters/path-status.yaml"
+        - $ref: "parameters/path-id.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-variable-definition-schema.yaml"
+        '404':
+          description: Variable not found
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - variables
+      summary: Update a variable definition
+      description: Update an existing variable definition by Id
+      operationId: update_variable
+      parameters:
+        - $ref: "parameters/path-status.yaml"
+        - $ref: "parameters/path-id.yaml"
+      requestBody:
+        description: Update an existing variable definition by Id
+        content:
+          application/json:
+            schema:
+              $ref: "schemas/input-variable-definition-schema.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-variable-definition-schema.yaml"
+        '404':
+          description: Variable not found
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
 components:
   securitySchemes:
-    BearerAuth:
+    bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT

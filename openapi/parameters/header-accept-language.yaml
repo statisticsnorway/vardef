@@ -1,0 +1,8 @@
+name: Accept-Language
+in: header
+description: "Specify the language in which data will be presented."
+schema:
+  type: string
+  enum: ["nb", "nn", "en"]
+  default: "nb"
+

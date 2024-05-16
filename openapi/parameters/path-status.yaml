@@ -1,0 +1,9 @@
+name: status
+in: path
+description: "Return variable definitions with the given status."
+schema:
+  type: string
+  enum: [
+    "internal",
+    "deprecated"
+  ]

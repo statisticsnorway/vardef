@@ -1,7 +1,6 @@
 package no.ssb.metadata
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
@@ -65,6 +64,7 @@ class VariablesControllerTest
                     .get("/variables/nb")
                     .then()
                     .assertThat().statusCode(200)
+            assertThat(response).isNotNull
         }
 
         @Test

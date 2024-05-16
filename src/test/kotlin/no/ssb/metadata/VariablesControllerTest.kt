@@ -26,7 +26,7 @@ class VariablesControllerTest {
     }
 
     @Test
-    fun testGetVariables(spec: RequestSpecification) {
+    fun testGetAllVariables(spec: RequestSpecification) {
         spec
             .`when`()
             .get("/variables")

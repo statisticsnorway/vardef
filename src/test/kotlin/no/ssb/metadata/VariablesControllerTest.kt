@@ -26,6 +26,21 @@ class VariablesControllerTest {
     }
 
     @Test
+    @Suppress("ktlint:standard:max-line-length")
+    fun testInvalidLanguage(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"no\":\"value\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"value\",\"nb\":\"value\",\"nn\":\"value\" }}",
+            )
+            .`when`()
+            .post("/variables")
+            .then()
+            .statusCode(400)
+    }
+
+    @Test
     fun testGetVariables(spec: RequestSpecification) {
         spec
             .`when`()

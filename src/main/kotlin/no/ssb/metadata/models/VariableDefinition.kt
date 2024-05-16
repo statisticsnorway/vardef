@@ -10,9 +10,24 @@ import org.bson.types.ObjectId
 
 @MappedEntity
 @Serdeable
-@Suppress("ktlint:standard:max-line-length")
+// @Suppress("ktlint:standard:max-line-length")
 @Schema(
-    example = "{\"name\": {\"en\": \"English\",\"nb\": \"Norwegian Bokmål\",\"nn\": \"Norwegian Nynorsk\"},\"short_name\": \"string\",\"definition\": {\"en\": \"English\",\"nb\": \"Norwegian Bokmål\",\"nn\": \"Norwegian Nynorsk\"}}",
+    example = """
+        {
+            "name": 
+                {   "en": "English",
+                    "nb": "Norwegian Bokmål",
+                    "nn": "Norwegian Nynorsk"
+                },
+            "short_name": "string",
+            "definition": 
+                {
+                    "en": "English",
+                    "nb": "Norwegian Bokmål",
+                    "nn": "Norwegian Nynorsk"
+                }
+        }
+    """,
 )
 data class VariableDefinition(
     @field:Id

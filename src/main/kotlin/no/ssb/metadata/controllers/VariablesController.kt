@@ -1,9 +1,11 @@
 package no.ssb.metadata.controllers
 
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Status
 import io.micronaut.scheduling.TaskExecutors
@@ -14,17 +16,29 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.models.VariableDefinition
 import no.ssb.metadata.repositories.VariableDefinitionRepository
+import no.ssb.metadata.services.VariableDefinitionRequest
+import no.ssb.metadata.services.VariableDefinitionService
 
 @Validated
 @Controller("/variables")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariablesController {
     @Inject
-    lateinit var vardefService: VariableDefinitionRepository
+    lateinit var vardefService: VariableDefinitionService
+
+    @Inject
+    lateinit var repository: VariableDefinitionRepository
 
     @Get()
     fun list(): List<VariableDefinition> {
-        return vardefService.findAll().toList()
+        return vardefService.findAll()
+    }
+
+    @Get("/nb")
+    fun findAllNorwegian(
+        @Header(HttpHeaders.ACCEPT_LANGUAGE) language: String,
+    ): List<VariableDefinitionRequest> {
+        return vardefService.findByLanguage(language)
     }
 
     @Post()
@@ -34,6 +48,6 @@ class VariablesController {
     fun createVariableDefinition(
         @Body @Valid vardef: VariableDefinition,
     ): VariableDefinition {
-        return vardefService.save(vardef)
+        return repository.save(vardef)
     }
 }

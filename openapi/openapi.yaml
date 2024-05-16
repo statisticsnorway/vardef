@@ -13,13 +13,13 @@ info:
 servers:
   - url: https://metadata.ssb.no
 tags:
-  - name: variables
+  - name: variable-definitions
     description: Variable definitions
 paths:
-  /variables/public:
+  /variable-definitions/public:
     get:
       tags:
-        - variables
+        - variable-definitions
       summary: Get all public variable definitions
       description: Paginated list of all public variable definitions.
       operationId: get_variables
@@ -72,10 +72,10 @@ paths:
                   $ref: "schemas/rendered-variable-definition.yaml"
         '400':
           description: "Invalid request"
-  /variables/public/{id}:
+  /variable-definitions/public/{id}:
     get:
       tags:
-        - variables
+        - variable-definitions
       summary: Get one variable definition by ID
       description: One variable definition.
       operationId: get_variable_by_id
@@ -97,10 +97,10 @@ paths:
                 $ref: "schemas/rendered-variable-definition.yaml"
         '404':
           description: Variable not found
-  /variables/{status}/{id}/versions:
+  /variable-definitions/{status}/{id}/versions:
     get:
       tags:
-        - variables
+        - variable-definitions
         - versions
       summary: Get all versions of this variable
       operationId: get_versions_of_variable_by_id
@@ -122,7 +122,7 @@ paths:
         - bearerAuth: []
     post:
       tags:
-        - variables
+        - variable-definitions
         - versions
       summary: Create a variable definition version
       description: Create a variable definition version
@@ -147,10 +147,10 @@ paths:
           description: "Invalid request"
       security:
         - bearerAuth: []
-  /variables/{status}/{id}/children:
+  /variable-definitions/{status}/{id}/children:
     get:
       tags:
-        - variables
+        - variable-definitions
         - children
       summary: Get all children of this variable
       operationId: get_children_of_variable_by_id
@@ -172,7 +172,7 @@ paths:
         - bearerAuth: []
     post:
       tags:
-        - variables
+        - variable-definitions
         - children
       summary: Create a derivative variable definition
       description: Create a derivative variable definition
@@ -197,10 +197,10 @@ paths:
           description: "Invalid request"
       security:
         - bearerAuth: []
-  /variables/draft:
+  /variable-definitions/draft:
     post:
       tags:
-        - variables
+        - variable-definitions
       summary: Create a variable definition
       description: Create a variable definition
       operationId: create_variable
@@ -221,10 +221,10 @@ paths:
           description: "Invalid request"
       security:
         - bearerAuth: []
-  /variables/{status}:
+  /variable-definitions/{status}:
     get:
       tags:
-        - variables
+        - variable-definitions
       summary: Paginated list of draft variable definitions.
       description: Get all variable definitions with the given status. Returns only definitions which the user is authorized to see. Authorization is based on the status of the variable. For DRAFT status, only members of the owning section may read the definition. For PUBLISHED_INTERNAL, PUBLISHED_EXTERNAL and DEPRECATED, any SSB employee may read the definition.
       operationId: get_draft_variables
@@ -246,10 +246,10 @@ paths:
       security:
         - bearerAuth: []
 
-  /variables/{status}/{id}:
+  /variable-definitions/{status}/{id}:
     get:
       tags:
-        - variables
+        - variable-definitions
       summary: Get one variable definition by ID
       description: One variable definition.
       operationId: get_variable_by_status_and_id
@@ -269,7 +269,7 @@ paths:
         - bearerAuth: []
     patch:
       tags:
-        - variables
+        - variable-definitions
       summary: Update a variable definition
       description: Update an existing variable definition by Id
       operationId: update_variable

@@ -20,8 +20,7 @@ properties:
     format: uri
   unit_type:
     title: Unit type(s)
-    description: A list of one or more unit types, e.g. person, vehicle, household.
-    $comment: See list of Statistics Norways unit types https://www.ssb.no/en/metadata/definisjoner-av-statistiske-enheter
+    description: A list of one or more unit types, e.g. person, vehicle, household. Sourced from Statistics Norway's unit types https://www.ssb.no/en/metadata/definisjoner-av-statistiske-enheter
     type: array
     items:
       type: string
@@ -134,25 +133,9 @@ properties:
         title: "Title of the contact"
       email:
         title: "Email address of the contact"
-  created_at:
-    title: Created date
-    description: Date on which the variable was created
-    type: string
-    format: date-time
-    readOnly: true
-  created_by:
-    title: Created by person
-    description: Person that created the variable, name and initials (SSB identifier)
-    $ref: person.json
-    readOnly: true
   last_updated_at:
     title: Last updated date
     description: Date on which the variable was last updated
     type: string
     format: date-time
-    readOnly: true
-  last_updated_by:
-    title: Last updated by
-    description: Person that last updated the variable, name and initials (SSB identifier)
-    $ref: person.json
     readOnly: true

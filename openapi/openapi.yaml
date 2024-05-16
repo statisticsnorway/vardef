@@ -7,21 +7,26 @@ info:
   contact:
     email: mmw@ssb.no
   license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
+    name: CC BY 4.0
+    url: https://creativecommons.org/licenses/by/4.0/deed.no
   version: 0.1.0
 servers:
   - url: https://metadata.ssb.no
 tags:
   - name: variable-definitions
     description: Variable definitions
+  - name: public
+    description: Available to the general public without authentication.
+  - name: internal
+    description: Only available to employees of Statistics Norway. Requires authentication.
 paths:
   /variable-definitions/public:
     get:
       tags:
         - variable-definitions
-      summary: Get all public variable definitions
-      description: Paginated list of all public variable definitions.
+        - public
+      summary: List public variable definitions
+      description: Paginated list of all public variable definitions. Available without authentication. The list may be filtered using the available query parameters.
       operationId: get_variables
       security: []   # Public endpoint, does not require authentication
       parameters:
@@ -69,14 +74,15 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "schemas/rendered-variable-definition.yaml"
+                  $ref: "schemas/public-rendered-variable-definition.yaml"
         '400':
           description: "Invalid request"
   /variable-definitions/public/{id}:
     get:
       tags:
         - variable-definitions
-      summary: Get one variable definition by ID
+        - public
+      summary: Get one public variable definition
       description: One variable definition.
       operationId: get_variable_by_id
       security: []   # Public endpoint, does not require authentication
@@ -94,15 +100,187 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "schemas/rendered-variable-definition.yaml"
+                $ref: "schemas/public-rendered-variable-definition.yaml"
         '404':
           description: Variable not found
+  /variable-definitions/draft:
+    get:
+      tags:
+        - variable-definitions
+        - internal
+      summary: List of draft variable definitions
+      description: Get draft variable definitions which the user is authorized to see. Only members of the owning unit may read the definition.
+      operationId: get_draft_variables
+      parameters:
+        - "$ref": "parameters/path-status.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "schemas/input-variable-definition.yaml"
+        '404':
+          description: "Status not found"
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - variable-definitions
+        - internal
+      summary: Create a draft variable definition
+      description: Create a variable definition
+      operationId: create_variable
+      requestBody:
+        description: Create a new variable
+        content:
+          application/json:
+            schema:
+              $ref: "schemas/input-variable-definition.yaml"
+      responses:
+        '201':
+          description: Variable definition created
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-variable-definition.yaml"
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
+  /variable-definitions/draft/{id}:
+    patch:
+      description: Update a draft variable definition
+      operationId: update_draft_variable_definition
+      requestBody:
+        description: Update a draft variable definition
+        content:
+          application/json:
+            schema:
+              $ref: "schemas/input-variable-definition.yaml"
+      responses:
+        '201':
+          description: Variable definition updated
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-variable-definition.yaml"
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - variable-definitions
+        - internal
+      summary: Get one draft variable definition
+      description: One variable definition.
+      operationId: get_draft_variable_definition_by_id
+      parameters:
+        - $ref: "parameters/path-id.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-variable-definition.yaml"
+        '404':
+          description: No such variable definition
+      security:
+        - bearerAuth: []
+    delete:
+      description: Delete a draft variable definition
+      responses:
+        '204':
+          description: Successfully deleted
+        '404':
+          description: No such variable definition
+  /variable-definitions/{status}:
+    get:
+      tags:
+        - variable-definitions
+        - internal
+      summary: List variable definitions
+      description: Get all variable definitions with the given status. Returns only definitions which the user is authorized to see. Authorization is based on the status of the variable. For DRAFT status, only members of the owning section may read the definition. For PUBLISHED_INTERNAL, PUBLISHED_EXTERNAL and DEPRECATED, any SSB employee may read the definition.
+      operationId: get_variables_by_status
+      parameters:
+        - "$ref": "parameters/path-status.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "schemas/input-variable-definition.yaml"
+        '404':
+          description: "Status not found"
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
+  /variable-definitions/{status}/{id}:
+    get:
+      tags:
+        - variable-definitions
+        - internal
+      summary: Get one variable definition by status and ID
+      description: One variable definition.
+      operationId: get_variable_by_status_and_id
+      parameters:
+        - $ref: "parameters/path-status.yaml"
+        - $ref: "parameters/path-id.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-variable-definition.yaml"
+        '404':
+          description: Variable not found
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - variable-definitions
+      summary: Update a variable definition
+      description: Update an existing variable definition by Id
+      operationId: update_variable
+      parameters:
+        - $ref: "parameters/path-status.yaml"
+        - $ref: "parameters/path-id.yaml"
+      requestBody:
+        description: Update an existing variable definition by Id
+        content:
+          application/json:
+            schema:
+              $ref: "schemas/input-variable-definition.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-variable-definition.yaml"
+        '404':
+          description: Variable not found
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
   /variable-definitions/{status}/{id}/versions:
     get:
       tags:
         - variable-definitions
         - versions
-      summary: Get all versions of this variable
+      summary: List versions of this variable definition
       operationId: get_versions_of_variable_by_id
       parameters:
         - $ref: "parameters/path-id.yaml"
@@ -135,25 +313,25 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "schemas/rendered-variable-definition.yaml"
+              $ref: "schemas/input-variable-definition.yaml"
       responses:
         '201':
           description: Variable definition version created
           content:
             application/json:
               schema:
-                $ref: "schemas/rendered-variable-definition.yaml"
+                $ref: "schemas/input-variable-definition.yaml"
         '400':
           description: "Invalid request"
       security:
         - bearerAuth: []
-  /variable-definitions/{status}/{id}/children:
+  /variable-definitions/{status}/{id}/derivatives:
     get:
       tags:
         - variable-definitions
-        - children
-      summary: Get all children of this variable
-      operationId: get_children_of_variable_by_id
+        - derivatives
+      summary: Get all derivatives of this variable
+      operationId: get_derivatives_of_variable_by_id
       parameters:
         - $ref: "parameters/path-id.yaml"
         - $ref: "parameters/path-status.yaml"
@@ -173,7 +351,7 @@ paths:
     post:
       tags:
         - variable-definitions
-        - children
+        - derivatives
       summary: Create a derivative variable definition
       description: Create a derivative variable definition
       operationId: create_derivative_variable
@@ -185,116 +363,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "schemas/input-variable-definition-schema.yaml"
+              $ref: "schemas/input-variable-definition.yaml"
       responses:
         '201':
           description: Derivative variable definition created
           content:
             application/json:
               schema:
-                $ref: "schemas/input-variable-definition-schema.yaml"
+                $ref: "schemas/input-variable-definition.yaml"
         '400':
           description: "Invalid request"
       security:
         - bearerAuth: []
-  /variable-definitions/draft:
-    post:
-      tags:
-        - variable-definitions
-      summary: Create a variable definition
-      description: Create a variable definition
-      operationId: create_variable
-      requestBody:
-        description: Create a new variable
-        content:
-          application/json:
-            schema:
-              $ref: "schemas/input-variable-definition-schema.yaml"
-      responses:
-        '201':
-          description: Variable definition created
-          content:
-            application/json:
-              schema:
-                $ref: "schemas/rendered-variable-definition.yaml"
-        '400':
-          description: "Invalid request"
-      security:
-        - bearerAuth: []
-  /variable-definitions/{status}:
+  /variable-definitions/deprecated:
     get:
-      tags:
-        - variable-definitions
-      summary: Paginated list of draft variable definitions.
-      description: Get all variable definitions with the given status. Returns only definitions which the user is authorized to see. Authorization is based on the status of the variable. For DRAFT status, only members of the owning section may read the definition. For PUBLISHED_INTERNAL, PUBLISHED_EXTERNAL and DEPRECATED, any SSB employee may read the definition.
-      operationId: get_draft_variables
-      parameters:
-        - "$ref": "parameters/path-status.yaml"
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "schemas/input-variable-definition-schema.yaml"
-        '404':
-          description: "Status not found"
-        '400':
-          description: "Invalid request"
-      security:
-        - bearerAuth: []
-
-  /variable-definitions/{status}/{id}:
+      summary: List all deprecated variable definitions
+  /variable-definitions/deprecated/{id}:
     get:
-      tags:
-        - variable-definitions
-      summary: Get one variable definition by ID
-      description: One variable definition.
-      operationId: get_variable_by_status_and_id
-      parameters:
-        - $ref: "parameters/path-status.yaml"
-        - $ref: "parameters/path-id.yaml"
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "schemas/input-variable-definition-schema.yaml"
-        '404':
-          description: Variable not found
-      security:
-        - bearerAuth: []
-    patch:
-      tags:
-        - variable-definitions
-      summary: Update a variable definition
-      description: Update an existing variable definition by Id
-      operationId: update_variable
-      parameters:
-        - $ref: "parameters/path-status.yaml"
-        - $ref: "parameters/path-id.yaml"
-      requestBody:
-        description: Update an existing variable definition by Id
-        content:
-          application/json:
-            schema:
-              $ref: "schemas/input-variable-definition-schema.yaml"
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "schemas/input-variable-definition-schema.yaml"
-        '404':
-          description: Variable not found
-        '400':
-          description: "Invalid request"
-      security:
-        - bearerAuth: []
+      summary: Get one deprecated variable definition
 components:
   securitySchemes:
     bearerAuth:

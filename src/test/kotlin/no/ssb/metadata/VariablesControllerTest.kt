@@ -4,7 +4,8 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
-import no.ssb.metadata.controllers.VariablesController
+import no.ssb.metadata.models.SupportedLanguages
+import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test
 @MicronautTest
 class VariablesControllerTest
     @Inject
-    constructor(val vardefService: VariableDefinitionService, val variablesController: VariablesController) {
+    constructor(val vardefService: VariableDefinitionService) {
 
 
         @Test
@@ -82,18 +83,23 @@ class VariablesControllerTest
 
         @Test
         fun testGetName() {
-            val valList = vardefService.findAll()
-            assertThat(valList).isNotEmpty()
-            //val result = vardefService.getName(valList[0],"nb")
-            //val name = """
-            //    {nb=Bankforbindelser}
-            //""".trimIndent()
-            //assertThat(result.toString()).isEqualTo(name)
+            val variableDefinition = VariableDefinitionDAO(null, mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),"bla", mapOf(
+                SupportedLanguages.NB to "nnnn"))
+            val result = vardefService.getName(variableDefinition,"nb")
+            val name = """
+                {nb=Bla bla}
+            """.trimIndent()
+            assertThat(result.toString()).isEqualTo(name)
         }
 
         @Test
         fun testGetResult() {
-            val valList = variablesController.findAllByLanguage("nb")
-            assertThat(valList[0].shortName).isEqualTo("Bank")
-    }
+            val variableDefinition = VariableDefinitionDAO(null, mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),"bla", mapOf(
+                SupportedLanguages.EN to "Bank definition", SupportedLanguages.NB to "Bankens rolle i verden"))
+            val result = vardefService.getDefinition(variableDefinition,"nb")
+            val definition = """
+                {nb=Bankens rolle i verden}
+            """.trimIndent()
+            assertThat(result.toString()).isEqualTo(definition)
+        }
     }

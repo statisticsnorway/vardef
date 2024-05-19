@@ -46,7 +46,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
     }
 
     @Serdeable.Serializable
-    private fun getDefinition(
+    fun getDefinition(
         variableDefinitionDAO: VariableDefinitionDAO,
         language: String,
     ): Map<SupportedLanguages,String>? {

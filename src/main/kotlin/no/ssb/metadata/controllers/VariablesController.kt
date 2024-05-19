@@ -14,9 +14,9 @@ import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
-import no.ssb.metadata.models.VariableDefinition
+import no.ssb.metadata.models.VariableDefinitionDAO
+import no.ssb.metadata.models.VariableDefinitionDTO
 import no.ssb.metadata.repositories.VariableDefinitionRepository
-import no.ssb.metadata.services.VariableDefinitionRequest
 import no.ssb.metadata.services.VariableDefinitionService
 
 @Validated
@@ -30,14 +30,14 @@ class VariablesController {
     lateinit var repository: VariableDefinitionRepository
 
     @Get()
-    fun list(): List<VariableDefinition> {
+    fun list(): List<VariableDefinitionDAO> {
         return vardefService.findAll()
     }
 
     @Get("/nb")
-    fun findAllNorwegian(
+    fun findAllByLanguage(
         @Header(HttpHeaders.ACCEPT_LANGUAGE) language: String,
-    ): List<VariableDefinitionRequest> {
+    ): List<VariableDefinitionDTO> {
         return vardefService.findByLanguage(language)
     }
 
@@ -46,8 +46,8 @@ class VariablesController {
     @ApiResponse(responseCode = "201", description = "Successfuly created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinition(
-        @Body @Valid vardef: VariableDefinition,
-    ): VariableDefinition {
+        @Body @Valid vardef: VariableDefinitionDAO,
+    ): VariableDefinitionDAO {
         return repository.save(vardef)
     }
 }

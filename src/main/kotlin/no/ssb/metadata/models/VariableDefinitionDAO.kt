@@ -29,7 +29,7 @@ import org.bson.types.ObjectId
         }
     """,
 )
-data class VariableDefinition(
+data class VariableDefinitionDAO(
     @field:Id
     @GeneratedValue
     @JsonIgnore

@@ -7,14 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(
     example = """
         {
-            "name": 
-                {   "language code": "value",
-                },
+            "name": {"language code": "value"},
             "short_name": "string",
-            "definition": 
-                {
-                    "language code": "value",
-                }
+            "definition": {"language code": "value"}
         }
     """,
 )

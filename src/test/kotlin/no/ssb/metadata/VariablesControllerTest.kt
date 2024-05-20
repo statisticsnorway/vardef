@@ -112,19 +112,32 @@ class VariablesControllerTest
         }
 
         @Test
-        @Suppress("ktlint:standard:max-line-length")
         fun testHttpRequestsVariables(spec: RequestSpecification) {
+            val jsonString =
+                """    
+                {
+                    "name": {
+                        "en": "Bank door",
+                        "nb": "Bankdør",
+                        "nn": "Bankdørar"
+                    },
+                    "shortName": "bankInngang",
+                    "definition": {
+                        "en": "Get inside the bank",
+                        "nb": "Komme inn i banken",
+                        "nn": "Komme inn i banken"
+                    }
+                }
+                """.trimIndent()
             val postResponse =
                 spec
                     .given()
                     .contentType(ContentType.JSON)
-                    .body(
-                        "{\"name\":{\"en\":\"Bank door\",\"nb\":\"Bankdør\",\"nn\":\"Bankdørar\" },\"shortName\":\"bankInngang\",\"definition\":{\"en\":\"Get inside the bank\",\"nb\":\"Komme inn i banken\",\"nn\":\"Komme inn i banken\" }}",
-                    )
+                    .body(jsonString)
                     .`when`()
                     .post("/variables")
                     .then()
-                    .statusCode(201)
+                    .statusCode(201).extract().body()
             assertThat(postResponse.toString()).isNotEmpty()
 
             val getResponseNorwegianBokmaal =

@@ -24,7 +24,7 @@ class VariablesControllerTest
                 .given()
                 .contentType(ContentType.JSON)
                 .body(
-                    "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"Bank kamerat\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"Definition of money\",\"nb\":\"Definisjon av penger\",\"nn\":\"Definere pengar\" }}",
+                   "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"Bank kamerat\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"Definition of money\",\"nb\":\"Definisjon av penger\",\"nn\":\"Definere pengar\" }}",
                 )
                 .`when`()
                 .post("/variables")
@@ -69,7 +69,7 @@ class VariablesControllerTest
         }
 
         @Test
-        fun testMethod() {
+        fun testGetVariablesByLanguage() {
             val result = vardefService.findByLanguage("nb")
             val name = """
                 {nb=Bankforbindelser}
@@ -85,15 +85,20 @@ class VariablesControllerTest
         fun testGetName() {
             val variableDefinition = VariableDefinitionDAO(null, mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),"bla", mapOf(
                 SupportedLanguages.NB to "nnnn"))
-            val result = vardefService.getName(variableDefinition,"nb")
-            val name = """
+            val resultNorwegian = vardefService.getName(variableDefinition,"nb")
+            val resultEnglish = vardefService.getName(variableDefinition,"en")
+            val nameNorwegian = """
                 {nb=Bla bla}
             """.trimIndent()
-            assertThat(result.toString()).isEqualTo(name)
+            val nameEnglish = """
+                {en=English name}
+            """.trimIndent()
+            assertThat(resultNorwegian.toString()).isEqualTo(nameNorwegian)
+            assertThat(resultEnglish.toString()).isEqualTo(nameEnglish)
         }
 
         @Test
-        fun testGetResult() {
+        fun testGetDefinition() {
             val variableDefinition = VariableDefinitionDAO(null, mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),"bla", mapOf(
                 SupportedLanguages.EN to "Bank definition", SupportedLanguages.NB to "Bankens rolle i verden"))
             val result = vardefService.getDefinition(variableDefinition,"nb")
@@ -101,5 +106,51 @@ class VariablesControllerTest
                 {nb=Bankens rolle i verden}
             """.trimIndent()
             assertThat(result.toString()).isEqualTo(definition)
+        }
+
+        @Test
+        fun testHttpRequestsVariables(spec: RequestSpecification) {
+            val postResponse =
+                spec
+                    .given()
+                    .contentType(ContentType.JSON)
+                    .body(
+                        "{\"name\":{\"en\":\"Bank door\",\"nb\":\"Bankdør\",\"nn\":\"Bankdørar\" },\"shortName\":\"bankInngang\",\"definition\":{\"en\":\"Get inside the bank\",\"nb\":\"Komme inn i banken\",\"nn\":\"Komme inn i banken\" }}",
+                    )
+                    .`when`()
+                    .post("/variables")
+                    .then()
+                    .statusCode(201)
+            assertThat(postResponse.toString()).isNotEmpty()
+
+            val getResponseNorwegianBokmaal =
+                spec
+                    .`when`()
+                    .contentType(ContentType.JSON)
+                    .header("Accept-Language", "nb")
+                    .get("/variables/nb")
+                    .then()
+                    .assertThat().statusCode(200).extract().body().asString()
+            assertThat((getResponseNorwegianBokmaal)).isNotNull()
+
+            val getResponseNorwegianNynorsk =
+                spec
+                    .`when`()
+                    .contentType(ContentType.JSON)
+                    .header("Accept-Language", "nn")
+                    .get("/variables/nn")
+                    .then()
+                    .assertThat().statusCode(200).extract().body().asString()
+            assertThat((getResponseNorwegianNynorsk)).isNotNull()
+
+            val getResponseEnglish =
+                spec
+                    .`when`()
+                    .contentType(ContentType.JSON)
+                    .header("Accept-Language", "en")
+                    .get("/variables/en")
+                    .then()
+                    .assertThat().statusCode(200).extract().body().asString()
+            assertThat((getResponseEnglish)).isNotNull()
         }
     }

@@ -38,7 +38,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
     ): Map<SupportedLanguages,String> ?{
         for ((k, v) in variableDefinitionDAO.name) {
             if (k.toString() == language) {
-                println(v)
+                println(k)
                 return mapOf(k to v)
             }
         }
@@ -52,7 +52,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
     ): Map<SupportedLanguages,String>? {
         for ((k, v) in variableDefinitionDAO.definition) {
             if (k.toString() == language) {
-                println(v)
+                println(k)
                 return mapOf(k to v)
             }
         }

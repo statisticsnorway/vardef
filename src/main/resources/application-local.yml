@@ -5,4 +5,4 @@ logger:
     root: DEBUG
 
 mongodb:
-  uri: mongodb://localhost:27017/variables
+  uri: mongodb://localhost:27017

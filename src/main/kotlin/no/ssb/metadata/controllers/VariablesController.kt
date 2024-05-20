@@ -1,6 +1,7 @@
 package no.ssb.metadata.controllers
 
 import io.micronaut.http.HttpHeaders
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -34,9 +35,10 @@ class VariablesController {
         return vardefService.findAll()
     }
 
-    @Get("/nb")
+    @Get("/{language}")
     fun findAllByLanguage(
-        @Header(HttpHeaders.ACCEPT_LANGUAGE) language: String,
+        @Header language: String
+        //@Header(HttpHeaders.ACCEPT_LANGUAGE) language: String,
     ): List<VariableDefinitionDTO> {
         return vardefService.findByLanguage(language)
     }

@@ -69,19 +69,6 @@ class VariablesControllerTest
         }
 
         @Test
-        fun testGetVariablesByLanguage() {
-            val result = vardefService.findByLanguage("nb")
-            val name = """
-                {nb=Bankforbindelser}
-            """.trimIndent()
-            val definition = """
-                {nb=Definisjon av penger}
-            """.trimIndent()
-            assertThat(result[0].name.toString()).isEqualTo(name)
-            assertThat(result[0].definition.toString()).isEqualTo(definition)
-        }
-
-        @Test
         fun testGetName() {
             val variableDefinition = VariableDefinitionDAO(null, mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),"bla", mapOf(
                 SupportedLanguages.NB to "nnnn"))

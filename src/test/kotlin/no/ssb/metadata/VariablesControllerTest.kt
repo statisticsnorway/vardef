@@ -15,8 +15,6 @@ import org.junit.jupiter.api.Test
 class VariablesControllerTest
     @Inject
     constructor(val vardefService: VariableDefinitionService) {
-
-
         @Test
         @Suppress("ktlint:standard:max-line-length")
         fun testVariables(spec: RequestSpecification) {
@@ -24,7 +22,7 @@ class VariablesControllerTest
                 .given()
                 .contentType(ContentType.JSON)
                 .body(
-                   "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"Bank kamerat\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"Definition of money\",\"nb\":\"Definisjon av penger\",\"nn\":\"Definere pengar\" }}",
+                    "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"Bank kamerat\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"Definition of money\",\"nb\":\"Definisjon av penger\",\"nn\":\"Definere pengar\" }}",
                 )
                 .`when`()
                 .post("/variables")
@@ -70,32 +68,51 @@ class VariablesControllerTest
 
         @Test
         fun testGetName() {
-            val variableDefinition = VariableDefinitionDAO(null, mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),"bla", mapOf(
-                SupportedLanguages.NB to "nnnn"))
-            val resultNorwegian = vardefService.getName(variableDefinition,"nb")
-            val resultEnglish = vardefService.getName(variableDefinition,"en")
-            val nameNorwegian = """
+            val variableDefinition =
+                VariableDefinitionDAO(
+                    null,
+                    mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),
+                    "bla",
+                    mapOf(
+                        SupportedLanguages.NB to "nnnn",
+                    ),
+                )
+            val resultNorwegian = vardefService.getName(variableDefinition, "nb")
+            val resultEnglish = vardefService.getName(variableDefinition, "en")
+            val nameNorwegian =
+                """
                 {nb=Bla bla}
-            """.trimIndent()
-            val nameEnglish = """
+                """.trimIndent()
+            val nameEnglish =
+                """
                 {en=English name}
-            """.trimIndent()
+                """.trimIndent()
             assertThat(resultNorwegian.toString()).isEqualTo(nameNorwegian)
             assertThat(resultEnglish.toString()).isEqualTo(nameEnglish)
         }
 
         @Test
         fun testGetDefinition() {
-            val variableDefinition = VariableDefinitionDAO(null, mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),"bla", mapOf(
-                SupportedLanguages.EN to "Bank definition", SupportedLanguages.NB to "Bankens rolle i verden"))
-            val result = vardefService.getDefinition(variableDefinition,"nb")
-            val definition = """
+            val variableDefinition =
+                VariableDefinitionDAO(
+                    null,
+                    mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),
+                    "bla",
+                    mapOf(
+                        SupportedLanguages.EN to "Bank definition",
+                        SupportedLanguages.NB to "Bankens rolle i verden",
+                    ),
+                )
+            val result = vardefService.getDefinition(variableDefinition, "nb")
+            val definition =
+                """
                 {nb=Bankens rolle i verden}
-            """.trimIndent()
+                """.trimIndent()
             assertThat(result.toString()).isEqualTo(definition)
         }
 
         @Test
+        @Suppress("ktlint:standard:max-line-length")
         fun testHttpRequestsVariables(spec: RequestSpecification) {
             val postResponse =
                 spec

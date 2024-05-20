@@ -35,8 +35,8 @@ class VariablesController {
 
     @Get("/{language}")
     fun findAllByLanguage(
-        @Header language: String
-        //@Header(HttpHeaders.ACCEPT_LANGUAGE) language: String,
+        @Header language: String,
+        // @Header(HttpHeaders.ACCEPT_LANGUAGE) language: String,
     ): List<VariableDefinitionDTO> {
         return vardefService.findByLanguage(language)
     }

@@ -18,13 +18,16 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
         val variables = findAll()
         val result: MutableList<VariableDefinitionDTO> = mutableListOf()
         for (variable in variables) {
-            val variableDefinitionDTO = getName(variable, language)?.let {
-                getDefinition(variable, language)?.let { it1 ->
-                    VariableDefinitionDTO(
-                        it,variable.shortName , it1
-                    )
+            val variableDefinitionDTO =
+                getName(variable, language)?.let {
+                    getDefinition(variable, language)?.let { it1 ->
+                        VariableDefinitionDTO(
+                            it,
+                            variable.shortName,
+                            it1,
+                        )
+                    }
                 }
-            }
             if (variableDefinitionDTO != null) {
                 result.add(variableDefinitionDTO)
             }
@@ -35,7 +38,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
     fun getName(
         variableDefinitionDAO: VariableDefinitionDAO,
         language: String,
-    ): Map<SupportedLanguages,String> ?{
+    ): Map<SupportedLanguages, String>? {
         for ((k, v) in variableDefinitionDAO.name) {
             if (k.toString() == language) {
                 return mapOf(k to v)
@@ -48,7 +51,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
     fun getDefinition(
         variableDefinitionDAO: VariableDefinitionDAO,
         language: String,
-    ): Map<SupportedLanguages,String>? {
+    ): Map<SupportedLanguages, String>? {
         for ((k, v) in variableDefinitionDAO.definition) {
             if (k.toString() == language) {
                 return mapOf(k to v)

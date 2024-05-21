@@ -174,9 +174,7 @@ class VariablesControllerTest {
                 .get("/variables")
                 .then()
                 .assertThat().statusCode(200).extract().body().asString()
-        assertThat(
-            getResponseDefaultLanguage,
-        ).isNotNull().isEqualTo(
+        assertThat(getResponseDefaultLanguage).isNotNull().isEqualTo(
             """[{"name":{"nb":"Bankforbindelser"},"shortName":"Bank","definition":{"nb":"Definisjon av penger"}},{"name":{"nb":"Bankdør"},"shortName":"bankInngang","definition":{"nb":"Komme inn i banken"}},{"name":{"nb":"Bankdør"},"shortName":"bankInngang","definition":{"nb":"Komme inn i banken"}}]""",
         )
     }

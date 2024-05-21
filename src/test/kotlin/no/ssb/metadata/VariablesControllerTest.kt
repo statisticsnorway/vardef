@@ -3,18 +3,15 @@ package no.ssb.metadata
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import jakarta.inject.Inject
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
-import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
 
 @MicronautTest
-class VariablesControllerTest
-    @Inject
-    constructor(val vardefService: VariableDefinitionService) {
+class VariablesControllerTest {
+
         @Test
         @Suppress("ktlint:standard:max-line-length")
         fun testVariables(spec: RequestSpecification) {
@@ -77,8 +74,8 @@ class VariablesControllerTest
                         SupportedLanguages.NB to "nnnn",
                     ),
                 )
-            val resultNorwegian = vardefService.getName(variableDefinition, "nb")
-            val resultEnglish = vardefService.getName(variableDefinition, "en")
+            val resultNorwegian = variableDefinition.getName( "nb")
+            val resultEnglish = variableDefinition.getName( "en")
             val nameNorwegian =
                 """
                 {nb=Bla bla}
@@ -103,7 +100,7 @@ class VariablesControllerTest
                         SupportedLanguages.NB to "Bankens rolle i verden",
                     ),
                 )
-            val result = vardefService.getDefinition(variableDefinition, "nb")
+            val result = variableDefinition.getDefinition("nb")
             val definition =
                 """
                 {nb=Bankens rolle i verden}

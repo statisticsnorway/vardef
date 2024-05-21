@@ -36,6 +36,7 @@ class VariablesControllerGetTest {
                 .then()
                 .statusCode(201).extract().body()
         assertThat(postResponse.toString()).isNotEmpty()
+
         val getResponse =
             spec
                 .`when`()

@@ -6,5 +6,5 @@ schema:
   type: string
   pattern: "^[a-z0-9]{8}$"
   examples:
-    id_example:
+    - id_example:
       value: enkb87pj

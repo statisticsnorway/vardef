@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO
-import no.ssb.metadata.repositories.VariableDefinitionRepository
 import no.ssb.metadata.services.VariableDefinitionService
 
 @Validated

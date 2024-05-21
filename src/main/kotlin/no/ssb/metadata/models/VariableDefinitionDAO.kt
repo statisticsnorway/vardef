@@ -8,7 +8,6 @@ import io.micronaut.serde.annotation.Serdeable
 import io.swagger.v3.oas.annotations.media.Schema
 import org.bson.types.ObjectId
 
-
 @MappedEntity
 @Serdeable
 // @Suppress("ktlint:standard:max-line-length")
@@ -30,19 +29,16 @@ import org.bson.types.ObjectId
         }
     """,
 )
-class VariableDefinitionDAO  (
+class VariableDefinitionDAO(
     @field:Id
     @GeneratedValue
     @JsonIgnore
     var id: ObjectId?,
     var name: Map<SupportedLanguages, String>,
     var shortName: String?,
-    var definition: Map<SupportedLanguages, String>,) {
-
-
-    fun getName(
-        language: String,
-    ): Map<SupportedLanguages, String>? {
+    var definition: Map<SupportedLanguages, String>,
+) {
+    fun getName(language: String): Map<SupportedLanguages, String>? {
         for ((k, v) in this.name) {
             if (k.toString() == language) {
                 return mapOf(k to v)
@@ -51,9 +47,7 @@ class VariableDefinitionDAO  (
         return null
     }
 
-    fun getDefinition(
-        language: String,
-    ): Map<SupportedLanguages, String>? {
+    fun getDefinition(language: String): Map<SupportedLanguages, String>? {
         for ((k, v) in this.definition) {
             if (k.toString() == language) {
                 return mapOf(k to v)
@@ -61,5 +55,4 @@ class VariableDefinitionDAO  (
         }
         return null
     }
-
 }

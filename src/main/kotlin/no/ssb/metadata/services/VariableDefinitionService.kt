@@ -32,41 +32,4 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
         }
         return result
     }
-
-    /*
-    val variableDefinitionDTO =
-                getName(variable, language)?.let {
-                    getDefinition(variable, language)?.let { it1 ->
-                        VariableDefinitionDTO(
-                            it,
-                            variable.shortName,
-                            it1,
-                        )
-                    }
-                }
-
-    fun getName(
-        variableDefinitionDAO: VariableDefinitionDAO1,
-        language: String,
-    ): Map<SupportedLanguages, String>? {
-        for ((k, v) in variableDefinitionDAO.name) {
-            if (k.toString() == language) {
-                return mapOf(k to v)
-            }
-        }
-        return null
-    }
-
-    @Serdeable.Serializable
-    fun getDefinition(
-        variableDefinitionDAO: VariableDefinitionDAO1,
-        language: String,
-    ): Map<SupportedLanguages, String>? {
-        for ((k, v) in variableDefinitionDAO.definition) {
-            if (k.toString() == language) {
-                return mapOf(k to v)
-            }
-        }
-        return null
-    }*/
 }

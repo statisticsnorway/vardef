@@ -6,7 +6,7 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.*
 import org.junit.jupiter.api.Test
 
 @MicronautTest
@@ -53,7 +53,6 @@ class VariablesControllerTest {
                 ),
             )
         val resultNorwegian = variableDefinition.getName("nb")
-        val resultWithDefaultValue = variableDefinition.getName(null)
         val resultEnglish = variableDefinition.getName("en")
         val nameNorwegian =
             """
@@ -64,7 +63,6 @@ class VariablesControllerTest {
             {en=English name}
             """.trimIndent()
         assertThat(resultNorwegian.toString()).isEqualTo(nameNorwegian)
-        assertThat(resultWithDefaultValue.toString()).isEqualTo(nameNorwegian)
         assertThat(resultEnglish.toString()).isEqualTo(nameEnglish)
     }
 
@@ -73,25 +71,66 @@ class VariablesControllerTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),
-                "bla",
+                mapOf(SupportedLanguages.NB to "Norsk navn", SupportedLanguages.EN to "English name"),
+                "testNavn",
                 mapOf(
                     SupportedLanguages.EN to "Bank definition",
                     SupportedLanguages.NB to "Bankens rolle i verden",
                 ),
             )
         val resultNorwegian = variableDefinition.getDefinition("nb")
-        val resultWithDefaultValue = variableDefinition.getDefinition(null)
         val norwegianDefinition =
             """
             {nb=Bankens rolle i verden}
             """.trimIndent()
         assertThat(resultNorwegian.toString()).isEqualTo(norwegianDefinition)
-        assertThat(resultWithDefaultValue.toString()).isEqualTo(norwegianDefinition)
     }
 
     @Test
     fun testHttpRequestsVariables(spec: RequestSpecification) {
+        val jsonString =
+            """    
+            {
+                "name": {
+                    "en": "Bank door",
+                    "nb": "Bankdør",
+                    "nn": "Bankdørar"
+                },
+                "shortName": "bankInngang",
+                "definition": {
+                    "en": "Get inside the bank",
+                    "nb": "Komme inn i banken",
+                    "nn": "Komme inn i banken"
+                }
+            }
+            """.trimIndent()
+        val postResponse =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString)
+                .`when`()
+                .post("/variables")
+                .then()
+                .statusCode(201).extract().body()
+        assertThat(postResponse.toString()).isNotEmpty()
+
+
+
+        val getResponseNorwegianNN =
+            spec
+                .`when`()
+                .contentType(ContentType.JSON)
+                .header("Accept-Language", "nn")
+                .get("/variables")
+                .then()
+                .assertThat().statusCode(200).extract().body().asString()
+
+        assertThat((getResponseNorwegianNN)).isNotNull()
+    }
+
+    @Test
+    fun testHttpRequestNorwegianVariables(spec: RequestSpecification){
         val jsonString =
             """    
             {
@@ -129,15 +168,44 @@ class VariablesControllerTest {
                 .assertThat().statusCode(200).extract().body().asString()
         assertThat((getResponseNorwegianNB)).isNotNull()
 
-        val getResponseNorwegianNN =
+        val getResponseDefaultLanguage =
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
-                .header("Accept-Language", "nn")
                 .get("/variables")
                 .then()
                 .assertThat().statusCode(200).extract().body().asString()
-        assertThat((getResponseNorwegianNN)).isNotNull()
+        assertThat(getResponseDefaultLanguage).isNotNull().isEqualTo("""[{"name":{"nb":"Bankdør"},"shortName":"bankInngang","definition":{"nb":"Komme inn i banken"}}]""")
+
+    }
+    @Test
+    fun testHttpRequestEnglishVariables(spec: RequestSpecification){
+        val jsonString =
+            """    
+            {
+                "name": {
+                    "en": "Bank door",
+                    "nb": "Bankdør",
+                    "nn": "Bankdørar"
+                },
+                "shortName": "bankInngang",
+                "definition": {
+                    "en": "Get inside the bank",
+                    "nb": "Komme inn i banken",
+                    "nn": "Komme inn i banken"
+                }
+            }
+            """.trimIndent()
+        val postResponse =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString)
+                .`when`()
+                .post("/variables")
+                .then()
+                .statusCode(201).extract().body()
+        assertThat(postResponse.toString()).isNotEmpty()
 
         val getResponseEnglish =
             spec
@@ -146,7 +214,7 @@ class VariablesControllerTest {
                 .header("Accept-Language", "en")
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(200).extract().body().asString()
+                .assertThat().statusCode(200).extract().body().asPrettyString()
         assertThat((getResponseEnglish)).isNotNull()
     }
 }

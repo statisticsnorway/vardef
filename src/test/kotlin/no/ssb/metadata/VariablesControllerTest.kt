@@ -18,7 +18,7 @@ class VariablesControllerTest {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"Bank kamerat\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"Definition of money\",\"nb\":\"Definisjon av penger\",\"nn\":\"Definere pengar\" }}",
+                "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"Bankforbinding\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"Definition of money\",\"nb\":\"Definisjon av penger\",\"nn\":\"Definere pengar\" }}",
             )
             .`when`()
             .post("/variables")
@@ -29,34 +29,13 @@ class VariablesControllerTest {
     }
 
     @Test
-    fun testGetAllVariables(spec: RequestSpecification) {
-        spec
-            .`when`()
-            .get("/variables")
-            .then()
-            .statusCode(200)
-    }
-
-    @Test
-    fun testGetVariablesReturnList(spec: RequestSpecification) {
-        val responseList =
-            spec
-                .`when`()
-                .get("/variables")
-                .then()
-                .assertThat()
-                .statusCode(200).extract().body().asString()
-        assertThat(responseList).isNotEmpty()
-    }
-
-    @Test
     fun getVariablesByLanguage(spec: RequestSpecification) {
         val response =
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "nb")
-                .get("/variables/nb")
+                .get("/variables")
                 .then()
                 .assertThat().statusCode(200)
         assertThat(response).isNotNull
@@ -145,7 +124,7 @@ class VariablesControllerTest {
                 .`when`()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "nb")
-                .get("/variables/nb")
+                .get("/variables")
                 .then()
                 .assertThat().statusCode(200).extract().body().asString()
         assertThat((getResponseNorwegianNB)).isNotNull()
@@ -155,7 +134,7 @@ class VariablesControllerTest {
                 .`when`()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "nn")
-                .get("/variables/nn")
+                .get("/variables")
                 .then()
                 .assertThat().statusCode(200).extract().body().asString()
         assertThat((getResponseNorwegianNN)).isNotNull()
@@ -165,7 +144,7 @@ class VariablesControllerTest {
                 .`when`()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "en")
-                .get("/variables/en")
+                .get("/variables")
                 .then()
                 .assertThat().statusCode(200).extract().body().asString()
         assertThat((getResponseEnglish)).isNotNull()

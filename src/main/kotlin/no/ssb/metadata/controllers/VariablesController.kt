@@ -29,21 +29,15 @@ class VariablesController {
     lateinit var repository: VariableDefinitionRepository
 
     @Get()
-    fun list(): List<VariableDefinitionDAO> {
-        return vardefService.findAll()
-    }
-
-    @Get("/{language}")
-    fun findAllByLanguage(
-        @Header language: String,
-        // @Header(HttpHeaders.ACCEPT_LANGUAGE) language: String,
+    fun listAllByLanguage(
+        @Header("Accept-Language") language: String?,
     ): List<VariableDefinitionDTO> {
         return vardefService.findByLanguage(language)
     }
 
     @Post()
     @Status(HttpStatus.CREATED)
-    @ApiResponse(responseCode = "201", description = "Successfuly created.")
+    @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinition(
         @Body @Valid vardef: VariableDefinitionDAO,

@@ -12,7 +12,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
             .findAll()
             .toList()
 
-    fun findByLanguage(language: String): List<VariableDefinitionDTO> {
+    fun findByLanguage(language: String?): List<VariableDefinitionDTO> {
         val variables = findAll()
         val result: MutableList<VariableDefinitionDTO> = mutableListOf()
         for (variable in variables) {

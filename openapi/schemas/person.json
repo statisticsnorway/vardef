@@ -1,0 +1,15 @@
+{
+  "$comment": "Person",
+  "type": "object",
+  "properties": {
+    "code": {
+      "title": "Person, initials",
+      "type": "string",
+      "pattern": "^[a-z]{3}$"
+    },
+    "name": {
+      "title": "Person, name",
+      "type": "string"
+    }
+  }
+}

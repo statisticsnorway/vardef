@@ -23,7 +23,6 @@ class VariablesController {
     @Inject
     lateinit var vardefService: VariableDefinitionService
 
-
     @Get()
     fun listAllByLanguage(
         @Header("Accept-Language", defaultValue = "nb") language: String,

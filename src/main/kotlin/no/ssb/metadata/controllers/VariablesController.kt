@@ -35,7 +35,7 @@ class VariablesController {
         return vardefService.findByLanguage(language)
     }
 
-    @Post()
+    /*@Post()
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
@@ -43,5 +43,11 @@ class VariablesController {
         @Body @Valid vardef: VariableDefinitionDAO,
     ): VariableDefinitionDAO {
         return repository.save(vardef)
-    }
+    }*/
+
+    @Post()
+    @Status(HttpStatus.CREATED)
+    @ApiResponse(responseCode = "201", description = "Successfully created.")
+    @ApiResponse(responseCode = "400", description = "Bad request.")
+    fun save(@Body vardef: VariableDefinitionDAO): VariableDefinitionDAO = vardefService.save(vardef)
 }

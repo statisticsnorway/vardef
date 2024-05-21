@@ -1,6 +1,7 @@
 package no.ssb.metadata.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import io.micronaut.core.annotation.Introspected
 import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.bson.types.ObjectId
 
 @MappedEntity
+@Introspected
 @Serdeable
 // @Suppress("ktlint:standard:max-line-length")
 @Schema(
@@ -19,7 +21,7 @@ import org.bson.types.ObjectId
                     "nb": "Norwegian Bokmål",
                     "nn": "Norwegian Nynorsk"
                 },
-            "short_name": "string",
+            "shortName": "string",
             "definition": 
                 {
                     "en": "English",
@@ -35,7 +37,7 @@ class VariableDefinitionDAO(
     @JsonIgnore
     var id: ObjectId?,
     var name: Map<SupportedLanguages, String>,
-    var shortName: String?,
+    var shortName: String,
     var definition: Map<SupportedLanguages, String>,
 ) {
     fun getName(language: String): Map<SupportedLanguages, String> {

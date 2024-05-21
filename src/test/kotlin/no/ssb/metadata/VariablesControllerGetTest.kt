@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 @MicronautTest
 class VariablesControllerGetTest {
     @Test
-    fun variablesByNotSupportedLanguage(spec: RequestSpecification) {
+    fun variablesByNotSupportedLanguageReturnShortName(spec: RequestSpecification) {
         val jsonString =
             """    
             {

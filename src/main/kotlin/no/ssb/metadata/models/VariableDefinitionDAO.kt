@@ -38,21 +38,26 @@ class VariableDefinitionDAO(
     var shortName: String?,
     var definition: Map<SupportedLanguages, String>,
 ) {
-    fun getName(language: String): Map<SupportedLanguages, String>? {
+
+    fun getName(language: String?): Map<SupportedLanguages, String> {
+        val inputLanguage = language ?: "nb"
+        var nameByLanguage = mapOf<SupportedLanguages,String>()
         for ((k, v) in this.name) {
-            if (k.toString() == language) {
-                return mapOf(k to v)
+            if (k.toString() == inputLanguage) {
+                nameByLanguage = mapOf(k to v)
             }
         }
-        return null
+        return nameByLanguage
     }
 
-    fun getDefinition(language: String): Map<SupportedLanguages, String>? {
+    fun getDefinition(language: String?): Map<SupportedLanguages, String> {
+        val inputLanguage = language ?: "nb"
+        var definitionByLanguage = mapOf<SupportedLanguages,String>()
         for ((k, v) in this.definition) {
-            if (k.toString() == language) {
-                return mapOf(k to v)
+            if (k.toString() == inputLanguage) {
+                definitionByLanguage = mapOf(k to v)
             }
         }
-        return null
+        return definitionByLanguage
     }
 }

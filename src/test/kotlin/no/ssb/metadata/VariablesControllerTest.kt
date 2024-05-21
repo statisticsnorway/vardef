@@ -67,23 +67,25 @@ class VariablesControllerTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.NB to "Bla bla", SupportedLanguages.EN to "English name"),
-                "bla",
+                mapOf(SupportedLanguages.NB to "Norsk navn", SupportedLanguages.EN to "English name"),
+                "test",
                 mapOf(
-                    SupportedLanguages.NB to "nnnn",
+                    SupportedLanguages.NB to "definisjon",
                 ),
             )
         val resultNorwegian = variableDefinition.getName("nb")
+        val resultWithDefaultValue = variableDefinition.getName(null)
         val resultEnglish = variableDefinition.getName("en")
         val nameNorwegian =
             """
-            {nb=Bla bla}
+            {nb=Norsk navn}
             """.trimIndent()
         val nameEnglish =
             """
             {en=English name}
             """.trimIndent()
         assertThat(resultNorwegian.toString()).isEqualTo(nameNorwegian)
+        assertThat(resultWithDefaultValue.toString()).isEqualTo(nameNorwegian)
         assertThat(resultEnglish.toString()).isEqualTo(nameEnglish)
     }
 
@@ -99,12 +101,14 @@ class VariablesControllerTest {
                     SupportedLanguages.NB to "Bankens rolle i verden",
                 ),
             )
-        val result = variableDefinition.getDefinition("nb")
-        val definition =
+        val resultNorwegian = variableDefinition.getDefinition("nb")
+        val resultWithDefaultValue = variableDefinition.getDefinition(null)
+        val norwegianDefinition =
             """
             {nb=Bankens rolle i verden}
             """.trimIndent()
-        assertThat(result.toString()).isEqualTo(definition)
+        assertThat(resultNorwegian.toString()).isEqualTo(norwegianDefinition)
+        assertThat(resultWithDefaultValue.toString()).isEqualTo(norwegianDefinition)
     }
 
     @Test
@@ -136,7 +140,7 @@ class VariablesControllerTest {
                 .statusCode(201).extract().body()
         assertThat(postResponse.toString()).isNotEmpty()
 
-        val getResponseNorwegianBokmaal =
+        val getResponseNorwegianNB =
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
@@ -144,9 +148,9 @@ class VariablesControllerTest {
                 .get("/variables/nb")
                 .then()
                 .assertThat().statusCode(200).extract().body().asString()
-        assertThat((getResponseNorwegianBokmaal)).isNotNull()
+        assertThat((getResponseNorwegianNB)).isNotNull()
 
-        val getResponseNorwegianNynorsk =
+        val getResponseNorwegianNN =
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
@@ -154,7 +158,7 @@ class VariablesControllerTest {
                 .get("/variables/nn")
                 .then()
                 .assertThat().statusCode(200).extract().body().asString()
-        assertThat((getResponseNorwegianNynorsk)).isNotNull()
+        assertThat((getResponseNorwegianNN)).isNotNull()
 
         val getResponseEnglish =
             spec

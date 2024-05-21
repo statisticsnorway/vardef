@@ -6,7 +6,7 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
 
 @MicronautTest
@@ -115,8 +115,6 @@ class VariablesControllerTest {
                 .statusCode(201).extract().body()
         assertThat(postResponse.toString()).isNotEmpty()
 
-
-
         val getResponseNorwegianNN =
             spec
                 .`when`()
@@ -130,7 +128,7 @@ class VariablesControllerTest {
     }
 
     @Test
-    fun testHttpRequestNorwegianVariables(spec: RequestSpecification){
+    fun testHttpRequestNorwegianVariables(spec: RequestSpecification) {
         val jsonString =
             """    
             {
@@ -175,11 +173,13 @@ class VariablesControllerTest {
                 .get("/variables")
                 .then()
                 .assertThat().statusCode(200).extract().body().asString()
-        assertThat(getResponseDefaultLanguage).isNotNull().isEqualTo("""[{"name":{"nb":"Bankdør"},"shortName":"bankInngang","definition":{"nb":"Komme inn i banken"}}]""")
-
+        assertThat(
+            getResponseDefaultLanguage,
+        ).isNotNull().isEqualTo("""[{"name":{"nb":"Bankdør"},"shortName":"bankInngang","definition":{"nb":"Komme inn i banken"}}]""")
     }
+
     @Test
-    fun testHttpRequestEnglishVariables(spec: RequestSpecification){
+    fun testHttpRequestEnglishVariables(spec: RequestSpecification) {
         val jsonString =
             """    
             {

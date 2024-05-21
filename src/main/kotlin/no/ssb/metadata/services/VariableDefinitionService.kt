@@ -1,8 +1,6 @@
 package no.ssb.metadata.services
 
-import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Singleton
-import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO
 import no.ssb.metadata.repositories.VariableDefinitionRepository

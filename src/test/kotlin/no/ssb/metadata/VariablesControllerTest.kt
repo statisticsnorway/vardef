@@ -229,4 +229,35 @@ class VariablesControllerTest {
                 .assertThat().statusCode(200).extract().body().asPrettyString()
         assertThat((getResponseEnglish)).isNotNull()
     }
+
+    @Test
+    fun testIncorrectLanguageCode(spec: RequestSpecification) {
+        val jsonString =
+            """    
+            {
+                "name": {
+                    "en": "Bank connections",
+                    "nb": "Bankforbindelser",
+                    "se": "Bankavtale"
+                },
+                "short_name": "bank",
+                "definition": {
+                    "en": "definition of money",
+                    "nb": "definisjon av penger",
+                    "nn": "pengers verdi"
+                }
+            }
+            """.trimIndent()
+        val getResponseIncorrectLanguage = spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonString)
+            .`when`()
+            .post("/variables")
+            .then()
+            .assertThat().statusCode(400).extract().body().asPrettyString()
+        assertThat((getResponseIncorrectLanguage) == "Unknown language code se. Valid values are [nb, nn, en")
+    }
 }
+
+

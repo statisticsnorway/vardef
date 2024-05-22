@@ -1,16 +1,25 @@
 package no.ssb.metadata
 
+import com.mongodb.client.MongoClient
+import io.micronaut.context.annotation.Property
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import jakarta.inject.Inject
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
+import no.ssb.metadata.models.VariableDefinitionDTO
+import no.ssb.metadata.repositories.VariableDefinitionRepository
+import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.Assertions.assertThat
+import org.bson.Document
 import org.hamcrest.CoreMatchers.equalTo
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @MicronautTest
 class VariablesControllerTest {
+
     @Test
     fun testVariables(spec: RequestSpecification) {
         val jsonString =

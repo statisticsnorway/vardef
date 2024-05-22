@@ -14,7 +14,7 @@ class VariablesDefinitionServiceTest {
     lateinit var variableDefinitionService: VariableDefinitionService
 
     @Test
-    fun testFindByLanguage()  {
+    fun testFindByLanguage() {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
@@ -26,6 +26,5 @@ class VariablesDefinitionServiceTest {
         val variables = variableDefinitionService.findByLanguage("nn")
         assertThat(variables[0].shortName).isEqualTo("test1")
         assertThat(variables[0].name).isNull()
-
     }
 }

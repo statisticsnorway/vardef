@@ -58,7 +58,6 @@ class VariableDefinitionDAO(
                 definitionByLanguage = v
                 return definitionByLanguage
             }
-
         }
         return null
     }

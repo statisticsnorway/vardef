@@ -1,71 +1,48 @@
 type: object
 properties:
+  id:
+    $ref: "identifier.yaml"
   name:
     title: Name
     description: Name of the variable
     type: string
+    examples:
+      - "Landbakgrunn"
   short_name:
     title: Short name
     description: Recommended short name
-    $comment: ' Alphanumeric limited to a-z, A-Z, 0-9, - (hyphen) and _ (underscore)'
     type: string
+    examples:
+      - landbak
+      - wkapinnt
+      - dek_total
   definition:
     title: Definition
     description: Definition of the variable
     type: string
+    examples:
+      - name: Country Background
+        value: "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar."
   classification_uri:
     title: Classification or code list URI
     description: Link (URI) to valid classification or code list
     type: string
     format: uri
+    examples:
+      - https://www.ssb.no/en/klass/klassifikasjoner/91
   unit_type:
     title: Unit type(s)
-    description: A list of one or more unit types, e.g. person, vehicle, household.
-    $comment: See list of Statistics Norways unit types https://www.ssb.no/en/metadata/definisjoner-av-statistiske-enheter
+    description: A list of one or more unit types, e.g. person, vehicle, household. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702.
     type: array
     items:
-      type: string
-      enum:
-      - ARBEIDSULYKKE
-      - ADRESSE
-      - BOLIG
-      - BYGNING
-      - EIENDOM
-      - FAMILIE
-      - FORETAK
-      - FYLKE_FORVALTNING
-      - FYLKE_GEOGRAFISK
-      - HAVNEANLOEP
-      - HUSHOLDNING
-      - KJOERETOEY
-      - KOMMUNE_FORVALTNING
-      - KOMMUNE_GEOGRAFISK
-      - KURS
-      - LOVBRUDD
-      - PERSON
-      - SKIP
-      - STATLIGE_VIRKSOMHETER
-      - STORFE
-      - TRAFIKKULYKKE
-      - TRANSAKSJON
-      - VALG
-      - VARE_TJENESTE
-      - VERDIPAPIR
-      - VIRKSOMHET
+      $ref: klass-reference.yaml
   subject_fields:
     title: Subject fields
     description: A list of subject fields that the variable is used in. Valid values
       defined by https://www.ssb.no/klass/klassifikasjoner/618
     type: array
     items:
-      type: object
-      properties:
-        code:
-          title: Subject field code
-          type: string
-        name:
-          title: Subject field name
-          $ref: language-texts.json
+      $ref: klass-reference.yaml
   direct_person_identifying:
     title: Direct Person identifying Information (DPI)
     description: Direct Person identifying Information (DPI)
@@ -74,17 +51,11 @@ properties:
     title: Status of the variable
     description: Status of the Life cycle of the variable
     type: string
-    enum:
-    - DRAFT
-    - PUBLISHED_INTERNAL
-    - PUBLISHED_EXTERNAL
-    - DEPRECATED
-    default: DRAFT
   measurement_type:
     title: Measurement type
     description: 'Type of measurement for the variable, e.g. length, volume, currency.
       Valid values defined by: https://www.ssb.no/klass/klassifikasjoner/303/koder'
-    type: string
+    $ref: klass-reference.yaml
   valid_from:
     title: Valid from
     description: The variable definition is valid from this date inclusive
@@ -109,12 +80,6 @@ properties:
     items:
       type: string
       format: uri
-  id:
-    title: Identifier
-    description: Unique identifier for the variable definition
-    type: string
-    pattern: ^[a-z0-9]{8}$
-    readOnly: true
   owner:
     title: Owner
     description: Division in Statistics Norway which is responsible for the variable.

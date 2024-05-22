@@ -32,7 +32,7 @@ class VariablesController {
     @ApiResponse(responseCode = "201", description = "Successfuly created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinition(
-        @Body @Valid vardef: VariableDefinition,
+        @Valid @Body vardef: VariableDefinition,
     ): VariableDefinition {
         return vardefService.save(vardef)
     }

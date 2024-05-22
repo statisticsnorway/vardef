@@ -41,7 +41,7 @@ class VariableDefinitionDAO(
     var definition: Map<SupportedLanguages, String>,
 ) {
     fun getName(language: String): String? {
-        var nameByLanguage: String = ""
+        val nameByLanguage: String
         for ((k, v) in this.name) {
             if (k.toString() == language) {
                 nameByLanguage = v
@@ -51,14 +51,15 @@ class VariableDefinitionDAO(
         return null
     }
 
-    fun getDefinition(language: String): String {
-        var definitionByLanguage: String = ""
+    fun getDefinition(language: String): String? {
+        val definitionByLanguage: String
         for ((k, v) in this.definition) {
             if (k.toString() == language) {
                 definitionByLanguage = v
+                return definitionByLanguage
             }
 
         }
-        return definitionByLanguage
+        return null
     }
 }

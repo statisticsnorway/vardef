@@ -8,8 +8,10 @@ import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
 @MicronautTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VariablesDefinitionServiceTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService

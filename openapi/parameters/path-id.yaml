@@ -4,7 +4,7 @@ description: ID of variable definition to update
 required: true
 schema:
   type: string
-  pattern: "^[a-z0-9]{8}$"
+  pattern: "^[a-zA-Z0-9-_]{8}$"
   examples:
-    - id_example:
-      value: enkb87pj
+    - "wypvb3wd"
+    - "i03qoh1e"

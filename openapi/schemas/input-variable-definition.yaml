@@ -4,6 +4,10 @@ properties:
     title: Name
     description: Name of the variable
     $ref: language-texts.json
+    examples:
+      - en: "Country Background"
+        nb: "Landbakgrunn"
+        nn: "Landbakgrunn"
   short_name:
     title: Short name
     description: Recommended short name
@@ -17,13 +21,16 @@ properties:
     title: Definition
     description: Definition of the variable
     $ref: language-texts.json
-  classification_uri:
-    title: Classification or code list URL
-    description: Valid URL to classification or code list. The given classification defines all possible values for the defined variable.
-    type: string
-    format: uri
     examples:
-      - https://www.ssb.no/klass/klassifikasjoner/91
+      - en: "Country background is the person's own, the mother's or possibly the father's country of birth. Persons without an immigrant background always have Norway as country background. In cases where the parents have different countries of birth the mother's country of birth is chosen. If neither the person nor the parents are born abroad, country background is chosen from the first person born abroad in the order mother's mother, mother's father, father's mother, father's father."
+        nb: "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar."
+  classification_reference:
+    title: Classification or code list ID
+    description: ID of a classification or code list from Klass. The given classification defines all possible values for the defined variable.
+    type: string
+    format: "^[0-9]{1,}%"
+    examples:
+      - "91"
   unit_type:
     title: Unit type(s)
     description: A list of one or more unit types, e.g. person, vehicle, household. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702.
@@ -104,3 +111,4 @@ required:
   - valid_from
   - unit_type
   - contains_unit_identifying_information
+  - contact

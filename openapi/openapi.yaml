@@ -12,6 +12,11 @@ info:
   version: 0.1.0
 servers:
   - url: https://metadata.ssb.no
+    description: Production
+  - url: https://metadata.test.ssb.no
+    description: Test
+  - url: https://127.0.0.1:8080
+    description: Local
 tags:
   - name: public
     description: Available to the general public without authentication.
@@ -84,13 +89,7 @@ paths:
       security: []   # Public endpoint, does not require authentication
       parameters:
         - $ref: "parameters/header-accept-language.yaml"
-        - name: id
-          in: path
-          description: ID of variable definition to return
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: "parameters/path-id.yaml"
       responses:
         '200':
           description: Successful operation

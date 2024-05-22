@@ -1,13 +1,6 @@
 package no.ssb.metadata
 
 import com.mongodb.assertions.Assertions.assertFalse
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
-import org.testcontainers.utility.DockerImageName
-import org.testcontainers.utility.MountableFile
-
-
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll

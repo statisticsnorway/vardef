@@ -32,4 +32,4 @@ spec:
   owner: dapla-metadata-developers
   lifecycle: experimental
   definition:
-   $text: ./openapi/vardef-openapi-spec.yaml
+   $text: ./openapi/openapi.yaml

@@ -14,12 +14,19 @@ class UnknownLanguageException(override val message: String) : IllegalArgumentEx
 @Produces
 @Singleton
 @Requires(classes = [UnknownLanguageException::class, ExceptionHandler::class])
-class UnknownLanguageExceptionHandler(private val errorResponseProcessor: HateoasErrorResponseProcessor) : ExceptionHandler<UnknownLanguageException, HttpResponse<*>> {
-    override fun handle(request: HttpRequest<*>?, exception: UnknownLanguageException?): HttpResponse<*>  {
+class UnknownLanguageExceptionHandler(
+    private val errorResponseProcessor: HateoasErrorResponseProcessor,
+) : ExceptionHandler<UnknownLanguageException, HttpResponse<*>> {
+    override fun handle(
+        request: HttpRequest<*>?,
+        exception: UnknownLanguageException?,
+    ): HttpResponse<*> {
         return errorResponseProcessor.processResponse(
             ErrorContext.builder(request)
                 .cause(exception)
                 .errorMessage(exception?.message)
-                .build(), HttpResponse.badRequest<Any>())
+                .build(),
+            HttpResponse.badRequest<Any>(),
+        )
     }
 }

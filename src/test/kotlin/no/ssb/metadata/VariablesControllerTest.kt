@@ -248,16 +248,15 @@ class VariablesControllerTest {
                 }
             }
             """.trimIndent()
-        val getResponseIncorrectLanguage = spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(jsonString)
-            .`when`()
-            .post("/variables")
-            .then()
-            .assertThat().statusCode(400).extract().body().asPrettyString()
+        val getResponseIncorrectLanguage =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString)
+                .`when`()
+                .post("/variables")
+                .then()
+                .assertThat().statusCode(400).extract().body().asPrettyString()
         assertThat((getResponseIncorrectLanguage) == "Unknown language code se. Valid values are [nb, nn, en")
     }
 }
-
-

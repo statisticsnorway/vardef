@@ -8,14 +8,14 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(
     example = """
         {
-            "name": {"language code": "value"},
+            "name": "value",
             "short_name": "string",
-            "definition": {"language code": "value"}
+            "definition": "value"
         }
     """,
 )
 data class VariableDefinitionDTO(
-    var name: Map<SupportedLanguages, String>,
+    var name: String?,
     var shortName: String,
-    var definition: Map<SupportedLanguages, String>,
+    var definition: String?,
 )

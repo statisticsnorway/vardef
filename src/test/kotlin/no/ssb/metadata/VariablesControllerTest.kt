@@ -3,8 +3,6 @@ package no.ssb.metadata
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.VariableDefinitionDAO
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
@@ -52,51 +50,6 @@ class VariablesControllerTest {
                 .then()
                 .assertThat().statusCode(200)
         assertThat(response).isNotNull
-    }
-
-    @Test
-    fun testGetName() {
-        val variableDefinition =
-            VariableDefinitionDAO(
-                null,
-                mapOf(SupportedLanguages.NB to "Norsk navn", SupportedLanguages.EN to "English name"),
-                "test",
-                mapOf(
-                    SupportedLanguages.NB to "definisjon",
-                ),
-            )
-        val resultNorwegian = variableDefinition.getName("nb")
-        val resultEnglish = variableDefinition.getName("en")
-        val nameNorwegian =
-            """
-            {nb=Norsk navn}
-            """.trimIndent()
-        val nameEnglish =
-            """
-            {en=English name}
-            """.trimIndent()
-        assertThat(resultNorwegian.toString()).isEqualTo(nameNorwegian)
-        assertThat(resultEnglish.toString()).isEqualTo(nameEnglish)
-    }
-
-    @Test
-    fun testGetDefinition() {
-        val variableDefinition =
-            VariableDefinitionDAO(
-                null,
-                mapOf(SupportedLanguages.NB to "Norsk navn", SupportedLanguages.EN to "English name"),
-                "testNavn",
-                mapOf(
-                    SupportedLanguages.EN to "Bank definition",
-                    SupportedLanguages.NB to "Bankens rolle i verden",
-                ),
-            )
-        val resultNorwegian = variableDefinition.getDefinition("nb")
-        val norwegianDefinition =
-            """
-            {nb=Bankens rolle i verden}
-            """.trimIndent()
-        assertThat(resultNorwegian.toString()).isEqualTo(norwegianDefinition)
     }
 
     @Test

@@ -7,7 +7,7 @@ import no.ssb.metadata.repositories.VariableDefinitionRepository
 
 @Singleton
 class VariableDefinitionService(private val variableDefinitionRepository: VariableDefinitionRepository) {
-    private fun findAll(): List<VariableDefinitionDAO> =
+    fun findAll(): List<VariableDefinitionDAO> =
         variableDefinitionRepository
             .findAll()
             .toList()

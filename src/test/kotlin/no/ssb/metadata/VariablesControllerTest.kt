@@ -3,12 +3,40 @@ package no.ssb.metadata
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import jakarta.inject.Inject
+import no.ssb.metadata.models.SupportedLanguages
+import no.ssb.metadata.models.VariableDefinitionDAO
+import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @MicronautTest
 class VariablesControllerTest {
+    @Inject
+    lateinit var variableDefinitionService: VariableDefinitionService
+
+    @BeforeEach
+    fun setUp() {
+        val variableDefinition =
+            VariableDefinitionDAO(
+                null,
+                mapOf((SupportedLanguages.NB to "verdi"), (SupportedLanguages.EN to "value")),
+                "test1",
+                mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
+            )
+        variableDefinitionService.save(variableDefinition)
+    }
+
+    @Test
+    fun testTest() {
+        val all = variableDefinitionService.findAll()
+        val variables = variableDefinitionService.findByLanguage("nb")
+        assertThat(variables[0].shortName).isEqualTo("test1")
+        assertThat(all[0].shortName).isEqualTo("test1")
+    }
+
     @Test
     fun testVariables(spec: RequestSpecification) {
         val jsonString =
@@ -41,15 +69,13 @@ class VariablesControllerTest {
 
     @Test
     fun getVariablesByLanguage(spec: RequestSpecification) {
-        val response =
-            spec
-                .`when`()
-                .contentType(ContentType.JSON)
-                .header("Accept-Language", "nb")
-                .get("/variables")
-                .then()
-                .assertThat().statusCode(200)
-        assertThat(response).isNotNull
+        spec
+            .`when`()
+            .contentType(ContentType.JSON)
+            .header("Accept-Language", "nb")
+            .get("/variables")
+            .then()
+            .assertThat().statusCode(200)
     }
 
     @Test

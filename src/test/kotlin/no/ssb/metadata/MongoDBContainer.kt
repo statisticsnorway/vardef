@@ -2,18 +2,16 @@ package no.ssb.metadata
 
 import com.mongodb.assertions.Assertions.assertFalse
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.testcontainers.containers.MongoDBContainer
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MongoDBContainer {
+    // @Inject private val mongoDBContainer: MongoDBContainer
 
-    //@Inject private val mongoDBContainer: MongoDBContainer
-    companion object {
+    /*companion object {
+
         private lateinit var mongoDBContainer: MongoDBContainer
 
         @BeforeAll
@@ -22,6 +20,13 @@ class MongoDBContainer {
             mongoDBContainer = MongoDBContainer("mongo:4.0.10")
             mongoDBContainer.start()
             System.setProperty("mongodb.uri", mongoDBContainer.replicaSetUrl)
+
+            // Initialize the MongoClient and insert test data
+            val mongoClient = MongoClients.create(mongoDBContainer.replicaSetUrl)
+            val database = mongoClient.getDatabase("vardef")
+            val collection = database.getCollection("testCollection")
+            collection.insertOne(Document("field", "expected result"))
+            mongoClient.close()
         }
 
         @AfterAll
@@ -30,10 +35,9 @@ class MongoDBContainer {
             mongoDBContainer.stop()
         }
     }
-
+*/
     @Test
     fun testSomething() {
-        // Your test logic here
         assertFalse(false)
     }
 }

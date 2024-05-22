@@ -40,22 +40,24 @@ class VariableDefinitionDAO(
     var shortName: String,
     var definition: Map<SupportedLanguages, String>,
 ) {
-    fun getName(language: String): Map<SupportedLanguages, String> {
-        var nameByLanguage = mapOf<SupportedLanguages, String>()
+    fun getName(language: String): String? {
+        var nameByLanguage: String = ""
         for ((k, v) in this.name) {
             if (k.toString() == language) {
-                nameByLanguage = mapOf(k to v)
+                nameByLanguage = v
+                return nameByLanguage
             }
         }
-        return nameByLanguage
+        return null
     }
 
-    fun getDefinition(language: String): Map<SupportedLanguages, String> {
-        var definitionByLanguage = mapOf<SupportedLanguages, String>()
+    fun getDefinition(language: String): String {
+        var definitionByLanguage: String = ""
         for ((k, v) in this.definition) {
             if (k.toString() == language) {
-                definitionByLanguage = mapOf(k to v)
+                definitionByLanguage = v
             }
+
         }
         return definitionByLanguage
     }

@@ -6,13 +6,13 @@ import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
+import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import org.bson.types.ObjectId
 
 @MappedEntity
 @Introspected
-@Serdeable
-// @Suppress("ktlint:standard:max-line-length")
+@Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
     example = """
         {
@@ -21,7 +21,7 @@ import org.bson.types.ObjectId
                     "nb": "Norwegian Bokmål",
                     "nn": "Norwegian Nynorsk"
                 },
-            "shortName": "string",
+            "short_name": "string",
             "definition": 
                 {
                     "en": "English",

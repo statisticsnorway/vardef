@@ -12,19 +12,32 @@ import org.junit.jupiter.api.Test
 @MicronautTest
 class VariablesControllerTest {
     @Test
-    @Suppress("ktlint:standard:max-line-length")
     fun testVariables(spec: RequestSpecification) {
+        val jsonString =
+            """    
+            {
+                "name": {
+                    "en": "Bank connections",
+                    "nb": "Bankforbindelser",
+                    "nn": "Bankavtale"
+                },
+                "short_name": "bank",
+                "definition": {
+                    "en": "definition of money",
+                    "nb": "definisjon av penger",
+                    "nn": "pengers verdi"
+                }
+            }
+            """.trimIndent()
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(
-                "{\"name\":{\"en\":\"Bank connections\",\"nb\":\"Bankforbindelser\",\"nn\":\"Bankforbinding\" },\"shortName\":\"Bank\",\"definition\":{\"en\":\"Definition of money\",\"nb\":\"Definisjon av penger\",\"nn\":\"Definere pengar\" }}",
-            )
+            .body(jsonString)
             .`when`()
             .post("/variables")
             .then()
             .statusCode(201)
-            .body("shortName", equalTo("Bank"))
+            .body("short_name", equalTo("bank"))
             .body("name.nb", equalTo("Bankforbindelser"))
     }
 
@@ -96,7 +109,7 @@ class VariablesControllerTest {
                     "nb": "Bankdør",
                     "nn": "Bankdørar"
                 },
-                "shortName": "bankInngang",
+                "short_name": "bankInngang",
                 "definition": {
                     "en": "Get inside the bank",
                     "nb": "Komme inn i banken",
@@ -138,7 +151,7 @@ class VariablesControllerTest {
                     "nb": "Bankdør",
                     "nn": "Bankdørar"
                 },
-                "shortName": "bankInngang",
+                "short_name": "bankInngang",
                 "definition": {
                     "en": "Get inside the bank",
                     "nb": "Komme inn i banken",
@@ -187,7 +200,7 @@ class VariablesControllerTest {
                     "nb": "Bankdør",
                     "nn": "Bankdørar"
                 },
-                "shortName": "bankInngang",
+                "short_name": "bankInngang",
                 "definition": {
                     "en": "Get inside the bank",
                     "nb": "Komme inn i banken",

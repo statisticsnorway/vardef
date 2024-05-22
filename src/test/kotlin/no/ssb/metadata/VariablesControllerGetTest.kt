@@ -18,7 +18,7 @@ class VariablesControllerGetTest {
                     "nb": "Bankdør",
                     "nn": "Bankdørar"
                 },
-                "shortName": "bankInngang",
+                "short_name": "bankInngang",
                 "definition": {
                     "en": "Get inside the bank",
                     "nb": "Komme inn i banken",
@@ -45,6 +45,6 @@ class VariablesControllerGetTest {
                 .get("/variables")
                 .then()
                 .assertThat().statusCode(200).and().extract().body().asString()
-        assertThat(getResponse).isNotNull().isEqualTo("""[{"shortName":"bankInngang"}]""")
+        assertThat(getResponse).isNotNull().isEqualTo("""[{"short_name":"bankInngang"}]""")
     }
 }

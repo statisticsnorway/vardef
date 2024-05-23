@@ -22,13 +22,13 @@ import no.ssb.metadata.services.VariableDefinitionService
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariablesController {
     @Inject
-    lateinit var vardefService: VariableDefinitionService
+    lateinit var varDefService: VariableDefinitionService
 
     @Get()
     fun listAllByLanguage(
         @Header("Accept-Language", defaultValue = "nb") language: String,
     ): List<VariableDefinitionDTO> {
-        return vardefService.findByLanguage(language)
+        return varDefService.findByLanguage(language)
     }
 
     @Post()
@@ -36,6 +36,6 @@ class VariablesController {
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun save(
-        @Body @Valid vardef: VariableDefinitionDAO,
-    ): VariableDefinitionDAO = vardefService.save(vardef)
+        @Body @Valid varDef: VariableDefinitionDAO,
+    ): VariableDefinitionDAO = varDefService.save(varDef)
 }

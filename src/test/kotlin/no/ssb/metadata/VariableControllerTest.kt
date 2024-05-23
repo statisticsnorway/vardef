@@ -22,7 +22,6 @@ class VariableControllerTest {
     private lateinit var variableDefinition: VariableDefinitionDAO
     private lateinit var variableDefinition1: VariableDefinitionDAO
     private lateinit var variableDefinition2: VariableDefinitionDAO
-    private lateinit var variableDefinition3: VariableDefinitionDAO
 
     @BeforeEach
     fun setUp() {

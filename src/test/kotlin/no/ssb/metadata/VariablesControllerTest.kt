@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test
 @MicronautTest
 class VariablesControllerTest {
     @Test
-    fun testVariables(spec: RequestSpecification) {
+    fun testCreateVariableDefinition(spec: RequestSpecification) {
         val jsonString =
-            """    
+            """
             {
                 "name": {
                     "en": "Bank connections",
@@ -40,6 +40,29 @@ class VariablesControllerTest {
     }
 
     @Test
+    fun testCreateVariableDefinitionMissingCompulsoryFields(spec: RequestSpecification) {
+        val jsonString =
+            """
+            {
+                "short_name": "bank",
+                "definition": {
+                    "en": "definition of money",
+                    "nb": "definisjon av penger",
+                    "nn": "pengers verdi"
+                }
+            }
+            """.trimIndent()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonString)
+            .`when`()
+            .post("/variables")
+            .then()
+            .statusCode(400)
+    }
+
+    @Test
     fun getVariablesByLanguage(spec: RequestSpecification) {
         val response =
             spec
@@ -55,7 +78,7 @@ class VariablesControllerTest {
     @Test
     fun testHttpRequestsVariables(spec: RequestSpecification) {
         val jsonString =
-            """    
+            """
             {
                 "name": {
                     "en": "Bank door",
@@ -97,7 +120,7 @@ class VariablesControllerTest {
     @Suppress("ktlint:standard:max-line-length")
     fun testHttpRequestNorwegianVariables(spec: RequestSpecification) {
         val jsonString =
-            """    
+            """
             {
                 "name": {
                     "en": "Bank door",
@@ -146,7 +169,7 @@ class VariablesControllerTest {
     @Test
     fun testHttpRequestEnglishVariables(spec: RequestSpecification) {
         val jsonString =
-            """    
+            """
             {
                 "name": {
                     "en": "Bank door",
@@ -186,7 +209,7 @@ class VariablesControllerTest {
     @Test
     fun testIncorrectLanguageCode(spec: RequestSpecification) {
         val jsonString =
-            """    
+            """
             {
                 "name": {
                     "en": "Bank connections",

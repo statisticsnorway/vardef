@@ -1,28 +1,28 @@
 package no.ssb.metadata.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import io.micronaut.core.annotation.Introspected
 import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
 import org.bson.types.ObjectId
 
 @MappedEntity
-@Introspected
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
     example = """
         {
-            "name": 
+            "name":
                 {   "en": "English",
                     "nb": "Norwegian Bokmål",
                     "nn": "Norwegian Nynorsk"
                 },
             "short_name": "string",
-            "definition": 
+            "definition":
                 {
                     "en": "English",
                     "nb": "Norwegian Bokmål",
@@ -31,14 +31,11 @@ import org.bson.types.ObjectId
         }
     """,
 )
-class VariableDefinitionDAO(
-    @field:Id
-    @GeneratedValue
-    @JsonIgnore
-    var id: ObjectId?,
-    var name: Map<SupportedLanguages, String>,
-    var shortName: String,
-    var definition: Map<SupportedLanguages, String>,
+data class VariableDefinitionDAO(
+    @field:Id @GeneratedValue @JsonIgnore val id: ObjectId?,
+    @field:NotBlank @Valid val name: Map<SupportedLanguages, String>,
+    @field:NotBlank val shortName: String,
+    @field:NotBlank val definition: Map<SupportedLanguages, String>,
 ) {
     fun getName(language: String): String? {
         val nameByLanguage: String

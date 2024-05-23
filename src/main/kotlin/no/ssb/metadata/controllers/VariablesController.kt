@@ -1,17 +1,13 @@
 package no.ssb.metadata.controllers
 
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Header
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Status
+import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
+import jakarta.validation.Valid
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO
 import no.ssb.metadata.services.VariableDefinitionService
@@ -35,6 +31,6 @@ class VariablesController {
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun save(
-        @Body vardef: VariableDefinitionDAO,
+        @Body @Valid vardef: VariableDefinitionDAO,
     ): VariableDefinitionDAO = vardefService.save(vardef)
 }

@@ -11,34 +11,43 @@ import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
 @MicronautTest
-class VariablesControllerTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class VariableControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
+    private lateinit var variableDefinition: VariableDefinitionDAO
+    private lateinit var variableDefinition1: VariableDefinitionDAO
+    private lateinit var variableDefinition2: VariableDefinitionDAO
+    private lateinit var variableDefinition3: VariableDefinitionDAO
+
     @BeforeEach
     fun setUp() {
-        val variableDefinition =
+        variableDefinition =
             VariableDefinitionDAO(
                 null,
                 mapOf((SupportedLanguages.NB to "verdi"), (SupportedLanguages.EN to "value")),
                 "test1",
                 mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
             )
+        variableDefinition1 =
+            VariableDefinitionDAO(
+                null,
+                mapOf(
+                    (SupportedLanguages.NB to "Bankdør"), (SupportedLanguages.EN to "Bank door"),
+                    (SupportedLanguages.NN to "Bankdørar"),
+                ),
+                "bankInngang", mapOf((SupportedLanguages.NB to "Komme inn i banken"), (SupportedLanguages.EN to "How to get inside a bank"), (SupportedLanguages.NN to "Komme inn i banken")),
+            )
         variableDefinitionService.save(variableDefinition)
+        variableDefinitionService.save(variableDefinition1)
     }
 
     @Test
-    fun testTest() {
-        val all = variableDefinitionService.findAll()
-        val variables = variableDefinitionService.findByLanguage("nb")
-        assertThat(variables[0].shortName).isEqualTo("test1")
-        assertThat(all[0].shortName).isEqualTo("test1")
-    }
-
-    @Test
-    fun testVariables(spec: RequestSpecification) {
+    fun testPostVariableDefinition(spec: RequestSpecification) {
         val jsonString =
             """    
             {
@@ -68,14 +77,24 @@ class VariablesControllerTest {
     }
 
     @Test
-    fun getVariablesByLanguage(spec: RequestSpecification) {
+    fun testGetVariableDefinitions(spec: RequestSpecification) {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", "nb")
             .get("/variables")
             .then()
             .assertThat().statusCode(200)
+    }
+
+    @Test
+    fun testGetVariableDefinitionsByLanguageNN(spec: RequestSpecification)  {
+            spec
+                .`when`()
+                .contentType(ContentType.JSON)
+                .header("Accept-Language", "nn")
+                .get("/variables")
+                .then()
+                .assertThat().statusCode(200).body("[1].name", equalTo("Bankdørar"))
     }
 
     @Test
@@ -114,13 +133,12 @@ class VariablesControllerTest {
                 .header("Accept-Language", "nn")
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(200).extract().body().asString()
+                .assertThat().statusCode(200).extract().body()
 
         assertThat((getResponseNorwegianNN)).isNotNull()
     }
 
     @Test
-    @Suppress("ktlint:standard:max-line-length")
     fun testHttpRequestNorwegianVariables(spec: RequestSpecification) {
         val jsonString =
             """    

@@ -171,4 +171,17 @@ class VariableControllerTest {
                 .assertThat().statusCode(400).extract().body().asPrettyString()
         assertThat((getResponseIncorrectLanguage) == "Unknown language code se. Valid values are [nb, nn, en")
     }
+
+    @Test
+    fun testIncorrectLanguageCodeGet(spec: RequestSpecification) {
+        val getResponseIncorrectLanguage =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .header("Accept-Language", "se")
+                .get("/variables")
+                .then()
+                .assertThat().statusCode(400).extract().body().asPrettyString()
+        assertThat((getResponseIncorrectLanguage) == "Unknown language code se. Valid values are [nb, nn, en")
+    }
 }

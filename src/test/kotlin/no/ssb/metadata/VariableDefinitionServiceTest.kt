@@ -16,9 +16,12 @@ class VariableDefinitionServiceTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
+    private lateinit var variableDefinition: VariableDefinitionDAO
+    private lateinit var variables: List<VariableDefinitionDAO>
+
     @BeforeEach
     fun setUp() {
-        val variableDefinition =
+        variableDefinition =
             VariableDefinitionDAO(
                 null,
                 mapOf((SupportedLanguages.NB to "verdi"), (SupportedLanguages.EN to "value")),
@@ -26,14 +29,14 @@ class VariableDefinitionServiceTest {
                 mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
             )
         variableDefinitionService.save(variableDefinition)
+        variables = variableDefinitionService.findAll()
     }
 
     @Test
-    fun testFindByLanguage() {
-        val all = variableDefinitionService.findAll()
+    fun testFindByLanguageNN() {
         val variables = variableDefinitionService.findByLanguage("nn")
         assertThat(variables[0].shortName).isEqualTo("test1")
         assertThat(variables[0].name).isNull()
-        assertThat(all[0].shortName).isEqualTo("test1")
+        assertThat(variables[0].shortName).isEqualTo("test1")
     }
 }

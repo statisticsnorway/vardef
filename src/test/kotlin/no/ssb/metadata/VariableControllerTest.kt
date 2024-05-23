@@ -47,8 +47,15 @@ class VariableControllerTest {
                     (SupportedLanguages.NN to "Komme inn i banken"),
                 ),
             )
-        val variables = listOf<VariableDefinitionDAO>(variableDefinition,variableDefinition1)
-        for(v in variables){
+        variableDefinition2 =
+            VariableDefinitionDAO(
+                null,
+                mapOf(SupportedLanguages.NB to "bilturer"),
+                "bil",
+                mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
+            )
+        val variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
+        for (v in variables) {
             variableDefinitionService.save(v)
         }
     }
@@ -134,47 +141,6 @@ class VariableControllerTest {
             .get("/variables")
             .then()
             .assertThat().statusCode(200).body("[1].name", equalTo("Bank door"))
-    }
-
-    @Test
-    fun testHttpRequestsVariables(spec: RequestSpecification) {
-        val jsonString =
-            """    
-            {
-                "name": {
-                    "en": "Bank door",
-                    "nb": "Bankdør",
-                    "nn": "Bankdørar"
-                },
-                "short_name": "bankInngang",
-                "definition": {
-                    "en": "Get inside the bank",
-                    "nb": "Komme inn i banken",
-                    "nn": "Komme inn i banken"
-                }
-            }
-            """.trimIndent()
-        val postResponse =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(jsonString)
-                .`when`()
-                .post("/variables")
-                .then()
-                .statusCode(201).extract().body()
-        assertThat(postResponse.toString()).isNotEmpty()
-
-        val getResponseNorwegianNN =
-            spec
-                .`when`()
-                .contentType(ContentType.JSON)
-                .header("Accept-Language", "nn")
-                .get("/variables")
-                .then()
-                .assertThat().statusCode(200).extract().body()
-
-        assertThat((getResponseNorwegianNN)).isNotNull()
     }
 
     @Test

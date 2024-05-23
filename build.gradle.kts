@@ -47,6 +47,9 @@ dependencies {
     testImplementation("io.micronaut:micronaut-http-client")
     testImplementation("org.assertj:assertj-core")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers:1.17.3")
+    testImplementation("org.testcontainers:mongodb:1.17.3")
     aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.2"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }

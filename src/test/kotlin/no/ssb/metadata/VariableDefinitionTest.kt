@@ -1,16 +1,19 @@
 package no.ssb.metadata
 
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
-@MicronautTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VariableDefinitionTest {
-    @Test
-    fun testGetName() {
-        val variableDefinition =
+    private lateinit var variableDefinition: VariableDefinitionDAO
+
+    @BeforeAll
+    fun setUp() {
+        variableDefinition =
             VariableDefinitionDAO(
                 null,
                 mapOf(SupportedLanguages.NB to "Norsk navn", SupportedLanguages.EN to "English name"),
@@ -19,6 +22,10 @@ class VariableDefinitionTest {
                     SupportedLanguages.NB to "definisjon",
                 ),
             )
+    }
+
+    @Test
+    fun testGetName() {
         val resultNorwegian = variableDefinition.getName("nb")
         val resultEnglish = variableDefinition.getName("en")
         val nameNorwegian = "Norsk navn"

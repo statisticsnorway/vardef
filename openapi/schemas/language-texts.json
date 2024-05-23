@@ -1,24 +1,9 @@
 {
   "$comment": "Language texts",
-  "type": "array",
-  "items": {
-    "$ref": "#/$defs/language_text"
-  },
-  "$defs": {
-    "language_text": {
-      "type": "object",
-      "properties": {
-        "language_code": {
-          "title": "Language code",
-          "description": "Language code (ISO 639-1)",
-          "type": "string"
-        },
-        "text": {
-          "title": "Text",
-          "description": "Text Text in language specified by the language code",
-          "type": "string"
-        }
-      }
+    "type": "object",
+    "properties": {
+      "en": {"title": "English text", "type": "string"},
+      "nb": {"title": "Norwegian Bokmål text", "type": "string"},
+      "nn": {"title": "Norwegian Nynorsk text", "type": "string"}
     }
-  }
 }

@@ -1,5 +1,6 @@
 package no.ssb.metadata
 
+import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
@@ -7,8 +8,8 @@ import jakarta.inject.Inject
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
-import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.Matchers.endsWith
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -36,7 +37,8 @@ class VariableControllerTest {
             VariableDefinitionDAO(
                 null,
                 mapOf(
-                    (SupportedLanguages.NB to "Bankdør"), (SupportedLanguages.EN to "Bank door"),
+                    (SupportedLanguages.NB to "Bankdør"),
+                    (SupportedLanguages.EN to "Bank door"),
                     (SupportedLanguages.NN to "Bankdørar"),
                 ),
                 "bankInngang",
@@ -62,7 +64,7 @@ class VariableControllerTest {
     @Test
     fun testPostVariableDefinition(spec: RequestSpecification) {
         val jsonString =
-            """    
+            """
             {
                 "name": {
                     "en": "Bank connections",
@@ -145,7 +147,7 @@ class VariableControllerTest {
     @Test
     fun testIncorrectLanguageCode(spec: RequestSpecification) {
         val jsonString =
-            """    
+            """
             {
                 "name": {
                     "en": "Bank connections",
@@ -160,7 +162,7 @@ class VariableControllerTest {
                 }
             }
             """.trimIndent()
-        val getResponseIncorrectLanguage =
+        val response =
             spec
                 .given()
                 .contentType(ContentType.JSON)
@@ -168,8 +170,33 @@ class VariableControllerTest {
                 .`when`()
                 .post("/variables")
                 .then()
-                .assertThat().statusCode(400).extract().body().asPrettyString()
-        assertThat((getResponseIncorrectLanguage) == "Unknown language code se. Valid values are [nb, nn, en")
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", equalTo("Unknown language code se. Valid values are [nb, nn, en]"))
+    }
+
+    @Test
+    fun testMissingCompulsoryField(spec: RequestSpecification) {
+        val jsonString =
+            """
+            {
+                "short_name": "bank",
+                "definition": {
+                    "en": "definition of money",
+                    "nb": "definisjon av penger",
+                    "nn": "pengers verdi"
+                }
+            }
+            """.trimIndent()
+        val response =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString)
+                .`when`()
+                .post("/variables")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", endsWith("must not be empty"))
     }
 
     @Test

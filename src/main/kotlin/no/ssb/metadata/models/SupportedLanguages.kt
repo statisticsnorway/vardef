@@ -6,7 +6,7 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.LowerCaseStrategy
 import jakarta.inject.Singleton
 import no.ssb.metadata.exceptions.UnknownLanguageException
-import java.util.Optional
+import java.util.*
 
 @Serdeable(naming = LowerCaseStrategy::class)
 enum class SupportedLanguages {

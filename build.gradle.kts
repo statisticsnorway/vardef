@@ -47,6 +47,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers:1.17.3")
     testImplementation("org.testcontainers:mongodb:1.17.3")
+    testImplementation("io.mockk:mockk:1.13.1")
     aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.2"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }

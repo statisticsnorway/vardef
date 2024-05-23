@@ -16,10 +16,16 @@ class VariableDefinitionTest {
         variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.NB to "Norsk navn", SupportedLanguages.EN to "English name"),
+                mapOf(
+                    (SupportedLanguages.NB to "Norsk navn"),
+                    (SupportedLanguages.EN to "English name"),
+                    (SupportedLanguages.NN to "namn"),
+                ),
                 "test",
                 mapOf(
-                    SupportedLanguages.NB to "definisjon",
+                    (SupportedLanguages.NB to "definisjon"),
+                    (SupportedLanguages.EN to "definition"),
+                    (SupportedLanguages.NN to "nynorsk definisjon"),
                 ),
             )
     }
@@ -28,26 +34,23 @@ class VariableDefinitionTest {
     fun testGetName() {
         val resultNorwegian = variableDefinition.getName("nb")
         val resultEnglish = variableDefinition.getName("en")
-        val nameNorwegian = "Norsk navn"
-        val nameEnglish = "English name"
-        assertThat(resultNorwegian).isEqualTo(nameNorwegian)
-        assertThat(resultEnglish).isEqualTo(nameEnglish)
+        val resultNyNorsk = variableDefinition.getName("nn")
+        val incorrectLanguage = variableDefinition.getName("dk")
+        assertThat(resultNorwegian).isEqualTo("Norsk navn")
+        assertThat(resultEnglish).isEqualTo("English name")
+        assertThat(resultNyNorsk).isEqualTo("namn")
+        assertThat(incorrectLanguage).isNull()
     }
 
     @Test
     fun testGetDefinition() {
-        val variableDefinition =
-            VariableDefinitionDAO(
-                null,
-                mapOf(SupportedLanguages.NB to "Norsk navn", SupportedLanguages.EN to "English name"),
-                "testNavn",
-                mapOf(
-                    SupportedLanguages.EN to "Bank definition",
-                    SupportedLanguages.NB to "Bankens rolle i verden",
-                ),
-            )
         val resultNorwegian = variableDefinition.getDefinition("nb")
-        val norwegianDefinition = "Bankens rolle i verden"
-        assertThat(resultNorwegian).isEqualTo(norwegianDefinition)
+        val resultEnglish = variableDefinition.getDefinition("en")
+        val resultNyNorsk = variableDefinition.getDefinition("nn")
+        val resultIncorrectLanguage = variableDefinition.getDefinition("sv")
+        assertThat(resultNorwegian).isEqualTo("definisjon")
+        assertThat(resultEnglish).isEqualTo("definition")
+        assertThat(resultNyNorsk).isEqualTo("nynorsk definisjon")
+        assertThat(resultIncorrectLanguage).isNull()
     }
 }

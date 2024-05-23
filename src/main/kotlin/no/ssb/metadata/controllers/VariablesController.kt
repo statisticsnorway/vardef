@@ -1,7 +1,12 @@
 package no.ssb.metadata.controllers
 
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.annotation.*
+import io.micronaut.http.annotation.Body
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Header
+import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Status
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated

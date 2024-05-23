@@ -7,8 +7,7 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.validation.Valid
-import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotEmpty
 import org.bson.types.ObjectId
 
 @MappedEntity
@@ -33,9 +32,9 @@ import org.bson.types.ObjectId
 )
 data class VariableDefinitionDAO(
     @field:Id @GeneratedValue @JsonIgnore val id: ObjectId?,
-    @field:NotBlank @Valid val name: Map<SupportedLanguages, String>,
-    @field:NotBlank val shortName: String,
-    @field:NotBlank val definition: Map<SupportedLanguages, String>,
+    @field:NotEmpty val name: Map<SupportedLanguages, String>,
+    @field:NotEmpty val shortName: String,
+    @field:NotEmpty val definition: Map<SupportedLanguages, String>,
 ) {
     fun getName(language: String): String? {
         val nameByLanguage: String

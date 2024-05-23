@@ -1,9 +1,11 @@
 package no.ssb.metadata
 
+import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.CoreMatchers.endsWith
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
 
@@ -59,7 +61,8 @@ class VariablesControllerTest {
             .`when`()
             .post("/variables")
             .then()
-            .statusCode(400)
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body("_embedded.errors[0].message", endsWith("must not be empty"))
     }
 
     @Test

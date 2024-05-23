@@ -33,10 +33,11 @@ class VariableDefinitionServiceTest {
     }
 
     @Test
-    fun testFindByLanguageNN() {
-        val variables = variableDefinitionService.findByLanguage("nn")
-        assertThat(variables[0].shortName).isEqualTo("test1")
-        assertThat(variables[0].name).isNull()
-        assertThat(variables[0].shortName).isEqualTo("test1")
+    fun testGetVariableDefinitionMissingValuesInSelectedLanguage() {
+        val variablesNyNorsk = variableDefinitionService.findByLanguage("nn")
+        assertThat(variablesNyNorsk[0].shortName).isEqualTo("test1")
+        assertThat(variablesNyNorsk[0].name).isNull()
+        assertThat(variablesNyNorsk[0]).isNotNull()
+        assertThat(variables[0].shortName).isEqualTo(variablesNyNorsk[0].shortName)
     }
 }

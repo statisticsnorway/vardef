@@ -8,7 +8,6 @@ import jakarta.inject.Inject
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
-import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.endsWith
 import org.junit.jupiter.api.BeforeEach

@@ -29,7 +29,7 @@ class VariableDefinitionServiceTest {
                 mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
             )
         variableDefinitionService.save(variableDefinition)
-        variables = variableDefinitionService.findAll()
+        // variables = variableDefinitionService.findAll()
     }
 
     @Test
@@ -37,6 +37,18 @@ class VariableDefinitionServiceTest {
         val variablesNyNorsk = variableDefinitionService.findByLanguage("nn")
         assertThat(variablesNyNorsk[0].shortName).isEqualTo("test1")
         assertThat(variablesNyNorsk[0].name).isNull()
-        assertThat(variablesNyNorsk[0]).isNotNull()
+    }
+
+    @Test
+    fun save_variable_definition() {
+        variableDefinition =
+            VariableDefinitionDAO(
+                null,
+                mapOf((SupportedLanguages.NB to "verdi 2"), (SupportedLanguages.EN to "value 2")),
+                "test1",
+                mapOf((SupportedLanguages.NB to "definisjon 2"), (SupportedLanguages.EN to "definition 2")),
+            )
+        val result = variableDefinitionService.save(variableDefinition)
+        assertThat(result.id).isNotNull()
     }
 }

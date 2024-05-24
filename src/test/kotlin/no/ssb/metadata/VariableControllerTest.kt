@@ -162,16 +162,15 @@ class VariableControllerTest {
                 }
             }
             """.trimIndent()
-        val response =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(jsonString)
-                .`when`()
-                .post("/variables")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", equalTo("Unknown language code se. Valid values are [nb, nn, en]"))
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonString)
+            .`when`()
+            .post("/variables")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body("_embedded.errors[0].message", equalTo("Unknown language code se. Valid values are [nb, nn, en]"))
     }
 
     @Test
@@ -187,16 +186,15 @@ class VariableControllerTest {
                 }
             }
             """.trimIndent()
-        val response =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(jsonString)
-                .`when`()
-                .post("/variables")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", endsWith("must not be empty"))
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonString)
+            .`when`()
+            .post("/variables")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body("_embedded.errors[0].message", endsWith("must not be empty"))
     }
 
     @Test
@@ -208,7 +206,7 @@ class VariableControllerTest {
                 .header("Accept-Language", "se")
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(400).extract().body().asPrettyString()
-        assertThat((getResponseIncorrectLanguage) == "Unknown language code se. Valid values are [nb, nn, en")
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", equalTo("Unknown language code se. Valid values are [nb, nn, en]"))
     }
 }

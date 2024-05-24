@@ -2,18 +2,20 @@ package no.ssb.metadata
 
 import com.mongodb.assertions.Assertions.assertTrue
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
 import no.ssb.metadata.repositories.VariableDefinitionRepository
 import no.ssb.metadata.services.VariableDefinitionService
 import org.junit.jupiter.api.Test
 
+@MockK
 class VariableDefinitionServiceMockTest {
     private val variableDefinitionRepository = mockk<VariableDefinitionRepository>()
     private val variableDefinitionService = VariableDefinitionService(variableDefinitionRepository)
 
     @Test
-    fun `should return empty list`() {
+    fun find_all_variables_no_data() {
         every {
             variableDefinitionRepository.findAll()
         } returns emptyList()

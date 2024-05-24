@@ -203,7 +203,6 @@ class VariableControllerTest {
 
         @Test
         fun get_incorrect_language_code(spec: RequestSpecification) {
-            val getResponseIncorrectLanguage =
                 spec
                     .given()
                     .contentType(ContentType.JSON)

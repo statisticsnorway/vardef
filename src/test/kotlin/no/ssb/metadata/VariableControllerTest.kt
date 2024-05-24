@@ -203,17 +203,17 @@ class VariableControllerTest {
 
         @Test
         fun get_incorrect_language_code(spec: RequestSpecification) {
-                spec
-                    .given()
-                    .contentType(ContentType.JSON)
-                    .header("Accept-Language", "se")
-                    .get("/variables")
-                    .then()
-                    .statusCode(HttpStatus.BAD_REQUEST.code)
-                    .body(
-                        "_embedded.errors[0].message",
-                        equalTo("Unknown language code se. Valid values are [nb, nn, en]"),
-                    )
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .header("Accept-Language", "se")
+                .get("/variables")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body(
+                    "_embedded.errors[0].message",
+                    equalTo("Unknown language code se. Valid values are [nb, nn, en]"),
+                )
         }
     }
 }

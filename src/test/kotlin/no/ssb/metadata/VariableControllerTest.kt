@@ -149,7 +149,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun post_incorrect_language_code(spec: RequestSpecification) {
+        fun post_request_incorrect_language_code(spec: RequestSpecification) {
             val jsonString =
                 """
                 {
@@ -202,7 +202,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun get_incorrect_language_code(spec: RequestSpecification) {
+        fun get_request_incorrect_language_code(spec: RequestSpecification) {
             spec
                 .given()
                 .contentType(ContentType.JSON)

@@ -17,7 +17,6 @@ class VariableDefinitionServiceTest {
     lateinit var variableDefinitionService: VariableDefinitionService
 
     private lateinit var variableDefinition: VariableDefinitionDAO
-    private lateinit var variables: List<VariableDefinitionDAO>
 
     @BeforeEach
     fun setUp() {
@@ -29,7 +28,6 @@ class VariableDefinitionServiceTest {
                 mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
             )
         variableDefinitionService.save(variableDefinition)
-        // variables = variableDefinitionService.findAll()
     }
 
     @Test

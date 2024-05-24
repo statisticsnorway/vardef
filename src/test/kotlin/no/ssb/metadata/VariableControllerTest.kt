@@ -207,7 +207,7 @@ class VariableControllerTest {
                 .header("Accept-Language", "se")
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(400).extract().body().asPrettyString()
-        assertThat((getResponseIncorrectLanguage) == "Unknown language code se. Valid values are [nb, nn, en")
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", equalTo("Unknown language code se. Valid values are [nb, nn, en]"))
     }
 }

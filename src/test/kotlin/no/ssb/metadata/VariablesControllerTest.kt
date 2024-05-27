@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.testcontainers.shaded.org.apache.commons.lang3.ObjectUtils.Null
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -149,7 +148,7 @@ class VariablesControllerTest {
         }
 
         @Test
-        fun `get request no value in selected language`(spec: RequestSpecification){
+        fun `get request no value in selected language`(spec: RequestSpecification)  {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
@@ -157,8 +156,8 @@ class VariablesControllerTest {
                 .get("/variables")
                 .then()
                 .assertThat().statusCode(200).body("[2].name", nullValue())
-
         }
+
         @Test
         fun `post request incorrect language code`(spec: RequestSpecification) {
             val jsonString =

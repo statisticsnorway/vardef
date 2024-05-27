@@ -21,18 +21,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
             )
         }
 
-        val variables = findAll()
-        val result: MutableList<VariableDefinitionDTO> = mutableListOf()
-        for (variable in variables) {
-            val variableDefinitionDTO =
-                VariableDefinitionDTO(
-                    variable.getName(language),
-                    variable.shortName,
-                    variable.getDefinition(language),
-                )
-            result.add(variableDefinitionDTO)
-        }
-        return result
+        return findAll().map { dao -> dao.toDTO(language) }
     }
 
     fun save(varDef: VariableDefinitionDAO): VariableDefinitionDAO = variableDefinitionRepository.save(varDef)

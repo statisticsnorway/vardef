@@ -36,25 +36,20 @@ data class VariableDefinitionDAO(
     @field:NotEmpty val shortName: String,
     @field:NotEmpty val definition: Map<SupportedLanguages, String>,
 ) {
-    fun getName(language: String): String? {
-        val nameByLanguage: String
-        for ((k, v) in this.name) {
-            if (k.toString() == language) {
-                nameByLanguage = v
-                return nameByLanguage
-            }
-        }
-        return null
-    }
+    fun getName(language: String): String? = this.name
+            .map { it.key to it.value }
+            .firstOrNull { it.first.toString() == language }
+            ?.second
 
-    fun getDefinition(language: String): String? {
-        val definitionByLanguage: String
-        for ((k, v) in this.definition) {
-            if (k.toString() == language) {
-                definitionByLanguage = v
-                return definitionByLanguage
-            }
-        }
-        return null
-    }
+    fun getDefinition(language: String): String? = this.definition
+            .map { it.key to it.value }
+            .firstOrNull { it.first.toString() == language }
+            ?.second
+
+    fun toDTO(language: String): VariableDefinitionDTO = VariableDefinitionDTO(
+        name = this.getName(language),
+        shortName = shortName,
+        definition = this.getDefinition(language)
+    )
+
 }

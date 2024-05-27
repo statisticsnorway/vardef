@@ -31,7 +31,7 @@ class VariableDefinitionTest {
     }
 
     @Test
-    fun testGetName() {
+    fun `get variable name by language code`() {
         val resultNorwegian = variableDefinition.getName("nb")
         val resultEnglish = variableDefinition.getName("en")
         val resultNyNorsk = variableDefinition.getName("nn")
@@ -43,7 +43,7 @@ class VariableDefinitionTest {
     }
 
     @Test
-    fun testGetDefinition() {
+    fun `get variable definition by language_code`() {
         val resultNorwegian = variableDefinition.getDefinition("nb")
         val resultEnglish = variableDefinition.getDefinition("en")
         val resultNyNorsk = variableDefinition.getDefinition("nn")

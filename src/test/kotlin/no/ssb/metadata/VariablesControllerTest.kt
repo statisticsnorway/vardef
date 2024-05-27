@@ -9,27 +9,27 @@ import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.endsWith
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.testcontainers.shaded.org.apache.commons.lang3.ObjectUtils.Null
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class VariableControllerTest {
+class VariablesControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
     @Test
-    fun access_empty_database(spec: RequestSpecification) {
+    fun `access empty database`(spec: RequestSpecification) {
         spec
             .`when`()
             .contentType(ContentType.JSON)
             .get("/variables")
             .then()
-            .statusCode(200).body("", Matchers.empty<List<Any>>())
+            .statusCode(200).body("", empty<List<Any>>())
     }
 
     @Nested
@@ -76,7 +76,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun post_new_variable_definition(spec: RequestSpecification) {
+        fun `post request new variable definition`(spec: RequestSpecification) {
             val jsonString =
                 """
                 {
@@ -106,7 +106,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun get_variables_by_default_language(spec: RequestSpecification) {
+        fun `get request default language`(spec: RequestSpecification) {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
@@ -116,7 +116,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun get_variables_by_NN_language(spec: RequestSpecification) {
+        fun `get request norwegian nynorsk language code`(spec: RequestSpecification) {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
@@ -127,7 +127,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun get_variables_by_NB_language(spec: RequestSpecification) {
+        fun `get request norwegian bokmaal language code`(spec: RequestSpecification) {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
@@ -138,7 +138,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun get_variables_by_EN_Language(spec: RequestSpecification) {
+        fun `get request english language code`(spec: RequestSpecification) {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
@@ -149,7 +149,18 @@ class VariableControllerTest {
         }
 
         @Test
-        fun post_request_incorrect_language_code(spec: RequestSpecification) {
+        fun `get request no value in selected language`(spec: RequestSpecification){
+            spec
+                .`when`()
+                .contentType(ContentType.JSON)
+                .header("Accept-Language", "en")
+                .get("/variables")
+                .then()
+                .assertThat().statusCode(200).body("[2].name", nullValue())
+
+        }
+        @Test
+        fun `post request incorrect language code`(spec: RequestSpecification) {
             val jsonString =
                 """
                 {
@@ -178,7 +189,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun missing_compulsory_field(spec: RequestSpecification) {
+        fun `post request missing compulsory field`(spec: RequestSpecification) {
             val jsonString =
                 """
                 {
@@ -202,7 +213,7 @@ class VariableControllerTest {
         }
 
         @Test
-        fun get_request_incorrect_language_code(spec: RequestSpecification) {
+        fun `get request incorrect language code`(spec: RequestSpecification) {
             spec
                 .given()
                 .contentType(ContentType.JSON)

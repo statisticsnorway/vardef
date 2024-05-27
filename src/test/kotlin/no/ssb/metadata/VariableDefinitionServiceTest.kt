@@ -15,12 +15,19 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @MockK
 class VariableDefinitionServiceTest {
-    private val variableDefinitionMockRepository = mockk<VariableDefinitionRepository>()
-    private val variableDefinitionService = VariableDefinitionService(variableDefinitionMockRepository)
+    private lateinit var variableDefinitionMockRepository: VariableDefinitionRepository
+    private lateinit var variableDefinitionService: VariableDefinitionService
+
+    @BeforeEach
+    fun setUp() {
+        variableDefinitionMockRepository = mockk<VariableDefinitionRepository>()
+        variableDefinitionService = VariableDefinitionService(variableDefinitionMockRepository)
+    }
 
     @AfterEach
     internal fun tearDown() {
@@ -61,13 +68,13 @@ class VariableDefinitionServiceTest {
     }
 
     @Test
-    fun `find variables in selected language`()  {
+    fun `find variables in selected language`() {
         val variableDefinition =
             VariableDefinitionDAO(
-               null,
-                mapOf((SupportedLanguages.NB to "marsvin sport"),(SupportedLanguages.EN to "guinea pig sport")),
+                null,
+                mapOf((SupportedLanguages.NB to "marsvin sport"), (SupportedLanguages.EN to "guinea pig sport")),
                 "marsvin",
-                mapOf((SupportedLanguages.NB to "marsvin trener"),(SupportedLanguages.EN to "guinea pig in training")),
+                mapOf((SupportedLanguages.NB to "marsvin trener"), (SupportedLanguages.EN to "guinea pig in training")),
             )
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
         val language = "nb"

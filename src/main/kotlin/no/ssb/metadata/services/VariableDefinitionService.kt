@@ -32,7 +32,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
                 )
             result.add(variableDefinitionDTO)
         }
-        return result
+        return result.toList()
     }
 
     fun save(varDef: VariableDefinitionDAO): VariableDefinitionDAO = variableDefinitionRepository.save(varDef)

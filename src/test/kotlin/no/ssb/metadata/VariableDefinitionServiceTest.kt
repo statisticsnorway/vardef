@@ -48,5 +48,6 @@ class VariableDefinitionServiceTest {
             )
         val result = variableDefinitionService.save(variableDefinition)
         assertThat(result.id).isNotNull()
+        assertThat(result.id).isNull()
     }
 }

@@ -148,7 +148,7 @@ class VariablesControllerTest {
         }
 
         @Test
-        fun `get request no value in selected language`(spec: RequestSpecification)  {
+        fun `get request no value in selected language`(spec: RequestSpecification) {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)

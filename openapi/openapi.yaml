@@ -23,14 +23,13 @@ tags:
   - name: internal
     description: Available only to employees of Statistics Norway. Requires authentication.
 paths:
-  /variable-definitions/public:
+  /variable-definitions:
     get:
       tags:
         - public
-      summary: List public variable definitions
-      description: Paginated list of all public variable definitions. Available without authentication. The list may be filtered using the available query parameters.
+      summary: List variable definitions
+      description: Paginated list of all variable definitions. The list may be filtered using the available query parameters.
       operationId: get_variables
-      security: []   # Public endpoint, does not require authentication
       parameters:
         - $ref: "parameters/header-accept-language.yaml"
         - name: classification_uri
@@ -79,46 +78,6 @@ paths:
                   $ref: "schemas/public-rendered-variable-definition.yaml"
         '400':
           description: "Invalid request"
-  /variable-definitions/public/{id}:
-    get:
-      tags:
-        - public
-      summary: Get one public variable definition
-      description: One variable definition.
-      operationId: get_variable_by_id
-      security: []   # Public endpoint, does not require authentication
-      parameters:
-        - $ref: "parameters/header-accept-language.yaml"
-        - $ref: "parameters/path-id.yaml"
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "schemas/public-rendered-variable-definition.yaml"
-        '404':
-          description: Variable not found
-  /variable-definitions/draft:
-    get:
-      tags:
-        - internal
-      summary: List of draft variable definitions
-      description: Get draft variable definitions which the user is authorized to see. Only members of the owning unit may read the definition. Returns the full representation of a variable definition, not a representation rendered in a specific language.
-      operationId: get_draft_variables
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "schemas/input-variable-definition.yaml"
-        '404':
-          description: "Status not found"
-        '400':
-          description: "Invalid request"
       security:
         - bearerAuth: []
     post:
@@ -144,90 +103,7 @@ paths:
           description: "Invalid request"
       security:
         - bearerAuth: []
-  /variable-definitions/draft/{id}:
-    patch:
-      tags:
-        - internal
-      summary: Update a draft variable definition
-      operationId: update_draft_variable_definition
-      parameters:
-        - $ref: "parameters/path-id.yaml"
-      requestBody:
-        description: Update a draft variable definition
-        content:
-          application/json:
-            schema:
-              $ref: "schemas/input-variable-definition.yaml"
-      responses:
-        '201':
-          description: Variable definition updated
-          content:
-            application/json:
-              schema:
-                $ref: "schemas/input-variable-definition.yaml"
-        '400':
-          description: "Invalid request"
-      security:
-        - bearerAuth: []
-    get:
-      tags:
-        - internal
-      summary: Get one draft variable definition
-      description: One variable definition.
-      operationId: get_draft_variable_definition_by_id
-      parameters:
-        - $ref: "parameters/path-id.yaml"
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "schemas/input-variable-definition.yaml"
-        '404':
-          description: No such variable definition
-      security:
-        - bearerAuth: []
-    delete:
-      tags:
-        - internal
-      summary: Delete a draft variable definition
-      operationId: delete_draft_variable_definition
-      parameters:
-        - $ref: "parameters/path-id.yaml"
-      responses:
-        '204':
-          description: Successfully deleted
-        '404':
-          description: No such variable definition
-      security:
-        - bearerAuth: []
-  /variable-definitions/{status}:
-    get:
-      tags:
-        - internal
-      summary: List variable definitions
-      description: List variable definitions with the given status. Returns only definitions which the user is authorized to see. Authorization is based on the status of the variable. For DRAFT status, only members of the owning section may read the definition. For PUBLISHED_INTERNAL, PUBLISHED_EXTERNAL and DEPRECATED, any SSB employee may read the definition.
-      operationId: get_variables_by_status
-      parameters:
-        - $ref: "parameters/header-accept-language.yaml"
-        - $ref: "parameters/path-status-internal-public-deprecated.yaml"
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "schemas/rendered-variable-definition.yaml"
-        '404':
-          description: "Status not found"
-        '400':
-          description: "Invalid request"
-      security:
-        - bearerAuth: []
-  /variable-definitions/{status}/{id}:
+  /variable-definitions/{id}:
     get:
       tags:
         - internal
@@ -277,7 +153,23 @@ paths:
           description: "Invalid request"
       security:
         - bearerAuth: []
-  /variable-definitions/{status}/{id}/versions:
+    delete:
+      tags:
+        - internal
+      summary: Delete a draft variable definition
+      operationId: delete_draft_variable_definition
+      parameters:
+        - $ref: "parameters/path-id.yaml"
+      responses:
+        '204':
+          description: Successfully deleted
+        '404':
+          description: No such variable definition
+        '405':
+          description: Attempt to delete a variable definition with status other than DRAFT
+      security:
+        - bearerAuth: []
+  /variable-definitions/{id}/versions:
     get:
       tags:
         - internal
@@ -287,7 +179,6 @@ paths:
       parameters:
         - $ref: "parameters/header-accept-language.yaml"
         - $ref: "parameters/path-id.yaml"
-        - $ref: "parameters/path-status-internal-public-deprecated.yaml"
       responses:
         '200':
           description: Successful operation
@@ -310,7 +201,6 @@ paths:
       operationId: create_variable_version
       parameters:
         - $ref: "parameters/path-id.yaml"
-        - $ref: "parameters/path-status-internal-public.yaml"
       requestBody:
         description: Create a new variable definition version
         content:
@@ -338,7 +228,6 @@ paths:
       parameters:
         - $ref: "parameters/header-accept-language.yaml"
         - $ref: "parameters/path-id.yaml"
-        - $ref: "parameters/path-status-internal-public-deprecated.yaml"
       responses:
         '200':
           description: Successful operation
@@ -361,7 +250,6 @@ paths:
       operationId: create_derivative_variable
       parameters:
         - $ref: "parameters/path-id.yaml"
-        - $ref: "parameters/path-status-internal-public.yaml"
       requestBody:
         description: Create a new derivative variable definition
         content:

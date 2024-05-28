@@ -19,12 +19,13 @@ data class LanguageStringType(
     val nn: String?,
     val en: String?
 ) {
-    fun getValidLanguage(language: SupportedLanguages): String? {
-        return when (language) {
-            SupportedLanguages.NORSK_BOKMÅL -> nb
-            SupportedLanguages.NORSK_NYNORSK -> nn
-            SupportedLanguages.ENGLISH -> en
+    fun getValidLanguage(language: String): String? {
+        when (language) {
+            SupportedLanguages.NORSK_BOKMÅL.toString()-> return nb
+            SupportedLanguages.NORSK_NYNORSK.toString() -> return nn
+            SupportedLanguages.ENGLISH.toString() -> return en
         }
+        return null
     }
 }
 

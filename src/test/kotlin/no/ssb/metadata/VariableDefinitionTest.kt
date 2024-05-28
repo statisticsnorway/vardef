@@ -17,25 +17,13 @@ class VariableDefinitionTest {
             VariableDefinitionDAO(
                 null,
                 SupportedLanugages(nb="Norsk navn", nn="namn", en="English name"),
-
-//                mapOf(
-//                    (SupportedLanguages.NB to "Norsk navn"),
-//                    (SupportedLanguages.EN to "English name"),
-//                    (SupportedLanguages.NN to "namn"),
-//                ),
                 "test",
                 SupportedLanugages(nb="definisjon", nn="nynorsk definisjon", en="definition"),
-
-//                mapOf(
-//                    (SupportedLanguages.NB to "definisjon"),
-//                    (SupportedLanguages.EN to "definition"),
-//                    (SupportedLanguages.NN to "nynorsk definisjon"),
-//                ),
             )
     }
 
     @Test
-    fun testGetName() {
+    fun `get variable name by language code`() {
         val resultNorwegian = variableDefinition.getName("nb")
         val resultEnglish = variableDefinition.getName("en")
         val resultNyNorsk = variableDefinition.getName("nn")
@@ -47,7 +35,7 @@ class VariableDefinitionTest {
     }
 
     @Test
-    fun testGetDefinition() {
+    fun `get variable definition by language_code`() {
         val resultNorwegian = variableDefinition.getDefinition("nb")
         val resultEnglish = variableDefinition.getDefinition("en")
         val resultNyNorsk = variableDefinition.getDefinition("nn")

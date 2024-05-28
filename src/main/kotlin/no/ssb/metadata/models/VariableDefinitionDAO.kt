@@ -35,11 +35,10 @@ data class VariableDefinitionDAO(
     val shortName: String,
     val definition: LanguageStringType
 ) {
-    fun getName(language: SupportedLanguages): String? {
-        return name.getValidLanguage(language)
-    }
-
-    fun getDefinition(language: SupportedLanguages): String? {
-        return definition.getValidLanguage(language)
-    }
+    fun toDTO(language: String): VariableDefinitionDTO =
+        VariableDefinitionDTO(
+            name = name.getValidLanguage(language),
+            shortName = shortName,
+            definition = definition.getValidLanguage(language),
+        )
 }

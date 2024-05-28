@@ -3,7 +3,7 @@ info:
   title: Variable Definitions
   x-audience: external-public
   description: |-
-    API for variable definitions. This is part of the Metadata system at Statistics Norway.
+    API for variable definitions. Part of the Metadata system at Statistics Norway.
   contact:
     email: mmw@ssb.no
   license:
@@ -18,20 +18,27 @@ servers:
   - url: https://127.0.0.1:8080
     description: Local
 tags:
-  - name: public
-    description: Available to the general public without authentication.
-  - name: internal
-    description: Available only to employees of Statistics Norway. Requires authentication.
+  - name: variable-definitions
+    description: Operations directly applying to Variable Definitions.
+  - name: derivatives
+    description: Derivatives are variable definitions which inherit from another definition. A single level of inheritance is permitted.
+  - name: validity-periods
+    description: Variable Definitions are valid for specified time periods. This allows for breaking changes in definitions to be introduced. Clients may specify a date at which a variable definition should be valid, this is guaranteed to always be backwards compatible.
+  - name: versions
+    description: There may be one or more versions within a particular validity period. This allows for non-breaking changes to be tracked. The latest version is always used unless otherwise specified.
+  - name: alternative-formulations
+    description: Some use cases require elaborations on the canonical variable definition. These should be regarded as an additional explanation, not a replacement for the canonical definition.
 paths:
   /variable-definitions:
     get:
-      tags:
-        - public
       summary: List variable definitions
       description: Paginated list of all variable definitions. The list may be filtered using the available query parameters.
       operationId: get_variables
+      tags:
+        - variable-definitions
       parameters:
         - $ref: "parameters/header-accept-language.yaml"
+        - $ref: "parameters/query-valid-at.yaml"
         - name: classification_uri
           in: query
           description: "Return only variable definitions which reference this classification."
@@ -75,19 +82,18 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "schemas/public-rendered-variable-definition.yaml"
+                  $ref: "schemas/rendered-variable-definition.yaml"
         '400':
           description: "Invalid request"
       security:
         - bearerAuth: []
     post:
-      tags:
-        - internal
       summary: Create a draft variable definition
-      description: Create a variable definition
+      description: Create a draft variable definition
       operationId: create_variable
+      tags:
+        - variable-definitions
       requestBody:
-        description: Create a new variable
         content:
           application/json:
             schema:
@@ -101,19 +107,22 @@ paths:
                 $ref: "schemas/input-variable-definition.yaml"
         '400':
           description: "Invalid request"
+        '405':
+          description: Attempt to create a variable definition with status other than DRAFT
       security:
         - bearerAuth: []
   /variable-definitions/{id}:
+    parameters:
+      - $ref: "parameters/path-id.yaml"
     get:
+      summary: Get one variable definition
+      description: Get the latest version of the variable definition which is valid on today's date. If no periods are valid on today's date, the closest (in time) valid definition is returned.
+      operationId: get_variable_by_id
       tags:
-        - internal
-      summary: Get one variable definition by status and ID
-      description: One variable definition.
-      operationId: get_variable_by_status_and_id
+        - variable-definitions
       parameters:
         - $ref: "parameters/header-accept-language.yaml"
-        - $ref: "parameters/path-status-internal-public-deprecated.yaml"
-        - $ref: "parameters/path-id.yaml"
+        - $ref: "parameters/query-valid-at.yaml"
       responses:
         '200':
           description: Successful operation
@@ -126,16 +135,11 @@ paths:
       security:
         - bearerAuth: []
     patch:
-      tags:
-        - internal
       summary: Update a variable definition
-      description: Update an existing variable definition by Id
       operationId: update_variable
-      parameters:
-        - $ref: "parameters/path-status-internal-public.yaml"
-        - $ref: "parameters/path-id.yaml"
+      tags:
+        - variable-definitions
       requestBody:
-        description: Update an existing variable definition by Id
         content:
           application/json:
             schema:
@@ -154,12 +158,10 @@ paths:
       security:
         - bearerAuth: []
     delete:
-      tags:
-        - internal
       summary: Delete a draft variable definition
       operationId: delete_draft_variable_definition
-      parameters:
-        - $ref: "parameters/path-id.yaml"
+      tags:
+        - variable-definitions
       responses:
         '204':
           description: Successfully deleted
@@ -169,16 +171,16 @@ paths:
           description: Attempt to delete a variable definition with status other than DRAFT
       security:
         - bearerAuth: []
-  /variable-definitions/{id}/versions:
+  /variable-definitions/{id}/periods:
+    parameters:
+      - $ref: "parameters/path-id.yaml"
     get:
+      summary: List validity periods of this variable definition
+      operationId: get_validity_periods_of_variable
       tags:
-        - internal
-        - versions
-      summary: List versions of this variable definition
-      operationId: get_versions_of_variable_by_id
+        - validity-periods
       parameters:
         - $ref: "parameters/header-accept-language.yaml"
-        - $ref: "parameters/path-id.yaml"
       responses:
         '200':
           description: Successful operation
@@ -193,16 +195,64 @@ paths:
       security:
         - bearerAuth: []
     post:
+      summary: Create a new variable definition validity period
+      description: Define a new period of validity for this variable definition. This is equivalent to a "Major" version change as defined in Semantic Versioning, the change to the definition is not backwards compatible. The "Valid from" date given for the new validity period is automatically set as the "Valid until" date for the current most recent validity period such that there are no gaps in validity.
+      operationId: create_variable_validity_period
       tags:
-        - internal
-        - versions
-      summary: Create a variable definition version
-      description: Create a variable definition version
-      operationId: create_variable_version
-      parameters:
-        - $ref: "parameters/path-id.yaml"
+        - validity-periods
       requestBody:
-        description: Create a new variable definition version
+        content:
+          application/json:
+            schema:
+              $ref: "schemas/input-variable-definition.yaml"
+      responses:
+        '201':
+          description: Variable definition validity period created
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-variable-definition.yaml"
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
+  /variable-definitions/{id}/periods/{period_id}/versions:
+    parameters:
+      - $ref: "parameters/path-id.yaml"
+      - name: period_id
+        in: path
+        description: Unique identifier for the validity period
+        required: true
+        schema:
+          $ref: "schemas/identifier.yaml"
+    get:
+      summary: List variable definition versions
+      description: List versions for this validity period of the variable definition.
+      operationId: get_versions_of_variable_by_id
+      tags:
+        - versions
+      parameters:
+        - $ref: "parameters/header-accept-language.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "schemas/rendered-variable-definition.yaml"
+        '404':
+          description: Variable not found
+      security:
+        - bearerAuth: []
+    post:
+      summary: Create a variable definition version
+      description: Create a variable definition version. This is equivalent to a "Minor" or "Patch" version change as defined in Semantic Versioning. Examples of accepted use are correcting a typo which does not alter the meaning of the definition, or adding a translation of a field in another language.
+      operationId: create_variable_version
+      tags:
+        - versions
+      requestBody:
         content:
           application/json:
             schema:
@@ -218,16 +268,16 @@ paths:
           description: "Invalid request"
       security:
         - bearerAuth: []
-  /variable-definitions/{status}/{id}/derivatives:
+  /variable-definitions/{id}/derivatives:
+    parameters:
+      - $ref: "parameters/path-id.yaml"
     get:
-      tags:
-        - internal
-        - derivatives
       summary: Get all derivatives of this variable
       operationId: get_derivatives_of_variable_by_id
+      tags:
+        - derivatives
       parameters:
         - $ref: "parameters/header-accept-language.yaml"
-        - $ref: "parameters/path-id.yaml"
       responses:
         '200':
           description: Successful operation
@@ -242,16 +292,11 @@ paths:
       security:
         - bearerAuth: []
     post:
-      tags:
-        - internal
-        - derivatives
       summary: Create a derivative variable definition
-      description: Create a derivative variable definition
       operationId: create_derivative_variable
-      parameters:
-        - $ref: "parameters/path-id.yaml"
+      tags:
+        - derivatives
       requestBody:
-        description: Create a new derivative variable definition
         content:
           application/json:
             schema:
@@ -265,6 +310,117 @@ paths:
                 $ref: "schemas/input-variable-definition.yaml"
         '400':
           description: "Invalid request"
+        '405':
+          description: "This variable definition already derives from another."
+      security:
+        - bearerAuth: []
+  /variable-definitions/{id}/alternative-formulations:
+    parameters:
+      - $ref: "parameters/path-id.yaml"
+    get:
+      summary: Get all alternative formulations for this variable definition
+      operationId: get_alternative_formulations
+      tags:
+        - alternative-formulations
+      parameters:
+        - $ref: "parameters/header-accept-language.yaml"
+        - $ref: "parameters/path-id.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "schemas/rendered-alternative-formulation.yaml"
+        '404':
+          description: Variable not found
+      security:
+        - bearerAuth: []
+    post:
+      summary: Create an alternative formulation
+      operationId: create_alternative_formulation
+      tags:
+        - alternative-formulations
+      parameters:
+        - $ref: "parameters/path-id.yaml"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "schemas/input-alternative-formulation.yaml"
+      responses:
+        '201':
+          description: Derivative variable definition created
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-alternative-formulation.yaml"
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
+  /variable-definitions/{id}/alternative-formulations/{alternative_formulation_id}:
+    parameters:
+      - $ref: "parameters/path-id.yaml"
+      - name: alternative_formulation_id
+        in: path
+        description: Unique identifier for the alternative formulation
+        required: true
+        schema:
+          $ref: "schemas/identifier.yaml"
+    get:
+      summary: Get an alternative formulation
+      operationId: get_an_alternative_formulation
+      tags:
+        - alternative-formulations
+      parameters:
+        - $ref: "parameters/header-accept-language.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/rendered-alternative-formulation.yaml"
+        '404':
+          description: Not found
+      security:
+        - bearerAuth: []
+    patch:
+      summary: Update an alternative formulation
+      operationId: update_alternative_formulation
+      tags:
+        - alternative-formulations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "schemas/input-alternative-formulation.yaml"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/input-alternative-formulation.yaml"
+        '404':
+          description: Variable not found
+        '400':
+          description: "Invalid request"
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Delete an alternative formulation
+      operationId: delete_alternative_formulation
+      tags:
+        - alternative-formulations
+      responses:
+        '204':
+          description: Successfully deleted
+        '404':
+          description: Not found
       security:
         - bearerAuth: []
 components:

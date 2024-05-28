@@ -38,19 +38,19 @@ data class VariableDefinitionDAO(
     @field:NotEmpty val definition: Map<SupportedLanguages, String>,
     @field:NotEmpty val varDefId: String = NanoId.generate(8),
 ) {
-    fun getName(language: String): String? =
+    fun getName(language: SupportedLanguages): String? =
         this.name
             .map { it.key to it.value }
-            .firstOrNull { it.first.toString() == language }
+            .firstOrNull { it.first == language }
             ?.second
 
-    fun getDefinition(language: String): String? =
+    fun getDefinition(language: SupportedLanguages): String? =
         this.definition
             .map { it.key to it.value }
-            .firstOrNull { it.first.toString() == language }
+            .firstOrNull { it.first == language }
             ?.second
 
-    fun toDTO(language: String): VariableDefinitionDTO =
+    fun toDTO(language: SupportedLanguages): VariableDefinitionDTO =
         VariableDefinitionDTO(
             id = varDefId,
             name = this.getName(language),

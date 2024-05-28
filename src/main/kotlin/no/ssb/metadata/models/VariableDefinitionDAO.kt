@@ -7,6 +7,7 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.constraints.NotEmpty
 import org.bson.types.ObjectId
 
 @MappedEntity
@@ -31,9 +32,9 @@ import org.bson.types.ObjectId
 )
 data class VariableDefinitionDAO(
     @field:Id @GeneratedValue @JsonIgnore val id: ObjectId?,
-    val name: LanguageStringType,
-    val shortName: String,
-    val definition: LanguageStringType
+    @field:NotEmpty val name: LanguageStringType,
+    @field:NotEmpty val shortName: String,
+    @field:NotEmpty val definition: LanguageStringType
 ) {
     fun toDTO(language: String): VariableDefinitionDTO =
         VariableDefinitionDTO(

@@ -27,7 +27,7 @@ class VariablesController {
 
     @Get()
     fun listAllByLanguage(
-        @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
+        @Header("Accept-Language", defaultValue = "nb") language: String,
     ): List<VariableDefinitionDTO> {
         return varDefService.findByLanguage(language)
     }

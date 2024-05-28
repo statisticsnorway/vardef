@@ -1,4 +1,3 @@
 [*.{kt,kts}]
 ktlint_code_style = ktlint_official
-wildcard_import_limit = 999
 ktlint_standard_no-wildcard-imports = disabled

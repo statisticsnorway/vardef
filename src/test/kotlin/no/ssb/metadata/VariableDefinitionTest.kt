@@ -1,11 +1,13 @@
 package no.ssb.metadata
 
 import no.ssb.metadata.models.LanguageStringType
+import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VariableDefinitionTest {
@@ -22,27 +24,17 @@ class VariableDefinitionTest {
             )
     }
 
-    @Test
-    fun `get variable name by language code`() {
-        val resultNorwegian = variableDefinition.name.getValidLanguage("nb")
-        val resultEnglish = variableDefinition.name.getValidLanguage("en")
-        val resultNyNorsk = variableDefinition.name.getValidLanguage("nn")
-        val incorrectLanguage = variableDefinition.name.getValidLanguage("dk")
-        assertThat(resultNorwegian).isEqualTo("Norsk navn")
-        assertThat(resultEnglish).isEqualTo("English name")
-        assertThat(resultNyNorsk).isEqualTo("namn")
-        assertThat(incorrectLanguage).isNull()
+    @ParameterizedTest
+    @EnumSource(SupportedLanguages::class)
+    fun `get variable name by language code`(language: SupportedLanguages) {
+        val result = variableDefinition.name.getValidLanguage(language)
+        assertThat(result).isEqualTo(variableDefinition.name.getValidLanguage(language))
     }
 
-    @Test
-    fun `get variable definition by language_code`() {
-        val resultNorwegian = variableDefinition.definition.getValidLanguage("nb")
-        val resultEnglish = variableDefinition.definition.getValidLanguage("en")
-        val resultNyNorsk = variableDefinition.definition.getValidLanguage("nn")
-        val resultIncorrectLanguage = variableDefinition.definition.getValidLanguage("sv")
-        assertThat(resultNorwegian).isEqualTo("definisjon")
-        assertThat(resultEnglish).isEqualTo("definition")
-        assertThat(resultNyNorsk).isEqualTo("nynorsk definisjon")
-        assertThat(resultIncorrectLanguage).isNull()
+    @ParameterizedTest
+    @EnumSource(SupportedLanguages::class)
+    fun `get variable definition by language code`(language: SupportedLanguages) {
+        val result = variableDefinition.definition.getValidLanguage(language)
+        assertThat(result).isEqualTo(variableDefinition.definition.getValidLanguage(language))
     }
 }

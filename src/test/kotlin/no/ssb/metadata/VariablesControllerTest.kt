@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -104,40 +106,26 @@ class VariablesControllerTest {
                 .contentType(ContentType.JSON)
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(200).body("[0].definition", equalTo("definisjon"))
+                .statusCode(200)
+                .body("[0].definition", equalTo("definisjon"))
+                .header("Content-Language", SupportedLanguages.NB.toString())
         }
 
-        @Test
-        fun `get request norwegian nynorsk language code`(spec: RequestSpecification) {
+        @ParameterizedTest
+        @EnumSource(SupportedLanguages::class)
+        fun `list variables in supported languages`(
+            language: SupportedLanguages,
+            spec: RequestSpecification,
+        ) {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
-                .header("Accept-Language", "nn")
+                .header("Accept-Language", language.toString())
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(200).body("[1].name", equalTo("Bankdørar"))
-        }
-
-        @Test
-        fun `get request norwegian bokmaal language code`(spec: RequestSpecification) {
-            spec
-                .`when`()
-                .contentType(ContentType.JSON)
-                .header("Accept-Language", "nb")
-                .get("/variables")
-                .then()
-                .assertThat().statusCode(200).body("[0].name", equalTo("Transaksjon"))
-        }
-
-        @Test
-        fun `get request english language code`(spec: RequestSpecification) {
-            spec
-                .`when`()
-                .contentType(ContentType.JSON)
-                .header("Accept-Language", "en")
-                .get("/variables")
-                .then()
-                .assertThat().statusCode(200).body("[1].name", equalTo("Bank door"))
+                .statusCode(200)
+                .body("[1].name", equalTo(variableDefinition1.name[language]))
+                .header("Content-Language", language.toString())
         }
 
         @Test

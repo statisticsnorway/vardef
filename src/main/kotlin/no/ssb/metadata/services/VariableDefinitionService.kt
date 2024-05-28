@@ -13,7 +13,7 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
             .findAll()
             .toList()
 
-    fun findByLanguage(language: String): List<VariableDefinitionDTO> {
+    fun findByLanguage(language: SupportedLanguages): List<VariableDefinitionDTO> {
         return findAll().map { dao -> dao.toDTO(language) }
     }
 

@@ -78,14 +78,13 @@ class VariableDefinitionServiceTest {
                 LanguageStringType(nb="marsvin trener", nn=null, en="guinea pig in training")
             )
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
-        val language = "nb"
         val variableDefinitionDTO =
             VariableDefinitionDTO(
                 "marsvin sport",
                 "marsvin",
                 "marsvin trener",
             )
-        val result = variableDefinitionService.findByLanguage(language)
+        val result = variableDefinitionService.findByLanguage(SupportedLanguages.NB)
         assert(result.isNotEmpty())
         assertEquals(listOf(variableDefinitionDTO), result)
         verify { variableDefinitionMockRepository.findAll() }

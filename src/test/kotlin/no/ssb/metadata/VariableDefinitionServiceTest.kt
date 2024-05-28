@@ -59,6 +59,7 @@ class VariableDefinitionServiceTest {
                 mapOf(SupportedLanguages.NB to "Kattens gange"),
                 "katt",
                 mapOf(SupportedLanguages.NB to "Katter går på fire bein."),
+                "8Ah4fbvb",
             )
         every {
             variableDefinitionService.save(variableDefinition)
@@ -80,6 +81,7 @@ class VariableDefinitionServiceTest {
         val language = "nb"
         val variableDefinitionDTO =
             VariableDefinitionDTO(
+                variableDefinition.varDefId,
                 "marsvin sport",
                 "marsvin",
                 "marsvin trener",

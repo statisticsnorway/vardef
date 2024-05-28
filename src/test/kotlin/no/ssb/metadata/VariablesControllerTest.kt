@@ -111,7 +111,9 @@ class VariablesControllerTest {
                 .contentType(ContentType.JSON)
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(200).body("[0].definition", equalTo("definisjon"))
+                .assertThat().statusCode(200)
+                .body("[0].definition", equalTo("definisjon"))
+                .body("varDefId", notNullValue())
         }
 
         @Test

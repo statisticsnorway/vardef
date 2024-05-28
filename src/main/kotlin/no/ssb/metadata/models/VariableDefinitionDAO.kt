@@ -7,6 +7,7 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
+import io.viascom.nanoid.NanoId
 import jakarta.validation.constraints.NotEmpty
 import org.bson.types.ObjectId
 
@@ -35,6 +36,7 @@ data class VariableDefinitionDAO(
     @field:NotEmpty val name: Map<SupportedLanguages, String>,
     @field:NotEmpty val shortName: String,
     @field:NotEmpty val definition: Map<SupportedLanguages, String>,
+    @field:NotEmpty val varDefId: String = NanoId.generate(8),
 ) {
     fun getName(language: String): String? =
         this.name
@@ -50,6 +52,7 @@ data class VariableDefinitionDAO(
 
     fun toDTO(language: String): VariableDefinitionDTO =
         VariableDefinitionDTO(
+            id = varDefId,
             name = this.getName(language),
             shortName = shortName,
             definition = this.getDefinition(language),

@@ -14,10 +14,10 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
             .findAll()
             .toList()
 
-    fun findByLanguage(language: String): List<VariableDefinitionDTO> {
-        if (!SupportedLanguages.entries.toString().contains(language)) {
+    fun findByLanguage(language: SupportedLanguages): List<VariableDefinitionDTO> {
+        if (!SupportedLanguages.entries.contains(language)) {
             throw UnknownLanguageException(
-                "Unknown language code $language. Valid values are ${SupportedLanguages.entries.map { it.toString() }}",
+                "Unknown language code $language. Valid values are ${SupportedLanguages.entries}",
             )
         }
 

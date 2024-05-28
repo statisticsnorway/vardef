@@ -1,18 +1,23 @@
 package no.ssb.metadata.models
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.micronaut.core.convert.ConversionContext
 import io.micronaut.core.convert.TypeConverter
 import io.micronaut.serde.annotation.Serdeable
-import io.micronaut.serde.config.naming.LowerCaseStrategy
 import jakarta.inject.Singleton
 import no.ssb.metadata.exceptions.UnknownLanguageException
 import java.util.*
 
-@Serdeable(naming = LowerCaseStrategy::class)
+@Serdeable
 enum class SupportedLanguages {
-    NB, // Norwegian Bokmål
-    NN, // Norwegian Nynorsk
-    EN, // English
+    @JsonProperty("nb")
+    NB,
+
+    @JsonProperty("nn")
+    NN,
+
+    @JsonProperty("en")
+    EN,
     ;
 
     override fun toString() = name.lowercase()

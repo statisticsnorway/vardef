@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
+import no.ssb.metadata.exceptions.UnknownLanguageException
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @MockK
 class VariableDefinitionServiceTest {
@@ -89,5 +91,20 @@ class VariableDefinitionServiceTest {
         assert(result.isNotEmpty())
         assertEquals(listOf(variableDefinitionDTO), result)
         verify { variableDefinitionMockRepository.findAll() }
+    }
+
+    @Test
+    fun `findByLanguage should throw exception for invalid language`() {
+        val invalidLanguage = SupportedLanguages.entries.firstOrNull { it !in SupportedLanguages.entries } ?: return
+
+        val exception =
+            assertThrows<UnknownLanguageException> {
+                variableDefinitionService.findByLanguage(invalidLanguage)
+            }
+
+        assertEquals(
+            "Unknown language code $invalidLanguage. Valid values are ${SupportedLanguages.entries}",
+            exception.message,
+        )
     }
 }

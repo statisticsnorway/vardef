@@ -13,6 +13,7 @@ import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
+import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO
 import no.ssb.metadata.services.VariableDefinitionService
@@ -26,7 +27,7 @@ class VariablesController {
 
     @Get()
     fun listAllByLanguage(
-        @Header("Accept-Language", defaultValue = "nb") language: String,
+        @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
     ): List<VariableDefinitionDTO> {
         return varDefService.findByLanguage(language)
     }

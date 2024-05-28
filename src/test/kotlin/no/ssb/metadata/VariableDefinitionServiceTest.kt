@@ -2,7 +2,7 @@ package no.ssb.metadata
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.models.SupportedLanguages
+import no.ssb.metadata.models.SupportedLanugages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -24,9 +24,12 @@ class VariableDefinitionServiceTest {
         variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf((SupportedLanguages.NB to "verdi"), (SupportedLanguages.EN to "value")),
+                SupportedLanugages(nb="verdi", nn=null, en="value"),
+                //mapOf((SupportedLanguages.NB to "verdi"), (SupportedLanguages.EN to "value")),
                 "test1",
-                mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
+                SupportedLanugages(nb="definisjon", nn=null, en="definition"),
+
+                //mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
             )
         variableDefinitionService.save(variableDefinition)
         variables = variableDefinitionService.findAll()

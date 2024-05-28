@@ -5,7 +5,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
-import no.ssb.metadata.models.SupportedLanguages
+import no.ssb.metadata.models.SupportedLanugages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
 import org.hamcrest.CoreMatchers.equalTo
@@ -29,31 +29,40 @@ class VariableControllerTest {
         variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf((SupportedLanguages.NB to "Transaksjon"), (SupportedLanguages.EN to "Transition")),
+                SupportedLanugages(nb="Transaksjon", nn=null, en="Transition"),
+
+                //mapOf((SupportedLanguages.NB to "Transaksjon"), (SupportedLanguages.EN to "Transition")),
                 "test1",
-                mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
+                SupportedLanugages(nb="definisjon", nn=null, en="definition"),
+                //mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
             )
         variableDefinition1 =
             VariableDefinitionDAO(
                 null,
-                mapOf(
-                    (SupportedLanguages.NB to "Bankdør"),
-                    (SupportedLanguages.EN to "Bank door"),
-                    (SupportedLanguages.NN to "Bankdørar"),
-                ),
+                SupportedLanugages(nb="Bankdør", nn="Bankdørar", en="Bank door"),
+
+//                mapOf(
+//                    (SupportedLanguages.NB to "Bankdør"),
+//                    (SupportedLanguages.EN to "Bank door"),
+//                    (SupportedLanguages.NN to "Bankdørar"),
+//                ),
                 "bankInngang",
-                mapOf(
-                    (SupportedLanguages.NB to "Komme inn i banken"),
-                    (SupportedLanguages.EN to "How to get inside a bank"),
-                    (SupportedLanguages.NN to "Komme inn i banken"),
-                ),
+                SupportedLanugages(nb="Komme inn i banken", nn="Komme inn i banken", en="How to get inside a bank"),
+
+//                mapOf(
+//                    (SupportedLanguages.NB to "Komme inn i banken"),
+//                    (SupportedLanguages.EN to "How to get inside a bank"),
+//                    (SupportedLanguages.NN to "Komme inn i banken"),
+//                ),
             )
         variableDefinition2 =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.NB to "bilturer"),
+                SupportedLanugages(nb="bilturer", nn=null, en=null),
+                //mapOf(SupportedLanguages.NB to "bilturer"),
                 "bil",
-                mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
+                SupportedLanugages(nb="Bil som kjøres på turer", nn=null, en=null),
+                //mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
             )
         val variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
         for (v in variables) {

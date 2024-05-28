@@ -1,6 +1,6 @@
 package no.ssb.metadata
 
-import no.ssb.metadata.models.SupportedLanguages
+import no.ssb.metadata.models.SupportedLanugages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
@@ -16,17 +16,21 @@ class VariableDefinitionTest {
         variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(
-                    (SupportedLanguages.NB to "Norsk navn"),
-                    (SupportedLanguages.EN to "English name"),
-                    (SupportedLanguages.NN to "namn"),
-                ),
+                SupportedLanugages(nb="Norsk navn", nn="namn", en="English name"),
+
+//                mapOf(
+//                    (SupportedLanguages.NB to "Norsk navn"),
+//                    (SupportedLanguages.EN to "English name"),
+//                    (SupportedLanguages.NN to "namn"),
+//                ),
                 "test",
-                mapOf(
-                    (SupportedLanguages.NB to "definisjon"),
-                    (SupportedLanguages.EN to "definition"),
-                    (SupportedLanguages.NN to "nynorsk definisjon"),
-                ),
+                SupportedLanugages(nb="definisjon", nn="nynorsk definisjon", en="definition"),
+
+//                mapOf(
+//                    (SupportedLanguages.NB to "definisjon"),
+//                    (SupportedLanguages.EN to "definition"),
+//                    (SupportedLanguages.NN to "nynorsk definisjon"),
+//                ),
             )
     }
 

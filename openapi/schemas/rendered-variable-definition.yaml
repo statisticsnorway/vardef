@@ -30,8 +30,8 @@ properties:
     format: uri
     examples:
       - https://www.ssb.no/en/klass/klassifikasjoner/91
-  unit_type:
-    title: Unit type(s)
+  unit_types:
+    title: Unit types
     description: A list of one or more unit types, e.g. person, vehicle, household. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702.
     type: array
     items:
@@ -43,9 +43,26 @@ properties:
     type: array
     items:
       $ref: klass-reference.yaml
-  direct_person_identifying:
-    title: Direct Person identifying Information (DPI)
-    description: Direct Person identifying Information (DPI)
+  contains_unit_identifying_information:
+    title: Contains unit identifying information
+    description: True if variable instances contain information which can identify a Person, Family or Household. Applies even if the information is pseudonymized.
+    type: boolean
+  contains_sensitive_personal_information:
+    title: Contains unit identifying information
+    description: |
+      True if variable instances contain particularly sensitive information. Applies even if the information or identifiers are pseudonymized.
+
+      Information within the following categories are regarded as particularly sensitive:
+        - Ethnicity
+        - Political alignment
+        - Religion
+        - Philosophical beliefs
+        - Union membership
+        - Genetics
+        - Biometrics
+        - Health
+        - Sexual relations
+        - Sexual orientation
     type: boolean
   variable_status:
     title: Status of the variable

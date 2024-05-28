@@ -2,7 +2,7 @@ type: object
 properties:
   name:
     title: Name
-    description: Name of the variable
+    description: Name of the variable. Must be unique for a given Unit Type and Owner combination.
     $ref: language-texts.json
     examples:
       - en: "Country Background"
@@ -10,7 +10,7 @@ properties:
         nn: "Landbakgrunn"
   short_name:
     title: Short name
-    description: Recommended short name
+    description: Recommended short name. Must be unique within an organization.
     type: string
     format: "^[a-zA-Z0-9-_]{3,}$"
     examples:
@@ -31,8 +31,8 @@ properties:
     format: "^[0-9]{1,}%"
     examples:
       - "91"
-  unit_type:
-    title: Unit type(s)
+  unit_types:
+    title: Unit types
     description: A list of one or more unit types, e.g. person, vehicle, household. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702.
     type: array
     items:
@@ -51,7 +51,24 @@ properties:
       - ["if02", "vf05"]
   contains_unit_identifying_information:
     title: Contains unit identifying information
-    description: True if variable instances contain information which can identify a Person, Family or Household. Applies even if the information is pseudonymised.
+    description: True if variable instances contain information which can identify a Person, Family or Household. Applies even if the information is pseudonymized.
+    type: boolean
+  contains_sensitive_personal_information:
+    title: Contains unit identifying information
+    description: |
+      True if variable instances contain particularly sensitive information. Applies even if the information or identifiers are pseudonymized.
+
+      Information within the following categories are regarded as particularly sensitive:
+        - Ethnicity
+        - Political alignment
+        - Religion
+        - Philosophical beliefs
+        - Union membership
+        - Genetics
+        - Biometrics
+        - Health
+        - Sexual relations
+        - Sexual orientation
     type: boolean
   variable_status:
     title: Status of the variable
@@ -109,6 +126,9 @@ required:
   - short_name
   - definition
   - valid_from
-  - unit_type
+  - unit_types
+  - subject_fields
+  - variable_status
   - contains_unit_identifying_information
+  - contains_sensitive_personal_information
   - contact

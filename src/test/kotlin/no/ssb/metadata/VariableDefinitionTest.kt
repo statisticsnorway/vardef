@@ -28,9 +28,12 @@ class VariableDefinitionTest {
     @CsvSource(
         "EN, English name",
         "NN, namn",
-        "NB, Norsk navn"
+        "NB, Norsk navn",
     )
-    fun `get variable name by language code`(languageCode: SupportedLanguages, expectedName: String) {
+    fun `get variable name by language code`(
+        languageCode: SupportedLanguages,
+        expectedName: String,
+    ) {
         val result = variableDefinition.name.getValidLanguage(languageCode)
         assertThat(result).isEqualTo(expectedName)
     }
@@ -39,9 +42,12 @@ class VariableDefinitionTest {
     @CsvSource(
         "EN, definition",
         "NN, nynorsk definisjon",
-        "NB, definisjon"
+        "NB, definisjon",
     )
-    fun `get variable definition by language code`(languageCode: SupportedLanguages, expectedDefinition: String) {
+    fun `get variable definition by language code`(
+        languageCode: SupportedLanguages,
+        expectedDefinition: String,
+    ) {
         val result = variableDefinition.definition.getValidLanguage(languageCode)
         assertThat(result).isEqualTo(expectedDefinition)
     }

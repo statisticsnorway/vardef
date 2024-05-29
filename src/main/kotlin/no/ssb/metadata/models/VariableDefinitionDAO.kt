@@ -31,7 +31,7 @@ import org.bson.types.ObjectId
     """,
 )
 data class VariableDefinitionDAO(
-    @field:Id @GeneratedValue @JsonIgnore val id: ObjectId?,
+    @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId?,
     val name: LanguageStringType,
     val shortName: String,
     val definition: LanguageStringType,

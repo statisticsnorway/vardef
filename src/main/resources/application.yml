@@ -18,3 +18,8 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
+
+  serde:
+    deserialization:
+      ignore-unknown: false
+      strict-nullable: true

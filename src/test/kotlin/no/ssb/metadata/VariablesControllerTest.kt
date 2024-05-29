@@ -217,7 +217,7 @@ class VariablesControllerTest {
                 .post("/variables")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", equalTo("varDef.shortName: must not be empty"))
+                .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
         }
 
         @Test

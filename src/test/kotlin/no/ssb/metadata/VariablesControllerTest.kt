@@ -116,7 +116,7 @@ class VariablesControllerTest {
                 .then()
                 .statusCode(200)
                 .body("[0].definition", equalTo("definisjon"))
-                .body("id", notNullValue())
+                .body("[0].id", notNullValue())
                 .header("Content-Language", SupportedLanguages.NB.toString())
         }
 
@@ -134,7 +134,7 @@ class VariablesControllerTest {
                 .then()
                 .statusCode(200)
                 .body("[1].name", equalTo(variableDefinition1.name[language]))
-                .body("id", notNullValue())
+                .body("[1].id", notNullValue())
                 .header("Content-Language", language.toString())
         }
 

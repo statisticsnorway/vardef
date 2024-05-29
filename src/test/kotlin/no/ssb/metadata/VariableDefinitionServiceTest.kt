@@ -69,7 +69,7 @@ class VariableDefinitionServiceTest {
         val result = variableDefinitionService.save(variableDefinition)
         assertThat(result).isEqualTo(savedVariableDefinition)
         assertThat(result.name).isEqualTo(savedVariableDefinition.name)
-        assertThat(result.objectId).isEqualTo(savedVariableDefinition.objectId)
+        assertThat(result.mongoId).isEqualTo(savedVariableDefinition.mongoId)
         assertThat(result.id).isEqualTo(savedVariableDefinition.id)
     }
 
@@ -110,5 +110,45 @@ class VariableDefinitionServiceTest {
             "Unknown language code $invalidLanguage. Valid values are ${SupportedLanguages.entries}",
             exception.message,
         )
+    }
+
+    @Test
+    fun `mongodb id is generated when variable is created`() {
+        val variableDefinition =
+            VariableDefinitionDAO(
+                null,
+                mapOf(SupportedLanguages.NB to "Middag"),
+                "mat",
+                mapOf(SupportedLanguages.NB to "Mat man spiser etter jobb"),
+            )
+        val savedVariableDefinition = variableDefinition.copy(mongoId = ObjectId.get())
+
+        every { variableDefinitionService.save(variableDefinition) } returns savedVariableDefinition
+        assertThat(variableDefinition.mongoId).isNull()
+
+        val saveVariable = variableDefinitionService.save(variableDefinition)
+        assertThat(saveVariable.mongoId).isNotNull()
+    }
+
+    @Test
+    fun `varDef id is only created once`() {
+        val variableDefinition =
+            VariableDefinitionDAO(
+                null,
+                mapOf(SupportedLanguages.EN to "Supper"),
+                "englishFood",
+                mapOf(SupportedLanguages.EN to "Food after work"),
+                "y7s34rf1",
+            )
+        val idBeforeSave = variableDefinition.id
+        val shortNameBeforeSave = variableDefinition.shortName
+
+        val savedVariableDefinition = variableDefinition.copy(shortName = "food")
+
+        every { variableDefinitionService.save(variableDefinition) } returns savedVariableDefinition
+
+        val result = variableDefinitionService.save(variableDefinition)
+        assertThat(idBeforeSave).isSameAs(result.id)
+        assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
     }
 }

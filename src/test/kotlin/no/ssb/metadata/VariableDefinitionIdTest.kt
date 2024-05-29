@@ -16,23 +16,38 @@ class VariableDefinitionIdTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
     private lateinit var variableDefinition: VariableDefinitionDAO
+    private lateinit var variableDefinition1: VariableDefinitionDAO
 
     @BeforeEach
     fun setUp() {
         variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf((SupportedLanguages.NB to "Transaksjon"), (SupportedLanguages.EN to "Transition")),
-                "test1",
+                mapOf((SupportedLanguages.NB to "Bilturer"), (SupportedLanguages.EN to "Road trips")),
+                "bil",
                 mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
             )
+        variableDefinition1 =
+            VariableDefinitionDAO(
+                null,
+                mapOf((SupportedLanguages.NB to "gåturer"), (SupportedLanguages.EN to "Hiking")),
+                "tur",
+                mapOf((SupportedLanguages.NB to "Ut på tur"), (SupportedLanguages.EN to "Walking about")),
+            )
+    }
+
+    @Test
+    fun `varDef id is generated when variable is created`() {
+        val saveVariable = variableDefinitionService.save(variableDefinition1)
+        assertThat(saveVariable.id).isNotNull()
+        assertThat(saveVariable.id).isEqualTo(variableDefinition1.id)
     }
 
     @Test
     fun `varDef id is only created once`() {
         val idBeforeSave = variableDefinition.id
         val shortNameBeforeSave = variableDefinition.shortName
-        variableDefinition.shortName = "bankUtgang"
+        variableDefinition.shortName = "bilSport"
         val result = variableDefinitionService.save(variableDefinition)
         assertThat(idBeforeSave).isSameAs(result.id)
         assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
@@ -40,17 +55,10 @@ class VariableDefinitionIdTest {
 
     @Test
     fun `all variables has mongodb id`() {
-        val variableDefinition1 =
-            VariableDefinitionDAO(
-                null,
-                mapOf(SupportedLanguages.NB to "bilturer"),
-                "bil",
-                mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
-            )
-        val result = variableDefinitionService.save(variableDefinition1)
+        val result = variableDefinitionService.save(variableDefinition)
         assertThat(result.objectId).isNotNull()
-        variableDefinition1.shortName = "campingbil"
-        val result2 = variableDefinitionService.save(variableDefinition1)
+        variableDefinition.shortName = "campingbil"
+        val result2 = variableDefinitionService.save(variableDefinition)
         assertThat(result2.objectId).isNotSameAs(result.objectId)
         assertThat(result2.id).isSameAs(result.id)
     }

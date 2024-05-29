@@ -68,6 +68,9 @@ class VariableDefinitionServiceTest {
         } returns savedVariableDefinition
         val result = variableDefinitionService.save(variableDefinition)
         assertThat(result).isEqualTo(savedVariableDefinition)
+        assertThat(result.name).isEqualTo(savedVariableDefinition.name)
+        assertThat(result.objectId).isEqualTo(savedVariableDefinition.objectId)
+        assertThat(result.id).isEqualTo(savedVariableDefinition.id)
     }
 
     @Test
@@ -82,7 +85,7 @@ class VariableDefinitionServiceTest {
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
         val variableDefinitionDTO =
             VariableDefinitionDTO(
-                variableDefinition.varDefId,
+                variableDefinition.id,
                 "marsvin sport",
                 "marsvin",
                 "marsvin trener",
@@ -90,6 +93,7 @@ class VariableDefinitionServiceTest {
         val result = variableDefinitionService.findByLanguage(SupportedLanguages.NB)
         assert(result.isNotEmpty())
         assertEquals(listOf(variableDefinitionDTO), result)
+        assertThat(result[0].id).isEqualTo(variableDefinitionDTO.id)
         verify { variableDefinitionMockRepository.findAll() }
     }
 

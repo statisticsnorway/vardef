@@ -8,6 +8,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
+import org.assertj.core.api.Assertions
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
@@ -38,6 +39,7 @@ class VariablesControllerTest {
         private lateinit var variableDefinition: VariableDefinitionDAO
         private lateinit var variableDefinition1: VariableDefinitionDAO
         private lateinit var variableDefinition2: VariableDefinitionDAO
+        private lateinit var variables: List<VariableDefinitionDAO>
 
         @BeforeEach
         fun setUp() {
@@ -70,7 +72,7 @@ class VariablesControllerTest {
                     "bil",
                     mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
                 )
-            val variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
+            variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
             for (v in variables) {
                 variableDefinitionService.save(v)
             }
@@ -115,6 +117,7 @@ class VariablesControllerTest {
                 .then()
                 .statusCode(200)
                 .body("[0].definition", equalTo("definisjon"))
+                .body("id", notNullValue())
                 .header("Content-Language", SupportedLanguages.NB.toString())
         }
 
@@ -132,6 +135,7 @@ class VariablesControllerTest {
                 .then()
                 .statusCode(200)
                 .body("[1].name", equalTo(variableDefinition1.name[language]))
+                .body("id", notNullValue())
                 .header("Content-Language", language.toString())
         }
 
@@ -212,6 +216,33 @@ class VariablesControllerTest {
                     "_embedded.errors[0].message",
                     equalTo("Unknown language code se. Valid values are [nb, nn, en]"),
                 )
+        }
+
+        @Test
+        fun `varDef id is only created once`()  {
+            val idBeforeSave = variableDefinition1.id
+            val shortNameBeforeSave = variableDefinition1.shortName
+            variableDefinition1.shortName = "bankUtgang"
+            val result = variableDefinitionService.save(variableDefinition1)
+            Assertions.assertThat(idBeforeSave).isSameAs(result.id)
+            Assertions.assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
+        }
+
+        @Test
+        fun `all variables has mongodb id`()  {
+            val variableDefinition3 =
+                VariableDefinitionDAO(
+                    null,
+                    mapOf(SupportedLanguages.NB to "bilturer"),
+                    "bil",
+                    mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
+                )
+            val result = variableDefinitionService.save(variableDefinition3)
+            Assertions.assertThat(result.objectId).isNotNull()
+            variableDefinition3.shortName = "campingbil"
+            val result2 = variableDefinitionService.save(variableDefinition3)
+            Assertions.assertThat(result2.objectId).isNotSameAs(result.objectId)
+            Assertions.assertThat(result2.id).isSameAs(result.id)
         }
     }
 }

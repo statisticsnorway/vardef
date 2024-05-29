@@ -32,11 +32,11 @@ import org.bson.types.ObjectId
     """,
 )
 data class VariableDefinitionDAO(
-    @field:Id @GeneratedValue @JsonIgnore val id: ObjectId?,
-    @field:NotEmpty val name: Map<SupportedLanguages, String>,
-    @field:NotEmpty val shortName: String,
-    @field:NotEmpty val definition: Map<SupportedLanguages, String>,
-    @field:NotEmpty val varDefId: String = NanoId.generate(8),
+    @field:Id @GeneratedValue @JsonIgnore val objectId: ObjectId?,
+    @field:NotEmpty var name: Map<SupportedLanguages, String>,
+    @field:NotEmpty var shortName: String,
+    @field:NotEmpty var definition: Map<SupportedLanguages, String>,
+    @field:NotEmpty @JsonIgnore val id: String = NanoId.generate(8),
 ) {
     fun getName(language: SupportedLanguages): String? =
         this.name
@@ -52,7 +52,7 @@ data class VariableDefinitionDAO(
 
     fun toDTO(language: SupportedLanguages): VariableDefinitionDTO =
         VariableDefinitionDTO(
-            id = varDefId,
+            id = id,
             name = this.getName(language),
             shortName = shortName,
             definition = this.getDefinition(language),

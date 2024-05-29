@@ -136,7 +136,7 @@ class VariablesControllerTest {
                 .header("Accept-Language", "en")
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(200).body("[2].name", nullValue())
+                .assertThat().statusCode(200).body("[2]", hasKey("name")).body("[2].name", equalTo(null))
         }
 
         @Test

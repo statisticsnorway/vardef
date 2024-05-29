@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
+import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO
@@ -49,16 +50,16 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.NB to "Kattens gange"),
+                LanguageStringType(nb = "Kattens gange", nn = null, en = null),
                 "katt",
-                mapOf(SupportedLanguages.NB to "Katter går på fire bein."),
+                LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
             )
         val savedVariableDefinition =
             VariableDefinitionDAO(
                 ObjectId("00000020f51bb4362eee2a4d"),
-                mapOf(SupportedLanguages.NB to "Kattens gange"),
+                LanguageStringType(nb = "Kattens gange", nn = null, en = null),
                 "katt",
-                mapOf(SupportedLanguages.NB to "Katter går på fire bein."),
+                LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
             )
         every {
             variableDefinitionService.save(variableDefinition)
@@ -72,9 +73,9 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf((SupportedLanguages.NB to "marsvin sport"), (SupportedLanguages.EN to "guinea pig sport")),
+                LanguageStringType(nb = "marsvin sport", nn = null, en = "guinea pig sport"),
                 "marsvin",
-                mapOf((SupportedLanguages.NB to "marsvin trener"), (SupportedLanguages.EN to "guinea pig in training")),
+                LanguageStringType(nb = "marsvin trener", nn = null, en = "guinea pig in training"),
             )
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
         val variableDefinitionDTO =

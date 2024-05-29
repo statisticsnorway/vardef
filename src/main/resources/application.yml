@@ -21,6 +21,8 @@ micronaut:
 
 
   serde:
+    deserialization:
+      ignore-unknown: false
+      strict-nullable: true
     serialization:
       inclusion: always
-

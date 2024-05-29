@@ -1,7 +1,6 @@
 package no.ssb.metadata.services
 
 import jakarta.inject.Singleton
-import no.ssb.metadata.exceptions.UnknownLanguageException
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO
@@ -15,12 +14,6 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
             .toList()
 
     fun findByLanguage(language: SupportedLanguages): List<VariableDefinitionDTO> {
-        if (!SupportedLanguages.entries.contains(language)) {
-            throw UnknownLanguageException(
-                "Unknown language code $language. Valid values are ${SupportedLanguages.entries}",
-            )
-        }
-
         return findAll().map { dao -> dao.toDTO(language) }
     }
 

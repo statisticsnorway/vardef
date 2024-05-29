@@ -124,7 +124,7 @@ class VariablesControllerTest {
                 .get("/variables")
                 .then()
                 .statusCode(200)
-                .body("[1].name", equalTo(variableDefinition1.name?.getValidLanguage(language)))
+                .body("[1].name", equalTo(variableDefinition1.name.getValidLanguage(language)))
                 .header("Content-Language", language.toString())
         }
 

@@ -216,6 +216,5 @@ class VariablesControllerTest {
                     equalTo("Unknown language code se. Valid values are [nb, nn, en]"),
                 )
         }
-
     }
 }

@@ -1,7 +1,6 @@
 package no.ssb.metadata.services
 
 import jakarta.inject.Singleton
-import no.ssb.metadata.exceptions.UnknownLanguageException
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO

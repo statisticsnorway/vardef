@@ -1,7 +1,6 @@
 package no.ssb.metadata.models
 
 import io.micronaut.serde.annotation.Serdeable
-import io.micronaut.serde.config.naming.LowerCaseStrategy
 
 @Serdeable
 data class LanguageStringType(

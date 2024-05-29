@@ -1,5 +1,6 @@
 package no.ssb.metadata.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
@@ -15,7 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema
     """,
 )
 data class VariableDefinitionDTO(
-    val id: String?,
+    @JsonIgnore val id: String?,
     val name: String?,
     val shortName: String,
     val definition: String?,

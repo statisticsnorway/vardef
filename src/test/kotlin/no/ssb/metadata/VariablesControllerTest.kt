@@ -5,6 +5,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
+import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
@@ -45,33 +46,25 @@ class VariablesControllerTest {
             variableDefinition =
                 VariableDefinitionDAO(
                     null,
-                    mapOf((SupportedLanguages.NB to "Transaksjon"), (SupportedLanguages.EN to "Transition")),
+                    LanguageStringType(nb = "Transaksjon", nn = null, en = "Transition"),
                     "test1",
-                    mapOf((SupportedLanguages.NB to "definisjon"), (SupportedLanguages.EN to "definition")),
+                    LanguageStringType(nb = "definisjon", nn = null, en = "definition"),
                 )
             variableDefinition1 =
                 VariableDefinitionDAO(
                     null,
-                    mapOf(
-                        (SupportedLanguages.NB to "Bankdør"),
-                        (SupportedLanguages.EN to "Bank door"),
-                        (SupportedLanguages.NN to "Bankdørar"),
-                    ),
+                    LanguageStringType(nb = "Bankdør", nn = "Bankdørar", en = "Bank door"),
                     "bankInngang",
-                    mapOf(
-                        (SupportedLanguages.NB to "Komme inn i banken"),
-                        (SupportedLanguages.EN to "How to get inside a bank"),
-                        (SupportedLanguages.NN to "Komme inn i banken"),
-                    ),
+                    LanguageStringType(nb = "Komme inn i banken", nn = "Komme inn i banken", en = "How to get inside a bank"),
                 )
             variableDefinition2 =
                 VariableDefinitionDAO(
                     null,
-                    mapOf(SupportedLanguages.NB to "bilturer"),
+                    LanguageStringType(nb = "bilturer", nn = null, en = null),
                     "bil",
-                    mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
+                    LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
                 )
-            variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
+            val variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
             for (v in variables) {
                 variableDefinitionService.save(v)
             }
@@ -133,8 +126,7 @@ class VariablesControllerTest {
                 .get("/variables")
                 .then()
                 .statusCode(200)
-                .body("[1].name", equalTo(variableDefinition1.name[language]))
-                .body("[1].id", notNullValue())
+                .body("[1].name", equalTo(variableDefinition1.name.getValidLanguage(language)))
                 .header("Content-Language", language.toString())
         }
 

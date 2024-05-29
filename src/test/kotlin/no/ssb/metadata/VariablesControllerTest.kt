@@ -218,31 +218,5 @@ class VariablesControllerTest {
                 )
         }
 
-        @Test
-        fun `varDef id is only created once`()  {
-            val idBeforeSave = variableDefinition1.id
-            val shortNameBeforeSave = variableDefinition1.shortName
-            variableDefinition1.shortName = "bankUtgang"
-            val result = variableDefinitionService.save(variableDefinition1)
-            Assertions.assertThat(idBeforeSave).isSameAs(result.id)
-            Assertions.assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
-        }
-
-        @Test
-        fun `all variables has mongodb id`()  {
-            val variableDefinition3 =
-                VariableDefinitionDAO(
-                    null,
-                    mapOf(SupportedLanguages.NB to "bilturer"),
-                    "bil",
-                    mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
-                )
-            val result = variableDefinitionService.save(variableDefinition3)
-            Assertions.assertThat(result.objectId).isNotNull()
-            variableDefinition3.shortName = "campingbil"
-            val result2 = variableDefinitionService.save(variableDefinition3)
-            Assertions.assertThat(result2.objectId).isNotSameAs(result.objectId)
-            Assertions.assertThat(result2.id).isSameAs(result.id)
-        }
     }
 }

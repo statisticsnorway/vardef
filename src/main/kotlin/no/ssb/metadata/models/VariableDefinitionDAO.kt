@@ -33,28 +33,16 @@ import org.bson.types.ObjectId
 )
 data class VariableDefinitionDAO(
     @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId?,
-    @field:NotEmpty var name: Map<SupportedLanguages, String>,
+    @field:NotEmpty var name: LanguageStringType,
     @field:NotEmpty var shortName: String,
-    @field:NotEmpty var definition: Map<SupportedLanguages, String>,
+    @field:NotEmpty var definition: LanguageStringType,
     @field:NotEmpty @JsonIgnore val id: String? = NanoId.generate(8),
 ) {
-    fun getName(language: SupportedLanguages): String? =
-        this.name
-            .map { it.key to it.value }
-            .firstOrNull { it.first == language }
-            ?.second
-
-    fun getDefinition(language: SupportedLanguages): String? =
-        this.definition
-            .map { it.key to it.value }
-            .firstOrNull { it.first == language }
-            ?.second
-
     fun toDTO(language: SupportedLanguages): VariableDefinitionDTO =
         VariableDefinitionDTO(
             id = id,
-            name = this.getName(language),
+            name = name.getValidLanguage(language),
             shortName = shortName,
-            definition = this.getDefinition(language),
+            definition = definition.getValidLanguage(language),
         )
 }

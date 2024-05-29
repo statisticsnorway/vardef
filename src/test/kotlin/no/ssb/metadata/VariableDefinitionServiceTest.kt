@@ -7,6 +7,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
 import no.ssb.metadata.exceptions.UnknownLanguageException
+import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.models.VariableDefinitionDTO
@@ -51,16 +52,16 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.NB to "Kattens gange"),
+                LanguageStringType(nb = "Kattens gange", null, null),
                 "katt",
-                mapOf(SupportedLanguages.NB to "Katter går på fire bein."),
+                LanguageStringType(nb = "Katter går på fire bein.", null, null),
             )
         val savedVariableDefinition =
             VariableDefinitionDAO(
                 ObjectId("00000020f51bb4362eee2a4d"),
-                mapOf(SupportedLanguages.NB to "Kattens gange"),
+                LanguageStringType(nb = "Kattens gange", null, null),
                 "katt",
-                mapOf(SupportedLanguages.NB to "Katter går på fire bein."),
+                LanguageStringType(nb = "Katter går på fire bein.", null, null),
                 "8Ah4fbvb",
             )
         every {
@@ -78,9 +79,9 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf((SupportedLanguages.NB to "marsvin sport"), (SupportedLanguages.EN to "guinea pig sport")),
+                LanguageStringType(nb = "marsvin sport", en = "guinea pig sport", nn = null),
                 "marsvin",
-                mapOf((SupportedLanguages.NB to "marsvin trener"), (SupportedLanguages.EN to "guinea pig in training")),
+                LanguageStringType(nb = "marsvin trener", en = "guinea pig in training", nn = null),
             )
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
         val variableDefinitionDTO =
@@ -117,9 +118,9 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.NB to "Middag"),
+                LanguageStringType(nb = "Middag", null, null),
                 "mat",
-                mapOf(SupportedLanguages.NB to "Mat man spiser etter jobb"),
+                LanguageStringType(nb = "Mat man spiser etter jobb", null, null),
             )
         val savedVariableDefinition = variableDefinition.copy(mongoId = ObjectId.get())
 
@@ -135,9 +136,9 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.EN to "Supper"),
+                LanguageStringType(nb = null, en = "Supper", nn = null),
                 "englishFood",
-                mapOf(SupportedLanguages.EN to "Food after work"),
+                LanguageStringType(nb = null, en = "Food after work", nn = null),
                 "y7s34rf1",
             )
         val idBeforeSave = variableDefinition.id

@@ -17,6 +17,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class VariableDefinitionDTO(
     val id: String?,
     val name: String?,
-    val shortName: String,
+    val shortName: String?,
     val definition: String?,
 )

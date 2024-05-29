@@ -36,7 +36,7 @@ data class VariableDefinitionDAO(
     @field:NotEmpty var name: Map<SupportedLanguages, String>,
     @field:NotEmpty var shortName: String,
     @field:NotEmpty var definition: Map<SupportedLanguages, String>,
-    @field:NotEmpty @JsonIgnore val id: String = NanoId.generate(8),
+    @field:NotEmpty @JsonIgnore val id: String? = NanoId.generate(8),
 ) {
     fun getName(language: SupportedLanguages): String? =
         this.name

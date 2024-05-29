@@ -27,14 +27,14 @@ class VariableDefinitionTest {
     @ParameterizedTest
     @EnumSource(SupportedLanguages::class)
     fun `get variable name by language code`(language: SupportedLanguages) {
-        val result = variableDefinition.name.getValidLanguage(language)
-        assertThat(result).isEqualTo(variableDefinition.name.getValidLanguage(language))
+        val result = variableDefinition.name?.getValidLanguage(language)
+        assertThat(result).isEqualTo(variableDefinition.name?.getValidLanguage(language))
     }
 
     @ParameterizedTest
     @EnumSource(SupportedLanguages::class)
     fun `get variable definition by language code`(language: SupportedLanguages) {
-        val result = variableDefinition.definition.getValidLanguage(language)
-        assertThat(result).isEqualTo(variableDefinition.definition.getValidLanguage(language))
+        val result = variableDefinition.definition?.getValidLanguage(language)
+        assertThat(result).isEqualTo(variableDefinition.definition?.getValidLanguage(language))
     }
 }

@@ -3,7 +3,7 @@ package no.ssb.metadata.models
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.LowerCaseStrategy
 
-@Serdeable(naming = LowerCaseStrategy::class)
+@Serdeable
 data class LanguageStringType(
     val nb: String?,
     val nn: String?,

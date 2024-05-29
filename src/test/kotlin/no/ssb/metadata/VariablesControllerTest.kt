@@ -124,7 +124,7 @@ class VariablesControllerTest {
                 .get("/variables")
                 .then()
                 .statusCode(200)
-                .body("[1].name", equalTo(variableDefinition1.name[language]))
+                .body("[1].name", equalTo(variableDefinition1.name?.getValidLanguage(language)))
                 .header("Content-Language", language.toString())
         }
 
@@ -172,7 +172,7 @@ class VariablesControllerTest {
         fun `post request missing compulsory field`(spec: RequestSpecification) {
             val jsonString =
                 """
-                {
+                {   
                     "short_name": "bank",
                     "definition": {
                         "en": "definition of money",
@@ -189,7 +189,35 @@ class VariablesControllerTest {
                 .post("/variables")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", endsWith("must not be empty"))
+                .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
+        }
+
+        @Test
+        fun `post request missing compulsory short_name field`(spec: RequestSpecification) {
+            val jsonString =
+                """
+                {   
+                    "name": {
+                        "en": "Bank connections",
+                        "nb": "Bankforbindelser",
+                        "nn": "Bankavtale"
+                    },
+                    "definition": {
+                        "en": "definition of money",
+                        "nb": "definisjon av penger",
+                        "nn": "pengers verdi"
+                    }
+                }
+                """.trimIndent()
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString)
+                .`when`()
+                .post("/variables")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", equalTo("varDef.shortName: must not be empty"))
         }
 
         @Test
@@ -203,7 +231,7 @@ class VariablesControllerTest {
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body(
                     "_embedded.errors[0].message",
-                    equalTo("Unknown language code se. Valid values are [nb, nn, en]"),
+                    startsWith("Failed to convert argument [language] for value [se]"),
                 )
         }
     }

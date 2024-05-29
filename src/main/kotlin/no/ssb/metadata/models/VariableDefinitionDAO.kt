@@ -35,9 +35,8 @@ data class VariableDefinitionDAO(
     @field:Id @GeneratedValue @JsonIgnore val id: ObjectId?,
     @field:NotNull val name: LanguageStringType,
     @field:NotEmpty val shortName: String?,
-    @field:NotNull val definition: LanguageStringType
+    @field:NotNull val definition: LanguageStringType,
 ) {
-
     fun toDTO(language: SupportedLanguages): VariableDefinitionDTO =
         VariableDefinitionDTO(
             name = name.getValidLanguage(language),

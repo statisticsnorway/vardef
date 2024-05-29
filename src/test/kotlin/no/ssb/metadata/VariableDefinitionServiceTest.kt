@@ -50,16 +50,16 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                LanguageStringType(nb="Kattens gange", nn=null, en=null),
+                LanguageStringType(nb = "Kattens gange", nn = null, en = null),
                 "katt",
-                LanguageStringType(nb="Katter går på fire bein.", nn=null, en=null)
+                LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
             )
         val savedVariableDefinition =
             VariableDefinitionDAO(
                 ObjectId("00000020f51bb4362eee2a4d"),
-                LanguageStringType(nb="Kattens gange", nn=null, en=null),
+                LanguageStringType(nb = "Kattens gange", nn = null, en = null),
                 "katt",
-                LanguageStringType(nb="Katter går på fire bein.", nn=null, en=null)
+                LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
             )
         every {
             variableDefinitionService.save(variableDefinition)
@@ -73,9 +73,9 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                LanguageStringType(nb="marsvin sport", nn=null, en="guinea pig sport"),
+                LanguageStringType(nb = "marsvin sport", nn = null, en = "guinea pig sport"),
                 "marsvin",
-                LanguageStringType(nb="marsvin trener", nn=null, en="guinea pig in training")
+                LanguageStringType(nb = "marsvin trener", nn = null, en = "guinea pig in training"),
             )
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
         val variableDefinitionDTO =

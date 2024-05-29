@@ -6,7 +6,7 @@ import io.micronaut.serde.annotation.Serdeable
 data class LanguageStringType(
     val nb: String?,
     val nn: String?,
-    val en: String?
+    val en: String?,
 ) {
     fun getValidLanguage(language: SupportedLanguages): String? {
         return when (language) {
@@ -16,6 +16,3 @@ data class LanguageStringType(
         }
     }
 }
-
-
-

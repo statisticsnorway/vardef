@@ -18,9 +18,9 @@ class VariableDefinitionTest {
         variableDefinition =
             VariableDefinitionDAO(
                 null,
-                LanguageStringType(nb="Norsk navn", nn="namn", en="English name"),
+                LanguageStringType(nb = "Norsk navn", nn = "namn", en = "English name"),
                 "test",
-                LanguageStringType(nb="definisjon", nn="nynorsk definisjon", en="definition"),
+                LanguageStringType(nb = "definisjon", nn = "nynorsk definisjon", en = "definition"),
             )
     }
 

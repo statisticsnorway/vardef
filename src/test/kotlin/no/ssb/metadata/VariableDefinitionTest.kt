@@ -7,7 +7,7 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.CsvSource
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VariableDefinitionTest {
@@ -25,16 +25,24 @@ class VariableDefinitionTest {
     }
 
     @ParameterizedTest
-    @EnumSource(SupportedLanguages::class)
-    fun `get variable name by language code`(language: SupportedLanguages) {
-        val result = variableDefinition.name.getValidLanguage(language)
-        assertThat(result).isEqualTo(variableDefinition.name.getValidLanguage(language))
+    @CsvSource(
+        "EN, English name",
+        "NN, namn",
+        "NB, Norsk navn"
+    )
+    fun `get variable name by language code`(languageCode: SupportedLanguages, expectedName: String) {
+        val result = variableDefinition.name.getValidLanguage(languageCode)
+        assertThat(result).isEqualTo(expectedName)
     }
 
     @ParameterizedTest
-    @EnumSource(SupportedLanguages::class)
-    fun `get variable definition by language code`(language: SupportedLanguages) {
-        val result = variableDefinition.definition.getValidLanguage(language)
-        assertThat(result).isEqualTo(variableDefinition.definition.getValidLanguage(language))
+    @CsvSource(
+        "EN, definition",
+        "NN, nynorsk definisjon",
+        "NB, definisjon"
+    )
+    fun `get variable definition by language code`(languageCode: SupportedLanguages, expectedDefinition: String) {
+        val result = variableDefinition.definition.getValidLanguage(languageCode)
+        assertThat(result).isEqualTo(expectedDefinition)
     }
 }

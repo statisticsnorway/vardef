@@ -1,0 +1,7 @@
+name: valid_at
+in: query
+description: Date on which variable definitions must be valid. Defaults to today's date.
+required: true
+schema:
+  type: string
+  format: date

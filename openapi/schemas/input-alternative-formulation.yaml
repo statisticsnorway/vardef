@@ -1,0 +1,11 @@
+type: object
+properties:
+  formulation_type:
+    title: The purpose of this formulation
+    type: string
+    enum:
+      - FORMATTED_TEXT
+      - EXPERT_DEFINITION
+  formulation:
+    title: The formulation content
+    $ref: "language-texts.json"

@@ -39,6 +39,7 @@ class VariablesControllerTest {
         private lateinit var variableDefinition: VariableDefinitionDAO
         private lateinit var variableDefinition1: VariableDefinitionDAO
         private lateinit var variableDefinition2: VariableDefinitionDAO
+        private lateinit var variables: List<VariableDefinitionDAO>
 
         @BeforeEach
         fun setUp() {
@@ -63,7 +64,7 @@ class VariablesControllerTest {
                     "bil",
                     LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
                 )
-            val variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
+            variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
             for (v in variables) {
                 variableDefinitionService.save(v)
             }
@@ -125,6 +126,7 @@ class VariablesControllerTest {
                 .get("/variables")
                 .then()
                 .statusCode(200)
+                .body("[1].id", notNullValue())
                 .body("[1].name", equalTo(variableDefinition1.name.getValidLanguage(language)))
                 .header("Content-Language", language.toString())
         }
@@ -137,7 +139,7 @@ class VariablesControllerTest {
                 .header("Accept-Language", "en")
                 .get("/variables")
                 .then()
-                .assertThat().statusCode(200).body("[2].name", nullValue())
+                .assertThat().statusCode(200).body("[2]", hasKey("name")).body("[2].name", equalTo(null))
         }
 
         @Test
@@ -167,6 +169,30 @@ class VariablesControllerTest {
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body("_embedded.errors[0].message", containsString("Unknown property [se]"))
+        }
+
+        @Test
+        fun `post request missing compulsory field`(spec: RequestSpecification) {
+            val jsonString =
+                """
+                {   
+                    "short_name": "bank",
+                    "definition": {
+                        "en": "definition of money",
+                        "nb": "definisjon av penger",
+                        "nn": "pengers verdi"
+                    }
+                }
+                """.trimIndent()
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString)
+                .`when`()
+                .post("/variables")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
         }
 
         @Test

@@ -118,9 +118,9 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.NB to "Middag"),
+                LanguageStringType(nb = "Middag", null, null),
                 "mat",
-                mapOf(SupportedLanguages.NB to "Mat man spiser etter jobb"),
+                LanguageStringType(nb = "Mat man spiser etter jobb", null, null),
             )
         val savedVariableDefinition = variableDefinition.copy(mongoId = ObjectId.get())
 
@@ -136,9 +136,9 @@ class VariableDefinitionServiceTest {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,
-                mapOf(SupportedLanguages.EN to "Supper"),
+                LanguageStringType(nb = null, en = "Supper", nn = null),
                 "englishFood",
-                mapOf(SupportedLanguages.EN to "Food after work"),
+                LanguageStringType(nb = null, en = "Food after work", nn = null),
                 "y7s34rf1",
             )
         val idBeforeSave = variableDefinition.id

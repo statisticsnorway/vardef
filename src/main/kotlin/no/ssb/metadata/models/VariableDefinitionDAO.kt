@@ -32,9 +32,9 @@ import org.bson.types.ObjectId
 )
 data class VariableDefinitionDAO(
     @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId?,
-    val name: LanguageStringType,
-    val shortName: String,
-    val definition: LanguageStringType,
+    var name: LanguageStringType,
+    var shortName: String,
+    var definition: LanguageStringType,
     @JsonIgnore val id: String? = NanoId.generate(8),
 ) {
     fun toDTO(language: SupportedLanguages): VariableDefinitionDTO =

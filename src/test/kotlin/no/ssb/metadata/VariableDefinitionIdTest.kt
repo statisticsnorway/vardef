@@ -6,6 +6,7 @@ import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -35,8 +36,8 @@ class VariableDefinitionIdTest {
             val shortNameBeforeSave = variableDefinition.shortName
             variableDefinition.shortName = "bankUtgang"
             val result = variableDefinitionService.save(variableDefinition)
-            Assertions.assertThat(idBeforeSave).isSameAs(result.id)
-            Assertions.assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
+            assertThat(idBeforeSave).isSameAs(result.id)
+            assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
         }
 
         @Test
@@ -49,10 +50,10 @@ class VariableDefinitionIdTest {
                     mapOf(SupportedLanguages.NB to "Bil som kjøres på turer"),
                 )
             val result = variableDefinitionService.save(variableDefinition1)
-            Assertions.assertThat(result.objectId).isNotNull()
+            assertThat(result.objectId).isNotNull()
             variableDefinition1.shortName = "campingbil"
             val result2 = variableDefinitionService.save(variableDefinition1)
-            Assertions.assertThat(result2.objectId).isNotSameAs(result.objectId)
-            Assertions.assertThat(result2.id).isSameAs(result.id)
+            assertThat(result2.objectId).isNotSameAs(result.objectId)
+            assertThat(result2.id).isSameAs(result.id)
         }
 }

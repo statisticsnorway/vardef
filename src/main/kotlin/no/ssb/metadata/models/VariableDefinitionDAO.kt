@@ -35,7 +35,7 @@ data class VariableDefinitionDAO(
     var name: LanguageStringType,
     var shortName: String,
     var definition: LanguageStringType,
-    @JsonIgnore val id: String? = NanoId.generate(8),
+    @GeneratedValue @JsonIgnore val id: String? = NanoId.generate(8),
 ) {
     fun toDTO(language: SupportedLanguages): VariableDefinitionDTO =
         VariableDefinitionDTO(

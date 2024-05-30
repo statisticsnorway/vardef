@@ -18,4 +18,11 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
     }
 
     fun save(varDef: VariableDefinitionDAO): VariableDefinitionDAO = variableDefinitionRepository.save(varDef)
+
+    fun saveVariable(varDef: VariableDefinitionDAO): VariableDefinitionDAO {
+        val savedVariable = variableDefinitionRepository.save(varDef)
+        requireNotNull(savedVariable.id) { "Something went wrong while saving variable" }
+        return savedVariable
+    }
+
 }

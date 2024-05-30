@@ -24,5 +24,4 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
         requireNotNull(savedVariable.id) { "Something went wrong while saving variable" }
         return savedVariable
     }
-
 }

@@ -152,4 +152,26 @@ class VariableDefinitionServiceTest {
         assertThat(idBeforeSave).isSameAs(result.id)
         assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
     }
+
+    @Test
+    fun `save should throw exception for null id`()  {
+        val variableDefinition =
+            VariableDefinitionDAO(
+                null,
+                LanguageStringType(nb = "navn", en = null, nn = null),
+                "kortNavn",
+                LanguageStringType(nb = "definisjon", en = null, nn = null),
+                null,
+            )
+
+        val exception =
+            assertThrows<IllegalArgumentException> {
+                variableDefinitionService.save(variableDefinition)
+            }
+
+        assertEquals(
+            "Something went wrong while saving variable, 'id' is missing",
+            exception.message,
+        )
+    }
 }

@@ -39,6 +39,7 @@ class VariablesControllerTest {
         private lateinit var variableDefinition: VariableDefinitionDAO
         private lateinit var variableDefinition1: VariableDefinitionDAO
         private lateinit var variableDefinition2: VariableDefinitionDAO
+        private lateinit var variables: List<VariableDefinitionDAO>
 
         @BeforeEach
         fun setUp() {
@@ -63,7 +64,7 @@ class VariablesControllerTest {
                     "bil",
                     LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
                 )
-            val variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
+            variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
             for (v in variables) {
                 variableDefinitionService.save(v)
             }
@@ -108,6 +109,7 @@ class VariablesControllerTest {
                 .then()
                 .statusCode(200)
                 .body("[0].definition", equalTo("definisjon"))
+                .body("[0].id", notNullValue())
                 .header("Content-Language", SupportedLanguages.NB.toString())
         }
 
@@ -124,6 +126,7 @@ class VariablesControllerTest {
                 .get("/variables")
                 .then()
                 .statusCode(200)
+                .body("[1].id", notNullValue())
                 .body("[1].name", equalTo(variableDefinition1.name.getValidLanguage(language)))
                 .header("Content-Language", language.toString())
         }

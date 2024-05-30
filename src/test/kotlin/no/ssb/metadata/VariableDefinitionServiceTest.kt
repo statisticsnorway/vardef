@@ -6,7 +6,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
-import no.ssb.metadata.exceptions.UnknownLanguageException
 import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
@@ -96,21 +95,6 @@ class VariableDefinitionServiceTest {
         assertEquals(listOf(variableDefinitionDTO), result)
         assertThat(result[0].id).isEqualTo(variableDefinitionDTO.id)
         verify { variableDefinitionMockRepository.findAll() }
-    }
-
-    @Test
-    fun `findByLanguage should throw exception for invalid language`() {
-        val invalidLanguage = SupportedLanguages.entries.firstOrNull { it !in SupportedLanguages.entries } ?: return
-
-        val exception =
-            assertThrows<UnknownLanguageException> {
-                variableDefinitionService.findByLanguage(invalidLanguage)
-            }
-
-        assertEquals(
-            "Unknown language code $invalidLanguage. Valid values are ${SupportedLanguages.entries}",
-            exception.message,
-        )
     }
 
     @Test

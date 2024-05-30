@@ -154,7 +154,7 @@ class VariableDefinitionServiceTest {
     }
 
     @Test
-    fun `save should throw exception for null id`()  {
+    fun `save should throw exception for null id`() {
         val variableDefinition =
             VariableDefinitionDAO(
                 null,

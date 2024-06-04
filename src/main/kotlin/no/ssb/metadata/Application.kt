@@ -2,11 +2,14 @@ package no.ssb.metadata
 
 import io.micronaut.runtime.Micronaut.run
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.extensions.Extension
 import io.swagger.v3.oas.annotations.extensions.ExtensionProperty
 import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.security.SecurityScheme
 
 @OpenAPIDefinition(
     info =
@@ -14,8 +17,8 @@ import io.swagger.v3.oas.annotations.info.License
             title = "Variable Definitions",
             description = "",
             version = "0.1",
-            license = License(name = "MIT License", url = "https://opensource.org/licenses/MIT"),
-            contact = Contact(email = "mmw@ssb.no"),
+            license = License(name = "CC BY 4.0", url = "https://creativecommons.org/licenses/by/4.0/deed.no"),
+            contact = Contact(email = "mmw@ssb.no", name = "Team Metadata"),
             extensions =
                 arrayOf(
                     Extension(
@@ -26,6 +29,14 @@ import io.swagger.v3.oas.annotations.info.License
                     ),
                 ),
         ),
+    security = [SecurityRequirement(name = "Keycloak token")],
+)
+@SecurityScheme(
+    name = "Keycloak token",
+    type = SecuritySchemeType.HTTP,
+    scheme = "bearer",
+    bearerFormat = "jwt",
+    paramName = "Authorization",
 )
 object Api
 

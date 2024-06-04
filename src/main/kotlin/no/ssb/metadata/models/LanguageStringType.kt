@@ -1,8 +1,10 @@
 package no.ssb.metadata.models
 
 import io.micronaut.serde.annotation.Serdeable
+import io.swagger.v3.oas.annotations.media.Schema
 
 @Serdeable
+@Schema()
 data class LanguageStringType(
     val nb: String?,
     val nn: String?,

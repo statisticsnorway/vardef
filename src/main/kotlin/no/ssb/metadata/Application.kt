@@ -2,14 +2,12 @@ package no.ssb.metadata
 
 import io.micronaut.runtime.Micronaut.run
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.extensions.Extension
 import io.swagger.v3.oas.annotations.extensions.ExtensionProperty
 import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.annotations.security.SecurityScheme
 
 @OpenAPIDefinition(
     info =
@@ -30,13 +28,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme
                 ),
         ),
     security = [SecurityRequirement(name = "Keycloak token")],
-)
-@SecurityScheme(
-    name = "Keycloak token",
-    type = SecuritySchemeType.HTTP,
-    scheme = "bearer",
-    bearerFormat = "jwt",
-    paramName = "Authorization",
 )
 object Api
 

@@ -12,7 +12,7 @@ properties:
     title: Short name
     description: Recommended short name. Must be unique within an organization.
     type: string
-    format: "^[a-zA-Z0-9-_]{3,}$"
+    format: "^[a-z0-9_]{3,}$"
     examples:
       - landbak
       - wkapinnt

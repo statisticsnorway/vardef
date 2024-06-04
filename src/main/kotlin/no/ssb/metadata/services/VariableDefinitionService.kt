@@ -17,5 +17,8 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
         return findAll().map { dao -> dao.toDTO(language) }
     }
 
-    fun save(varDef: VariableDefinitionDAO): VariableDefinitionDAO = variableDefinitionRepository.save(varDef)
+    fun save(varDef: VariableDefinitionDAO): VariableDefinitionDAO {
+        requireNotNull(varDef.id) { "Something went wrong while saving variable, 'id' is missing" }
+        return variableDefinitionRepository.save(varDef)
+    }
 }

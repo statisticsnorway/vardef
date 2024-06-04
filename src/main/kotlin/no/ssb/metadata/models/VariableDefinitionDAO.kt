@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.DEFINITION_FIELD_DESCRIPTION
 import no.ssb.metadata.constants.NAME_FIELD_DESCRIPTION
 import no.ssb.metadata.constants.SHORT_NAME_FIELD_DESCRIPTION
+import io.viascom.nanoid.NanoId
 import org.bson.types.ObjectId
 
 @MappedEntity
@@ -35,10 +36,7 @@ import org.bson.types.ObjectId
     """,
 )
 data class VariableDefinitionDAO(
-    @field:Id
-    @GeneratedValue
-    @JsonIgnore
-    val id: ObjectId?,
+    @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId?,
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
@@ -46,9 +44,11 @@ data class VariableDefinitionDAO(
     val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
+    @JsonIgnore val id: String? = NanoId.generate(8),
 ) {
     fun toDTO(language: SupportedLanguages): VariableDefinitionDTO =
         VariableDefinitionDTO(
+            id = id,
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),

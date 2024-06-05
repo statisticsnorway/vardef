@@ -11,12 +11,14 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
 @Property(name = "micronaut.http.client.follow-redirects", value = StringUtils.FALSE)
 @MicronautTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class HomeControllerTest {
     @Test
-    fun testRedirectionToApiDocs(
+    fun `get on root path redirects to API docs`(
         @Client("/") httpClient: HttpClient,
     ) {
         val client = httpClient.toBlocking()
@@ -32,7 +34,7 @@ internal class HomeControllerTest {
     }
 
     @Test
-    fun homeControllerIsHidden(
+    fun `home controller not included in API docs`(
         @Client("/") httpClient: HttpClient,
     ) {
         val client = httpClient.toBlocking()

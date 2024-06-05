@@ -32,6 +32,7 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-mongodb")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.security:micronaut-security-jwt")
+    implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("jakarta.validation:jakarta.validation-api")

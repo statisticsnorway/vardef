@@ -16,7 +16,7 @@ import no.ssb.metadata.models.VariableDefinitionDTO
 import no.ssb.metadata.services.VariableDefinitionService
 
 @Validated
-@Controller("/variables")
+@Controller("/variable-definitions")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariablesController {
     @Inject

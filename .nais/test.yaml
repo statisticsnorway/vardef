@@ -7,16 +7,8 @@ metadata:
   labels:
     team: dapla-metadata
 spec:
-  image: "{{ image }}"  # Injected from  the Github Action
+  image: "{{ image }}"  # Injected from the GitHub Action
   port: 8080
-
-  replicas:
-    disableAutoScaling: true
-    max: 1
-    min: 1
-
-  prometheus:
-    enabled: false
 
   ingresses:
     - https://vardef.test.ssb.cloud.nais.io

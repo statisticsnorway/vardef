@@ -39,7 +39,7 @@ internal class HomeControllerTest {
         val yml =
             Assertions.assertDoesNotThrow<String> {
                 client.retrieve(
-                    "/docs/variable-definitions-0.1.yml",
+                    "/swagger/openapi.yaml",
                 )
             }
         Assertions.assertFalse(yml.contains("operationId: redirectToDocs"))

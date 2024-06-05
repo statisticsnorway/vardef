@@ -29,7 +29,7 @@ class VariablesControllerTest {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/variables")
+            .get("/variable-definitions")
             .then()
             .statusCode(200).body("", empty<List<Any>>())
     }
@@ -93,7 +93,7 @@ class VariablesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(jsonString)
                 .`when`()
-                .post("/variables")
+                .post("/variable-definitions")
                 .then()
                 .statusCode(201)
                 .body("short_name", equalTo("bank"))
@@ -105,7 +105,7 @@ class VariablesControllerTest {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
-                .get("/variables")
+                .get("/variable-definitions")
                 .then()
                 .statusCode(200)
                 .body("[0].definition", equalTo("definisjon"))
@@ -123,7 +123,7 @@ class VariablesControllerTest {
                 .`when`()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", language.toString())
-                .get("/variables")
+                .get("/variable-definitions")
                 .then()
                 .statusCode(200)
                 .body("[1].id", notNullValue())
@@ -137,7 +137,7 @@ class VariablesControllerTest {
                 .`when`()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "en")
-                .get("/variables")
+                .get("/variable-definitions")
                 .then()
                 .assertThat().statusCode(200).body("[2]", hasKey("name")).body("[2].name", equalTo(null))
         }
@@ -165,7 +165,7 @@ class VariablesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(jsonString)
                 .`when`()
-                .post("/variables")
+                .post("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body("_embedded.errors[0].message", containsString("Unknown property [se]"))
@@ -175,7 +175,7 @@ class VariablesControllerTest {
         fun `post request missing compulsory field`(spec: RequestSpecification) {
             val jsonString =
                 """
-                {   
+                {
                     "short_name": "bank",
                     "definition": {
                         "en": "definition of money",
@@ -189,7 +189,7 @@ class VariablesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(jsonString)
                 .`when`()
-                .post("/variables")
+                .post("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
@@ -199,7 +199,7 @@ class VariablesControllerTest {
         fun `post request missing compulsory short_name field`(spec: RequestSpecification) {
             val jsonString =
                 """
-                {   
+                {
                     "name": {
                         "en": "Bank connections",
                         "nb": "Bankforbindelser",
@@ -217,7 +217,7 @@ class VariablesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(jsonString)
                 .`when`()
-                .post("/variables")
+                .post("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
@@ -229,7 +229,7 @@ class VariablesControllerTest {
                 .given()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "se")
-                .get("/variables")
+                .get("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body(

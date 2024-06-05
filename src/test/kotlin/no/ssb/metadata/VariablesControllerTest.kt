@@ -71,7 +71,7 @@ class VariablesControllerTest {
         }
 
         @Test
-        fun `post request new variable definition`(spec: RequestSpecification) {
+        fun `create variable definition`(spec: RequestSpecification) {
             val jsonString =
                 """
                 {
@@ -96,6 +96,7 @@ class VariablesControllerTest {
                 .post("/variables")
                 .then()
                 .statusCode(201)
+                .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
                 .body("short_name", equalTo("bank"))
                 .body("name.nb", equalTo("Bankforbindelser"))
         }
@@ -175,7 +176,7 @@ class VariablesControllerTest {
         fun `post request missing compulsory field`(spec: RequestSpecification) {
             val jsonString =
                 """
-                {   
+                {
                     "short_name": "bank",
                     "definition": {
                         "en": "definition of money",
@@ -199,7 +200,7 @@ class VariablesControllerTest {
         fun `post request missing compulsory short_name field`(spec: RequestSpecification) {
             val jsonString =
                 """
-                {   
+                {
                     "name": {
                         "en": "Bank connections",
                         "nb": "Bankforbindelser",

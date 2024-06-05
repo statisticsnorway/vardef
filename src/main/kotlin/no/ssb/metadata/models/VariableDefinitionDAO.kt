@@ -1,6 +1,7 @@
 package no.ssb.metadata.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
@@ -31,11 +32,13 @@ import org.bson.types.ObjectId
     """,
 )
 data class VariableDefinitionDAO(
-    @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId?,
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    val id: String? = NanoId.generate(8),
+    @field:Id @GeneratedValue @JsonIgnore
+    val mongoId: ObjectId?,
     var name: LanguageStringType,
     var shortName: String,
     var definition: LanguageStringType,
-    @JsonIgnore val id: String? = NanoId.generate(8),
 ) {
     fun toDTO(language: SupportedLanguages): VariableDefinitionDTO =
         VariableDefinitionDTO(

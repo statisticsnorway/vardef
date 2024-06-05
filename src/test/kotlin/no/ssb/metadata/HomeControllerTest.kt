@@ -14,8 +14,8 @@ import org.junit.jupiter.api.TestInstance
 internal class HomeControllerTest {
     @Test
     fun `get on root path redirects to API docs`(spec: RequestSpecification) {
-        spec.redirects().follow(false)
-        spec.given().get("/")
+        spec.given().redirects().follow(false)
+            .`when`().get("/")
             .then()
             .statusCode(HttpStatus.SEE_OTHER.code)
             .header(HttpHeaders.LOCATION, "/docs/redoc")

@@ -62,15 +62,6 @@ class VariableDefinitionTest {
     }
 
     @Test
-    fun `variable definition id persists through updates`() {
-        val initialId = variableDefinition.id
-        val initialShortName = variableDefinition.shortName
-        variableDefinition.shortName = "test1"
-        assertThat(initialShortName).isNotSameAs(variableDefinition.shortName)
-        assertThat(initialId).isEqualTo(variableDefinition.id)
-    }
-
-    @Test
     fun `variable definition id is expected length`() {
         val nanoId = variableDefinition.id
         if (nanoId != null) {

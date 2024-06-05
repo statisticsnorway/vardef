@@ -20,7 +20,7 @@ spec:
     enabled: false
 
   ingresses:
-    - https://vardef.staging.ssb.cloud.nais.io
+    - https://vardef.test.ssb.cloud.nais.io
 
   liveness:
     path: /swagger-ui

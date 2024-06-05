@@ -1,6 +1,5 @@
 package no.ssb.metadata.klass
 
-import com.sun.net.httpserver.Authenticator
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get

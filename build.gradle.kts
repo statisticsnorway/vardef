@@ -40,6 +40,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic")
     implementation("io.micrometer:context-propagation")
     implementation("io.viascom.nanoid:nanoid:1.0.1")
+    implementation("io.micronaut.cache:micronaut-cache-caffeine")
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")

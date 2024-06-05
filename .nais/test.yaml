@@ -1,5 +1,4 @@
-# Deploy to staging environment for an individual PR
-
+# Deploy config for the test cluster
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:

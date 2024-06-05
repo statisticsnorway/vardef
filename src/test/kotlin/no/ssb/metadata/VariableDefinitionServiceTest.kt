@@ -50,18 +50,17 @@ class VariableDefinitionServiceTest {
     fun `save variable definition`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                null,
-                LanguageStringType(nb = "Kattens gange", nn = null, en = null),
-                "katt",
-                LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
+                name = LanguageStringType(nb = "Kattens gange", nn = null, en = null),
+                shortName = "katt",
+                definition = LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
             )
         val savedVariableDefinition =
             VariableDefinitionDAO(
-                ObjectId("00000020f51bb4362eee2a4d"),
-                LanguageStringType(nb = "Kattens gange", nn = null, en = null),
-                "katt",
-                LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
-                "8Ah4fbvb",
+                id = "8Ah4fbvb",
+                mongoId = ObjectId("00000020f51bb4362eee2a4d"),
+                name = LanguageStringType(nb = "Kattens gange", nn = null, en = null),
+                shortName = "katt",
+                definition = LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
             )
         every {
             variableDefinitionService.save(variableDefinition)
@@ -77,10 +76,9 @@ class VariableDefinitionServiceTest {
     fun `find variables in selected language`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                null,
-                LanguageStringType(nb = "marsvin sport", nn = null, en = "guinea pig sport"),
-                "marsvin",
-                LanguageStringType(nb = "marsvin trener", nn = null, en = "guinea pig in training"),
+                name = LanguageStringType(nb = "marsvin sport", nn = null, en = "guinea pig sport"),
+                shortName = "marsvin",
+                definition = LanguageStringType(nb = "marsvin trener", nn = null, en = "guinea pig in training"),
             )
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
         val variableDefinitionDTO =
@@ -101,10 +99,9 @@ class VariableDefinitionServiceTest {
     fun `mongodb id is generated when variable is created`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                null,
-                LanguageStringType(nb = "Middag", null, null),
-                "mat",
-                LanguageStringType(nb = "Mat man spiser etter jobb", null, null),
+                name = LanguageStringType(nb = "Middag", null, null),
+                shortName = "mat",
+                definition = LanguageStringType(nb = "Mat man spiser etter jobb", null, null),
             )
         val savedVariableDefinition = variableDefinition.copy(mongoId = ObjectId.get())
 
@@ -119,11 +116,10 @@ class VariableDefinitionServiceTest {
     fun `varDef id is only created once`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                null,
-                LanguageStringType(nb = null, en = "Supper", nn = null),
-                "englishFood",
-                LanguageStringType(nb = null, en = "Food after work", nn = null),
-                "y7s34rf1",
+                id = "y7s34rf1",
+                name = LanguageStringType(nb = null, en = "Supper", nn = null),
+                shortName = "englishFood",
+                definition = LanguageStringType(nb = null, en = "Food after work", nn = null),
             )
         val idBeforeSave = variableDefinition.id
         val shortNameBeforeSave = variableDefinition.shortName
@@ -141,11 +137,10 @@ class VariableDefinitionServiceTest {
     fun `save should throw exception for null id`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                null,
-                LanguageStringType(nb = "navn", en = null, nn = null),
-                "kortNavn",
-                LanguageStringType(nb = "definisjon", en = null, nn = null),
-                null,
+                id = null,
+                name = LanguageStringType(nb = "navn", en = null, nn = null),
+                shortName = "kortNavn",
+                definition = LanguageStringType(nb = "definisjon", en = null, nn = null),
             )
 
         val exception =

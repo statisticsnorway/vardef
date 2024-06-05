@@ -20,10 +20,9 @@ class VariableDefinitionTest {
     fun setUp() {
         variableDefinition =
             VariableDefinitionDAO(
-                null,
-                LanguageStringType(nb = "Norsk navn", nn = "namn", en = "English name"),
-                "test",
-                LanguageStringType(nb = "definisjon", nn = "nynorsk definisjon", en = "definition"),
+                name = LanguageStringType(nb = "Norsk navn", nn = "namn", en = "English name"),
+                shortName = "test",
+                definition = LanguageStringType(nb = "definisjon", nn = "nynorsk definisjon", en = "definition"),
             )
         nanoIdSize = 8
     }

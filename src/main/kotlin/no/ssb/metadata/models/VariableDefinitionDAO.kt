@@ -39,7 +39,7 @@ import org.bson.types.ObjectId
 data class VariableDefinitionDAO(
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val id: String? = NanoId.generate(8),
-    @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId?,
+    @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId? = null,
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)

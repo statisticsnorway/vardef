@@ -45,24 +45,21 @@ class VariablesControllerTest {
         fun setUp() {
             variableDefinition =
                 VariableDefinitionDAO(
-                    null,
-                    LanguageStringType(nb = "Transaksjon", nn = null, en = "Transition"),
-                    "test1",
-                    LanguageStringType(nb = "definisjon", nn = null, en = "definition"),
+                    name = LanguageStringType(nb = "Transaksjon", nn = null, en = "Transition"),
+                    shortName = "test1",
+                    definition = LanguageStringType(nb = "definisjon", nn = null, en = "definition"),
                 )
             variableDefinition1 =
                 VariableDefinitionDAO(
-                    null,
-                    LanguageStringType(nb = "Bankdør", nn = "Bankdørar", en = "Bank door"),
-                    "bankInngang",
-                    LanguageStringType(nb = "Komme inn i banken", nn = "Komme inn i banken", en = "How to get inside a bank"),
+                    name = LanguageStringType(nb = "Bankdør", nn = "Bankdørar", en = "Bank door"),
+                    shortName = "bankInngang",
+                    definition = LanguageStringType(nb = "Komme inn i banken", nn = "Komme inn i banken", en = "How to get inside a bank"),
                 )
             variableDefinition2 =
                 VariableDefinitionDAO(
-                    null,
-                    LanguageStringType(nb = "bilturer", nn = null, en = null),
-                    "bil",
-                    LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
+                    name = LanguageStringType(nb = "bilturer", nn = null, en = null),
+                    shortName = "bil",
+                    definition = LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
                 )
             variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
             for (v in variables) {

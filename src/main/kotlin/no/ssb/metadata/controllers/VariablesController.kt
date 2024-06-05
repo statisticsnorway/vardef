@@ -22,6 +22,11 @@ class VariablesController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
 
+    /**
+     * List all variable definitions.
+     *
+     * These are rendered in the given language, with the default being Norwegian Bokmål.
+     */
     @Get()
     fun listVariableDefinitions(
         @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
@@ -31,6 +36,11 @@ class VariablesController {
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
     }
 
+    /**
+     * Create a variable definition.
+     *
+     * New variable definitions must have status DRAFT and include all required fields.
+     */
     @Post()
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")

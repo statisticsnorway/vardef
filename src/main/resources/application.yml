@@ -14,27 +14,29 @@ micronaut:
     static-resources:
       swagger:
         paths: classpath:META-INF/swagger
-        mapping: /docs/**
+        mapping: /swagger/**
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
-        mapping: /docs/swagger-ui/**
+        mapping: /docs/swagger/**
       redoc:
         paths: classpath:META-INF/swagger/views/redoc
         mapping: /docs/redoc/**
   openapi:
-    views:
-      spec: |
-        swagger-ui.enabled=true,
-        swagger-ui.js.url=/docs/swagger-ui/res/,
-        redoc.enabled=true,
-        redoc.js.url=/docs/redoc/res/,
-        mapping.path=/,
     property:
       naming:
         strategy: SNAKE_CASE
-    server:
-      context:
-        path: /docs
+    filename: openapi.yaml
+    target:
+      file: build/resources/main/META-INF/swagger/${micronaut.openapi.filename}
+    views:
+      spec: |
+        swagger-ui.enabled=true,
+        swagger-ui.js.url=/docs/swagger/res/,
+        swagger-ui.spec.url=/swagger/${micronaut.openapi.filename},
+        redoc.enabled=true,
+        redoc.js.url=/docs/redoc/res/,
+        redoc.spec.url=/swagger/${micronaut.openapi.filename},
+        mapping.path=/,
   serde:
     deserialization:
       ignore-unknown: false

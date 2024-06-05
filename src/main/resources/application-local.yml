@@ -3,6 +3,7 @@
 logger:
   levels:
     root: DEBUG
+    io.micronaut.context.DefaultBeanContext: INFO
 
 mongodb:
   uri: mongodb://localhost:27017

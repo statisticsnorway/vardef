@@ -1,5 +1,4 @@
-# Deploy to staging environment for an individual PR
-
+# Deploy config for the test cluster
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
@@ -8,19 +7,11 @@ metadata:
   labels:
     team: dapla-metadata
 spec:
-  image: "{{ image }}"  # Injected from  the Github Action
+  image: "{{ image }}"  # Injected from the GitHub Action
   port: 8080
 
-  replicas:
-    disableAutoScaling: true
-    max: 1
-    min: 1
-
-  prometheus:
-    enabled: false
-
   ingresses:
-    - https://vardef.staging.ssb.cloud.nais.io
+    - https://vardef.test.ssb.cloud.nais.io
 
   liveness:
     path: /health

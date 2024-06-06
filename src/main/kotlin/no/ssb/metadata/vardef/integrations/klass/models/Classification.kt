@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.integrations.klass.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.mongodb.lang.Nullable
 import io.micronaut.serde.annotation.Serdeable
 
 @Serdeable

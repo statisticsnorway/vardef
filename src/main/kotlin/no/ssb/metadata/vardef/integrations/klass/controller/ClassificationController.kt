@@ -6,7 +6,6 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
-import no.ssb.metadata.vardef.integrations.klass.models.Classifications
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import no.ssb.metadata.vardef.integrations.klass.service.Client
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient

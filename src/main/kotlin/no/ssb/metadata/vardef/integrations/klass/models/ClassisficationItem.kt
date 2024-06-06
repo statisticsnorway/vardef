@@ -12,5 +12,5 @@ data class ClassisficationItem(
     val presentationName: String,
     val validFrom: String,
     val validTo: String?,
-    val notes: String?
+    val notes: String?,
 )

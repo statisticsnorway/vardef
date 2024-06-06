@@ -7,7 +7,8 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Headers
 import io.micronaut.http.client.annotation.Client
-import no.ssb.metadata.vardef.integrations.klass.models.Embedded
+import no.ssb.metadata.vardef.integrations.klass.models.Classifications
+import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 
 /**
  * A declarative client
@@ -20,5 +21,9 @@ import no.ssb.metadata.vardef.integrations.klass.models.Embedded
 interface KlassApiClient {
     @Get()
     @SingleResult
-    fun fetchClassifications(): Embedded
+    fun fetchClassifications(): KlassApiResponse
+
+    @Get()
+    @SingleResult
+    fun fetchClassificationList(): Classifications
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.micronaut.serde.annotation.Serdeable
 
 @Serdeable
-data class ClassificationItem(
+data class ClassificationItem2(
     @JsonProperty val code: String,
     @JsonProperty val parentCode: String?,
     @JsonProperty val level: Int,

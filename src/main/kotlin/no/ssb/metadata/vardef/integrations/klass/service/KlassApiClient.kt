@@ -7,19 +7,20 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Headers
 import io.micronaut.http.client.annotation.Client
-import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
-import org.reactivestreams.Publisher
+import io.netty.handler.codec.http.HttpResponse
+import no.ssb.metadata.vardef.integrations.klass.models.Response
+
 
 /**
  * A declarative client
  */
-@Client(id = "klass.url")
+@Client("https://data.ssb.no/api/klass/v1/classifications")
 @Headers(
     Header(name = USER_AGENT, value = "Micronaut HTTP Client"),
-    Header(name = ACCEPT, value = "application/vnd.github.v3+json, application/json"),
+    Header(name = ACCEPT, value = "application/json"),
 )
 interface KlassApiClient {
-    @Get("/classifications")
+    @Get()
     @SingleResult
-    fun fetchClassifications(): Publisher<List<ClassificationItem>>
+    fun fetchClassifications(): HttpResponse
 }

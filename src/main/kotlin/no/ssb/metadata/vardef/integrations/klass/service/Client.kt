@@ -21,7 +21,7 @@ class Client(
             .path("classifications")
             .build()
 
-    fun fetchReleases(): Publisher<MutableList<ClassificationItem>>? {
+    fun fetchClassifications(): Publisher<List<ClassificationItem>> {
         val req: HttpRequest<*> =
             HttpRequest.GET<Any>(uri)
                 .header(USER_AGENT, "Micronaut HTTP Client")

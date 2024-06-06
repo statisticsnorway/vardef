@@ -14,11 +14,11 @@ spec:
     - https://vardef.test.ssb.cloud.nais.io
 
   liveness:
-    path: /swagger-ui
+    path: /health
     port: 8080
   readiness:
-    path: /swagger-ui
+    path: /health
     port: 8080
   startup:
-    path: /swagger-ui
+    path: /health
     port: 8080

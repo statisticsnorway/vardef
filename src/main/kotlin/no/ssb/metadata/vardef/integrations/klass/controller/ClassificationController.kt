@@ -5,8 +5,6 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
-import io.netty.handler.codec.http.HttpResponse
-import no.ssb.metadata.vardef.integrations.klass.models.ClassResult
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import no.ssb.metadata.vardef.integrations.klass.models.Embedded
 import no.ssb.metadata.vardef.integrations.klass.service.Client

@@ -12,7 +12,6 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import no.ssb.metadata.vardef.integrations.klass.models.ClassResult
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import io.micronaut.serde.ObjectMapper
 
 
 @Controller("/api")

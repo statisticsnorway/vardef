@@ -1,4 +1,4 @@
-package no.ssb.metadata.klass
+package no.ssb.metadata.vardef.integrations.klass
 
 import io.micronaut.scheduling.annotation.Scheduled
 import jakarta.inject.Singleton
@@ -7,13 +7,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Singleton
-class ClassificationsJob {
-    @Scheduled(cron = "0 28 08 * * ?")
+class KlassJob {
+
+    @Scheduled(cron = "0 00 13 * * ?")
     fun getClassifications() {
         LOG.info("Simulate getting classifications: {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
     }
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(ClassificationsJob::class.java)
+        private val LOG = LoggerFactory.getLogger(KlassJob::class.java)
     }
 }

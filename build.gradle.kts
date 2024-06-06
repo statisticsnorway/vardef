@@ -41,6 +41,7 @@ dependencies {
     implementation("io.micrometer:context-propagation")
     implementation("io.viascom.nanoid:nanoid:1.0.1")
     implementation("io.micronaut:micronaut-http-client")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")

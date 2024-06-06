@@ -43,3 +43,9 @@ micronaut:
       strict-nullable: true
     serialization:
       inclusion: always
+  klass:
+    url: https://data.ssb.no/api/klass/v1/
+    unit-types: 702
+    subject-fields: 618
+
+

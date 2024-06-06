@@ -10,7 +10,6 @@ import org.junit.jupiter.api.TestInstance
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KlassTest {
-
     @Inject
     lateinit var application: EmbeddedApplication<*>
 

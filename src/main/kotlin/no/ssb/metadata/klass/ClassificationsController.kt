@@ -10,16 +10,21 @@ import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
+//"https://data.ssb.no/api/klass/v1/classifications"
+
 @Controller("/classifications")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class ClassificationsController {
-
-    @Get("https://data.ssb.no/api/klass/v1/classifications")
-    @Scheduled(cron = "0 04 16 * * ?")
-    fun getClassificationsResponse(): HttpStatus{
-        LOG.info("Check https response: {} {}", HttpStatus.OK, SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(
-            Date()
-        ))
+    @Get()
+    @Scheduled(cron = "0 30 08 * * ?")
+    fun getClassificationsResponse(): HttpStatus  {
+        LOG.info(
+            "Check https response: {} {}",
+            HttpStatus.OK,
+            SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(
+                Date(),
+            ),
+        )
         return HttpStatus.OK
     }
 

@@ -6,10 +6,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.netty.handler.codec.http.HttpResponse
-import no.ssb.metadata.vardef.integrations.klass.models.ClassResult
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
-import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItems
-import no.ssb.metadata.vardef.integrations.klass.models.Response
 import no.ssb.metadata.vardef.integrations.klass.service.Client
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
 import org.reactivestreams.Publisher

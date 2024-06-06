@@ -17,7 +17,7 @@ import java.util.*
 class ClassificationsController {
     @Get()
     @Scheduled(cron = "0 30 08 * * ?")
-    fun getClassificationsResponse(): HttpStatus  {
+    fun classifications(): HttpStatus  {
         LOG.info(
             "Check https response: {} {}",
             HttpStatus.OK,

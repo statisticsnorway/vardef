@@ -6,7 +6,9 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.netty.handler.codec.http.HttpResponse
+import no.ssb.metadata.vardef.integrations.klass.models.ClassResult
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
+import no.ssb.metadata.vardef.integrations.klass.models.Embedded
 import no.ssb.metadata.vardef.integrations.klass.service.Client
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
 import org.reactivestreams.Publisher
@@ -28,7 +30,7 @@ class ClassificationController(private val client: Client, val klassApiClient: K
      */
     @Get("/classifications")
     @SingleResult
-    fun fetchClassifications(): HttpResponse {
+    fun fetchClassifications(): Embedded{
         return klassApiClient.fetchClassifications()
     }
 }

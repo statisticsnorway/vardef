@@ -12,20 +12,6 @@ data class Classification(
     @JsonProperty("_links") val links: Links
 )
 
-@Serdeable
-data class Links(
-    @JsonProperty("self") val self: Link
-)
-
-@Serdeable
-data class Link(
-    @JsonProperty("href") val href: String
-)
-
-@Serdeable
-data class Embedded(
-    @JsonProperty("classifications") val classifications: List<Classification>
-)
 
 @Serdeable
 data class Page(

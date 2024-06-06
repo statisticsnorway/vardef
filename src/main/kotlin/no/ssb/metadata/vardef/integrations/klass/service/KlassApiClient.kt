@@ -8,6 +8,8 @@ import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Headers
 import io.micronaut.http.client.annotation.Client
 import io.netty.handler.codec.http.HttpResponse
+import no.ssb.metadata.vardef.integrations.klass.models.ClassResult
+import no.ssb.metadata.vardef.integrations.klass.models.Embedded
 
 /**
  * A declarative client
@@ -20,5 +22,5 @@ import io.netty.handler.codec.http.HttpResponse
 interface KlassApiClient {
     @Get()
     @SingleResult
-    fun fetchClassifications(): HttpResponse
+    fun fetchClassifications(): Embedded
 }

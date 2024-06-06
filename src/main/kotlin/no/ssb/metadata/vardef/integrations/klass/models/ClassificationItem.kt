@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.integrations.klass.models
 import io.micronaut.serde.annotation.Serdeable
 
 @Serdeable
-data class ClassisficationItem(
+data class ClassificationItem(
     val code: String,
     val parentCode: String?,
     val level: Int,

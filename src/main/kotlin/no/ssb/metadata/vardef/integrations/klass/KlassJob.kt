@@ -8,7 +8,6 @@ import java.util.*
 
 @Singleton
 class KlassJob {
-
     @Scheduled(cron = "0 00 13 * * ?")
     fun getClassifications() {
         LOG.info("Simulate getting classifications: {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))

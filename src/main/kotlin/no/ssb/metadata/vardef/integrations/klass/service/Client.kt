@@ -12,7 +12,6 @@ import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import org.reactivestreams.Publisher
 import java.net.URI
 
-// "https://data.ssb.no/api/klass/v1/classifications/"
 @Singleton
 class Client(
     @param:Client(id = "klass.url") private val httpClient: HttpClient,

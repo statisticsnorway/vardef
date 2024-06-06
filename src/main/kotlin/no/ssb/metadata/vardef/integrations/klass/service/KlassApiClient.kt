@@ -21,5 +21,5 @@ import org.reactivestreams.Publisher
 interface KlassApiClient {
     @Get("/classifications")
     @SingleResult
-    fun fetchReleases(): Publisher<List<ClassificationItem>>
+    fun fetchClassifications(): Publisher<List<ClassificationItem>>
 }

@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
+import io.micronaut.data.model.naming.NamingStrategies
 import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import org.bson.types.ObjectId
 
-@MappedEntity
+@MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
     @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId?,
     var name: LanguageStringType,

@@ -1,31 +1,63 @@
 import no.ssb.metadata.models.*
 
-
-const val MONGO_USER = "testuser"
-const val MONGO_PASSWORD = "testpassword"
-const val MONGO_PORT = 27017
-
-val SIMPLE_VARIABLE_DEFINITION = SavedVariableDefinition(
-    mongoId = null,
-    name = LanguageStringType(nb = "Transaksjon", nn = null, en = "Transition"),
-    shortName = "test1",
-    definition =  LanguageStringType(nb = "definisjon", nn = null, en = "definition"),
-    classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
-    unitTypes = listOf(KlassReference("https://www.example.com", "01", "Storfe")),
-    subjectFields = listOf(KlassReference("https://www.example.com", "AL01", "")),
+val SIMPLE_VARIABLE_DEFINITION = InputVariableDefinition(
+    name = LanguageStringType(nb = "Landbakgrunn", nn = "Landbakgrunn", en = "Country Background"),
+    shortName = "landbak",
+    definition =  LanguageStringType(nb = "For personer født", nn = null, en = "Country background is"),
+    classificationReference = "91",
+    unitTypes = listOf("",""),
+    subjectFields = listOf("", ""),
     containsUnitIdentifyingInformation =  false,
     containsSensitivePersonalInformation = false,
     variableStatus = "Draft",
-    measurementType = KlassReference("https://www.example.com", "", ""),
+    measurementType = "",
     validFrom = "",
     validUntil = "",
     externalReferenceUri = "https://www.example.com",
     relatedVariableDefinitionUris = listOf("https://www.example.com"),
-    owner = Owner("", ""),
     contact = Contact(LanguageStringType("", "", ""), ""),
-    createdAt = "",
-    createdBy = Person("",""),
-    lastUpdatedAt = "",
-    lastUpdatedBy = Person("", ""),
-    id = null,
 )
+
+
+
+val VARIABLE_JSON_INPUT = """
+    {
+        "name": {
+            "en": "Country Background",
+            "nb": "Landbakgrunn",
+            "nn": "Landbakgrunn"
+        },
+        "short_name": "landbak",
+        "definition": {
+            "en": "C.",
+            "nb": "F"
+        },
+        "classification_reference": "91",
+        "unit_types": [
+            "03",
+            "04",
+            "05"
+        ],
+        "subject_fields": [
+            "he04"
+        ],
+        "contains_unit_identifying_information": true,
+        "contains_sensitive_personal_information": true,
+        "variable_status": "DRAFT",
+        "measurement_type": "02.01",
+        "valid_from": "2024-06-05",
+        "valid_until": "2024-06-05",
+        "external_reference_uri": "https://example.com/",
+        "related_variable_definition_uris": [
+            "https://example.com/"
+        ],
+        "contact": {
+            "title": {
+                "en": "a",
+                "nb": "b",
+                "nn": "c"
+            },
+            "email": "user@example.com"
+        }
+    }
+    """.trimIndent()

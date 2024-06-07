@@ -87,4 +87,4 @@ data class RenderedVariableDefinition(
     val createdBy: Person?,
     val lastUpdatedAt: String?,
     val lastUpdatedBy: Person?
-    )
+)

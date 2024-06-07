@@ -1,6 +1,6 @@
 package no.ssb.metadata.integrations.klass
 
-//Mockk test
+// Mockk test
 // fetchClassificationList()
 
 class KlassApiClientTest

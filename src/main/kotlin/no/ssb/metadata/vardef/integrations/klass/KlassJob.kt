@@ -12,20 +12,18 @@ import java.util.*
 
 @Singleton
 class KlassJob {
-
     @Inject
     lateinit var klassApiClient: KlassApiClient
 
     @Scheduled(cron = "0 44 12 * * ?")
     fun getClassifications(): HttpResponse<KlassApiResponse> {
-            return try {
-                val result = klassApiClient.fetchClassificationList()
-                LOG.info("Retrieving classifications from Klass Api {} {}", result, SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
-                HttpResponse.ok(result)
-            } catch (e: Exception) {
-                HttpResponse.notFound()
-            }
-
+        return try {
+            val result = klassApiClient.fetchClassificationList()
+            LOG.info("Retrieving classifications from Klass Api {} {}", result, SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
+            HttpResponse.ok(result)
+        } catch (e: Exception) {
+            HttpResponse.notFound()
+        }
     }
 
     companion object {

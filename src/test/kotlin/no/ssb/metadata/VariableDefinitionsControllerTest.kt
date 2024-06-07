@@ -4,11 +4,13 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
 import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
+import org.bson.types.ObjectId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
@@ -20,9 +22,14 @@ import org.junit.jupiter.params.provider.EnumSource
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class VariablesControllerTest {
+class VariableDefinitionsControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
+
+    @BeforeEach
+    fun setUp() {
+        variableDefinitionService.clear()
+    }
 
     @Test
     fun `access empty database`(spec: RequestSpecification) {
@@ -45,23 +52,29 @@ class VariablesControllerTest {
         fun setUp() {
             variableDefinition =
                 VariableDefinitionDAO(
+                    id = ObjectId(),
+                    definitionId = NanoId.generate(8),
                     name = LanguageStringType(nb = "Transaksjon", nn = null, en = "Transition"),
                     shortName = "test1",
                     definition = LanguageStringType(nb = "definisjon", nn = null, en = "definition"),
                 )
             variableDefinition1 =
                 VariableDefinitionDAO(
+                    id = ObjectId(),
+                    definitionId = NanoId.generate(8),
                     name = LanguageStringType(nb = "Bankdør", nn = "Bankdørar", en = "Bank door"),
                     shortName = "bankInngang",
                     definition = LanguageStringType(nb = "Komme inn i banken", nn = "Komme inn i banken", en = "How to get inside a bank"),
                 )
             variableDefinition2 =
                 VariableDefinitionDAO(
+                    id = ObjectId(),
+                    definitionId = NanoId.generate(8),
                     name = LanguageStringType(nb = "bilturer", nn = null, en = null),
                     shortName = "bil",
                     definition = LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
                 )
-            variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
+            variables = listOf(variableDefinition, variableDefinition1, variableDefinition2)
             for (v in variables) {
                 variableDefinitionService.save(v)
             }
@@ -91,7 +104,7 @@ class VariablesControllerTest {
                 .body(jsonString)
                 .`when`()
                 .post("/variable-definitions")
-                .then()
+                .then().log().everything()
                 .statusCode(201)
                 .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
                 .body("short_name", equalTo("bank"))

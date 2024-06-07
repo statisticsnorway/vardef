@@ -8,17 +8,21 @@ import no.ssb.metadata.repositories.VariableDefinitionRepository
 
 @Singleton
 class VariableDefinitionService(private val variableDefinitionRepository: VariableDefinitionRepository) {
-    fun findAll(): List<VariableDefinitionDAO> =
+    fun clear() = variableDefinitionRepository.deleteAll()
+
+    fun listAll(): List<VariableDefinitionDAO> =
         variableDefinitionRepository
             .findAll()
             .toList()
 
-    fun findByLanguage(language: SupportedLanguages): List<VariableDefinitionDTO> {
-        return findAll().map { dao -> dao.toDTO(language) }
+    fun listAllAndRenderForLanguage(language: SupportedLanguages): List<VariableDefinitionDTO> {
+        return listAll().map { dao -> dao.toDTO(language) }
     }
 
-    fun save(varDef: VariableDefinitionDAO): VariableDefinitionDAO {
-        requireNotNull(varDef.id) { "Something went wrong while saving variable, 'id' is missing" }
-        return variableDefinitionRepository.save(varDef)
-    }
+    fun getOneByIdAndRenderForLanguage(
+        language: SupportedLanguages,
+        id: String,
+    ): VariableDefinitionDTO = variableDefinitionRepository.findByDefinitionId(id).toDTO(language)
+
+    fun save(varDef: VariableDefinitionDAO): VariableDefinitionDAO = variableDefinitionRepository.save(varDef)
 }

@@ -15,7 +15,7 @@ class KlassApiJob {
     @Inject
     lateinit var klassApiClient: KlassApiClient
 
-    @Scheduled(cron = "0 10 14 * * ?")
+    @Scheduled(cron = "0 10 08 * * ?")
     fun getClassifications(): HttpResponse<KlassApiResponse> {
         return try {
             val result = klassApiClient.fetchClassificationList()

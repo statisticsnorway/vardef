@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.micronaut.serde.annotation.Serdeable
 
+/**
+ * Data classes for Klass Api response
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class KlassApiResponse(

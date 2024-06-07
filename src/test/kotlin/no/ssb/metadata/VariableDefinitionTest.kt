@@ -2,7 +2,7 @@ package no.ssb.metadata
 
 import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.VariableDefinitionDAO
+import no.ssb.metadata.models.SavedVariableDefinition
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -13,17 +13,18 @@ import kotlin.properties.Delegates
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VariableDefinitionTest {
-    private lateinit var variableDefinition: VariableDefinitionDAO
+    private lateinit var variableDefinition: SavedVariableDefinition
     private var nanoIdSize by Delegates.notNull<Int>()
 
     @BeforeAll
     fun setUp() {
         variableDefinition =
-            VariableDefinitionDAO(
+            SavedVariableDefinition(
                 null,
                 LanguageStringType(nb = "Norsk navn", nn = "namn", en = "English name"),
                 "test",
                 LanguageStringType(nb = "definisjon", nn = "nynorsk definisjon", en = "definition"),
+
             )
         nanoIdSize = 8
     }

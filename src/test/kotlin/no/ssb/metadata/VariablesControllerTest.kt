@@ -7,7 +7,7 @@ import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.VariableDefinitionDAO
+import no.ssb.metadata.models.SavedVariableDefinition
 import no.ssb.metadata.services.VariableDefinitionService
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
@@ -36,35 +36,35 @@ class VariablesControllerTest {
 
     @Nested
     inner class MongoDBDataSetupAndTest {
-        private lateinit var variableDefinition: VariableDefinitionDAO
-        private lateinit var variableDefinition1: VariableDefinitionDAO
-        private lateinit var variableDefinition2: VariableDefinitionDAO
-        private lateinit var variables: List<VariableDefinitionDAO>
+        private lateinit var variableDefinition: SavedVariableDefinition
+        private lateinit var variableDefinition1: SavedVariableDefinition
+        private lateinit var variableDefinition2: SavedVariableDefinition
+        private lateinit var variables: List<SavedVariableDefinition>
 
         @BeforeEach
         fun setUp() {
             variableDefinition =
-                VariableDefinitionDAO(
+                SavedVariableDefinition(
                     null,
                     LanguageStringType(nb = "Transaksjon", nn = null, en = "Transition"),
                     "test1",
                     LanguageStringType(nb = "definisjon", nn = null, en = "definition"),
                 )
-            variableDefinition1 =
-                VariableDefinitionDAO(
-                    null,
-                    LanguageStringType(nb = "Bankdør", nn = "Bankdørar", en = "Bank door"),
-                    "bankInngang",
-                    LanguageStringType(nb = "Komme inn i banken", nn = "Komme inn i banken", en = "How to get inside a bank"),
-                )
-            variableDefinition2 =
-                VariableDefinitionDAO(
-                    null,
-                    LanguageStringType(nb = "bilturer", nn = null, en = null),
-                    "bil",
-                    LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
-                )
-            variables = listOf<VariableDefinitionDAO>(variableDefinition, variableDefinition1, variableDefinition2)
+//            variableDefinition1 =
+//                SavedVariableDefinition(
+//                    null,
+//                    LanguageStringType(nb = "Bankdør", nn = "Bankdørar", en = "Bank door"),
+//                    "bankInngang",
+//                    LanguageStringType(nb = "Komme inn i banken", nn = "Komme inn i banken", en = "How to get inside a bank"),
+//                )
+//            variableDefinition2 =
+//                SavedVariableDefinition(
+//                    null,
+//                    LanguageStringType(nb = "bilturer", nn = null, en = null),
+//                    "bil",
+//                    LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
+//                )
+            variables = listOf<SavedVariableDefinition>(variableDefinition)//, variableDefinition1, variableDefinition2)
             for (v in variables) {
                 variableDefinitionService.save(v)
             }

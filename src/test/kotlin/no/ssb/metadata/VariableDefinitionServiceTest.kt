@@ -8,8 +8,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.VariableDefinitionDAO
-import no.ssb.metadata.models.VariableDefinitionDTO
+import no.ssb.metadata.models.SavedVariableDefinition
+import no.ssb.metadata.models.RenderedVariableDefinition
 import no.ssb.metadata.repositories.VariableDefinitionRepository
 import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -49,14 +49,14 @@ class VariableDefinitionServiceTest {
     @Test
     fun `save variable definition`() {
         val variableDefinition =
-            VariableDefinitionDAO(
+            SavedVariableDefinition(
                 null,
                 LanguageStringType(nb = "Kattens gange", nn = null, en = null),
                 "katt",
                 LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
             )
         val savedVariableDefinition =
-            VariableDefinitionDAO(
+            SavedVariableDefinition(
                 ObjectId("00000020f51bb4362eee2a4d"),
                 LanguageStringType(nb = "Kattens gange", nn = null, en = null),
                 "katt",
@@ -76,7 +76,7 @@ class VariableDefinitionServiceTest {
     @Test
     fun `find variables in selected language`() {
         val variableDefinition =
-            VariableDefinitionDAO(
+            SavedVariableDefinition(
                 null,
                 LanguageStringType(nb = "marsvin sport", nn = null, en = "guinea pig sport"),
                 "marsvin",
@@ -84,7 +84,7 @@ class VariableDefinitionServiceTest {
             )
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
         val variableDefinitionDTO =
-            VariableDefinitionDTO(
+            RenderedVariableDefinition(
                 variableDefinition.id,
                 "marsvin sport",
                 "marsvin",
@@ -100,7 +100,7 @@ class VariableDefinitionServiceTest {
     @Test
     fun `mongodb id is generated when variable is created`() {
         val variableDefinition =
-            VariableDefinitionDAO(
+            SavedVariableDefinition(
                 null,
                 LanguageStringType(nb = "Middag", null, null),
                 "mat",
@@ -118,7 +118,7 @@ class VariableDefinitionServiceTest {
     @Test
     fun `varDef id is only created once`() {
         val variableDefinition =
-            VariableDefinitionDAO(
+            SavedVariableDefinition(
                 null,
                 LanguageStringType(nb = null, en = "Supper", nn = null),
                 "englishFood",
@@ -140,7 +140,7 @@ class VariableDefinitionServiceTest {
     @Test
     fun `save should throw exception for null id`() {
         val variableDefinition =
-            VariableDefinitionDAO(
+            SavedVariableDefinition(
                 null,
                 LanguageStringType(nb = "navn", en = null, nn = null),
                 "kortNavn",

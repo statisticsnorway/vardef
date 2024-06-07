@@ -7,15 +7,15 @@ import io.micronaut.serde.annotation.Serdeable
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class KlassApiResponse(
-    @JsonProperty("_embedded") val embedded: Classifications?,
-    @JsonProperty("_links") val links: PaginationLinks?,
-    @JsonProperty("page") val page: Page?,
+    @JsonProperty("_embedded") val embedded: Classifications,
+    @JsonProperty("_links") val links: PaginationLinks,
+    @JsonProperty("page") val page: Page,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class Classifications(
-    @JsonProperty("classifications") val classificationItems: List<ClassificationItem>?,
+    @JsonProperty("classifications") val classificationItems: List<ClassificationItem>,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -31,17 +31,17 @@ data class ClassificationItem(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class PaginationLinks(
-    @JsonProperty("self") val self: Link,
-    @JsonProperty("first") val first: Link,
-    @JsonProperty("next") val next: Link,
-    @JsonProperty("last") val last: Link,
-    @JsonProperty("search") val search: Link,
+    @JsonProperty("self") val self: Link?,
+    @JsonProperty("first") val first: Link?,
+    @JsonProperty("next") val next: Link?,
+    @JsonProperty("last") val last: Link?,
+    @JsonProperty("search") val search: Link?,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class ClassificationLinks(
-    @JsonProperty("self") val self: Link,
+    @JsonProperty("self") val self: Link?,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

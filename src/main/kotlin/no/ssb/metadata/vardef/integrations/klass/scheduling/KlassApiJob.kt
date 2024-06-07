@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.klass
+package no.ssb.metadata.vardef.integrations.klass.scheduling
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.scheduling.annotation.Scheduled
@@ -11,11 +11,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Singleton
-class KlassJob {
+class KlassApiJob {
     @Inject
     lateinit var klassApiClient: KlassApiClient
 
-    @Scheduled(cron = "0 44 12 * * ?")
+    @Scheduled(cron = "0 10 14 * * ?")
     fun getClassifications(): HttpResponse<KlassApiResponse> {
         return try {
             val result = klassApiClient.fetchClassificationList()
@@ -27,6 +27,6 @@ class KlassJob {
     }
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(KlassJob::class.java)
+        private val LOG = LoggerFactory.getLogger(KlassApiJob::class.java)
     }
 }

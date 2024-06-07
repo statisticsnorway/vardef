@@ -12,10 +12,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-// Mockk test
-// getClassifications() - given clock -> KlassApiResponse
-// Error/exception
-
 @MockK
 class KlassApiJobTest {
     private lateinit var klassApiMockkClient: KlassApiClient
@@ -37,6 +33,16 @@ class KlassApiJobTest {
         every {
             job.getClassifications()
         } returns HttpResponse.ok(result)
+        job.getClassifications()
+        verify(exactly = 1) { job.getClassifications() }
+    }
+
+    @Test
+    fun `no response returns exception`() {
+        val job = mockk<KlassApiJob>(relaxed = true)
+        every {
+            job.getClassifications()
+        } returns HttpResponse.notFound()
         job.getClassifications()
         verify(exactly = 1) { job.getClassifications() }
     }

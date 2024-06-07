@@ -4,6 +4,7 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -48,6 +49,7 @@ class VariableDefinitionsController {
     fun createVariableDefinition(
         @Body @Valid varDef: InputVariableDefinition,
     ): InputVariableDefinition {
+        if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
         return varDefService.save(varDef.toDAO()).toInput()
     }
 }

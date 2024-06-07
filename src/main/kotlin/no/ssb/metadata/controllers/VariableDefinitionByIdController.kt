@@ -36,12 +36,9 @@ class VariableDefinitionByIdController {
     fun getVariableDefinitionById(
         @VardefId id: String,
         @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
-    ): MutableHttpResponse<VariableDefinitionDTO?>? {
-        val vardef =
-            varDefService.getOneByIdAndRenderForLanguage(id = id, language = language)
-        return HttpResponse
-            .ok(vardef)
+    ): MutableHttpResponse<VariableDefinitionDTO?>? =
+        HttpResponse
+            .ok(varDefService.getOneByIdAndRenderForLanguage(id = id, language = language))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
             .contentType(MediaType.APPLICATION_JSON)
-    }
 }

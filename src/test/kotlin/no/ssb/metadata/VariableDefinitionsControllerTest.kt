@@ -112,6 +112,36 @@ class VariableDefinitionsControllerTest {
         }
 
         @Test
+        fun `create variable definition with id`(spec: RequestSpecification) {
+            val jsonString =
+                """
+                {
+                    "id": "my-special-id",
+                    "name": {
+                        "en": "Bank connections",
+                        "nb": "Bankforbindelser",
+                        "nn": "Bankavtale"
+                    },
+                    "short_name": "bank",
+                    "definition": {
+                        "en": "definition of money",
+                        "nb": "definisjon av penger",
+                        "nn": "pengers verdi"
+                    }
+                }
+                """.trimIndent()
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then().log().everything()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", containsString("ID may not be specified on creation."))
+        }
+
+        @Test
         fun `get request default language`(spec: RequestSpecification) {
             spec
                 .`when`()

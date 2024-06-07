@@ -1,6 +1,5 @@
 package no.ssb.metadata.models
 
-import io.micronaut.core.annotation.Introspected
 import io.micronaut.core.annotation.Nullable
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
@@ -11,7 +10,6 @@ import no.ssb.metadata.constants.DEFINITION_FIELD_DESCRIPTION
 import no.ssb.metadata.constants.NAME_FIELD_DESCRIPTION
 import no.ssb.metadata.constants.SHORT_NAME_FIELD_DESCRIPTION
 
-@Introspected
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
     description = "Variable definition Data Access Object. For creating and updating Variable Definitions.",

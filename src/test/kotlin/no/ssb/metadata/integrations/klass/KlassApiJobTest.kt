@@ -42,7 +42,7 @@ class KlassApiJobTest {
         val job = mockk<KlassApiJob>(relaxed = true)
         every {
             job.getClassifications()
-        } returns HttpResponse.notFound()
+        } returns HttpResponse.serverError()
         job.getClassifications()
         verify(exactly = 1) { job.getClassifications() }
     }

@@ -22,7 +22,7 @@ class KlassApiJob {
             LOG.info("Retrieving classifications from Klass Api {} {}", result, SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
             HttpResponse.ok(result)
         } catch (e: Exception) {
-            HttpResponse.notFound()
+            HttpResponse.serverError()
         }
     }
 

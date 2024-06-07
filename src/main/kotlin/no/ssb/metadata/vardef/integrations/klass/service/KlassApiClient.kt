@@ -8,16 +8,14 @@ import io.micronaut.http.annotation.Headers
 import io.micronaut.http.client.annotation.Client
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 
-
 /**
- * A declarative client
+ * A declarative client for response from Klass Api
  */
 @Client("https://data.ssb.no/api/klass/v1/classifications")
 @Headers(
     Header(name = ACCEPT, value = "application/json"),
 )
 interface KlassApiClient {
-
     @Get()
     @SingleResult
     fun fetchClassificationList(): KlassApiResponse

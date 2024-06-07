@@ -9,7 +9,7 @@ import io.micronaut.serde.annotation.Serdeable
 data class KlassApiResponse(
     @JsonProperty("_embedded") val embedded: Classifications?,
     @JsonProperty("_links") val links: PaginationLinks?,
-    @JsonProperty("page") val page: Page?
+    @JsonProperty("page") val page: Page?,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

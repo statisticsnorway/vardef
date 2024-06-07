@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.klass.controller
 
 import io.micronaut.core.async.annotation.SingleResult
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.scheduling.TaskExecutors
@@ -8,7 +9,6 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
-import io.micronaut.http.HttpResponse
 import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +16,6 @@ import java.util.*
 @Controller()
 @ExecuteOn(TaskExecutors.BLOCKING)
 class ClassificationController {
-
     @Inject
     lateinit var klassApiClient: KlassApiClient
 
@@ -26,8 +25,7 @@ class ClassificationController {
         return try {
             LOG.info("Retrieving classifications from Klass Api {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
             HttpResponse.ok(klassApiClient.fetchClassificationList())
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             HttpResponse.notFound()
         }
     }

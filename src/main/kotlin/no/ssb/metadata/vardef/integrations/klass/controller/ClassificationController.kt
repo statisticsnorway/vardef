@@ -10,6 +10,8 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
 import io.micronaut.http.HttpResponse
 import org.slf4j.LoggerFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Controller()
 @ExecuteOn(TaskExecutors.BLOCKING)
@@ -22,6 +24,7 @@ class ClassificationController {
     @SingleResult
     fun fetchClassifications(): HttpResponse<KlassApiResponse> {
         return try {
+            LOG.info("Retrieving classifications from Klass Api {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
             HttpResponse.ok(klassApiClient.fetchClassificationList())
         }
         catch (e: Exception) {

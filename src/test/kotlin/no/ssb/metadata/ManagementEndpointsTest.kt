@@ -16,4 +16,14 @@ class ManagementEndpointsTest {
             .then()
             .statusCode(200)
     }
+
+    @Test
+    fun `metrics endpoint`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .contentType(ContentType.JSON)
+            .get("/metrics")
+            .then().log().everything()
+            .statusCode(200)
+    }
 }

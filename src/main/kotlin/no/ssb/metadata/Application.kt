@@ -1,6 +1,6 @@
 package no.ssb.metadata
 
-import io.micronaut.runtime.Micronaut.run
+import io.micronaut.runtime.Micronaut
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.extensions.Extension
 import io.swagger.v3.oas.annotations.extensions.ExtensionProperty
@@ -32,5 +32,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 object Api
 
 fun main(args: Array<String>) {
-    run(*args)
+    Micronaut
+        .build(*args)
+        .deduceCloudEnvironment(true)
+        .start()
 }

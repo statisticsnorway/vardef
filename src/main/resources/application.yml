@@ -43,3 +43,11 @@ micronaut:
       strict-nullable: true
     serialization:
       inclusion: always
+
+  server:
+    netty:
+      access-logger:
+        enabled: true
+        exclusions:
+          - /health
+          - /metrics

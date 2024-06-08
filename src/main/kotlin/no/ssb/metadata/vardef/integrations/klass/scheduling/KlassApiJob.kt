@@ -11,9 +11,6 @@ import java.util.*
 
 @Singleton
 class KlassApiJob(private val klassApiClient: KlassApiClient) {
-    // @Inject
-    // lateinit var klassApiClient: KlassApiClient
-
     @Scheduled(cron = "0 10 08 * * ?")
     fun getClassifications(): HttpResponse<KlassApiResponse> {
         return try {

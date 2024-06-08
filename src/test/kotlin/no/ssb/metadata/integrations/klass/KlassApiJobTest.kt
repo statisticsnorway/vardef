@@ -31,7 +31,7 @@ class KlassApiJobTest {
     }
 
     @Test
-    fun `Job is run`() {
+    fun `klass api job is run`() {
         val klassApiResponse = mockk<KlassApiResponse>()
         every { klassApiMockkClient.fetchClassificationList() } returns (klassApiResponse)
         val jobResult = klassApiJob.getClassifications()
@@ -41,7 +41,7 @@ class KlassApiJobTest {
     }
 
     @Test
-    fun `no response returns exception`() {
+    fun `no response klass api returns exception`() {
         every {
             klassApiMockkClient.fetchClassificationList()
         } throws Exception("test")

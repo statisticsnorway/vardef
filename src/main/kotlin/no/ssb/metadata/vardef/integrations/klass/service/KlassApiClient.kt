@@ -9,7 +9,7 @@ import io.micronaut.http.client.annotation.Client
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 
 /**
- * A declarative client for response from Klass Api
+ * A declarative client response from Klass Api
  */
 @Client("https://data.ssb.no/api/klass/v1/classifications")
 @Headers(

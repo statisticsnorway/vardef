@@ -25,14 +25,14 @@ class KlassApiResponseTest {
     }
 
     @Test
-    fun `request data klass api`() {
+    fun `request to klass api`() {
         assertThat(result).isNotNull
         assertThat(result.page).isNotNull
         assertThat(result.links).isNotNull
     }
 
     @Test
-    fun `klass api result serialize to dataclasses`() {
+    fun `klass api result serializes to dataclasses`() {
         val classificationList = result.embedded.classificationItems
         assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
         assertThat(result.embedded).isInstanceOf(Classifications::class.java)

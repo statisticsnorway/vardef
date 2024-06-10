@@ -7,10 +7,8 @@ import io.restassured.specification.RequestSpecification
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
 @MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class HomeControllerTest {
     @Test
     fun `get on root path redirects to API docs`(spec: RequestSpecification) {

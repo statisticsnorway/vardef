@@ -1,5 +1,5 @@
 logger:
   levels:
     root: DEBUG
-    io.micronaut.context.*: INFO
+    io.micronaut.context.DefaultBeanContext: INFO
     org.mongodb.*: DEBUG

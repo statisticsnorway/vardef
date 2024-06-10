@@ -6,7 +6,6 @@ import io.micronaut.http.HttpResponse
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import org.slf4j.LoggerFactory
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 

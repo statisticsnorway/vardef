@@ -44,11 +44,6 @@ micronaut:
     serialization:
       inclusion: always
 
-  klass:
-    url: https://data.ssb.no/api/klass/v1/
-    unit-types: 702
-    subject-fields: 618
-
   server:
     netty:
       access-logger:
@@ -56,3 +51,12 @@ micronaut:
         exclusions:
           - /health
           - /metrics
+
+  http:
+    services:
+      klass:
+        url: https://data.ssb.no/api/klass/v1/
+
+klass:
+  unit-types: 702
+  subject-fields: 618

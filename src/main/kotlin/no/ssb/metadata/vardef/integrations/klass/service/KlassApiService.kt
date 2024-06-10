@@ -12,8 +12,6 @@ import java.util.*
 @CacheConfig("classifications")
 @Singleton
 open class KlassApiService(private val klassApiClient: KlassApiClient) {
-    // @Inject
-    // lateinit var klassApiClient: KlassApiClient
 
     var klassApiResponse: KlassApiResponse? = null
 
@@ -34,13 +32,14 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
         }
     }
 
-    fun getClassifications(): KlassApiResponse? {
+    fun getClassifications(): KlassApiResponse {
         if (this.klassApiResponse == null) {
             LOG.info("Request Klass Api at {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
             klassApiJob()
+            return this.klassApiResponse!!
         }
         LOG.info("Fetching from cache at {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
-        return this.klassApiResponse
+        return this.klassApiResponse!!
     }
 
     companion object {

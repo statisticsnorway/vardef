@@ -4,7 +4,7 @@
 # 1. Authenticate to Google Cloud
 # 2. Authenticate to Artifact Registry
 # 3. Build and publish a docker image to Google Artifact Registry
-# 
+#
 # To configure this workflow:
 # 1. Change the values for the IMAGE_NAME and TEAM_NAME environment variables (below).
 # 2. The image will be tagged with the git commit hash and latest. To override the default tags, add tags to the build_metadata step.
@@ -133,7 +133,7 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: staging
-          RESOURCE: .nais/staging.yaml
+          CLUSTER: test
+          RESOURCE: .nais/test.yaml
           VAR: image=${{ needs.docker-build.outputs.image-tag }},pr-number=${{github.event.number}}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

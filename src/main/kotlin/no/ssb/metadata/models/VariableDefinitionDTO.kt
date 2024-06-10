@@ -26,11 +26,11 @@ import no.ssb.metadata.constants.SHORT_NAME_FIELD_DESCRIPTION
 )
 data class VariableDefinitionDTO(
     @Schema(description = ID_FIELD_DESCRIPTION)
-    val id: String?,
+    val id: String,
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: String?,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
-    val shortName: String?,
+    val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: String?,
 )

@@ -11,12 +11,12 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 /**
  * A declarative client response from Klass Api
  */
-@Client("https://data.ssb.no/api/klass/v1/classifications")
+@Client(id = "klass")
 @Headers(
     Header(name = ACCEPT, value = "application/json"),
 )
 interface KlassApiClient {
-    @Get()
+    @Get("classifications")
     @SingleResult
     fun fetchClassificationList(): KlassApiResponse
 }

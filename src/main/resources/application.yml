@@ -50,8 +50,12 @@ micronaut:
             maximumSize: 3600
 
 
+  http:
+    services:
+      klass:
+        url: https://data.ssb.no/api/klass/v1/
+
   klass:
-    url: https://data.ssb.no/api/klass/v1/
     unit-types: 702
     subject-fields: 618
 

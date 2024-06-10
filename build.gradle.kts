@@ -16,11 +16,6 @@ plugins {
 version = "0.1"
 group = "no.ssb.metadata"
 
-// TODO @mmwinther: Remove once debugging is complete
-tasks.internalStartTestResourcesService {
-    debugServer.set(true)
-}
-
 val kotlinVersion = project.properties["kotlinVersion"]
 repositories {
     mavenCentral()

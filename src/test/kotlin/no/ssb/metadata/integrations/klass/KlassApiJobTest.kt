@@ -13,6 +13,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.IOException
 
 @MockK
 class KlassApiJobTest {
@@ -40,18 +41,13 @@ class KlassApiJobTest {
         verify(exactly = 1) { klassApiMockkClient.fetchClassificationList() }
     }
 
-    /*@Test
+    @Test
     fun `no response klass api returns exception`() {
         every {
             klassApiMockkClient.fetchClassificationList()
-         } throws Exception()
-
-        19:36:13.142 [Test worker] WARN  n.s.m.v.i.k.service.KlassApiService - Error while fetching classifications from Klass Api
-java.lang.Exception: null
-
-
+         } throws IOException("Error while fetching classifications from Klass Api")
         val result = klassApiService.klassApiJob()
         assertThat(result.status).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         verify(exactly = 1) { klassApiMockkClient.fetchClassificationList() }
-    }*/
+    }
 }

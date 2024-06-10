@@ -1,4 +1,0 @@
-logger:
-  levels:
-    io.micronaut.context.DefaultBeanContext: INFO
-    org.mongodb.*: DEBUG

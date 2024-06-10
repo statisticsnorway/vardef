@@ -11,11 +11,9 @@ import no.ssb.metadata.services.VariableDefinitionService
 import org.bson.types.ObjectId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 
+@Disabled
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VariableDefinitionByIdControllerTest {

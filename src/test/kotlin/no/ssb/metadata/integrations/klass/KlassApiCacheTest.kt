@@ -19,7 +19,7 @@ class KlassApiCacheTest {
     fun `first run cache`() {
         assertThat(klassApiService.klassApiResponse).isNull()
         klassApiService.klassApiJob()
-        assertThat(klassApiService.klassApiResponse).isNotNull
+        assertThat(klassApiService.klassApiResponse).isNotNull()
     }
 
     @Timeout(1000)

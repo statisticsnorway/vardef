@@ -19,9 +19,8 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
         return try {
             val result = klassApiClient.fetchClassificationList()
             LOG.info(
-                "Retrieving classifications from Klass Api with cache support {} {}",
-                result,
-                SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()),
+                "Retrieving classifications from Klass Api {}",
+                SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()),
             )
             this.klassApiResponse = result
             HttpResponse.ok(result)
@@ -33,11 +32,11 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
 
     fun getClassifications(): KlassApiResponse {
         if (this.klassApiResponse == null) {
-            LOG.info("Request Klass Api at {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
+            LOG.info("Request Klass Api at {}", SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()))
             klassApiJob()
             return this.klassApiResponse!!
         }
-        LOG.info("Fetching from cache at {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
+        LOG.info("Fetching from cache at {}", SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()))
         return this.klassApiResponse!!
     }
 

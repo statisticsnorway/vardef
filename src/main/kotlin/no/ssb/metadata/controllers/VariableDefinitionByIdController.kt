@@ -13,10 +13,11 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
+import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.constants.VARDEF_ID_PATTERN
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDTO
 import no.ssb.metadata.services.VariableDefinitionService
-import no.ssb.metadata.validators.VardefId
 
 @Validated
 @Controller("/variable-definitions/{id}")
@@ -34,7 +35,7 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get()
     fun getVariableDefinitionById(
-        @VardefId id: String,
+        @Pattern(regexp = VARDEF_ID_PATTERN) id: String,
         @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
     ): MutableHttpResponse<VariableDefinitionDTO?>? =
         HttpResponse

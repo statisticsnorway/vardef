@@ -44,6 +44,12 @@ micronaut:
     serialization:
       inclusion: always
 
+    cache:
+        caches:
+          classifications:
+            maximumSize: 3600
+
+
   klass:
     url: https://data.ssb.no/api/klass/v1/
     unit-types: 702

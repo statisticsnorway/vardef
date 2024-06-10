@@ -12,7 +12,6 @@ import java.util.*
 @CacheConfig("classifications")
 @Singleton
 open class KlassApiService(private val klassApiClient: KlassApiClient) {
-
     var klassApiResponse: KlassApiResponse? = null
 
     @Cacheable("classifications")

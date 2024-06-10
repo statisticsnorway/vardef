@@ -45,7 +45,7 @@ class KlassApiJobTest {
     fun `no response klass api returns exception`() {
         every {
             klassApiMockkClient.fetchClassificationList()
-         } throws IOException("Error while fetching classifications from Klass Api")
+        } throws IOException("Error while fetching classifications from Klass Api")
         val result = klassApiService.klassApiJob()
         assertThat(result.status).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         verify(exactly = 1) { klassApiMockkClient.fetchClassificationList() }

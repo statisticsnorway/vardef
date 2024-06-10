@@ -44,11 +44,10 @@ micronaut:
     serialization:
       inclusion: always
 
-    cache:
-        caches:
-          classifications:
-            maximumSize: 3600
-
+  cache:
+    caches:
+      classifications:
+        maximumSize: 3600
 
   http:
     services:

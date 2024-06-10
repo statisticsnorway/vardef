@@ -3,7 +3,6 @@ package no.ssb.metadata.vardef.integrations.klass.service
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.http.HttpResponse
-import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import org.slf4j.LoggerFactory
@@ -12,14 +11,14 @@ import java.util.*
 
 @CacheConfig("classifications")
 @Singleton
-open class KlassApiService() {
-    @Inject
-    lateinit var klassApiClient: KlassApiClient
+open class KlassApiService(private val klassApiClient: KlassApiClient) {
+    // @Inject
+    // lateinit var klassApiClient: KlassApiClient
 
-    var classifications: KlassApiResponse? = null
+    var klassApiResponse: KlassApiResponse? = null
 
     @Cacheable("classifications")
-    open fun runKlassApiJob(): HttpResponse<KlassApiResponse> {
+    open fun klassApiJob(): HttpResponse<KlassApiResponse> {
         return try {
             val result = klassApiClient.fetchClassificationList()
             LOG.info(
@@ -27,12 +26,21 @@ open class KlassApiService() {
                 result,
                 SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()),
             )
-            classifications = result
+            this.klassApiResponse = result
             HttpResponse.ok(result)
         } catch (e: Exception) {
             LOG.warn("Error while fetching classifications from Klass Api", e)
             HttpResponse.serverError()
         }
+    }
+
+    fun getClassifications(): KlassApiResponse? {
+        if (this.klassApiResponse == null) {
+            LOG.info("Request Klass Api at {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
+            klassApiJob()
+        }
+        LOG.info("Fetching from cache at {}", SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date()))
+        return this.klassApiResponse
     }
 
     companion object {

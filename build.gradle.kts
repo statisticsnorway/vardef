@@ -18,6 +18,8 @@ version = "0.1"
 group = "no.ssb.metadata"
 
 val kotlinVersion = project.properties["kotlinVersion"]
+val micronautVersion = project.properties["micronautVersion"]
+
 repositories {
     mavenCentral()
 }
@@ -62,7 +64,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers:1.19.8")
     testImplementation("org.testcontainers:mongodb:1.19.8")
     testImplementation("io.mockk:mockk:1.13.1")
-    aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.3"))
+    aotPlugins(platform("io.micronaut.platform:micronaut-platform:$micronautVersion"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
 

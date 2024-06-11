@@ -1,0 +1,6 @@
+logger:
+  levels:
+    root: DEBUG
+
+mongodb:
+  uri: mongodb://localhost:27017

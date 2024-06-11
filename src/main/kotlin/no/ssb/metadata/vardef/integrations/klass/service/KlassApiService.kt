@@ -8,8 +8,6 @@ import io.micronaut.retry.annotation.Retryable
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import org.slf4j.LoggerFactory
-import java.text.SimpleDateFormat
-import java.util.*
 
 @CacheConfig("classifications")
 @Singleton
@@ -20,10 +18,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
     open fun klassApiJob(): HttpResponse<KlassApiResponse> {
         return try {
             val result = klassApiClient.fetchClassificationList()
-            LOG.info(
-                "Retrieving classifications from Klass Api {}",
-                SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()),
-            )
+            LOG.info("Retrieving classifications from Klass Api")
             this.klassApiResponse = result
             HttpResponse.ok(result)
         } catch (e: Exception) {
@@ -33,18 +28,25 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
     }
 
     @Retryable(delay = "2s", attempts = "3")
-    open fun getClassifications(): KlassApiResponse {
+    open fun getClassifications(): KlassApiResponse? {
         var attempts = 0
         if (this.klassApiResponse == null) {
-            LOG.info("Request Klass Api at {}", SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()))
+            LOG.info("Request Klass Api")
             klassApiJob()
-            if (klassApiJob().status == HttpStatus.INTERNAL_SERVER_ERROR || this.klassApiJob().status == HttpStatus.SERVICE_UNAVAILABLE) {
+            if (klassApiJob().status == HttpStatus.INTERNAL_SERVER_ERROR) {
                 attempts += 1
+                LOG.info("Testing new call to Klass Api no: $attempts")
                 klassApiJob()
             }
-            return this.klassApiResponse!!
+            if (klassApiJob().status == HttpStatus.INTERNAL_SERVER_ERROR) {
+                LOG.warn("Klass Api is unavailable")
+                return null
+            } else {
+                LOG.info("Refreshing Klass Api cache")
+                return this.klassApiResponse
+            }
         }
-        LOG.info("Fetching from cache at {}", SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()))
+        LOG.info("Fetching from cache")
         return this.klassApiResponse!!
     }
 

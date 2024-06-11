@@ -64,4 +64,22 @@ class KlassApiJobTest {
         }
         verify(atMost = 3) { klassApiService.klassApiJob() }
     }
+
+    @Test
+    fun `klass api job returns status`() {
+        every {
+            klassApiMockkClient.fetchClassificationList()
+        } throws HttpServerException("Server error")
+        val result = klassApiService.klassApiJob()
+        assertThat(result.status()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @Test
+    fun `klass api get classifications acts on status`() {
+        every {
+            klassApiMockkClient.fetchClassificationList()
+        } throws HttpServerException("Server error")
+        assertThat(klassApiService.getClassifications()).isNull()
+        verify(atMost = 4) { klassApiService.klassApiJob() }
+    }
 }

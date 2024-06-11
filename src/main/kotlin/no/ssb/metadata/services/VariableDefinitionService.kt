@@ -18,8 +18,8 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
         return findAll().map { dao -> dao.toRenderedVariableDefinition(language) }
     }
 
-    fun save(varDef: InputVariableDefinition): SavedVariableDefinition {
+    fun save(varDef: InputVariableDefinition): InputVariableDefinition {
         //requireNotNull(varDef.id) { "Something went wrong while saving variable, 'id' is missing" }
-        return variableDefinitionRepository.save(varDef.toSavedVariableDefinition())
+        return variableDefinitionRepository.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
     }
 }

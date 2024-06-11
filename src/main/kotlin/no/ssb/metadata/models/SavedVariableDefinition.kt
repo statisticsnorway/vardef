@@ -59,4 +59,25 @@ data class SavedVariableDefinition(
             lastUpdatedAt = lastUpdatedAt,
             lastUpdatedBy = lastUpdatedBy
         )
+
+    fun toInputVariableDefinition(): InputVariableDefinition =
+        InputVariableDefinition(
+            name = name,
+            shortName = shortName,
+            definition = definition,
+            classificationReference = "",
+            unitTypes = emptyList(),
+            subjectFields = emptyList(),
+            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
+            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            variableStatus = variableStatus,
+            measurementType = "",
+            validFrom = validFrom,
+            validUntil = validUntil,
+            externalReferenceUri = externalReferenceUri,
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
+            contact = contact,
+
+        )
+
 }

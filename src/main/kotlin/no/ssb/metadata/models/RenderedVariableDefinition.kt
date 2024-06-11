@@ -4,7 +4,6 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 
-@Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(example = """
         {
             "name": {   "en": "English",
@@ -65,6 +64,7 @@ import io.swagger.v3.oas.annotations.media.Schema
         }
     """,
 )
+@Serdeable(naming = SnakeCaseStrategy::class)
 data class RenderedVariableDefinition(
     val id: String?,
     val name: String?,

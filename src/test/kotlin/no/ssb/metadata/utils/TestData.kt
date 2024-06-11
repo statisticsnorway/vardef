@@ -1,6 +1,16 @@
+import com.fasterxml.jackson.annotation.JsonIgnore
+import io.micronaut.data.annotation.GeneratedValue
+import io.micronaut.data.annotation.Id
+import io.micronaut.json.tree.JsonObject
+import io.micronaut.serde.annotation.Serdeable
 import no.ssb.metadata.models.*
+import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
+import io.micronaut.serde.config.naming.SnakeCaseStrategy
+import io.viascom.nanoid.NanoId
+import org.bson.types.ObjectId
+import org.json.JSONObject
 
-val SIMPLE_VARIABLE_DEFINITION = InputVariableDefinition(
+val INPUT_VARIABLE_DEFINITION = InputVariableDefinition(
     name = LanguageStringType(nb = "Landbakgrunn", nn = "Landbakgrunn", en = "Country Background"),
     shortName = "landbak",
     definition =  LanguageStringType(nb = "For personer født", nn = null, en = "Country background is"),
@@ -18,16 +28,45 @@ val SIMPLE_VARIABLE_DEFINITION = InputVariableDefinition(
     contact = Contact(LanguageStringType("", "", ""), ""),
 )
 
+val INPUT_VARIABLE_DEFINITION_COPY = INPUT_VARIABLE_DEFINITION.copy(
+    name = LanguageStringType(nb = "Landbakgrunn 2", nn = "Landbakgrunn 2", en = "Country Background 2"),
+    shortName = "landbak 2",
+)
+
+val SAVED_VARIABLE_DEFINITION = SavedVariableDefinition(
+    mongoId = null,
+    name = LanguageStringType(nb = "Landbakgrunn", nn = "Landbakgrunn", en = "Country Background"),
+    shortName = "landbak",
+    definition = LanguageStringType(nb = "For personer født", nn = "For personer født", en = "Country background is"),
+    classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+    unitTypes = listOf(KlassReference("https://example.com/", "", "")),
+    subjectFields = listOf(KlassReference("https://example.com/", "", "")),
+    containsUnitIdentifyingInformation = false,
+    containsSensitivePersonalInformation = false,
+    variableStatus = "",
+    measurementType = KlassReference("https://example.com/", "", ""),
+    validFrom = "2024-06-11",
+    validUntil = "2024-06-11",
+    externalReferenceUri =  "https://example.com/",
+    relatedVariableDefinitionUris = listOf("https://example.com/"),
+    owner = Owner("", ""),
+    contact = Contact(LanguageStringType("", "", ""), ""),
+    createdAt = "2024-06-11T08:15:19.421Z",
+    createdBy = Person("", ""),
+    lastUpdatedAt = "2024-06-11T08:15:19.421Z",
+    lastUpdatedBy = Person("", "")
+)
 
 
-val VARIABLE_JSON_INPUT = """
+val JSON_TEST_INPUT =
+    """
     {
         "name": {
             "en": "Country Background",
             "nb": "Landbakgrunn",
             "nn": "Landbakgrunn"
         },
-        "short_name": "landbak",
+        "short_name": "landbak 2",
         "definition": {
             "en": "C.",
             "nb": "F"
@@ -53,9 +92,9 @@ val VARIABLE_JSON_INPUT = """
         ],
         "contact": {
             "title": {
-                "en": "a",
-                "nb": "b",
-                "nn": "c"
+                "en": "string",
+                "nb": "string",
+                "nn": "string"
             },
             "email": "user@example.com"
         }

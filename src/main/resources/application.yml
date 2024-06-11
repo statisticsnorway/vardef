@@ -44,10 +44,10 @@ micronaut:
     serialization:
       inclusion: always
 
-  server:
-    netty:
-      access-logger:
-        enabled: true
-        exclusions:
-          - /health
-          - /metrics
+#  server:
+#    netty:
+#      access-logger:
+#        enabled: true
+#        exclusions:
+#          - /health
+#          - /metrics

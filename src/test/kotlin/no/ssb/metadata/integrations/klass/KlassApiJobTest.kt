@@ -19,12 +19,14 @@ class KlassApiJobTest {
     private lateinit var klassApiMockkClient: KlassApiClient
     private lateinit var klassApiService: KlassApiService
     private lateinit var klassApiMockService: KlassApiService
+    private lateinit var klassApiResponse: KlassApiResponse
 
     @BeforeEach
     fun setUp() {
         klassApiMockkClient = mockk<KlassApiClient>(relaxed = true)
         klassApiService = KlassApiService(klassApiMockkClient)
         klassApiMockService = mockk<KlassApiService>()
+        klassApiResponse = mockk<KlassApiResponse>()
     }
 
     @AfterEach
@@ -34,7 +36,6 @@ class KlassApiJobTest {
 
     @Test
     fun `klass api job`() {
-        val klassApiResponse = mockk<KlassApiResponse>()
         every { klassApiMockkClient.fetchClassificationList() } returns (klassApiResponse)
         val jobResult = klassApiService.klassApiJob()
         assertThat(jobResult).isNotNull
@@ -68,5 +69,16 @@ class KlassApiJobTest {
         } throws HttpServerException("Server error")
         val result = klassApiService.getClassifications()
         assertThat(result).isNull()
+    }
+
+    @Test
+    fun `klass api status ok`() {
+        every {
+            klassApiMockkClient.fetchClassificationList()
+        } returns klassApiResponse
+        val response = klassApiService.getClassifications()
+        assertThat(response).isNotNull
+        assertThat(response).isInstanceOf(KlassApiResponse::class.java)
+        assertThat(klassApiService.klassApiResponse).isNotNull
     }
 }

@@ -49,7 +49,6 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     runtimeOnly("org.yaml:snakeyaml")
-    testImplementation("io.rest-assured:kotlin-extensions")
     testImplementation("org.assertj:assertj-core")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testImplementation("io.rest-assured:kotlin-extensions")

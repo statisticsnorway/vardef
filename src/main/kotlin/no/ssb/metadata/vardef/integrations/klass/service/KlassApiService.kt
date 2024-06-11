@@ -15,7 +15,9 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
     open fun klassApiJob(): HttpResponse<KlassApiResponse> {
         return try {
             val result = klassApiClient.fetchClassificationList()
-            LOG.info("Retrieving classifications from Klass Api")
+            LOG.info(
+                "Retrieving classifications from Klass Api",
+            )
             this.klassApiResponse = result
             HttpResponse.ok(result)
         } catch (e: Exception) {

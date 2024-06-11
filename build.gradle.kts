@@ -6,9 +6,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.23"
     id("com.google.devtools.ksp") version "1.9.23-1.0.19"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.3.8"
-    id("io.micronaut.test-resources") version "4.3.8"
-    id("io.micronaut.aot") version "4.3.8"
+    id("io.micronaut.application") version "4.4.0"
+    id("io.micronaut.test-resources") version "4.4.0"
+    id("io.micronaut.aot") version "4.4.0"
     id("jacoco")
     id("org.sonarqube") version "5.0.0.4638"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"

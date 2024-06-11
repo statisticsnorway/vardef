@@ -12,7 +12,6 @@ import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
 import java.io.IOException
 
 @MockK

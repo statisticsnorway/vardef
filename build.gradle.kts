@@ -29,6 +29,7 @@ dependencies {
     ksp("io.micronaut.security:micronaut-security-annotations")
     ksp("io.micronaut.serde:micronaut-serde-processor")
     ksp("io.micronaut.validation:micronaut-validation-processor")
+    kspTest("io.micronaut:micronaut-inject-java")
     implementation("io.micronaut.mongodb:micronaut-mongo-sync")
     implementation("io.micronaut.data:micronaut-data-mongodb")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
@@ -49,15 +50,19 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     runtimeOnly("org.yaml:snakeyaml")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testImplementation("io.micronaut:micronaut-http-client")
     testImplementation("org.assertj:assertj-core")
-    testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers:1.17.3")
     testImplementation("org.testcontainers:mongodb:1.17.3")
     testImplementation("io.mockk:mockk:1.13.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
-    aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.2"))
+    aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.3"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
 
@@ -129,6 +134,7 @@ tasks.jacocoTestReport {
 tasks.named<Test>("test") {
     useJUnitPlatform()
     testLogging {
+        showStandardStreams = true
         events("passed", "skipped", "failed", "standardOut", "standardError")
     }
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run

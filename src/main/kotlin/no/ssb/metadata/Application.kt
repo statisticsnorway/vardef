@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import org.slf4j.LoggerFactory
+
+val log = LoggerFactory.getLogger("no.ssb.metadata.Application")
 
 @OpenAPIDefinition(
     info =
@@ -32,6 +35,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 object Api
 
 fun main(args: Array<String>) {
+    log.info("Starting application")
     Micronaut.run(*args)
 //    Micronaut
 //        .build(*args)

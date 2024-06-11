@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.integrations.klass.service
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.http.HttpResponse
+import io.micronaut.retry.annotation.Retryable
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import org.slf4j.LoggerFactory
@@ -14,6 +15,7 @@ import java.util.*
 open class KlassApiService(private val klassApiClient: KlassApiClient) {
     var klassApiResponse: KlassApiResponse? = null
 
+    @Retryable(delay = "2s", attempts = "3")
     @Cacheable("classifications")
     open fun klassApiJob(): HttpResponse<KlassApiResponse> {
         return try {

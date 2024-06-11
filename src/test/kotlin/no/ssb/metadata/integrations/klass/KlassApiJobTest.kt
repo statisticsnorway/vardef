@@ -1,6 +1,7 @@
 package no.ssb.metadata.integrations.klass
 
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.server.exceptions.HttpServerException
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -10,20 +11,21 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
 import java.io.IOException
 
 @MockK
 class KlassApiJobTest {
     private lateinit var klassApiMockkClient: KlassApiClient
     private lateinit var klassApiService: KlassApiService
+    private lateinit var klassApiMockService: KlassApiService
 
     @BeforeEach
     fun setUp() {
         klassApiMockkClient = mockk<KlassApiClient>(relaxed = true)
         klassApiService = KlassApiService(klassApiMockkClient)
+        klassApiMockService = mockk<KlassApiService>()
     }
 
     @AfterEach
@@ -49,5 +51,16 @@ class KlassApiJobTest {
         val result = klassApiService.klassApiJob()
         assertThat(result.status).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         verify(exactly = 1) { klassApiMockkClient.fetchClassificationList() }
+    }
+
+    @Test
+    fun `retry klass api request on exception`() {
+        every {
+            klassApiMockService.klassApiJob()
+        } throws HttpServerException("Server error")
+        assertDoesNotThrow {
+            RuntimeException()
+            klassApiService.klassApiJob()
+        }
     }
 }

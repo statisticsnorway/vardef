@@ -135,6 +135,13 @@ tasks.named<Test>("test") {
     timeout = Duration.ofMinutes(10) // For debugging
 }
 
+if (hasProperty("buildScan")) {
+    extensions.findByName("buildScan")?.withGroovyBuilder {
+        setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
+        setProperty("termsOfServiceAgree", "yes")
+    }
+}
+
 tasks.withType(ShadowJar::class.java) {
     archiveBaseName.set("vardef")
     archiveVersion.set("")

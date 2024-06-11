@@ -3,6 +3,7 @@ package no.ssb.metadata
 import INPUT_VARIABLE_DEFINITION
 import INPUT_VARIABLE_DEFINITION_COPY
 import JSON_TEST_INPUT
+import SAVED_VARIABLE_DEFINITION
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.micronaut.http.HttpStatus
@@ -61,22 +62,6 @@ class VariableDefinitionsControllerTest {
 
         @Test
         fun `create variable definition`(spec: RequestSpecification) {
-            val jsonString =
-                """
-                {
-                    "name": {
-                        "en": "Bank connections",
-                        "nb": "Bankforbindelser",
-                        "nn": "Bankavtale"
-                    },
-                    "short_name": "bank",
-                    "definition": {
-                        "en": "definition of money",
-                        "nb": "definisjon av penger",
-                        "nn": "pengers verdi"
-                    }
-                }
-                """.trimIndent()
             spec
                 .given()
                 .contentType(ContentType.JSON)
@@ -92,27 +77,13 @@ class VariableDefinitionsControllerTest {
 
         @Test
         fun `create variable definition with id`(spec: RequestSpecification) {
-            val jsonString =
-                """
-                {
-                    "id": "my-special-id",
-                    "name": {
-                        "en": "Bank connections",
-                        "nb": "Bankforbindelser",
-                        "nn": "Bankavtale"
-                    },
-                    "short_name": "bank",
-                    "definition": {
-                        "en": "definition of money",
-                        "nb": "definisjon av penger",
-                        "nn": "pengers verdi"
-                    }
-                }
-                """.trimIndent()
+            val updatedJsonString = JSONObject(JSON_TEST_INPUT).apply {
+                put("id", "my-special-id")
+            }.toString()
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(jsonString)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()

@@ -35,7 +35,8 @@ val INPUT_VARIABLE_DEFINITION_COPY = INPUT_VARIABLE_DEFINITION.copy(
 )
 
 val SAVED_VARIABLE_DEFINITION = SavedVariableDefinition(
-    definitionId = "",
+    id = ObjectId(),
+    definitionId = NanoId.generate(8),
     name = LanguageStringType(nb = "Landbakgrunn", nn = "Landbakgrunn", en = "Country Background"),
     shortName = "landbak",
     definition = LanguageStringType(nb = "For personer født", nn = "For personer født", en = "Country background is"),
@@ -59,6 +60,37 @@ val SAVED_VARIABLE_DEFINITION = SavedVariableDefinition(
 )
 
 
+val SAVED_VARIABLE_DEFINITION_COPY = SAVED_VARIABLE_DEFINITION.copy(
+    id = ObjectId(),
+    definitionId = NanoId.generate(8),
+    name = LanguageStringType(nb = "Landbakgrunn 2", nn = "Landbakgrunn 2", en = "Country Background 2"),
+)
+
+val RENDERD_VARIABLE_DEFINITION = RenderedVariableDefinition(
+    id = "",
+    name = "Landbakgrunn",
+    shortName = "landbak",
+    definition = "For personer født",
+    classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+    unitTypes = listOf(KlassReference("https://example.com/", "", "")),
+    subjectFields = listOf(KlassReference("https://example.com/", "", "")),
+    containsUnitIdentifyingInformation = false,
+    containsSensitivePersonalInformation = false,
+    variableStatus = "",
+    measurementType = KlassReference("https://example.com/", "", ""),
+    validFrom = "2024-06-11",
+    validUntil = "2024-06-11",
+    externalReferenceUri =  "https://example.com/",
+    relatedVariableDefinitionUris = listOf("https://example.com/"),
+    owner = Owner("", ""),
+    contact = RenderedContact("", ""),
+    createdAt = "2024-06-11T08:15:19.421Z",
+    createdBy = Person("", ""),
+    lastUpdatedAt = "2024-06-11T08:15:19.421Z",
+    lastUpdatedBy = Person("", "")
+)
+
+
 val JSON_TEST_INPUT =
     """
     {
@@ -67,7 +99,7 @@ val JSON_TEST_INPUT =
             "nb": "Landbakgrunn",
             "nn": "Landbakgrunn"
         },
-        "short_name": "landbak 2",
+        "short_name": "landbak",
         "definition": {
             "en": "C.",
             "nb": "F"
@@ -101,3 +133,57 @@ val JSON_TEST_INPUT =
         }
     }
     """.trimIndent()
+
+
+
+
+val VD =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = NanoId.generate(8),
+        name = LanguageStringType(nb = "Kattens gange", nn = null, en = null),
+        shortName = "katt",
+        definition = LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
+        classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+        unitTypes = listOf(KlassReference("https://example.com/", "", "")),
+        subjectFields = listOf(KlassReference("https://example.com/", "", "")),
+        containsUnitIdentifyingInformation = false,
+        containsSensitivePersonalInformation = false,
+        variableStatus = "",
+        measurementType = KlassReference("https://example.com/", "", ""),
+        validFrom = "2024-06-11",
+        validUntil = "2024-06-11",
+        externalReferenceUri =  "https://example.com/",
+        relatedVariableDefinitionUris = listOf("https://example.com/"),
+        owner = Owner("", ""),
+        contact = Contact(LanguageStringType("", "", ""), ""),
+        createdAt = "2024-06-11T08:15:19.421Z",
+        createdBy = Person("", ""),
+        lastUpdatedAt = "2024-06-11T08:15:19.421Z",
+        lastUpdatedBy = Person("", "")
+    )
+val SD =
+    SavedVariableDefinition(
+        definitionId = "8Ah4fbvb",
+        id = ObjectId("00000020f51bb4362eee2a4d"),
+        name = LanguageStringType(nb = "Kattens gange", nn = null, en = null),
+        shortName = "katt",
+        definition = LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
+        classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+        unitTypes = listOf(KlassReference("https://example.com/", "", "")),
+        subjectFields = listOf(KlassReference("https://example.com/", "", "")),
+        containsUnitIdentifyingInformation = false,
+        containsSensitivePersonalInformation = false,
+        variableStatus = "",
+        measurementType = KlassReference("https://example.com/", "", ""),
+        validFrom = "2024-06-11",
+        validUntil = "2024-06-11",
+        externalReferenceUri =  "https://example.com/",
+        relatedVariableDefinitionUris = listOf("https://example.com/"),
+        owner = Owner("", ""),
+        contact = Contact(LanguageStringType("", "", ""), ""),
+        createdAt = "2024-06-11T08:15:19.421Z",
+        createdBy = Person("", ""),
+        lastUpdatedAt = "2024-06-11T08:15:19.421Z",
+        lastUpdatedBy = Person("", "")
+    )

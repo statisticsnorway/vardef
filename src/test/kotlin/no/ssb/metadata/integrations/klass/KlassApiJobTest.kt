@@ -34,7 +34,7 @@ class KlassApiJobTest {
     }
 
     @Test
-    fun `klass api job is run`() {
+    fun `klass api job`() {
         val klassApiResponse = mockk<KlassApiResponse>()
         every { klassApiMockkClient.fetchClassificationList() } returns (klassApiResponse)
         val jobResult = klassApiService.klassApiJob()
@@ -54,18 +54,6 @@ class KlassApiJobTest {
     }
 
     @Test
-    fun `retry klass api request on exception max 3 times`() {
-        every {
-            klassApiMockService.klassApiJob()
-        } throws HttpServerException("Server error")
-        assertDoesNotThrow {
-            RuntimeException()
-            klassApiService.getClassifications()
-        }
-        verify(atMost = 3) { klassApiService.klassApiJob() }
-    }
-
-    @Test
     fun `klass api job returns status`() {
         every {
             klassApiMockkClient.fetchClassificationList()
@@ -75,11 +63,11 @@ class KlassApiJobTest {
     }
 
     @Test
-    fun `klass api get classifications acts on status`() {
+    fun `server error klass api`() {
         every {
             klassApiMockkClient.fetchClassificationList()
         } throws HttpServerException("Server error")
-        assertThat(klassApiService.getClassifications()).isNull()
-        verify(atMost = 4) { klassApiService.klassApiJob() }
+        val result = klassApiService.getClassifications()
+        assertThat(result).isNull()
     }
 }

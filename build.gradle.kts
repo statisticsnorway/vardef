@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import java.time.Duration
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
@@ -131,6 +132,7 @@ tasks.named<Test>("test") {
         events("passed", "skipped", "failed", "standardOut", "standardError")
     }
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+    timeout = Duration.ofMinutes(10) // For debugging
 }
 
 tasks.withType(ShadowJar::class.java) {

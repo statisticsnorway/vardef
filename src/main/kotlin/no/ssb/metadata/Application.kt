@@ -32,8 +32,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 object Api
 
 fun main(args: Array<String>) {
-    Micronaut
-        .build(*args)
-        .deduceCloudEnvironment(true)
-        .start()
+    Micronaut.run(*args)
+//    Micronaut
+//        .build(*args)
+//        .deduceCloudEnvironment(true)
+//        .start()
 }

@@ -6,7 +6,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
@@ -19,6 +18,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @MockK
 class VariableDefinitionServiceTest {
@@ -41,7 +41,7 @@ class VariableDefinitionServiceTest {
         every {
             variableDefinitionMockRepository.findAll()
         } returns emptyList()
-        val result = variableDefinitionService.listAll()
+        val result = variableDefinitionService.findAll()
         assertTrue(result.isEmpty())
         verify(exactly = 1) { variableDefinitionMockRepository.findAll() }
     }
@@ -50,16 +50,14 @@ class VariableDefinitionServiceTest {
     fun `save variable definition`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                id = ObjectId(),
-                definitionId = NanoId.generate(8),
                 name = LanguageStringType(nb = "Kattens gange", nn = null, en = null),
                 shortName = "katt",
                 definition = LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
             )
         val savedVariableDefinition =
             VariableDefinitionDAO(
-                definitionId = "8Ah4fbvb",
-                id = ObjectId("00000020f51bb4362eee2a4d"),
+                id = "8Ah4fbvb",
+                mongoId = ObjectId("00000020f51bb4362eee2a4d"),
                 name = LanguageStringType(nb = "Kattens gange", nn = null, en = null),
                 shortName = "katt",
                 definition = LanguageStringType(nb = "Katter går på fire bein.", nn = null, en = null),
@@ -70,16 +68,14 @@ class VariableDefinitionServiceTest {
         val result = variableDefinitionService.save(variableDefinition)
         assertThat(result).isEqualTo(savedVariableDefinition)
         assertThat(result.name).isEqualTo(savedVariableDefinition.name)
+        assertThat(result.mongoId).isEqualTo(savedVariableDefinition.mongoId)
         assertThat(result.id).isEqualTo(savedVariableDefinition.id)
-        assertThat(result.definitionId).isEqualTo(savedVariableDefinition.definitionId)
     }
 
     @Test
     fun `find variables in selected language`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                id = ObjectId(),
-                definitionId = NanoId.generate(8),
                 name = LanguageStringType(nb = "marsvin sport", nn = null, en = "guinea pig sport"),
                 shortName = "marsvin",
                 definition = LanguageStringType(nb = "marsvin trener", nn = null, en = "guinea pig in training"),
@@ -87,12 +83,12 @@ class VariableDefinitionServiceTest {
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
         val variableDefinitionDTO =
             VariableDefinitionDTO(
-                variableDefinition.definitionId,
+                variableDefinition.id,
                 "marsvin sport",
                 "marsvin",
                 "marsvin trener",
             )
-        val result = variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB)
+        val result = variableDefinitionService.findByLanguage(SupportedLanguages.NB)
         assert(result.isNotEmpty())
         assertEquals(listOf(variableDefinitionDTO), result)
         assertThat(result[0].id).isEqualTo(variableDefinitionDTO.id)
@@ -103,32 +99,29 @@ class VariableDefinitionServiceTest {
     fun `mongodb id is generated when variable is created`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                id = null,
-                definitionId = NanoId.generate(8),
                 name = LanguageStringType(nb = "Middag", null, null),
                 shortName = "mat",
                 definition = LanguageStringType(nb = "Mat man spiser etter jobb", null, null),
             )
-        val savedVariableDefinition = variableDefinition.copy(id = ObjectId.get())
+        val savedVariableDefinition = variableDefinition.copy(mongoId = ObjectId.get())
 
         every { variableDefinitionService.save(variableDefinition) } returns savedVariableDefinition
-        assertThat(variableDefinition.id).isNull()
+        assertThat(variableDefinition.mongoId).isNull()
 
         val saveVariable = variableDefinitionService.save(variableDefinition)
-        assertThat(saveVariable.id).isNotNull()
+        assertThat(saveVariable.mongoId).isNotNull()
     }
 
     @Test
     fun `varDef id is only created once`() {
         val variableDefinition =
             VariableDefinitionDAO(
-                id = ObjectId(),
-                definitionId = "y7s34rf1",
+                id = "y7s34rf1",
                 name = LanguageStringType(nb = null, en = "Supper", nn = null),
                 shortName = "englishFood",
                 definition = LanguageStringType(nb = null, en = "Food after work", nn = null),
             )
-        val idBeforeSave = variableDefinition.definitionId
+        val idBeforeSave = variableDefinition.id
         val shortNameBeforeSave = variableDefinition.shortName
 
         val savedVariableDefinition = variableDefinition.copy(shortName = "food")
@@ -136,7 +129,28 @@ class VariableDefinitionServiceTest {
         every { variableDefinitionService.save(variableDefinition) } returns savedVariableDefinition
 
         val result = variableDefinitionService.save(variableDefinition)
-        assertThat(idBeforeSave).isSameAs(result.definitionId)
+        assertThat(idBeforeSave).isSameAs(result.id)
         assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
+    }
+
+    @Test
+    fun `save should throw exception for null id`() {
+        val variableDefinition =
+            VariableDefinitionDAO(
+                id = null,
+                name = LanguageStringType(nb = "navn", en = null, nn = null),
+                shortName = "kortNavn",
+                definition = LanguageStringType(nb = "definisjon", en = null, nn = null),
+            )
+
+        val exception =
+            assertThrows<IllegalArgumentException> {
+                variableDefinitionService.save(variableDefinition)
+            }
+
+        assertEquals(
+            "Something went wrong while saving variable, 'id' is missing",
+            exception.message,
+        )
     }
 }

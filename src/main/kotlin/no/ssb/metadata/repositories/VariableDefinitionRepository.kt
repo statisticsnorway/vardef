@@ -6,6 +6,4 @@ import no.ssb.metadata.models.VariableDefinitionDAO
 import org.bson.types.ObjectId
 
 @MongoRepository(databaseName = "vardef")
-interface VariableDefinitionRepository : CrudRepository<VariableDefinitionDAO, ObjectId> {
-    fun findByDefinitionId(definitionId: String): VariableDefinitionDAO
-}
+interface VariableDefinitionRepository : CrudRepository<VariableDefinitionDAO, ObjectId>

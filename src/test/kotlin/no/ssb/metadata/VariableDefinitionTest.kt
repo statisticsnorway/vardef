@@ -1,11 +1,9 @@
 package no.ssb.metadata
 
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.VariableDefinitionDAO
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -22,8 +20,6 @@ class VariableDefinitionTest {
     fun setUp() {
         variableDefinition =
             VariableDefinitionDAO(
-                id = ObjectId(),
-                definitionId = NanoId.generate(8),
                 name = LanguageStringType(nb = "Norsk navn", nn = "namn", en = "English name"),
                 shortName = "test",
                 definition = LanguageStringType(nb = "definisjon", nn = "nynorsk definisjon", en = "definition"),
@@ -61,12 +57,14 @@ class VariableDefinitionTest {
 
     @Test
     fun `variable definition id is created`() {
-        assertThat(variableDefinition.definitionId).isNotNull()
+        assertThat(variableDefinition.id).isNotNull()
     }
 
     @Test
     fun `variable definition id is expected length`() {
-        val nanoId = variableDefinition.definitionId
-        assertThat(nanoId.length).isEqualTo(nanoIdSize)
+        val nanoId = variableDefinition.id
+        if (nanoId != null) {
+            assertThat(nanoId.length).isEqualTo(nanoIdSize)
+        }
     }
 }

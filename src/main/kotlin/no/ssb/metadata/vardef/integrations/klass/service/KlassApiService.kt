@@ -1,10 +1,7 @@
 package no.ssb.metadata.vardef.integrations.klass.service
-
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
-import io.micronaut.retry.annotation.Retryable
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import org.slf4j.LoggerFactory
@@ -27,24 +24,11 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
         }
     }
 
-    @Retryable(delay = "2s", attempts = "3")
-    open fun getClassifications(): KlassApiResponse? {
-        var attempts = 0
+    fun getClassifications(): KlassApiResponse {
         if (this.klassApiResponse == null) {
             LOG.info("Request Klass Api")
             klassApiJob()
-            if (klassApiJob().status == HttpStatus.INTERNAL_SERVER_ERROR) {
-                attempts += 1
-                LOG.info("Testing new call to Klass Api no: $attempts")
-                klassApiJob()
-            }
-            if (klassApiJob().status == HttpStatus.INTERNAL_SERVER_ERROR) {
-                LOG.warn("Klass Api is unavailable")
-                return null
-            } else {
-                LOG.info("Refreshing Klass Api cache")
-                return this.klassApiResponse
-            }
+            return this.klassApiResponse!!
         }
         LOG.info("Fetching from cache")
         return this.klassApiResponse!!

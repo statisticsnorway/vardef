@@ -45,7 +45,6 @@ dependencies {
     implementation("io.viascom.nanoid:nanoid:1.0.1")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut.cache:micronaut-cache-caffeine")
-    implementation("io.micronaut:micronaut-retry")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")

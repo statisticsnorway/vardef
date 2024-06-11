@@ -1,8 +1,10 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
+import com.sun.net.httpserver.HttpServer
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
 import io.micronaut.retry.annotation.Retryable
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
@@ -15,7 +17,6 @@ import java.util.*
 open class KlassApiService(private val klassApiClient: KlassApiClient) {
     var klassApiResponse: KlassApiResponse? = null
 
-    @Retryable(delay = "2s", attempts = "3")
     @Cacheable("classifications")
     open fun klassApiJob(): HttpResponse<KlassApiResponse> {
         return try {
@@ -32,10 +33,16 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
         }
     }
 
-    fun getClassifications(): KlassApiResponse {
+    @Retryable(delay = "2s", attempts = "3")
+    open fun getClassifications(): KlassApiResponse {
+        var attempts = 0
         if (this.klassApiResponse == null) {
             LOG.info("Request Klass Api at {}", SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()))
             klassApiJob()
+            if (klassApiJob().status == HttpStatus.INTERNAL_SERVER_ERROR || this.klassApiJob().status == HttpStatus.SERVICE_UNAVAILABLE) {
+                attempts += 1
+                klassApiJob()
+            }
             return this.klassApiResponse!!
         }
         LOG.info("Fetching from cache at {}", SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()))

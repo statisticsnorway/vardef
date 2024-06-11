@@ -54,13 +54,14 @@ class KlassApiJobTest {
     }
 
     @Test
-    fun `retry klass api request on exception`() {
+    fun `retry klass api request on exception max 3 times`() {
         every {
             klassApiMockService.klassApiJob()
         } throws HttpServerException("Server error")
         assertDoesNotThrow {
             RuntimeException()
-            klassApiService.klassApiJob()
+            klassApiService.getClassifications()
         }
+        verify(atMost = 3) { klassApiService.klassApiJob()}
     }
 }

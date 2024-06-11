@@ -62,6 +62,6 @@ class KlassApiJobTest {
             RuntimeException()
             klassApiService.getClassifications()
         }
-        verify(atMost = 3) { klassApiService.klassApiJob()}
+        verify(atMost = 3) { klassApiService.klassApiJob() }
     }
 }

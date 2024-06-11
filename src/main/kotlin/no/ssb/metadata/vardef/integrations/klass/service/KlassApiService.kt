@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
-import com.sun.net.httpserver.HttpServer
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.http.HttpResponse

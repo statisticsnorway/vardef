@@ -26,7 +26,7 @@ jobs:
           cache-disabled: true
 
       - name: Build and test project
-        run: ./gradlew check
+        run: ./gradlew clean check
 
       - name: SonarCloud Scan
         env:

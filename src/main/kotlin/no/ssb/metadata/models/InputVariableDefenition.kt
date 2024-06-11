@@ -1,9 +1,15 @@
 package no.ssb.metadata.models
 
+import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
+import io.viascom.nanoid.NanoId
+import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.constants.DEFINITION_FIELD_DESCRIPTION
+import no.ssb.metadata.constants.NAME_FIELD_DESCRIPTION
+import no.ssb.metadata.constants.SHORT_NAME_FIELD_DESCRIPTION
 
 @MappedEntity
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -43,8 +49,15 @@ import io.swagger.v3.oas.annotations.media.Schema
     """,
 )
 data class InputVariableDefinition(
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Nullable
+    val id: String?,
+    @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
+    @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
+    @Pattern(regexp = "^[a-z0-9_]{3,}$")
     val shortName: String,
+    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
     val classificationReference: String,
     val unitTypes: List<String>,
@@ -61,7 +74,7 @@ data class InputVariableDefinition(
 ) {
     fun toSavedVariableDefinition(): SavedVariableDefinition =
         SavedVariableDefinition(
-            mongoId = null,
+            definitionId = NanoId.generate(8),
             name = name,
             shortName = shortName,
             definition = definition,
@@ -82,6 +95,5 @@ data class InputVariableDefinition(
             createdBy = null,
             lastUpdatedAt = "",
             lastUpdatedBy = null,
-            id = null,
         )
     }

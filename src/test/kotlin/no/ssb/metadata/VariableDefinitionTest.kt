@@ -1,7 +1,6 @@
 package no.ssb.metadata
 
 import SAVED_VARIABLE_DEFINITION
-import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.SavedVariableDefinition
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -53,23 +52,12 @@ class VariableDefinitionTest {
 
     @Test
     fun `variable definition id is created`() {
-        assertThat(variableDefinition.id).isNotNull()
-    }
-
-    @Test
-    fun `variable definition id persists through updates`() {
-        val initialId = variableDefinition.id
-        val initialShortName = variableDefinition.shortName
-        variableDefinition.shortName = "test1"
-        assertThat(initialShortName).isNotSameAs(variableDefinition.shortName)
-        assertThat(initialId).isEqualTo(variableDefinition.id)
+        assertThat(variableDefinition.definitionId).isNotNull()
     }
 
     @Test
     fun `variable definition id is expected length`() {
-        val nanoId = variableDefinition.id
-        if (nanoId != null) {
-            assertThat(nanoId.length).isEqualTo(nanoIdSize)
-        }
+        val nanoId = variableDefinition.definitionId
+        assertThat(nanoId?.length).isEqualTo(nanoIdSize)
     }
 }

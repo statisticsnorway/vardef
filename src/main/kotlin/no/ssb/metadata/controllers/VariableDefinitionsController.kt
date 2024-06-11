@@ -4,6 +4,7 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -12,32 +13,44 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.models.InputVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.SavedVariableDefinition
 import no.ssb.metadata.models.RenderedVariableDefinition
 import no.ssb.metadata.services.VariableDefinitionService
 
 @Validated
-@Controller("/variables")
+@Controller("/variable-definitions")
 @ExecuteOn(TaskExecutors.BLOCKING)
-class VariablesController {
+class VariableDefinitionsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
 
+    /**
+     * List all variable definitions.
+     *
+     * These are rendered in the given language, with the default being Norwegian Bokmål.
+     */
     @Get()
     fun listVariableDefinitions(
         @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
     ): HttpResponse<List<RenderedVariableDefinition>> {
         return HttpResponse
-            .ok(varDefService.findByLanguage(language))
+            .ok(varDefService.listAllAndRenderForLanguage(language))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
     }
 
+    /**
+     * Create a variable definition.
+     *
+     * New variable definitions must have status DRAFT and include all required fields.
+     */
     @Post()
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinition(
         @Body @Valid varDef: InputVariableDefinition,
-    ): Input
-    VariableDefinition = varDefService.save(varDef)
+
+        ): InputVariableDefinition {
+        if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
+        return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
+    }
 }

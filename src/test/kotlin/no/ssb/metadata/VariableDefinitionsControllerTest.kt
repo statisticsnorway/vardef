@@ -9,10 +9,12 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.services.VariableDefinitionService
 import no.ssb.metadata.utils.removeJsonField
+import org.bson.types.ObjectId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
@@ -26,19 +28,23 @@ import org.json.JSONObject
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class VariablesControllerTest {
+class VariableDefinitionsControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
     private val mapper = jacksonObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 
+    @BeforeEach
+    fun setUp() {
+        variableDefinitionService.clear()
+    }
 
     @Test
     fun `access empty database`(spec: RequestSpecification) {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/variables")
+            .get("/variable-definitions")
             .then()
             .statusCode(200).body("", empty<List<Any>>())
     }
@@ -48,22 +54,70 @@ class VariablesControllerTest {
 
         @BeforeEach
         fun setUp() {
-            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION)
-            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY)
+            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
+            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
         }
 
+
         @Test
-        fun `post request new variable definition`(spec: RequestSpecification) {
+        fun `create variable definition`(spec: RequestSpecification) {
+            val jsonString =
+                """
+                {
+                    "name": {
+                        "en": "Bank connections",
+                        "nb": "Bankforbindelser",
+                        "nn": "Bankavtale"
+                    },
+                    "short_name": "bank",
+                    "definition": {
+                        "en": "definition of money",
+                        "nb": "definisjon av penger",
+                        "nn": "pengers verdi"
+                    }
+                }
+                """.trimIndent()
             spec
                 .given()
                 .contentType(ContentType.JSON)
                 .body(mapper.writeValueAsString(INPUT_VARIABLE_DEFINITION))
                 .`when`()
-                .post("/variables")
-                .then()
+                .post("/variable-definitions")
+                .then().log().everything()
                 .statusCode(201)
                 .body("short_name", equalTo("landbak"))
                 .body("name.nb", equalTo("Landbakgrunn"))
+                .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
+        }
+
+        @Test
+        fun `create variable definition with id`(spec: RequestSpecification) {
+            val jsonString =
+                """
+                {
+                    "id": "my-special-id",
+                    "name": {
+                        "en": "Bank connections",
+                        "nb": "Bankforbindelser",
+                        "nn": "Bankavtale"
+                    },
+                    "short_name": "bank",
+                    "definition": {
+                        "en": "definition of money",
+                        "nb": "definisjon av penger",
+                        "nn": "pengers verdi"
+                    }
+                }
+                """.trimIndent()
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then().log().everything()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", containsString("ID may not be specified on creation."))
         }
 
         @Test
@@ -71,7 +125,7 @@ class VariablesControllerTest {
             spec
                 .`when`()
                 .contentType(ContentType.JSON)
-                .get("/variables")
+                .get("/variable-definitions")
                 .then()
                 .statusCode(200)
                 .body("[0].definition", equalTo("For personer født"))
@@ -89,7 +143,7 @@ class VariablesControllerTest {
                 .`when`()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", language.toString())
-                .get("/variables")
+                .get("/variable-definitions")
                 .then()
                 .statusCode(200)
                 .body("[1].id", notNullValue())
@@ -103,7 +157,7 @@ class VariablesControllerTest {
                 .`when`()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "en")
-                .get("/variables")
+                .get("/variable-definitions")
                 .then()
                 .assertThat().statusCode(200).body("[2]", hasKey("name")).body("[2].name", equalTo(null))
         }
@@ -121,7 +175,7 @@ class VariablesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
                 .`when`()
-                .post("/variables")
+                .post("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body("_embedded.errors[0].message", containsString("Unknown property [se]"))
@@ -129,13 +183,12 @@ class VariablesControllerTest {
 
         @Test
         fun `post request missing compulsory field`(spec: RequestSpecification) {
-
             spec
                 .given()
                 .contentType(ContentType.JSON)
                 .body(removeJsonField(mapper.writeValueAsString(INPUT_VARIABLE_DEFINITION), "name"))
                 .`when`()
-                .post("/variables")
+                .post("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
@@ -148,7 +201,7 @@ class VariablesControllerTest {
                 .contentType(ContentType.JSON)
                 .body(removeJsonField(mapper.writeValueAsString(INPUT_VARIABLE_DEFINITION), "short_name"))
                 .`when`()
-                .post("/variables")
+                .post("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
@@ -160,7 +213,7 @@ class VariablesControllerTest {
                 .given()
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "se")
-                .get("/variables")
+                .get("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body(

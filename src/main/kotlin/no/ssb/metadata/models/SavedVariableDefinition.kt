@@ -7,13 +7,27 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
 import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
+import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.constants.DEFINITION_FIELD_DESCRIPTION
+import no.ssb.metadata.constants.NAME_FIELD_DESCRIPTION
+import no.ssb.metadata.constants.SHORT_NAME_FIELD_DESCRIPTION
 import org.bson.types.ObjectId
+
+
+
+
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
-    @field:Id @GeneratedValue @JsonIgnore val mongoId: ObjectId?,
+    var definitionId: String,
+    @field:Id @GeneratedValue
+    var id: ObjectId? = null,
+    @Schema(description = NAME_FIELD_DESCRIPTION)
     var name: LanguageStringType,
+    @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
+    @Pattern(regexp = "^[a-z0-9_]{3,}$")
     var shortName: String,
+    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     var definition: LanguageStringType,
     var classificationUri: String,
     var unitTypes: List<KlassReference>,
@@ -32,12 +46,11 @@ data class SavedVariableDefinition(
     var createdBy: Person?,
     var lastUpdatedAt: String,
     var lastUpdatedBy: Person?,
-    @JsonIgnore val id: String? = NanoId.generate(8),
 
     ) {
     fun toRenderedVariableDefinition(language: SupportedLanguages): RenderedVariableDefinition =
         RenderedVariableDefinition(
-            id = id,
+            id = definitionId,
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),
@@ -62,6 +75,7 @@ data class SavedVariableDefinition(
 
     fun toInputVariableDefinition(): InputVariableDefinition =
         InputVariableDefinition(
+            id = definitionId,
             name = name,
             shortName = shortName,
             definition = definition,

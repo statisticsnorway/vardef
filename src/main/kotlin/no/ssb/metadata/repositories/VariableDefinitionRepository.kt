@@ -6,4 +6,6 @@ import no.ssb.metadata.models.SavedVariableDefinition
 import org.bson.types.ObjectId
 
 @MongoRepository(databaseName = "vardef")
-interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition, ObjectId>
+interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition, ObjectId> {
+    fun findByDefinitionId(definitionId: String): SavedVariableDefinition
+}

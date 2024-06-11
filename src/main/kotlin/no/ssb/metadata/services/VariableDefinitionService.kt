@@ -1,7 +1,6 @@
 package no.ssb.metadata.services
 
 import jakarta.inject.Singleton
-import no.ssb.metadata.models.InputVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.SavedVariableDefinition
 import no.ssb.metadata.models.RenderedVariableDefinition
@@ -9,17 +8,22 @@ import no.ssb.metadata.repositories.VariableDefinitionRepository
 
 @Singleton
 class VariableDefinitionService(private val variableDefinitionRepository: VariableDefinitionRepository) {
-    fun findAll(): List<SavedVariableDefinition> =
+    fun clear() = variableDefinitionRepository.deleteAll()
+
+    fun listAll(): List<SavedVariableDefinition> =
         variableDefinitionRepository
             .findAll()
             .toList()
 
-    fun findByLanguage(language: SupportedLanguages): List<RenderedVariableDefinition> {
-        return findAll().map { dao -> dao.toRenderedVariableDefinition(language) }
+
+    fun listAllAndRenderForLanguage(language: SupportedLanguages): List<RenderedVariableDefinition> {
+        return listAll().map { savedVariableDefinition -> savedVariableDefinition.toRenderedVariableDefinition(language) }
     }
 
-    fun save(varDef: InputVariableDefinition): InputVariableDefinition {
-        //requireNotNull(varDef.id) { "Something went wrong while saving variable, 'id' is missing" }
-        return variableDefinitionRepository.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
-    }
+    fun getOneByIdAndRenderForLanguage(
+        language: SupportedLanguages,
+        id: String,
+    ): RenderedVariableDefinition = variableDefinitionRepository.findByDefinitionId(id).toRenderedVariableDefinition(language)
+
+    fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 }

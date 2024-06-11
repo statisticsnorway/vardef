@@ -11,6 +11,7 @@ import org.bson.types.ObjectId
 import org.json.JSONObject
 
 val INPUT_VARIABLE_DEFINITION = InputVariableDefinition(
+    id = null,
     name = LanguageStringType(nb = "Landbakgrunn", nn = "Landbakgrunn", en = "Country Background"),
     shortName = "landbak",
     definition =  LanguageStringType(nb = "For personer født", nn = null, en = "Country background is"),
@@ -34,7 +35,7 @@ val INPUT_VARIABLE_DEFINITION_COPY = INPUT_VARIABLE_DEFINITION.copy(
 )
 
 val SAVED_VARIABLE_DEFINITION = SavedVariableDefinition(
-    mongoId = null,
+    definitionId = "",
     name = LanguageStringType(nb = "Landbakgrunn", nn = "Landbakgrunn", en = "Country Background"),
     shortName = "landbak",
     definition = LanguageStringType(nb = "For personer født", nn = "For personer født", en = "Country background is"),

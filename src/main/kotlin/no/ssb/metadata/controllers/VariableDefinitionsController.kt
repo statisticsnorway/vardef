@@ -12,8 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.models.InputVariableDefinition
-import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.RenderedVariableDefinition
+import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.services.VariableDefinitionService
 
 @Validated
@@ -48,8 +48,7 @@ class VariableDefinitionsController {
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinition(
         @Body @Valid varDef: InputVariableDefinition,
-
-        ): InputVariableDefinition {
+    ): InputVariableDefinition {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
         return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
     }

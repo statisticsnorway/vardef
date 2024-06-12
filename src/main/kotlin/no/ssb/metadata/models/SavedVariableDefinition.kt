@@ -1,21 +1,15 @@
 package no.ssb.metadata.models
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
 import io.swagger.v3.oas.annotations.media.Schema
-import io.viascom.nanoid.NanoId
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.DEFINITION_FIELD_DESCRIPTION
 import no.ssb.metadata.constants.NAME_FIELD_DESCRIPTION
 import no.ssb.metadata.constants.SHORT_NAME_FIELD_DESCRIPTION
 import org.bson.types.ObjectId
-
-
-
-
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -46,8 +40,7 @@ data class SavedVariableDefinition(
     var createdBy: Person?,
     var lastUpdatedAt: String,
     var lastUpdatedBy: Person?,
-
-    ) {
+) {
     fun toRenderedVariableDefinition(language: SupportedLanguages): RenderedVariableDefinition =
         RenderedVariableDefinition(
             id = definitionId,
@@ -70,7 +63,7 @@ data class SavedVariableDefinition(
             createdAt = createdAt,
             createdBy = createdBy,
             lastUpdatedAt = lastUpdatedAt,
-            lastUpdatedBy = lastUpdatedBy
+            lastUpdatedBy = lastUpdatedBy,
         )
 
     fun toInputVariableDefinition(): InputVariableDefinition =
@@ -91,7 +84,5 @@ data class SavedVariableDefinition(
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris,
             contact = contact,
-
         )
-
 }

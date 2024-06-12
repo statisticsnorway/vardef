@@ -7,9 +7,7 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import jakarta.validation.constraints.Pattern
-import no.ssb.metadata.constants.DEFINITION_FIELD_DESCRIPTION
-import no.ssb.metadata.constants.NAME_FIELD_DESCRIPTION
-import no.ssb.metadata.constants.SHORT_NAME_FIELD_DESCRIPTION
+import no.ssb.metadata.constants.*
 
 @MappedEntity
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -59,18 +57,24 @@ data class InputVariableDefinition(
     val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
+    @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
+    @Pattern(regexp = "^\\s*[0-9]+\\s*\$")
     val classificationReference: String,
+    @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     val unitTypes: List<String>,
     val subjectFields: List<String>,
     val containsUnitIdentifyingInformation: Boolean,
     val containsSensitivePersonalInformation: Boolean,
     val variableStatus: String,
     val measurementType: String,
+    @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
     val validFrom: String,
+    @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
     val validUntil: String,
+    @Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].\\S*$")
     val externalReferenceUri: String,
     val relatedVariableDefinitionUris: List<String>,
-    val contact : Contact,
+    val contact: Contact,
 ) {
     fun toSavedVariableDefinition(): SavedVariableDefinition =
         SavedVariableDefinition(
@@ -96,4 +100,4 @@ data class InputVariableDefinition(
             lastUpdatedAt = "",
             lastUpdatedBy = null,
         )
-    }
+}

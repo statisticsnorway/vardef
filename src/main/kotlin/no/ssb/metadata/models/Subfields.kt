@@ -1,6 +1,5 @@
 package no.ssb.metadata.models
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.validation.constraints.Email
 
@@ -20,7 +19,7 @@ data class LanguageStringType(
 }
 
 @Serdeable()
-data class KlassReference (
+data class KlassReference(
     val referenceUri: String,
     val code: String,
     val title: String,
@@ -51,4 +50,3 @@ data class RenderedContact(
     @Email
     val email: String,
 )
-

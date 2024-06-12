@@ -4,7 +4,8 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 
-@Schema(example = """
+@Schema(
+    example = """
         {
             "name": {   "en": "English",
                     "nb": "Norwegian Bokmål",
@@ -86,5 +87,5 @@ data class RenderedVariableDefinition(
     val createdAt: String,
     val createdBy: Person?,
     val lastUpdatedAt: String?,
-    val lastUpdatedBy: Person?
+    val lastUpdatedBy: Person?,
 )

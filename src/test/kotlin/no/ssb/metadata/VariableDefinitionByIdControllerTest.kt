@@ -6,10 +6,8 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
-import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.services.VariableDefinitionService
-import org.bson.types.ObjectId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +23,6 @@ class VariableDefinitionByIdControllerTest {
 
     @Nested
     inner class MongoDBDataSetupAndTest {
-
         @BeforeEach
         fun setUp() {
             variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)

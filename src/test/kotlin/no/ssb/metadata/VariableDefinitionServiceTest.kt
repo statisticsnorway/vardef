@@ -1,20 +1,13 @@
 package no.ssb.metadata
 
-import INPUT_VARIABLE_DEFINITION
 import RENDERD_VARIABLE_DEFINITION
 import SAVED_VARIABLE_DEFINITION
-import SD
-import VD
 import com.mongodb.assertions.Assertions.assertTrue
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
-import io.viascom.nanoid.NanoId
-import no.ssb.metadata.models.LanguageStringType
-import no.ssb.metadata.models.RenderedVariableDefinition
-import no.ssb.metadata.models.SavedVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.repositories.VariableDefinitionRepository
 import no.ssb.metadata.services.VariableDefinitionService
@@ -53,12 +46,12 @@ class VariableDefinitionServiceTest {
 
     @Test
     fun `save variable definition`() {
-
         val variableDefinition = SAVED_VARIABLE_DEFINITION
-        val savedVariableDefinition = SAVED_VARIABLE_DEFINITION.copy(
-            definitionId = "8Ah4fbvb",
-            id = ObjectId("00000020f51bb4362eee2a4d"),
-        )
+        val savedVariableDefinition =
+            SAVED_VARIABLE_DEFINITION.copy(
+                definitionId = "8Ah4fbvb",
+                id = ObjectId("00000020f51bb4362eee2a4d"),
+            )
 
         every {
             variableDefinitionService.save(variableDefinition)
@@ -72,12 +65,11 @@ class VariableDefinitionServiceTest {
 
     @Test
     fun `find variables in selected language`() {
-
         val variableDefinition = SAVED_VARIABLE_DEFINITION
 
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
 
-        val renderedVariableDefinition = RENDERD_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId,)
+        val renderedVariableDefinition = RENDERD_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
 
         val result = variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB)
         assert(result.isNotEmpty())

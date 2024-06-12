@@ -1,8 +1,8 @@
 package no.ssb.metadata
 
 import SAVED_VARIABLE_DEFINITION
-import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.models.SavedVariableDefinition
+import no.ssb.metadata.models.SupportedLanguages
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test

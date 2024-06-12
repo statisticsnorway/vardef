@@ -58,5 +58,8 @@ micronaut:
         url: https://data.ssb.no/api/klass/v1/
 
 klass:
-  unit-types: 702
-  subject-fields: 618
+  cached-classifications:
+    - id: 702
+      name: Kodeliste for enhetstyper
+    - id: 618
+      name: Kodeliste for statistikkområder i Statistikkbanken

@@ -19,7 +19,6 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
             result
         } catch (e: Exception) {
             LOG.warn("Error while fetching classifications from Klass Api", e)
-            // HttpResponse.serverError()
             return null
         }
     }

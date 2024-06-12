@@ -4,9 +4,6 @@ object KlassCodeUtil {
     private val klassCodes = intArrayOf(131, 17, 68)
 
     fun isValid(value: String?): Boolean {
-        if (value == null) {
-            return false
-        }
-        return value.toIntOrNull()!! in klassCodes
+        return value!!.toIntOrNull()!! in klassCodes
     }
 }

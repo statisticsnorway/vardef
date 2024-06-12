@@ -1,18 +1,19 @@
 package no.ssb.metadata
 
+import INPUT_VARIABLE_DEFINITION
+import INPUT_VARIABLE_DEFINITION_COPY
+import INPUT_VARIABLE_DEFINITION_NO_NAME
+import JSON_TEST_INPUT
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
-import no.ssb.metadata.models.LanguageStringType
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.VariableDefinitionDAO
 import no.ssb.metadata.services.VariableDefinitionService
-import org.bson.types.ObjectId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
+import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -43,97 +44,38 @@ class VariableDefinitionsControllerTest {
 
     @Nested
     inner class MongoDBDataSetupAndTest {
-        private lateinit var variableDefinition: VariableDefinitionDAO
-        private lateinit var variableDefinition1: VariableDefinitionDAO
-        private lateinit var variableDefinition2: VariableDefinitionDAO
-        private lateinit var variables: List<VariableDefinitionDAO>
-
         @BeforeEach
         fun setUp() {
-            variableDefinition =
-                VariableDefinitionDAO(
-                    id = ObjectId(),
-                    definitionId = NanoId.generate(8),
-                    name = LanguageStringType(nb = "Transaksjon", nn = null, en = "Transition"),
-                    shortName = "test1",
-                    definition = LanguageStringType(nb = "definisjon", nn = null, en = "definition"),
-                )
-            variableDefinition1 =
-                VariableDefinitionDAO(
-                    id = ObjectId(),
-                    definitionId = NanoId.generate(8),
-                    name = LanguageStringType(nb = "Bankdør", nn = "Bankdørar", en = "Bank door"),
-                    shortName = "bankInngang",
-                    definition = LanguageStringType(nb = "Komme inn i banken", nn = "Komme inn i banken", en = "How to get inside a bank"),
-                )
-            variableDefinition2 =
-                VariableDefinitionDAO(
-                    id = ObjectId(),
-                    definitionId = NanoId.generate(8),
-                    name = LanguageStringType(nb = "bilturer", nn = null, en = null),
-                    shortName = "bil",
-                    definition = LanguageStringType(nb = "Bil som kjøres på turer", nn = null, en = null),
-                )
-            variables = listOf(variableDefinition, variableDefinition1, variableDefinition2)
-            for (v in variables) {
-                variableDefinitionService.save(v)
-            }
+            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
+            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
+            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
         }
 
         @Test
         fun `create variable definition`(spec: RequestSpecification) {
-            val jsonString =
-                """
-                {
-                    "name": {
-                        "en": "Bank connections",
-                        "nb": "Bankforbindelser",
-                        "nn": "Bankavtale"
-                    },
-                    "short_name": "bank",
-                    "definition": {
-                        "en": "definition of money",
-                        "nb": "definisjon av penger",
-                        "nn": "pengers verdi"
-                    }
-                }
-                """.trimIndent()
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(jsonString)
+                .body(JSON_TEST_INPUT)
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()
                 .statusCode(201)
+                .body("short_name", equalTo("landbak"))
+                .body("name.nb", equalTo("Landbakgrunn"))
                 .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
-                .body("short_name", equalTo("bank"))
-                .body("name.nb", equalTo("Bankforbindelser"))
         }
 
         @Test
         fun `create variable definition with id`(spec: RequestSpecification) {
-            val jsonString =
-                """
-                {
-                    "id": "my-special-id",
-                    "name": {
-                        "en": "Bank connections",
-                        "nb": "Bankforbindelser",
-                        "nn": "Bankavtale"
-                    },
-                    "short_name": "bank",
-                    "definition": {
-                        "en": "definition of money",
-                        "nb": "definisjon av penger",
-                        "nn": "pengers verdi"
-                    }
-                }
-                """.trimIndent()
+            val updatedJsonString =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("id", "my-special-id")
+                }.toString()
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(jsonString)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()
@@ -149,7 +91,7 @@ class VariableDefinitionsControllerTest {
                 .get("/variable-definitions")
                 .then()
                 .statusCode(200)
-                .body("[0].definition", equalTo("definisjon"))
+                .body("[0].definition", equalTo("For personer født"))
                 .body("[0].id", notNullValue())
                 .header("Content-Language", SupportedLanguages.NB.toString())
         }
@@ -168,7 +110,7 @@ class VariableDefinitionsControllerTest {
                 .then()
                 .statusCode(200)
                 .body("[1].id", notNullValue())
-                .body("[1].name", equalTo(variableDefinition1.name.getValidLanguage(language)))
+                .body("[1].name", equalTo(INPUT_VARIABLE_DEFINITION_COPY.name.getValidLanguage(language)))
                 .header("Content-Language", language.toString())
         }
 
@@ -179,32 +121,23 @@ class VariableDefinitionsControllerTest {
                 .contentType(ContentType.JSON)
                 .header("Accept-Language", "en")
                 .get("/variable-definitions")
-                .then()
+                .then().log().everything()
                 .assertThat().statusCode(200).body("[2]", hasKey("name")).body("[2].name", equalTo(null))
         }
 
         @Test
         fun `post request incorrect language code`(spec: RequestSpecification) {
-            val jsonString =
-                """
-                {
-                    "name": {
-                        "en": "Bank connections",
-                        "nb": "Bankforbindelser",
-                        "se": "Bankavtale"
-                    },
-                    "short_name": "bank",
-                    "definition": {
-                        "en": "definition of money",
-                        "nb": "definisjon av penger",
-                        "nn": "pengers verdi"
+            val updatedJsonString =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    getJSONObject("name").apply {
+                        remove("en")
+                        put("se", "Landbakgrunn")
                     }
-                }
-                """.trimIndent()
+                }.toString()
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(jsonString)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -214,21 +147,14 @@ class VariableDefinitionsControllerTest {
 
         @Test
         fun `post request missing compulsory field`(spec: RequestSpecification) {
-            val jsonString =
-                """
-                {
-                    "short_name": "bank",
-                    "definition": {
-                        "en": "definition of money",
-                        "nb": "definisjon av penger",
-                        "nn": "pengers verdi"
-                    }
-                }
-                """.trimIndent()
+            val updatedJsonString =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("name")
+                }.toString()
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(jsonString)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -238,25 +164,14 @@ class VariableDefinitionsControllerTest {
 
         @Test
         fun `post request missing compulsory short_name field`(spec: RequestSpecification) {
-            val jsonString =
-                """
-                {
-                    "name": {
-                        "en": "Bank connections",
-                        "nb": "Bankforbindelser",
-                        "nn": "Bankavtale"
-                    },
-                    "definition": {
-                        "en": "definition of money",
-                        "nb": "definisjon av penger",
-                        "nn": "pengers verdi"
-                    }
-                }
-                """.trimIndent()
+            val updatedJsonString =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("short_name")
+                }.toString()
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(jsonString)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -277,6 +192,40 @@ class VariableDefinitionsControllerTest {
                     "_embedded.errors[0].message",
                     startsWith("Failed to convert argument [language] for value [se]"),
                 )
+        }
+
+        @Test
+        fun `create variable definition with incorrect url`(spec: RequestSpecification) {
+            val updatedJsonString =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("external_reference_uri", "not url")
+                }.toString()
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then().log().everything()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", containsString("varDef.externalReferenceUri: must match "))
+        }
+
+        @Test
+        fun `create variable definition with incorrect date`(spec: RequestSpecification) {
+            val updatedJsonString =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("valid_from", "2024-20-11")
+                }.toString()
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString).log().body()
+                .`when`()
+                .post("/variable-definitions")
+                .then().log().everything()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", containsString("varDef.validFrom: must match "))
         }
     }
 }

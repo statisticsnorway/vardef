@@ -2,10 +2,10 @@ package no.ssb.metadata.repositories
 
 import io.micronaut.data.mongodb.annotation.MongoRepository
 import io.micronaut.data.repository.CrudRepository
-import no.ssb.metadata.models.VariableDefinitionDAO
+import no.ssb.metadata.models.SavedVariableDefinition
 import org.bson.types.ObjectId
 
 @MongoRepository(databaseName = "vardef")
-interface VariableDefinitionRepository : CrudRepository<VariableDefinitionDAO, ObjectId> {
-    fun findByDefinitionId(definitionId: String): VariableDefinitionDAO
+interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition, ObjectId> {
+    fun findByDefinitionId(definitionId: String): SavedVariableDefinition
 }

@@ -46,6 +46,7 @@ dependencies {
     testImplementation(libs.micronaut.test.rest.assured)
     testImplementation(libs.mockk)
     testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.json)
     aotPlugins(platform("io.micronaut.platform:micronaut-platform"))
 }
 

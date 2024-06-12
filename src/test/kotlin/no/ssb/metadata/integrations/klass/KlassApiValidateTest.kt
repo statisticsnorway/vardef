@@ -9,14 +9,12 @@ import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KlassApiValidateTest {
-
     @Inject
     lateinit var validator: Validator
 
     @Test
     fun `klass code validation`() {
-        val classItem = ClassificationItem(null,123,null,null,null)
+        val classItem = ClassificationItem(null, 123, null, null, null)
         assertThat(classItem).isNotNull
-
     }
 }

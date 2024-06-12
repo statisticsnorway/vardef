@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.serde.annotation.Serdeable
-import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 
 /**
  * Data classes for Klass Api response

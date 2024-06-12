@@ -10,11 +10,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-
 @MicronautTest(startApplication = false)
 class KlassApiValidatorTest(private val validator: Validator) {
-
-
     @ParameterizedTest
     @ValueSource(
         strings = [
@@ -35,7 +32,6 @@ class KlassApiValidatorTest(private val validator: Validator) {
         assertThat(isValid(code)).isTrue()
     }
 
-
     @Test
     fun `klass code validation`() {
         val testObject = TestObject("11")
@@ -46,9 +42,10 @@ class KlassApiValidatorTest(private val validator: Validator) {
     @Test
     fun `klass code validation2`() {
         assertThat(validator.validate(TestObject("131"))).isEmpty()
-
     }
 }
 
 @Introspected
-data class TestObject (@KlassCode var id: String? = null)
+data class TestObject(
+    @KlassCode var id: String? = null,
+)

@@ -4,11 +4,7 @@ import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Pattern
-import no.ssb.metadata.constants.DEFINITION_FIELD_DESCRIPTION
-import no.ssb.metadata.constants.NAME_FIELD_DESCRIPTION
-import no.ssb.metadata.constants.SHORT_NAME_FIELD_DESCRIPTION
 import org.bson.types.ObjectId
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
@@ -16,12 +12,9 @@ data class SavedVariableDefinition(
     var definitionId: String,
     @field:Id @GeneratedValue
     var id: ObjectId? = null,
-    @Schema(description = NAME_FIELD_DESCRIPTION)
     var name: LanguageStringType,
-    @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
     @Pattern(regexp = "^[a-z0-9_]{3,}$")
     var shortName: String,
-    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     var definition: LanguageStringType,
     var classificationUri: String,
     var unitTypes: List<KlassReference>,
@@ -72,12 +65,16 @@ data class SavedVariableDefinition(
             name = name,
             shortName = shortName,
             definition = definition,
+            //TODO
             classificationReference = "",
+            //TODO
             unitTypes = emptyList(),
+            //TODO
             subjectFields = emptyList(),
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
+            //TODO
             measurementType = "",
             validFrom = validFrom,
             validUntil = validUntil,

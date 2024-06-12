@@ -7,16 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(
     example = """
         {
-            "name": {   "en": "English",
-                    "nb": "Norwegian Bokmål",
-                    "nn": "Norwegian Nynorsk"
-                },
+            "name": "Landbakgrunn",
             "short_name": "string",
-            "definition": {
-                    "en": "English",
-                    "nb": "Norwegian Bokmål",
-                    "nn": "Norwegian Nynorsk"
-                }
+            "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
             "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
             "unit_types": [{
                     "reference_uri": "https://example.com/",
@@ -52,12 +45,12 @@ import io.swagger.v3.oas.annotations.media.Schema
                 "title": "",
                 "email": ""
             }
-            "created_at": "2024-06-05",
+            "created_at": "2024-06-12T10:39:41.038Z",
             "created_by": {
                 "code": "",
                 "name": ""
             },
-            "last_updated_at": "2024-06-05",
+            "last_updated_at": "2024-06-12T10:39:41.038Z",
             "last_updated_by": {
                 "title": "",
                 "email": ""
@@ -67,25 +60,25 @@ import io.swagger.v3.oas.annotations.media.Schema
 )
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class RenderedVariableDefinition(
-    val id: String?,
+    val id: String,
     val name: String?,
-    val shortName: String?,
+    val shortName: String,
     val definition: String?,
-    val classificationUri: String?,
+    val classificationUri: String,
     val unitTypes: List<KlassReference>,
     val subjectFields: List<KlassReference>,
     val containsUnitIdentifyingInformation: Boolean,
     val containsSensitivePersonalInformation: Boolean,
-    val variableStatus: String?,
+    val variableStatus: String,
     val measurementType: KlassReference,
-    val validFrom: String?,
-    val validUntil: String?,
-    val externalReferenceUri: String?,
+    val validFrom: String,
+    val validUntil: String,
+    val externalReferenceUri: String,
     val relatedVariableDefinitionUris: List<String>,
     val owner: Owner?,
     val contact: RenderedContact,
     val createdAt: String,
     val createdBy: Person?,
-    val lastUpdatedAt: String?,
+    val lastUpdatedAt: String,
     val lastUpdatedBy: Person?,
 )

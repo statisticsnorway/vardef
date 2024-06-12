@@ -15,16 +15,16 @@ import no.ssb.metadata.constants.*
     example = """
         {
             "name":
-                {   "en": "English",
-                    "nb": "Norwegian Bokmål",
-                    "nn": "Norwegian Nynorsk"
+                {   "en": "Country Background",
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn"
                 },
-            "short_name": "string",
+            "short_name": "landbak",
             "definition":
                 {
-                    "en": "English",
-                    "nb": "Norwegian Bokmål",
-                    "nn": "Norwegian Nynorsk"
+                    "en": "Country background is the person's own, the mother's or possibly the father's country of birth. Persons without an immigrant background always have Norway as country background. In cases where the parents have different countries of birth the mother's country of birth is chosen. If neither the person nor the parents are born abroad, country background is chosen from the first person born abroad in the order mother's mother, mother's father, father's mother, father's father.",
+                    "nb": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
+                    "nn": "For personar fødd i utlandet, er dette (med nokre få unntak) eige fødeland. For personar fødd i Noreg er det fødelandet til foreldra. I dei tilfella der foreldra har ulikt fødeland, er det fødelandet til mora som blir valt. Viss ikkje personen sjølv eller nokon av foreldra er utenlandsfødt, blir henta landsbakgrunn frå dei første utenlandsfødte ein treffar på i rekkjefølgja mormor, morfar, farmor eller farfar."
                 }
             "classification_reference": "91",
             "unit_types": ["01", "02"],
@@ -58,7 +58,7 @@ data class InputVariableDefinition(
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
-    @Pattern(regexp = "^\\s*[0-9]+\\s*\$")
+    @Pattern(regexp = "^[0-9]+$")
     val classificationReference: String,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     val unitTypes: List<String>,
@@ -82,8 +82,11 @@ data class InputVariableDefinition(
             name = name,
             shortName = shortName,
             definition = definition,
+            // TODO
             classificationUri = "",
+            // TODO
             unitTypes = emptyList(),
+            // TODO
             subjectFields = emptyList(),
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
@@ -93,11 +96,16 @@ data class InputVariableDefinition(
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris,
+            // TODO
             owner = null,
             contact = contact,
+            // TODO
             createdAt = "",
+            // TODO
             createdBy = null,
+            // TODO
             lastUpdatedAt = "",
+            // TODO
             lastUpdatedBy = null,
         )
 }

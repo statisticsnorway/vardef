@@ -29,4 +29,13 @@ class KlassApiCacheTest {
         assertThat(klassApiService.klassApiResponse).isEqualTo(klassApiService.getClassifications())
         assertThat(klassApiService.klassApiResponse?.embedded).isInstanceOf(Classifications::class.java)
     }
+
+    @Timeout(16000)
+    @Test
+    @Order(3)
+    fun `third run cache`() {
+        assertThat(klassApiService.klassApiResponse).isNotNull()
+        assertThat(klassApiService.klassApiResponse).isEqualTo(klassApiService.getClassifications())
+        assertThat(klassApiService.klassApiResponse?.embedded).isInstanceOf(Classifications::class.java)
+    }
 }

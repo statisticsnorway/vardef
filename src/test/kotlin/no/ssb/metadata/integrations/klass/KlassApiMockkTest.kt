@@ -1,6 +1,5 @@
 package no.ssb.metadata.integrations.klass
 
-import io.micronaut.http.HttpStatus
 import io.micronaut.http.server.exceptions.HttpServerException
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -39,7 +38,6 @@ class KlassApiMockkTest {
         every { klassApiMockkClient.fetchClassificationList() } returns (klassApiResponse)
         val jobResult = klassApiService.klassApiJob()
         assertThat(jobResult).isNotNull
-        assertThat(jobResult.status).isEqualTo(HttpStatus.OK)
         verify(exactly = 1) { klassApiMockkClient.fetchClassificationList() }
     }
 
@@ -49,7 +47,7 @@ class KlassApiMockkTest {
             klassApiMockkClient.fetchClassificationList()
         } throws IOException("Error while fetching classifications from Klass Api")
         val result = klassApiService.klassApiJob()
-        assertThat(result.status).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+        assertThat(result).isNull()
         verify(exactly = 1) { klassApiMockkClient.fetchClassificationList() }
     }
 
@@ -59,7 +57,7 @@ class KlassApiMockkTest {
             klassApiMockkClient.fetchClassificationList()
         } throws HttpServerException("Server error")
         val result = klassApiService.klassApiJob()
-        assertThat(result.status()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+        assertThat(result).isNull()
     }
 
     @Test

@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.sonarqube.gradle.SonarTask
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
@@ -110,13 +111,7 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
     jdkVersion = "21"
 }
 
-tasks.jacocoTestReport {
-    reports {
-        xml.required = true
-    }
-}
-
-tasks.named<Test>("test") {
+tasks.withType<Test> {
     useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed", "standardOut", "standardError")
@@ -124,7 +119,18 @@ tasks.named<Test>("test") {
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
 
-tasks.withType(ShadowJar::class.java) {
+tasks.withType<JacocoReport> {
+    dependsOn(tasks.withType<Test>())
+    reports {
+        xml.required = true
+    }
+}
+
+tasks.withType<SonarTask> {
+    dependsOn(tasks.withType<JacocoReport>())
+}
+
+tasks.withType<ShadowJar> {
     archiveBaseName.set("vardef")
     archiveVersion.set("")
 }

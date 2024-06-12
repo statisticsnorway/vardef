@@ -44,6 +44,11 @@ micronaut:
     serialization:
       inclusion: always
 
+  cache:
+    caches:
+      classifications:
+        maximumSize: 3600
+
   server:
     netty:
       access-logger:

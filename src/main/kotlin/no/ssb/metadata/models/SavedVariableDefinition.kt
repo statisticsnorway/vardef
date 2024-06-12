@@ -65,16 +65,16 @@ data class SavedVariableDefinition(
             name = name,
             shortName = shortName,
             definition = definition,
-            //TODO
+            // TODO
             classificationReference = "",
-            //TODO
+            // TODO
             unitTypes = emptyList(),
-            //TODO
+            // TODO
             subjectFields = emptyList(),
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
-            //TODO
+            // TODO
             measurementType = "",
             validFrom = validFrom,
             validUntil = validUntil,

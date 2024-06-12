@@ -15,7 +15,7 @@ import org.junit.jupiter.api.*
 import java.io.IOException
 
 @MockK
-class KlassApiJobTest {
+class KlassApiMockkTest {
     private lateinit var klassApiMockkClient: KlassApiClient
     private lateinit var klassApiService: KlassApiService
     private lateinit var klassApiMockService: KlassApiService

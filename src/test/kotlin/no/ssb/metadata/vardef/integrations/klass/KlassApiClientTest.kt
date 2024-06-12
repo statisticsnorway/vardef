@@ -1,17 +1,14 @@
-package no.ssb.metadata.integrations.klass
+package no.ssb.metadata.vardef.integrations.klass
 
 import io.micronaut.context.annotation.Value
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.*
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.fail
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
-import java.util.function.Supplier
 
 // No available service exception
 

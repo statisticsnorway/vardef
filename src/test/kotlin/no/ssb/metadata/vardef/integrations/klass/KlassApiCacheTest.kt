@@ -1,4 +1,5 @@
-package no.ssb.metadata.integrations.klass
+package no.ssb.metadata.vardef.integrations.klass
+
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.Classifications

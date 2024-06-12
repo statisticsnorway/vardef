@@ -1,4 +1,5 @@
 package no.ssb.metadata.vardef.integrations.klass.service
+
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.http.HttpResponse

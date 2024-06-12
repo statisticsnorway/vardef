@@ -107,5 +107,5 @@ data class ClassificationItem(
     @JsonProperty("presentationName") val presentationName: String,
     @JsonProperty("validFrom") val validFrom: LocalDate?,
     @JsonProperty("validTo") val validTo: LocalDate?,
-    @JsonProperty("notes") val notes:String,
+    @JsonProperty("notes") val notes: String,
 )

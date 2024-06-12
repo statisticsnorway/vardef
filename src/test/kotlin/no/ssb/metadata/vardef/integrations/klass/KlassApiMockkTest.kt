@@ -1,4 +1,4 @@
-package no.ssb.metadata.integrations.klass
+package no.ssb.metadata.vardef.integrations.klass
 
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.server.exceptions.HttpServerException
@@ -11,7 +11,9 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.io.IOException
 
 @MockK

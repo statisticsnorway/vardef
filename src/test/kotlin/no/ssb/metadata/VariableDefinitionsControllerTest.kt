@@ -208,7 +208,7 @@ class VariableDefinitionsControllerTest {
                 .post("/variable-definitions")
                 .then().log().everything()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("varDef.externalReferenceUri: must match "))
+                .body("_embedded.errors[0].message", containsString("Website URL must be valid"))
         }
 
         @Test
@@ -220,12 +220,34 @@ class VariableDefinitionsControllerTest {
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(updatedJsonString).log().body()
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body("_embedded.errors[0].message", containsString("varDef.validFrom: must match "))
+        }
+
+        @Test
+        fun `create variable definition with incorrect url list`(spec: RequestSpecification) {
+            val updatedJsonString =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("related_variable_definition_uris",
+                        """[
+                            not a url,
+                            "https://example.com/",
+                        ]""".trimIndent()
+                    )
+                }.toString()
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then().log().everything()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", containsString("varDef.externalReferenceUri: must match "))
         }
     }
 }

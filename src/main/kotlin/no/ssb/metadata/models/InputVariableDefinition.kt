@@ -7,6 +7,7 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.annotations.ValidUrl
 import no.ssb.metadata.constants.*
 
 @MappedEntity
@@ -71,9 +72,10 @@ data class InputVariableDefinition(
     val validFrom: String,
     @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
     val validUntil: String,
-    @Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].\\S*$")
+    //@Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].\\S*$")
+    @ValidUrl(message = "Website URL must be valid")
     val externalReferenceUri: String,
-    val relatedVariableDefinitionUris: List<String>,
+    val relatedVariableDefinitionUris: List<@ValidUrl String>,
     val contact: Contact,
 ) {
     fun toSavedVariableDefinition(): SavedVariableDefinition =

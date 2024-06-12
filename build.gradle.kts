@@ -32,7 +32,7 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-mongodb")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.security:micronaut-security-jwt")
-    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut:micronaut-management:4.5.3")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
     implementation("io.micronaut.serde:micronaut-serde-jackson")

@@ -56,9 +56,7 @@ dependencies {
 application {
     mainClass = "no.ssb.metadata.ApplicationKt"
 }
-java {
-    sourceCompatibility = JavaVersion.toVersion("21")
-}
+kotlin { jvmToolchain(21) }
 
 graalvmNative.toolchainDetection = false
 micronaut {

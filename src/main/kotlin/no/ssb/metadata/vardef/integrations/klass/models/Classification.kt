@@ -28,7 +28,7 @@ data class Classifications(
 @Serdeable
 data class ClassificationItem(
     @JsonProperty("name") val name: String?,
-    @KlassCode @JsonProperty("id") val id: Int?,
+    @JsonProperty("id") val id: Int?,
     @JsonProperty("classificationType") val classificationType: String?,
     @JsonProperty("lastModified") val lastModified: String?,
     @JsonProperty("_links") val links: ClassificationLinks?,

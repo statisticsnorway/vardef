@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.klass.validators
 
 import jakarta.validation.Constraint
+
 /**
  * The annotated element must be a valid Klass code
  */
@@ -18,5 +19,5 @@ import jakarta.validation.Constraint
 @MustBeDocumented
 @Constraint(validatedBy = [])
 annotation class KlassCode(
-    val message: String = "Invalid klass code ({value})"
+    val message: String = "Invalid klass code",
 )

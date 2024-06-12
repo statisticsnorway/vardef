@@ -33,14 +33,14 @@ class KlassApiValidatorTest(private val validator: Validator) {
     }
 
     @Test
-    fun `klass code validation`() {
+    fun `klass code validation illegal code`() {
         val testObject = TestObject("11")
         val violations = validator.validate(testObject)
         assertThat(violations).isNotEmpty()
     }
 
     @Test
-    fun `klass code validation2`() {
+    fun `klass code validation legal code`() {
         assertThat(validator.validate(TestObject("131"))).isEmpty()
     }
 }

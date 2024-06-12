@@ -58,6 +58,6 @@ class VariableDefinitionTest {
     @Test
     fun `variable definition id is expected length`() {
         val nanoId = variableDefinition.definitionId
-        assertThat(nanoId?.length).isEqualTo(nanoIdSize)
+        assertThat(nanoId.length).isEqualTo(nanoIdSize)
     }
 }

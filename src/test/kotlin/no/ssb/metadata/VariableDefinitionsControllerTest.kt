@@ -4,8 +4,6 @@ import INPUT_VARIABLE_DEFINITION
 import INPUT_VARIABLE_DEFINITION_COPY
 import INPUT_VARIABLE_DEFINITION_NO_NAME
 import JSON_TEST_INPUT
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
@@ -28,8 +26,6 @@ import org.junit.jupiter.params.provider.EnumSource
 class VariableDefinitionsControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
-
-    private val mapper = jacksonObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 
     @BeforeEach
     fun setUp() {
@@ -106,17 +102,16 @@ class VariableDefinitionsControllerTest {
             language: SupportedLanguages,
             spec: RequestSpecification,
         ) {
-            val res =
-                spec
-                    .`when`()
-                    .contentType(ContentType.JSON)
-                    .header("Accept-Language", language.toString())
-                    .get("/variable-definitions")
-                    .then()
-                    .statusCode(200)
-                    .body("[1].id", notNullValue())
-                    .body("[1].name", equalTo(INPUT_VARIABLE_DEFINITION_COPY.name.getValidLanguage(language)))
-                    .header("Content-Language", language.toString())
+            spec
+                .`when`()
+                .contentType(ContentType.JSON)
+                .header("Accept-Language", language.toString())
+                .get("/variable-definitions")
+                .then()
+                .statusCode(200)
+                .body("[1].id", notNullValue())
+                .body("[1].name", equalTo(INPUT_VARIABLE_DEFINITION_COPY.name.getValidLanguage(language)))
+                .header("Content-Language", language.toString())
         }
 
         @Test

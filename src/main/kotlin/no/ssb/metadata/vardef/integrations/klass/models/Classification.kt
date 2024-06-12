@@ -2,7 +2,9 @@ package no.ssb.metadata.vardef.integrations.klass.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.micronaut.core.annotation.Introspected
 import io.micronaut.serde.annotation.Serdeable
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 
 /**
  * Data classes for Klass Api response
@@ -21,11 +23,12 @@ data class Classifications(
     @JsonProperty("classifications") val classificationItems: List<ClassificationItem>,
 )
 
+@Introspected
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class ClassificationItem(
     @JsonProperty("name") val name: String?,
-    @JsonProperty("id") val id: Int?,
+    @KlassCode @JsonProperty("id") val id: Int?,
     @JsonProperty("classificationType") val classificationType: String?,
     @JsonProperty("lastModified") val lastModified: String?,
     @JsonProperty("_links") val links: ClassificationLinks?,

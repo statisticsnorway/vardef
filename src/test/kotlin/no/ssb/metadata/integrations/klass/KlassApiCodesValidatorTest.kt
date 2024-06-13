@@ -50,7 +50,7 @@ class KlassApiCodesValidatorTest(private val validator: Validator) {
     @Test
     fun `klass code validation illegal code`() {
         val result = validator.validate(TestCodesObject(listOf("999", "33")))
-        assertThat(result.map { res -> res.message }).isEqualTo(listOf("Invalid klass codes ([999,33])"))
+        assertThat(result.map { res -> res.message }).isEqualTo(listOf("Invalid klass codes ([999, 33])"))
         assertThat(result.map { res -> res.invalidValue }).isEqualTo(listOf(listOf("999", "33")))
     }
 }

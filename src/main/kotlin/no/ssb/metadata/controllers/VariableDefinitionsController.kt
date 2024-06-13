@@ -12,8 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.models.InputVariableDefinition
+import no.ssb.metadata.models.RenderedVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.VariableDefinitionDTO
 import no.ssb.metadata.services.VariableDefinitionService
 
 @Validated
@@ -31,7 +31,7 @@ class VariableDefinitionsController {
     @Get()
     fun listVariableDefinitions(
         @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
-    ): HttpResponse<List<VariableDefinitionDTO>> {
+    ): HttpResponse<List<RenderedVariableDefinition>> {
         return HttpResponse
             .ok(varDefService.listAllAndRenderForLanguage(language))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
@@ -50,6 +50,6 @@ class VariableDefinitionsController {
         @Body @Valid varDef: InputVariableDefinition,
     ): InputVariableDefinition {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
-        return varDefService.save(varDef.toDAO()).toInput()
+        return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
     }
 }

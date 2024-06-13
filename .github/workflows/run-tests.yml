@@ -1,10 +1,9 @@
 
-name: Build branch
+name: Run tests
 
 on:
   push:
     paths-ignore:
-      - .github/workflows/**
       - README.md
 
 jobs:
@@ -16,7 +15,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
+          fetch-depth: 0
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -28,13 +27,16 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build and test project
-        run: ./gradlew build
-      
+        run: >
+          ./gradlew
+          check
+          jacocoTestReport
+          --daemon --parallel --build-cache
+
       - name: SonarCloud Scan
-        env: 
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         # No need to run SonarCloud analysis if dependabot update or token not defined
         if: env.SONAR_TOKEN != '' && (github.actor != 'dependabot[bot]')
-        uses: SonarSource/sonarcloud-github-action@v2.1.1
-    
+        uses: SonarSource/sonarcloud-github-action@v2.2.0

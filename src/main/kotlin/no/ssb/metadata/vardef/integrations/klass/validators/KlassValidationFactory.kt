@@ -12,6 +12,4 @@ class KlassValidationFactory {
     fun klassIdValidator(): ConstraintValidator<KlassId, String> {
         return ConstraintValidator { value, _, _ -> isValid(value) }
     }
-
-
 }

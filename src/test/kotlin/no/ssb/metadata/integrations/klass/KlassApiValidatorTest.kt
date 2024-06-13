@@ -15,7 +15,7 @@ class KlassApiValidatorTest(private val validator: Validator) {
     @ParameterizedTest
     @ValueSource(
         strings = [
-            "13", "22", "7", "33", "8",
+            "19", "22", "7", "33", "8",
         ],
     )
     fun `invalid klass codes`(code: String) {
@@ -25,7 +25,7 @@ class KlassApiValidatorTest(private val validator: Validator) {
     @ParameterizedTest
     @ValueSource(
         strings = [
-            "131", "17", "68",
+            "1", "2", "13", "14",
         ],
     )
     fun `valid klass codes`(code: String) {
@@ -41,7 +41,7 @@ class KlassApiValidatorTest(private val validator: Validator) {
 
     @Test
     fun `klass code validation legal code`() {
-        assertThat(validator.validate(TestObject("131"))).isEmpty()
+        assertThat(validator.validate(TestObject("14"))).isEmpty()
     }
 }
 

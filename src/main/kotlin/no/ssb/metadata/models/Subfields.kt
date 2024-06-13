@@ -47,6 +47,5 @@ data class Owner(
 @Serdeable()
 data class RenderedContact(
     val title: String?,
-    @Email
     val email: String,
 )

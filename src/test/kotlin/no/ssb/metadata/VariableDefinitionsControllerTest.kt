@@ -225,19 +225,14 @@ class VariableDefinitionsControllerTest {
                 .post("/variable-definitions")
                 .then().log().everything()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("varDef.validFrom: must match "))
+                .body("_embedded.errors[0].message", containsString("Invalid date format"))
         }
 
         @Test
         fun `create variable definition with incorrect url list`(spec: RequestSpecification) {
             val updatedJsonString =
                 JSONObject(JSON_TEST_INPUT).apply {
-                    put("related_variable_definition_uris",
-                        """[
-                            not a url,
-                            "https://example.com/",
-                        ]""".trimIndent()
-                    )
+                    put("related_variable_definition_uris", listOf("not a url", "https://example.com/", ""))
                 }.toString()
             spec
                 .given()
@@ -247,7 +242,26 @@ class VariableDefinitionsControllerTest {
                 .post("/variable-definitions")
                 .then().log().everything()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("varDef.externalReferenceUri: must match "))
+                .body("_embedded.errors[0].message", containsString("Invalid URL format"))
+        }
+
+        @Test
+        fun `create contact with incorrect email`(spec: RequestSpecification) {
+            val updatedJsonString =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    getJSONObject("contact").apply {
+                        put("email", "not an email")
+                    }
+                }.toString()
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then().log().everything()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .body("_embedded.errors[0].message", containsString("varDef.contact.email: must be a well-formed email address"))
         }
     }
 }

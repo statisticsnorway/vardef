@@ -6,7 +6,9 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
+import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.annotations.ValidDate
 import no.ssb.metadata.annotations.ValidUrl
 import no.ssb.metadata.constants.*
 
@@ -60,23 +62,22 @@ data class InputVariableDefinition(
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Pattern(regexp = "^[0-9]+$")
-    val classificationReference: String,
+    val classificationReference: String, //TODO Validate against klass data
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<String>,
-    val subjectFields: List<String>,
+    val unitTypes: List<String>, //TODO Validate against klass data
+    val subjectFields: List<String>, //TODO Validate against klass data
     val containsUnitIdentifyingInformation: Boolean,
     val containsSensitivePersonalInformation: Boolean,
     val variableStatus: String,
     val measurementType: String,
-    @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
+    @ValidDate
     val validFrom: String,
-    @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
+    @ValidDate
     val validUntil: String,
-    //@Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].\\S*$")
     @ValidUrl(message = "Website URL must be valid")
     val externalReferenceUri: String,
     val relatedVariableDefinitionUris: List<@ValidUrl String>,
-    val contact: Contact,
+    @Valid val contact: Contact,
 ) {
     fun toSavedVariableDefinition(): SavedVariableDefinition =
         SavedVariableDefinition(

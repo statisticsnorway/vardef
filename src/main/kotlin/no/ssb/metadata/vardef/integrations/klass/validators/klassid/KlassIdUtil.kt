@@ -5,7 +5,7 @@ import no.ssb.metadata.vardef.integrations.klass.models.ClassificationLinks
 import no.ssb.metadata.vardef.integrations.klass.models.Link
 
 object KlassIdUtil {
-    fun isValid(value: String?): Boolean {
+    fun isValidId(value: String?): Boolean {
         return TestCacheObjectClassification.classificationItems.map { item -> item.id }.contains(value?.toInt())
     }
 }

@@ -1,0 +1,65 @@
+# Dependencies referenced in build.gradle.kts
+# See https://docs.gradle.org/current/userguide/platforms.html
+
+# Each block is sorted alphabetically.
+
+[versions]
+assertj = "3.25.3"
+jackson = "2.17.0"
+json = "20240303"
+junit = "5.10.2"
+kotlin = "1.9.23"
+ksp = "1.9.23-1.0.19"
+ktlint = "12.1.1"
+logback = "1.5.3"
+micronaut = "4.4.0"
+micronautData = "4.8.1"
+micronautKotlin = "4.3.0"
+micronautManagement = "4.5.3"
+micronautMicrometer = "5.7.0"
+micronautMongoDb = "5.3.0"
+micronautOpenapi = "6.11.0"
+micronautSerde = "2.10.1"
+micronautTest = "4.3.0"
+mockk = "1.13.10"
+nanoid = "1.0.1"
+shadow = "8.1.1"
+snakeyaml = "2.2"
+
+[libraries]
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj"}
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+json = { module = "org.json:json", version.ref = "json" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit"}
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+micronaut-data-document-processor = { module = "io.micronaut.data:micronaut-data-document-processor", version.ref = "micronautData" }
+micronaut-data-mongodb = { module = "io.micronaut.data:micronaut-data-mongodb", version.ref = "micronautData" }
+micronaut-http-client = { module = "io.micronaut:micronaut-http-client", version.ref = "micronaut" }
+micronaut-http-validation = { module = "io.micronaut:micronaut-http-validation", version.ref = "micronaut" }
+micronaut-kotlin-runtime = { module = "io.micronaut.kotlin:micronaut-kotlin-runtime", version.ref = "micronautKotlin" }
+micronaut-management = { module = "io.micronaut:micronaut-management", version.ref = "micronautManagement" }
+micronaut-micrometer-registry-prometheus = { module = "io.micronaut.micrometer:micronaut-micrometer-registry-prometheus", version.ref = "micronautMicrometer" }
+micronaut-mongo-sync = { module = "io.micronaut.mongodb:micronaut-mongo-sync", version.ref = "micronautMongoDb" }
+micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi", version.ref = "micronautOpenapi" }
+micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronautOpenapi" }
+micronaut-security-annotations = { module = "io.micronaut.security:micronaut-security-annotations", version.ref = "micronaut" }
+micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt", version.ref = "micronaut" }
+micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson", version.ref = "micronautSerde" }
+micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor", version.ref = "micronautSerde" }
+micronaut-test-rest-assured = { module = "io.micronaut.test:micronaut-test-rest-assured", version.ref = "micronautTest"}
+micronaut-validation-processor = { module = "io.micronaut.validation:micronaut-validation-processor", version.ref = "micronaut" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+nanoid = { module = "io.viascom.nanoid:nanoid", version.ref = "nanoid" }
+snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
+
+[plugins]
+allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+micronaut-aot = { id = "io.micronaut.aot", version.ref = "micronaut" }
+micronaut-application = { id = "io.micronaut.application", version.ref = "micronaut" }
+micronaut-test-resources = { id = "io.micronaut.test-resources", version.ref = "micronaut" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }

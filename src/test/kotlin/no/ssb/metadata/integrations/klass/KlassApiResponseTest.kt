@@ -32,7 +32,7 @@ class KlassApiResponseTest {
     @Test
     fun `klass api result serializes to dataclasses`() {
         val classificationList = result.embedded.classificationItems
-        assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
+        assertThat(classificationList[0]).isInstanceOf(Classification::class.java)
         assertThat(result.embedded).isInstanceOf(Classifications::class.java)
         assertThat(result.links).isInstanceOf(PaginationLinks::class.java)
         assertThat(result.links.next).isInstanceOf(Link::class.java)

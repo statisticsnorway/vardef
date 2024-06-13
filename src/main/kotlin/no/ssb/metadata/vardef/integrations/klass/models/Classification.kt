@@ -19,13 +19,13 @@ data class KlassApiResponse(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class Classifications(
-    @JsonProperty("classifications") val classificationItems: List<ClassificationItem>,
+    @JsonProperty("classifications") val classificationItems: List<Classification>,
 )
 
 @Introspected
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
-data class ClassificationItem(
+data class Classification(
     @JsonProperty("name") val name: String?,
     @JsonProperty("id") val id: Int?,
     @JsonProperty("classificationType") val classificationType: String?,

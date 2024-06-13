@@ -3,8 +3,8 @@ package no.ssb.metadata.integrations.klass
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
-import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
-import no.ssb.metadata.vardef.integrations.klass.validators.KlassCodeUtil.isValid
+import no.ssb.metadata.vardef.integrations.klass.validators.klassid.KlassId
+import no.ssb.metadata.vardef.integrations.klass.validators.klassid.KlassIdUtil.isValid
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -47,5 +47,5 @@ class KlassApiValidatorTest(private val validator: Validator) {
 
 @Introspected
 data class TestObject(
-    @KlassCode var id: String? = null,
+    @KlassId var id: String? = null,
 )

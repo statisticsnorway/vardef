@@ -1,18 +1,18 @@
-package no.ssb.metadata.vardef.integrations.klass.validators
+package no.ssb.metadata.vardef.integrations.klass.validators.klassid
 
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationLinks
 import no.ssb.metadata.vardef.integrations.klass.models.Link
 
-object KlassCodeUtil {
+object KlassIdUtil {
     fun isValid(value: String?): Boolean {
-        return TestCacheObject.classificationItems.map { item -> item.id }.contains(value?.toInt())
+        return TestCacheObjectClassification.classificationItems.map { item -> item.id }.contains(value?.toInt())
     }
 }
 
 /* TODO: Only for testing, remove when cache object is implemented
 * */
-object TestCacheObject {
+object TestCacheObjectClassification {
     val classificationItems =
         listOf(
             Classification(

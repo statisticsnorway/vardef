@@ -11,6 +11,7 @@ import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.Assertions
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -69,6 +70,7 @@ class VariableDefinitionByIdControllerTest {
             .delete("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
             .then().log().everything()
             .statusCode(204)
+            .header("Content-Type", nullValue())
         Assertions.assertThat(variableDefinitionService.listAll()).doesNotContain(SAVED_VARIABLE_DEFINITION)
     }
 

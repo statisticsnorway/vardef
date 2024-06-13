@@ -1,11 +1,9 @@
 package no.ssb.metadata
 
-import io.viascom.nanoid.NanoId
-import no.ssb.metadata.models.LanguageStringType
+import SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.models.SavedVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.VariableDefinitionDAO
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -15,27 +13,20 @@ import kotlin.properties.Delegates
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VariableDefinitionTest {
-    private lateinit var variableDefinition: VariableDefinitionDAO
+    private lateinit var variableDefinition: SavedVariableDefinition
     private var nanoIdSize by Delegates.notNull<Int>()
 
     @BeforeAll
     fun setUp() {
-        variableDefinition =
-            VariableDefinitionDAO(
-                id = ObjectId(),
-                definitionId = NanoId.generate(8),
-                name = LanguageStringType(nb = "Norsk navn", nn = "namn", en = "English name"),
-                shortName = "test",
-                definition = LanguageStringType(nb = "definisjon", nn = "nynorsk definisjon", en = "definition"),
-            )
+        variableDefinition = SAVED_VARIABLE_DEFINITION
         nanoIdSize = 8
     }
 
     @ParameterizedTest
     @CsvSource(
-        "EN, English name",
-        "NN, namn",
-        "NB, Norsk navn",
+        "EN, Country Background",
+        "NN, Landbakgrunn",
+        "NB, Landbakgrunn",
     )
     fun `get variable name by language code`(
         languageCode: SupportedLanguages,
@@ -47,9 +38,9 @@ class VariableDefinitionTest {
 
     @ParameterizedTest
     @CsvSource(
-        "EN, definition",
-        "NN, nynorsk definisjon",
-        "NB, definisjon",
+        "EN, Country background is",
+        "NN, For personer født",
+        "NB, For personer født",
     )
     fun `get variable definition by language code`(
         languageCode: SupportedLanguages,

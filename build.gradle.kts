@@ -1,16 +1,16 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.9.23"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.9.23"
-    id("com.google.devtools.ksp") version "1.9.23-1.0.19"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.3.8"
-    id("io.micronaut.test-resources") version "4.3.8"
-    id("io.micronaut.aot") version "4.3.8"
+    alias(libs.plugins.jvm)
+    alias(libs.plugins.allopen)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.micronaut.application)
+    alias(libs.plugins.micronaut.test.resources)
+    alias(libs.plugins.micronaut.aot)
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.ktlint)
+
     id("jacoco")
-    id("org.sonarqube") version "5.0.0.4638"
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 version = "0.1"
@@ -22,56 +22,45 @@ repositories {
 }
 
 dependencies {
-    ksp("io.micronaut.data:micronaut-data-document-processor")
-    ksp("io.micronaut:micronaut-http-validation")
-    ksp("io.micronaut.openapi:micronaut-openapi")
-    ksp("io.micronaut.security:micronaut-security-annotations")
-    ksp("io.micronaut.serde:micronaut-serde-processor")
-    ksp("io.micronaut.validation:micronaut-validation-processor")
-    implementation("io.micronaut.mongodb:micronaut-mongo-sync")
-    implementation("io.micronaut.data:micronaut-data-mongodb")
-    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-    implementation("io.micronaut.security:micronaut-security-jwt")
-    implementation("io.micronaut:micronaut-management:4.5.3")
-    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
-    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-    implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("io.micronaut.validation:micronaut-validation")
-    implementation("jakarta.validation:jakarta.validation-api")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-    implementation("ch.qos.logback:logback-classic")
-    implementation("io.micrometer:context-propagation")
-    implementation("io.viascom.nanoid:nanoid:1.0.1")
-    implementation("io.micronaut:micronaut-http-client")
+    ksp(libs.micronaut.data.document.processor)
+    ksp(libs.micronaut.http.validation)
+    ksp(libs.micronaut.openapi)
+    ksp(libs.micronaut.serde.processor)
+    ksp(libs.micronaut.validation.processor)
+    implementation(libs.micronaut.mongo.sync)
+    implementation(libs.micronaut.data.mongodb)
+    implementation(libs.micronaut.kotlin.runtime)
+    implementation(libs.micronaut.management)
+    implementation(libs.micronaut.micrometer.registry.prometheus)
+    implementation(libs.micronaut.serde.jackson)
     implementation("io.micronaut.cache:micronaut-cache-caffeine")
-    compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
-    runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-    runtimeOnly("org.yaml:snakeyaml")
-    testImplementation("org.assertj:assertj-core")
-    testImplementation("io.micronaut.test:micronaut-test-rest-assured")
-    testImplementation("io.rest-assured:kotlin-extensions")
-    testImplementation("org.testcontainers:testcontainers:1.17.3")
-    testImplementation("org.testcontainers:mongodb:1.17.3")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("io.mockk:mockk:1.13.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
-    aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.4.2"))
-    aotPlugins("io.micronaut.security:micronaut-security-aot")
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.nanoid)
+    compileOnly(libs.micronaut.http.client)
+    compileOnly(libs.micronaut.openapi.annotations)
+    runtimeOnly(libs.logback.classic)
+    runtimeOnly(libs.jackson.module.kotlin)
+    runtimeOnly(libs.snakeyaml)
+    testImplementation(libs.micronaut.http.client)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.micronaut.test.rest.assured)
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.json)
+    aotPlugins(platform("io.micronaut.platform:micronaut-platform"))
 }
 
 application {
     mainClass = "no.ssb.metadata.ApplicationKt"
 }
-java {
-    sourceCompatibility = JavaVersion.toVersion("21")
-}
+kotlin { jvmToolchain(21) }
 
 graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
     testRuntime("junit5")
+    importMicronautPlatform.set(true)
     processing {
         incremental(true)
         annotations("no.ssb.metadata.*")
@@ -88,14 +77,6 @@ micronaut {
         optimizeNetty = true
         replaceLogbackXml = true
         configurationProperties.put("micronaut.security.jwks.enabled", "false")
-    }
-}
-
-sonarqube {
-    properties {
-        property("sonar.organization", "statisticsnorway")
-        property("sonar.projectKey", "statisticsnorway_vardef")
-        property("sonar.host.url", "https://sonarcloud.io")
     }
 }
 
@@ -120,13 +101,7 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
     jdkVersion = "21"
 }
 
-tasks.jacocoTestReport {
-    reports {
-        xml.required = true
-    }
-}
-
-tasks.named<Test>("test") {
+tasks.withType<Test> {
     useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed", "standardOut", "standardError")
@@ -134,7 +109,14 @@ tasks.named<Test>("test") {
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
 
-tasks.withType(ShadowJar::class.java) {
+tasks.withType<JacocoReport> {
+    dependsOn(tasks.withType<Test>())
+    reports {
+        xml.required = true
+    }
+}
+
+tasks.withType<ShadowJar> {
     archiveBaseName.set("vardef")
     archiveVersion.set("")
 }

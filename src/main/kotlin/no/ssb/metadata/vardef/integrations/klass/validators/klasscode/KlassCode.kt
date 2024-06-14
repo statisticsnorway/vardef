@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.integrations.klass.validators.klasscode
 
 import jakarta.validation.Constraint
 import jakarta.validation.Payload
-import no.ssb.metadata.vardef.integrations.klass.validators.KlassValidationFactory
 import kotlin.reflect.KClass
 
 /**

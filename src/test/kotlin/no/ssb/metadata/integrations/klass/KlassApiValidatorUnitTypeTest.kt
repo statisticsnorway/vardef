@@ -3,8 +3,8 @@ package no.ssb.metadata.integrations.klass
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
-import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.KlassCode
-import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.KlassCodeUtil
+import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.KlassCodeUnitType
+import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.ValidKlassCodeUnitType.isValidUnitCode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+/*
+TODO: Edit tests when caching object is implemented
+ */
 @MicronautTest(startApplication = false)
 class KlassApiCodeValidatorTest(private val validator: Validator) {
     @ParameterizedTest
@@ -23,7 +26,7 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
         ],
     )
     fun `invalid klass code`(code: String) {
-        assertFalse(KlassCodeUtil.isValidCode(code))
+        assertFalse(isValidUnitCode(code))
     }
 
     @ParameterizedTest
@@ -35,13 +38,17 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
         ],
     )
     fun `valid klass code`(code: String) {
-        assertTrue(KlassCodeUtil.isValidCode(code))
+        assertTrue(isValidUnitCode(code))
     }
 
     @Test
-    fun `valid and invalid klass codes`() {
-        val testObject = TestCodeObject(listOf("01", "33"))
-        assertThat(validator.validate(testObject)).isNotEmpty()
+    fun `null klass code`() {
+        assertFalse(isValidUnitCode(null))
+    }
+
+    @Test
+    fun `empty klass code`() {
+        assertFalse(isValidUnitCode(""))
     }
 
     @Test
@@ -55,12 +62,29 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
         assertThat(result).isNotEmpty()
         assertThat(result.map { res -> res.invalidValue }.contains("33")).isTrue()
         assertThat(result.map { res -> res.invalidValue }.contains("01")).isFalse()
+        assertThat(result).hasSize(1)
 
         assertTrue(
             result
                 .any {
                     it.invalidValue == "33" &&
-                        it.message == "Invalid klass code (33)"
+                        it.message == "Invalid klass code for unit type (33)"
+                },
+        )
+    }
+
+    @Test
+    fun `klass code validation empty code`() {
+        val result = validator.validate(TestCodeObject(listOf("")))
+        assertThat(result).isNotEmpty()
+        assertThat(result.map { res -> res.invalidValue }.contains("")).isTrue()
+        assertThat(result).hasSize(1)
+
+        assertTrue(
+            result
+                .any {
+                    it.invalidValue == "" &&
+                        it.message == "Invalid klass code for unit type ()"
                 },
         )
     }
@@ -68,16 +92,24 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
     @Test
     fun `klass code validation illegal code`() {
         val result = validator.validate(TestCodeObject(listOf("999", "33")))
-        assertThat(result.map { res -> res.message }).isEqualTo(listOf("Invalid klass code (999)", "Invalid klass code (33)"))
-        assertThat(result.elementAt(0).message).isEqualTo("Invalid klass code (999)")
-        assertThat(result.elementAt(1).message).isEqualTo("Invalid klass code (33)")
+        assertThat(
+            result.map {
+                    res ->
+                res.message
+            },
+        ).isEqualTo(listOf("Invalid klass code for unit type (999)", "Invalid klass code for unit type (33)"))
+        assertThat(result.elementAt(0).message).isEqualTo("Invalid klass code for unit type (999)")
+        assertThat(result.elementAt(1).message).isEqualTo("Invalid klass code for unit type (33)")
         assertThat(result.elementAt(1).invalidValue).isEqualTo("33")
         assertThat(result).isNotEmpty()
         assertThat(result).hasSize(2)
     }
 }
 
+/*
+TODO: Remove/replace when caching object is implemented
+ */
 @Introspected
 data class TestCodeObject(
-    var unitCodes: List<@KlassCode String>? = null,
+    var unitCodes: List<@KlassCodeUnitType String>? = null,
 )

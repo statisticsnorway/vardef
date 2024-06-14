@@ -18,6 +18,6 @@ import jakarta.validation.Constraint
 @Repeatable
 @MustBeDocumented
 @Constraint(validatedBy = [])
-annotation class KlassCode(
-    val message: String = "Invalid klass code ({validatedValue})",
+annotation class KlassCodeUnitType(
+    val message: String = "Invalid klass code for unit type ({validatedValue})",
 )

@@ -40,7 +40,7 @@ object TestCacheObjectClassification {
         )
 }
 
-class KlassUnitField(
+data class KlassUnitField(
     val unitCode: String,
     val parentCode: String?,
     val level: String?,
@@ -52,7 +52,19 @@ class KlassUnitField(
     val notes: String?,
 )
 
-object TestCodes {
+data class KlassSubjectField(
+    val subjectCode: String,
+    val parentCode: String?,
+    val level: String?,
+    val subjectName: String?,
+    val shortName: String?,
+    val presentationName: String?,
+    val validFrom: String?,
+    val validTo: String?,
+    val notes: String?,
+)
+
+object TestUnitCodes {
     val testDataCodes =
         listOf(
             KlassUnitField(
@@ -97,6 +109,78 @@ object TestCodes {
                     "annen leilighet. Dette inkluderer også hybler i hybelbygg med felles inngang og kjøkken, " +
                     "typisk studenthybler og enheter i bofellesskap for eldre, funksjonshemmede o.l. " +
                     "\"Hybler\" uten egen inngang (f.eks. rom i en privatbolig) regnes ikke som bolig. ",
+            ),
+        )
+}
+
+object TestSubjectCodes {
+    val testDataCodes =
+        listOf(
+            KlassSubjectField(
+                "al",
+                null,
+                "1",
+                "Arbeid og lønn",
+                "",
+                "",
+                null,
+                null,
+                "",
+            ),
+            KlassSubjectField(
+                "al03",
+                "al",
+                "2",
+                "Arbeidsledighet",
+                "",
+                "",
+                null,
+                null,
+                "",
+            ),
+            KlassSubjectField(
+                "al04",
+                "al",
+                "2",
+                "Arbeidsmiljø, sykefravær og arbeidskonflikter",
+                "",
+                "",
+                null,
+                null,
+                "",
+            ),
+            KlassSubjectField(
+                "al05",
+                "al",
+                "2",
+                "Lønn og arbeidskraftkostnader",
+                "",
+                "",
+                null,
+                null,
+                "",
+            ),
+            KlassSubjectField(
+                "al06",
+                "al",
+                "2",
+                "Sysselsetting",
+                "",
+                "",
+                null,
+                null,
+                "",
+            ),
+            KlassSubjectField(
+                "bb",
+                null,
+                "1",
+                "Bygg, bolig og eiendom",
+                "",
+                "",
+                null,
+                null,
+                "",
             ),
         )
 }

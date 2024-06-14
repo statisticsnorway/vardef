@@ -70,7 +70,7 @@ class KlassApiValidatorTest(private val validator: Validator) {
         assertThat(result).isNotEmpty()
         assertThat(result.elementAt(0).message).isEqualTo("Invalid klass id ()")
     }
-    }
+}
 
 /*
 TODO: Remove/replace when caching object is implemented

@@ -114,7 +114,7 @@ object TestUnitCodes {
 }
 
 object TestSubjectCodes {
-    val testDataCodes =
+    val testDataCodesSubjectField =
         listOf(
             KlassSubjectField(
                 "al",

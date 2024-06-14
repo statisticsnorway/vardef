@@ -23,6 +23,6 @@ object ValidKlassCodeSubjectField {
         if (value.isNullOrEmpty()) {
             return false
         }
-        return TestSubjectCodes.testDataCodes.map { item -> item.subjectCode }.contains(value)
+        return TestSubjectCodes.testDataCodesSubjectField.map { item -> item.subjectCode }.contains(value)
     }
 }

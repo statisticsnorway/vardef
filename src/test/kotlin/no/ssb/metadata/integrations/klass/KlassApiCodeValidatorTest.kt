@@ -3,8 +3,8 @@ package no.ssb.metadata.integrations.klass
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
-import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.KlassCodeUnitType
-import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.ValidKlassCodeUnitType.isValidUnitCode
+import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.KlassCode
+import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.ValidKlassCode.isValidKlassCode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -26,7 +26,7 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
         ],
     )
     fun `invalid klass code`(code: String) {
-        assertFalse(isValidUnitCode(code))
+        assertFalse(isValidKlassCode(code,"702"))
     }
 
     @ParameterizedTest
@@ -38,27 +38,41 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
         ],
     )
     fun `valid klass code`(code: String) {
-        assertTrue(isValidUnitCode(code))
+        assertTrue(isValidKlassCode(code,"702"))
     }
 
     @Test
     fun `null klass code`() {
-        assertFalse(isValidUnitCode(null))
+        assertFalse(isValidKlassCode(null,"702"))
     }
 
     @Test
     fun `empty klass code`() {
-        assertFalse(isValidUnitCode(""))
+        assertFalse(isValidKlassCode("","702"))
     }
 
     @Test
     fun `klass code validation legal codes`() {
-        assertThat(validator.validate(TestCodeObject(listOf("01", "02", "03")))).isEmpty()
+        assertThat(validator.validate(TestCodeObject(listOf("01", "02", "03"), listOf( "al",
+            "al03",
+            "al04")))).isEmpty()
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "al",
+            "al03",
+            "al04",
+        ],
+    )
+    fun `valid klass code subject field`(code: String) {
+        assertTrue(isValidKlassCode(code,"618"))
     }
 
     @Test
     fun `klass code validation illegal and legal code`() {
-        val result = validator.validate(TestCodeObject(listOf("01", "33")))
+        val result = validator.validate(TestCodeObject(listOf("01", "33"),null))
         assertThat(result).isNotEmpty()
         assertThat(result.map { res -> res.invalidValue }.contains("33")).isTrue()
         assertThat(result.map { res -> res.invalidValue }.contains("01")).isFalse()
@@ -68,7 +82,7 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
             result
                 .any {
                     it.invalidValue == "33" &&
-                        it.message == "Invalid klass code for unit type (33)"
+                        it.message == "Invalid klass code (33)"
                 },
         )
     }
@@ -84,7 +98,7 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
             result
                 .any {
                     it.invalidValue == "" &&
-                        it.message == "Invalid klass code for unit type ()"
+                        it.message == "Invalid klass code ()"
                 },
         )
     }
@@ -97,9 +111,9 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
                     res ->
                 res.message
             },
-        ).isEqualTo(listOf("Invalid klass code for unit type (999)", "Invalid klass code for unit type (33)"))
-        assertThat(result.elementAt(0).message).isEqualTo("Invalid klass code for unit type (999)")
-        assertThat(result.elementAt(1).message).isEqualTo("Invalid klass code for unit type (33)")
+        ).isEqualTo(listOf("Invalid klass code (999)", "Invalid klass code (33)"))
+        assertThat(result.elementAt(0).message).isEqualTo("Invalid klass code (999)")
+        assertThat(result.elementAt(1).message).isEqualTo("Invalid klass code (33)")
         assertThat(result.elementAt(1).invalidValue).isEqualTo("33")
         assertThat(result).isNotEmpty()
         assertThat(result).hasSize(2)
@@ -111,5 +125,6 @@ TODO: Remove/replace when caching object is implemented
  */
 @Introspected
 data class TestCodeObject(
-    var unitCodes: List<@KlassCodeUnitType String>? = null,
+    var unitCodes: List<@KlassCode("702") String>? = null,
+    var subjectCodes: List<@KlassCode("618") String>? = null,
 )

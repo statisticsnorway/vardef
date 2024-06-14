@@ -1,6 +1,9 @@
 package no.ssb.metadata.vardef.integrations.klass.validators.klasscode
 
 import jakarta.validation.Constraint
+import jakarta.validation.Payload
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassValidationFactory
+import kotlin.reflect.KClass
 
 /**
  * The annotated element must be a valid Klass code
@@ -17,7 +20,11 @@ import jakarta.validation.Constraint
 @Retention(AnnotationRetention.RUNTIME)
 @Repeatable
 @MustBeDocumented
-@Constraint(validatedBy = [])
-annotation class KlassCodeUnitType(
-    val message: String = "Invalid klass code for unit type ({validatedValue})",
+@Constraint(validatedBy = [KlassCodeValidator::class])
+annotation class KlassCode(
+    val id: String = "",
+    val message: String = "Invalid klass code ({validatedValue})",
+    val groups: Array<KClass<*>> = [],
+    val payload: Array<KClass<out Payload>> = []
+
 )

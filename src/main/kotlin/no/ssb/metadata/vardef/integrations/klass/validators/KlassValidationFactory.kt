@@ -3,10 +3,7 @@ package no.ssb.metadata.vardef.integrations.klass.validators
 import io.micronaut.context.annotation.Factory
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.KlassCodeSubjectField
-import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.KlassCodeUnitType
-import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.ValidKlassCodeSubjectField
-import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.ValidKlassCodeUnitType
+import no.ssb.metadata.vardef.integrations.klass.validators.klasscode.*
 import no.ssb.metadata.vardef.integrations.klass.validators.klassid.KlassId
 import no.ssb.metadata.vardef.integrations.klass.validators.klassid.ValidKlassId
 
@@ -18,12 +15,9 @@ class KlassValidationFactory {
     }
 
     @Singleton
-    fun klassCodeUnitTypeValidator(): ConstraintValidator<KlassCodeUnitType, String> {
-        return ConstraintValidator { value, _, _ -> ValidKlassCodeUnitType.isValidUnitCode(value) }
+    fun klassCodeValidator(): ConstraintValidator<KlassCode, String> {
+        return KlassCodeValidator()
+        //return ConstraintValidator { value, id, _ -> ValidKlassCode.isValidKlassCode(value, id.toString()) }
     }
 
-    @Singleton
-    fun klassCodeSubjectFieldValidator(): ConstraintValidator<KlassCodeSubjectField, String> {
-        return ConstraintValidator { value, _, _ -> ValidKlassCodeSubjectField.isValidSubjectCode(value) }
-    }
 }

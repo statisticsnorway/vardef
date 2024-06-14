@@ -99,9 +99,9 @@ class VariableDefinitionByIdControllerTest {
 
     @Test
     fun `update variable definition`(spec: RequestSpecification) {
-        val updatedVariableDefinition =
-            SAVED_VARIABLE_DEFINITION.toInputVariableDefinition().copy(
-                name = SAVED_VARIABLE_DEFINITION.toInputVariableDefinition().name.copy(en = "Update"),
+        val expectedVariableDefinition =
+            SAVED_VARIABLE_DEFINITION.copy(
+                name = SAVED_VARIABLE_DEFINITION.name.copy(en = "Update"),
             )
 
         spec
@@ -117,11 +117,11 @@ class VariableDefinitionByIdControllerTest {
                 """.trimIndent(),
             )
             .`when`().log().everything()
-            .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
+            .patch("/variable-definitions/${expectedVariableDefinition.definitionId}")
             .then().log().everything()
             .statusCode(200)
         Assertions.assertThat(
-            variableDefinitionService.getOneById(SAVED_VARIABLE_DEFINITION.definitionId).name,
-        ).isEqualTo(updatedVariableDefinition.name)
+            variableDefinitionService.getOneById(expectedVariableDefinition.definitionId),
+        ).isEqualTo(expectedVariableDefinition)
     }
 }

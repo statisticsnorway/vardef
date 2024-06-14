@@ -19,10 +19,12 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
         return listAll().map { savedVariableDefinition -> savedVariableDefinition.toRenderedVariableDefinition(language) }
     }
 
+    fun getOneById(id: String): SavedVariableDefinition = variableDefinitionRepository.findByDefinitionId(id)
+
     fun getOneByIdAndRenderForLanguage(
         language: SupportedLanguages,
         id: String,
-    ): RenderedVariableDefinition = variableDefinitionRepository.findByDefinitionId(id).toRenderedVariableDefinition(language)
+    ): RenderedVariableDefinition = getOneById(id).toRenderedVariableDefinition(language)
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 

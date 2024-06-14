@@ -2,7 +2,9 @@ package no.ssb.metadata
 
 import SAVED_VARIABLE_DEFINITION
 import SAVED_VARIABLE_DEFINITION_COPY
+import io.micronaut.json.JsonMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
@@ -94,5 +96,25 @@ class VariableDefinitionByIdControllerTest {
             .statusCode(404)
             .body("_embedded.errors[0].message", containsString("No such variable definition found"))
         Assertions.assertThat(variableDefinitionService.listAll()).contains(SAVED_VARIABLE_DEFINITION)
+    }
+
+    @Test
+    fun `update variable definition`(spec: RequestSpecification) {
+        val updatedVariableDefinition =
+            SAVED_VARIABLE_DEFINITION.toInputVariableDefinition().copy(
+                name = SAVED_VARIABLE_DEFINITION.toInputVariableDefinition().name.copy(en = "Update"),
+            )
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JsonMapper.createDefault().writeValueAsString(updatedVariableDefinition))
+            .`when`().log().everything()
+            .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
+            .then().log().everything()
+            .statusCode(200)
+        Assertions.assertThat(
+            variableDefinitionService.getOneById(SAVED_VARIABLE_DEFINITION.definitionId).name,
+        ).isEqualTo(updatedVariableDefinition.name)
     }
 }

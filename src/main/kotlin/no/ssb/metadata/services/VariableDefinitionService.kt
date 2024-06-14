@@ -25,4 +25,6 @@ class VariableDefinitionService(private val variableDefinitionRepository: Variab
     ): RenderedVariableDefinition = variableDefinitionRepository.findByDefinitionId(id).toRenderedVariableDefinition(language)
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
+
+    fun deleteById(id: String): Any = variableDefinitionRepository.deleteById(variableDefinitionRepository.findByDefinitionId(id).id)
 }

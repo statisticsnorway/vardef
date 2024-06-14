@@ -1,5 +1,6 @@
 package no.ssb.metadata.models
 
+import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
@@ -16,22 +17,30 @@ data class SavedVariableDefinition(
     @Pattern(regexp = "^[a-z0-9_]{3,}$")
     var shortName: String,
     var definition: LanguageStringType,
-    var classificationUri: String,
+    @Nullable
+    var classificationUri: String?,
     var unitTypes: List<KlassReference>,
     var subjectFields: List<KlassReference>,
     var containsUnitIdentifyingInformation: Boolean,
     var containsSensitivePersonalInformation: Boolean,
     var variableStatus: String,
-    var measurementType: KlassReference,
+    @Nullable
+    var measurementType: KlassReference?,
     var validFrom: String,
-    var validUntil: String,
-    var externalReferenceUri: String,
-    var relatedVariableDefinitionUris: List<String>,
+    @Nullable
+    var validUntil: String?,
+    @Nullable
+    var externalReferenceUri: String?,
+    @Nullable
+    var relatedVariableDefinitionUris: List<String>?,
+    @Nullable
     var owner: Owner?,
     var contact: Contact,
     var createdAt: String,
+    @Nullable
     var createdBy: Person?,
     var lastUpdatedAt: String,
+    @Nullable
     var lastUpdatedBy: Person?,
 ) {
     fun toRenderedVariableDefinition(language: SupportedLanguages): RenderedVariableDefinition =
@@ -81,5 +90,43 @@ data class SavedVariableDefinition(
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris,
             contact = contact,
+        )
+
+    fun copyAndUpdate(varDefUpdates: UpdateVariableDefinition): SavedVariableDefinition =
+        copy(
+            // Carry over value from existing object
+            id = id,
+            definitionId = definitionId,
+            owner = owner,
+            createdAt = createdAt,
+            createdBy = createdBy,
+            // TODO DPMETA-268
+            lastUpdatedAt = createdAt,
+            // TODO DPMETA-268
+            lastUpdatedBy = createdBy,
+            // Update field if non-null value provided
+            name = varDefUpdates.name ?: name,
+            shortName = varDefUpdates.shortName ?: shortName,
+            definition = varDefUpdates.definition ?: definition,
+            // TODO DPMETA-257 convert reference to URI
+            classificationUri = varDefUpdates.classificationReference ?: classificationUri,
+            // TODO DPMETA-257
+            unitTypes = emptyList(),
+            // TODO DPMETA-257
+            subjectFields = emptyList(),
+            containsUnitIdentifyingInformation =
+                varDefUpdates.containsUnitIdentifyingInformation
+                    ?: containsUnitIdentifyingInformation,
+            containsSensitivePersonalInformation =
+                varDefUpdates.containsSensitivePersonalInformation
+                    ?: containsSensitivePersonalInformation,
+            variableStatus = varDefUpdates.variableStatus ?: variableStatus,
+            // TODO DPMETA-257
+            measurementType = KlassReference("", "", ""),
+            validFrom = varDefUpdates.validFrom ?: validFrom,
+            validUntil = varDefUpdates.validUntil ?: validUntil,
+            externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
+            relatedVariableDefinitionUris = varDefUpdates.relatedVariableDefinitionUris ?: relatedVariableDefinitionUris,
+            contact = varDefUpdates.contact ?: contact,
         )
 }

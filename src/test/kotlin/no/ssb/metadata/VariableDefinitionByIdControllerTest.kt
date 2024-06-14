@@ -2,7 +2,6 @@ package no.ssb.metadata
 
 import SAVED_VARIABLE_DEFINITION
 import SAVED_VARIABLE_DEFINITION_COPY
-import io.micronaut.json.JsonMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
@@ -108,7 +107,15 @@ class VariableDefinitionByIdControllerTest {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JsonMapper.createDefault().writeValueAsString(updatedVariableDefinition))
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            )
             .`when`().log().everything()
             .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
             .then().log().everything()

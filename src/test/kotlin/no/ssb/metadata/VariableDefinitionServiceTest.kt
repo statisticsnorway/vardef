@@ -1,6 +1,6 @@
 package no.ssb.metadata
 
-import RENDERD_VARIABLE_DEFINITION
+import RENDERED_VARIABLE_DEFINITION
 import SAVED_VARIABLE_DEFINITION
 import com.mongodb.assertions.Assertions.assertTrue
 import io.mockk.clearAllMocks
@@ -69,7 +69,7 @@ class VariableDefinitionServiceTest {
 
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
 
-        val renderedVariableDefinition = RENDERD_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
+        val renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
 
         val result = variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB)
         assert(result.isNotEmpty())

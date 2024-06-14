@@ -4,10 +4,14 @@ import io.micronaut.core.annotation.Nullable
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
-import io.viascom.nanoid.NanoId
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.*
 
+/**
+ * Update variable definition
+ *
+ * Data structure with all fields optional for updating an existing variable definition.
+ */
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
     example = """
@@ -44,31 +48,37 @@ import no.ssb.metadata.constants.*
         }
     """,
 )
-data class InputVariableDefinition(
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+data class UpdateVariableDefinition(
     @Nullable
-    val id: String?,
     @Schema(description = NAME_FIELD_DESCRIPTION)
-    val name: LanguageStringType,
+    val name: LanguageStringType?,
+    @Nullable
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
     @Pattern(regexp = "^[a-z0-9_]{3,}$")
-    val shortName: String,
-    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
-    val definition: LanguageStringType,
-    @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
+    val shortName: String?,
     @Nullable
+    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
+    val definition: LanguageStringType?,
+    @Nullable
+    @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Pattern(regexp = "^[0-9]+$")
     val classificationReference: String?,
+    @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<String>,
-    val subjectFields: List<String>,
-    val containsUnitIdentifyingInformation: Boolean,
-    val containsSensitivePersonalInformation: Boolean,
-    val variableStatus: String,
+    val unitTypes: List<String>?,
+    @Nullable
+    val subjectFields: List<String>?,
+    @Nullable
+    val containsUnitIdentifyingInformation: Boolean?,
+    @Nullable
+    val containsSensitivePersonalInformation: Boolean?,
+    @Nullable
+    val variableStatus: String?,
     @Nullable
     val measurementType: String?,
+    @Nullable
     @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
-    val validFrom: String,
+    val validFrom: String?,
     @Nullable
     @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
     val validUntil: String?,
@@ -77,38 +87,6 @@ data class InputVariableDefinition(
     val externalReferenceUri: String?,
     @Nullable
     val relatedVariableDefinitionUris: List<String>?,
-    val contact: Contact,
-) {
-    fun toSavedVariableDefinition(): SavedVariableDefinition =
-        SavedVariableDefinition(
-            definitionId = NanoId.generate(8),
-            name = name,
-            shortName = shortName,
-            definition = definition,
-            // TODO
-            classificationUri = "",
-            // TODO
-            unitTypes = emptyList(),
-            // TODO
-            subjectFields = emptyList(),
-            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
-            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus,
-            measurementType = measurementType?.let { KlassReference("", "", it) },
-            validFrom = validFrom,
-            validUntil = validUntil,
-            externalReferenceUri = externalReferenceUri,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
-            // TODO
-            owner = null,
-            contact = contact,
-            // TODO
-            createdAt = "",
-            // TODO
-            createdBy = null,
-            // TODO
-            lastUpdatedAt = "",
-            // TODO
-            lastUpdatedBy = null,
-        )
-}
+    @Nullable
+    val contact: Contact?,
+)

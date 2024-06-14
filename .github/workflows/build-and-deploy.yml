@@ -29,6 +29,7 @@ env:
 jobs:
   build-branch:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: "read"
       id-token: "write"

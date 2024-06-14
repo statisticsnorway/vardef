@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.core.async.annotation.SingleResult
 import io.micronaut.http.HttpHeaders.ACCEPT
+import io.micronaut.http.HttpHeaders.USER_AGENT
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Headers
@@ -13,6 +14,7 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
  */
 @Client(id = "klass")
 @Headers(
+    Header(name = USER_AGENT, value = "VarDef API"),
     Header(name = ACCEPT, value = "application/json"),
 )
 interface KlassApiClient {

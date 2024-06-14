@@ -7,7 +7,10 @@ import no.ssb.metadata.vardef.integrations.klass.validators.TestUnitCodes
 TODO: Edit source when caching object is implemented
  */
 object ValidKlassCode {
-    fun isValidKlassCode(value: String?, id: String): Boolean {
+    fun isValidKlassCode(
+        value: String?,
+        id: String,
+    ): Boolean {
         if (value.isNullOrEmpty()) {
             return false
         }

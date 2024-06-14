@@ -24,6 +24,5 @@ annotation class KlassCode(
     val id: String = "",
     val message: String = "Invalid klass code ({validatedValue})",
     val groups: Array<KClass<*>> = [],
-    val payload: Array<KClass<out Payload>> = []
-
+    val payload: Array<KClass<out Payload>> = [],
 )

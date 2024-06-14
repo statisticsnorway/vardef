@@ -17,7 +17,6 @@ class KlassValidationFactory {
     @Singleton
     fun klassCodeValidator(): ConstraintValidator<KlassCode, String> {
         return KlassCodeValidator()
-        //return ConstraintValidator { value, id, _ -> ValidKlassCode.isValidKlassCode(value, id.toString()) }
+        // return ConstraintValidator { value, id, _ -> ValidKlassCode.isValidKlassCode(value, id.toString()) }
     }
-
 }

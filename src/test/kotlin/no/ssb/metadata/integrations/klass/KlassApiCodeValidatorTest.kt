@@ -26,7 +26,7 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
         ],
     )
     fun `invalid klass code`(code: String) {
-        assertFalse(isValidKlassCode(code,"702"))
+        assertFalse(isValidKlassCode(code, "702"))
     }
 
     @ParameterizedTest
@@ -38,24 +38,33 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
         ],
     )
     fun `valid klass code`(code: String) {
-        assertTrue(isValidKlassCode(code,"702"))
+        assertTrue(isValidKlassCode(code, "702"))
     }
 
     @Test
     fun `null klass code`() {
-        assertFalse(isValidKlassCode(null,"702"))
+        assertFalse(isValidKlassCode(null, "702"))
     }
 
     @Test
     fun `empty klass code`() {
-        assertFalse(isValidKlassCode("","702"))
+        assertFalse(isValidKlassCode("", "702"))
     }
 
     @Test
     fun `klass code validation legal codes`() {
-        assertThat(validator.validate(TestCodeObject(listOf("01", "02", "03"), listOf( "al",
-            "al03",
-            "al04")))).isEmpty()
+        assertThat(
+            validator.validate(
+                TestCodeObject(
+                    listOf("01", "02", "03"),
+                    listOf(
+                        "al",
+                        "al03",
+                        "al04",
+                    ),
+                ),
+            ),
+        ).isEmpty()
     }
 
     @ParameterizedTest
@@ -67,12 +76,12 @@ class KlassApiCodeValidatorTest(private val validator: Validator) {
         ],
     )
     fun `valid klass code subject field`(code: String) {
-        assertTrue(isValidKlassCode(code,"618"))
+        assertTrue(isValidKlassCode(code, "618"))
     }
 
     @Test
     fun `klass code validation illegal and legal code`() {
-        val result = validator.validate(TestCodeObject(listOf("01", "33"),null))
+        val result = validator.validate(TestCodeObject(listOf("01", "33"), null))
         assertThat(result).isNotEmpty()
         assertThat(result.map { res -> res.invalidValue }.contains("33")).isTrue()
         assertThat(result.map { res -> res.invalidValue }.contains("01")).isFalse()
@@ -125,6 +134,12 @@ TODO: Remove/replace when caching object is implemented
  */
 @Introspected
 data class TestCodeObject(
-    var unitCodes: List<@KlassCode("702") String>? = null,
-    var subjectCodes: List<@KlassCode("618") String>? = null,
+    var unitCodes: List<
+        @KlassCode("702")
+        String,
+        >? = null,
+    var subjectCodes: List<
+        @KlassCode("618")
+        String,
+        >? = null,
 )

@@ -9,8 +9,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
-// No available service exception
-
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KlassApiResponseTest {

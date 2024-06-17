@@ -1,4 +1,15 @@
 logger:
   levels:
-    io.micronaut.context.DefaultBeanContext: INFO
+    root: DEBUG
     org.mongodb.*: DEBUG
+
+klass:
+  classifications:
+    702:
+      name:
+        en: "Codelist for unit types"
+      codes:
+        - code: "01"
+          name:
+            en: "Address"
+            nb: "Adresse"

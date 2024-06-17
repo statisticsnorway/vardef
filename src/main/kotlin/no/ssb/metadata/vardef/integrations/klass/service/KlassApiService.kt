@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 
 @CacheConfig("classifications")
 @Singleton
-open class KlassApiService(private val klassApiClient: KlassApiClient) {
+open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassService {
     var klassApiResponse: KlassApiResponse? = null
 
     @Cacheable("classifications")
@@ -23,7 +23,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
         }
     }
 
-    fun getClassifications(): KlassApiResponse? {
+    override fun getClassifications(): KlassApiResponse? {
         if (this.klassApiResponse == null) {
             LOG.info("Request Klass Api")
             val response = klassApiJob()
@@ -34,6 +34,10 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
         }
         LOG.info("Fetching from cache")
         return this.klassApiResponse!!
+    }
+
+    override fun getCodesFor(id: String): List<String> {
+        TODO("Not yet implemented")
     }
 
     companion object {

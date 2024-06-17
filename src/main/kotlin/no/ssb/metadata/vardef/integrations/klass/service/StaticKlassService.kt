@@ -10,7 +10,6 @@ import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.models.LanguageStringType
-import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 
 @Serdeable
 data class StaticKlassCode(
@@ -34,10 +33,6 @@ class StaticClassification(
 class StaticKlassService : KlassService {
     @Inject
     lateinit var beanContext: BeanContext
-
-    override fun getClassifications(): KlassApiResponse? {
-        TODO("Not yet implemented")
-    }
 
     override fun getCodesFor(id: String): List<String> {
         val classification: StaticClassification = beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))

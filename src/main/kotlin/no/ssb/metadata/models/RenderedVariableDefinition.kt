@@ -3,10 +3,10 @@ package no.ssb.metadata.models
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
-import no.ssb.metadata.constants.RENDERED_VARIABLE_DEFINITION
+import no.ssb.metadata.constants.RENDERED_VARIABLE_DEFINITION_EXAMPLE
 
 @Schema(
-    example = RENDERED_VARIABLE_DEFINITION,
+    example = RENDERED_VARIABLE_DEFINITION_EXAMPLE,
 )
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class RenderedVariableDefinition(

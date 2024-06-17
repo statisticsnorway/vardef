@@ -14,7 +14,7 @@ import no.ssb.metadata.constants.*
  */
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = UPDATE_VARIABLE_DEFINITION,
+    example = INPUT_VARIABLE_DEFINITION_EXAMPLE,
 )
 data class UpdateVariableDefinition(
     @Nullable

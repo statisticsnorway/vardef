@@ -33,7 +33,6 @@ dependencies {
     implementation(libs.micronaut.management)
     implementation(libs.micronaut.micrometer.registry.prometheus)
     implementation(libs.micronaut.serde.jackson)
-    implementation(libs.micronaut.cache.caffeine)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.nanoid)

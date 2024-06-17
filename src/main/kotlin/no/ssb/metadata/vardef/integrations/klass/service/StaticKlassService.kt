@@ -17,8 +17,9 @@ data class StaticKlassCode(
     val name: LanguageStringType,
 )
 
-// @ConfigurationProperties("klass.classifications")
+// Deserializes test data from property in application-test.yaml
 @Serdeable
+@Requires(env = ["test"])
 @EachProperty("klass.classifications")
 class StaticClassification(
     @param:Parameter val id: String,

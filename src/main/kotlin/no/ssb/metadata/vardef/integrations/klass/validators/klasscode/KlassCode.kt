@@ -5,9 +5,8 @@ import jakarta.validation.Payload
 import kotlin.reflect.KClass
 
 /**
- * The annotated element must be a valid Klass code
+ * The annotated element must be a valid Klass code belonging to the classification or code list referenced by id.
  */
-
 @Target(
     AnnotationTarget.FIELD,
     AnnotationTarget.FUNCTION,
@@ -21,7 +20,7 @@ import kotlin.reflect.KClass
 @MustBeDocumented
 @Constraint(validatedBy = [KlassCodeValidator::class])
 annotation class KlassCode(
-    val id: String = "",
+    val id: String,
     val message: String = "Invalid klass code ({validatedValue})",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = [],

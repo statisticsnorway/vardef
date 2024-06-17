@@ -1,24 +1,20 @@
 package no.ssb.metadata.vardef.integrations.klass.validators.klasscode
 
 import io.micronaut.core.annotation.AnnotationValue
+import io.micronaut.core.annotation.Introspected
+import io.micronaut.core.annotation.NonNull
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext
+import kotlin.jvm.optionals.getOrElse
 
+@Introspected
 class KlassCodeValidator : ConstraintValidator<KlassCode, String> {
-    private lateinit var id: String
-
-    override fun initialize(constraintAnnotation: KlassCode) {
-        this.id = constraintAnnotation.id
-    }
-
     override fun isValid(
         value: String?,
-        annotationMetadata: AnnotationValue<KlassCode>?,
-        context: ConstraintValidatorContext?,
+        @NonNull annotationMetadata: AnnotationValue<KlassCode>,
+        @NonNull context: ConstraintValidatorContext,
     ): Boolean {
-        if (!::id.isInitialized) {
-            throw IllegalStateException("id has not been initialized")
-        }
+        val id = annotationMetadata.get("id", String::class.java).getOrElse { throw IllegalStateException("id has not been initialized") }
         return ValidKlassCode.isValidKlassCode(value, id)
     }
 }

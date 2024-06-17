@@ -58,6 +58,8 @@ class VariableDefinitionByIdController {
     /**
      * Update a variable definition.
      */
+    @ApiResponse(responseCode = "200", description = "Successfully updated")
+    @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Patch
     fun updateVariableDefinitionById(
         @VardefId id: String,

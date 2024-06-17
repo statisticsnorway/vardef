@@ -1,16 +1,11 @@
 package no.ssb.metadata.controllers
 
-import io.micronaut.http.HttpHeaders
-import io.micronaut.http.HttpResponse
-import io.micronaut.http.MediaType
-import io.micronaut.http.MutableHttpResponse
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Header
-import io.micronaut.http.annotation.Produces
+import io.micronaut.http.*
+import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import no.ssb.metadata.models.RenderedVariableDefinition
@@ -41,4 +36,19 @@ class VariableDefinitionByIdController {
             .ok(varDefService.getOneByIdAndRenderForLanguage(id = id, language = language))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
             .contentType(MediaType.APPLICATION_JSON)
+
+    /**
+     * Delete a variable definition.
+     */
+    @ApiResponse(responseCode = "204", description = "Successfully deleted", content = [Content()])
+    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @Status(HttpStatus.NO_CONTENT)
+    @Delete()
+    fun deleteVariableDefinitionById(
+        @VardefId id: String,
+    ): MutableHttpResponse<Unit> {
+        varDefService.deleteById(id = id)
+        // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
+        return HttpResponse.noContent<Unit?>().contentType(null)
+    }
 }

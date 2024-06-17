@@ -18,10 +18,10 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @Repeatable
 @MustBeDocumented
-@Constraint(validatedBy = [KlassCodeValidator::class])
+@Constraint(validatedBy = [])
 annotation class KlassCode(
     val id: String,
-    val message: String = "Invalid klass code ({validatedValue})",
+    val message: String = "Code {validatedValue} is not a member of classification with id {id}",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = [],
 )

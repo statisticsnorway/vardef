@@ -123,13 +123,12 @@ class VariableDefinitionsControllerTest {
                 )
         }
 
-
         @ParameterizedTest
         @MethodSource("TestUtils#invalidVariableDefinitions")
         fun `create variable definition with invalid inputs`(
             updatedJsonString: String,
             errorMessage: String,
-            spec: RequestSpecification
+            spec: RequestSpecification,
         ) {
             spec
                 .contentType(ContentType.JSON)
@@ -144,12 +143,11 @@ class VariableDefinitionsControllerTest {
                 )
         }
 
-
         @ParameterizedTest
         @MethodSource("TestUtils#variableDefinitionsNonMandatoryFieldsRemoved")
         fun `create variable definition with non mandatory fields removed`(
             updatedJsonString: String,
-            spec: RequestSpecification
+            spec: RequestSpecification,
         ) {
             spec
                 .contentType(ContentType.JSON)
@@ -160,13 +158,12 @@ class VariableDefinitionsControllerTest {
                 .statusCode(HttpStatus.CREATED.code)
         }
 
-
         @ParameterizedTest
         @MethodSource("TestUtils#variableDefinitionsMandatoryFieldsRemoved")
         fun `create variable definition with mandatory fields removed`(
             updatedJsonString: String,
             errorMessage: String,
-            spec: RequestSpecification
+            spec: RequestSpecification,
         ) {
             spec
                 .contentType(ContentType.JSON)
@@ -186,7 +183,7 @@ class VariableDefinitionsControllerTest {
         fun `test variable status inputs`(
             updatedJsonString: String,
             errorCode: Int,
-            spec: RequestSpecification
+            spec: RequestSpecification,
         ) {
             spec
                 .contentType(ContentType.JSON)
@@ -198,7 +195,3 @@ class VariableDefinitionsControllerTest {
         }
     }
 }
-
-
-
-

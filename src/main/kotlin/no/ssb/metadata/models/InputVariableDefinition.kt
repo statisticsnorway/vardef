@@ -27,16 +27,19 @@ data class InputVariableDefinition(
     val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
+    // TODO Validate against klass data
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @Pattern(regexp = "^[0-9]+$")
-    val classificationReference: String, // TODO Validate against klass data
+    val classificationReference: String,
+    // TODO Validate against klass data
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @NotEmpty
-    val unitTypes: List<String>, // TODO Validate against klass data
+    val unitTypes: List<String>,
+    // TODO Validate against klass data
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @NotEmpty
-    val subjectFields: List<String>, // TODO Validate against klass data
+    val subjectFields: List<String>,
     @Schema(description = CONTAINS_UNIT_IDENTIFYING_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     @ValidBoolean(message = "Invalid value for contains_unit_identifying_information, must be either true or false")

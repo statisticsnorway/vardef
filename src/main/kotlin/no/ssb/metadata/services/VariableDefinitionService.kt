@@ -1,28 +1,28 @@
 package no.ssb.metadata.services
 
 import jakarta.inject.Singleton
+import no.ssb.metadata.models.RenderedVariableDefinition
+import no.ssb.metadata.models.SavedVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.models.VariableDefinitionDAO
-import no.ssb.metadata.models.VariableDefinitionDTO
 import no.ssb.metadata.repositories.VariableDefinitionRepository
 
 @Singleton
 class VariableDefinitionService(private val variableDefinitionRepository: VariableDefinitionRepository) {
     fun clear() = variableDefinitionRepository.deleteAll()
 
-    fun listAll(): List<VariableDefinitionDAO> =
+    fun listAll(): List<SavedVariableDefinition> =
         variableDefinitionRepository
             .findAll()
             .toList()
 
-    fun listAllAndRenderForLanguage(language: SupportedLanguages): List<VariableDefinitionDTO> {
-        return listAll().map { dao -> dao.toDTO(language) }
+    fun listAllAndRenderForLanguage(language: SupportedLanguages): List<RenderedVariableDefinition> {
+        return listAll().map { savedVariableDefinition -> savedVariableDefinition.toRenderedVariableDefinition(language) }
     }
 
     fun getOneByIdAndRenderForLanguage(
         language: SupportedLanguages,
         id: String,
-    ): VariableDefinitionDTO = variableDefinitionRepository.findByDefinitionId(id).toDTO(language)
+    ): RenderedVariableDefinition = variableDefinitionRepository.findByDefinitionId(id).toRenderedVariableDefinition(language)
 
-    fun save(varDef: VariableDefinitionDAO): VariableDefinitionDAO = variableDefinitionRepository.save(varDef)
+    fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 }

@@ -46,14 +46,14 @@ val SAVED_VARIABLE_DEFINITION =
         subjectFields = listOf(KlassReference("https://example.com/", "", "")),
         containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
-        variableStatus = "",
+        variableStatus = "DRAFT",
         measurementType = KlassReference("https://example.com/", "", ""),
         validFrom = "2024-06-11",
         validUntil = "2024-06-11",
         externalReferenceUri = "https://example.com/",
         relatedVariableDefinitionUris = listOf("https://example.com/"),
         owner = Owner("", ""),
-        contact = Contact(LanguageStringType("", "", ""), ""),
+        contact = Contact(LanguageStringType("", "", ""), "me@example.com"),
         createdAt = "2024-06-11T08:15:19.421Z",
         createdBy = Person("", ""),
         lastUpdatedAt = "2024-06-11T08:15:19.421Z",
@@ -67,7 +67,7 @@ val SAVED_VARIABLE_DEFINITION_COPY =
         name = LanguageStringType(nb = "Landbakgrunn 2", nn = "Landbakgrunn 2", en = "Country Background 2"),
     )
 
-val RENDERD_VARIABLE_DEFINITION =
+val RENDERED_VARIABLE_DEFINITION =
     RenderedVariableDefinition(
         id = "",
         name = "Landbakgrunn",
@@ -78,14 +78,14 @@ val RENDERD_VARIABLE_DEFINITION =
         subjectFields = listOf(KlassReference("https://example.com/", "", "")),
         containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
-        variableStatus = "",
+        variableStatus = "DRAFT",
         measurementType = KlassReference("https://example.com/", "", ""),
         validFrom = "2024-06-11",
         validUntil = "2024-06-11",
         externalReferenceUri = "https://example.com/",
         relatedVariableDefinitionUris = listOf("https://example.com/"),
         owner = Owner("", ""),
-        contact = RenderedContact("", ""),
+        contact = RenderedContact("", "me@example.com"),
         createdAt = "2024-06-11T08:15:19.421Z",
         createdBy = Person("", ""),
         lastUpdatedAt = "2024-06-11T08:15:19.421Z",

@@ -50,7 +50,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
         return this.klassApiResponse!!
     }
 
-    @CachePut("classifications", parameters = ["classificationId"])
+    @Cacheable("classifications")
     open fun getClassification(classificationId: Int): Classification? {
         return try {
             classifications.getOrDefault(classificationId, fetchClassification(classificationId))
@@ -59,7 +59,8 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
         }
     }
 
-    private fun fetchClassification(classificationId: Int): Classification? {
+    @CachePut("classifications", parameters = ["classificationId"])
+    open fun fetchClassification(classificationId: Int): Classification? {
         logger.info("Fetch classification and codes by id $classificationId from Klass Api")
         val classification = klassApiClient.fetchClassification(classificationId)
         val codes = klassApiClient.fetchCodeList(classificationId)
@@ -78,4 +79,6 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
     fun getUnitTypes(): Classification? = getClassification(unitTypesId)
 
     fun getAreas(): Classification? = getClassification(areasId)
+
+    
 }

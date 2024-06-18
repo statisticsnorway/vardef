@@ -46,9 +46,9 @@ class VariableDefinitionsControllerTest {
     inner class MongoDBDataSetupAndTest {
         @BeforeEach
         fun setUp() {
-//            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
-//            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
-//            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
+            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
+            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
+            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
         }
 
         @Test

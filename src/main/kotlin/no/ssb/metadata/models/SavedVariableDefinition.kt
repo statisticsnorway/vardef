@@ -5,7 +5,6 @@ import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
 import jakarta.validation.constraints.Pattern
-import java.util.Optional
 import org.bson.types.ObjectId
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)

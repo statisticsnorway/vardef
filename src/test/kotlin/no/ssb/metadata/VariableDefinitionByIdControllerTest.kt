@@ -1,46 +1,25 @@
 package no.ssb.metadata
 
 import SAVED_VARIABLE_DEFINITION
-import SAVED_VARIABLE_DEFINITION_COPY
-import io.micronaut.json.JsonMapper
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
-import jakarta.inject.Inject
 import no.ssb.metadata.models.InputVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
-import no.ssb.metadata.services.VariableDefinitionService
+import no.ssb.metadata.utils.BaseVardefTest
 import org.assertj.core.api.Assertions
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.nullValue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
-@MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class VariableDefinitionByIdControllerTest {
-    @Inject
-    lateinit var variableDefinitionService: VariableDefinitionService
-
-    @Inject
-    lateinit var jsonMapper: JsonMapper
-
-    @BeforeEach
-    fun setUp() {
-        variableDefinitionService.clear()
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
-    }
-
+class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
     fun `get request default language`(spec: RequestSpecification) {
         spec
-            .`when`().log().everything()
+            .`when`()
             .get("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
-            .then().log().everything()
+            .then()
             .statusCode(200)
             .body("id", equalTo(SAVED_VARIABLE_DEFINITION.definitionId))
             .body("name", equalTo(SAVED_VARIABLE_DEFINITION.name.nb))
@@ -52,9 +31,9 @@ class VariableDefinitionByIdControllerTest {
     @Test
     fun `get request malformed id`(spec: RequestSpecification) {
         spec
-            .`when`().log().everything()
+            .`when`()
             .get("/variable-definitions/MALFORMED_ID")
-            .then().log().everything()
+            .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
@@ -62,9 +41,9 @@ class VariableDefinitionByIdControllerTest {
     @Test
     fun `get request unknown id`(spec: RequestSpecification) {
         spec
-            .`when`().log().everything()
+            .`when`()
             .get("/variable-definitions/${NanoId.generate(8)}")
-            .then().log().everything()
+            .then()
             .statusCode(404)
             .body("_embedded.errors[0].message", containsString("No such variable definition found"))
     }
@@ -72,9 +51,9 @@ class VariableDefinitionByIdControllerTest {
     @Test
     fun `delete request`(spec: RequestSpecification) {
         spec
-            .`when`().log().everything()
+            .`when`()
             .delete("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
-            .then().log().everything()
+            .then()
             .statusCode(204)
             .header("Content-Type", nullValue())
         Assertions.assertThat(variableDefinitionService.listAll()).doesNotContain(SAVED_VARIABLE_DEFINITION)
@@ -83,9 +62,9 @@ class VariableDefinitionByIdControllerTest {
     @Test
     fun `delete request malformed id`(spec: RequestSpecification) {
         spec
-            .`when`().log().everything()
+            .`when`()
             .delete("/variable-definitions/MALFORMED_ID")
-            .then().log().everything()
+            .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
         Assertions.assertThat(variableDefinitionService.listAll()).contains(SAVED_VARIABLE_DEFINITION)
@@ -122,9 +101,9 @@ class VariableDefinitionByIdControllerTest {
                     }}
                     """.trimIndent(),
                 )
-                .`when`().log().everything()
+                .`when`()
                 .patch("/variable-definitions/${expectedVariableDefinition.definitionId}")
-                .then().log().everything()
+                .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .extract().body().asString()
@@ -152,9 +131,9 @@ class VariableDefinitionByIdControllerTest {
                 }}
                 """.trimIndent(),
             )
-            .`when`().log().everything()
+            .`when`()
             .patch("/variable-definitions/MALFORMED_ID")
-            .then().log().everything()
+            .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
@@ -195,9 +174,9 @@ class VariableDefinitionByIdControllerTest {
                 }}
                 """.trimIndent(),
             )
-            .`when`().log().everything()
+            .`when`()
             .patch("/variable-definitions/MALFORMED_ID")
-            .then().log().everything()
+            .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("Unknown property [id] encountered during deserialization of type"))
         Assertions.assertThat(variableDefinitionService.listAll()).contains(SAVED_VARIABLE_DEFINITION)

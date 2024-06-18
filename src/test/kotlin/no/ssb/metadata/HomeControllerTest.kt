@@ -2,16 +2,13 @@ package no.ssb.metadata
 
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.utils.BaseVardefTest
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
-@MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class HomeControllerTest {
+internal class HomeControllerTest : BaseVardefTest() {
     @Test
     fun `get on root path redirects to API docs`(spec: RequestSpecification) {
         spec.given().redirects().follow(false)

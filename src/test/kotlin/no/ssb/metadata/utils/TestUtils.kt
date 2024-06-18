@@ -65,25 +65,35 @@ object TestUtils {
     fun variableDefinitionsMandatoryFieldsRemoved(): Stream<Arguments> {
         val testCases =
             listOf(
-                JSONObject(JSON_TEST_INPUT).apply { remove("name")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("name")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("short_name")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("short_name")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("definition")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("definition")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("unit_types")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("unit_types")
                 } to "varDef.unitTypes: must not be empty",
-                JSONObject(JSON_TEST_INPUT).apply { remove("subject_fields")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("subject_fields")
                 } to "varDef.subjectFields: must not be empty",
-                JSONObject(JSON_TEST_INPUT).apply { remove("contains_unit_identifying_information")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("contains_unit_identifying_information")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("contains_sensitive_personal_information")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("contains_sensitive_personal_information")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("variable_status")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("variable_status")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("valid_from")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("valid_from")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("contact")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    remove("contact")
                 } to "null annotate it with @Nullable",
             )
         return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }
@@ -93,15 +103,20 @@ object TestUtils {
     fun variableDefinitionsVariousVariableStatus(): Stream<Arguments> {
         val testCases =
             listOf(
-                JSONObject(JSON_TEST_INPUT).apply { put("variable_status", "DRAFT")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("variable_status", "DRAFT")
                 } to HttpStatus.CREATED.code,
-                JSONObject(JSON_TEST_INPUT).apply { put("variable_status", "PUBLISHED_INTERNAL")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("variable_status", "PUBLISHED_INTERNAL")
                 } to HttpStatus.CREATED.code,
-                JSONObject(JSON_TEST_INPUT).apply { put("variable_status", "PUBLISHED_EXTERNAL")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("variable_status", "PUBLISHED_EXTERNAL")
                 } to HttpStatus.CREATED.code,
-                JSONObject(JSON_TEST_INPUT).apply { put("variable_status", "DEPRECATED")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("variable_status", "DEPRECATED")
                 } to HttpStatus.CREATED.code,
-                JSONObject(JSON_TEST_INPUT).apply { put("variable_status", "Not a status")
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("variable_status", "Not a status")
                 } to HttpStatus.BAD_REQUEST.code,
             )
 

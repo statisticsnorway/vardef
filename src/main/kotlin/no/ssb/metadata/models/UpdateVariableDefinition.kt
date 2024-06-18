@@ -6,6 +6,7 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.*
+import java.time.LocalDate
 
 /**
  * Update variable definition
@@ -46,10 +47,10 @@ data class UpdateVariableDefinition(
     val measurementType: String?,
     @Nullable
     @Pattern(regexp = DATE_PATTERN)
-    val validFrom: String?,
+    val validFrom: LocalDate?,
     @Nullable
     @Pattern(regexp = DATE_PATTERN)
-    val validUntil: String?,
+    val validUntil: LocalDate?,
     @Nullable
     @Pattern(regexp = URL_PATTERN)
     val externalReferenceUri: String?,

@@ -1,6 +1,7 @@
 package no.ssb.metadata.models
 
 import io.micronaut.core.annotation.Nullable
+import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
@@ -9,9 +10,9 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.*
 import no.ssb.metadata.constants.*
 import no.ssb.metadata.validators.ValidBoolean
-import no.ssb.metadata.validators.ValidDate
 import no.ssb.metadata.validators.ValidUrl
 import no.ssb.metadata.validators.ValidVariableStatus
+import java.time.LocalDate
 
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
@@ -55,12 +56,12 @@ data class InputVariableDefinition(
     @Nullable
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
-    @ValidDate
-    val validFrom: String,
+    @Format("yyyy-MM-dd")
+    val validFrom: LocalDate,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable
-    @ValidDate
-    val validUntil: String?,
+    @Format("yyyy-MM-dd")
+    val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     @ValidUrl(message = "Website URL must be valid")

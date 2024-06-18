@@ -1,6 +1,7 @@
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.models.*
 import org.bson.types.ObjectId
+import java.time.LocalDate
 
 val INPUT_VARIABLE_DEFINITION =
     InputVariableDefinition(
@@ -15,8 +16,8 @@ val INPUT_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = "false",
         variableStatus = "DRAFT",
         measurementType = "",
-        validFrom = "",
-        validUntil = "",
+        validFrom = LocalDate.of(2021, 1, 4),
+        validUntil = LocalDate.of(2021, 1, 4),
         externalReferenceUri = "https://www.example.com",
         relatedVariableDefinitionUris = listOf("https://www.example.com"),
         contact = Contact(LanguageStringType("", "", ""), ""),
@@ -48,8 +49,8 @@ val SAVED_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = KlassReference("https://example.com/", "", ""),
-        validFrom = "2024-06-11",
-        validUntil = "2024-06-11",
+        validFrom = LocalDate.of(2021, 1, 4),
+        validUntil = LocalDate.of(2021, 1, 4),
         externalReferenceUri = "https://example.com/",
         relatedVariableDefinitionUris = listOf("https://example.com/"),
         owner = Owner("", ""),
@@ -80,8 +81,8 @@ val RENDERED_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = KlassReference("https://example.com/", "", ""),
-        validFrom = "2024-06-11",
-        validUntil = "2024-06-11",
+        validFrom = LocalDate.of(2021, 1, 4),
+        validUntil = LocalDate.of(2021, 1, 4),
         externalReferenceUri = "https://example.com/",
         relatedVariableDefinitionUris = listOf("https://example.com/"),
         owner = Owner("", ""),

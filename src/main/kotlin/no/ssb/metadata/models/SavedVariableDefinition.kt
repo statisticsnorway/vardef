@@ -6,6 +6,7 @@ import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
 import org.bson.types.ObjectId
+import java.time.LocalDate
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -24,9 +25,9 @@ data class SavedVariableDefinition(
     var variableStatus: VariableStatus,
     @Nullable
     var measurementType: KlassReference?,
-    var validFrom: String,
+    var validFrom: LocalDate,
     @Nullable
-    var validUntil: String?,
+    var validUntil: LocalDate?,
     @Nullable
     var externalReferenceUri: String?,
     @Nullable

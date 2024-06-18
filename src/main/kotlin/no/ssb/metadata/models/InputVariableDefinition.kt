@@ -1,7 +1,6 @@
 package no.ssb.metadata.models
 
 import io.micronaut.core.annotation.Nullable
-import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
@@ -9,7 +8,6 @@ import io.viascom.nanoid.NanoId
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.*
 
-@MappedEntity
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
     example = INPUT_VARIABLE_DEFINITION_EXAMPLE,
@@ -26,22 +24,27 @@ data class InputVariableDefinition(
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
+    @Nullable
     @Pattern(regexp = "^[0-9]+$")
-    val classificationReference: String,
+    val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     val unitTypes: List<String>,
     val subjectFields: List<String>,
     val containsUnitIdentifyingInformation: Boolean,
     val containsSensitivePersonalInformation: Boolean,
     val variableStatus: String,
-    val measurementType: String,
+    @Nullable
+    val measurementType: String?,
     @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
     val validFrom: String,
+    @Nullable
     @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
-    val validUntil: String,
+    val validUntil: String?,
+    @Nullable
     @Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].\\S*$")
-    val externalReferenceUri: String,
-    val relatedVariableDefinitionUris: List<String>,
+    val externalReferenceUri: String?,
+    @Nullable
+    val relatedVariableDefinitionUris: List<String>?,
     val contact: Contact,
 ) {
     fun toSavedVariableDefinition(): SavedVariableDefinition =
@@ -59,7 +62,7 @@ data class InputVariableDefinition(
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
-            measurementType = KlassReference("", "", measurementType),
+            measurementType = measurementType?.let { KlassReference("", "", it) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

@@ -8,8 +8,11 @@ import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
+import jakarta.validation.Valid
+import no.ssb.metadata.models.InputVariableDefinition
 import no.ssb.metadata.models.RenderedVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
+import no.ssb.metadata.models.UpdateVariableDefinition
 import no.ssb.metadata.services.VariableDefinitionService
 import no.ssb.metadata.validators.VardefId
 
@@ -50,5 +53,18 @@ class VariableDefinitionByIdController {
         varDefService.deleteById(id = id)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
         return HttpResponse.noContent<Unit?>().contentType(null)
+    }
+
+    /**
+     * Update a variable definition.
+     */
+    @ApiResponse(responseCode = "200", description = "Successfully updated")
+    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @Patch
+    fun updateVariableDefinitionById(
+        @VardefId id: String,
+        @Body @Valid varDefUpdates: UpdateVariableDefinition,
+    ): InputVariableDefinition {
+        return varDefService.update(varDefService.getOneById(id).copyAndUpdate(varDefUpdates)).toInputVariableDefinition()
     }
 }

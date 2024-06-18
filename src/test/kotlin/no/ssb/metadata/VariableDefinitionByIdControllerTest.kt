@@ -2,10 +2,13 @@ package no.ssb.metadata
 
 import SAVED_VARIABLE_DEFINITION
 import SAVED_VARIABLE_DEFINITION_COPY
+import io.micronaut.json.JsonMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
+import no.ssb.metadata.models.InputVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.services.VariableDefinitionService
 import org.assertj.core.api.Assertions
@@ -21,6 +24,9 @@ import org.junit.jupiter.api.TestInstance
 class VariableDefinitionByIdControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
+
+    @Inject
+    lateinit var jsonMapper: JsonMapper
 
     @BeforeEach
     fun setUp() {
@@ -93,6 +99,107 @@ class VariableDefinitionByIdControllerTest {
             .then()
             .statusCode(404)
             .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+        Assertions.assertThat(variableDefinitionService.listAll()).contains(SAVED_VARIABLE_DEFINITION)
+    }
+
+    @Test
+    fun `update variable definition`(spec: RequestSpecification) {
+        val expectedVariableDefinition =
+            SAVED_VARIABLE_DEFINITION.copy(
+                name = SAVED_VARIABLE_DEFINITION.name.copy(en = "Update"),
+            )
+
+        val bodyString =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """
+                    {"name": {
+                        "nb": "Landbakgrunn",
+                        "nn": "Landbakgrunn",
+                        "en": "Update"
+                    }}
+                    """.trimIndent(),
+                )
+                .`when`().log().everything()
+                .patch("/variable-definitions/${expectedVariableDefinition.definitionId}")
+                .then().log().everything()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .extract().body().asString()
+        val body = jsonMapper.readValue(bodyString, InputVariableDefinition::class.java)
+
+        Assertions.assertThat(body.id).isEqualTo(SAVED_VARIABLE_DEFINITION.definitionId)
+        Assertions.assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
+        Assertions.assertThat(body.definition).isEqualTo(SAVED_VARIABLE_DEFINITION.definition)
+        Assertions.assertThat(
+            variableDefinitionService.getOneById(expectedVariableDefinition.definitionId),
+        ).isEqualTo(expectedVariableDefinition)
+    }
+
+    @Test
+    fun `patch request malformed id`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            )
+            .`when`().log().everything()
+            .patch("/variable-definitions/MALFORMED_ID")
+            .then().log().everything()
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+    }
+
+    @Test
+    fun `patch request unknown id`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            )
+            .`when`()
+            .patch("/variable-definitions/${NanoId.generate(8)}")
+            .then()
+            .statusCode(404)
+            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+    }
+
+    @Test
+    fun `patch request attempt to modify id`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"id":  "${NanoId.generate(8)}",
+                "name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            )
+            .`when`().log().everything()
+            .patch("/variable-definitions/MALFORMED_ID")
+            .then().log().everything()
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("Unknown property [id] encountered during deserialization of type"))
         Assertions.assertThat(variableDefinitionService.listAll()).contains(SAVED_VARIABLE_DEFINITION)
     }
 }

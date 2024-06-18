@@ -38,6 +38,11 @@ micronaut:
     serialization:
       inclusion: always
 
+  http:
+    services:
+      klass:
+        url: https://data.ssb.no/api/klass/v1/
+
   server:
     netty:
       access-logger:

@@ -5,7 +5,6 @@ import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
-import jakarta.validation.constraints.Pattern
 import org.bson.types.ObjectId
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
@@ -14,7 +13,6 @@ data class SavedVariableDefinition(
     @field:Id @GeneratedValue
     var id: ObjectId? = null,
     var name: LanguageStringType,
-    @Pattern(regexp = "^[a-z0-9_]{3,}$")
     var shortName: String,
     var definition: LanguageStringType,
     @Nullable

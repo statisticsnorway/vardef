@@ -23,16 +23,15 @@ data class InputVariableDefinition(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
-    @Pattern(regexp = "^[a-z0-9_]{3,}$")
+    @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
     val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
     // TODO Validate against klass data
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
-    @Pattern(regexp = "^[0-9]+$")
-    val classificationReference: String,
-    // TODO Validate against klass data
+    @Pattern(regexp = KLASS_ID_PATTERN)
+    val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @NotEmpty
     val unitTypes: List<String>,

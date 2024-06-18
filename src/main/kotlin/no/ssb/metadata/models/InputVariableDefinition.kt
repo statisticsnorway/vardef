@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import jakarta.validation.Valid
 import jakarta.validation.constraints.*
-import no.ssb.metadata.validators.ValidDate
-import no.ssb.metadata.validators.ValidUrl
 import no.ssb.metadata.constants.*
 import no.ssb.metadata.validators.ValidBoolean
+import no.ssb.metadata.validators.ValidDate
+import no.ssb.metadata.validators.ValidUrl
 
 @MappedEntity
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -63,18 +63,20 @@ data class InputVariableDefinition(
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Pattern(regexp = "^[0-9]+$")
-    val classificationReference: String, //TODO Validate against klass data
+    val classificationReference: String, // TODO Validate against klass data
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @NotEmpty
-    val unitTypes: List<String>, //TODO Validate against klass data
+    val unitTypes: List<String>, // TODO Validate against klass data
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @NotEmpty
-    val subjectFields: List<String>, //TODO Validate against klass data
+    val subjectFields: List<String>, // TODO Validate against klass data
     @Schema(description = CONTAINS_UNIT_IDENTIFYING_INFORMATION_FIELD_DESCRIPTION)
-    @NotNull @ValidBoolean(message = "Invalid value for contains_unit_identifying_information, must be either true or false")
+    @NotNull
+    @ValidBoolean(message = "Invalid value for contains_unit_identifying_information, must be either true or false")
     val containsUnitIdentifyingInformation: String,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
-    @NotNull @ValidBoolean(message = "Invalid value for contains_sensitive_personal_information, must be either true or false")
+    @NotNull
+    @ValidBoolean(message = "Invalid value for contains_sensitive_personal_information, must be either true or false")
     val containsSensitivePersonalInformation: String,
     @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
     val variableStatus: VariableStatus,
@@ -85,10 +87,12 @@ data class InputVariableDefinition(
     @ValidDate
     val validFrom: String,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
-    @Nullable @ValidDate
+    @Nullable
+    @ValidDate
     val validUntil: String?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
-    @Nullable @ValidUrl(message = "Website URL must be valid")
+    @Nullable
+    @ValidUrl(message = "Website URL must be valid")
     val externalReferenceUri: String?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable

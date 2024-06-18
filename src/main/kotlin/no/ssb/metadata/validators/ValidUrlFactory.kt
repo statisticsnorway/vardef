@@ -4,10 +4,8 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import jakarta.inject.Singleton
 
-
 @Factory // <1>
 class ValidUrlFactory() {
-
     @Singleton // <2>
     fun urlValidator(): ConstraintValidator<ValidUrl, String> {
         return ConstraintValidator { value, _, _ -> ValidUrlValidator.isValid(value) }
@@ -23,5 +21,3 @@ class ValidUrlFactory() {
         return ConstraintValidator { value, _, _ -> ValidBooleanValidator.isValid(value) }
     }
 }
-
-

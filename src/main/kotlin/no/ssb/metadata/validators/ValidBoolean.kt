@@ -2,7 +2,6 @@ package no.ssb.metadata.validators
 
 import jakarta.validation.Constraint
 
-
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.TYPE)
 @Retention(AnnotationRetention.RUNTIME)
 @Repeatable
@@ -11,4 +10,3 @@ import jakarta.validation.Constraint
 annotation class ValidBoolean(
     val message: String = "Invalid boolean",
 )
-

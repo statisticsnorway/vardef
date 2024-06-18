@@ -20,4 +20,9 @@ class ValidUrlFactory() {
     fun booleanValidator(): ConstraintValidator<ValidBoolean, String> {
         return ConstraintValidator { value, _, _ -> ValidBooleanValidator.isValid(value) }
     }
+
+    @Singleton // <2>
+    fun variableStatusValidator(): ConstraintValidator<ValidVariableStatus, String> {
+        return ConstraintValidator { value, _, _ -> ValidVariableStatusValidator.isValid(value) }
+    }
 }

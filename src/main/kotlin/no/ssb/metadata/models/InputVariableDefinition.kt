@@ -11,6 +11,7 @@ import no.ssb.metadata.constants.*
 import no.ssb.metadata.validators.ValidBoolean
 import no.ssb.metadata.validators.ValidDate
 import no.ssb.metadata.validators.ValidUrl
+import no.ssb.metadata.validators.ValidVariableStatus
 
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
@@ -48,7 +49,8 @@ data class InputVariableDefinition(
     @ValidBoolean(message = "Invalid value for contains_sensitive_personal_information, must be either true or false")
     val containsSensitivePersonalInformation: String,
     @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
-    val variableStatus: VariableStatus,
+    @ValidVariableStatus
+    val variableStatus: String,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     val measurementType: String?,
@@ -84,7 +86,7 @@ data class InputVariableDefinition(
             subjectFields = emptyList(),
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation.toBoolean(),
             containsSensitivePersonalInformation = containsSensitivePersonalInformation.toBoolean(),
-            variableStatus = variableStatus,
+            variableStatus = VariableStatus.valueOf(variableStatus),
             measurementType = measurementType?.let { KlassReference("", "", it) },
             validFrom = validFrom,
             validUntil = validUntil,

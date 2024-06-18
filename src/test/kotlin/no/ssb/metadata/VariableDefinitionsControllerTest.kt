@@ -135,7 +135,7 @@ class VariableDefinitionsControllerTest {
                 .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
-                .then().log().everything()
+                .then()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
                 .body(
                     "_embedded.errors[0].message",
@@ -187,7 +187,7 @@ class VariableDefinitionsControllerTest {
         ) {
             spec
                 .contentType(ContentType.JSON)
-                .body(updatedJsonString).log().body()
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()

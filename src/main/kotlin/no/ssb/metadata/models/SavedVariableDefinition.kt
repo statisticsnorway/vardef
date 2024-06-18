@@ -80,7 +80,7 @@ data class SavedVariableDefinition(
             subjectFields = emptyList(),
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation.toString(),
             containsSensitivePersonalInformation = containsSensitivePersonalInformation.toString(),
-            variableStatus = variableStatus,
+            variableStatus = variableStatus.toString(),
             // TODO
             measurementType = "",
             validFrom = validFrom,

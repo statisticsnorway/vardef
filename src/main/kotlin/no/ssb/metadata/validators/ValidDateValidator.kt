@@ -1,4 +1,4 @@
-package no.ssb.metadata.annotations
+package no.ssb.metadata.validators
 
 
 object ValidDateValidator {
@@ -6,6 +6,6 @@ object ValidDateValidator {
 
         val regex = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$".toRegex()
 
-        return !value.isNullOrBlank() && regex.matches(value)
+        return value.isNullOrBlank() || regex.matches(value)
     }
 }

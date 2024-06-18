@@ -5,6 +5,7 @@ import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
 import jakarta.validation.constraints.Pattern
+import java.util.Optional
 import org.bson.types.ObjectId
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
@@ -21,12 +22,12 @@ data class SavedVariableDefinition(
     var subjectFields: List<KlassReference>,
     var containsUnitIdentifyingInformation: Boolean,
     var containsSensitivePersonalInformation: Boolean,
-    var variableStatus: String,
+    var variableStatus: VariableStatus,
     var measurementType: KlassReference,
     var validFrom: String,
-    var validUntil: String,
-    var externalReferenceUri: String,
-    var relatedVariableDefinitionUris: List<String>,
+    var validUntil: String?,
+    var externalReferenceUri: String?,
+    var relatedVariableDefinitionUris: List<String>?,
     var owner: Owner?,
     var contact: Contact,
     var createdAt: String,
@@ -71,8 +72,8 @@ data class SavedVariableDefinition(
             unitTypes = emptyList(),
             // TODO
             subjectFields = emptyList(),
-            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
-            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation.toString(),
+            containsSensitivePersonalInformation = containsSensitivePersonalInformation.toString(),
             variableStatus = variableStatus,
             // TODO
             measurementType = "",

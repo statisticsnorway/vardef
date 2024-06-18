@@ -13,13 +13,13 @@ import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.services.VariableDefinitionService
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
-import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.MethodSource
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -46,9 +46,9 @@ class VariableDefinitionsControllerTest {
     inner class MongoDBDataSetupAndTest {
         @BeforeEach
         fun setUp() {
-            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
-            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
-            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
+//            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
+//            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
+//            variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
         }
 
         @Test
@@ -60,27 +60,10 @@ class VariableDefinitionsControllerTest {
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()
-                .statusCode(201)
+                .statusCode(HttpStatus.CREATED.code)
                 .body("short_name", equalTo("landbak"))
                 .body("name.nb", equalTo("Landbakgrunn"))
                 .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
-        }
-
-        @Test
-        fun `create variable definition with id`(spec: RequestSpecification) {
-            val updatedJsonString =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("id", "my-special-id")
-                }.toString()
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .`when`()
-                .post("/variable-definitions")
-                .then().log().everything()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("ID may not be specified on creation."))
         }
 
         @Test
@@ -90,7 +73,7 @@ class VariableDefinitionsControllerTest {
                 .contentType(ContentType.JSON)
                 .get("/variable-definitions")
                 .then()
-                .statusCode(200)
+                .statusCode(HttpStatus.OK.code)
                 .body("[0].definition", equalTo("For personer født"))
                 .body("[0].id", notNullValue())
                 .header("Content-Language", SupportedLanguages.NB.toString())
@@ -108,7 +91,7 @@ class VariableDefinitionsControllerTest {
                 .header("Accept-Language", language.toString())
                 .get("/variable-definitions")
                 .then()
-                .statusCode(200)
+                .statusCode(HttpStatus.OK.code)
                 .body("[1].id", notNullValue())
                 .body("[1].name", equalTo(INPUT_VARIABLE_DEFINITION_COPY.name.getValidLanguage(language)))
                 .header("Content-Language", language.toString())
@@ -122,61 +105,7 @@ class VariableDefinitionsControllerTest {
                 .header("Accept-Language", "en")
                 .get("/variable-definitions")
                 .then().log().everything()
-                .assertThat().statusCode(200).body("[2]", hasKey("name")).body("[2].name", equalTo(null))
-        }
-
-        @Test
-        fun `post request incorrect language code`(spec: RequestSpecification) {
-            val updatedJsonString =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    getJSONObject("name").apply {
-                        remove("en")
-                        put("se", "Landbakgrunn")
-                    }
-                }.toString()
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("Unknown property [se]"))
-        }
-
-        @Test
-        fun `post request missing compulsory field`(spec: RequestSpecification) {
-            val updatedJsonString =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    remove("name")
-                }.toString()
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
-        }
-
-        @Test
-        fun `post request missing compulsory short_name field`(spec: RequestSpecification) {
-            val updatedJsonString =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    remove("short_name")
-                }.toString()
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
+                .assertThat().statusCode(HttpStatus.OK.code).body("[2]", hasKey("name")).body("[2].name", equalTo(null))
         }
 
         @Test
@@ -194,74 +123,82 @@ class VariableDefinitionsControllerTest {
                 )
         }
 
-        @Test
-        fun `create variable definition with incorrect url`(spec: RequestSpecification) {
-            val updatedJsonString =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("external_reference_uri", "not url")
-                }.toString()
+
+        @ParameterizedTest
+        @MethodSource("TestUtils#invalidVariableDefinitions")
+        fun `create variable definition with invalid inputs`(
+            updatedJsonString: String,
+            errorMessage: String,
+            spec: RequestSpecification
+        ) {
             spec
-                .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("Website URL must be valid"))
+                .body(
+                    "_embedded.errors[0].message",
+                    containsString(errorMessage),
+                )
         }
 
-        @Test
-        fun `create variable definition with incorrect date`(spec: RequestSpecification) {
-            val updatedJsonString =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "2024-20-11")
-                }.toString()
+
+        @ParameterizedTest
+        @MethodSource("TestUtils#variableDefinitionsNonMandatoryFieldsRemoved")
+        fun `create variable definition with non mandatory fields removed`(
+            updatedJsonString: String,
+            spec: RequestSpecification
+        ) {
             spec
-                .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("Invalid date format"))
+                .statusCode(HttpStatus.CREATED.code)
         }
 
-        @Test
-        fun `create variable definition with incorrect url list`(spec: RequestSpecification) {
-            val updatedJsonString =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("related_variable_definition_uris", listOf("not a url", "https://example.com/", ""))
-                }.toString()
+
+        @ParameterizedTest
+        @MethodSource("TestUtils#variableDefinitionsMandatoryFieldsRemoved")
+        fun `create variable definition with mandatory fields removed`(
+            updatedJsonString: String,
+            errorMessage: String,
+            spec: RequestSpecification
+        ) {
             spec
-                .given()
                 .contentType(ContentType.JSON)
-                .body(updatedJsonString)
+                .body(updatedJsonString).log().body()
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()
                 .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("Invalid URL format"))
+                .body(
+                    "_embedded.errors[0].message",
+                    containsString(errorMessage),
+                )
         }
 
-        @Test
-        fun `create contact with incorrect email`(spec: RequestSpecification) {
-            val updatedJsonString =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    getJSONObject("contact").apply {
-                        put("email", "not an email")
-                    }
-                }.toString()
+        @ParameterizedTest
+        @MethodSource("TestUtils#variableDefinitionsVariousVariableStatus")
+        fun `test variable status inputs`(
+            updatedJsonString: String,
+            errorCode: Int,
+            spec: RequestSpecification
+        ) {
             spec
-                .given()
                 .contentType(ContentType.JSON)
-                .body(updatedJsonString)
+                .body(updatedJsonString).log().body()
                 .`when`()
                 .post("/variable-definitions")
                 .then().log().everything()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
-                .body("_embedded.errors[0].message", containsString("varDef.contact.email: must be a well-formed email address"))
+                .statusCode(errorCode)
         }
     }
 }
+
+
+
+

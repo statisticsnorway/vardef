@@ -1,4 +1,4 @@
-package no.ssb.metadata.annotations
+package no.ssb.metadata.validators
 
 import jakarta.validation.Constraint
 
@@ -8,7 +8,7 @@ import jakarta.validation.Constraint
 @Repeatable
 @MustBeDocumented
 @Constraint(validatedBy = [])
-annotation class ValidDate(
-    val message: String = "Invalid date format",
+annotation class ValidBoolean(
+    val message: String = "Invalid boolean",
 )
 

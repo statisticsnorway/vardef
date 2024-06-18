@@ -1,4 +1,4 @@
-package no.ssb.metadata.annotations
+package no.ssb.metadata.validators
 
 import jakarta.validation.Constraint
 

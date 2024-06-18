@@ -1,4 +1,4 @@
-package no.ssb.metadata.annotations
+package no.ssb.metadata.validators
 
 
 object ValidUrlValidator {
@@ -6,6 +6,6 @@ object ValidUrlValidator {
 
         val regex = "^(https?|ftp)://[^\\s/$.?#].\\S*$".toRegex()
 
-        return !value.isNullOrBlank() && regex.matches(value)
+        return value.isNullOrBlank() || regex.matches(value)
     }
 }

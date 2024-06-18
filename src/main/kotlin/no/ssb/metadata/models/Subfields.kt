@@ -2,6 +2,7 @@ package no.ssb.metadata.models
 
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.validation.constraints.Email
+import no.ssb.metadata.validators.ValidUrl
 
 @Serdeable
 data class LanguageStringType(
@@ -20,6 +21,7 @@ data class LanguageStringType(
 
 @Serdeable()
 data class KlassReference(
+    @ValidUrl
     val referenceUri: String,
     val code: String,
     val title: String,

@@ -1,9 +1,8 @@
 package no.ssb.metadata.validators
 
 import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.constants.VARDEF_ID_PATTERN
 import kotlin.reflect.KClass
-
-const val VARDEF_ID_PATTERN = "^[a-zA-Z0-9-_]{8}$"
 
 /**
  * Vardef ID validation constraint annotation class.

@@ -19,13 +19,13 @@ data class InputVariableDefinition(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
-    @Pattern(regexp = "^[a-z0-9_]{3,}$")
+    @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
     val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
-    @Pattern(regexp = "^[0-9]+$")
+    @Pattern(regexp = KLASS_ID_PATTERN)
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     val unitTypes: List<String>,
@@ -35,13 +35,13 @@ data class InputVariableDefinition(
     val variableStatus: String,
     @Nullable
     val measurementType: String?,
-    @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
+    @Pattern(regexp = DATE_PATTERN)
     val validFrom: String,
     @Nullable
-    @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
+    @Pattern(regexp = DATE_PATTERN)
     val validUntil: String?,
     @Nullable
-    @Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].\\S*$")
+    @Pattern(regexp = URL_PATTERN)
     val externalReferenceUri: String?,
     @Nullable
     val relatedVariableDefinitionUris: List<String>?,

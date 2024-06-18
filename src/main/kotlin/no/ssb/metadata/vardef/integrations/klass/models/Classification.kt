@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.micronaut.serde.annotation.Serdeable
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * Data classes for Klass Api response
@@ -39,6 +40,8 @@ data class Classification(
     @JsonProperty("statisticalUnits") val statisticalUnits: List<String>?,
     @JsonProperty("versions") val versions: List<ClassificationVersion>?,
     @JsonProperty("_links") val links: ClassificationLinks?,
+    @JsonProperty("classificationItems") val classificationItems: List<ClassificationItem>?,
+    @JsonProperty("lastFetched") val lastFetched: LocalDateTime = LocalDateTime.now(),
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -107,5 +110,7 @@ data class ClassificationItem(
     @JsonProperty("presentationName") val presentationName: String,
     @JsonProperty("validFrom") val validFrom: LocalDate?,
     @JsonProperty("validTo") val validTo: LocalDate?,
+    @JsonProperty("validFromInRequestedRange") val validFromInRequestedRange: LocalDate?,
+    @JsonProperty("validToInRequestedRange") val validToInRequestedRange: LocalDate?,
     @JsonProperty("notes") val notes: String,
 )

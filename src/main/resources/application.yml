@@ -44,10 +44,9 @@ micronaut:
     serialization:
       inclusion: always
 
-  cache:
-    caches:
-      classifications:
-        maximumSize: 3600
+  caches:
+    classifications:
+      maximumSize: 3600
 
   server:
     netty:
@@ -64,7 +63,5 @@ micronaut:
 
 klass:
   cached-classifications:
-    - id: 702
-      name: Kodeliste for enhetstyper
-    - id: 618
-      name: Kodeliste for statistikkområder i Statistikkbanken
+    unit-types: 702
+    areas: 618

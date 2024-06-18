@@ -36,27 +36,27 @@ class KlassApiMockkTest {
 
     @Test
     fun `klass api job`() {
-        every { klassApiMockkClient.fetchClassificationList() } returns (klassApiResponse)
+        every { klassApiMockkClient.fetchClassifications() } returns (klassApiResponse)
         val jobResult = klassApiService.fetchClassifications()
         assertThat(jobResult).isNotNull
         assertThat(jobResult.status).isEqualTo(HttpStatus.OK)
-        verify(exactly = 1) { klassApiMockkClient.fetchClassificationList() }
+        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
 
     @Test
     fun `no response klass api returns exception`() {
         every {
-            klassApiMockkClient.fetchClassificationList()
+            klassApiMockkClient.fetchClassifications()
         } throws IOException("Error while fetching classifications from Klass Api")
         val result = klassApiService.fetchClassifications()
         assertThat(result.status).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-        verify(exactly = 1) { klassApiMockkClient.fetchClassificationList() }
+        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
 
     @Test
     fun `klass api job returns status`() {
         every {
-            klassApiMockkClient.fetchClassificationList()
+            klassApiMockkClient.fetchClassifications()
         } throws HttpServerException("Server error")
         val result = klassApiService.fetchClassifications()
         assertThat(result.status()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -65,7 +65,7 @@ class KlassApiMockkTest {
     @Test
     fun `server error klass api`() {
         every {
-            klassApiMockkClient.fetchClassificationList()
+            klassApiMockkClient.fetchClassifications()
         } throws HttpServerException("Server error")
         val result = klassApiService.getClassifications()
         assertThat(result).isNull()
@@ -74,7 +74,7 @@ class KlassApiMockkTest {
     @Test
     fun `klass api status ok`() {
         every {
-            klassApiMockkClient.fetchClassificationList()
+            klassApiMockkClient.fetchClassifications()
         } returns klassApiResponse
         val response = klassApiService.getClassifications()
         assertThat(response).isNotNull

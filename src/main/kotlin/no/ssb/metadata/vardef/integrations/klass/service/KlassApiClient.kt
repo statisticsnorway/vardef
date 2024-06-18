@@ -23,7 +23,7 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 interface KlassApiClient {
     @Get("classifications?size=10000&language=nb&includeCodelists=true")
     @SingleResult
-    fun fetchClassificationList(): KlassApiResponse?
+    fun fetchClassifications(): KlassApiResponse?
 
     @Get("classifications/{classificationId}")
     @SingleResult

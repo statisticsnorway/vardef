@@ -50,7 +50,6 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.json)
     aotPlugins(platform("io.micronaut.platform:micronaut-platform"))
-
 }
 
 application {

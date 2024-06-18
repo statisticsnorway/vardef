@@ -17,7 +17,7 @@ class KlassApiCacheTest {
     @Order(1)
     fun `first run cache`() {
         assertThat(klassApiService.klassApiResponse).isNull()
-        klassApiService.klassApiJob()
+        klassApiService.fetchClassifications()
         assertThat(klassApiService.klassApiResponse).isNotNull()
     }
 

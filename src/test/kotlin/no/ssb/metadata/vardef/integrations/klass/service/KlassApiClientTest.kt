@@ -27,7 +27,7 @@ class KlassApiClientTest {
 
     @Test
     fun `fetch classifications from klass api`() {
-        val result = klassApiClient.fetchClassificationList()
+        val result = klassApiClient.fetchClassifications()
         assertThat(result).isNotNull
         assertThat(result?.page).isNotNull
         assertThat(result?.links).isNotNull

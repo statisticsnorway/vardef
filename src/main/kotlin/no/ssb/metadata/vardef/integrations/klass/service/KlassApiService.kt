@@ -27,7 +27,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
     @Cacheable("classifications")
     open fun fetchClassifications(): HttpResponse<KlassApiResponse> {
         return try {
-            val result = klassApiClient.fetchClassificationList()
+            val result = klassApiClient.fetchClassifications()
             logger.info("Retrieving classifications from Klass Api")
             this.klassApiResponse = result
             HttpResponse.ok(result)

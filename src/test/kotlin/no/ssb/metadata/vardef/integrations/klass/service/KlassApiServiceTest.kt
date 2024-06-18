@@ -13,9 +13,9 @@ import org.junit.jupiter.api.*
 class KlassApiServiceTest {
     @Inject
     lateinit var klassApiService: KlassApiService
+
     @Property(name = "klass.cached-classifications.unit-types")
     private var unitTypesId: Int = 0
-
 
     @Timeout(4)
     @Test
@@ -67,5 +67,4 @@ class KlassApiServiceTest {
         val classificationList = result?.classificationItems ?: emptyList()
         assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
     }
-
 }

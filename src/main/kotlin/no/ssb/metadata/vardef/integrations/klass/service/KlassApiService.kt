@@ -79,6 +79,4 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
     fun getUnitTypes(): Classification? = getClassification(unitTypesId)
 
     fun getAreas(): Classification? = getClassification(areasId)
-
-    
 }

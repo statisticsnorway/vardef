@@ -1,5 +1,6 @@
-package no.ssb.metadata.integrations.klass
+package no.ssb.metadata.vardef.integrations.klass.service
 
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.server.exceptions.HttpServerException
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -7,10 +8,10 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
-import no.ssb.metadata.vardef.integrations.klass.service.KlassApiClient
-import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.io.IOException
 
 @MockK
@@ -36,8 +37,9 @@ class KlassApiMockkTest {
     @Test
     fun `klass api job`() {
         every { klassApiMockkClient.fetchClassifications() } returns (klassApiResponse)
-        val jobResult = klassApiService.getClassifications()
+        val jobResult = klassApiService.fetchClassifications()
         assertThat(jobResult).isNotNull
+        assertThat(jobResult.status).isEqualTo(HttpStatus.OK)
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
 
@@ -46,8 +48,8 @@ class KlassApiMockkTest {
         every {
             klassApiMockkClient.fetchClassifications()
         } throws IOException("Error while fetching classifications from Klass Api")
-        val result = klassApiService.getClassifications()
-        assertThat(result).isNull()
+        val result = klassApiService.fetchClassifications()
+        assertThat(result.status).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
 
@@ -56,8 +58,8 @@ class KlassApiMockkTest {
         every {
             klassApiMockkClient.fetchClassifications()
         } throws HttpServerException("Server error")
-        val result = klassApiService.getClassifications()
-        assertThat(result).isNull()
+        val result = klassApiService.fetchClassifications()
+        assertThat(result.status()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     @Test
@@ -77,6 +79,5 @@ class KlassApiMockkTest {
         val response = klassApiService.getClassifications()
         assertThat(response).isNotNull
         assertThat(response).isInstanceOf(KlassApiResponse::class.java)
-        assertThat(klassApiService.klassApiResponse).isNotNull
     }
 }

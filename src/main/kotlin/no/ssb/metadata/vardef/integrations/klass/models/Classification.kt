@@ -3,6 +3,8 @@ package no.ssb.metadata.vardef.integrations.klass.models
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.micronaut.serde.annotation.Serdeable
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * Data classes for Klass Api response
@@ -18,17 +20,46 @@ data class KlassApiResponse(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class Classifications(
-    @JsonProperty("classifications") val classificationItems: List<ClassificationItem>,
+    @JsonProperty("classifications") val classifications: List<Classification>,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
-data class ClassificationItem(
+data class Classification(
     @JsonProperty("name") val name: String?,
     @JsonProperty("id") val id: Int?,
     @JsonProperty("classificationType") val classificationType: String?,
     @JsonProperty("lastModified") val lastModified: String?,
+    @JsonProperty("description") val description: String?,
+    @JsonProperty("primaryLanguage") val primaryLanguage: String?,
+    @JsonProperty("copyrighted") val copyrighted: Boolean,
+    @JsonProperty("includeShortName") val includeShortName: Boolean,
+    @JsonProperty("includeNotes") val includeNotes: Boolean,
+    @JsonProperty("contactPerson") val contactPerson: ContactPerson?,
+    @JsonProperty("owningSection") val owningSection: String?,
+    @JsonProperty("statisticalUnits") val statisticalUnits: List<String>?,
+    @JsonProperty("versions") val versions: List<ClassificationVersion>?,
     @JsonProperty("_links") val links: ClassificationLinks?,
+    @JsonProperty("classificationItems") val classificationItems: List<ClassificationItem>?,
+    @JsonProperty("lastFetched") val lastFetched: LocalDateTime = LocalDateTime.now(),
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Serdeable
+data class ContactPerson(
+    @JsonProperty("name") val name: String,
+    @JsonProperty("email") val email: String,
+    @JsonProperty("phone") val phone: String,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Serdeable
+data class ClassificationVersion(
+    @JsonProperty("name") val name: String?,
+    @JsonProperty("id") val id: Int?,
+    @JsonProperty("validFrom") val validFrom: LocalDate?,
+    @JsonProperty("lastModified") val lastModified: String?,
+    @JsonProperty("published") val published: List<String>?,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -60,4 +91,26 @@ data class Page(
     @JsonProperty("totalElements") val totalElements: Int,
     @JsonProperty("totalPages") val totalPages: Int,
     @JsonProperty("number") val number: Int,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Serdeable
+data class KlassApiCodeListResponse(
+    @JsonProperty("codes") val classificationItems: List<ClassificationItem>,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Serdeable
+data class ClassificationItem(
+    @JsonProperty("code") val code: String,
+    @JsonProperty("parentCode") val parentCode: String?,
+    @JsonProperty("level") val level: Int,
+    @JsonProperty("name") val name: String,
+    @JsonProperty("shortName") val shortName: String,
+    @JsonProperty("presentationName") val presentationName: String,
+    @JsonProperty("validFrom") val validFrom: LocalDate?,
+    @JsonProperty("validTo") val validTo: LocalDate?,
+    @JsonProperty("validFromInRequestedRange") val validFromInRequestedRange: LocalDate?,
+    @JsonProperty("validToInRequestedRange") val validToInRequestedRange: LocalDate?,
+    @JsonProperty("notes") val notes: String,
 )

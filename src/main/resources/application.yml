@@ -44,14 +44,9 @@ micronaut:
     serialization:
       inclusion: always
 
-  http:
-    services:
-      klass:
-        url: https://data.ssb.no/api/klass/v1/
-
-  klass:
-    unit-types: 702
-    subject-fields: 618
+  caches:
+    classifications:
+      maximumSize: 3600
 
   server:
     netty:
@@ -67,5 +62,6 @@ micronaut:
         url: https://data.ssb.no/api/klass/v1/
 
 klass:
-  unit-types: 702
-  subject-fields: 618
+  cached-classifications:
+    unit-types: 702
+    areas: 618

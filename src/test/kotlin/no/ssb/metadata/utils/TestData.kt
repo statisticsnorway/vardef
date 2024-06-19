@@ -1,6 +1,8 @@
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.models.*
 import org.bson.types.ObjectId
+import java.net.URI
+import java.time.LocalDate
 
 val INPUT_VARIABLE_DEFINITION =
     InputVariableDefinition(
@@ -13,12 +15,12 @@ val INPUT_VARIABLE_DEFINITION =
         subjectFields = listOf("", ""),
         containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
-        variableStatus = "Draft",
+        variableStatus = VariableStatus.DRAFT,
         measurementType = "",
-        validFrom = "",
-        validUntil = "",
-        externalReferenceUri = "https://www.example.com",
-        relatedVariableDefinitionUris = listOf("https://www.example.com"),
+        validFrom = LocalDate.of(2021, 1, 4),
+        validUntil = LocalDate.of(2021, 1, 4),
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact = Contact(LanguageStringType("", "", ""), ""),
     )
 
@@ -46,12 +48,12 @@ val SAVED_VARIABLE_DEFINITION =
         subjectFields = listOf(KlassReference("https://example.com/", "", "")),
         containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
-        variableStatus = "DRAFT",
+        variableStatus = VariableStatus.DRAFT,
         measurementType = KlassReference("https://example.com/", "", ""),
-        validFrom = "2024-06-11",
-        validUntil = "2024-06-11",
-        externalReferenceUri = "https://example.com/",
-        relatedVariableDefinitionUris = listOf("https://example.com/"),
+        validFrom = LocalDate.of(2021, 1, 4),
+        validUntil = LocalDate.of(2021, 1, 4),
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact = Contact(LanguageStringType("", "", ""), "me@example.com"),
         createdAt = "2024-06-11T08:15:19.421Z",
@@ -78,12 +80,12 @@ val RENDERED_VARIABLE_DEFINITION =
         subjectFields = listOf(KlassReference("https://example.com/", "", "")),
         containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
-        variableStatus = "DRAFT",
+        variableStatus = VariableStatus.DRAFT,
         measurementType = KlassReference("https://example.com/", "", ""),
-        validFrom = "2024-06-11",
-        validUntil = "2024-06-11",
-        externalReferenceUri = "https://example.com/",
-        relatedVariableDefinitionUris = listOf("https://example.com/"),
+        validFrom = LocalDate.of(2021, 1, 4),
+        validUntil = LocalDate.of(2021, 1, 4),
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact = RenderedContact("", "me@example.com"),
         createdAt = "2024-06-11T08:15:19.421Z",

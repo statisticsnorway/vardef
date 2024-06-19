@@ -4,6 +4,8 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import no.ssb.metadata.constants.RENDERED_VARIABLE_DEFINITION_EXAMPLE
+import java.net.URL
+import java.time.LocalDate
 
 @Schema(
     example = RENDERED_VARIABLE_DEFINITION_EXAMPLE,
@@ -19,12 +21,12 @@ data class RenderedVariableDefinition(
     val subjectFields: List<KlassReference>,
     val containsUnitIdentifyingInformation: Boolean,
     val containsSensitivePersonalInformation: Boolean,
-    val variableStatus: String,
+    val variableStatus: VariableStatus,
     val measurementType: KlassReference?,
-    val validFrom: String,
-    val validUntil: String?,
-    val externalReferenceUri: String?,
-    val relatedVariableDefinitionUris: List<String>?,
+    val validFrom: LocalDate,
+    val validUntil: LocalDate?,
+    val externalReferenceUri: URL?,
+    val relatedVariableDefinitionUris: List<URL>?,
     val owner: Owner?,
     val contact: RenderedContact,
     val createdAt: String,

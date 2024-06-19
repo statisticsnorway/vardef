@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.MethodSource
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -75,6 +76,21 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `get request incorrect language code`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .header("Accept-Language", "se")
+            .get("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body(
+                "_embedded.errors[0].message",
+                startsWith("Failed to convert argument [language] for value [se]"),
+            )
+    }
+
+    @Test
     fun `get request default language`(spec: RequestSpecification) {
         spec
             .`when`()
@@ -118,106 +134,74 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body("[4].name", equalTo(null))
     }
 
-    @Test
-    fun `post request incorrect language code`(spec: RequestSpecification) {
-        val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT).apply {
-                getJSONObject("name").apply {
-                    remove("en")
-                    put("se", "Landbakgrunn")
-                }
-            }.toString()
+    @ParameterizedTest
+    @MethodSource("TestUtils#invalidVariableDefinitions")
+    fun `create variable definition with invalid inputs`(
+        updatedJsonString: String,
+        errorMessage: String,
+        spec: RequestSpecification,
+    ) {
         spec
-            .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .`when`()
             .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body("_embedded.errors[0].message", containsString("Unknown property [se]"))
-    }
-
-    @Test
-    fun `post request missing compulsory field`(spec: RequestSpecification) {
-        val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT).apply {
-                remove("name")
-            }.toString()
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(updatedJsonString)
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
-    }
-
-    @Test
-    fun `post request missing compulsory short_name field`(spec: RequestSpecification) {
-        val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT).apply {
-                remove("short_name")
-            }.toString()
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(updatedJsonString)
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body("_embedded.errors[0].message", endsWith("null annotate it with @Nullable"))
-    }
-
-    @Test
-    fun `get request incorrect language code`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .header("Accept-Language", "se")
-            .get("/variable-definitions")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
                 "_embedded.errors[0].message",
-                startsWith("Failed to convert argument [language] for value [se]"),
+                containsString(errorMessage),
             )
     }
 
-    @Test
-    fun `create variable definition with incorrect url`(spec: RequestSpecification) {
-        val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT).apply {
-                put("external_reference_uri", "not url")
-            }.toString()
+    @ParameterizedTest
+    @MethodSource("TestUtils#variableDefinitionsNonMandatoryFieldsRemoved")
+    fun `create variable definition with non mandatory fields removed`(
+        updatedJsonString: String,
+        spec: RequestSpecification,
+    ) {
         spec
-            .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .`when`()
             .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body("_embedded.errors[0].message", containsString("varDef.externalReferenceUri: must match "))
+            .then().log().everything()
+            .statusCode(HttpStatus.CREATED.code)
     }
 
-    @Test
-    fun `create variable definition with incorrect date`(spec: RequestSpecification) {
-        val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT).apply {
-                put("valid_from", "2024-20-11")
-            }.toString()
+    @ParameterizedTest
+    @MethodSource("TestUtils#variableDefinitionsMandatoryFieldsRemoved")
+    fun `create variable definition with mandatory fields removed`(
+        updatedJsonString: String,
+        errorMessage: String,
+        spec: RequestSpecification,
+    ) {
         spec
-            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString).log().body()
+            .`when`()
+            .post("/variable-definitions")
+            .then().log().everything()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(errorMessage),
+            )
+    }
+
+    @ParameterizedTest
+    @MethodSource("TestUtils#variableDefinitionsVariousVariableStatus")
+    fun `test variable status inputs`(
+        updatedJsonString: String,
+        errorCode: Int,
+        spec: RequestSpecification,
+    ) {
+        spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .`when`()
             .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body("_embedded.errors[0].message", containsString("varDef.validFrom: must match "))
+            .then().log().everything()
+            .statusCode(errorCode)
     }
 }

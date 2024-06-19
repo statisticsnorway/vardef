@@ -134,8 +134,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body("[4].name", equalTo(null))
     }
 
-
-
     @ParameterizedTest
     @MethodSource("TestUtils#invalidVariableDefinitions")
     fun `create variable definition with invalid inputs`(
@@ -206,5 +204,4 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then().log().everything()
             .statusCode(errorCode)
     }
-
 }

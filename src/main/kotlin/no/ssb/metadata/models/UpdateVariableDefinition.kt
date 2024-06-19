@@ -1,6 +1,7 @@
 package no.ssb.metadata.models
 
 import io.micronaut.core.annotation.Nullable
+import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
@@ -47,13 +48,12 @@ data class UpdateVariableDefinition(
     @Nullable
     val measurementType: String?,
     @Nullable
-    @Pattern(regexp = DATE_PATTERN)
+    @Format("yyyy-MM-dd")
     val validFrom: LocalDate?,
     @Nullable
-    @Pattern(regexp = DATE_PATTERN)
+    @Format("yyyy-MM-dd")
     val validUntil: LocalDate?,
     @Nullable
-    @Pattern(regexp = URL_PATTERN)
     val externalReferenceUri: URL?,
     @Nullable
     val relatedVariableDefinitionUris: List<URL>?,

@@ -32,7 +32,7 @@ const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """
             "nb": "string",
             "nn": "string"
         },
-        "email": ""
+        "email": "user@example.com"
     }
 }
 """
@@ -75,7 +75,7 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     },
     "contact": {
         "title": "",
-        "email": ""
+        "email": "user@example.com"
     },
     "created_at": "2024-06-12T10:39:41.038Z",
     "created_by": {

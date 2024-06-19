@@ -35,22 +35,4 @@ class KlassApiServiceIntegrationTest {
         val classificationList = result.classificationItems
         assertThat(classificationList.isEmpty())
     }
-
-    @Test
-    fun `get unit types from klass api`() {
-        val result = klassApiService.getUnitTypes()
-        assertThat(result).isNotNull
-
-        val classificationList = result.classificationItems
-        assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
-    }
-
-    @Test
-    fun `get areas from klass api`() {
-        val result = klassApiService.getAreas()
-        assertThat(result).isNotNull
-
-        val classificationList = result.classificationItems
-        assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
-    }
 }

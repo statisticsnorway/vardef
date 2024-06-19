@@ -16,12 +16,6 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
     private val classificationCache: MutableMap<Int, Classification> = mutableMapOf()
     private val classificationItemListCache = mutableMapOf<Int, List<ClassificationItem>>()
 
-    @Property(name = "klass.cached-classifications.unit-types")
-    private var unitTypesId: Int = 0
-
-    @Property(name = "klass.cached-classifications.areas")
-    private var areasId: Int = 0
-
     @Cacheable("classifications")
     open fun fetchAllClassifications(): List<Classification> {
         return try {
@@ -74,8 +68,4 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) {
 
         return classificationItemListCache.getOrDefault(classificationId, emptyList())
     }
-
-    fun getUnitTypes(): Classification = getClassification(unitTypesId)
-
-    fun getAreas(): Classification = getClassification(areasId)
 }

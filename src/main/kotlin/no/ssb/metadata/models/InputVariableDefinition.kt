@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import jakarta.validation.Valid
 import jakarta.validation.constraints.*
+import java.net.URI
+import java.net.URL
 import no.ssb.metadata.constants.*
 import no.ssb.metadata.validators.ValidBoolean
 import no.ssb.metadata.validators.ValidUrl
@@ -64,11 +66,10 @@ data class InputVariableDefinition(
     val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
-    @ValidUrl(message = "Website URL must be valid")
-    val externalReferenceUri: String?,
+    val externalReferenceUri: URL?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
-    val relatedVariableDefinitionUris: List<@ValidUrl String>?,
+    val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
     val contact: Contact,

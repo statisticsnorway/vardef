@@ -5,6 +5,7 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Pattern
+import java.net.URL
 import no.ssb.metadata.constants.*
 import java.time.LocalDate
 
@@ -53,9 +54,9 @@ data class UpdateVariableDefinition(
     val validUntil: LocalDate?,
     @Nullable
     @Pattern(regexp = URL_PATTERN)
-    val externalReferenceUri: String?,
+    val externalReferenceUri: URL?,
     @Nullable
-    val relatedVariableDefinitionUris: List<String>?,
+    val relatedVariableDefinitionUris: List<URL>?,
     @Nullable
     val contact: Contact?,
 )

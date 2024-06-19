@@ -5,6 +5,8 @@ import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
+import java.net.URI
+import java.net.URL
 import org.bson.types.ObjectId
 import java.time.LocalDate
 
@@ -29,9 +31,9 @@ data class SavedVariableDefinition(
     @Nullable
     var validUntil: LocalDate?,
     @Nullable
-    var externalReferenceUri: String?,
+    var externalReferenceUri: URL?,
     @Nullable
-    var relatedVariableDefinitionUris: List<String>?,
+    var relatedVariableDefinitionUris: List<URL>?,
     @Nullable
     var owner: Owner?,
     var contact: Contact,

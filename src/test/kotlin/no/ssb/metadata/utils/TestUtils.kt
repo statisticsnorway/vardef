@@ -12,12 +12,13 @@ object TestUtils {
             listOf(
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2024-20-11") } to "Invalid date format",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2024-20-11") } to "Invalid date format",
+                JSONObject(JSON_TEST_INPUT).apply { put("external_reference_uri", "Not url") } to "Not url",
                 JSONObject(JSON_TEST_INPUT).apply {
                     put(
                         "related_variable_definition_uris",
                         listOf("not a url", "https://example.com/", ""),
                     )
-                } to "Invalid URL format",
+                } to "not a url",
                 JSONObject(JSON_TEST_INPUT).apply {
                     getJSONObject("contact").put(
                         "email",

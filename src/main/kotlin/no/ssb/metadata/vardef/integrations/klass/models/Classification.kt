@@ -18,18 +18,18 @@ data class KlassApiResponse(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class Classifications(
-    @JsonProperty("classifications") val classifications: List<Classification>,
+    val classifications: List<Classification>,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class Classification(
-    @JsonProperty("name") val name: String = "",
-    @JsonProperty("id") val id: Int = 0,
-    @JsonProperty("classificationType") val classificationType: String = "",
-    @JsonProperty("lastModified") val lastModified: String = "",
-    @JsonProperty("classificationItems") val classificationItems: List<ClassificationItem> = emptyList(),
-    @JsonProperty("lastFetched") val lastFetched: LocalDateTime = LocalDateTime.now(),
+    val name: String = "",
+    val id: Int = 0,
+    val classificationType: String = "",
+    val lastModified: String = "",
+    val classificationItems: List<ClassificationItem> = emptyList(),
+    val lastFetched: LocalDateTime = LocalDateTime.now(),
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -41,10 +41,10 @@ data class KlassApiCodeListResponse(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
 data class ClassificationItem(
-    @JsonProperty("code") val code: String = "",
-    @JsonProperty("name") val name: String = "",
-    @JsonProperty("validFrom") val validFrom: LocalDate? = null,
-    @JsonProperty("validTo") val validTo: LocalDate? = null,
-    @JsonProperty("validFromInRequestedRange") val validFromInRequestedRange: LocalDate? = null,
-    @JsonProperty("validToInRequestedRange") val validToInRequestedRange: LocalDate? = null,
+    val code: String = "",
+    val name: String = "",
+    val validFrom: LocalDate? = null,
+    val validTo: LocalDate? = null,
+    val validFromInRequestedRange: LocalDate? = null,
+    val validToInRequestedRange: LocalDate? = null,
 )

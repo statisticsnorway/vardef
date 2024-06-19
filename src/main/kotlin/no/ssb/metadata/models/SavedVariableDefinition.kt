@@ -5,9 +5,9 @@ import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
+import org.bson.types.ObjectId
 import java.net.URI
 import java.net.URL
-import org.bson.types.ObjectId
 import java.time.LocalDate
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
@@ -83,7 +83,7 @@ data class SavedVariableDefinition(
             subjectFields = emptyList(),
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus,//variableStatus.toString(),
+            variableStatus = variableStatus,
             // TODO
             measurementType = "",
             validFrom = validFrom,
@@ -127,7 +127,10 @@ data class SavedVariableDefinition(
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
-            relatedVariableDefinitionUris = varDefUpdates.relatedVariableDefinitionUris?.map{ it.toString() } ?: relatedVariableDefinitionUris,
+            relatedVariableDefinitionUris =
+                varDefUpdates.relatedVariableDefinitionUris?.map {
+                    it.toString()
+                } ?: relatedVariableDefinitionUris,
             contact = varDefUpdates.contact ?: contact,
         )
 }

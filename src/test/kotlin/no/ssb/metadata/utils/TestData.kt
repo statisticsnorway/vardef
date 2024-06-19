@@ -1,7 +1,7 @@
 import io.viascom.nanoid.NanoId
-import java.net.URI
 import no.ssb.metadata.models.*
 import org.bson.types.ObjectId
+import java.net.URI
 import java.time.LocalDate
 
 val INPUT_VARIABLE_DEFINITION =
@@ -24,12 +24,14 @@ val INPUT_VARIABLE_DEFINITION =
         contact = Contact(LanguageStringType("", "", ""), ""),
     )
 
-val INPUT_VARIABLE_DEFINITION_COPY = INPUT_VARIABLE_DEFINITION.copy(
+val INPUT_VARIABLE_DEFINITION_COPY =
+    INPUT_VARIABLE_DEFINITION.copy(
         name = LanguageStringType(nb = "Landbakgrunn 2", nn = "Landbakgrunn 2", en = "Country Background 2"),
         shortName = "landbak 2",
     )
 
-val INPUT_VARIABLE_DEFINITION_NO_NAME = INPUT_VARIABLE_DEFINITION.copy(
+val INPUT_VARIABLE_DEFINITION_NO_NAME =
+    INPUT_VARIABLE_DEFINITION.copy(
         name = LanguageStringType(nb = "Landbakgrunn", nn = "", en = null),
         shortName = "landbak 2",
     )
@@ -51,7 +53,7 @@ val SAVED_VARIABLE_DEFINITION =
         validFrom = LocalDate.of(2021, 1, 4),
         validUntil = LocalDate.of(2021, 1, 4),
         externalReferenceUri = URI("https://example.com/").toURL(),
-        relatedVariableDefinitionUris = listOf(),//listOf(URI("https://example.com/").toURL()),
+        relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact = Contact(LanguageStringType("", "", ""), "me@example.com"),
         createdAt = "2024-06-11T08:15:19.421Z",
@@ -83,7 +85,7 @@ val RENDERED_VARIABLE_DEFINITION =
         validFrom = LocalDate.of(2021, 1, 4),
         validUntil = LocalDate.of(2021, 1, 4),
         externalReferenceUri = URI("https://example.com/").toURL(),
-        relatedVariableDefinitionUris = listOf(),//listOf(URI("https://example.com/").toURL()),
+        relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact = RenderedContact("", "me@example.com"),
         createdAt = "2024-06-11T08:15:19.421Z",

@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import jakarta.validation.Valid
 import jakarta.validation.constraints.*
-import java.net.URL
 import no.ssb.metadata.constants.*
+import java.net.URL
 import java.time.LocalDate
 
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -81,12 +81,12 @@ data class InputVariableDefinition(
             subjectFields = emptyList(),
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus,//VariableStatus.valueOf(variableStatus),
+            variableStatus = variableStatus,
             measurementType = measurementType?.let { KlassReference("https://example.com/", "", it) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map{it.toString()},
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             // TODO
             owner = null,
             contact = contact,

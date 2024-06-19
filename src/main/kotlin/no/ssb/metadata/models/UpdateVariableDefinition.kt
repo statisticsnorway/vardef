@@ -5,8 +5,8 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Pattern
-import java.net.URL
 import no.ssb.metadata.constants.*
+import java.net.URL
 import java.time.LocalDate
 
 /**

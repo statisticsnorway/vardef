@@ -1,7 +1,7 @@
 logger:
   levels:
-    root: DEBUG
-    org.mongodb.*: DEBUG
+#    root: DEBUG
+#    org.mongodb.*: DEBUG
 
 klass:
   classifications:

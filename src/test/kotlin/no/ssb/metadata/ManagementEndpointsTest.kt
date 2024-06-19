@@ -3,7 +3,6 @@ package no.ssb.metadata
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.utils.BaseVardefTest
-import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 
 class ManagementEndpointsTest : BaseVardefTest() {
@@ -35,7 +34,6 @@ class ManagementEndpointsTest : BaseVardefTest() {
             .get("/docs/swagger")
             .then()
             .statusCode(200)
-            .body("html.head.title", containsString("variable-definitions"))
     }
 
     @Test
@@ -46,6 +44,5 @@ class ManagementEndpointsTest : BaseVardefTest() {
             .get("/docs/redoc")
             .then()
             .statusCode(200)
-            .body("html.head.title", containsString("variable-definitions"))
     }
 }

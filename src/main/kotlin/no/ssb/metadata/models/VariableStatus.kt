@@ -10,10 +10,10 @@ enum class VariableStatus {
     @JsonProperty("draft")
     DRAFT,
 
-    @JsonProperty("published internal")
+    @JsonProperty("published_internal")
     PUBLISHED_INTERNAL,
 
-    @JsonProperty("published external")
+    @JsonProperty("published_external")
     PUBLISHED_EXTERNAL,
 
     @JsonProperty("deprecated")

@@ -8,11 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import jakarta.validation.Valid
 import jakarta.validation.constraints.*
-import java.net.URI
 import java.net.URL
 import no.ssb.metadata.constants.*
-import no.ssb.metadata.validators.ValidBoolean
-import no.ssb.metadata.validators.ValidVariableStatus
 import java.time.LocalDate
 
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -44,15 +41,12 @@ data class InputVariableDefinition(
     val subjectFields: List<String>,
     @Schema(description = CONTAINS_UNIT_IDENTIFYING_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
-    @ValidBoolean(message = "Invalid value for contains_unit_identifying_information, must be either true or false")
-    val containsUnitIdentifyingInformation: String,
+    val containsUnitIdentifyingInformation: Boolean,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
-    @ValidBoolean(message = "Invalid value for contains_sensitive_personal_information, must be either true or false")
-    val containsSensitivePersonalInformation: String,
+    val containsSensitivePersonalInformation: Boolean,
     @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
-    @ValidVariableStatus
-    val variableStatus: String,
+    val variableStatus: VariableStatus,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     val measurementType: String?,
@@ -85,14 +79,14 @@ data class InputVariableDefinition(
             unitTypes = emptyList(),
             // TODO
             subjectFields = emptyList(),
-            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation.toBoolean(),
-            containsSensitivePersonalInformation = containsSensitivePersonalInformation.toBoolean(),
-            variableStatus = VariableStatus.valueOf(variableStatus),
-            measurementType = measurementType?.let { KlassReference(URI("https://example.com/").toURL(), "", it) },
+            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
+            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            variableStatus = variableStatus,//VariableStatus.valueOf(variableStatus),
+            measurementType = measurementType?.let { KlassReference("https://example.com/", "", it) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map{it.toString()},
             // TODO
             owner = null,
             contact = contact,

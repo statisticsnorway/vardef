@@ -33,7 +33,7 @@ data class SavedVariableDefinition(
     @Nullable
     var externalReferenceUri: URL?,
     @Nullable
-    var relatedVariableDefinitionUris: List<URL>?,
+    var relatedVariableDefinitionUris: List<String>?,
     @Nullable
     var owner: Owner?,
     var contact: Contact,
@@ -60,7 +60,7 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             owner = owner,
             contact = RenderedContact(contact.title.getValidLanguage(language), contact.email),
             createdAt = createdAt,
@@ -81,15 +81,15 @@ data class SavedVariableDefinition(
             unitTypes = emptyList(),
             // TODO
             subjectFields = emptyList(),
-            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation.toString(),
-            containsSensitivePersonalInformation = containsSensitivePersonalInformation.toString(),
-            variableStatus = variableStatus.toString(),
+            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
+            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            variableStatus = variableStatus,//variableStatus.toString(),
             // TODO
             measurementType = "",
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
         )
 
@@ -112,9 +112,9 @@ data class SavedVariableDefinition(
             // TODO DPMETA-257 convert reference to URI
             classificationUri = varDefUpdates.classificationReference ?: classificationUri,
             // TODO DPMETA-257
-            unitTypes = listOf(KlassReference(URI("https://example.com/").toURL(), "", "")),
+            unitTypes = listOf(KlassReference("https://example.com/", "", "")),
             // TODO DPMETA-257
-            subjectFields = listOf(KlassReference(URI("https://example.com/").toURL(), "", "")),
+            subjectFields = listOf(KlassReference("https://example.com/", "", "")),
             containsUnitIdentifyingInformation =
                 varDefUpdates.containsUnitIdentifyingInformation
                     ?: containsUnitIdentifyingInformation,
@@ -123,11 +123,11 @@ data class SavedVariableDefinition(
                     ?: containsSensitivePersonalInformation,
             variableStatus = varDefUpdates.variableStatus ?: variableStatus,
             // TODO DPMETA-257
-            measurementType = KlassReference(URI("https://example.com/").toURL(), "", ""),
+            measurementType = KlassReference("https://example.com/", "", ""),
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
-            relatedVariableDefinitionUris = varDefUpdates.relatedVariableDefinitionUris ?: relatedVariableDefinitionUris,
+            relatedVariableDefinitionUris = varDefUpdates.relatedVariableDefinitionUris?.map{ it.toString() } ?: relatedVariableDefinitionUris,
             contact = varDefUpdates.contact ?: contact,
         )
 }

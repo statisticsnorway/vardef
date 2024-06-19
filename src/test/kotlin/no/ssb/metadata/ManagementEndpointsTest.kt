@@ -1,13 +1,12 @@
 package no.ssb.metadata
 
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.utils.BaseVardefTest
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 
-@MicronautTest
-class ManagementEndpointsTest {
+class ManagementEndpointsTest : BaseVardefTest() {
     @Test
     fun `health endpoint`(spec: RequestSpecification) {
         spec

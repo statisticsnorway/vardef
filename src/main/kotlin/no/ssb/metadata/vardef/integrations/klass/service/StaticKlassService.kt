@@ -36,7 +36,8 @@ class StaticKlassService : KlassService {
     lateinit var beanContext: BeanContext
 
     override fun getCodesFor(id: String): List<String> {
-        val classification: StaticClassification = beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
+        val classification: StaticClassification =
+            beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
         println(classification)
         return classification.codes?.map { it.code }.orEmpty().toList()
     }

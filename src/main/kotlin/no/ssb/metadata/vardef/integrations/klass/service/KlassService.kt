@@ -5,6 +5,6 @@ import io.micronaut.core.annotation.Introspected
 
 @Prototype
 @Introspected
-interface KlassService {
+fun interface KlassService {
     fun getCodesFor(id: String): List<String>
 }

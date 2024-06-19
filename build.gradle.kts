@@ -28,6 +28,7 @@ dependencies {
     ksp(libs.micronaut.serde.processor)
     ksp(libs.micronaut.validation.processor)
     implementation(libs.micronaut.mongo.sync)
+    implementation(libs.micronaut.cache.caffeine)
     implementation(libs.micronaut.data.mongodb)
     implementation(libs.micronaut.kotlin.runtime)
     implementation(libs.micronaut.management)

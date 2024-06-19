@@ -12,7 +12,6 @@ import java.net.URI
 import java.net.URL
 import no.ssb.metadata.constants.*
 import no.ssb.metadata.validators.ValidBoolean
-import no.ssb.metadata.validators.ValidUrl
 import no.ssb.metadata.validators.ValidVariableStatus
 import java.time.LocalDate
 
@@ -89,7 +88,7 @@ data class InputVariableDefinition(
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation.toBoolean(),
             containsSensitivePersonalInformation = containsSensitivePersonalInformation.toBoolean(),
             variableStatus = VariableStatus.valueOf(variableStatus),
-            measurementType = measurementType?.let { KlassReference("", "", it) },
+            measurementType = measurementType?.let { KlassReference(URI("https://example.com/").toURL(), "", it) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

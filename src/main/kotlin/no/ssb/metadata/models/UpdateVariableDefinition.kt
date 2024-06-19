@@ -43,7 +43,7 @@ data class UpdateVariableDefinition(
     @Nullable
     val containsSensitivePersonalInformation: Boolean?,
     @Nullable
-    val variableStatus: String?,
+    val variableStatus: VariableStatus?,
     @Nullable
     val measurementType: String?,
     @Nullable

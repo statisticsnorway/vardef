@@ -112,18 +112,18 @@ data class SavedVariableDefinition(
             // TODO DPMETA-257 convert reference to URI
             classificationUri = varDefUpdates.classificationReference ?: classificationUri,
             // TODO DPMETA-257
-            unitTypes = listOf(KlassReference("https://example.com/", "", "")),
+            unitTypes = listOf(KlassReference(URI("https://example.com/").toURL(), "", "")),
             // TODO DPMETA-257
-            subjectFields = listOf(KlassReference("https://example.com/", "", "")),
+            subjectFields = listOf(KlassReference(URI("https://example.com/").toURL(), "", "")),
             containsUnitIdentifyingInformation =
                 varDefUpdates.containsUnitIdentifyingInformation
                     ?: containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation =
                 varDefUpdates.containsSensitivePersonalInformation
                     ?: containsSensitivePersonalInformation,
-            variableStatus = variableStatus,
+            variableStatus = varDefUpdates.variableStatus ?: variableStatus,
             // TODO DPMETA-257
-            measurementType = KlassReference("https://example.com/", "", ""),
+            measurementType = KlassReference(URI("https://example.com/").toURL(), "", ""),
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,

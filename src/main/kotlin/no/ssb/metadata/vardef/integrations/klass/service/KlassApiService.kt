@@ -3,7 +3,6 @@ package no.ssb.metadata.vardef.integrations.klass.service
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.CachePut
 import io.micronaut.cache.annotation.Cacheable
-import io.micronaut.core.annotation.Introspected
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory
 
 @CacheConfig("classifications")
 @Singleton
-@Introspected
 open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
     private val classificationCache: MutableMap<Int, Classification> = mutableMapOf()

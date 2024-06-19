@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
-import io.micronaut.core.annotation.Introspected
 import io.micronaut.core.async.annotation.SingleResult
 import io.micronaut.http.HttpHeaders.ACCEPT
 import io.micronaut.http.HttpHeaders.USER_AGENT
@@ -21,7 +20,6 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
     Header(name = USER_AGENT, value = "VarDef API"),
     Header(name = ACCEPT, value = "application/json"),
 )
-@Introspected
 interface KlassApiClient {
     @Get("classifications?size=10000&language=nb&includeCodelists=true")
     @SingleResult

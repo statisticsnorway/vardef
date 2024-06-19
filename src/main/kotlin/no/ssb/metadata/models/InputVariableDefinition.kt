@@ -7,11 +7,15 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import jakarta.validation.Valid
-import jakarta.validation.constraints.*
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.*
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import java.net.URL
 import java.time.LocalDate
 
+@Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
     example = INPUT_VARIABLE_DEFINITION_EXAMPLE,
@@ -34,11 +38,16 @@ data class InputVariableDefinition(
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @NotEmpty
-    val unitTypes: List<String>,
-    // TODO Validate against klass data
+    val unitTypes: List<
+        @KlassCode("702")
+        String,
+    >,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @NotEmpty
-    val subjectFields: List<String>,
+    val subjectFields: List<
+        @KlassCode("618")
+        String,
+    >,
     @Schema(description = CONTAINS_UNIT_IDENTIFYING_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     val containsUnitIdentifyingInformation: Boolean,
@@ -49,6 +58,7 @@ data class InputVariableDefinition(
     val variableStatus: VariableStatus,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
+    @KlassCode("303")
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format("yyyy-MM-dd")

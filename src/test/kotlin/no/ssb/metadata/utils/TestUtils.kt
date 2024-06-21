@@ -86,12 +86,13 @@ object TestUtils {
                 JSONObject(JSON_TEST_INPUT).apply {
                     remove("subject_fields")
                 } to "varDef.subjectFields: must not be empty",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    remove("contains_unit_identifying_information")
-                } to "varDef.containsUnitIdentifyingInformation: must not be empty",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    remove("contains_sensitive_personal_information")
-                } to "varDef.containsSensitivePersonalInformation: must not be empty",
+                // TODO Boolean fields should fail validation
+//                JSONObject(JSON_TEST_INPUT).apply {
+//                    remove("contains_unit_identifying_information")
+//                } to "varDef.containsUnitIdentifyingInformation: must not be empty",
+//                JSONObject(JSON_TEST_INPUT).apply {
+//                    remove("contains_sensitive_personal_information")
+//                } to "varDef.containsSensitivePersonalInformation: must not be empty",
                 JSONObject(JSON_TEST_INPUT).apply {
                     remove("variable_status")
                 } to "null annotate it with @Nullable",

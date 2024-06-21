@@ -3,80 +3,70 @@ package no.ssb.metadata.vardef.integrations.klass.service
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.CachePut
 import io.micronaut.cache.annotation.Cacheable
-import io.micronaut.context.annotation.Property
-import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
+import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import org.slf4j.LoggerFactory
 
 @CacheConfig("classifications")
 @Singleton
-open class KlassApiService(private val klassApiClient: KlassApiClient) {
+open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
-    private val classifications = mutableMapOf<Int, Classification?>()
-    var klassApiResponse: KlassApiResponse? = null
-
-    @Property(name = "klass.cached-classifications.unit-types")
-    private var unitTypesId: Int = 0
-
-    @Property(name = "klass.cached-classifications.areas")
-    private var areasId: Int = 0
+    private val classificationCache: MutableMap<Int, Classification> = mutableMapOf()
+    private val classificationItemListCache = mutableMapOf<Int, List<ClassificationItem>>()
 
     @Cacheable("classifications")
-    open fun fetchClassifications(): HttpResponse<KlassApiResponse> {
+    open fun fetchAllClassifications(): List<Classification> {
         return try {
-            val result = klassApiClient.fetchClassifications()
             logger.info("Retrieving classifications from Klass Api")
-            this.klassApiResponse = result
-            HttpResponse.ok(result)
+            klassApiClient.fetchClassifications()?.embedded?.classifications ?: emptyList()
         } catch (e: Exception) {
             logger.warn("Error while fetching classifications from Klass Api", e)
-            HttpResponse.serverError()
+            emptyList()
         }
-    }
-
-    fun getClassifications(): KlassApiResponse? {
-        if (this.klassApiResponse == null) {
-            logger.info("Request Klass Api")
-            val response = fetchClassifications()
-            if (response.status == HttpStatus.OK) {
-                return this.klassApiResponse!!
-            }
-            return null
-        }
-        logger.info("Fetching from cache")
-        return this.klassApiResponse!!
     }
 
     @Cacheable("classifications")
-    open fun getClassification(classificationId: Int): Classification? {
-        return try {
-            classifications.getOrDefault(classificationId, fetchClassification(classificationId))
-        } catch (e: InterruptedException) {
-            null
+    open fun getClassifications(): List<Classification> {
+        if (classificationCache.isEmpty()) {
+            logger.info("Request Klass Api")
+            fetchAllClassifications().forEach { classification ->
+                classificationCache[classification.id] = classification
+            }
         }
+        logger.info("Fetching all classifications from cache")
+        return classificationCache.values.toList()
     }
 
-    @CachePut("classifications", parameters = ["classificationId"])
-    open fun fetchClassification(classificationId: Int): Classification? {
-        logger.info("Fetch classification and codes by id $classificationId from Klass Api")
-        val classification = klassApiClient.fetchClassification(classificationId)
-        val codes = klassApiClient.fetchCodeList(classificationId)
-
-        if (classification == null) {
-            logger.info("No classification found")
-            return null
+    @CachePut("classification", parameters = ["classificationId"])
+    open fun getClassification(classificationId: Int): Classification {
+        if (classificationCache.isEmpty()) {
+            getClassifications()
         }
 
-        logger.info("Caching classification with id $classificationId")
-        classifications[classificationId] = classification.copy(classificationItems = codes?.classificationItems)
+        logger.info("Fetching classification with id $classificationId from cache")
 
-        return classifications[classificationId]
+        return classificationCache
+            .getOrDefault(classificationId, Classification())
+            .copy(classificationItems = getClassificationItemsById(classificationId))
     }
 
-    fun getUnitTypes(): Classification? = getClassification(unitTypesId)
+    @CachePut("ClassificationItems", parameters = ["classificationId"])
+    open fun getClassificationItemsById(classificationId: Int): List<ClassificationItem> {
+        if (!classificationItemListCache.containsKey(classificationId)) {
+            try {
+                logger.info("Retrieving classification items from Klass Api")
+                classificationItemListCache[classificationId] =
+                    klassApiClient
+                        .fetchCodeList(classificationId)?.classificationItems
+                        ?: emptyList()
+            } catch (e: Exception) {
+                logger.warn("Error while fetching classification items from Klass Api", e)
+            }
+        }
 
-    fun getAreas(): Classification? = getClassification(areasId)
+        return classificationItemListCache.getOrDefault(classificationId, emptyList())
+    }
+
+    override fun getCodesFor(id: String): List<String> = getClassificationItemsById(id.toInt()).map { it.code }
 }

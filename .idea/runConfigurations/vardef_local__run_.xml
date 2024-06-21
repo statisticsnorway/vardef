@@ -15,6 +15,7 @@
       </option>
       <option name="taskNames">
         <list>
+          <option value="clean" />
           <option value="run" />
         </list>
       </option>

@@ -13,7 +13,7 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiCodeListResponse
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 
 /**
- * A declarative client response from Klass Api
+ * A declarative client for the Klass API
  */
 @Client(id = "klass")
 @Headers(

@@ -18,22 +18,27 @@ const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """
     "subject_fields": ["he04"],
     "contains_unit_identifying_information": true,
     "contains_sensitive_personal_information": true,
-    "variable_status": "Draft",
+    "variable_status": "DRAFT",
     "measurement_type": "volume",
     "valid_from": "2024-06-05",
     "valid_until": "2024-06-05",
     "external_reference_uri": "https://example.com/",
-    "relevant_variable_definition_uri": [
+    "related_variable_definition_uris": [
         "https://example.com/"
     ],
     "contact": {
-        "title": "",
-        "email": ""
+        "title": {
+            "en": "string",
+            "nb": "string",
+            "nn": "string"
+        },
+        "email": "user@example.com"
     }
 }
 """
 
 const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
+    "id": "wypvb3wd",
     "name": "Landbakgrunn",
     "short_name": "string",
     "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
@@ -42,17 +47,17 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
             "reference_uri": "https://example.com/",
             "code": "20",
             "title": "Storfe"
-        },
+        }
     ],
     "subject_fields": [{
             "reference_uri": "https://example.com/",
             "code": "sk",
             "title": "Sosiale forhold og kriminalitet"
-        },
+        }
     ],
     "contains_unit_identifying_information": true,
     "contains_sensitive_personal_information": true,
-    "variable_status": "Draft",
+    "variable_status": "DRAFT",
     "measurement_type": {
         "reference_uri": "https://example.com/",
         "code": "07",
@@ -61,16 +66,16 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "valid_from": "2024-06-05",
     "valid_until": "2024-06-05",
     "external_reference_uri": "https://example.com/",
-    "relevant_variable_definition_uri": [
+    "related_variable_definition_uris": [
         "https://example.com/"
     ],
     "owner": {
         "code": "724",
-        "name": "Dataplatform"
+        "name": "Dataplattform"
     },
     "contact": {
         "title": "",
-        "email": ""
+        "email": "user@example.com"
     },
     "created_at": "2024-06-12T10:39:41.038Z",
     "created_by": {
@@ -79,8 +84,8 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     },
     "last_updated_at": "2024-06-12T10:39:41.038Z",
     "last_updated_by": {
-        "title": "",
-        "email": ""
+        "code": "",
+        "name": ""
     }
 }
 """

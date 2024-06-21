@@ -1,11 +1,14 @@
 package no.ssb.metadata.models
 
 import io.micronaut.core.annotation.Nullable
+import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.*
+import java.net.URL
+import java.time.LocalDate
 
 /**
  * Update variable definition
@@ -41,20 +44,19 @@ data class UpdateVariableDefinition(
     @Nullable
     val containsSensitivePersonalInformation: Boolean?,
     @Nullable
-    val variableStatus: String?,
+    val variableStatus: VariableStatus?,
     @Nullable
     val measurementType: String?,
     @Nullable
-    @Pattern(regexp = DATE_PATTERN)
-    val validFrom: String?,
+    @Format("yyyy-MM-dd")
+    val validFrom: LocalDate?,
     @Nullable
-    @Pattern(regexp = DATE_PATTERN)
-    val validUntil: String?,
+    @Format("yyyy-MM-dd")
+    val validUntil: LocalDate?,
     @Nullable
-    @Pattern(regexp = URL_PATTERN)
-    val externalReferenceUri: String?,
+    val externalReferenceUri: URL?,
     @Nullable
-    val relatedVariableDefinitionUris: List<String>?,
+    val relatedVariableDefinitionUris: List<URL>?,
     @Nullable
     val contact: Contact?,
 )

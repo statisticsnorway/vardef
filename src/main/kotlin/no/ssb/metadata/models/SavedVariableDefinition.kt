@@ -6,6 +6,9 @@ import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
 import org.bson.types.ObjectId
+import java.net.URI
+import java.net.URL
+import java.time.LocalDate
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -21,14 +24,14 @@ data class SavedVariableDefinition(
     var subjectFields: List<KlassReference>,
     var containsUnitIdentifyingInformation: Boolean,
     var containsSensitivePersonalInformation: Boolean,
-    var variableStatus: String,
+    var variableStatus: VariableStatus,
     @Nullable
     var measurementType: KlassReference?,
-    var validFrom: String,
+    var validFrom: LocalDate,
     @Nullable
-    var validUntil: String?,
+    var validUntil: LocalDate?,
     @Nullable
-    var externalReferenceUri: String?,
+    var externalReferenceUri: URL?,
     @Nullable
     var relatedVariableDefinitionUris: List<String>?,
     @Nullable
@@ -57,7 +60,7 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             owner = owner,
             contact = RenderedContact(contact.title.getValidLanguage(language), contact.email),
             createdAt = createdAt,
@@ -86,7 +89,7 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
         )
 
@@ -124,7 +127,10 @@ data class SavedVariableDefinition(
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
-            relatedVariableDefinitionUris = varDefUpdates.relatedVariableDefinitionUris ?: relatedVariableDefinitionUris,
+            relatedVariableDefinitionUris =
+                varDefUpdates.relatedVariableDefinitionUris?.map {
+                    it.toString()
+                } ?: relatedVariableDefinitionUris,
             contact = varDefUpdates.contact ?: contact,
         )
 }

@@ -5,6 +5,7 @@ import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
@@ -16,6 +17,7 @@ import java.time.LocalDate
  *
  * Data structure with all fields optional for updating an existing variable definition.
  */
+@Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
     example = INPUT_VARIABLE_DEFINITION_EXAMPLE,
@@ -76,5 +78,6 @@ data class UpdateVariableDefinition(
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Nullable
+    @Valid
     val contact: Contact?,
 )

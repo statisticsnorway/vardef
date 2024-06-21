@@ -7,6 +7,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
+import no.ssb.metadata.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.services.VariableDefinitionService
 import no.ssb.metadata.utils.BaseVardefTest
@@ -56,6 +57,18 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body("short_name", equalTo("landbak"))
             .body("name.nb", equalTo("Landbakgrunn"))
             .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
+    }
+
+    @Test
+    fun `check schema example`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(INPUT_VARIABLE_DEFINITION_EXAMPLE)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(201)
     }
 
     @Test

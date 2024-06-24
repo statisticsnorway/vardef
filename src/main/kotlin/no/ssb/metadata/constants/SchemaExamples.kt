@@ -19,7 +19,7 @@ const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """
     "contains_unit_identifying_information": true,
     "contains_sensitive_personal_information": true,
     "variable_status": "DRAFT",
-    "measurement_type": "volume",
+    "measurement_type": "02.01",
     "valid_from": "2024-06-05",
     "valid_until": "2024-06-05",
     "external_reference_uri": "https://example.com/",

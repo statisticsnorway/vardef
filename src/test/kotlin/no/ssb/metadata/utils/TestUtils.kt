@@ -6,6 +6,15 @@ import org.junit.jupiter.params.provider.Arguments
 import java.util.stream.Stream
 
 object TestUtils {
+    /**
+     * Invalid variable definitions.
+     *
+     * Some fields are not included in these test cases because they're covered by other tests. They include:
+     * - id
+     * - variable_status
+     *
+     * @return
+     */
     @JvmStatic
     fun invalidVariableDefinitions(): Stream<Arguments> {
         val testCases =
@@ -28,10 +37,6 @@ object TestUtils {
                 // TODO: Validation on boolean values
 //                JSONObject(JSON_TEST_INPUT).apply { put("contains_unit_identifying_information", "2024-20-11") } to "Not a valid boolean",
 //                JSONObject(JSON_TEST_INPUT).apply { put("contains_sensitive_personal_information", "2024-20-11") } to "Not a valid boolean",
-                // TODO: Should return 400 status code
-//                JSONObject(
-//                    JSON_TEST_INPUT,
-//                ).apply { put("variable_status", "2024-20-11") } to "No enum constant no.ssb.metadata.models.VariableStatus",
                 JSONObject(
                     JSON_TEST_INPUT,
                 ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",
@@ -124,7 +129,7 @@ object TestUtils {
                 } to HttpStatus.CREATED.code,
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("variable_status", "Not a status")
-                } to HttpStatus.INTERNAL_SERVER_ERROR.code,
+                } to HttpStatus.BAD_REQUEST.code,
             )
 
         return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }

@@ -10,6 +10,31 @@ object TestUtils {
     fun invalidVariableDefinitions(): Stream<Arguments> {
         val testCases =
             listOf(
+                JSONObject(JSON_TEST_INPUT).apply {
+                    getJSONObject("name").apply {
+                        remove("en")
+                        put(
+                            "se",
+                            "Landbakgrunn",
+                        )
+                    }
+                } to "Unknown property [se]",
+                JSONObject(
+                    JSON_TEST_INPUT,
+                ).apply { put("unit_types", listOf("blah")) } to "Code blah is not a member of classification with id",
+                JSONObject(
+                    JSON_TEST_INPUT,
+                ).apply { put("subject_fields", listOf("blah")) } to "Code blah is not a member of classification with id",
+                // TODO: Validation on boolean values
+//                JSONObject(JSON_TEST_INPUT).apply { put("contains_unit_identifying_information", "2024-20-11") } to "Not a valid boolean",
+//                JSONObject(JSON_TEST_INPUT).apply { put("contains_sensitive_personal_information", "2024-20-11") } to "Not a valid boolean",
+                // TODO: Should return 400 status code
+//                JSONObject(
+//                    JSON_TEST_INPUT,
+//                ).apply { put("variable_status", "2024-20-11") } to "No enum constant no.ssb.metadata.models.VariableStatus",
+                JSONObject(
+                    JSON_TEST_INPUT,
+                ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2024-20-11") } to "Invalid date format",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2024-20-11") } to "Invalid date format",
                 JSONObject(JSON_TEST_INPUT).apply { put("external_reference_uri", "Not url") } to "Not url",
@@ -24,21 +49,7 @@ object TestUtils {
                         "email",
                         "not an email",
                     )
-                } to "varDef.contact.email: must be a well-formed email address",
-                JSONObject(JSON_TEST_INPUT).apply { remove("short_name") } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("name") } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    getJSONObject("name").apply {
-                        remove("en")
-                        put(
-                            "se",
-                            "Landbakgrunn",
-                        )
-                    }
-                } to "Unknown property [se]",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("id", "my-special-id")
-                } to "ID may not be specified on creation.",
+                } to "must be a well-formed email address",
             )
 
         return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }
@@ -75,6 +86,13 @@ object TestUtils {
                 JSONObject(JSON_TEST_INPUT).apply {
                     remove("subject_fields")
                 } to "varDef.subjectFields: must not be empty",
+                // TODO Boolean fields should fail validation
+//                JSONObject(JSON_TEST_INPUT).apply {
+//                    remove("contains_unit_identifying_information")
+//                } to "varDef.containsUnitIdentifyingInformation: must not be empty",
+//                JSONObject(JSON_TEST_INPUT).apply {
+//                    remove("contains_sensitive_personal_information")
+//                } to "varDef.containsSensitivePersonalInformation: must not be empty",
                 JSONObject(JSON_TEST_INPUT).apply {
                     remove("variable_status")
                 } to "null annotate it with @Nullable",

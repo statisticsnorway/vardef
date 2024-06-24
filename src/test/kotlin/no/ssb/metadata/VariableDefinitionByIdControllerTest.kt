@@ -1,6 +1,7 @@
 package no.ssb.metadata
 
 import SAVED_VARIABLE_DEFINITION
+import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
@@ -12,6 +13,8 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
@@ -115,6 +118,26 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         Assertions.assertThat(
             variableDefinitionService.getOneById(expectedVariableDefinition.definitionId),
         ).isEqualTo(expectedVariableDefinition)
+    }
+
+    @ParameterizedTest
+    @MethodSource("TestUtils#invalidVariableDefinitions")
+    fun `update variable definition with invalid inputs`(
+        updatedJsonString: String,
+        errorMessage: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(errorMessage),
+            )
     }
 
     @Test

@@ -6,9 +6,11 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
+import no.ssb.metadata.constants.ID_FIELD_DESCRIPTION
 import no.ssb.metadata.models.InputVariableDefinition
 import no.ssb.metadata.models.RenderedVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
@@ -32,7 +34,7 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get()
     fun getVariableDefinitionById(
-        @VardefId id: String,
+        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
         @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
     ): MutableHttpResponse<RenderedVariableDefinition?>? =
         HttpResponse
@@ -48,7 +50,7 @@ class VariableDefinitionByIdController {
     @Status(HttpStatus.NO_CONTENT)
     @Delete()
     fun deleteVariableDefinitionById(
-        @VardefId id: String,
+        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
     ): MutableHttpResponse<Unit> {
         varDefService.deleteById(id = id)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
@@ -56,13 +58,13 @@ class VariableDefinitionByIdController {
     }
 
     /**
-     * Update a variable definition.
+     * Update a variable definition. Only the fields which need updating should be supplied.
      */
     @ApiResponse(responseCode = "200", description = "Successfully updated")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Patch
     fun updateVariableDefinitionById(
-        @VardefId id: String,
+        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
         @Body @Valid varDefUpdates: UpdateVariableDefinition,
     ): InputVariableDefinition {
         return varDefService.update(varDefService.getOneById(id).copyAndUpdate(varDefUpdates)).toInputVariableDefinition()

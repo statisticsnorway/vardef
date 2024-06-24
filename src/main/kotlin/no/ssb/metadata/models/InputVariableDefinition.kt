@@ -85,28 +85,26 @@ data class InputVariableDefinition(
             definition = definition,
             // TODO
             classificationUri = "",
-            // TODO
-            unitTypes = emptyList(),
-            // TODO
-            subjectFields = emptyList(),
+            unitTypes = unitTypes,
+            subjectFields = subjectFields,
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
-            measurementType = measurementType?.let { KlassReference("https://example.com/", "", it) },
+            measurementType = measurementType,
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            // TODO
+            // TODO depends on authentication to make user information available
             owner = null,
             contact = contact,
             // TODO
             createdAt = "",
-            // TODO
+            // TODO depends on authentication to make user information available
             createdBy = null,
             // TODO
             lastUpdatedAt = "",
-            // TODO
+            // TODO depends on authentication to make user information available
             lastUpdatedBy = null,
         )
 }

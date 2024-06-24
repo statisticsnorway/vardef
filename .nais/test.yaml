@@ -13,6 +13,12 @@ spec:
   ingresses:
     - https://vardef.test.ssb.cloud.nais.io
 
+  accessPolicy:
+    outbound:
+      external:
+        # Allow egress to Klass
+        - host: data.ssb.no
+
   liveness:
     path: /health
     port: 8080

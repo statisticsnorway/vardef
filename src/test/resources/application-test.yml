@@ -1,7 +1,4 @@
-logger:
-  levels:
-#    root: DEBUG
-#    org.mongodb.*: DEBUG
+# Configuration which applies under unit/integration tests (NOT the deployment environment called "test")
 
 klass:
   classifications:

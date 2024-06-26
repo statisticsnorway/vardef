@@ -21,6 +21,9 @@ spec:
       rules:
         - application: mongodb
 
+  envFrom:
+    - secret: vardef-mongo-mongodb
+
   liveness:
     path: /health
     port: 8080

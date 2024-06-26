@@ -1,70 +1,138 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
-import io.micronaut.context.annotation.Property
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
-import no.ssb.metadata.vardef.integrations.klass.models.Classifications
+import io.micronaut.http.server.exceptions.HttpServerException
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.verify
+import no.ssb.metadata.vardef.integrations.klass.models.*
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import java.io.IOException
+import java.time.LocalDateTime
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-@MicronautTest(startApplication = false)
+@MockK
 class KlassApiServiceTest {
-    @Inject
-    lateinit var klassApiService: KlassApiService
+    private lateinit var klassApiMockkClient: KlassApiClient
+    private lateinit var klassApiService: KlassApiService
+    private lateinit var klassApiResponseMock: KlassApiResponse
+    private lateinit var klassApiResponse: KlassApiResponse
+    private lateinit var klassApiCodeListResponseMock: KlassApiCodeListResponse
+    private lateinit var klassApiCodeListResponse: KlassApiCodeListResponse
+    private lateinit var codeList: List<ClassificationItem>
+    private val testClassificationId = 1
 
-    @Property(name = "klass.cached-classifications.unit-types")
-    private var unitTypesId: Int = 0
-
-    @Timeout(4)
-    @Test
-    @Order(1)
-    fun `first run cache`() {
-        assertThat(klassApiService.klassApiResponse).isNull()
-        klassApiService.fetchClassifications()
-        assertThat(klassApiService.klassApiResponse).isNotNull()
+    @BeforeEach
+    fun setUp() {
+        klassApiMockkClient = mockk<KlassApiClient>(relaxed = true)
+        klassApiService = KlassApiService(klassApiMockkClient)
+        klassApiResponseMock = mockk<KlassApiResponse>()
+        codeList = listOf(
+            ClassificationItem(code = "1", name = "Ja"),
+            ClassificationItem(code = "2", name = "Nei"),
+        )
+        klassApiResponse =
+            KlassApiResponse(
+                Classifications(
+                    listOf(
+                        Classification(
+                            name = "Test",
+                            id = 1,
+                            classificationType = "classification",
+                            lastModified = "${LocalDateTime.now()}",
+                            classificationItems = codeList,
+                        ),
+                    ),
+                ),
+            )
+        klassApiCodeListResponseMock = mockk<KlassApiCodeListResponse>()
+        klassApiCodeListResponse = KlassApiCodeListResponse(
+            classificationItems = codeList
+        )
     }
 
-    @Timeout(1000)
-    @Test
-    @Order(2)
-    fun `second run cache`() {
-        assertThat(klassApiService.klassApiResponse).isNotNull()
-        assertThat(klassApiService.klassApiResponse).isEqualTo(klassApiService.getClassifications())
-        assertThat(klassApiService.klassApiResponse?.embedded).isInstanceOf(Classifications::class.java)
+    @AfterEach
+    internal fun tearDown() {
+        clearAllMocks()
     }
 
     @Test
-    fun `fetch existing classification by id from klass api`() {
-        val result = klassApiService.getClassification(unitTypesId)
+    fun `fetch all classifications from klass api`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns (klassApiResponseMock)
+        klassApiService.getClassifications()
+        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
+    }
+
+    @Test
+    fun `no response klass api returns exception`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } throws IOException("Error while fetching classifications from Klass Api")
+        klassApiService.getClassifications()
+        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
+    }
+
+    @Test
+    fun `server error klass api returns exception`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } throws HttpServerException("Server error")
+        val result = klassApiService.getClassifications()
         assertThat(result).isNotNull
-
-        val classificationList = result?.classificationItems ?: emptyList()
-        assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
     }
 
     @Test
-    fun `fetch NON-existing classification by id from klass api`() {
-        val result = klassApiService.getClassification(0)
-        assertThat(result).isNull()
-    }
-
-    @Test
-    fun `get unit types from klass api`() {
-        val result = klassApiService.getUnitTypes()
+    fun `klass api status ok`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns klassApiResponse
+        val result = klassApiService.getClassifications()
         assertThat(result).isNotNull
-
-        val classificationList = result?.classificationItems ?: emptyList()
-        assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
+        assertEquals(1, result.size)
     }
 
     @Test
-    fun `get areas from klass api`() {
-        val result = klassApiService.getAreas()
+    fun `fetch mocked code list fra klass api`() {
+        every {
+            klassApiMockkClient.fetchCodeList(0)
+        } returns klassApiCodeListResponseMock
+        val result = klassApiService.getClassification(testClassificationId)
+        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
         assertThat(result).isNotNull
+        assertEquals(0, result.classificationItems.size)
+    }
 
-        val classificationList = result?.classificationItems ?: emptyList()
-        assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
+    @Test
+    fun `fetch code list fra klass api`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns klassApiResponse
+        every {
+            klassApiMockkClient.fetchCodeList(testClassificationId)
+        } returns klassApiCodeListResponse
+        assertEquals(0, klassApiService.classificationItemListCache())
+        val result = klassApiService.getClassificationItemsById(testClassificationId)
+        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
+        assertThat(result).isNotNull
+        assertEquals(2, result.size)
+        assertEquals(1, klassApiService.classificationItemListCache())
+    }
+
+    @Test
+    fun `fetch non-existing code list fra klass api`() {
+        every {
+            klassApiMockkClient.fetchCodeList(1)
+        } returns null
+        val result = klassApiService.getClassificationItemsById(testClassificationId)
+        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
+        assertThat(result).isNotNull
+        assertEquals(0, result.size)
+        assertEquals(0, klassApiService.classificationItemListCache())
     }
 }

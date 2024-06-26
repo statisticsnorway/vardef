@@ -5,10 +5,12 @@ import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
+import jakarta.inject.Inject
 import org.bson.types.ObjectId
 import java.net.URI
 import java.net.URL
 import java.time.LocalDate
+import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -44,6 +46,9 @@ data class SavedVariableDefinition(
     @Nullable
     var lastUpdatedBy: Person?,
 ) {
+    @Inject
+    private lateinit var klassService: KlassService
+
     fun toRenderedVariableDefinition(language: SupportedLanguages): RenderedVariableDefinition =
         RenderedVariableDefinition(
             id = definitionId,
@@ -52,14 +57,14 @@ data class SavedVariableDefinition(
             definition = definition.getValidLanguage(language),
             classificationUri = classificationUri,
             // TODO DPMETA-258
-            unitTypes = emptyList(),
+            unitTypes = unitTypes.map{ klassService.getCodeItemFor("702", it, language)},
             // TODO DPMETA-258
-            subjectFields = emptyList(),
+            subjectFields = subjectFields.map{ klassService.getCodeItemFor("618", it, language)},
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
             // TODO DPMETA-258
-            measurementType = null,
+            measurementType = measurementType?.let { klassService.getCodeItemFor("303", it, language) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

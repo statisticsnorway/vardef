@@ -22,8 +22,8 @@ data class LanguageStringType(
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class KlassReference(
     val referenceUri: String,
-    val code: String,
-    val title: String,
+    val code: String?,
+    val title: String?,
 )
 
 @Serdeable(naming = SnakeCaseStrategy::class)

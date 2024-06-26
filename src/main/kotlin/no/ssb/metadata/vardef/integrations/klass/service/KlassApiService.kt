@@ -4,6 +4,8 @@ import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.CachePut
 import io.micronaut.cache.annotation.Cacheable
 import jakarta.inject.Singleton
+import no.ssb.metadata.models.KlassReference
+import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import org.slf4j.LoggerFactory
@@ -68,5 +70,20 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
         return classificationItemListCache.getOrDefault(classificationId, emptyList())
     }
 
+
+    open fun getClassificationItemByIdAndCode(classificationId: Int, code: String, language: SupportedLanguages): KlassReference? {
+        val classification = getClassificationItemsById(classificationId).find {it.code == code}
+        return classification?.let {
+            if (language == SupportedLanguages.NB) {
+                KlassReference("", it.code, it.name)
+            } else {
+                KlassReference("", it.code, null)
+            }
+        }
+    }
+
     override fun getCodesFor(id: String): List<String> = getClassificationItemsById(id.toInt()).map { it.code }
+
+    override fun getCodeItemFor(id: String, code: String, language: SupportedLanguages): KlassReference? = getClassificationItemByIdAndCode(id.toInt(), code, language)
+
 }

@@ -18,6 +18,8 @@ spec:
       external:
         # Allow egress to Klass
         - host: data.ssb.no
+      rules:
+        - application: mongodb
 
   liveness:
     path: /health

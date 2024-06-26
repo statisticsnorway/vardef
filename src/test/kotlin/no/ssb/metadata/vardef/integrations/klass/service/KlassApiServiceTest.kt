@@ -31,10 +31,11 @@ class KlassApiServiceTest {
         klassApiMockkClient = mockk<KlassApiClient>(relaxed = true)
         klassApiService = KlassApiService(klassApiMockkClient)
         klassApiResponseMock = mockk<KlassApiResponse>()
-        codeList = listOf(
-            ClassificationItem(code = "1", name = "Ja"),
-            ClassificationItem(code = "2", name = "Nei"),
-        )
+        codeList =
+            listOf(
+                ClassificationItem(code = "1", name = "Ja"),
+                ClassificationItem(code = "2", name = "Nei"),
+            )
         klassApiResponse =
             KlassApiResponse(
                 Classifications(
@@ -50,9 +51,10 @@ class KlassApiServiceTest {
                 ),
             )
         klassApiCodeListResponseMock = mockk<KlassApiCodeListResponse>()
-        klassApiCodeListResponse = KlassApiCodeListResponse(
-            classificationItems = codeList
-        )
+        klassApiCodeListResponse =
+            KlassApiCodeListResponse(
+                classificationItems = codeList,
+            )
     }
 
     @AfterEach

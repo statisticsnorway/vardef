@@ -16,8 +16,9 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
     private val classificationCache: MutableMap<Int, Classification> = mutableMapOf()
     private val classificationItemListCache = mutableMapOf<Int, List<ClassificationItem>>()
+
     @Property(name = "klass.cache-retry-timeout-seconds")
-    val timeout:Long = 3600
+    val timeout: Long = 3600
 
     @Cacheable("classifications")
     open fun fetchAllClassifications(): List<Classification> {
@@ -65,13 +66,13 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
             emptyList()
         }
 
-
     @CachePut("ClassificationItems", parameters = ["classificationId"])
     open fun getClassificationItemsById(classificationId: Int): List<ClassificationItem> {
         if (!classificationItemListCache.containsKey(classificationId)) {
             val classificationItems = fetchClassificationItemsById(classificationId)
-            if (classificationItems.isNotEmpty())
+            if (classificationItems.isNotEmpty()) {
                 classificationItemListCache[classificationId] = classificationItems
+            }
         }
 
         return classificationItemListCache.getOrDefault(classificationId, emptyList())
@@ -83,6 +84,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
 
     fun classificationItemListCache(): Int = classificationItemListCache.size
 
-    private fun hasExpiredCache():Boolean = classificationCache.isEmpty()
-            || LocalDateTime.now().plusSeconds(timeout) < classificationCache.values.first().lastFetched
+    private fun hasExpiredCache(): Boolean =
+        classificationCache.isEmpty() ||
+            LocalDateTime.now().plusSeconds(timeout) < classificationCache.values.first().lastFetched
 }

@@ -109,7 +109,6 @@ class KlassApiServiceTest {
         assertEquals(1, result.size)
     }
 
-
     @Test
     fun `fetch classification by id return exception`() {
         every {
@@ -119,7 +118,6 @@ class KlassApiServiceTest {
         assertThat(result).isNotNull
         assertThat(result.classificationItems).isNotNull
         assertThat(result.classificationItems.isEmpty())
-
     }
 
     @Test

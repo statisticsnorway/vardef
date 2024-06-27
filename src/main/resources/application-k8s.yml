@@ -1,3 +1,3 @@
 # Connect to the MongoDB instance deployed in the same namespace
 mongodb:
-  uri: mongodb://root:${MONGODB_ROOT_PASSWORD:}@mongodb:27017
+  uri: mongodb://root:${MONGODB_ROOT_PASSWORD:}@vardef-mongo-mongodb-headless.dapla-metadata.svc.cluster.local:27017

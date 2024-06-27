@@ -18,7 +18,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     private val classificationItemListCache = mutableMapOf<Int, List<ClassificationItem>>()
 
     @Property(name = "klass.cache-retry-timeout-seconds")
-    val timeout: Long = 3600
+    val timeout: Long = 360
 
     @Cacheable("classifications")
     open fun fetchAllClassifications(): List<Classification> {

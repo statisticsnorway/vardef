@@ -81,6 +81,16 @@ class KlassApiServiceTest {
     }
 
     @Test
+    fun `no response klass api returns null`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns null
+        val result = klassApiService.fetchAllClassifications()
+        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
+        assertThat(result.isEmpty())
+    }
+
+    @Test
     fun `server error klass api returns exception`() {
         every {
             klassApiMockkClient.fetchClassifications()
@@ -99,6 +109,19 @@ class KlassApiServiceTest {
         assertEquals(1, result.size)
     }
 
+
+    @Test
+    fun `fetch classification by id return exception`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } throws Exception("Some error")
+        val result = klassApiService.getClassification(testClassificationId)
+        assertThat(result).isNotNull
+        assertThat(result.classificationItems).isNotNull
+        assertThat(result.classificationItems.isEmpty())
+
+    }
+
     @Test
     fun `fetch mocked code list fra klass api`() {
         every {
@@ -108,6 +131,17 @@ class KlassApiServiceTest {
         verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
         assertThat(result).isNotNull
         assertEquals(0, result.classificationItems.size)
+    }
+
+    @Test
+    fun `fetch mocked code list fra klass api returns null`() {
+        every {
+            klassApiMockkClient.fetchCodeList(0)
+        } returns null
+        val result = klassApiService.getClassification(testClassificationId)
+        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
+        assertThat(result).isNotNull
+        assertThat(result.classificationItems.isEmpty())
     }
 
     @Test
@@ -134,7 +168,7 @@ class KlassApiServiceTest {
         val result = klassApiService.getClassificationItemsById(testClassificationId)
         verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
         assertThat(result).isNotNull
-        assertEquals(0, result.size)
+        assertThat(result.isEmpty())
         assertEquals(0, klassApiService.classificationItemListCache())
     }
 }

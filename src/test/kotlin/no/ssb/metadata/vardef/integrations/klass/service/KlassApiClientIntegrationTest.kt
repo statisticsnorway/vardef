@@ -26,11 +26,11 @@ class KlassApiClientIntegrationTest {
     fun `fetch classifications from klass api`() {
         val result = klassApiClient.fetchClassifications()
         assertThat(result).isNotNull
-        assertThat(result?.embedded).isNotNull
-        assertThat(result?.embedded).isInstanceOf(Classifications::class.java)
-        assertThat(result?.embedded?.classifications).isNotNull
+        assertThat(result.body()?.embedded).isNotNull
+        assertThat(result.body()?.embedded).isInstanceOf(Classifications::class.java)
+        assertThat(result.body()?.embedded?.classifications).isNotNull
 
-        val classificationList = result?.embedded?.classifications
+        val classificationList = result.body()?.embedded?.classifications
         assertThat(classificationList?.get(0) ?: emptyList<Classification>()).isInstanceOf(Classification::class.java)
     }
 
@@ -41,7 +41,7 @@ class KlassApiClientIntegrationTest {
                 val result = klassApiClient.fetchCodeList(id)
                 assertThat(result).isNotNull
 
-                val classificationList = result?.classificationItems ?: emptyList()
+                val classificationList = result.body()?.classificationItems ?: emptyList()
                 assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
                 assertThat(classificationList.size > 1)
             }
@@ -53,7 +53,7 @@ class KlassApiClientIntegrationTest {
             .forEach { id ->
                 val result = klassApiClient.fetchClassification(id)
                 assertThat(result).isNotNull
-                assertThat(id == result?.id)
+                assertThat(id == result.body()?.id)
             }
     }
 }

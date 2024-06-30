@@ -1,4 +1,5 @@
 package no.ssb.metadata.vardef.integrations.klass.service
+import io.micronaut.http.HttpResponse
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -42,7 +43,7 @@ class KlassApiServiceCacheTest {
                     ),
                 ),
             )
-        every { klassApiMockkClient.fetchClassifications() } returns (klassApiResponse)
+        every { klassApiMockkClient.fetchClassifications() } returns HttpResponse.ok(klassApiResponse)
     }
 
     @AfterAll

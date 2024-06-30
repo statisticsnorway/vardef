@@ -25,6 +25,7 @@ class KlassApiServiceTest {
     private lateinit var klassApiCodeListResponse: KlassApiCodeListResponse
     private lateinit var codeList: List<ClassificationItem>
     private val testClassificationId = 1
+    private val nonExistingClassificationId = 0
 
     @BeforeEach
     fun setUp() {
@@ -109,33 +110,20 @@ class KlassApiServiceTest {
         } throws HttpServerException("Error while fetching classifications from Klass Api")
 
         assertThrows<HttpServerException> {
-            klassApiService.getClassifications()
+            klassApiService.fetchAllClassifications()
         }
 
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
 
     @Test
-    fun `no response klass api returns null`() {
+    fun `get non-existing classification by id from cache returns exception`() {
         every {
             klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.serverError()
+        } returns HttpResponse.ok(klassApiResponse)
 
-        assertThrows<HttpServerException> {
-            klassApiService.getClassifications()
-        }
-
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
-    }
-
-    @Test
-    fun `fetch classification by id return exception`() {
-        every {
-            klassApiMockkClient.fetchClassifications()
-        } throws HttpServerException("Error while fetching classification by id from Klass Api")
-
-        assertThrows<HttpServerException> {
-            klassApiService.getClassification(testClassificationId)
+        assertThrows<NoSuchElementException> {
+            klassApiService.getClassification(nonExistingClassificationId)
         }
 
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
@@ -160,8 +148,6 @@ class KlassApiServiceTest {
 
     @Test
     fun `fetch mocked code list from klass api returns no content`() {
-        val nonExistingClassificationId = 0
-
         every {
             klassApiMockkClient.fetchClassifications()
         } returns HttpResponse.ok(klassApiResponse)

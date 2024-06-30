@@ -107,7 +107,7 @@ class KlassApiServiceTest {
     fun `fetch all classifications from klass api returns 500 INTERNAL SERVER ERROR`() {
         every {
             klassApiMockkClient.fetchClassifications()
-        } throws HttpServerException("Error while fetching classifications from Klass Api")
+        } returns HttpResponse.serverError()
 
         assertThrows<HttpServerException> {
             klassApiService.fetchAllClassifications()

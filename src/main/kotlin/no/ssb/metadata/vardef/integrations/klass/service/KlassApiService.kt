@@ -24,7 +24,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     private val status500 = "Klass Api: Service is not available"
 
     @Cacheable("classifications")
-    open fun fetchAllClassifications(): List<Classification> {
+    open fun fetchAllClassifications(): List<Classification>? {
         val notFound = "Klass Api: Classifications not found"
 
         try {
@@ -36,15 +36,18 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
                     logger.error(status500)
                     throw HttpServerException(status500)
                 }
-                200 -> logger.info("Klass Api: Classifications fetched")
+                404 -> {
+                    logger.error(notFound)
+                    throw HttpServerException(notFound)
+                }
                 else -> {
-                    logger.info(notFound)
-                    throw NoSuchElementException(notFound)
+                    logger.info("Klass Api: Classifications fetched")
+                    return response
+                        .body()
+                        ?.embedded
+                        ?.classifications
                 }
             }
-
-            return response.body()?.embedded?.classifications
-                ?: throw NoSuchElementException(notFound)
         } catch (e: ClassCastException) {
             throw NoSuchElementException(notFound)
         }
@@ -53,7 +56,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     @Cacheable("classifications")
     open fun getClassifications(): List<Classification> {
         if (cacheHasExpired()) {
-            classificationCache = fetchAllClassifications().associateBy { it.id }.toMutableMap()
+            classificationCache = fetchAllClassifications()?.associateBy { it.id }?.toMutableMap() ?: mutableMapOf()
         }
 
         logger.info("Klass Api Service Cache: Getting all classifications")

@@ -21,7 +21,6 @@ import java.time.LocalDateTime
 class KlassApiServiceTest {
     private lateinit var klassApiMockkClient: KlassApiClient
     private lateinit var klassApiService: KlassApiService
-    private lateinit var klassApiResponseMock: KlassApiResponse
     private lateinit var klassApiResponse: KlassApiResponse
     private lateinit var klassApiCodeListResponseMock: KlassApiCodeListResponse
     private lateinit var klassApiCodeListResponse: KlassApiCodeListResponse
@@ -32,7 +31,6 @@ class KlassApiServiceTest {
     fun setUp() {
         klassApiMockkClient = mockk<KlassApiClient>(relaxed = true)
         klassApiService = KlassApiService(klassApiMockkClient)
-        klassApiResponseMock = mockk<KlassApiResponse>()
         codeList =
             listOf(
                 ClassificationItem(code = "1", name = "Ja"),
@@ -44,10 +42,9 @@ class KlassApiServiceTest {
                     listOf(
                         Classification(
                             name = "Test",
-                            id = 1,
+                            id = testClassificationId,
                             classificationType = "classification",
                             lastModified = "${LocalDateTime.now()}",
-                            classificationItems = codeList,
                         ),
                     ),
                 ),
@@ -65,18 +62,49 @@ class KlassApiServiceTest {
     }
 
     @Test
-    fun `fetch all classifications from klass api`() {
+    fun `fetch all classifications from klass api returns 200 OK, but Klass is empty`() {
         every {
             klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
-        val result = klassApiService.getClassifications()
+        } returns
+            HttpResponse.ok(
+                KlassApiResponse(
+                    Classifications(
+                        emptyList(),
+                    ),
+                ),
+            )
+        val result = klassApiService.fetchAllClassifications()
         assertThat(result).isNotNull
-        assertEquals(1, result.size)
+        assertThat(result).hasSize(0)
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
 
     @Test
-    fun `no response klass api returns exception`() {
+    fun `fetch all classifications from klass api returns 200 OK`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns HttpResponse.ok(klassApiResponse)
+        val result = klassApiService.fetchAllClassifications()
+        assertThat(result).isNotNull
+        assertEquals(1, result?.size)
+        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
+    }
+
+    @Test
+    fun `fetch all classifications from klass api returns 404 NOT FOUND`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns HttpResponse.notFound()
+
+        assertThrows<HttpServerException> {
+            klassApiService.fetchAllClassifications()
+        }
+
+        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
+    }
+
+    @Test
+    fun `fetch all classifications from klass api returns 500 INTERNAL SERVER ERROR`() {
         every {
             klassApiMockkClient.fetchClassifications()
         } throws HttpServerException("Error while fetching classifications from Klass Api")

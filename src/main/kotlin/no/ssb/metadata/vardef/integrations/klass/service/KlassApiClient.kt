@@ -23,7 +23,7 @@ interface KlassApiClient {
     @Get("classifications?size=10000&language=nb&includeCodelists=true")
     @SingleResult
     @Consumes(MediaType.APPLICATION_JSON)
-    fun fetchClassifications(): HttpResponse<KlassApiResponse?>
+    fun fetchClassifications(): HttpResponse<KlassApiResponse>
 
     @Get("classifications/{classificationId}")
     @SingleResult

@@ -27,29 +27,27 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     open fun fetchAllClassifications(): List<Classification> {
         val notFound = "Klass Api: Classifications not found"
 
-        try {
-            logger.info("Klass Api: Fetching classifications")
-            val response = klassApiClient.fetchClassifications()
+        logger.info("Klass Api: Fetching classifications")
+        val response = klassApiClient.fetchClassifications()
 
-            when (response.status.code) {
-                500 -> {
-                    logger.error(status500)
-                    throw HttpServerException(status500)
-                }
-                404 -> {
-                    logger.error(notFound)
-                    throw HttpServerException(notFound)
-                }
-                else -> {
-                    logger.info("Klass Api: Classifications fetched")
-                    return response
-                        .body()
-                        .embedded
-                        .classifications
-                }
+        when (response.status.code) {
+            500 -> {
+                logger.error(status500)
+                throw HttpServerException(status500)
             }
-        } catch (e: ClassCastException) {
-            throw NoSuchElementException(notFound)
+
+            404 -> {
+                logger.error(notFound)
+                throw HttpServerException(notFound)
+            }
+
+            else -> {
+                logger.info("Klass Api: Classifications fetched")
+                return response
+                    .body()
+                    .embedded
+                    .classifications
+            }
         }
     }
 
@@ -88,6 +86,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
                     logger.error(status500)
                     throw HttpServerException(status500)
                 }
+
                 200 -> logger.info("Klass Api: Classifications fetched")
                 else -> {
                     logger.info("Klass Api: Classification items not found")

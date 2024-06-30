@@ -11,7 +11,6 @@ import no.ssb.metadata.vardef.integrations.klass.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -86,7 +85,7 @@ class KlassApiServiceTest {
         } returns HttpResponse.ok(klassApiResponse)
         val result = klassApiService.fetchAllClassifications()
         assertThat(result).isNotNull
-        assertEquals(1, result?.size)
+        assertEquals(1, result.size)
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
 

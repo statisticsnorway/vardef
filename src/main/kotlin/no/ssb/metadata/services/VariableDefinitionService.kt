@@ -9,9 +9,9 @@ import no.ssb.metadata.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 
 @Singleton
-class VariableDefinitionService (private val variableDefinitionRepository: VariableDefinitionRepository
+class VariableDefinitionService(
+    private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
-
     @Inject
     private lateinit var klassService: KlassService
 

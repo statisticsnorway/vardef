@@ -46,7 +46,11 @@ class StaticKlassService : KlassService {
         return classification.codes?.map { it.code }.orEmpty().toList()
     }
 
-    override fun getCodeItemFor(id: String, code: String, language: SupportedLanguages): KlassReference? {
+    override fun getCodeItemFor(
+        id: String,
+        code: String,
+        language: SupportedLanguages,
+    ): KlassReference? {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
         println(classification)
@@ -54,7 +58,7 @@ class StaticKlassService : KlassService {
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
             val name = if (language == SupportedLanguages.NB) it.name.nb else null
-            KlassReference("https://data.ssb.no/api/klass/v1/classifications/${id}/", it.code, name)
+            KlassReference("https://data.ssb.no/api/klass/v1/classifications/$id/", it.code, name)
         }
     }
 }

@@ -36,5 +36,4 @@ fun main(args: Array<String>) {
         .build(*args)
         .deduceCloudEnvironment(true)
         .start()
-
 }

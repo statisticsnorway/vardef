@@ -70,21 +70,24 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
         return classificationItemListCache.getOrDefault(classificationId, emptyList())
     }
 
-
-    open fun getClassificationItemByIdAndCode(classificationId: Int, code: String, language: SupportedLanguages): KlassReference? {
-        val classification = getClassificationItemsById(classificationId).find {it.code == code}
+    open fun getClassificationItemByIdAndCode(
+        classificationId: Int,
+        code: String,
+        language: SupportedLanguages,
+    ): KlassReference? {
+        val classification = getClassificationItemsById(classificationId).find { it.code == code }
         return classification?.let {
             if (language == SupportedLanguages.NB) {
                 KlassReference(
-                    "https://data.ssb.no/api/klass/v1/classifications/${classificationId.toString()}/",
+                    "https://data.ssb.no/api/klass/v1/classifications/$classificationId/",
                     it.code,
-                    it.name
+                    it.name,
                 )
             } else {
                 KlassReference(
-                    "https://data.ssb.no/api/klass/v1/classifications/${classificationId.toString()}/",
+                    "https://data.ssb.no/api/klass/v1/classifications/$classificationId/",
                     it.code,
-                    null
+                    null,
                 )
             }
         }
@@ -92,6 +95,14 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
 
     override fun getCodesFor(id: String): List<String> = getClassificationItemsById(id.toInt()).map { it.code }
 
-    override fun getCodeItemFor(id: String, code: String, language: SupportedLanguages): KlassReference? = getClassificationItemByIdAndCode(id.toInt(), code, language)
-
+    override fun getCodeItemFor(
+        id: String,
+        code: String,
+        language: SupportedLanguages,
+    ): KlassReference? =
+        getClassificationItemByIdAndCode(
+            id.toInt(),
+            code,
+            language,
+        )
 }

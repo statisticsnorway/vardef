@@ -10,7 +10,9 @@ import no.ssb.metadata.models.SupportedLanguages
 interface KlassService {
     fun getCodesFor(id: String): List<String>
 
-    fun getCodeItemFor(id: String, code: String, language: SupportedLanguages): KlassReference?
+    fun getCodeItemFor(
+        id: String,
+        code: String,
+        language: SupportedLanguages,
+    ): KlassReference?
 }
-
-

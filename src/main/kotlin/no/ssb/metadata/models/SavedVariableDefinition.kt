@@ -5,11 +5,11 @@ import io.micronaut.data.annotation.GeneratedValue
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.model.naming.NamingStrategies
+import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.bson.types.ObjectId
 import java.net.URI
 import java.net.URL
 import java.time.LocalDate
-import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -45,8 +45,10 @@ data class SavedVariableDefinition(
     @Nullable
     var lastUpdatedBy: Person?,
 ) {
-
-    fun toRenderedVariableDefinition(language: SupportedLanguages, klassService: KlassService): RenderedVariableDefinition =
+    fun toRenderedVariableDefinition(
+        language: SupportedLanguages,
+        klassService: KlassService,
+    ): RenderedVariableDefinition =
         RenderedVariableDefinition(
             id = definitionId,
             name = name.getValidLanguage(language),

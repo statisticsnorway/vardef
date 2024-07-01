@@ -75,9 +75,17 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
         val classification = getClassificationItemsById(classificationId).find {it.code == code}
         return classification?.let {
             if (language == SupportedLanguages.NB) {
-                KlassReference("", it.code, it.name)
+                KlassReference(
+                    "https://data.ssb.no/api/klass/v1/classifications/${classificationId.toString()}/",
+                    it.code,
+                    it.name
+                )
             } else {
-                KlassReference("", it.code, null)
+                KlassReference(
+                    "https://data.ssb.no/api/klass/v1/classifications/${classificationId.toString()}/",
+                    it.code,
+                    null
+                )
             }
         }
     }

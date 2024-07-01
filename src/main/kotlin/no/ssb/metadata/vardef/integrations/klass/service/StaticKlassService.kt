@@ -54,7 +54,7 @@ class StaticKlassService : KlassService {
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
             val name = if (language == SupportedLanguages.NB) it.name.nb else null
-            KlassReference("", it.code, name)
+            KlassReference("https://data.ssb.no/api/klass/v1/classifications/${id}/", it.code, name)
         }
     }
 }

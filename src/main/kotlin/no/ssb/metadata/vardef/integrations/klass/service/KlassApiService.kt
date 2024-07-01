@@ -151,6 +151,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
             code,
             language,
         )
+
     fun classificationCacheSize(): Int = classificationCache.size
 
     fun classificationItemListCache(): Int = classificationItemListCache.size

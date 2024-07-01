@@ -128,6 +128,29 @@ class KlassApiServiceTest {
     }
 
     @Test
+    fun `fetch code list from klass api returns 200 OK, but Klass is empty`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns HttpResponse.ok(klassApiResponse)
+
+        every {
+            klassApiMockkClient.fetchCodeList(testClassificationId)
+        } returns
+            HttpResponse.ok(
+                KlassApiCodeListResponse(
+                    classificationItems = emptyList(),
+                ),
+            )
+
+        assertThrows<NoSuchElementException> {
+            klassApiService.getClassificationItemsById(testClassificationId)
+        }
+
+        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
+        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
+    }
+
+    @Test
     fun `fetch code list from klass api returns 200 OK`() {
         every {
             klassApiMockkClient.fetchClassifications()
@@ -177,23 +200,6 @@ class KlassApiServiceTest {
 
         verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
     }
-
-//    @Test
-//    fun `fetch mocked code list from klass api returns no content`() {
-//        every {
-//            klassApiMockkClient.fetchClassifications()
-//        } returns HttpResponse.ok(klassApiResponse)
-//
-//        every {
-//            klassApiMockkClient.fetchCodeList(nonExistingClassificationId)
-//        } returns HttpResponse.noContent()
-//
-//        assertThrows<NoSuchElementException> {
-//            klassApiService.getClassification(nonExistingClassificationId)
-//        }
-//
-//        verify(exactly = 0) { klassApiMockkClient.fetchCodeList(nonExistingClassificationId) }
-//    }
 
     @Test
     fun `fetch non-existing code list fra klass api throws exception`() {

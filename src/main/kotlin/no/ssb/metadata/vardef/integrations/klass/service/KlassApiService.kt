@@ -90,10 +90,19 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
                 logger.info("Klass Api: Classification items not found")
                 throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
             }
+
             else -> {
                 logger.info("Klass Api: Classifications fetched")
-                return response.body()?.classificationItems
-                    ?: throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
+                val classificationItems =
+                    response
+                        .body()
+                        ?.classificationItems
+                        ?: emptyList()
+                if (classificationItems.isEmpty()) {
+                    throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
+                }
+
+                return classificationItems
             }
         }
     }

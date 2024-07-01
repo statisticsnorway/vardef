@@ -15,12 +15,12 @@ import java.time.LocalDateTime
 @Singleton
 open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
+    private var classificationCacheLastFetched: LocalDateTime = LocalDateTime.now().minusDays(1L)
     private var classificationCache: MutableMap<Int, Classification> = mutableMapOf()
     private val classificationItemListCache = mutableMapOf<Int, List<ClassificationItem>>()
 
     @Property(name = "klass.cache-retry-timeout-seconds")
-    val timeout: Long = 360
-
+    private val timeout: Long = 360
     private val status500 = "Klass Api: Service is not available"
 
     @Cacheable("classifications")
@@ -55,6 +55,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     open fun getClassifications(): List<Classification> {
         if (cacheHasExpired()) {
             classificationCache = fetchAllClassifications().associateBy { it.id }.toMutableMap()
+            classificationCacheLastFetched = LocalDateTime.now()
         }
 
         logger.info("Klass Api Service Cache: Getting all classifications")
@@ -100,14 +101,6 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
 
     @CachePut("ClassificationItems", parameters = ["classificationId"])
     open fun getClassificationItemsById(classificationId: Int): List<ClassificationItem> {
-        if (cacheHasExpired()) {
-            getClassifications()
-        }
-
-        if (!classificationCache.containsKey(classificationId)) {
-            throw NoSuchElementException("Klass Api Service: No such classification items with id $classificationId")
-        }
-
         if (!classificationItemListCache.containsKey(classificationId)) {
             val classificationItems = fetchClassificationItemsById(classificationId)
             if (classificationItems.isNotEmpty()) {
@@ -129,5 +122,5 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
 
     private fun cacheHasExpired(): Boolean =
         classificationCache.isEmpty() ||
-            LocalDateTime.now().plusSeconds(timeout) < classificationCache.values.first().lastFetched
+            LocalDateTime.now().plusSeconds(timeout) < classificationCacheLastFetched
 }

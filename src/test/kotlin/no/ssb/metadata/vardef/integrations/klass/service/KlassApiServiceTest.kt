@@ -130,10 +130,6 @@ class KlassApiServiceTest {
     @Test
     fun `fetch code list from klass api returns 200 OK, but Klass is empty`() {
         every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
-
-        every {
             klassApiMockkClient.fetchCodeList(testClassificationId)
         } returns
             HttpResponse.ok(
@@ -146,7 +142,6 @@ class KlassApiServiceTest {
             klassApiService.getClassificationItemsById(testClassificationId)
         }
 
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
         verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
     }
 

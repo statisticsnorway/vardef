@@ -9,21 +9,32 @@ open class VarDokApiService(private val varDokClient: VarDokClient) {
 
     open fun getVarDokResponse(): FIMD? {
         return try {
-            logger.info("Retrieving definition from varDok")
+            logger.info("Retrieving definition from vardok")
             varDokClient.fetchVarDok()
         } catch (e: Exception) {
-            logger.warn("Error while fetching varDok", e)
+            logger.warn("Error while fetching vardok", e)
             null
         }
     }
 
     open fun getVarDokItem(id: String): FIMD? {
         return try {
-            logger.info("Retrieving definition by id from varDok")
+            logger.info("Retrieving definition by id from vardok")
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
-            logger.warn("Error while fetching varDok item", e)
+            logger.warn("Error while fetching vardok item", e)
             null
+        }
+    }
+
+    open fun getListOfVardokById(vardokIdList: List<String>): List<FIMD?> {
+        return try {
+            logger.info("Retrieving multiple definitions from vardok")
+            val vardokList = vardokIdList.map { getVarDokItem(it) }
+            vardokList
+            } catch (e: Exception) {
+                logger.warn("Error while fetching list of vardoks", e)
+                emptyList()
         }
     }
 }

@@ -5,55 +5,34 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.serde.annotation.Serdeable
 
-@Introspected
-@JacksonXmlRootElement(localName = "vardok-response")
-data class VarDokResponse(
-    @JacksonXmlProperty(localName = "title") val name: String?,
-)
-
 @Serdeable
 @Introspected
 data class DC(
-    @field:JacksonXmlProperty(localName = "contributor", namespace = "http://purl.org/dc/elements/1.1/")
+    @field:JacksonXmlProperty(localName = "contributor")
     val contributor: String?,
-    @field:JacksonXmlProperty(localName = "creator", namespace = "http://purl.org/dc/elements/1.1/")
+    @field:JacksonXmlProperty(localName = "creator")
     val creator: String?,
-    @field:JacksonXmlProperty(localName = "modified", namespace = "http://purl.org/dc/terms/")
+    @field:JacksonXmlProperty(localName = "modified")
     val modified: String?,
-    @field:JacksonXmlProperty(localName = "valid", namespace = "http://purl.org/dc/terms/")
+    @field:JacksonXmlProperty(localName = "valid")
     val valid: String?,
     val description: String?,
-    @field:JacksonXmlProperty(localName = "abstract", namespace = "http://purl.org/dc/terms/")
+    @field:JacksonXmlProperty(localName = "abstract")
     val abstractText: String?,
-    @field:JacksonXmlProperty(localName = "tableOfContents", namespace = "http://purl.org/dc/terms/")
+    @field:JacksonXmlProperty(localName = "tableOfContents")
     val tableOfContents: String?,
     val format: String?,
-    @field:JacksonXmlProperty(localName = "identifier", namespace = "http://purl.org/dc/elements/1.1/")
+    @field:JacksonXmlProperty(localName = "identifier")
     val identifier: String?,
     val language: String?,
     val publisher: String?,
     val rights: String?,
     val source: String?,
     val subject: String?,
-    /*@field:JacksonXmlProperty(localName = "title", namespace = "http://purl.org/dc/elements/1.1/")
+    @field:JacksonXmlProperty(localName = "title")
     val title: String?,
-    @field:JacksonXmlProperty(localName = "type", namespace = "http://purl.org/dc/elements/1.1/")
+    @field:JacksonXmlProperty(localName = "type")
     val type: String?
-    val creator: String?,
-    val modified: String?,
-    val valid: String?,
-    val description: String?,
-    val tableOfContents: String?,
-    val format: String?,
-    val identifier: String?,
-    val language: String?,
-    val publisher: String?,
-    val rights: String?,
-    val source: String? = null,
-    val subject: String?,
-    @JacksonXmlProperty(localName = "dc:title", isAttribute = false)
-    val title: String,
-    val type: String?,*/
 )
 
 @Serdeable

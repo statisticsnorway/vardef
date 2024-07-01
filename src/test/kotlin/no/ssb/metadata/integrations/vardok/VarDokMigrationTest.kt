@@ -26,6 +26,16 @@ class VarDokMigrationTest {
         val result = varDokApiService.getVarDokItem("1422")
         assertThat(result).isNotNull()
         assertThat(result?.dc?.contributor).isEqualTo("Seksjon for regnskapsstatistikk")
+        assertThat(result?.dc?.title).isEqualTo("Aksje")
         assertThat(result?.common?.title).isEqualTo("Aksje")
+    }
+
+    @Test
+    fun `get list of vardok results by id`(){
+        val idList = listOf("100","1422","2001")
+        val result = varDokApiService.getListOfVardokById(idList)
+        assertThat(result).isNotNull()
+        result.forEach { assertThat(it?.id).isNotNull() }
+        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
     }
 }

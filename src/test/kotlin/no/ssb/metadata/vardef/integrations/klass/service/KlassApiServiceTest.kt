@@ -200,4 +200,26 @@ class KlassApiServiceTest {
 
         verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
     }
+
+    @Test
+    fun `get existing classification by id from cache`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns HttpResponse.ok(klassApiResponse)
+
+        every {
+            klassApiMockkClient.fetchCodeList(testClassificationId)
+        } returns
+            HttpResponse.ok(
+                KlassApiCodeListResponse(
+                    classificationItems = codeList,
+                ),
+            )
+
+        val result = klassApiService.getClassification(testClassificationId)
+        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
+
+        assertThat(result).isInstanceOf(Classification::class.java)
+        assertThat(result.classificationItems).hasSize(2)
+    }
 }

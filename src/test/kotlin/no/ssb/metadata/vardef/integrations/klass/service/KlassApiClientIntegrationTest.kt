@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.annotation.Property
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.TestInstance
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Requires(env=["integration-test"])
 class KlassApiClientIntegrationTest {
     @Inject
     lateinit var klassApiClient: KlassApiClient

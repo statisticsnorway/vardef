@@ -14,21 +14,46 @@ data class VarDokResponse( @JacksonXmlProperty(localName = "title") val name: St
 @Serdeable
 @Introspected
 data class DC(
-    val contributor: String,
-    val creator: String,
-    val modified: String,
-    val valid: String,
-    val description: String,
-    val tableOfContents: String,
-    val format: String,
-    val identifier: String,
-    val language: String,
-    val publisher: String,
-    val rights: String,
+    @field:JacksonXmlProperty(localName = "contributor", namespace = "http://purl.org/dc/elements/1.1/")
+    val contributor: String?,
+    @field:JacksonXmlProperty(localName = "creator", namespace = "http://purl.org/dc/elements/1.1/")
+    val creator: String?,
+    @field:JacksonXmlProperty(localName = "modified", namespace = "http://purl.org/dc/terms/")
+    val modified: String?,
+    @field:JacksonXmlProperty(localName = "valid", namespace = "http://purl.org/dc/terms/")
+    val valid: String?,
+    val description: String?,
+    @field:JacksonXmlProperty(localName = "abstract", namespace = "http://purl.org/dc/terms/")
+    val abstractText: String?,
+    @field:JacksonXmlProperty(localName = "tableOfContents", namespace = "http://purl.org/dc/terms/")
+    val tableOfContents: String?,
+    val format: String?,
+    @field:JacksonXmlProperty(localName = "identifier", namespace = "http://purl.org/dc/elements/1.1/")
+    val identifier: String?,
+    val language: String?,
+    val publisher: String?,
+    val rights: String?,
+    val source: String?,
+    val subject: String?,
+    /*@field:JacksonXmlProperty(localName = "title", namespace = "http://purl.org/dc/elements/1.1/")
+    val title: String?,
+    @field:JacksonXmlProperty(localName = "type", namespace = "http://purl.org/dc/elements/1.1/")
+    val type: String?
+    val creator: String?,
+    val modified: String?,
+    val valid: String?,
+    val description: String?,
+    val tableOfContents: String?,
+    val format: String?,
+    val identifier: String?,
+    val language: String?,
+    val publisher: String?,
+    val rights: String?,
     val source: String? = null,
-    val subject: String,
+    val subject: String?,
+    @JacksonXmlProperty(localName = "dc:title", isAttribute = false)
     val title: String,
-    val type: String,
+    val type: String?,*/
 )
 
 @Serdeable
@@ -48,10 +73,12 @@ data class ContactDivision(
 @Serdeable
 @Introspected
 data class Common(
+    @JacksonXmlProperty(localName = "Title")
     val title: String,
-    val description: String,
-    val contactPerson: ContactPerson,
-    val contactDivision: ContactDivision,
+    @field:JacksonXmlProperty(localName = "Description")
+    val description: String?,
+    val contactPerson: ContactPerson?,
+    val contactDivision: ContactDivision?,
     val notes: String? = null
 )
 
@@ -89,7 +116,9 @@ data class Variable(
 
 @Serdeable
 @Introspected
+@JacksonXmlRootElement(localName = "fimd")
 data class FIMD(
+
     val createdOn: String,
     val defaultValidFrom: String,
     val defaultValidTo: String? = null,
@@ -99,7 +128,9 @@ data class FIMD(
     val type: String,
     val xmlLang: String?,
     val xsiSchemaLocation: String?,
+    @field:JacksonXmlProperty(localName = "DC", isAttribute = true)
     val dc: DC?,
+    @field:JacksonXmlProperty(localName = "Common", isAttribute = true)
     val common: Common?,
     val variable: Variable?,
     val relations: String? = null

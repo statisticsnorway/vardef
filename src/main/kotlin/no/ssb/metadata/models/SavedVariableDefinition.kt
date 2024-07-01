@@ -1,14 +1,13 @@
 package no.ssb.metadata.models
 
 import io.micronaut.core.annotation.Nullable
-import io.micronaut.data.annotation.GeneratedValue
-import io.micronaut.data.annotation.Id
-import io.micronaut.data.annotation.MappedEntity
+import io.micronaut.data.annotation.*
 import io.micronaut.data.model.naming.NamingStrategies
 import org.bson.types.ObjectId
 import java.net.URI
 import java.net.URL
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -20,13 +19,13 @@ data class SavedVariableDefinition(
     var definition: LanguageStringType,
     @Nullable
     var classificationUri: String?,
-    var unitTypes: List<KlassReference>,
-    var subjectFields: List<KlassReference>,
+    var unitTypes: List<String>,
+    var subjectFields: List<String>,
     var containsUnitIdentifyingInformation: Boolean,
     var containsSensitivePersonalInformation: Boolean,
     var variableStatus: VariableStatus,
     @Nullable
-    var measurementType: KlassReference?,
+    var measurementType: String?,
     var validFrom: LocalDate,
     @Nullable
     var validUntil: LocalDate?,
@@ -37,10 +36,12 @@ data class SavedVariableDefinition(
     @Nullable
     var owner: Owner?,
     var contact: Contact,
-    var createdAt: String,
+    @DateCreated
+    var createdAt: LocalDateTime,
     @Nullable
     var createdBy: Person?,
-    var lastUpdatedAt: String,
+    @DateUpdated
+    var lastUpdatedAt: LocalDateTime,
     @Nullable
     var lastUpdatedBy: Person?,
 ) {
@@ -51,12 +52,15 @@ data class SavedVariableDefinition(
             shortName = shortName,
             definition = definition.getValidLanguage(language),
             classificationUri = classificationUri,
-            unitTypes = unitTypes,
-            subjectFields = subjectFields,
+            // TODO DPMETA-258
+            unitTypes = emptyList(),
+            // TODO DPMETA-258
+            subjectFields = emptyList(),
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
-            measurementType = measurementType,
+            // TODO DPMETA-258
+            measurementType = null,
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
@@ -77,15 +81,12 @@ data class SavedVariableDefinition(
             definition = definition,
             // TODO
             classificationReference = "",
-            // TODO
-            unitTypes = emptyList(),
-            // TODO
-            subjectFields = emptyList(),
+            unitTypes = unitTypes,
+            subjectFields = subjectFields,
             containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
-            // TODO
-            measurementType = "",
+            measurementType = measurementType,
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
@@ -111,10 +112,8 @@ data class SavedVariableDefinition(
             definition = varDefUpdates.definition ?: definition,
             // TODO DPMETA-257 convert reference to URI
             classificationUri = varDefUpdates.classificationReference ?: classificationUri,
-            // TODO DPMETA-257
-            unitTypes = listOf(KlassReference("https://example.com/", "", "")),
-            // TODO DPMETA-257
-            subjectFields = listOf(KlassReference("https://example.com/", "", "")),
+            unitTypes = varDefUpdates.unitTypes ?: unitTypes,
+            subjectFields = varDefUpdates.subjectFields ?: subjectFields,
             containsUnitIdentifyingInformation =
                 varDefUpdates.containsUnitIdentifyingInformation
                     ?: containsUnitIdentifyingInformation,
@@ -122,8 +121,7 @@ data class SavedVariableDefinition(
                 varDefUpdates.containsSensitivePersonalInformation
                     ?: containsSensitivePersonalInformation,
             variableStatus = varDefUpdates.variableStatus ?: variableStatus,
-            // TODO DPMETA-257
-            measurementType = KlassReference("https://example.com/", "", ""),
+            measurementType = varDefUpdates.measurementType ?: measurementType,
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,

@@ -11,6 +11,8 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.models.LanguageStringType
 
+const val KLASS_CLASSIFICATIONS_PROPERTY_NAME = "klass.classifications"
+
 @Serdeable
 data class StaticKlassCode(
     val code: String,
@@ -19,8 +21,8 @@ data class StaticKlassCode(
 
 // Deserializes test data from property in application-test.yaml
 @Serdeable
-@Requires(env = ["test"])
-@EachProperty("klass.classifications")
+@Requires(env = ["test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
+@EachProperty(KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 class StaticClassification(
     @param:Parameter val id: String,
 ) {
@@ -29,7 +31,7 @@ class StaticClassification(
 }
 
 @Primary
-@Requires(env = ["test"])
+@Requires(env = ["test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 @Singleton
 class StaticKlassService : KlassService {
     @Inject

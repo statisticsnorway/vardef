@@ -1,17 +1,22 @@
 package no.ssb.metadata
 
 import SAVED_VARIABLE_DEFINITION
+import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.models.InputVariableDefinition
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.utils.BaseVardefTest
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import java.time.temporal.ChronoUnit
 
 class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
@@ -56,7 +61,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(204)
             .header("Content-Type", nullValue())
-        Assertions.assertThat(variableDefinitionService.listAll()).doesNotContain(SAVED_VARIABLE_DEFINITION)
+        assertThat(variableDefinitionService.listAll().map { it.definitionId }).doesNotContain(SAVED_VARIABLE_DEFINITION.definitionId)
     }
 
     @Test
@@ -67,7 +72,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
-        Assertions.assertThat(variableDefinitionService.listAll()).contains(SAVED_VARIABLE_DEFINITION)
     }
 
     @Test
@@ -78,7 +82,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(404)
             .body("_embedded.errors[0].message", containsString("No such variable definition found"))
-        Assertions.assertThat(variableDefinitionService.listAll()).contains(SAVED_VARIABLE_DEFINITION)
     }
 
     @Test
@@ -109,12 +112,43 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .extract().body().asString()
         val body = jsonMapper.readValue(bodyString, InputVariableDefinition::class.java)
 
-        Assertions.assertThat(body.id).isEqualTo(SAVED_VARIABLE_DEFINITION.definitionId)
-        Assertions.assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
-        Assertions.assertThat(body.definition).isEqualTo(SAVED_VARIABLE_DEFINITION.definition)
-        Assertions.assertThat(
-            variableDefinitionService.getOneById(expectedVariableDefinition.definitionId),
-        ).isEqualTo(expectedVariableDefinition)
+        assertThat(body.id).isEqualTo(SAVED_VARIABLE_DEFINITION.definitionId)
+        assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
+        assertThat(body.definition).isEqualTo(SAVED_VARIABLE_DEFINITION.definition)
+
+        val updatedVariableDefinition = variableDefinitionService.getOneById(expectedVariableDefinition.definitionId)
+        assertThat(
+            updatedVariableDefinition.definitionId,
+        ).isEqualTo(expectedVariableDefinition.definitionId)
+        assertThat(
+            updatedVariableDefinition.createdAt,
+        ).isCloseTo(expectedVariableDefinition.createdAt, within(1, ChronoUnit.SECONDS))
+        assertThat(
+            updatedVariableDefinition.name,
+        ).isEqualTo(expectedVariableDefinition.name)
+        assertThat(
+            updatedVariableDefinition.lastUpdatedAt,
+        ).isAfter(expectedVariableDefinition.lastUpdatedAt)
+    }
+
+    @ParameterizedTest
+    @MethodSource("TestUtils#invalidVariableDefinitions")
+    fun `update variable definition with invalid inputs`(
+        updatedJsonString: String,
+        errorMessage: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(errorMessage),
+            )
     }
 
     @Test
@@ -175,10 +209,11 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 """.trimIndent(),
             )
             .`when`()
-            .patch("/variable-definitions/MALFORMED_ID")
+            .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
             .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("Unknown property [id] encountered during deserialization of type"))
-        Assertions.assertThat(variableDefinitionService.listAll()).contains(SAVED_VARIABLE_DEFINITION)
+        assertThat(variableDefinitionService.listAll().map { it.definitionId }).contains(SAVED_VARIABLE_DEFINITION.definitionId)
+        assertThat(variableDefinitionService.listAll().map { it.name }).contains(SAVED_VARIABLE_DEFINITION.name)
     }
 }

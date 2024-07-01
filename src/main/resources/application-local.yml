@@ -2,8 +2,7 @@
 
 logger:
   levels:
-    root: DEBUG
-    io.micronaut.context.DefaultBeanContext: INFO
+    io.micronaut.core.reflect: TRACE
 
 mongodb:
   uri: mongodb://localhost:27017

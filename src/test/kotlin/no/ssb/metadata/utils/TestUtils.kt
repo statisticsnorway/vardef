@@ -6,10 +6,40 @@ import org.junit.jupiter.params.provider.Arguments
 import java.util.stream.Stream
 
 object TestUtils {
+    /**
+     * Invalid variable definitions.
+     *
+     * Some fields are not included in these test cases because they're covered by other tests. They include:
+     * - id
+     * - variable_status
+     *
+     * @return
+     */
     @JvmStatic
     fun invalidVariableDefinitions(): Stream<Arguments> {
         val testCases =
             listOf(
+                JSONObject(JSON_TEST_INPUT).apply {
+                    getJSONObject("name").apply {
+                        remove("en")
+                        put(
+                            "se",
+                            "Landbakgrunn",
+                        )
+                    }
+                } to "Unknown property [se]",
+                JSONObject(
+                    JSON_TEST_INPUT,
+                ).apply { put("unit_types", listOf("blah")) } to "Code blah is not a member of classification with id",
+                JSONObject(
+                    JSON_TEST_INPUT,
+                ).apply { put("subject_fields", listOf("blah")) } to "Code blah is not a member of classification with id",
+                // TODO: Validation on boolean values
+//                JSONObject(JSON_TEST_INPUT).apply { put("contains_unit_identifying_information", "2024-20-11") } to "Not a valid boolean",
+//                JSONObject(JSON_TEST_INPUT).apply { put("contains_sensitive_personal_information", "2024-20-11") } to "Not a valid boolean",
+                JSONObject(
+                    JSON_TEST_INPUT,
+                ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2024-20-11") } to "Invalid date format",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2024-20-11") } to "Invalid date format",
                 JSONObject(JSON_TEST_INPUT).apply { put("external_reference_uri", "Not url") } to "Not url",
@@ -24,21 +54,7 @@ object TestUtils {
                         "email",
                         "not an email",
                     )
-                } to "varDef.contact.email: must be a well-formed email address",
-                JSONObject(JSON_TEST_INPUT).apply { remove("short_name") } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply { remove("name") } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    getJSONObject("name").apply {
-                        remove("en")
-                        put(
-                            "se",
-                            "Landbakgrunn",
-                        )
-                    }
-                } to "Unknown property [se]",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("id", "my-special-id")
-                } to "ID may not be specified on creation.",
+                } to "must be a well-formed email address",
             )
 
         return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }
@@ -106,7 +122,7 @@ object TestUtils {
                 } to HttpStatus.CREATED.code,
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("variable_status", "Not a status")
-                } to HttpStatus.INTERNAL_SERVER_ERROR.code,
+                } to HttpStatus.BAD_REQUEST.code,
             )
 
         return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }

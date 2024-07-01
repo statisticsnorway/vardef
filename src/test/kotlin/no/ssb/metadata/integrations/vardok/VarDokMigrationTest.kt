@@ -4,7 +4,6 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.FIMD
 import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
-import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

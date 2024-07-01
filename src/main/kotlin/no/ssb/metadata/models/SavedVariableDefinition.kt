@@ -1,15 +1,14 @@
 package no.ssb.metadata.models
 
 import io.micronaut.core.annotation.Nullable
-import io.micronaut.data.annotation.GeneratedValue
-import io.micronaut.data.annotation.Id
-import io.micronaut.data.annotation.MappedEntity
+import io.micronaut.data.annotation.*
 import io.micronaut.data.model.naming.NamingStrategies
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.bson.types.ObjectId
 import java.net.URI
 import java.net.URL
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -38,10 +37,12 @@ data class SavedVariableDefinition(
     @Nullable
     var owner: Owner?,
     var contact: Contact,
-    var createdAt: String,
+    @DateCreated
+    var createdAt: LocalDateTime,
     @Nullable
     var createdBy: Person?,
-    var lastUpdatedAt: String,
+    @DateUpdated
+    var lastUpdatedAt: LocalDateTime,
     @Nullable
     var lastUpdatedBy: Person?,
 ) {

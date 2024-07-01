@@ -14,6 +14,7 @@ import no.ssb.metadata.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import java.net.URL
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -98,12 +99,12 @@ data class InputVariableDefinition(
             // TODO depends on authentication to make user information available
             owner = null,
             contact = contact,
-            // TODO
-            createdAt = "",
+            // Provide a placeholder value, actual value set by data layer
+            createdAt = LocalDateTime.now(),
             // TODO depends on authentication to make user information available
             createdBy = null,
-            // TODO
-            lastUpdatedAt = "",
+            // Provide a placeholder value, actual value set by data layer
+            lastUpdatedAt = LocalDateTime.now(),
             // TODO depends on authentication to make user information available
             lastUpdatedBy = null,
         )

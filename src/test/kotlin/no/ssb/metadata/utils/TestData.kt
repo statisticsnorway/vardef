@@ -1,8 +1,10 @@
+
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.models.*
 import org.bson.types.ObjectId
 import java.net.URI
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 val INPUT_VARIABLE_DEFINITION =
     InputVariableDefinition(
@@ -56,9 +58,9 @@ val SAVED_VARIABLE_DEFINITION =
         relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact = Contact(LanguageStringType("", "", ""), "me@example.com"),
-        createdAt = "2024-06-11T08:15:19.421Z",
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy = Person("", ""),
-        lastUpdatedAt = "2024-06-11T08:15:19.421Z",
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy = Person("", ""),
     )
 
@@ -88,9 +90,9 @@ val RENDERED_VARIABLE_DEFINITION =
         relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact = RenderedContact("", "me@example.com"),
-        createdAt = "2024-06-11T08:15:19.421Z",
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy = Person("", ""),
-        lastUpdatedAt = "2024-06-11T08:15:19.421Z",
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy = Person("", ""),
     )
 

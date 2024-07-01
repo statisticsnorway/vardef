@@ -1,15 +1,16 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.annotation.Property
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertEquals
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @MicronautTest(startApplication = false)
+@Requires(env = ["integration-test"])
 class KlassApiServiceIntegrationTest {
     @Inject
     lateinit var klassApiService: KlassApiService
@@ -28,11 +29,8 @@ class KlassApiServiceIntegrationTest {
 
     @Test
     fun `fetch NON-existing classification by id from klass api`() {
-        val result = klassApiService.getClassification(0)
-        assertThat(result).isNotNull
-        assertEquals("", result.name)
-
-        val classificationList = result.classificationItems
-        assertThat(classificationList.isEmpty())
+        assertThrows<NoSuchElementException> {
+            klassApiService.getClassification(0)
+        }
     }
 }

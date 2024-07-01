@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import no.ssb.metadata.constants.RENDERED_VARIABLE_DEFINITION_EXAMPLE
 import java.net.URL
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Schema(
     example = RENDERED_VARIABLE_DEFINITION_EXAMPLE,
@@ -29,8 +30,8 @@ data class RenderedVariableDefinition(
     val relatedVariableDefinitionUris: List<URL>?,
     val owner: Owner?,
     val contact: RenderedContact,
-    val createdAt: String,
+    val createdAt: LocalDateTime,
     val createdBy: Person?,
-    val lastUpdatedAt: String,
+    val lastUpdatedAt: LocalDateTime,
     val lastUpdatedBy: Person?,
 )

@@ -2,7 +2,9 @@ package no.ssb.metadata.integrations.vardok
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.vardok.FIMD
 import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
+import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -41,5 +43,30 @@ class VarDokMigrationTest {
         result.forEach { assertThat(it?.id).isNotNull() }
         assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
         assertThat(result).size().isEqualTo(idList.size)
+    }
+
+    @Test
+    fun `iterate list`(){
+        val resList: ArrayList<FIMD> = arrayListOf()
+        var res: FIMD?
+        var counter = 0
+        val invalidList: ArrayList<Int> = arrayListOf()
+        for(i in 1..100){
+            res = varDokApiService.getVarDokItem("$i")
+            if(res != null){
+                resList.add(res)
+                println("Id found $i")
+            }
+            else{
+                counter += 1
+                println("Not valid id $counter")
+                invalidList.add(i)
+
+            }
+        }
+        assertThat(resList).isNotNull()
+        assertThat(resList).size().isEqualTo(100 - counter)
+        assertThat(resList[0].dc).isNotNull()
+        println(invalidList)
     }
 }

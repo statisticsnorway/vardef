@@ -1,8 +1,10 @@
+
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.models.*
 import org.bson.types.ObjectId
 import java.net.URI
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 val INPUT_VARIABLE_DEFINITION =
     InputVariableDefinition(
@@ -44,21 +46,21 @@ val SAVED_VARIABLE_DEFINITION =
         shortName = "landbak",
         definition = LanguageStringType(nb = "For personer født", nn = "For personer født", en = "Country background is"),
         classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
-        unitTypes = listOf(KlassReference("https://example.com/", "", "")),
-        subjectFields = listOf(KlassReference("https://example.com/", "", "")),
+        unitTypes = listOf("01", "02"),
+        subjectFields = listOf("he04"),
         containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
-        measurementType = KlassReference("https://example.com/", "", ""),
+        measurementType = "02.01",
         validFrom = LocalDate.of(2021, 1, 4),
         validUntil = LocalDate.of(2021, 1, 4),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact = Contact(LanguageStringType("", "", ""), "me@example.com"),
-        createdAt = "2024-06-11T08:15:19.421Z",
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy = Person("", ""),
-        lastUpdatedAt = "2024-06-11T08:15:19.421Z",
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy = Person("", ""),
     )
 
@@ -76,21 +78,21 @@ val RENDERED_VARIABLE_DEFINITION =
         shortName = "landbak",
         definition = "For personer født",
         classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
-        unitTypes = listOf(KlassReference("https://example.com/", "", "")),
-        subjectFields = listOf(KlassReference("https://example.com/", "", "")),
+        unitTypes = emptyList(),
+        subjectFields = emptyList(),
         containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
-        measurementType = KlassReference("https://example.com/", "", ""),
+        measurementType = null,
         validFrom = LocalDate.of(2021, 1, 4),
         validUntil = LocalDate.of(2021, 1, 4),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact = RenderedContact("", "me@example.com"),
-        createdAt = "2024-06-11T08:15:19.421Z",
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy = Person("", ""),
-        lastUpdatedAt = "2024-06-11T08:15:19.421Z",
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy = Person("", ""),
     )
 

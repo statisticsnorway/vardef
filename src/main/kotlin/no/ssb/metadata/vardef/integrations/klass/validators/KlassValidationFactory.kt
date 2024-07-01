@@ -19,7 +19,7 @@ class KlassValidationFactory {
                 annotationMetadata,
                 _,
             ->
-            value in
+            value == null || value in
                 klassService.getCodesFor(
                     annotationMetadata["id", String::class.java].getOrElse {
                         throw IllegalStateException("no id supplied on annotation")

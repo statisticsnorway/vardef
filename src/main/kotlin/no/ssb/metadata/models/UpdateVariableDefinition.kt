@@ -5,8 +5,10 @@ import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.constants.*
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import java.net.URL
 import java.time.LocalDate
 
@@ -15,6 +17,7 @@ import java.time.LocalDate
  *
  * Data structure with all fields optional for updating an existing variable definition.
  */
+@Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
     example = INPUT_VARIABLE_DEFINITION_EXAMPLE,
@@ -36,27 +39,45 @@ data class UpdateVariableDefinition(
     val classificationReference: String?,
     @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<String>?,
+    val unitTypes: List<
+        @KlassCode("702")
+        String,
+    >?,
+    @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<String>?,
+    val subjectFields: List<
+        @KlassCode("618")
+        String,
+    >?,
+    @Schema(description = CONTAINS_UNIT_IDENTIFYING_INFORMATION_FIELD_DESCRIPTION)
     @Nullable
     val containsUnitIdentifyingInformation: Boolean?,
+    @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @Nullable
     val containsSensitivePersonalInformation: Boolean?,
+    @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
     @Nullable
     val variableStatus: VariableStatus?,
+    @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
+    @KlassCode("303")
     val measurementType: String?,
+    @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Nullable
     @Format("yyyy-MM-dd")
     val validFrom: LocalDate?,
+    @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable
     @Format("yyyy-MM-dd")
     val validUntil: LocalDate?,
+    @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,
+    @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
     val relatedVariableDefinitionUris: List<URL>?,
+    @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Nullable
+    @Valid
     val contact: Contact?,
 )

@@ -16,23 +16,23 @@ const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """
     "classification_reference": "91",
     "unit_types": ["01", "02"],
     "subject_fields": ["he04"],
-    "contains_unit_identifying_information": true,
+    "contains_unit_identifying_information": false,
     "contains_sensitive_personal_information": true,
-    "variable_status": "DRAFT",
-    "measurement_type": "volume",
-    "valid_from": "2024-06-05",
-    "valid_until": "2024-06-05",
-    "external_reference_uri": "https://example.com/",
+    "variable_status": "PUBLISHED_EXTERNAL",
+    "measurement_type": null,
+    "valid_from": "2003-01-01",
+    "valid_until": null,
+    "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
     "contact": {
         "title": {
-            "en": "string",
-            "nb": "string",
-            "nn": "string"
+            "en": "Division for population statistics",
+            "nb": "Seksjon for befolkningsstatistikk",
+            "nn": "Seksjon for befolkningsstatistikk"
         },
-        "email": "user@example.com"
+        "email": "s320@ssb.no"
     }
 }
 """
@@ -44,48 +44,44 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
     "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
     "unit_types": [{
-            "reference_uri": "https://example.com/",
-            "code": "20",
-            "title": "Storfe"
+            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/702",
+            "code": "17",
+            "title": "Person"
         }
     ],
     "subject_fields": [{
-            "reference_uri": "https://example.com/",
-            "code": "sk",
-            "title": "Sosiale forhold og kriminalitet"
+            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
+            "code": "be07",
+            "title": "Innvandrere"
         }
     ],
-    "contains_unit_identifying_information": true,
+    "contains_unit_identifying_information": false,
     "contains_sensitive_personal_information": true,
-    "variable_status": "DRAFT",
-    "measurement_type": {
-        "reference_uri": "https://example.com/",
-        "code": "07",
-        "title": "Effekt"
-    },
-    "valid_from": "2024-06-05",
-    "valid_until": "2024-06-05",
-    "external_reference_uri": "https://example.com/",
+    "variable_status": "PUBLISHED_EXTERNAL",
+    "measurement_type": null,
+    "valid_from": "2003-01-01",
+    "valid_until": null,
+    "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
     "owner": {
-        "code": "724",
-        "name": "Dataplattform"
+        "code": "320",
+        "name": "Seksjon for befolkningsstatistikk"
     },
     "contact": {
-        "title": "",
-        "email": "user@example.com"
+        "title": "Seksjon for befolkningsstatistikk",
+        "email": "s320@ssb.no"
     },
     "created_at": "2024-06-12T10:39:41.038Z",
     "created_by": {
-        "code": "",
-        "name": ""
+        "code": "ano@ssb.no",
+        "name": "Ola Nordmann"
     },
     "last_updated_at": "2024-06-12T10:39:41.038Z",
     "last_updated_by": {
-        "code": "",
-        "name": ""
+        "code": "ano@ssb.no",
+        "name": "Ola Nordmann"
     }
 }
 """

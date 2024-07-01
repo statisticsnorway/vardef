@@ -11,6 +11,8 @@ import no.ssb.metadata.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.services.VariableDefinitionService
 import no.ssb.metadata.utils.BaseVardefTest
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
@@ -20,6 +22,8 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -46,17 +50,27 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
 class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `create variable definition`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT)
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(201)
-            .body("short_name", equalTo("landbak"))
-            .body("name.nb", equalTo("Landbakgrunn"))
-            .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
+        val startTime = LocalDateTime.now()
+
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(JSON_TEST_INPUT)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .body("short_name", equalTo("landbak"))
+                .body("name.nb", equalTo("Landbakgrunn"))
+                .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
+                .extract().body().path<String>("id")
+
+        val createdVariableDefinition = variableDefinitionService.getOneById(definitionId)
+
+        assertThat(createdVariableDefinition.shortName).isEqualTo("landbak")
+        assertThat(createdVariableDefinition.createdAt).isCloseTo(startTime, within(1, ChronoUnit.MINUTES))
+        assertThat(createdVariableDefinition.createdAt).isEqualTo(createdVariableDefinition.lastUpdatedAt)
     }
 
     @Test
@@ -194,7 +208,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body(updatedJsonString).log().body()
             .`when`()
             .post("/variable-definitions")
-            .then().log().everything()
+            .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
                 "_embedded.errors[0].message",
@@ -214,7 +228,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body(updatedJsonString)
             .`when`()
             .post("/variable-definitions")
-            .then().log().everything()
+            .then()
             .statusCode(errorCode)
     }
 }

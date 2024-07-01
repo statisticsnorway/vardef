@@ -10,7 +10,7 @@ import org.junit.jupiter.api.*
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @MicronautTest(startApplication = false)
-@Requires(env=["integration-test"])
+@Requires(env = ["integration-test"])
 class KlassApiServiceIntegrationTest {
     @Inject
     lateinit var klassApiService: KlassApiService

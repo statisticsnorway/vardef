@@ -239,4 +239,19 @@ class KlassApiServiceTest {
         assertThat(result).isInstanceOf(Classification::class.java)
         assertThat(result.classificationItems).hasSize(2)
     }
+
+    @Test
+    fun `get codes for returns a list of just the codes`() {
+        every {
+            klassApiMockkClient.fetchClassifications()
+        } returns HttpResponse.ok(klassApiResponse)
+
+        every {
+            klassApiMockkClient.fetchCodeList(testClassificationId)
+        } returns HttpResponse.ok(klassApiCodeListResponse)
+
+        val result = klassApiService.getCodesFor(testClassificationId.toString())
+        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId) }
+        assertThat(result).containsExactly("1", "2")
+    }
 }

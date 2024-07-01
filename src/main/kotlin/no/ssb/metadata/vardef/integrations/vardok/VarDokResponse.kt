@@ -52,7 +52,7 @@ data class ContactDivision(
 @Serdeable
 @Introspected
 data class Common(
-    @JacksonXmlProperty(localName = "Title")
+    @JacksonXmlProperty(localName = "Title", namespace = "xml:lang")
     val title: String,
     @field:JacksonXmlProperty(localName = "Description")
     val description: String?,
@@ -104,11 +104,13 @@ data class FIMD(
     val lastChangedDate: String,
     val otherLanguages: String,
     val type: String,
-    val xmlLang: String?,
-    val xsiSchemaLocation: String?,
-    @field:JacksonXmlProperty(localName = "DC", isAttribute = true)
+    @field:JacksonXmlProperty(isAttribute = true, localName = "lang")
+    val xmlLang: String,
+    @field:JacksonXmlProperty(isAttribute = true, localName = "schemaLocation")
+    val xsiSchemaLocation: String,
+    @field:JacksonXmlProperty(localName = "DC", isAttribute = false)
     val dc: DC?,
-    @field:JacksonXmlProperty(localName = "Common", isAttribute = true)
+    @field:JacksonXmlProperty(localName = "Common", isAttribute = false)
     val common: Common?,
     val variable: Variable?,
     val relations: String? = null,

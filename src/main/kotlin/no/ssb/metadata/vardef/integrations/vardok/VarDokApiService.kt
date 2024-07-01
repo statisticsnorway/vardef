@@ -26,5 +26,4 @@ open class VarDokApiService(private val varDokClient: VarDokClient) {
             null
         }
     }
-
 }

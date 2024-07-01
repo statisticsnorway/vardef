@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 
 @MicronautTest
 class VarDokMigrationTest {
-
     @Inject
     lateinit var varDokApiService: VarDokApiService
 
@@ -23,11 +22,10 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `Get vardok by id`(){
+    fun `Get vardok by id`() {
         val result = varDokApiService.getVarDokItem("1422")
         assertThat(result).isNotNull()
         assertThat(result?.dc?.contributor).isEqualTo("Seksjon for regnskapsstatistikk")
         assertThat(result?.common?.title).isEqualTo("Aksje")
     }
-
 }

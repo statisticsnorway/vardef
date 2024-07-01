@@ -77,27 +77,24 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
 
     @CachePut("ClassificationItems", parameters = ["classificationId"])
     open fun fetchClassificationItemsById(classificationId: Int): List<ClassificationItem> {
-        try {
-            logger.info("Klass Api: Fetching classification items")
-            val response = klassApiClient.fetchCodeList(classificationId)
+        logger.info("Klass Api: Fetching classification items")
+        val response = klassApiClient.fetchCodeList(classificationId)
 
-            when (response.status.code) {
-                500 -> {
-                    logger.error(status500)
-                    throw HttpServerException(status500)
-                }
-
-                200 -> logger.info("Klass Api: Classifications fetched")
-                else -> {
-                    logger.info("Klass Api: Classification items not found")
-                    throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
-                }
+        when (response.status.code) {
+            500 -> {
+                logger.error(status500)
+                throw HttpServerException(status500)
             }
 
-            return response.body()?.classificationItems
-                ?: throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
-        } catch (e: ClassCastException) {
-            throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
+            404 -> {
+                logger.info("Klass Api: Classification items not found")
+                throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
+            }
+            else -> {
+                logger.info("Klass Api: Classifications fetched")
+                return response.body()?.classificationItems
+                    ?: throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
+            }
         }
     }
 

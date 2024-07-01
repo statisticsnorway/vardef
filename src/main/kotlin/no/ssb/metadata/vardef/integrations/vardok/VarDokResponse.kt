@@ -32,7 +32,7 @@ data class DC(
     @field:JacksonXmlProperty(localName = "title")
     val title: String?,
     @field:JacksonXmlProperty(localName = "type")
-    val type: String?
+    val type: String?,
 )
 
 @Serdeable

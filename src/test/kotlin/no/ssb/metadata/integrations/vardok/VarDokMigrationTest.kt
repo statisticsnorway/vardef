@@ -31,8 +31,8 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `get list of vardok results by id`(){
-        val idList = listOf("100","1422","2001")
+    fun `get list of vardok results by id`() {
+        val idList = listOf("100", "1422", "2001")
         val result = varDokApiService.getListOfVardokById(idList)
         assertThat(result).isNotNull()
         result.forEach { assertThat(it?.id).isNotNull() }

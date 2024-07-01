@@ -32,9 +32,9 @@ open class VarDokApiService(private val varDokClient: VarDokClient) {
             logger.info("Retrieving multiple definitions from vardok")
             val vardokList = vardokIdList.map { getVarDokItem(it) }
             vardokList
-            } catch (e: Exception) {
-                logger.warn("Error while fetching list of vardoks", e)
-                emptyList()
+        } catch (e: Exception) {
+            logger.warn("Error while fetching list of vardoks", e)
+            emptyList()
         }
     }
 }

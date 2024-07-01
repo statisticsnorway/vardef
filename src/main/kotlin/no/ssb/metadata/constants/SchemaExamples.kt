@@ -18,7 +18,6 @@ const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """
     "subject_fields": ["he04"],
     "contains_unit_identifying_information": false,
     "contains_sensitive_personal_information": true,
-    "variable_status": "PUBLISHED_EXTERNAL",
     "measurement_type": null,
     "valid_from": "2003-01-01",
     "valid_until": null,

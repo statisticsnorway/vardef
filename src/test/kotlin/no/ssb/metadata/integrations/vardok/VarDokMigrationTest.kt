@@ -101,7 +101,7 @@ class VarDokMigrationTest {
         val result = varDokApiService.getListOfVardokById(idList)
         assertThat(result).isNotNull()
         assertThat(result[0]?.variable?.dataElementName).isNotNull()
-        //println(result[0]?.variable?.shortNameWeb?.codeValue)
+        // println(result[0]?.variable?.shortNameWeb?.codeValue)
 
         val l = result[0]?.let { toRenderVarDok(it) }
         println(l)

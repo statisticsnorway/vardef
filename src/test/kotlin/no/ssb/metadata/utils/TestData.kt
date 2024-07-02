@@ -15,7 +15,6 @@ val INPUT_VARIABLE_DEFINITION =
         classificationReference = "91",
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
-        containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = "",
@@ -48,7 +47,6 @@ val SAVED_VARIABLE_DEFINITION =
         classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
         unitTypes = listOf("01", "02"),
         subjectFields = listOf("he04"),
-        containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
@@ -80,7 +78,6 @@ val RENDERED_VARIABLE_DEFINITION =
         classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
         unitTypes = emptyList(),
         subjectFields = emptyList(),
-        containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = null,
@@ -118,7 +115,6 @@ val JSON_TEST_INPUT =
         "subject_fields": [
             "he04"
         ],
-        "contains_unit_identifying_information": true,
         "contains_sensitive_personal_information": true,
         "measurement_type": "02.01",
         "valid_from": "2024-06-05",

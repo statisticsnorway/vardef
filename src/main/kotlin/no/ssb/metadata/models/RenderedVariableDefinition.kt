@@ -20,7 +20,6 @@ data class RenderedVariableDefinition(
     val classificationUri: String?,
     val unitTypes: List<KlassReference>,
     val subjectFields: List<KlassReference>,
-    val containsUnitIdentifyingInformation: Boolean,
     val containsSensitivePersonalInformation: Boolean,
     val variableStatus: VariableStatus,
     val measurementType: KlassReference?,

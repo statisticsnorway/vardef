@@ -16,7 +16,6 @@ const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """
     "classification_reference": "91",
     "unit_types": ["01", "02"],
     "subject_fields": ["he04"],
-    "contains_unit_identifying_information": false,
     "contains_sensitive_personal_information": true,
     "measurement_type": null,
     "valid_from": "2003-01-01",
@@ -54,7 +53,6 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
             "title": "Innvandrere"
         }
     ],
-    "contains_unit_identifying_information": false,
     "contains_sensitive_personal_information": true,
     "variable_status": "PUBLISHED_EXTERNAL",
     "measurement_type": null,

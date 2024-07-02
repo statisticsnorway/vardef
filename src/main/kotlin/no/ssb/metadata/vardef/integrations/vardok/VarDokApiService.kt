@@ -33,8 +33,19 @@ open class VarDokApiService(private val varDokClient: VarDokClient) {
             val vardokList = vardokIdList.map { getVarDokItem(it) }
             vardokList
         } catch (e: Exception) {
-            logger.warn("Error while fetching list of vardoks", e)
+            logger.warn("Error while fetching list of vardok", e)
             emptyList()
+        }
+    }
+
+    open fun getVardokByIdAndLanguage(id: String, language: String): FIMD? {
+        return try {
+            //if language in
+            logger.info("Retrieving $id by $language")
+            varDokClient.fetchVarDokByIdAndLanguage(id, language)
+        } catch (e: Exception) {
+            logger.warn("Error while fetching vardok by id and language", e)
+            null
         }
     }
 }

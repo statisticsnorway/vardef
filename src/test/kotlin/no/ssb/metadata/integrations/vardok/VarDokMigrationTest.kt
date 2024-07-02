@@ -4,6 +4,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.FIMD
 import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
+import no.ssb.metadata.vardef.integrations.vardok.toRenderVarDok
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -32,6 +33,15 @@ class VarDokMigrationTest {
         assertThat(result?.otherLanguages).isEqualTo("en")
         assertThat(result?.type).isEqualTo("ConceptVariable")
         assertThat(result?.xmlLang).isEqualTo("nb")
+    }
+
+    @Test
+    fun `transform vardok to vardef`(){
+        val result = varDokApiService.getVarDokItem("100")
+        val renderVarDok = result?.let { toRenderVarDok(it) }
+        assertThat(renderVarDok?.name?.nb).isEqualTo(result?.dc?.title)
+        assertThat(renderVarDok?.definition?.nb).isEqualTo(result?.common?.description)
+        assertThat(renderVarDok?.validFrom).isEqualTo(result?.lastChangedDate)
     }
 
     @Test
@@ -67,5 +77,16 @@ class VarDokMigrationTest {
         assertThat(resList).size().isEqualTo(100 - counter)
         assertThat(resList[0].dc).isNotNull()
         println(invalidList)
+    }
+
+    @Test
+    fun `Get vardok by id and language if other languages`(){
+        val res = varDokApiService.getVarDokItem("1422")
+        var englishRes: FIMD? = null
+        if(res?.otherLanguages != "") {
+            englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("1422", it.otherLanguages) }
+        }
+        assertThat(englishRes?.common?.title).isEqualTo("Share")
+        assertThat(englishRes?.id).isEqualTo(res?.id)
     }
 }

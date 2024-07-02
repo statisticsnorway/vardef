@@ -38,9 +38,12 @@ open class VarDokApiService(private val varDokClient: VarDokClient) {
         }
     }
 
-    open fun getVardokByIdAndLanguage(id: String, language: String): FIMD? {
+    open fun getVardokByIdAndLanguage(
+        id: String,
+        language: String,
+    ): FIMD? {
         return try {
-            //if language in
+            // if language in
             logger.info("Retrieving $id by $language")
             varDokClient.fetchVarDokByIdAndLanguage(id, language)
         } catch (e: Exception) {

@@ -36,7 +36,7 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `transform vardok to vardef`(){
+    fun `transform vardok to vardef`() {
         val result = varDokApiService.getVarDokItem("100")
         val renderVarDok = result?.let { toRenderVarDok(it) }
         assertThat(renderVarDok?.name?.nb).isEqualTo(result?.dc?.title)
@@ -55,22 +55,20 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `iterate list`(){
+    fun `iterate list`() {
         val resList: ArrayList<FIMD> = arrayListOf()
         var res: FIMD?
         var counter = 0
         val invalidList: ArrayList<Int> = arrayListOf()
-        for(i in 1..100){
+        for (i in 1..100) {
             res = varDokApiService.getVarDokItem("$i")
-            if(res != null){
+            if (res != null) {
                 resList.add(res)
                 println("Id found $i")
-            }
-            else{
+            } else {
                 counter += 1
                 println("Not valid id $counter")
                 invalidList.add(i)
-
             }
         }
         assertThat(resList).isNotNull()
@@ -80,10 +78,10 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `Get vardok by id and language if other languages`(){
+    fun `Get vardok by id and language if other languages`() {
         val res = varDokApiService.getVarDokItem("1422")
         var englishRes: FIMD? = null
-        if(res?.otherLanguages != "") {
+        if (res?.otherLanguages != "") {
             englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("1422", it.otherLanguages) }
         }
         assertThat(englishRes?.common?.title).isEqualTo("Share")

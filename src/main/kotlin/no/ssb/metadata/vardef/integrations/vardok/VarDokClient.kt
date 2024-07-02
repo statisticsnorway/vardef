@@ -25,5 +25,8 @@ interface VarDokClient {
     @Produces(MediaType.APPLICATION_XML)
     @Get("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/{id}/{language}")
     @SingleResult
-    fun fetchVarDokByIdAndLanguage(id: String, language: String): FIMD
+    fun fetchVarDokByIdAndLanguage(
+        id: String,
+        language: String,
+    ): FIMD
 }

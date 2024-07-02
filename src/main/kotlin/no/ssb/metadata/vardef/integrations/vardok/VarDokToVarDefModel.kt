@@ -24,19 +24,21 @@ class VarDokValidDates(vardokItem: FIMD) {
         logger.info("Valid date: $dateString")
         return dateString
     }
-    fun mapValidDateFrom(): String?{
+
+    fun mapValidDateFrom(): String? {
         val range = 0..9
         if (validDate != null) {
-            if(validDate.isNotEmpty()){
+            if (validDate.isNotEmpty()) {
                 return mapDateToLocalDate(range)
             }
         }
         return null
     }
-    fun mapValidDateUntil(): String?{
-        val range =13..22
+
+    fun mapValidDateUntil(): String? {
+        val range = 13..22
         if (validDate != null) {
-            if(validDate.length >= 20){
+            if (validDate.length >= 20) {
                 return mapDateToLocalDate(range)
             }
         }

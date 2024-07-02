@@ -8,7 +8,7 @@ data class RenderVarDok(
     val shortName: String?,
     val definition: LanguageStringType,
     val validFrom: String,
-    val validUntil: String?
+    val validUntil: String?,
 )
 
 fun migrateVarDok(vardokItem: FIMD): RenderVarDok? {

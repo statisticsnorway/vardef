@@ -3,14 +3,13 @@ package no.ssb.metadata
 import RENDERED_VARIABLE_DEFINITION
 import SAVED_VARIABLE_DEFINITION
 import com.mongodb.assertions.Assertions.assertTrue
-import io.mockk.clearAllMocks
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.verify
+import no.ssb.metadata.models.KlassReference
 import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.repositories.VariableDefinitionRepository
 import no.ssb.metadata.services.VariableDefinitionService
+import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
@@ -20,11 +19,13 @@ import org.junit.jupiter.api.Test
 @MockK
 class VariableDefinitionServiceTest {
     private lateinit var variableDefinitionMockRepository: VariableDefinitionRepository
-    private lateinit var variableDefinitionService: VariableDefinitionService
+    lateinit var variableDefinitionService: VariableDefinitionService
+    private lateinit var mockKlassService: KlassService
 
     @BeforeEach
     fun setUp() {
         variableDefinitionMockRepository = mockk<VariableDefinitionRepository>()
+        mockKlassService = mockk<KlassService>()
         variableDefinitionService = VariableDefinitionService(variableDefinitionMockRepository)
     }
 
@@ -65,6 +66,15 @@ class VariableDefinitionServiceTest {
     @Test
     fun `find variables in selected language`() {
         val variableDefinition = SAVED_VARIABLE_DEFINITION
+
+        (
+            variableDefinitionService::class.java.getDeclaredField("klassService").apply { isAccessible = true }
+                .set(variableDefinitionService, mockKlassService)
+        )
+
+        every {
+            mockKlassService.getCodeItemFor(any(), any(), any())
+        } returns KlassReference("", "01", "Adresse")
 
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
 

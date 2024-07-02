@@ -88,7 +88,7 @@ properties:
     description: A link (URI) to an external definition/documentation
     type: string
     format: uri
-  relevant_variable_definition_uri:
+  related_variable_definition_uris:
     title: Related variable(s)
     description: Link(s) to related definitions of variables - a list of one or more
       definitions. For example if after-tax income is a derived variable then it could

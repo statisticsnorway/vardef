@@ -36,7 +36,7 @@ class VarDokMigrationTest {
     @Test
     fun `transform vardok to vardef`() {
         val result = varDokApiService.getVarDokItem("1422")
-        val renderVarDok = result?.let { migrateVarDok(it) }
+        val renderVarDok = result?.let { toRenderVarDok(it) }
         assertThat(renderVarDok?.name?.nb).isEqualTo(result?.dc?.title)
         assertThat(renderVarDok?.definition?.nb).isEqualTo(result?.common?.description)
         assertThat(renderVarDok?.validFrom).isEqualTo("1984-01-01")

@@ -11,17 +11,18 @@ data class RenderVarDok(
     val validUntil: String?,
 )
 
-fun migrateVarDok(vardokItem: FIMD): RenderVarDok? {
-    val name = LanguageStringType(vardokItem.common?.title, null, null)
-    val shortName = vardokItem.variable?.shortNameWeb?.codeText
-    val definition = LanguageStringType(vardokItem.common?.description, null, null)
-    val validFrom = mapValidDateFrom(vardokItem)
-    val validUntil = mapValidDateUntil(vardokItem)
-    return if (validFrom == null) {
-        null
-    } else {
-        RenderVarDok(name, shortName, definition, validFrom, validUntil)
-    }
+fun toRenderVarDok(vardokItem: FIMD): RenderVarDok? {
+    val renderVarDok =
+        mapValidDateFrom(vardokItem)?.let {
+            RenderVarDok(
+                name = LanguageStringType(vardokItem.common?.title, null, null),
+                shortName = vardokItem.variable?.shortNameWeb?.codeValue,
+                definition = LanguageStringType(vardokItem.common?.description, null, null),
+                validFrom = it,
+                validUntil = mapValidDateUntil(vardokItem),
+            )
+        }
+    return renderVarDok
 }
 
 private fun sliceValidDate(

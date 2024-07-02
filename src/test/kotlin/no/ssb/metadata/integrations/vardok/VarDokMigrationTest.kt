@@ -12,7 +12,6 @@ class VarDokMigrationTest {
     @Inject
     lateinit var varDokApiService: VarDokApiService
 
-
     @Test
     fun `Test migration`() {
         val result = varDokApiService.getVarDokResponse()
@@ -44,10 +43,9 @@ class VarDokMigrationTest {
         assertThat(renderVarDok?.validFrom).isEqualTo("1984-01-01")
     }
 
-
     @Test
     fun `get list of vardok results by id`() {
-        val idList = listOf("1422","1919")
+        val idList = listOf("1422", "1919")
         val result = varDokApiService.getListOfVardokById(idList)
         assertThat(result).isNotNull()
         result.forEach { assertThat(it?.id).isNotNull() }

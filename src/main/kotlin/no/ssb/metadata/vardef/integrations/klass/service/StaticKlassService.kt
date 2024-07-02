@@ -1,10 +1,7 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.BeanContext
-import io.micronaut.context.annotation.EachProperty
-import io.micronaut.context.annotation.Parameter
-import io.micronaut.context.annotation.Primary
-import io.micronaut.context.annotation.Requires
+import io.micronaut.context.annotation.*
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Inject
@@ -39,6 +36,9 @@ class StaticKlassService : KlassService {
     @Inject
     lateinit var beanContext: BeanContext
 
+    @Property(name = "micronaut.http.services.klass.url")
+    private var klassUrl: String = ""
+
     override fun getCodesFor(id: String): List<String> {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
@@ -58,7 +58,7 @@ class StaticKlassService : KlassService {
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
             val name = if (language == SupportedLanguages.NB) it.name.nb else null
-            KlassReference("https://data.ssb.no/api/klass/v1/classifications/$id/", it.code, name)
+            KlassReference(klassUrl + "classifications/" + id + "/", it.code, name)
         }
     }
 }

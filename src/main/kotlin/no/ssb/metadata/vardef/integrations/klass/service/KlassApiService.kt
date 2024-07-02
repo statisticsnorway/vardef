@@ -25,6 +25,9 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     private val timeout: Long = 360
     private val status500 = "Klass Api: Service is not available"
 
+    @Property(name = "http.services.klass.url")
+    private var klassUrl: String = ""
+
     @Cacheable("classifications")
     open fun fetchAllClassifications(): List<Classification> {
         val notFound = "Klass Api: Classifications not found"
@@ -126,19 +129,12 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
         val classificationId = id.toInt()
         val classification = getClassificationItemsById(classificationId).find { it.code == code }
         return classification?.let {
-            if (language == SupportedLanguages.NB) {
-                KlassReference(
-                    "https://data.ssb.no/api/klass/v1/classifications/$classificationId/",
-                    it.code,
-                    it.name,
-                )
-            } else {
-                KlassReference(
-                    "https://data.ssb.no/api/klass/v1/classifications/$classificationId/",
-                    it.code,
-                    null,
-                )
-            }
+            val name = if (language == SupportedLanguages.NB) it.name else null
+            KlassReference(
+                klassUrl + "classifications/" + classificationId + "/",
+                it.code,
+                name,
+            )
         }
     }
 

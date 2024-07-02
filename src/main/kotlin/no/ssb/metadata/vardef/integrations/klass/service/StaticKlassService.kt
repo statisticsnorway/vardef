@@ -1,15 +1,14 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.BeanContext
-import io.micronaut.context.annotation.EachProperty
-import io.micronaut.context.annotation.Parameter
-import io.micronaut.context.annotation.Primary
-import io.micronaut.context.annotation.Requires
+import io.micronaut.context.annotation.*
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import no.ssb.metadata.models.KlassReference
 import no.ssb.metadata.models.LanguageStringType
+import no.ssb.metadata.models.SupportedLanguages
 
 const val KLASS_CLASSIFICATIONS_PROPERTY_NAME = "klass.classifications"
 
@@ -37,10 +36,29 @@ class StaticKlassService : KlassService {
     @Inject
     lateinit var beanContext: BeanContext
 
+    @Property(name = "micronaut.http.services.klass.url")
+    private var klassUrl: String = ""
+
     override fun getCodesFor(id: String): List<String> {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
         println(classification)
         return classification.codes?.map { it.code }.orEmpty().toList()
+    }
+
+    override fun getCodeItemFor(
+        id: String,
+        code: String,
+        language: SupportedLanguages,
+    ): KlassReference? {
+        val classification: StaticClassification =
+            beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
+        println(classification)
+
+        val klassCode = classification.codes?.find { it.code == code }
+        return klassCode?.let {
+            val name = if (language == SupportedLanguages.NB) it.name.nb else null
+            KlassReference(klassUrl + "classifications/" + id + "/", it.code, name)
+        }
     }
 }

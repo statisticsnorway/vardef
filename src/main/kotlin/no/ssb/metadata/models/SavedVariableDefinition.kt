@@ -3,6 +3,7 @@ package no.ssb.metadata.models
 import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.*
 import io.micronaut.data.model.naming.NamingStrategies
+import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.bson.types.ObjectId
 import java.net.URI
 import java.net.URL
@@ -44,21 +45,21 @@ data class SavedVariableDefinition(
     @Nullable
     var lastUpdatedBy: Person?,
 ) {
-    fun toRenderedVariableDefinition(language: SupportedLanguages): RenderedVariableDefinition =
+    fun toRenderedVariableDefinition(
+        language: SupportedLanguages,
+        klassService: KlassService,
+    ): RenderedVariableDefinition =
         RenderedVariableDefinition(
             id = definitionId,
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),
             classificationUri = classificationUri,
-            // TODO DPMETA-258
-            unitTypes = emptyList(),
-            // TODO DPMETA-258
-            subjectFields = emptyList(),
+            unitTypes = unitTypes.map { klassService.getCodeItemFor("702", it, language) },
+            subjectFields = subjectFields.map { klassService.getCodeItemFor("618", it, language) },
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
-            // TODO DPMETA-258
-            measurementType = null,
+            measurementType = measurementType?.let { klassService.getCodeItemFor("303", it, language) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

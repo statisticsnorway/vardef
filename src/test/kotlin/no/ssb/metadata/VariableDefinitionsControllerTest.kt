@@ -231,4 +231,39 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(errorCode)
     }
+
+    @Test
+    fun `get request klass codes`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .contentType(ContentType.JSON)
+            .header("Accept-Language", "nb")
+            .get("/variable-definitions")
+            .then()
+            .assertThat().statusCode(200)
+            .body(
+                "[0].measurement_type.reference_uri",
+                equalTo(
+                    "https://data.ssb.no/api/klass/v1/classifications/303/",
+                ),
+            )
+            .body("[0].measurement_type.code", equalTo("02.01"))
+            .body("[0].measurement_type.title", equalTo("antall"))
+            .body(
+                "[0].unit_types[0].reference_uri",
+                equalTo(
+                    "https://data.ssb.no/api/klass/v1/classifications/702/",
+                ),
+            )
+            .body("[0].unit_types[0].code", equalTo("01"))
+            .body("[0].unit_types[0].title", equalTo("Adresse"))
+            .body(
+                "[0].subject_fields[0].reference_uri",
+                equalTo(
+                    "https://data.ssb.no/api/klass/v1/classifications/618/",
+                ),
+            )
+            .body("[0].subject_fields[0].code", equalTo("he04"))
+            .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
+    }
 }

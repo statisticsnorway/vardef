@@ -6,6 +6,8 @@ import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.server.exceptions.HttpServerException
 import jakarta.inject.Singleton
+import no.ssb.metadata.models.KlassReference
+import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import org.slf4j.LoggerFactory
@@ -22,6 +24,9 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     @Property(name = "klass.cache-retry-timeout-seconds")
     private val timeout: Long = 360
     private val status500 = "Klass Api: Service is not available"
+
+    @Property(name = "http.services.klass.url")
+    private var klassUrl: String = ""
 
     @Cacheable("classifications")
     open fun fetchAllClassifications(): List<Classification> {
@@ -115,6 +120,23 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     }
 
     override fun getCodesFor(id: String): List<String> = getClassificationItemsById(id.toInt()).map { it.code }
+
+    override fun getCodeItemFor(
+        id: String,
+        code: String,
+        language: SupportedLanguages,
+    ): KlassReference? {
+        val classificationId = id.toInt()
+        val classification = getClassificationItemsById(classificationId).find { it.code == code }
+        return classification?.let {
+            val name = if (language == SupportedLanguages.NB) it.name else null
+            KlassReference(
+                klassUrl + "classifications/" + classificationId + "/",
+                it.code,
+                name,
+            )
+        }
+    }
 
     fun classificationCacheSize(): Int = classificationCache.size
 

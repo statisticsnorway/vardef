@@ -125,4 +125,3 @@ data class FIMD(
     val variable: Variable?,
     val relations: String? = null,
 )
-

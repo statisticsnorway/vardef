@@ -5,7 +5,6 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 
 @MicronautTest
 class VarDokMigrationTest {

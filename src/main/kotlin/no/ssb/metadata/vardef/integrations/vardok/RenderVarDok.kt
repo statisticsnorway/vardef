@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.models.LanguageStringType
-import java.time.LocalDate
 
 data class RenderVarDok(
     val name: LanguageStringType,

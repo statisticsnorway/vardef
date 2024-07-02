@@ -35,11 +35,11 @@ class VarDokMigrationTest {
 
     @Test
     fun `transform vardok to vardef`() {
-        val result = varDokApiService.getVarDokItem("100")
+        val result = varDokApiService.getVarDokItem("1422")
         val renderVarDok = result?.let { migrateVarDok(it) }
         assertThat(renderVarDok?.name?.nb).isEqualTo(result?.dc?.title)
         assertThat(renderVarDok?.definition?.nb).isEqualTo(result?.common?.description)
-        assertThat(renderVarDok?.validFrom).isEqualTo(result?.lastChangedDate)
+        assertThat(renderVarDok?.validFrom).isEqualTo("1984-01-01")
     }
 
     @Test
@@ -91,8 +91,7 @@ class VarDokMigrationTest {
         val res = varDokApiService.getVarDokItem("1422")
         assertThat(res?.dc?.valid).isNotNull()
         assertThat(res?.dc?.valid).hasSizeGreaterThan(10)
-        val varDokValidDates = res?.let { VarDokValidDates(it) }
-        val mappedFromDate = varDokValidDates?.mapValidDateFrom()
+        val mappedFromDate = res?.let { mapValidDateFrom(it) }
         assertThat(mappedFromDate).isNotNull()
         assertThat(mappedFromDate).isEqualTo("1984-01-01")
     }
@@ -102,8 +101,7 @@ class VarDokMigrationTest {
         val res = varDokApiService.getVarDokItem("123")
         assertThat(res?.dc?.valid).isNotNull()
         assertThat(res?.dc?.valid).hasSizeGreaterThan(20)
-        val varDokValidDates = res?.let { VarDokValidDates(it) }
-        val mappedUntilDate = res?.let { varDokValidDates?.mapValidDateUntil() }
+        val mappedUntilDate = res?.let { mapValidDateUntil(it) }
         assertThat(mappedUntilDate).isNotNull()
         assertThat(mappedUntilDate).isEqualTo("2002-12-31")
     }
@@ -111,16 +109,14 @@ class VarDokMigrationTest {
     @Test
     fun `Map vardok missing valid date`() {
         val res = varDokApiService.getVarDokItem("100")
-        val varDokValidDates = res?.let { VarDokValidDates(it) }
-        val mappedFromDate = varDokValidDates?.mapValidDateFrom()
+        val mappedFromDate = res?.let { mapValidDateFrom(it) }
         assertThat(mappedFromDate).isNull()
     }
 
     @Test
     fun `Map vardok missing valid end date`() {
         val res = varDokApiService.getVarDokItem("1422")
-        val varDokValidDates = res?.let { VarDokValidDates(it) }
-        val mappedUntilDate = varDokValidDates?.mapValidDateUntil()
+        val mappedUntilDate = res?.let { mapValidDateUntil(it) }
         assertThat(mappedUntilDate).isNull()
     }
 }

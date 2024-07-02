@@ -2,11 +2,10 @@ package no.ssb.metadata.integrations.vardok
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.vardok.FIMD
-import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
-import no.ssb.metadata.vardef.integrations.vardok.toRenderVarDok
+import no.ssb.metadata.vardef.integrations.vardok.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 @MicronautTest
 class VarDokMigrationTest {
@@ -38,7 +37,7 @@ class VarDokMigrationTest {
     @Test
     fun `transform vardok to vardef`() {
         val result = varDokApiService.getVarDokItem("100")
-        val renderVarDok = result?.let { toRenderVarDok(it) }
+        val renderVarDok = result?.let { migrateVarDok(it) }
         assertThat(renderVarDok?.name?.nb).isEqualTo(result?.dc?.title)
         assertThat(renderVarDok?.definition?.nb).isEqualTo(result?.common?.description)
         assertThat(renderVarDok?.validFrom).isEqualTo(result?.lastChangedDate)
@@ -87,4 +86,44 @@ class VarDokMigrationTest {
         assertThat(englishRes?.common?.title).isEqualTo("Share")
         assertThat(englishRes?.id).isEqualTo(res?.id)
     }
+
+    @Test
+    fun `Map vardok date from`(){
+        val res = varDokApiService.getVarDokItem("1422")
+        assertThat(res?.dc?.valid).isNotNull()
+        assertThat(res?.dc?.valid).hasSizeGreaterThan(10)
+        val varDokValidDates = res?.let { VarDokValidDates(it) }
+        val mappedFromDate = varDokValidDates?.mapValidDateFrom()
+        assertThat(mappedFromDate).isNotNull()
+        assertThat(mappedFromDate).isEqualTo("1984-01-01")
+    }
+
+    @Test
+    fun `Map vardok date until`(){
+        val res = varDokApiService.getVarDokItem("123")
+        assertThat(res?.dc?.valid).isNotNull()
+        assertThat(res?.dc?.valid).hasSizeGreaterThan(20)
+        val varDokValidDates = res?.let { VarDokValidDates(it) }
+        val mappedUntilDate = res?.let { varDokValidDates?.mapValidDateUntil()}
+        assertThat(mappedUntilDate).isNotNull()
+        assertThat(mappedUntilDate).isEqualTo("2002-12-31")
+    }
+
+
+    @Test
+    fun `Map vardok missing valid date`(){
+        val res = varDokApiService.getVarDokItem("100")
+        val varDokValidDates = res?.let { VarDokValidDates(it) }
+        val mappedFromDate = varDokValidDates?.mapValidDateFrom()
+        assertThat(mappedFromDate).isNull()
+    }
+
+    @Test
+    fun `Map vardok missing valid end date`(){
+        val res = varDokApiService.getVarDokItem("1422")
+        val varDokValidDates = res?.let { VarDokValidDates(it) }
+        val mappedUntilDate = varDokValidDates?.mapValidDateUntil()
+        assertThat(mappedUntilDate).isNull()
+    }
+
 }

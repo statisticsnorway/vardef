@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 val INPUT_VARIABLE_DEFINITION =
     InputVariableDefinition(
-        id = null,
+        id = NanoId.generate(8),
         name = LanguageStringType(nb = "Landbakgrunn", nn = "Landbakgrunn", en = "Country Background"),
         shortName = "landbak",
         definition = LanguageStringType(nb = "For personer født", nn = null, en = "Country background is"),
@@ -50,7 +50,7 @@ val SAVED_VARIABLE_DEFINITION =
         subjectFields = listOf("he04"),
         containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
-        variableStatus = VariableStatus.DRAFT,
+        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
         validFrom = LocalDate.of(2021, 1, 4),
         validUntil = LocalDate.of(2021, 1, 4),
@@ -120,7 +120,6 @@ val JSON_TEST_INPUT =
         ],
         "contains_unit_identifying_information": true,
         "contains_sensitive_personal_information": true,
-        "variable_status": "DRAFT",
         "measurement_type": "02.01",
         "valid_from": "2024-06-05",
         "valid_until": "2024-06-05",

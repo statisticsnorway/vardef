@@ -64,29 +64,38 @@ data class Common(
 @Serdeable
 @Introspected
 data class SubjectArea(
-    val codeValue: String,
-    val codeText: String,
+    val codeValue: String?,
+    val codeText: String?,
 )
 
 @Serdeable
 @Introspected
 data class ShortNameWeb(
-    val codeValue: String,
-    val codeText: String,
+    @field:JacksonXmlProperty(localName = "CodeValue")
+    val codeValue: String? = null,
+    @field:JacksonXmlProperty(localName = "CodeText")
+    val codeText: String? = null
 )
 
 @Serdeable
 @Introspected
 data class Variable(
+    @field:JacksonXmlProperty(localName = "InternalNotes")
     val internalNotes: String? = null,
-    val statisticalUnit: String,
-    val subjectArea: SubjectArea,
+    @field:JacksonXmlProperty(localName = "StatisticalUnit")
+    val statisticalUnit: String?,
+    @field:JacksonXmlProperty(localName = "SubjectArea")
+    val subjectArea: SubjectArea?,
+    @field:JacksonXmlProperty(localName = "ExternalSource")
     val externalSource: String? = null,
+    @field:JacksonXmlProperty(localName = "InternalSource")
     val internalSource: String? = null,
+    @field:JacksonXmlProperty(localName = "Sensitivity")
     val sensitivity: String,
     val externalDocument: String? = null,
     val dataElementName: String? = null,
-    val shortNameWeb: ShortNameWeb,
+    @field:JacksonXmlProperty(localName = "ShortNameWeb", isAttribute = false)
+    val shortNameWeb: ShortNameWeb?,
     val calculation: String? = null,
     val internalDocument: String? = null,
     val externalComment: String? = null,
@@ -112,6 +121,7 @@ data class FIMD(
     val dc: DC?,
     @field:JacksonXmlProperty(localName = "Common", isAttribute = false)
     val common: Common?,
+    @field:JacksonXmlProperty(localName = "Variable", isAttribute = false)
     val variable: Variable?,
     val relations: String? = null,
 )

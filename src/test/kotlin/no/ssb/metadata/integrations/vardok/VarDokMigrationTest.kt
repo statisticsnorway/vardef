@@ -1,5 +1,7 @@
 package no.ssb.metadata.integrations.vardok
 
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.FIMD
@@ -7,6 +9,7 @@ import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
 import no.ssb.metadata.vardef.integrations.vardok.toRenderVarDok
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 @MicronautTest
 class VarDokMigrationTest {
@@ -86,5 +89,28 @@ class VarDokMigrationTest {
         }
         assertThat(englishRes?.common?.title).isEqualTo("Share")
         assertThat(englishRes?.id).isEqualTo(res?.id)
+    }
+
+
+
+    @Test
+    fun `get list of vardok results by id and return response`() {
+        val idList = listOf("2")
+        val result = varDokApiService.getListOfVardokById(idList)
+        println(result[0]?.variable?.shortNameWeb?.codeValue)
+
+        val l = result[0]?.let { toRenderVarDok(it) }
+        println(l)
+
+        val mapper = jacksonObjectMapper()
+
+        println(mapper.writeValueAsString(l))
+
+
+
+//        assertThat(result).isNotNull()
+//        result.forEach { assertThat(it?.id).isNotNull() }
+//        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
+//        assertThat(result).size().isEqualTo(idList.size)
     }
 }

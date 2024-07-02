@@ -40,7 +40,9 @@ class VariableDefinitionsController {
     /**
      * Create a variable definition.
      *
-     * New variable definitions must have status DRAFT and include all required fields.
+     * New variable definitions are automatically assigned status DRAFT and must include all required fields.
+     *
+     * Attempts to specify id or variable_status in a request will receive 400 BAD REQUEST responses.
      */
     @Post()
     @Status(HttpStatus.CREATED)
@@ -50,6 +52,12 @@ class VariableDefinitionsController {
         @Body @Valid varDef: InputVariableDefinition,
     ): InputVariableDefinition {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
+        if (varDef.variableStatus != null) {
+            throw HttpStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Variable status may not be specified on creation.",
+            )
+        }
         return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
     }
 }

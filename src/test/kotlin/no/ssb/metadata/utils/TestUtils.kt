@@ -92,9 +92,6 @@ object TestUtils {
                     remove("subject_fields")
                 } to "varDef.subjectFields: must not be empty",
                 JSONObject(JSON_TEST_INPUT).apply {
-                    remove("variable_status")
-                } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply {
                     remove("valid_from")
                 } to "null annotate it with @Nullable",
                 JSONObject(JSON_TEST_INPUT).apply {
@@ -110,16 +107,16 @@ object TestUtils {
             listOf(
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("variable_status", "DRAFT")
-                } to HttpStatus.CREATED.code,
+                } to HttpStatus.BAD_REQUEST.code,
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("variable_status", "PUBLISHED_INTERNAL")
-                } to HttpStatus.CREATED.code,
+                } to HttpStatus.BAD_REQUEST.code,
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("variable_status", "PUBLISHED_EXTERNAL")
-                } to HttpStatus.CREATED.code,
+                } to HttpStatus.BAD_REQUEST.code,
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("variable_status", "DEPRECATED")
-                } to HttpStatus.CREATED.code,
+                } to HttpStatus.BAD_REQUEST.code,
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("variable_status", "Not a status")
                 } to HttpStatus.BAD_REQUEST.code,

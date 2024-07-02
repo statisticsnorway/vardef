@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 data class InputVariableDefinition(
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @Nullable
-    val id: String?,
+    var id: String?,
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
@@ -49,14 +49,11 @@ data class InputVariableDefinition(
         @KlassCode("618")
         String,
     >,
-    @Schema(description = CONTAINS_UNIT_IDENTIFYING_INFORMATION_FIELD_DESCRIPTION)
-    @NotNull
-    val containsUnitIdentifyingInformation: Boolean,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     val containsSensitivePersonalInformation: Boolean,
-    @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
-    val variableStatus: VariableStatus,
+    @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION, accessMode = Schema.AccessMode.READ_ONLY)
+    var variableStatus: VariableStatus?,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
@@ -80,7 +77,7 @@ data class InputVariableDefinition(
 ) {
     fun toSavedVariableDefinition(): SavedVariableDefinition =
         SavedVariableDefinition(
-            definitionId = NanoId.generate(8),
+            definitionId = id ?: NanoId.generate(8),
             name = name,
             shortName = shortName,
             definition = definition,
@@ -88,9 +85,8 @@ data class InputVariableDefinition(
             classificationUri = "",
             unitTypes = unitTypes,
             subjectFields = subjectFields,
-            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus,
+            variableStatus = variableStatus ?: VariableStatus.DRAFT,
             measurementType = measurementType,
             validFrom = validFrom,
             validUntil = validUntil,

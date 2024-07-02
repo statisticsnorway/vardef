@@ -8,14 +8,13 @@ import java.time.LocalDateTime
 
 val INPUT_VARIABLE_DEFINITION =
     InputVariableDefinition(
-        id = null,
+        id = NanoId.generate(8),
         name = LanguageStringType(nb = "Landbakgrunn", nn = "Landbakgrunn", en = "Country Background"),
         shortName = "landbak",
         definition = LanguageStringType(nb = "For personer født", nn = null, en = "Country background is"),
         classificationReference = "91",
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
-        containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = "",
@@ -48,9 +47,8 @@ val SAVED_VARIABLE_DEFINITION =
         classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
         unitTypes = listOf("01", "02"),
         subjectFields = listOf("he04"),
-        containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
-        variableStatus = VariableStatus.DRAFT,
+        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
         validFrom = LocalDate.of(2021, 1, 4),
         validUntil = LocalDate.of(2021, 1, 4),
@@ -80,7 +78,6 @@ val RENDERED_VARIABLE_DEFINITION =
         classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
         unitTypes = emptyList(),
         subjectFields = emptyList(),
-        containsUnitIdentifyingInformation = false,
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = null,
@@ -118,9 +115,7 @@ val JSON_TEST_INPUT =
         "subject_fields": [
             "he04"
         ],
-        "contains_unit_identifying_information": true,
         "contains_sensitive_personal_information": true,
-        "variable_status": "DRAFT",
         "measurement_type": "02.01",
         "valid_from": "2024-06-05",
         "valid_until": "2024-06-05",

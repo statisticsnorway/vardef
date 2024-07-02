@@ -25,7 +25,7 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
     private val timeout: Long = 360
     private val status500 = "Klass Api: Service is not available"
 
-    @Property(name = "http.services.klass.url")
+    @Property(name = "micronaut.http.services.klass.url")
     private var klassUrl: String = ""
 
     @Cacheable("classifications")

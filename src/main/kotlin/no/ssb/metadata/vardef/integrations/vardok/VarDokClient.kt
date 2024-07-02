@@ -13,7 +13,7 @@ import io.micronaut.http.client.annotation.Client
 interface VarDokClient {
     // @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    @Get("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/100/nb")
+    @Get("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/1422/nb")
     @SingleResult
     fun fetchVarDok(): FIMD
 

@@ -95,7 +95,7 @@ data class Variable(
     val externalDocument: String? = null,
     val dataElementName: String? = null,
     @field:JacksonXmlProperty(localName = "ShortNameWeb", isAttribute = false)
-    val shortNameWeb: ShortNameWeb?,
+    val shortNameWeb: ShortNameWeb? = null,
     val calculation: String? = null,
     val internalDocument: String? = null,
     val externalComment: String? = null,
@@ -122,6 +122,6 @@ data class FIMD(
     @field:JacksonXmlProperty(localName = "Common", isAttribute = false)
     val common: Common?,
     @field:JacksonXmlProperty(localName = "Variable", isAttribute = false)
-    val variable: Variable?,
+    val variable: Variable? = null,
     val relations: String? = null,
 )

@@ -12,17 +12,16 @@ class VarDokMigrationTest {
     @Inject
     lateinit var varDokApiService: VarDokApiService
 
-    /*
-    Fails after changes
+
     @Test
     fun `Test migration`() {
         val result = varDokApiService.getVarDokResponse()
-        /*assertThat(result).isNotNull()
-        assertThat(result?.id).isEqualTo("urn:ssb:conceptvariable:vardok:100")
+        assertThat(result).isNotNull()
+        assertThat(result?.id).isEqualTo("urn:ssb:conceptvariable:vardok:1422")
         assertThat(result?.dc?.contributor).isNotNull()
-        assertThat(result?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
-        assertThat(result?.common?.title).isEqualTo("Adressenavn")*/
-    }*/
+        assertThat(result?.dc?.contributor).isEqualTo("Seksjon for regnskapsstatistikk")
+        assertThat(result?.common?.title).isEqualTo("Aksje")
+    }
 
     @Test
     fun `Get vardok by id`() {
@@ -45,18 +44,16 @@ class VarDokMigrationTest {
         assertThat(renderVarDok?.validFrom).isEqualTo("1984-01-01")
     }
 
-    /*
-    Fails after changes
+
     @Test
     fun `get list of vardok results by id`() {
-        val idList = listOf("100")
-                //"1422", "2001", "1919
+        val idList = listOf("1422","1919")
         val result = varDokApiService.getListOfVardokById(idList)
         assertThat(result).isNotNull()
         result.forEach { assertThat(it?.id).isNotNull() }
-        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
+        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for regnskapsstatistikk")
         assertThat(result).size().isEqualTo(idList.size)
-    }*/
+    }
 
     @Test
     fun `iterate list`() {
@@ -96,6 +93,8 @@ class VarDokMigrationTest {
     fun `get list of vardok results by id and return response`() {
         val idList = listOf("2")
         val result = varDokApiService.getListOfVardokById(idList)
+        assertThat(result).isNotNull()
+        assertThat(result[0]?.variable?.shortNameWeb?.codeValue).isNotNull()
         println(result[0]?.variable?.shortNameWeb?.codeValue)
 
         val l = result[0]?.let { toRenderVarDok(it) }

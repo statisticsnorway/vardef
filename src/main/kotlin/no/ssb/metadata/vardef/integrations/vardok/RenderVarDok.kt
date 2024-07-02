@@ -17,7 +17,8 @@ fun toRenderVarDok(vardokItem: FIMD): RenderVarDok? {
         mapValidDateFrom(vardokItem)?.let {
             RenderVarDok(
                 name = LanguageStringType(vardokItem.common?.title, null, null),
-                shortName = vardokItem.variable?.shortNameWeb?.codeValue,
+                //shortName = vardokItem.variable?.shortNameWeb?.codeValue,
+                shortName = vardokItem.variable?.dataElementName,
                 definition = LanguageStringType(vardokItem.common?.description, null, null),
                 validFrom = it,
                 validUntil = mapValidDateUntil(vardokItem),

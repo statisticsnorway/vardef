@@ -39,7 +39,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.nanoid)
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.+")
+    // implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.+")
     compileOnly(libs.micronaut.openapi.annotations)
     runtimeOnly(libs.logback.classic)
     runtimeOnly(libs.jackson.module.kotlin)

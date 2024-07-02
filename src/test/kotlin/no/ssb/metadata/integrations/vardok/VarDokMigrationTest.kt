@@ -1,11 +1,14 @@
 package no.ssb.metadata.integrations.vardok
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+// import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+
 
 @MicronautTest
 class VarDokMigrationTest {
@@ -54,6 +57,12 @@ class VarDokMigrationTest {
     }
 
     @Test
+    fun `get vardokItem with empty shortname`() {
+        val result = varDokApiService.getVarDokItem("100")
+        assertThat(result).isNotNull()
+    }
+
+    @Test
     fun `iterate list`() {
         val resList: ArrayList<FIMD> = arrayListOf()
         var res: FIMD?
@@ -98,9 +107,11 @@ class VarDokMigrationTest {
         val l = result[0]?.let { toRenderVarDok(it) }
         println(l)
 
-        val mapper = jacksonObjectMapper()
-
-        println(mapper.writeValueAsString(l))
+        val xmlMapper: ObjectMapper = XmlMapper()
+        val xml: String = xmlMapper.writeValueAsString(result)
+        // val mapper = jacksonObjectMapper()
+        println(xml)
+        // println(mapper.writeValueAsString(l))
 
 //        assertThat(result).isNotNull()
 //        result.forEach { assertThat(it?.id).isNotNull() }

@@ -74,7 +74,7 @@ data class ShortNameWeb(
     @field:JacksonXmlProperty(localName = "CodeValue")
     val codeValue: String? = null,
     @field:JacksonXmlProperty(localName = "CodeText")
-    val codeText: String? = null
+    val codeText: String? = null,
 )
 
 @Serdeable
@@ -125,3 +125,4 @@ data class FIMD(
     val variable: Variable?,
     val relations: String? = null,
 )
+

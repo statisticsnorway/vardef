@@ -122,19 +122,19 @@ open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassSe
         id: String,
         code: String,
         language: SupportedLanguages,
-    ):  KlassReference? {
+    ): KlassReference? {
         val classificationId = id.toInt()
         val classification = getClassificationItemsById(classificationId).find { it.code == code }
         return classification?.let {
             if (language == SupportedLanguages.NB) {
                 KlassReference(
-                    "https://data.ssb.no/api/klass/v1/classifications/${classificationId}/",
+                    "https://data.ssb.no/api/klass/v1/classifications/$classificationId/",
                     it.code,
                     it.name,
                 )
             } else {
                 KlassReference(
-                    "https://data.ssb.no/api/klass/v1/classifications/${classificationId}/",
+                    "https://data.ssb.no/api/klass/v1/classifications/$classificationId/",
                     it.code,
                     null,
                 )

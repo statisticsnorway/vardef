@@ -49,9 +49,6 @@ data class UpdateVariableDefinition(
         @KlassCode("618")
         String,
     >?,
-    @Schema(description = CONTAINS_UNIT_IDENTIFYING_INFORMATION_FIELD_DESCRIPTION)
-    @Nullable
-    val containsUnitIdentifyingInformation: Boolean?,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @Nullable
     val containsSensitivePersonalInformation: Boolean?,

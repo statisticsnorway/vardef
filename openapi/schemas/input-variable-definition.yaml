@@ -49,10 +49,6 @@ properties:
     examples:
       - ["he04"]
       - ["if02", "vf05"]
-  contains_unit_identifying_information:
-    title: Contains unit identifying information
-    description: True if variable instances contain information which can identify a Person, Family or Household. Applies even if the information is pseudonymized.
-    type: boolean
   contains_sensitive_personal_information:
     title: Contains unit identifying information
     description: |

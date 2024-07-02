@@ -49,9 +49,6 @@ data class InputVariableDefinition(
         @KlassCode("618")
         String,
     >,
-    @Schema(description = CONTAINS_UNIT_IDENTIFYING_INFORMATION_FIELD_DESCRIPTION)
-    @NotNull
-    val containsUnitIdentifyingInformation: Boolean,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     val containsSensitivePersonalInformation: Boolean,
@@ -88,7 +85,6 @@ data class InputVariableDefinition(
             classificationUri = "",
             unitTypes = unitTypes,
             subjectFields = subjectFields,
-            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus ?: VariableStatus.DRAFT,
             measurementType = measurementType,

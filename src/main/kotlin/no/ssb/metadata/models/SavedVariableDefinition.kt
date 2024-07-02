@@ -21,7 +21,6 @@ data class SavedVariableDefinition(
     var classificationUri: String?,
     var unitTypes: List<String>,
     var subjectFields: List<String>,
-    var containsUnitIdentifyingInformation: Boolean,
     var containsSensitivePersonalInformation: Boolean,
     var variableStatus: VariableStatus,
     @Nullable
@@ -56,7 +55,6 @@ data class SavedVariableDefinition(
             unitTypes = emptyList(),
             // TODO DPMETA-258
             subjectFields = emptyList(),
-            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
             // TODO DPMETA-258
@@ -83,7 +81,6 @@ data class SavedVariableDefinition(
             classificationReference = "",
             unitTypes = unitTypes,
             subjectFields = subjectFields,
-            containsUnitIdentifyingInformation = containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
             variableStatus = variableStatus,
             measurementType = measurementType,
@@ -114,9 +111,6 @@ data class SavedVariableDefinition(
             classificationUri = varDefUpdates.classificationReference ?: classificationUri,
             unitTypes = varDefUpdates.unitTypes ?: unitTypes,
             subjectFields = varDefUpdates.subjectFields ?: subjectFields,
-            containsUnitIdentifyingInformation =
-                varDefUpdates.containsUnitIdentifyingInformation
-                    ?: containsUnitIdentifyingInformation,
             containsSensitivePersonalInformation =
                 varDefUpdates.containsSensitivePersonalInformation
                     ?: containsSensitivePersonalInformation,

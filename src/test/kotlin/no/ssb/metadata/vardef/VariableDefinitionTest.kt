@@ -1,6 +1,8 @@
 package no.ssb.metadata.vardef
 
+import RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
 import SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -15,11 +17,13 @@ import kotlin.properties.Delegates
 class VariableDefinitionTest {
     private lateinit var variableDefinition: SavedVariableDefinition
     private var nanoIdSize by Delegates.notNull<Int>()
+    private lateinit var renderedVariableDefinition: RenderedVariableDefinition
 
     @BeforeAll
     fun setUp() {
         variableDefinition = SAVED_VARIABLE_DEFINITION
         nanoIdSize = 8
+        renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
     }
 
     @ParameterizedTest
@@ -59,5 +63,11 @@ class VariableDefinitionTest {
     fun `variable definition id is expected length`() {
         val nanoId = variableDefinition.definitionId
         assertThat(nanoId.length).isEqualTo(nanoIdSize)
+    }
+
+    @Test
+    fun `rendered variable without contact information`() {
+        assertThat(renderedVariableDefinition.contact).isNull()
+        assertThat(renderedVariableDefinition.name).isEqualTo("Landbakgrunn")
     }
 }

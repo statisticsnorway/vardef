@@ -138,6 +138,33 @@ val RENDERED_VARIABLE_DEFINITION =
             Person("", ""),
     )
 
+val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
+    RenderedVariableDefinition(
+        id = "",
+        name = "Landbakgrunn",
+        shortName = "landbak",
+        definition = "For personer født",
+        classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+        unitTypes = emptyList(),
+        subjectFields = emptyList(),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.DRAFT,
+        measurementType = null,
+        validFrom = LocalDate.of(2021, 1, 4),
+        validUntil = LocalDate.of(2021, 1, 4),
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        relatedVariableDefinitionUris = listOf(),
+        owner =
+            Owner("", ""),
+        contact = null,
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy =
+            Person("", ""),
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy =
+            Person("", ""),
+    )
+
 val JSON_TEST_INPUT =
     """
     {
@@ -175,6 +202,41 @@ val JSON_TEST_INPUT =
                 "nn": "string"
             },
             "email": "user@example.com"
+        }
+    }
+    """.trimIndent()
+
+val JSON_TEST_INPUT_NULL_CONTACT =
+    """
+    {
+        "name": {
+            "en": "Country Background",
+            "nb": "Landbakgrunn",
+            "nn": "Landbakgrunn"
+        },
+        "short_name": "landbak",
+        "definition": {
+            "en": "C.",
+            "nb": "F"
+        },
+        "classification_reference": "91",
+        "unit_types": [
+            "03",
+            "04",
+            "05"
+        ],
+        "subject_fields": [
+            "he04"
+        ],
+        "contains_sensitive_personal_information": true,
+        "measurement_type": "02.01",
+        "valid_from": "2024-06-05",
+        "valid_until": "2024-06-05",
+        "external_reference_uri": "https://example.com/",
+        "related_variable_definition_uris": [
+            "https://example.com/"
+        ],
+        "contact": null
         }
     }
     """.trimIndent()

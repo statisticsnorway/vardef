@@ -76,7 +76,7 @@ data class InputVariableDefinition(
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
-    val contact: Contact,
+    val contact: Contact?,
 ) {
     fun toSavedVariableDefinition(): SavedVariableDefinition =
         SavedVariableDefinition(

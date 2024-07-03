@@ -202,8 +202,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .log()
-            .everything()
             .statusCode(HttpStatus.CREATED.code)
     }
 
@@ -217,8 +215,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .log()
-            .body()
             .`when`()
             .post("/variable-definitions")
             .then()

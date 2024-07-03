@@ -94,9 +94,6 @@ object TestUtils {
                 JSONObject(JSON_TEST_INPUT).apply {
                     remove("valid_from")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    remove("contact")
-                } to "null annotate it with @Nullable",
             )
         return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }
     }

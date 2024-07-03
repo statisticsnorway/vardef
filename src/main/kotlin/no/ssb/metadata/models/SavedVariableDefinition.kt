@@ -35,7 +35,7 @@ data class SavedVariableDefinition(
     var relatedVariableDefinitionUris: List<String>?,
     @Nullable
     var owner: Owner?,
-    var contact: Contact,
+    var contact: Contact?,
     @DateCreated
     var createdAt: LocalDateTime,
     @Nullable
@@ -65,7 +65,7 @@ data class SavedVariableDefinition(
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             owner = owner,
-            contact = RenderedContact(contact.title.getValidLanguage(language), contact.email),
+            contact = RenderedContact(contact?.title?.getValidLanguage(language), contact?.email),
             createdAt = createdAt,
             createdBy = createdBy,
             lastUpdatedAt = lastUpdatedAt,

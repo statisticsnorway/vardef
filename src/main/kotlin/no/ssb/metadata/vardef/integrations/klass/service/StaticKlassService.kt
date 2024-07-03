@@ -6,9 +6,9 @@ import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import no.ssb.metadata.models.KlassReference
-import no.ssb.metadata.models.LanguageStringType
-import no.ssb.metadata.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.KlassReference
+import no.ssb.metadata.vardef.models.LanguageStringType
+import no.ssb.metadata.vardef.models.SupportedLanguages
 
 const val KLASS_CLASSIFICATIONS_PROPERTY_NAME = "klass.classifications"
 
@@ -43,7 +43,10 @@ class StaticKlassService : KlassService {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
         println(classification)
-        return classification.codes?.map { it.code }.orEmpty().toList()
+        return classification.codes
+            ?.map { it.code }
+            .orEmpty()
+            .toList()
     }
 
     override fun getCodeItemFor(

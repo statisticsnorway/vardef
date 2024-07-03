@@ -1,16 +1,20 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import io.micronaut.serde.annotation.Serdeable
+import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import no.ssb.metadata.models.LanguageStringType
 import org.slf4j.LoggerFactory
 
+@Serdeable(naming = SnakeCaseStrategy::class)
 data class RenderVarDok(
     val name: LanguageStringType?,
     val shortName: String?,
     val definition: LanguageStringType?,
-    val validFrom: String?,
+    var validFrom: String?,
     val validUntil: String?,
     val unitTypes: List<String?>,
     val externalReferenceUri: String?,
+    val variableStatus: String,
 )
 
 fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
@@ -24,6 +28,7 @@ fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
             validUntil = mapValidDateUntil(vardokItem),
             unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
             externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+            variableStatus = "DRAFT"
         )
     return renderVarDok
 }
@@ -70,6 +75,7 @@ fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDo
     if (vardokItems["nb"] == null) {
         return null
     }
+
     val vardokItem = vardokItems["nb"]!!
     val vardokId = mapVardokIdentifier(vardokItem)
     val renderVarDok =
@@ -91,6 +97,7 @@ fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDo
             validUntil = mapValidDateUntil(vardokItem),
             unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
             externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+            variableStatus = "DRAFT"
         )
     return renderVarDok
 }

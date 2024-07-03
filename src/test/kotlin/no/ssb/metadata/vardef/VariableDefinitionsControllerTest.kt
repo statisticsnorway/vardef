@@ -7,6 +7,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
@@ -80,7 +81,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(no.ssb.metadata.vardef.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE)
+            .body(INPUT_VARIABLE_DEFINITION_EXAMPLE)
             .`when`()
             .post("/variable-definitions")
             .then()

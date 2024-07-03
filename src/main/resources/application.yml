@@ -59,6 +59,8 @@ klass:
   cached-classifications:
     unit-types: 702
     areas: 618
+  cache-retry-timeout-seconds: 1800
+
 
 jackson:
   xml:

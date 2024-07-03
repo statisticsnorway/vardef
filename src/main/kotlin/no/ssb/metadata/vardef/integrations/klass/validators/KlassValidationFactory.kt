@@ -13,18 +13,18 @@ class KlassValidationFactory {
     private lateinit var klassService: KlassService
 
     @Singleton
-    fun klassCodeValidator(): ConstraintValidator<KlassCode, String> {
-        return ConstraintValidator {
+    fun klassCodeValidator(): ConstraintValidator<KlassCode, String> =
+        ConstraintValidator {
                 value,
                 annotationMetadata,
                 _,
             ->
-            value == null || value in
+            value == null ||
+                value in
                 klassService.getCodesFor(
                     annotationMetadata["id", String::class.java].getOrElse {
                         throw IllegalStateException("no id supplied on annotation")
                     },
                 )
         }
-    }
 }

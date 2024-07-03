@@ -149,8 +149,8 @@ class VarDokMigrationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["1422","1919","2","100","123"])
-    fun `Set link to vardok`(vardokId: String){
+    @ValueSource(strings = ["1422", "1919", "2", "100", "123"])
+    fun `Set link to vardok`(vardokId: String) {
         val result = varDokApiService.getVarDokItem(vardokId)
         val renderVarDok = result?.let { toRenderVarDok(it) }
         assertThat(renderVarDok).isNotNull()

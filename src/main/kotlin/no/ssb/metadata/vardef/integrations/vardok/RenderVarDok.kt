@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.models.LanguageStringType
 import org.slf4j.LoggerFactory
-import java.net.URL
 
 data class RenderVarDok(
     val name: LanguageStringType?,
@@ -17,15 +16,15 @@ data class RenderVarDok(
 fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
     val vardokId = mapVardokIdentifier(vardokItem)
     val renderVarDok =
-            RenderVarDok(
-                name = LanguageStringType(vardokItem.common?.title, null, null),
-                shortName = vardokItem.variable?.dataElementName,
-                definition = LanguageStringType(vardokItem.common?.description, null, null),
-                validFrom = mapValidDateFrom(vardokItem),
-                validUntil = mapValidDateUntil(vardokItem),
-                unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
-                externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId"
-            )
+        RenderVarDok(
+            name = LanguageStringType(vardokItem.common?.title, null, null),
+            shortName = vardokItem.variable?.dataElementName,
+            definition = LanguageStringType(vardokItem.common?.description, null, null),
+            validFrom = mapValidDateFrom(vardokItem),
+            validUntil = mapValidDateUntil(vardokItem),
+            unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
+            externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+        )
     return renderVarDok
 }
 

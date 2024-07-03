@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef
 
 import INPUT_VARIABLE_DEFINITION_COPY
 import JSON_TEST_INPUT
+import JSON_TEST_INPUT_NULL_CONTACT
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
@@ -74,6 +75,30 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         assertThat(createdVariableDefinition.shortName).isEqualTo("landbak")
         assertThat(createdVariableDefinition.createdAt).isCloseTo(startTime, within(1, ChronoUnit.MINUTES))
         assertThat(createdVariableDefinition.createdAt).isEqualTo(createdVariableDefinition.lastUpdatedAt)
+    }
+
+    @Test
+    fun `create variable definition with no contact information`(spec: RequestSpecification) {
+
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(JSON_TEST_INPUT_NULL_CONTACT)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .body("contact", nullValue())
+                .extract()
+                .body()
+                .path<String>("id")
+
+        val createdVariableDefinition = variableDefinitionService.getOneById(definitionId)
+
+        assertThat(createdVariableDefinition.contact).isNull()
+        assertThat(createdVariableDefinition.id).isNotNull()
+        assertThat(createdVariableDefinition.shortName).isEqualTo("landbak")
     }
 
     @Test

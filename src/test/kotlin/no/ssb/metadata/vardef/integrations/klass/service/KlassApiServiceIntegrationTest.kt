@@ -6,7 +6,10 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestMethodOrder
+import org.junit.jupiter.api.assertThrows
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @MicronautTest(startApplication = false)

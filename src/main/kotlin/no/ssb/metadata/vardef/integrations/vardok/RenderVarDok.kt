@@ -22,7 +22,7 @@ fun toRenderVarDok(vardokItem: FIMD): RenderVarDok? {
                 definition = LanguageStringType(vardokItem.common?.description, null, null),
                 validFrom = it,
                 validUntil = mapValidDateUntil(vardokItem),
-                unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
+                unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit])
             )
         }
     return renderVarDok
@@ -59,3 +59,23 @@ fun mapValidDateUntil(vardokItem: FIMD): String? {
     }
     return null
 }
+
+fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDok? {
+    if (vardokItems["nb"] == null) {
+        return null
+    }
+    val vardokItem = vardokItems["nb"]!!
+    val renderVarDok =
+        mapValidDateFrom(vardokItem)?.let {
+            RenderVarDok(
+                name = LanguageStringType(vardokItem.common?.title,  vardokItems["nn"]?.common?.title, vardokItems["en"]?.common?.title),
+                shortName = vardokItem.variable?.dataElementName,
+                definition = LanguageStringType(vardokItem.common?.description, vardokItems["nn"]?.common?.description, vardokItems["en"]?.common?.description),
+                validFrom = it,
+                validUntil = mapValidDateUntil(vardokItem),
+                unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit])
+            )
+        }
+    return renderVarDok
+}
+

@@ -1,8 +1,6 @@
 package no.ssb.metadata.integrations.vardok
 
-// import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.*
@@ -97,20 +95,25 @@ class VarDokMigrationTest {
 
     @Test
     fun `get list of vardok results by id and return response`() {
-        val idList = listOf("2")
-        val result = varDokApiService.getListOfVardokById(idList)
-        assertThat(result).isNotNull()
-        assertThat(result[0]?.variable?.dataElementName).isNotNull()
-        // println(result[0]?.variable?.shortNameWeb?.codeValue)
+        //val idList = listOf("190")
 
-        val l = result[0]?.let { toRenderVarDok(it) }
-        println(l)
+        val id = "190"
 
-        val xmlMapper: ObjectMapper = XmlMapper()
-        val xml: String = xmlMapper.writeValueAsString(result)
-        // val mapper = jacksonObjectMapper()
-        println(xml)
-        // println(mapper.writeValueAsString(l))
+        val result = varDokApiService.getVarDokItem(id)
+        val responseMap = mutableMapOf("nb" to result)
+
+        val lang = result?.otherLanguages?.split(";")
+        if (lang != null) {
+            if (lang.isNotEmpty()) {
+                for (l in lang) {
+                    responseMap[l] = varDokApiService.getVardokByIdAndLanguage(id, l)
+                }
+            }
+        }
+
+        val l = result?.let { toRenderVarDokMultiLang(responseMap) }
+        val mapper = ObjectMapper()
+        println(mapper.writeValueAsString(l))
 
 //        assertThat(result).isNotNull()
 //        result.forEach { assertThat(it?.id).isNotNull() }

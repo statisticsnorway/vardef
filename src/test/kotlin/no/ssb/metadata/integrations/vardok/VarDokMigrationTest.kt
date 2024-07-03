@@ -93,7 +93,7 @@ class VarDokMigrationTest {
     fun `get list of vardok results by id and return response`() {
         // val idList = listOf("190")
 
-        //190 nb en nn, 2 nb en
+        // 190 nb en nn, 2 nb en
         val id = "100"
 
         val result = varDokApiService.getVarDokItem(id)

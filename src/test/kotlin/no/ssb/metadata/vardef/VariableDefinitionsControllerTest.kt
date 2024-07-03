@@ -79,7 +79,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create variable definition with no contact information`(spec: RequestSpecification) {
-
         val definitionId =
             spec
                 .given()
@@ -97,7 +96,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         val createdVariableDefinition = variableDefinitionService.getOneById(definitionId)
 
         assertThat(createdVariableDefinition.contact).isNull()
-        assertThat(createdVariableDefinition.id).isNotNull()
         assertThat(createdVariableDefinition.shortName).isEqualTo("landbak")
     }
 

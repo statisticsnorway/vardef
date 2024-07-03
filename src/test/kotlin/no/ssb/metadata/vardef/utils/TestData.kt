@@ -138,6 +138,33 @@ val RENDERED_VARIABLE_DEFINITION =
             Person("", ""),
     )
 
+val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
+    RenderedVariableDefinition(
+        id = "",
+        name = "Landbakgrunn",
+        shortName = "landbak",
+        definition = "For personer født",
+        classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+        unitTypes = emptyList(),
+        subjectFields = emptyList(),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.DRAFT,
+        measurementType = null,
+        validFrom = LocalDate.of(2021, 1, 4),
+        validUntil = LocalDate.of(2021, 1, 4),
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        relatedVariableDefinitionUris = listOf(),
+        owner =
+            Owner("", ""),
+        contact = null,
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy =
+            Person("", ""),
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy =
+            Person("", ""),
+    )
+
 val JSON_TEST_INPUT =
     """
     {

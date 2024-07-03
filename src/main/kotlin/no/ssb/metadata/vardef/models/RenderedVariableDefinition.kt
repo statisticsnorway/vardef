@@ -28,7 +28,7 @@ data class RenderedVariableDefinition(
     val externalReferenceUri: URL?,
     val relatedVariableDefinitionUris: List<URL>?,
     val owner: Owner?,
-    val contact: RenderedContact,
+    val contact: RenderedContact?,
     val createdAt: LocalDateTime,
     val createdBy: Person?,
     val lastUpdatedAt: LocalDateTime,

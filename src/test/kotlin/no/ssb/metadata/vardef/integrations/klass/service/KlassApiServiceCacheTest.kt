@@ -1,4 +1,5 @@
 package no.ssb.metadata.vardef.integrations.klass.service
+
 import io.micronaut.http.HttpResponse
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.clearAllMocks

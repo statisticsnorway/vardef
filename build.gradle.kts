@@ -14,7 +14,7 @@ plugins {
 }
 
 version = "0.1"
-group = "no.ssb.metadata"
+group = "no.ssb.metadata.vardef"
 
 val kotlinVersion = project.properties["kotlinVersion"]
 repositories {
@@ -52,7 +52,7 @@ dependencies {
 }
 
 application {
-    mainClass = "no.ssb.metadata.ApplicationKt"
+    mainClass = "no.ssb.metadata.vardef.ApplicationKt"
 }
 kotlin { jvmToolchain(21) }
 
@@ -63,7 +63,7 @@ micronaut {
     importMicronautPlatform.set(true)
     processing {
         incremental(true)
-        annotations("no.ssb.metadata.*")
+        annotations("no.ssb.metadata.vardef.*")
     }
     aot {
         // Please review carefully the optimizations enabled below
@@ -82,7 +82,7 @@ micronaut {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "no.ssb.metadata.ApplicationKt"
+        attributes["Main-Class"] = "no.ssb.metadata.vardef.ApplicationKt"
     }
 
     // To avoid the duplicate handling strategy error
@@ -93,7 +93,10 @@ tasks.withType<Jar> {
 
     dependsOn(configurations.runtimeClasspath)
     from({
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        configurations.runtimeClasspath
+            .get()
+            .filter { it.name.endsWith("jar") }
+            .map { zipTree(it) }
     })
 }
 

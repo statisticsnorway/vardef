@@ -1,5 +1,5 @@
 applicationType: default
-defaultPackage: no.ssb.metadata
+defaultPackage: no.ssb.metadata.vardef
 testFramework: junit
 sourceLanguage: kotlin
 buildTool: gradle_kotlin

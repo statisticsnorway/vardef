@@ -6,16 +6,18 @@ import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.server.exceptions.HttpServerException
 import jakarta.inject.Singleton
-import no.ssb.metadata.models.KlassReference
-import no.ssb.metadata.models.SupportedLanguages
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
+import no.ssb.metadata.vardef.models.KlassReference
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
 @CacheConfig("classifications")
 @Singleton
-open class KlassApiService(private val klassApiClient: KlassApiClient) : KlassService {
+open class KlassApiService(
+    private val klassApiClient: KlassApiClient,
+) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
     private var classificationCacheLastFetched: LocalDateTime = LocalDateTime.now().minusDays(1L)
     private var classificationCache: MutableMap<Int, Classification> = mutableMapOf()

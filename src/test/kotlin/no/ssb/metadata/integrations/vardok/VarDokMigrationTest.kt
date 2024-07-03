@@ -98,13 +98,8 @@ class VarDokMigrationTest {
         val result = varDokApiService.getVarDokItem(id)
         val responseMap = mutableMapOf("nb" to result)
 
-        val lang = result?.otherLanguages?.split(";")
-        if (lang != null) {
-            if (lang.isNotEmpty()) {
-                for (l in lang) {
-                    responseMap[l] = varDokApiService.getVardokByIdAndLanguage(id, l)
-                }
-            }
+        result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
+            responseMap[l] = varDokApiService.getVardokByIdAndLanguage(id, l)
         }
 
         val l = result?.let { toRenderVarDokMultiLang(responseMap) }

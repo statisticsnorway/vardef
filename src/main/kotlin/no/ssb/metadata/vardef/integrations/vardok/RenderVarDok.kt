@@ -75,16 +75,19 @@ fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDo
     val renderVarDok =
         mapValidDateFrom(vardokItem)?.let {
             RenderVarDok(
-                name = LanguageStringType(vardokItem.common?.title,  vardokItems["nn"]?.common?.title, vardokItems["en"]?.common?.title),
+                name = LanguageStringType(vardokItem.common?.title, vardokItems["nn"]?.common?.title, vardokItems["en"]?.common?.title),
                 shortName = vardokItem.variable?.dataElementName,
-                definition = LanguageStringType(vardokItem.common?.description, vardokItems["nn"]?.common?.description, vardokItems["en"]?.common?.description),
+                definition =
+                    LanguageStringType(
+                        vardokItem.common?.description,
+                        vardokItems["nn"]?.common?.description,
+                        vardokItems["en"]?.common?.description,
+                    ),
                 validFrom = it,
                 validUntil = mapValidDateUntil(vardokItem),
                 unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
                 externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
-
-                )
+            )
         }
     return renderVarDok
 }
-

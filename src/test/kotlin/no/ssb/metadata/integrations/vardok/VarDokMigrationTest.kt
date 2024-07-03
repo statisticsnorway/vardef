@@ -91,7 +91,7 @@ class VarDokMigrationTest {
 
     @Test
     fun `get list of vardok results by id and return response`() {
-        //val idList = listOf("190")
+        // val idList = listOf("190")
 
         val id = "190"
 

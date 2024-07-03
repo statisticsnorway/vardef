@@ -72,22 +72,20 @@ fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDo
     }
     val vardokItem = vardokItems["nb"]!!
     val vardokId = mapVardokIdentifier(vardokItem)
-    val renderVarDok =
-        mapValidDateFrom(vardokItem)?.let {
-            RenderVarDok(
-                name = LanguageStringType(vardokItem.common?.title, vardokItems["nn"]?.common?.title, vardokItems["en"]?.common?.title),
-                shortName = vardokItem.variable?.dataElementName,
-                definition =
-                    LanguageStringType(
-                        vardokItem.common?.description,
-                        vardokItems["nn"]?.common?.description,
-                        vardokItems["en"]?.common?.description,
-                    ),
-                validFrom = it,
-                validUntil = mapValidDateUntil(vardokItem),
-                unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
-                externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
-            )
-        }
+    val renderVarDok = RenderVarDok(
+        name = LanguageStringType(vardokItem.common?.title, null, null),//vardokItems["nn"]?.common?.title, vardokItems["en"]?.common?.title),
+        shortName = vardokItem.variable?.dataElementName,
+        definition =
+            LanguageStringType(
+                vardokItem.common?.description,
+                //vardokItems["nn"]?.common?.description,
+                //vardokItems["en"]?.common?.description,
+                null, null
+            ),
+        validFrom = mapValidDateFrom(vardokItem),
+        validUntil = mapValidDateUntil(vardokItem),
+        unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
+        externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId"
+    )
     return renderVarDok
 }

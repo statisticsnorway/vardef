@@ -76,13 +76,16 @@ fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDo
         RenderVarDok(
             name =
                 LanguageStringType(
-                    vardokItem.common?.title, vardokItems["nn"]?.common?.title, vardokItems["en"]?.common?.title),
+                    vardokItem.common?.title,
+                    vardokItems["nn"]?.common?.title,
+                    vardokItems["en"]?.common?.title,
+                ),
             shortName = vardokItem.variable?.dataElementName,
             definition =
                 LanguageStringType(
                     vardokItem.common?.description,
-                     vardokItems["nn"]?.common?.description,
-                     vardokItems["en"]?.common?.description,
+                    vardokItems["nn"]?.common?.description,
+                    vardokItems["en"]?.common?.description,
                 ),
             validFrom = mapValidDateFrom(vardokItem),
             validUntil = mapValidDateUntil(vardokItem),

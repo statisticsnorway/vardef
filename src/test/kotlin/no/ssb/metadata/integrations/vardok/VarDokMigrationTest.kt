@@ -6,6 +6,8 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @MicronautTest
 class VarDokMigrationTest {
@@ -51,12 +53,6 @@ class VarDokMigrationTest {
         result.forEach { assertThat(it?.id).isNotNull() }
         assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for regnskapsstatistikk")
         assertThat(result).size().isEqualTo(idList.size)
-    }
-
-    @Test
-    fun `get vardokItem with empty shortname`() {
-        val result = varDokApiService.getVarDokItem("100")
-        assertThat(result).isNotNull()
     }
 
     @Test
@@ -153,5 +149,14 @@ class VarDokMigrationTest {
         val res = varDokApiService.getVarDokItem("1422")
         val mappedUntilDate = res?.let { mapValidDateUntil(it) }
         assertThat(mappedUntilDate).isNull()
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["1422", "1919", "2", "100", "123"])
+    fun `Set link to vardok`(vardokId: String) {
+        val result = varDokApiService.getVarDokItem(vardokId)
+        val renderVarDok = result?.let { toRenderVarDok(it) }
+        assertThat(renderVarDok).isNotNull()
+        assertThat(renderVarDok?.externalReferenceUri).isEqualTo("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId")
     }
 }

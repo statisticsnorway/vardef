@@ -3,10 +3,15 @@ package no.ssb.metadata.vardef
 import RENDERED_VARIABLE_DEFINITION
 import SAVED_VARIABLE_DEFINITION
 import com.mongodb.assertions.Assertions.assertTrue
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.verify
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.KlassReference
+import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.bson.types.ObjectId
@@ -16,13 +21,13 @@ import org.junit.jupiter.api.Test
 
 @MockK
 class VariableDefinitionServiceTest {
-    private lateinit var variableDefinitionMockRepository: no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-    lateinit var variableDefinitionService: VariableDefinitionService
+    private lateinit var variableDefinitionMockRepository: VariableDefinitionRepository
+    private lateinit var variableDefinitionService: VariableDefinitionService
     private lateinit var mockKlassService: KlassService
 
     @BeforeEach
     fun setUp() {
-        variableDefinitionMockRepository = mockk<no.ssb.metadata.vardef.repositories.VariableDefinitionRepository>()
+        variableDefinitionMockRepository = mockk<VariableDefinitionRepository>()
         mockKlassService = mockk<KlassService>()
         variableDefinitionService = VariableDefinitionService(variableDefinitionMockRepository)
     }
@@ -82,7 +87,7 @@ class VariableDefinitionServiceTest {
         val renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
 
         val result =
-            variableDefinitionService.listAllAndRenderForLanguage(no.ssb.metadata.vardef.models.SupportedLanguages.NB)
+            variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB)
         assertThat(result.isNotEmpty())
         assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })
         assertThat(result[0].id).isEqualTo(renderedVariableDefinition.id)

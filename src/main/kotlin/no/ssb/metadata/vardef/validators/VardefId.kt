@@ -1,13 +1,14 @@
 package no.ssb.metadata.vardef.validators
 
 import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.vardef.constants.VARDEF_ID_PATTERN
 import kotlin.reflect.KClass
 
 /**
  * Vardef ID validation constraint annotation class.
  *
  */
-@Pattern(regexp = no.ssb.metadata.vardef.constants.VARDEF_ID_PATTERN)
+@Pattern(regexp = VARDEF_ID_PATTERN)
 @Target(
     AnnotationTarget.FIELD,
     AnnotationTarget.PROPERTY,

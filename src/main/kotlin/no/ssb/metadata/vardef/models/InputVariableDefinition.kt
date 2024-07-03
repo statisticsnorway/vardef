@@ -10,6 +10,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import java.net.URL
 import java.time.LocalDate
@@ -18,62 +19,62 @@ import java.time.LocalDateTime
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = no.ssb.metadata.vardef.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE,
+    example = INPUT_VARIABLE_DEFINITION_EXAMPLE,
 )
 data class InputVariableDefinition(
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @Nullable
     var id: String?,
-    @Schema(description = no.ssb.metadata.vardef.constants.NAME_FIELD_DESCRIPTION)
+    @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
-    @Schema(description = no.ssb.metadata.vardef.constants.SHORT_NAME_FIELD_DESCRIPTION)
-    @Pattern(regexp = no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN)
+    @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
+    @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
     val shortName: String,
-    @Schema(description = no.ssb.metadata.vardef.constants.DEFINITION_FIELD_DESCRIPTION)
+    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
     // TODO Validate against klass data
-    @Schema(description = no.ssb.metadata.vardef.constants.CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
+    @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
-    @Pattern(regexp = no.ssb.metadata.vardef.constants.KLASS_ID_PATTERN)
+    @Pattern(regexp = KLASS_ID_PATTERN)
     val classificationReference: String?,
-    @Schema(description = no.ssb.metadata.vardef.constants.UNIT_TYPES_FIELD_DESCRIPTION)
+    @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @NotEmpty
     val unitTypes: List<
             @KlassCode("702")
             String,
             >,
-    @Schema(description = no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_FIELD_DESCRIPTION)
+    @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @NotEmpty
     val subjectFields: List<
             @KlassCode("618")
             String,
             >,
-    @Schema(description = no.ssb.metadata.vardef.constants.CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
+    @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     val containsSensitivePersonalInformation: Boolean,
     @Schema(
-        description = no.ssb.metadata.vardef.constants.VARIABLE_STATUS_FIELD_DESCRIPTION,
+        description = VARIABLE_STATUS_FIELD_DESCRIPTION,
         accessMode = Schema.AccessMode.READ_ONLY,
     )
     var variableStatus: VariableStatus?,
-    @Schema(description = no.ssb.metadata.vardef.constants.MEASURMENT_TYPE_FIELD_DESCRIPTION)
+    @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
     val measurementType: String?,
-    @Schema(description = no.ssb.metadata.vardef.constants.VALID_FROM_FIELD_DESCRIPTION)
+    @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format("yyyy-MM-dd")
     val validFrom: LocalDate,
-    @Schema(description = no.ssb.metadata.vardef.constants.VALID_UNTIL_FIELD_DESCRIPTION)
+    @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable
     @Format("yyyy-MM-dd")
     val validUntil: LocalDate?,
-    @Schema(description = no.ssb.metadata.vardef.constants.EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
+    @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,
-    @Schema(description = no.ssb.metadata.vardef.constants.RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
+    @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
     val relatedVariableDefinitionUris: List<URL>?,
-    @Schema(description = no.ssb.metadata.vardef.constants.CONTACT_FIELD_DESCRIPTION)
+    @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
     val contact: Contact,
 ) {

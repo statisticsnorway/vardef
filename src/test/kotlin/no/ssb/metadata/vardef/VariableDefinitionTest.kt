@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef
 
 import SAVED_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -28,7 +29,7 @@ class VariableDefinitionTest {
         "NB, Landbakgrunn",
     )
     fun `get variable name by language code`(
-        languageCode: no.ssb.metadata.vardef.models.SupportedLanguages,
+        languageCode: SupportedLanguages,
         expectedName: String,
     ) {
         val result = variableDefinition.name.getValidLanguage(languageCode)
@@ -42,7 +43,7 @@ class VariableDefinitionTest {
         "NB, For personer født",
     )
     fun `get variable definition by language code`(
-        languageCode: no.ssb.metadata.vardef.models.SupportedLanguages,
+        languageCode: SupportedLanguages,
         expectedDefinition: String,
     ) {
         val result = variableDefinition.definition.getValidLanguage(languageCode)

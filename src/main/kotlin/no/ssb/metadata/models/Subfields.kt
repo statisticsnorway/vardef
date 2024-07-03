@@ -48,5 +48,5 @@ data class Owner(
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class RenderedContact(
     val title: String?,
-    val email: String?,
+    val email: String,
 )

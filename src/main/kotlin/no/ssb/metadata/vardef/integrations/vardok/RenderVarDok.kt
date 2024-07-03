@@ -4,27 +4,27 @@ import no.ssb.metadata.models.LanguageStringType
 import org.slf4j.LoggerFactory
 
 data class RenderVarDok(
-    val name: LanguageStringType,
+    val name: LanguageStringType?,
     val shortName: String?,
-    val definition: LanguageStringType,
-    val validFrom: String,
+    val definition: LanguageStringType?,
+    val validFrom: String?,
     val validUntil: String?,
     val unitTypes: List<String?>,
+    val externalReferenceUri: String?,
 )
 
-fun toRenderVarDok(vardokItem: FIMD): RenderVarDok? {
+fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
+    val vardokId = mapVardokIdentifier(vardokItem)
     val renderVarDok =
-        mapValidDateFrom(vardokItem)?.let {
-            RenderVarDok(
-                name = LanguageStringType(vardokItem.common?.title, null, null),
-                // shortName = vardokItem.variable?.shortNameWeb?.codeValue,
-                shortName = vardokItem.variable?.dataElementName,
-                definition = LanguageStringType(vardokItem.common?.description, null, null),
-                validFrom = it,
-                validUntil = mapValidDateUntil(vardokItem),
-                unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
-            )
-        }
+        RenderVarDok(
+            name = LanguageStringType(vardokItem.common?.title, null, null),
+            shortName = vardokItem.variable?.dataElementName,
+            definition = LanguageStringType(vardokItem.common?.description, null, null),
+            validFrom = mapValidDateFrom(vardokItem),
+            validUntil = mapValidDateUntil(vardokItem),
+            unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
+            externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+        )
     return renderVarDok
 }
 
@@ -58,4 +58,10 @@ fun mapValidDateUntil(vardokItem: FIMD): String? {
         }
     }
     return null
+}
+
+fun mapVardokIdentifier(vardokItem: FIMD): String {
+    val vardokId = vardokItem.id
+    val splitId = vardokId.split(":")
+    return splitId[splitId.size - 1]
 }

@@ -95,7 +95,6 @@ data class Variable(
     val externalDocument: String? = null,
     @field:JacksonXmlProperty(localName = "DataElementName")
     val dataElementName: String? = null,
-    // @field:JacksonXmlProperty(localName = "ShortNameWeb", isAttribute = false)
     val shortNameWeb: ShortNameWeb? = null,
     val calculation: String? = null,
     val internalDocument: String? = null,

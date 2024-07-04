@@ -45,7 +45,9 @@ data class ContactPerson(
 @Serdeable
 @Introspected
 data class ContactDivision(
+    @field:JacksonXmlProperty(localName = "CodeValue")
     val codeValue: String,
+    @field:JacksonXmlProperty(localName = "CodeText")
     val codeText: String,
 )
 
@@ -57,7 +59,8 @@ data class Common(
     @field:JacksonXmlProperty(localName = "Description")
     val description: String?,
     val contactPerson: ContactPerson?,
-    val contactDivision: ContactDivision?,
+    @field:JacksonXmlProperty(localName = "ContactDivision")
+    val contactDivision: ContactDivision,
     val notes: String? = null,
 )
 

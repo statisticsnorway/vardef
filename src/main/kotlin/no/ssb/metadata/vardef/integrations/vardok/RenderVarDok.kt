@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import no.ssb.metadata.models.LanguageStringType
+import no.ssb.metadata.vardef.models.LanguageStringType
+import no.ssb.metadata.vardef.models.Owner
 import org.slf4j.LoggerFactory
 
 data class RenderVarDok(
@@ -11,6 +12,7 @@ data class RenderVarDok(
     val validUntil: String?,
     val unitTypes: List<String?>,
     val externalReferenceUri: String?,
+    val owner: Owner,
 )
 
 fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
@@ -24,8 +26,15 @@ fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
             validUntil = mapValidDateUntil(vardokItem),
             unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
             externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+            owner = mapVardokContactDivisionToOwner(vardokItem),
         )
     return renderVarDok
+}
+
+fun mapVardokContactDivisionToOwner(vardokItem: FIMD): Owner {
+    val owner = vardokItem.common?.contactDivision
+    val mappedOwner = Owner(owner!!.codeValue, owner.codeText)
+    return mappedOwner
 }
 
 private fun sliceValidDate(
@@ -91,6 +100,7 @@ fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDo
             validUntil = mapValidDateUntil(vardokItem),
             unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
             externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+            owner = mapVardokContactDivisionToOwner(vardokItem),
         )
     return renderVarDok
 }

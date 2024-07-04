@@ -40,7 +40,7 @@ data class Person(
 
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Owner(
-    val code: String,
+    var code: String,
     val name: String,
 )
 

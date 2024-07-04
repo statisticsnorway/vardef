@@ -60,32 +60,9 @@ open class VarDokApiService(
         return responseMap
     }
 
-   /* open class VardokException(override val message: String) : Exception()
-
-    class MissingDataElementNameException() : VardokException("Variabledefinition from Vardok is missing data element name")
-
-    class MissingValidDatesException() : VardokException("Vardok is missing valid dates")
-
-    private fun vardokMissingElements(varDokItems: MutableMap<String, FIMD>) {
-        if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()){
-            throw MissingDataElementNameException()
-        }
-        if (varDokItems["nb"]?.dc?.valid.isNullOrBlank()){
-            throw MissingValidDatesException()
-        }
-    }*/
-
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
-        vardokMissingElements(varDokItems)
-
+        checkVardokForMissingElements(varDokItems)
         val varDefInput = toVarDefFromVarDok(varDokItems)
-        // TODO Consider if we should skip if there is no date
-//        if (varDefInput.validFrom == null) {
-//            varDefInput.validFrom = LocalDate.now().toString()
-//        }
-
-        // val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-
         return varDefInput
     }
 }

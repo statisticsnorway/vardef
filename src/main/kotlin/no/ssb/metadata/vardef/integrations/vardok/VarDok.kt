@@ -50,7 +50,6 @@ fun mapVardokIdentifier(vardokItem: FIMD): String {
     return splitId[splitId.size - 1]
 }
 
-// Hvor håndtere returnere null?
 fun toVarDefFromVarDok(vardokItems: MutableMap<String, FIMD>): InputVariableDefinition {
     val vardokItem = vardokItems["nb"]!!
     val vardokId = mapVardokIdentifier(vardokItem)

@@ -24,22 +24,22 @@ data class RenderVarDok(
     val owner: Owner,
 )
 
-fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
+/*fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
     val vardokId = mapVardokIdentifier(vardokItem)
     val renderVarDok =
         RenderVarDok(
             name = LanguageStringType(vardokItem.common?.title, null, null),
             shortName = vardokItem.variable?.dataElementName,
             definition = LanguageStringType(vardokItem.common?.description, null, null),
-            validFrom = mapValidDateFrom(vardokItem),
-            validUntil = mapValidDateUntil(vardokItem),
+            validFrom = mapValidDateFrom(vardokItem).toString(),
+            validUntil = mapValidDateUntil(vardokItem).toString(),
             unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
             externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
             variableStatus = "DRAFT",
             owner = mapVardokContactDivisionToOwner(vardokItem),
         )
     return renderVarDok
-}
+}*/
 
 fun mapVardokContactDivisionToOwner(vardokItem: FIMD): Owner {
     val owner = vardokItem.common?.contactDivision
@@ -57,7 +57,7 @@ private fun sliceValidDate(
     return dateString
 }
 
-fun mapValidDateFrom(vardokItem: FIMD): String? {
+fun mapValidDateFrom(vardokItem: FIMD): CharSequence? {
     val range = 0..9
     val validDate = vardokItem.dc?.valid
     if (validDate != null) {
@@ -68,7 +68,7 @@ fun mapValidDateFrom(vardokItem: FIMD): String? {
     return null
 }
 
-fun mapValidDateUntil(vardokItem: FIMD): String? {
+fun mapValidDateUntil(vardokItem: FIMD): CharSequence? {
     val range = 13..22
     val validDate = vardokItem.dc?.valid
     if (validDate != null) {
@@ -106,7 +106,7 @@ fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD>): InputVariabl
                     vardokItems["nn"]?.common?.description,
                     vardokItems["en"]?.common?.description,
                 ),
-            validFrom = LocalDate.parse(mapValidDateFrom(vardokItem), formatter),
+            validFrom = mapValidDateFrom(vardokItem)?.let { LocalDate.parse(it, formatter) }!!,
             validUntil = mapValidDateUntil(vardokItem)?.let { LocalDate.parse(it, formatter) },
             unitTypes = listOf(unitTypeConverter[vardokItem.variable.statisticalUnit]!!),
             externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId").toURL(),

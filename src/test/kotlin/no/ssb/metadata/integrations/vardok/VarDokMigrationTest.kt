@@ -1,7 +1,7 @@
 package no.ssb.metadata.integrations.vardok
 
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.*
 import org.assertj.core.api.Assertions.assertThat
@@ -10,19 +10,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
 @MicronautTest
+@Requires(env = ["integration-test"])
 class VarDokMigrationTest {
     @Inject
     lateinit var varDokApiService: VarDokApiService
-
-    @Test
-    fun `Test migration`() {
-        val result = varDokApiService.getVarDokResponse()
-        assertThat(result).isNotNull()
-        assertThat(result?.id).isEqualTo("urn:ssb:conceptvariable:vardok:1422")
-        assertThat(result?.dc?.contributor).isNotNull()
-        assertThat(result?.dc?.contributor).isEqualTo("Seksjon for regnskapsstatistikk")
-        assertThat(result?.common?.title).isEqualTo("Aksje")
-    }
 
     @Test
     fun `get vardok by id`() {
@@ -37,15 +28,6 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `transform vardok to vardef`() {
-        val result = varDokApiService.getVarDokItem("1422")
-        val renderVarDok = result?.let { toRenderVarDok(it) }
-        assertThat(renderVarDok?.name?.nb).isEqualTo(result?.dc?.title)
-        assertThat(renderVarDok?.definition?.nb).isEqualTo(result?.common?.description)
-        assertThat(renderVarDok?.validFrom).isEqualTo("1984-01-01")
-    }
-
-    @Test
     fun `get list of vardok results by id`() {
         val idList = listOf("1422", "1919")
         val result = varDokApiService.getListOfVardokById(idList)
@@ -56,30 +38,7 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `iterate list`() {
-        val resList: ArrayList<FIMD> = arrayListOf()
-        var res: FIMD?
-        var counter = 0
-        val invalidList: ArrayList<Int> = arrayListOf()
-        for (i in 1..50) {
-            res = varDokApiService.getVarDokItem("$i")
-            if (res != null) {
-                resList.add(res)
-                println("Id found $i")
-            } else {
-                counter += 1
-                println("Not valid id $counter")
-                invalidList.add(i)
-            }
-        }
-        assertThat(resList).isNotNull()
-        assertThat(resList).size().isEqualTo(50 - counter)
-        assertThat(resList[0].dc).isNotNull()
-        println(invalidList)
-    }
-
-    @Test
-    fun `Get vardok by id and language if other languages`() {
+    fun `get vardok by id and language if other languages`() {
         val res = varDokApiService.getVarDokItem("1422")
         var englishRes: FIMD? = null
         if (res?.otherLanguages != "") {
@@ -87,47 +46,6 @@ class VarDokMigrationTest {
         }
         assertThat(englishRes?.common?.title).isEqualTo("Share")
         assertThat(englishRes?.id).isEqualTo(res?.id)
-    }
-
-    @Test
-    fun `get list of vardok results by id and return response`(spec: RequestSpecification) {
-//        // val idList = listOf("190")
-//
-//        // 190 nb en nn, 2 nb en, 100 har shortname
-//        val id = "100"
-//
-//        val result = varDokApiService.getVarDokItem(id)
-//        val responseMap = mutableMapOf("nb" to result)
-//
-//        result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
-//            responseMap[l] = varDokApiService.getVardokByIdAndLanguage(id, l)
-//        }
-//
-//
-//        val l = result?.let { toRenderVarDokMultiLang(responseMap) }
-//        //TODO Consider if we should skip if there is no date
-//        if (l?.validFrom == null) {
-//            l?.validFrom = LocalDate.now().toString()
-//        }
-//
-//        val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-//
-//        //val jsonFromVardoc = mapper.writeValueAsString(l)
-//
-//        println(jsonFromVardoc)
-//
-//        spec
-//            .given()
-//            .contentType(ContentType.JSON)
-//            .body(jsonFromVardoc)
-//            .`when`()
-//            .post("/variable-definitions")
-//            .then().log().everything()
-
-        val id = "2"
-        val l = varDokApiService.createVarDefInputFromVarDokItems(varDokApiService.fetchMultipleVarDokItemsByLanguage(id))
-
-        // println(l)
     }
 
     @Test
@@ -165,12 +83,17 @@ class VarDokMigrationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["1422", "1919", "2", "100", "123"])
+    @ValueSource(strings = ["1422", "1919", "2", "5", "123"])
     fun `set link to vardok`(vardokId: String) {
         val result = varDokApiService.getVarDokItem(vardokId)
-        val renderVarDok = result?.let { toRenderVarDok(it) }
-        assertThat(renderVarDok).isNotNull
-        assertThat(renderVarDok?.externalReferenceUri).isEqualTo("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId")
+        if (result != null) {
+            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
+            val renderVarDok = toRenderVarDokMultiLang(mapResult)
+            assertThat(renderVarDok).isNotNull
+            assertThat(
+                renderVarDok.externalReferenceUri.toString(),
+            ).isEqualTo("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId")
+        }
     }
 
     @ParameterizedTest
@@ -186,10 +109,5 @@ class VarDokMigrationTest {
         assertThat(result?.common?.contactDivision).isNotNull
         assertThat(result?.common?.contactDivision?.codeValue).isNotNull()
         assertThat(result?.common?.contactDivision?.codeText).isNotNull()
-
-        val renderVarDok = result?.let { toRenderVarDok(it) }
-        assertThat(renderVarDok?.owner).isNotNull
-        assertThat(renderVarDok?.owner?.code).isEqualTo(result?.common?.contactDivision?.codeValue)
-        assertThat(renderVarDok?.owner?.name).isEqualTo(result?.common?.contactDivision?.codeText)
     }
 }

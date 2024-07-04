@@ -10,16 +10,6 @@ open class VarDokApiService(
 ) {
     private val logger = LoggerFactory.getLogger(VarDokApiService::class.java)
 
-    open fun getVarDokResponse(): FIMD? {
-        return try {
-            logger.info("Retrieving definition from vardok")
-            varDokClient.fetchVarDok()
-        } catch (e: Exception) {
-            logger.warn("Error while fetching vardok", e)
-            null
-        }
-    }
-
     open fun getVarDokItem(id: String): FIMD? {
         return try {
             logger.info("Retrieving definition by id from vardok")
@@ -46,7 +36,6 @@ open class VarDokApiService(
         language: String,
     ): FIMD? {
         return try {
-            // if language in
             logger.info("Retrieving $id by $language")
             varDokClient.fetchVarDokByIdAndLanguage(id, language)
         } catch (e: Exception) {

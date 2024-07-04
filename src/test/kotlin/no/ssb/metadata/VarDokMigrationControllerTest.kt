@@ -17,4 +17,16 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
     }
+
+    @Test
+    fun `get request not valid id`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/variable-definitions/vardok-migration/1")
+            .then()
+            .statusCode(405)
+    }
 }

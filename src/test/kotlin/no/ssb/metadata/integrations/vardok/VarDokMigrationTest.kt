@@ -1,6 +1,7 @@
 package no.ssb.metadata.integrations.vardok
 
 import io.micronaut.context.annotation.Requires
+import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.*
@@ -8,9 +9,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import java.lang.Exception
 
 @MicronautTest
-@Requires(env = ["integration-test"])
+//@Requires(env = ["integration-test"])
 class VarDokMigrationTest {
     @Inject
     lateinit var varDokApiService: VarDokApiService
@@ -109,5 +111,11 @@ class VarDokMigrationTest {
         assertThat(result?.common?.contactDivision).isNotNull
         assertThat(result?.common?.contactDivision?.codeValue).isNotNull()
         assertThat(result?.common?.contactDivision?.codeText).isNotNull()
+    }
+
+    @Test
+    fun `catch vardok id not found`() {
+        val result = varDokApiService.getVarDokItem("1")
+        assertThat(result).isNull()
     }
 }

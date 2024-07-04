@@ -15,7 +15,7 @@ open class VarDokApiService(
             logger.info("Retrieving definition by id from vardok")
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
-            logger.warn("Error while fetching vardok item", e)
+            logger.warn("Id is not valid")
             null
         }
     }

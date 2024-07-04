@@ -95,42 +95,44 @@ class VarDokMigrationTest {
 
     @Test
     fun `get list of vardok results by id and return response`(spec: RequestSpecification) {
-        // val idList = listOf("190")
+//        // val idList = listOf("190")
+//
+//        // 190 nb en nn, 2 nb en, 100 har shortname
+//        val id = "100"
+//
+//        val result = varDokApiService.getVarDokItem(id)
+//        val responseMap = mutableMapOf("nb" to result)
+//
+//        result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
+//            responseMap[l] = varDokApiService.getVardokByIdAndLanguage(id, l)
+//        }
+//
+//
+//        val l = result?.let { toRenderVarDokMultiLang(responseMap) }
+//        //TODO Consider if we should skip if there is no date
+//        if (l?.validFrom == null) {
+//            l?.validFrom = LocalDate.now().toString()
+//        }
+//
+//        val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+//
+//        //val jsonFromVardoc = mapper.writeValueAsString(l)
+//
+//        println(jsonFromVardoc)
+//
+//        spec
+//            .given()
+//            .contentType(ContentType.JSON)
+//            .body(jsonFromVardoc)
+//            .`when`()
+//            .post("/variable-definitions")
+//            .then().log().everything()
 
-        // 190 nb en nn, 2 nb en, 100 har shortname
-        val id = "100"
+        val id = "2"
+        val l = varDokApiService.createVarDefInputFromVarDokItems(varDokApiService.fetchMultipleVarDokItemsByLanguage(id))
 
-        val result = varDokApiService.getVarDokItem(id)
-        val responseMap = mutableMapOf("nb" to result)
+        println(l)
 
-        result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
-            responseMap[l] = varDokApiService.getVardokByIdAndLanguage(id, l)
-        }
-
-        val l = result?.let { toRenderVarDokMultiLang(responseMap) }
-        //TODO Consider if we should skip if there is no date
-        if (l?.validFrom == null) {
-            l?.validFrom = LocalDate.now().toString()
-        }
-
-        val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-
-        val jsonFromVardoc = mapper.writeValueAsString(l)
-
-        println(jsonFromVardoc)
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(jsonFromVardoc)
-            .`when`()
-            .post("/variable-definitions")
-            .then().log().everything()
-
-//        assertThat(result).isNotNull()
-//        result.forEach { assertThat(it?.id).isNotNull() }
-//        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
-//        assertThat(result).size().isEqualTo(idList.size)
     }
 
     @Test

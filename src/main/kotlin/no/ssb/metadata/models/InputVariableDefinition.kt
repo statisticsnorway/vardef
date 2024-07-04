@@ -38,13 +38,11 @@ data class InputVariableDefinition(
     @Pattern(regexp = KLASS_ID_PATTERN)
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    @NotEmpty
     val unitTypes: List<
         @KlassCode("702")
         String,
     >,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    @NotEmpty
     val subjectFields: List<
         @KlassCode("618")
         String,

@@ -2,7 +2,14 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
+import java.net.URI
+import java.net.URL
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import no.ssb.metadata.models.Contact
+import no.ssb.metadata.models.InputVariableDefinition
 import no.ssb.metadata.models.LanguageStringType
+import no.ssb.metadata.models.VariableStatus
 import org.slf4j.LoggerFactory
 
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -71,33 +78,41 @@ fun mapVardokIdentifier(vardokItem: FIMD): String {
     return splitId[splitId.size - 1]
 }
 
-fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDok? {
-    if (vardokItems["nb"] == null) {
-        return null
-    }
+fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD>): InputVariableDefinition {
 
     val vardokItem = vardokItems["nb"]!!
     val vardokId = mapVardokIdentifier(vardokItem)
-    val renderVarDok =
-        RenderVarDok(
+
+
+    val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+
+    val vardefInput = InputVariableDefinition(
             name =
-                LanguageStringType(
-                    vardokItem.common?.title,
-                    vardokItems["nn"]?.common?.title,
-                    vardokItems["en"]?.common?.title,
-                ),
-            shortName = vardokItem.variable?.dataElementName,
+            LanguageStringType(
+                vardokItem.common?.title,
+                vardokItems["nn"]?.common?.title,
+                vardokItems["en"]?.common?.title,
+            ),
+            shortName = vardokItem.variable?.dataElementName!!,
             definition =
-                LanguageStringType(
-                    vardokItem.common?.description,
-                    vardokItems["nn"]?.common?.description,
-                    vardokItems["en"]?.common?.description,
-                ),
-            validFrom = mapValidDateFrom(vardokItem),
-            validUntil = mapValidDateUntil(vardokItem),
-            unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
-            externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
-            variableStatus = "DRAFT"
-        )
-    return renderVarDok
+            LanguageStringType(
+                vardokItem.common?.description,
+                vardokItems["nn"]?.common?.description,
+                vardokItems["en"]?.common?.description,
+            ),
+            validFrom =  LocalDate.parse(mapValidDateFrom(vardokItem), formatter),
+            validUntil = mapValidDateUntil(vardokItem)?.let { LocalDate.parse(it, formatter) },
+            unitTypes = listOf(unitTypeConverter[vardokItem.variable.statisticalUnit]!!),
+            externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId").toURL(),
+            variableStatus = VariableStatus.DRAFT,
+            classificationReference = null,
+            containsUnitIdentifyingInformation = false,
+            containsSensitivePersonalInformation = false,
+            contact = Contact(LanguageStringType(null, null, null), ""),
+            id = null,
+            measurementType = null,
+            relatedVariableDefinitionUris = emptyList(),
+            subjectFields = emptyList(),
+    )
+    return vardefInput
 }

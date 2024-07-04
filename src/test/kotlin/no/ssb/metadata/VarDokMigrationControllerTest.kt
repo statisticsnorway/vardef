@@ -19,7 +19,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `get request not valid id`(spec: RequestSpecification) {
+    fun `get request id with no content`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -27,6 +27,18 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/vardok-migration/1")
             .then()
-            .statusCode(405)
+            .statusCode(204)
+    }
+
+    @Test
+    fun `get request vardok with missing short name`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/variable-definitions/vardok-migration/100")
+            .then()
+            .statusCode(204)
     }
 }

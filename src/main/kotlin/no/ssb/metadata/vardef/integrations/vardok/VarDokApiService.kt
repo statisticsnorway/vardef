@@ -1,5 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import org.slf4j.LoggerFactory
@@ -13,10 +15,15 @@ open class VarDokApiService(
     open fun getVarDokItem(id: String): FIMD? {
         return try {
             logger.info("Retrieving definition by id from vardok")
-            varDokClient.fetchVarDokById(id)
+            val result = varDokClient.fetchVarDokById(id)
+            if(result.variable?.dataElementName.isNullOrBlank() or result.dc?.valid.isNullOrBlank()) {
+                return null
+            }
+            result
         } catch (e: Exception) {
             logger.warn("Id is not valid")
-            null
+            throw(HttpStatusException(HttpStatus.NO_CONTENT,"Id not found"))
+            //burde returnere null
         }
     }
 

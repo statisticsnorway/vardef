@@ -1,15 +1,16 @@
 package no.ssb.metadata.integrations.vardok
 
-import io.micronaut.context.annotation.Requires
-import io.micronaut.http.HttpStatus
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.*
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import java.lang.Exception
+
 
 @MicronautTest
 //@Requires(env = ["integration-test"])
@@ -19,11 +20,10 @@ class VarDokMigrationTest {
 
     @Test
     fun `get vardok by id`() {
-        val result = varDokApiService.getVarDokItem("1422")
+        val result = varDokApiService.getVarDokItem("901")
         assertThat(result).isNotNull()
-        assertThat(result?.dc?.contributor).isEqualTo("Seksjon for regnskapsstatistikk")
-        assertThat(result?.dc?.title).isEqualTo("Aksje")
-        assertThat(result?.common?.title).isEqualTo("Aksje")
+        assertThat(result?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
+        assertThat(result?.common?.title).isEqualTo("Oppvarming, har lukket ovn for fast brensel")
         assertThat(result?.otherLanguages).isEqualTo("en")
         assertThat(result?.type).isEqualTo("ConceptVariable")
         assertThat(result?.xmlLang).isEqualTo("nb")
@@ -31,48 +31,49 @@ class VarDokMigrationTest {
 
     @Test
     fun `get list of vardok results by id`() {
-        val idList = listOf("1422", "1919")
+        val idList = listOf("901", "1919")
         val result = varDokApiService.getListOfVardokById(idList)
         assertThat(result).isNotNull()
         result.forEach { assertThat(it?.id).isNotNull() }
-        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for regnskapsstatistikk")
+        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
         assertThat(result).size().isEqualTo(idList.size)
     }
 
     @Test
     fun `get vardok by id and language if other languages`() {
-        val res = varDokApiService.getVarDokItem("1422")
+        val res = varDokApiService.getVarDokItem("901")
         var englishRes: FIMD? = null
         if (res?.otherLanguages != "") {
-            englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("1422", it.otherLanguages) }
+            englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("901", it.otherLanguages) }
         }
-        assertThat(englishRes?.common?.title).isEqualTo("Share")
+        assertThat(englishRes?.common?.title).isEqualTo("System for heating, has closed stoves for solid fuel")
         assertThat(englishRes?.id).isEqualTo(res?.id)
     }
 
     @Test
     fun `map vardok date from`() {
-        val res = varDokApiService.getVarDokItem("1422")
+        val res = varDokApiService.getVarDokItem("901")
         assertThat(res?.dc?.valid).isNotNull()
         assertThat(res?.dc?.valid).hasSizeGreaterThan(10)
         val mappedFromDate = res?.let { mapValidDateFrom(it) }
         assertThat(mappedFromDate).isNotNull()
-        assertThat(mappedFromDate).isEqualTo("1984-01-01")
+        assertThat(mappedFromDate).isEqualTo("2001-01-01")
     }
 
     @Test
     fun `map vardok date until`() {
-        val res = varDokApiService.getVarDokItem("123")
+        val res = varDokApiService.getVarDokItem("901")
         assertThat(res?.dc?.valid).isNotNull()
         assertThat(res?.dc?.valid).hasSizeGreaterThan(20)
         val mappedUntilDate = res?.let { mapValidDateUntil(it) }
         assertThat(mappedUntilDate).isNotNull()
-        assertThat(mappedUntilDate).isEqualTo("2002-12-31")
+        assertThat(mappedUntilDate).isEqualTo("2001-12-31")
     }
 
     @Test
     fun `map vardok missing valid date`() {
         val res = varDokApiService.getVarDokItem("100")
+        assertThat(res).isNull()
         val mappedFromDate = res?.let { mapValidDateFrom(it) }
         assertThat(mappedFromDate).isNull()
     }
@@ -115,7 +116,29 @@ class VarDokMigrationTest {
 
     @Test
     fun `catch vardok id not found`() {
-        val result = varDokApiService.getVarDokItem("1")
+        val exception: Exception = assertThrows(HttpStatusException::class.java) {
+            varDokApiService.getVarDokItem("1")
+        }
+        assertThat(exception).isInstanceOf(HttpStatusException::class.java)
+        val expectedMessage = "Id not found"
+        val actualMessage = exception.message
+
+        assertThat(expectedMessage).isEqualTo(actualMessage)
+
+    }
+
+    @Test
+    fun `catch vardok item has not short name`() {
+        val result = varDokApiService.getVarDokItem("123")
         assertThat(result).isNull()
+        val result2 = varDokApiService.getVarDokItem("2450")
+        assertThat(result2).isNull()
+        /*if(result != null){
+            //val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
+            //val result2 = toVarDefFromVarDok(mapResult)
+            assertThat(result2).isNull()
+        }*/
+
+        //val result2 = varDokApiService.createVarDefInputFromVarDokItems(varDokApiService.fetchMultipleVarDokItemsByLanguage("100"))
     }
 }

@@ -1,22 +1,13 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import java.time.LocalDate
-import no.ssb.metadata.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.InputVariableDefinition
 import org.slf4j.LoggerFactory
-
 
 @Singleton
 open class VarDokApiService(
     private val varDokClient: VarDokClient,
 ) {
-
-    @Inject
-    lateinit var objectMapper: ObjectMapper
-
     private val logger = LoggerFactory.getLogger(VarDokApiService::class.java)
 
     open fun getVarDokResponse(): FIMD? {
@@ -64,8 +55,7 @@ open class VarDokApiService(
         }
     }
 
-
-    fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, FIMD>{
+    fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, FIMD> {
         val result = getVarDokItem(id)
         val responseMap = mutableMapOf<String, FIMD>()
         result?.let {
@@ -73,26 +63,22 @@ open class VarDokApiService(
         }
 
         result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
-            getVardokByIdAndLanguage(id, l)?.let {responseMap[l] = it}
+            getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
         }
 
         return responseMap
     }
 
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition{
+    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
+        val varDefInput = toRenderVarDokMultiLang(varDokItems)
 
-        val varDefInput =  toRenderVarDokMultiLang(varDokItems)
-
-        //TODO Consider if we should skip if there is no date
+        // TODO Consider if we should skip if there is no date
 //        if (varDefInput.validFrom == null) {
 //            varDefInput.validFrom = LocalDate.now().toString()
 //        }
 
-        //val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+        // val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 
         return varDefInput
     }
-
-
-
 }

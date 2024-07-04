@@ -1,12 +1,8 @@
 package no.ssb.metadata.integrations.vardok
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
-import java.time.LocalDate
 import no.ssb.metadata.vardef.integrations.vardok.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -131,8 +127,7 @@ class VarDokMigrationTest {
         val id = "2"
         val l = varDokApiService.createVarDefInputFromVarDokItems(varDokApiService.fetchMultipleVarDokItemsByLanguage(id))
 
-        println(l)
-
+        // println(l)
     }
 
     @Test

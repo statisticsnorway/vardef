@@ -9,15 +9,14 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
-import no.ssb.metadata.models.InputVariableDefinition
-import no.ssb.metadata.services.VariableDefinitionService
 import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
+import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 
 @Validated
 @Controller("/variable-definitions/vardok-migration/{id}")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
-
     @Inject
     lateinit var varDefService: VariableDefinitionService
 
@@ -37,12 +36,4 @@ class VarDokMigrationController {
         val varDefInput = varDokApiService.createVarDefInputFromVarDokItems(varDokApiService.fetchMultipleVarDokItemsByLanguage(id))
         return varDefService.save(varDefInput.toSavedVariableDefinition()).toInputVariableDefinition()
     }
-//    fun createVariableDefinition(
-//        @Body @Valid varDef: InputVariableDefinition,
-//    ): InputVariableDefinition {
-//        if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
-//        return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
-//    }
-
-
 }

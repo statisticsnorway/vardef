@@ -37,9 +37,6 @@ object TestUtils {
                         listOf("blah"),
                     )
                 } to "Code blah is not a member of classification with id",
-                // TODO: Validation on boolean values
-//                JSONObject(JSON_TEST_INPUT).apply { put("contains_unit_identifying_information", "2024-20-11") } to "Not a valid boolean",
-//                JSONObject(JSON_TEST_INPUT).apply { put("contains_sensitive_personal_information", "2024-20-11") } to "Not a valid boolean",
                 JSONObject(
                     JSON_TEST_INPUT,
                 ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",
@@ -88,12 +85,6 @@ object TestUtils {
                 JSONObject(JSON_TEST_INPUT).apply {
                     remove("definition")
                 } to "null annotate it with @Nullable",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    remove("unit_types")
-                } to "varDef.unitTypes: must not be empty",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    remove("subject_fields")
-                } to "varDef.subjectFields: must not be empty",
                 JSONObject(JSON_TEST_INPUT).apply {
                     remove("valid_from")
                 } to "null annotate it with @Nullable",

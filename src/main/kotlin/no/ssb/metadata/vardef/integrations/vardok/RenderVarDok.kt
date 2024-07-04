@@ -1,17 +1,26 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import io.micronaut.serde.annotation.Serdeable
+import io.micronaut.serde.config.naming.SnakeCaseStrategy
+import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.Owner
+import no.ssb.metadata.vardef.models.VariableStatus
 import org.slf4j.LoggerFactory
+import java.net.URI
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@Serdeable(naming = SnakeCaseStrategy::class)
 data class RenderVarDok(
     val name: LanguageStringType?,
     val shortName: String?,
     val definition: LanguageStringType?,
-    val validFrom: String?,
+    var validFrom: String?,
     val validUntil: String?,
     val unitTypes: List<String?>,
     val externalReferenceUri: String?,
+    val variableStatus: String,
     val owner: Owner,
 )
 
@@ -26,6 +35,7 @@ fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
             validUntil = mapValidDateUntil(vardokItem),
             unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
             externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+            variableStatus = "DRAFT",
             owner = mapVardokContactDivisionToOwner(vardokItem),
         )
     return renderVarDok
@@ -75,32 +85,41 @@ fun mapVardokIdentifier(vardokItem: FIMD): String {
     return splitId[splitId.size - 1]
 }
 
-fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD?>): RenderVarDok? {
-    if (vardokItems["nb"] == null) {
-        return null
-    }
+fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD>): InputVariableDefinition {
     val vardokItem = vardokItems["nb"]!!
     val vardokId = mapVardokIdentifier(vardokItem)
-    val renderVarDok =
-        RenderVarDok(
+
+    val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+
+    val vardefInput =
+        InputVariableDefinition(
             name =
                 LanguageStringType(
                     vardokItem.common?.title,
                     vardokItems["nn"]?.common?.title,
                     vardokItems["en"]?.common?.title,
                 ),
-            shortName = vardokItem.variable?.dataElementName,
+            shortName = vardokItem.variable?.dataElementName!!,
             definition =
                 LanguageStringType(
                     vardokItem.common?.description,
                     vardokItems["nn"]?.common?.description,
                     vardokItems["en"]?.common?.description,
                 ),
-            validFrom = mapValidDateFrom(vardokItem),
-            validUntil = mapValidDateUntil(vardokItem),
-            unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
-            externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
-            owner = mapVardokContactDivisionToOwner(vardokItem),
+            validFrom = LocalDate.parse(mapValidDateFrom(vardokItem), formatter),
+            validUntil = mapValidDateUntil(vardokItem)?.let { LocalDate.parse(it, formatter) },
+            unitTypes = listOf(unitTypeConverter[vardokItem.variable.statisticalUnit]!!),
+            externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId").toURL(),
+            variableStatus = VariableStatus.DRAFT,
+            classificationReference = null,
+            containsSensitivePersonalInformation = false,
+            contact = null,
+            id = null,
+            measurementType = null,
+            relatedVariableDefinitionUris = emptyList(),
+            subjectFields = emptyList(),
+            // TODO Consider if we want to use owner by patching the variable definition
+            // owner = mapVardokContactDivisionToOwner(vardokItem),
         )
-    return renderVarDok
+    return vardefInput
 }

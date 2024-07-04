@@ -1,10 +1,13 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.models.InputVariableDefinition
 import org.slf4j.LoggerFactory
 
 @Singleton
-open class VarDokApiService(private val varDokClient: VarDokClient) {
+open class VarDokApiService(
+    private val varDokClient: VarDokClient,
+) {
     private val logger = LoggerFactory.getLogger(VarDokApiService::class.java)
 
     open fun getVarDokResponse(): FIMD? {
@@ -50,5 +53,32 @@ open class VarDokApiService(private val varDokClient: VarDokClient) {
             logger.warn("Error while fetching vardok by id and language", e)
             null
         }
+    }
+
+    fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, FIMD> {
+        val result = getVarDokItem(id)
+        val responseMap = mutableMapOf<String, FIMD>()
+        result?.let {
+            responseMap["nb"] = it
+        }
+
+        result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
+            getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
+        }
+
+        return responseMap
+    }
+
+    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
+        val varDefInput = toRenderVarDokMultiLang(varDokItems)
+
+        // TODO Consider if we should skip if there is no date
+//        if (varDefInput.validFrom == null) {
+//            varDefInput.validFrom = LocalDate.now().toString()
+//        }
+
+        // val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+
+        return varDefInput
     }
 }

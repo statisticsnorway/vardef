@@ -41,8 +41,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/variable-definitions/vardok-migration/100")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString(
-                "Vardok is missing valid dates and can not be saved")
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "Vardok is missing valid dates and can not be saved",
+                ),
             )
     }
 
@@ -56,8 +59,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/variable-definitions/vardok-migration/123")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString(
-                "Vardok is missing short name and can not be saved")
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "Vardok is missing short name and can not be saved",
+                ),
             )
     }
 }

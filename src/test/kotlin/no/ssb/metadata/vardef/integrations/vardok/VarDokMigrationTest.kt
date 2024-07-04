@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import io.micronaut.context.annotation.Requires
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-// @Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject

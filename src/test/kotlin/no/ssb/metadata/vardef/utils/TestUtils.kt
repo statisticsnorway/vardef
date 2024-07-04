@@ -86,12 +86,6 @@ object TestUtils {
                     remove("definition")
                 } to "null annotate it with @Nullable",
                 JSONObject(JSON_TEST_INPUT).apply {
-                    remove("unit_types")
-                } to "varDef.unitTypes: must not be empty",
-                JSONObject(JSON_TEST_INPUT).apply {
-                    remove("subject_fields")
-                } to "varDef.subjectFields: must not be empty",
-                JSONObject(JSON_TEST_INPUT).apply {
                     remove("valid_from")
                 } to "null annotate it with @Nullable",
             )

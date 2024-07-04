@@ -37,9 +37,6 @@ object TestUtils {
                         listOf("blah"),
                     )
                 } to "Code blah is not a member of classification with id",
-                // TODO: Validation on boolean values
-//                JSONObject(JSON_TEST_INPUT).apply { put("contains_unit_identifying_information", "2024-20-11") } to "Not a valid boolean",
-//                JSONObject(JSON_TEST_INPUT).apply { put("contains_sensitive_personal_information", "2024-20-11") } to "Not a valid boolean",
                 JSONObject(
                     JSON_TEST_INPUT,
                 ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",

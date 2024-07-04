@@ -28,7 +28,6 @@ class VarDokMigrationController {
      *
      * New variable definitions must have status DRAFT and include all required fields.
      */
-    //must try catch and return 400 if exception and message
     @Post()
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")

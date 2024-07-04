@@ -18,7 +18,7 @@ open class VarDokApiService(
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
             logger.warn("Id is not valid")
-            throw(HttpStatusException(HttpStatus.NO_CONTENT,"Id not found"))
+            throw(HttpStatusException(HttpStatus.NO_CONTENT, "Id not found"))
         }
     }
 

@@ -10,9 +10,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-
+// @Requires(env = ["integration-test"])
 @MicronautTest
-//@Requires(env = ["integration-test"])
 class VarDokMigrationTest {
     @Inject
     lateinit var varDokApiService: VarDokApiService
@@ -115,44 +114,43 @@ class VarDokMigrationTest {
 
     @Test
     fun `catch vardok id not found`() {
-        val exception: Exception = assertThrows(HttpStatusException::class.java) {
-            varDokApiService.getVarDokItem("1")
-        }
+        val exception: Exception =
+            assertThrows(HttpStatusException::class.java) {
+                varDokApiService.getVarDokItem("1")
+            }
         assertThat(exception).isInstanceOf(HttpStatusException::class.java)
         val expectedMessage = "Id not found"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
-
     }
 
     @Test
     fun `catch vardok item has not short name`() {
         val result = varDokApiService.getVarDokItem("2450")
-        if(result != null) {
+        if (result != null) {
             val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
-            val exception: VardokException
-            = assertThrows(VardokException::class.java) {
-                varDokApiService.createVarDefInputFromVarDokItems(mapResult)
-            }
+            val exception: VardokException =
+                assertThrows(VardokException::class.java) {
+                    varDokApiService.createVarDefInputFromVarDokItems(mapResult)
+                }
             assertThat(exception).isInstanceOf(VardokException::class.java)
             val expectedMessage = "Variabledefinition from Vardok is missing data element name"
             val actualMessage = exception.message
 
             assertThat(expectedMessage).isEqualTo(actualMessage)
         }
-
-
     }
 
     @Test
     fun `catch vardok item has not valid dates`() {
         val result = varDokApiService.getVarDokItem("100")
-        if(result != null) {
+        if (result != null) {
             val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
-            val exception: MissingValidDatesException = assertThrows(MissingValidDatesException::class.java) {
-                varDokApiService.createVarDefInputFromVarDokItems(mapResult)
-            }
+            val exception: MissingValidDatesException =
+                assertThrows(MissingValidDatesException::class.java) {
+                    varDokApiService.createVarDefInputFromVarDokItems(mapResult)
+                }
             assertThat(exception).isInstanceOf(MissingValidDatesException::class.java)
             val expectedMessage = "Vardok is missing valid dates"
             val actualMessage = exception.message

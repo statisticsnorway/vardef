@@ -2,9 +2,9 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 open class VardokException(override val message: String) : Exception()
 
-class MissingDataElementNameException() : VardokException("Variabledefinition from Vardok is missing data element name")
+class MissingDataElementNameException() : VardokException("Vardok is missing short name and can not be saved")
 
-class MissingValidDatesException() : VardokException("Vardok is missing valid dates")
+class MissingValidDatesException() : VardokException("Vardok is missing valid dates and can not be saved")
 
 fun vardokMissingElements(varDokItems: MutableMap<String, FIMD>) {
     if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()) {

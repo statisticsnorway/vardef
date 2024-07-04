@@ -8,30 +8,21 @@ import io.micronaut.serde.annotation.Serdeable
 @Serdeable
 @Introspected
 data class DC(
-    @field:JacksonXmlProperty(localName = "contributor")
     val contributor: String?,
-    @field:JacksonXmlProperty(localName = "creator")
     val creator: String?,
-    @field:JacksonXmlProperty(localName = "modified")
     val modified: String?,
-    @field:JacksonXmlProperty(localName = "valid")
     val valid: String?,
     val description: String?,
-    @field:JacksonXmlProperty(localName = "abstract")
-    val abstractText: String?,
-    @field:JacksonXmlProperty(localName = "tableOfContents")
+    val abstract: String?,
     val tableOfContents: String?,
     val format: String?,
-    @field:JacksonXmlProperty(localName = "identifier")
     val identifier: String?,
     val language: String?,
     val publisher: String?,
     val rights: String?,
     val source: String?,
     val subject: String?,
-    @field:JacksonXmlProperty(localName = "title")
     val title: String?,
-    @field:JacksonXmlProperty(localName = "type")
     val type: String?,
 )
 

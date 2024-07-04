@@ -59,7 +59,7 @@ open class VarDokApiService(
     }
 
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
-        val varDefInput = toRenderVarDokMultiLang(varDokItems)
+        val varDefInput = toVarDefFromVarDok(varDokItems)
 
         // TODO Consider if we should skip if there is no date
 //        if (varDefInput.validFrom == null) {

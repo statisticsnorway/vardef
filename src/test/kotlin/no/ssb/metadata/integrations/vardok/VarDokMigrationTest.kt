@@ -88,7 +88,7 @@ class VarDokMigrationTest {
         val result = varDokApiService.getVarDokItem(vardokId)
         if (result != null) {
             val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
-            val renderVarDok = toRenderVarDokMultiLang(mapResult)
+            val renderVarDok = toVarDefFromVarDok(mapResult)
             assertThat(renderVarDok).isNotNull
             assertThat(
                 renderVarDok.externalReferenceUri.toString(),

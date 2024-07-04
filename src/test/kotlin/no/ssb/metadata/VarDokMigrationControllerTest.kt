@@ -30,6 +30,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .statusCode(204)
     }
 
+    //håndtere nullpointerexception....
     @Test
     fun `get request vardok with missing short name`(spec: RequestSpecification) {
         spec
@@ -39,6 +40,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/vardok-migration/100")
             .then()
-            .statusCode(204)
+            .statusCode(400)
     }
 }

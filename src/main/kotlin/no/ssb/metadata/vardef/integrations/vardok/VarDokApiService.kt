@@ -15,15 +15,10 @@ open class VarDokApiService(
     open fun getVarDokItem(id: String): FIMD? {
         return try {
             logger.info("Retrieving definition by id from vardok")
-            val result = varDokClient.fetchVarDokById(id)
-            if(result.variable?.dataElementName.isNullOrBlank() or result.dc?.valid.isNullOrBlank()) {
-                return null
-            }
-            result
+            varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
             logger.warn("Id is not valid")
             throw(HttpStatusException(HttpStatus.NO_CONTENT,"Id not found"))
-            //burde returnere null
         }
     }
 
@@ -65,9 +60,36 @@ open class VarDokApiService(
         return responseMap
     }
 
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
-        val varDefInput = toVarDefFromVarDok(varDokItems)
+    /*
+     if(result.variable?.dataElementName.isNullOrBlank() or result.dc?.valid.isNullOrBlank()) {
+                return null
+            }
+            result
+     */
+    fun vardokMissingPropertyException(vardokItem: FIMD): Boolean{
+        val message = "Vardok missing value for short name"
+        return vardokItem.variable?.dataElementName.isNullOrBlank()
+    }
 
+    class MissingDataElementNameException(message: String = "Variabledefinition from Vardok is missing data element name") : Exception(message)
+
+
+    class MissingValidDatesException(message: String = "Vardok is missing valid dates") : Exception(message)
+
+    private fun vardokMissingDataElementName(varDokItems: MutableMap<String, FIMD>) {
+        if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()){
+            throw MissingDataElementNameException()
+        }
+    }
+
+    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
+        try {
+            vardokMissingDataElementName(varDokItems)
+        } catch (e: MissingDataElementNameException) {
+            throw MissingDataElementNameException()
+        }
+
+        val varDefInput = toVarDefFromVarDok(varDokItems)
         // TODO Consider if we should skip if there is no date
 //        if (varDefInput.validFrom == null) {
 //            varDefInput.validFrom = LocalDate.now().toString()

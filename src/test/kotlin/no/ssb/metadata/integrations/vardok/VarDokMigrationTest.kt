@@ -73,7 +73,7 @@ class VarDokMigrationTest {
     @Test
     fun `map vardok missing valid date`() {
         val res = varDokApiService.getVarDokItem("100")
-        assertThat(res).isNull()
+        assertThat(res).isNotNull()
         val mappedFromDate = res?.let { mapValidDateFrom(it) }
         assertThat(mappedFromDate).isNull()
     }
@@ -129,14 +129,27 @@ class VarDokMigrationTest {
 
     @Test
     fun `catch vardok item has not short name`() {
-        val result = varDokApiService.getVarDokItem("123")
-        assertThat(result).isNull()
+        //val result = varDokApiService.getVarDokItem("123")
+        //assertThat(result).isNotNull()
         val result2 = varDokApiService.getVarDokItem("2450")
-        assertThat(result2).isNull()
-        /*if(result != null){
-            //val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
-            //val result2 = toVarDefFromVarDok(mapResult)
-            assertThat(result2).isNull()
+        assertThat(result2).isNotNull()
+        if(result2 != null) {
+            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result2)
+            val exception: VarDokApiService.MissingDataElementNameException = assertThrows(VarDokApiService.MissingDataElementNameException::class.java) {
+                varDokApiService.createVarDefInputFromVarDokItems(mapResult)
+            }
+            assertThat(exception).isInstanceOf(VarDokApiService.MissingDataElementNameException::class.java)
+            val expectedMessage = "Variabledefinition from Vardok is missing data element name"
+            val actualMessage = exception.message
+
+            assertThat(expectedMessage).isEqualTo(actualMessage)
+        }
+
+
+        /*if(result2 != null){
+            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result2)
+            val result3 = toVarDefFromVarDok(mapResult)
+            assertThat(result3).isNull()
         }*/
 
         //val result2 = varDokApiService.createVarDefInputFromVarDokItems(varDokApiService.fetchMultipleVarDokItemsByLanguage("100"))

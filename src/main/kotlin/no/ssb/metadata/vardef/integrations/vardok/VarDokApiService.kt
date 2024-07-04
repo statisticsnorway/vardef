@@ -60,34 +60,23 @@ open class VarDokApiService(
         return responseMap
     }
 
-    /*
-     if(result.variable?.dataElementName.isNullOrBlank() or result.dc?.valid.isNullOrBlank()) {
-                return null
-            }
-            result
-     */
-    fun vardokMissingPropertyException(vardokItem: FIMD): Boolean{
-        val message = "Vardok missing value for short name"
-        return vardokItem.variable?.dataElementName.isNullOrBlank()
-    }
+   /* open class VardokException(override val message: String) : Exception()
 
-    class MissingDataElementNameException(message: String = "Variabledefinition from Vardok is missing data element name") : Exception(message)
+    class MissingDataElementNameException() : VardokException("Variabledefinition from Vardok is missing data element name")
 
+    class MissingValidDatesException() : VardokException("Vardok is missing valid dates")
 
-    class MissingValidDatesException(message: String = "Vardok is missing valid dates") : Exception(message)
-
-    private fun vardokMissingDataElementName(varDokItems: MutableMap<String, FIMD>) {
+    private fun vardokMissingElements(varDokItems: MutableMap<String, FIMD>) {
         if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()){
             throw MissingDataElementNameException()
         }
-    }
+        if (varDokItems["nb"]?.dc?.valid.isNullOrBlank()){
+            throw MissingValidDatesException()
+        }
+    }*/
 
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
-        try {
-            vardokMissingDataElementName(varDokItems)
-        } catch (e: MissingDataElementNameException) {
-            throw MissingDataElementNameException()
-        }
+        vardokMissingElements(varDokItems)
 
         val varDefInput = toVarDefFromVarDok(varDokItems)
         // TODO Consider if we should skip if there is no date

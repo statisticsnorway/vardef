@@ -3,13 +3,13 @@ package no.ssb.metadata.vardef.integrations.vardok
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import java.net.URI
-import java.net.URL
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import no.ssb.metadata.models.Contact
-import no.ssb.metadata.models.InputVariableDefinition
-import no.ssb.metadata.models.LanguageStringType
-import no.ssb.metadata.models.VariableStatus
+import no.ssb.metadata.vardef.models.Contact
+import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.models.LanguageStringType
+import no.ssb.metadata.vardef.models.Owner
 import org.slf4j.LoggerFactory
 
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -22,7 +22,8 @@ data class RenderVarDok(
     val unitTypes: List<String?>,
     val externalReferenceUri: String?,
     val variableStatus: String,
-)
+    val owner: Owner,
+    )
 
 fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
     val vardokId = mapVardokIdentifier(vardokItem)
@@ -35,9 +36,16 @@ fun toRenderVarDok(vardokItem: FIMD): RenderVarDok {
             validUntil = mapValidDateUntil(vardokItem),
             unitTypes = listOf(unitTypeConverter[vardokItem.variable?.statisticalUnit]),
             externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
-            variableStatus = "DRAFT"
+            variableStatus = "DRAFT",
+            owner = mapVardokContactDivisionToOwner(vardokItem),
         )
     return renderVarDok
+}
+
+fun mapVardokContactDivisionToOwner(vardokItem: FIMD): Owner {
+    val owner = vardokItem.common?.contactDivision
+    val mappedOwner = Owner(owner!!.codeValue, owner.codeText)
+    return mappedOwner
 }
 
 private fun sliceValidDate(
@@ -106,13 +114,14 @@ fun toRenderVarDokMultiLang(vardokItems: MutableMap<String, FIMD>): InputVariabl
             externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId").toURL(),
             variableStatus = VariableStatus.DRAFT,
             classificationReference = null,
-            containsUnitIdentifyingInformation = false,
             containsSensitivePersonalInformation = false,
-            contact = Contact(LanguageStringType(null, null, null), ""),
+            contact = null,
             id = null,
             measurementType = null,
             relatedVariableDefinitionUris = emptyList(),
             subjectFields = emptyList(),
+            // TODO Consider if we want to use owner by patching the variable definition
+            //owner = mapVardokContactDivisionToOwner(vardokItem),
     )
     return vardefInput
 }

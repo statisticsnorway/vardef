@@ -28,7 +28,6 @@ class VarDokMigrationController {
     /**
      * Create a variable definition from a VarDok variable.
      *
-     * New variable definitions must have status DRAFT and include all required fields.
      */
     @Post
     @Status(HttpStatus.CREATED)

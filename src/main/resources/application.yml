@@ -54,13 +54,14 @@ micronaut:
     services:
       klass:
         url: https://data.ssb.no/api/klass/v1/
+      vardok:
+        url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
 
 klass:
   cached-classifications:
     unit-types: 702
     areas: 618
   cache-retry-timeout-seconds: 1800
-
 
 jackson:
   xml:

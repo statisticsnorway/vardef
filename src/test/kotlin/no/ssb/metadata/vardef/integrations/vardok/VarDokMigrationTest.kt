@@ -35,7 +35,7 @@ class VarDokMigrationTest {
         if (res?.otherLanguages != "") {
             englishRes =
                 res?.let {
-                    it.otherLanguages?.let { it1 ->
+                    it.otherLanguages.let { it1 ->
                         varDokApiService.getVardokByIdAndLanguage(
                             "901",
                             it1,
@@ -132,7 +132,7 @@ class VarDokMigrationTest {
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: VardokException =
-                org.junit.jupiter.api.Assertions.assertThrows(VardokException::class.java) {
+                assertThrows(VardokException::class.java) {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(VardokException::class.java)
@@ -149,7 +149,7 @@ class VarDokMigrationTest {
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: MissingValidDatesException =
-                org.junit.jupiter.api.Assertions.assertThrows(MissingValidDatesException::class.java) {
+                assertThrows(MissingValidDatesException::class.java) {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(MissingValidDatesException::class.java)

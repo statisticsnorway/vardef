@@ -50,9 +50,9 @@ fun mapVardokIdentifier(vardokItem: VardokResponse): String {
     return splitId[splitId.size - 1]
 }
 
-fun toVarDefFromVarDok(vardokItems: MutableMap<String, VardokResponse>): InputVariableDefinition {
-    val vardokItem = vardokItems["nb"]!!
-    val vardokId = mapVardokIdentifier(vardokItem)
+fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): InputVariableDefinition {
+    val vardokItemNb = vardokItem["nb"]!!
+    val vardokId = mapVardokIdentifier(vardokItemNb)
 
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
@@ -60,20 +60,20 @@ fun toVarDefFromVarDok(vardokItems: MutableMap<String, VardokResponse>): InputVa
         InputVariableDefinition(
             name =
                 LanguageStringType(
-                    vardokItem.common?.title,
-                    vardokItems["nn"]?.common?.title,
-                    vardokItems["en"]?.common?.title,
+                    vardokItemNb.common?.title,
+                    vardokItem["nn"]?.common?.title,
+                    vardokItem["en"]?.common?.title,
                 ),
-            shortName = vardokItem.variable?.dataElementName!!,
+            shortName = vardokItemNb.variable?.dataElementName!!,
             definition =
                 LanguageStringType(
-                    vardokItem.common?.description,
-                    vardokItems["nn"]?.common?.description,
-                    vardokItems["en"]?.common?.description,
+                    vardokItemNb.common?.description,
+                    vardokItem["nn"]?.common?.description,
+                    vardokItem["en"]?.common?.description,
                 ),
-            validFrom = mapValidDateFrom(vardokItem)?.let { LocalDate.parse(it, formatter) }!!,
-            validUntil = mapValidDateUntil(vardokItem)?.let { LocalDate.parse(it, formatter) },
-            unitTypes = listOf(unitTypeConverter[vardokItem.variable.statisticalUnit]!!),
+            validFrom = mapValidDateFrom(vardokItemNb)?.let { LocalDate.parse(it, formatter) }!!,
+            validUntil = mapValidDateUntil(vardokItemNb)?.let { LocalDate.parse(it, formatter) },
+            unitTypes = listOf(unitTypeConverter[vardokItemNb.variable.statisticalUnit]!!),
             externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId").toURL(),
             variableStatus = VariableStatus.DRAFT,
             classificationReference = null,

@@ -1,10 +1,13 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Requires
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -31,7 +34,12 @@ class VarDokMigrationTest {
         val res = varDokApiService.getVarDokItem("901")
         var englishRes: VardokResponse? = null
         if (res?.otherLanguages != "") {
-            englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("901", it.otherLanguages) }
+            englishRes = res?.let { it.otherLanguages?.let { it1 ->
+                varDokApiService.getVardokByIdAndLanguage("901",
+                    it1
+                )
+            } }
+           // englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("901", it.otherLanguages) }
         }
         assertThat(englishRes?.common?.title).isEqualTo("System for heating, has closed stoves for solid fuel")
         assertThat(englishRes?.id).isEqualTo(res?.id)
@@ -96,6 +104,7 @@ class VarDokMigrationTest {
     fun `map owner from vardok`(vardokId: Int) {
         val result = varDokApiService.getVarDokItem(vardokId.toString())
         assertThat(result).isNotNull
+        println(result)
         assertThat(result?.common?.contactDivision).isNotNull
         assertThat(result?.common?.contactDivision?.codeValue).isNotNull()
         assertThat(result?.common?.contactDivision?.codeText).isNotNull()
@@ -104,7 +113,7 @@ class VarDokMigrationTest {
     @Test
     fun `vardok id not found`() {
         val exception: Exception =
-            org.junit.jupiter.api.Assertions.assertThrows(HttpStatusException::class.java) {
+            assertThrows(HttpStatusException::class.java) {
                 varDokApiService.getVarDokItem("1")
             }
         assertThat(exception).isInstanceOf(HttpStatusException::class.java)
@@ -146,5 +155,12 @@ class VarDokMigrationTest {
 
             assertThat(expectedMessage).isEqualTo(actualMessage)
         }
+    }
+
+    @Test
+    fun `test mapper`(){
+        val mapper = ObjectMapper().registerKotlinModule()
+        val value = mapper.writeValueAsString(validFromDateAndEnInOtherLanguages1466)
+        println(value)
     }
 }

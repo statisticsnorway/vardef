@@ -8,29 +8,45 @@ import io.micronaut.serde.annotation.Serdeable
 @Serdeable
 @Introspected
 data class DC(
+    @JacksonXmlProperty(localName = "contributor")
     val contributor: String?,
+    @JacksonXmlProperty(localName = "creator")
     val creator: String?,
+    @JacksonXmlProperty(localName = "modified")
     val modified: String?,
+    @JacksonXmlProperty(localName = "valid")
     val valid: String?,
+    @JacksonXmlProperty(localName = "description")
     val description: String?,
+    @JacksonXmlProperty(localName = "abstract")
     val abstract: String?,
+    @JacksonXmlProperty(localName = "tableOfContents")
     val tableOfContents: String?,
+    @JacksonXmlProperty(localName = "format")
     val format: String?,
+    @JacksonXmlProperty(localName = "identifier")
     val identifier: String?,
+    @JacksonXmlProperty(localName = "language")
     val language: String?,
+    @JacksonXmlProperty(localName = "publisher")
     val publisher: String?,
+    @JacksonXmlProperty(localName = "rights")
     val rights: String?,
+    @JacksonXmlProperty(localName = "source")
     val source: String?,
+    @JacksonXmlProperty(localName = "subject")
     val subject: String?,
+    @JacksonXmlProperty(localName = "title")
     val title: String?,
+    @JacksonXmlProperty(localName = "type")
     val type: String?,
 )
 
 @Serdeable
 @Introspected
 data class ContactPerson(
-    val codeValue: String,
-    val codeText: String,
+    val codeValue: String?,
+    val codeText: String?,
 )
 
 @Serdeable
@@ -45,13 +61,15 @@ data class ContactDivision(
 @Serdeable
 @Introspected
 data class Common(
-    @JacksonXmlProperty(localName = "Title", namespace = "xml:lang")
+    @field:JacksonXmlProperty(localName = "Title", namespace = "xml:lang")
     val title: String,
     @field:JacksonXmlProperty(localName = "Description")
     val description: String?,
+    @field:JacksonXmlProperty(localName = "ContactPerson")
     val contactPerson: ContactPerson?,
     @field:JacksonXmlProperty(localName = "ContactDivision")
     val contactDivision: ContactDivision,
+    @field:JacksonXmlProperty(localName = "Notes")
     val notes: String? = null,
 )
 
@@ -88,6 +106,7 @@ data class Variable(
     val internalSource: String? = null,
     @field:JacksonXmlProperty(localName = "Sensitivity")
     val sensitivity: String,
+    @field:JacksonXmlProperty(localName = "ExternalDocument")
     val externalDocument: String? = null,
     @field:JacksonXmlProperty(localName = "DataElementName")
     val dataElementName: String? = null,
@@ -100,7 +119,7 @@ data class Variable(
 
 @Serdeable
 @Introspected
-@JacksonXmlRootElement(localName = "fimd")
+@JacksonXmlRootElement(localName = "FIMD")
 data class VardokResponse(
     val createdOn: String,
     val defaultValidFrom: String,

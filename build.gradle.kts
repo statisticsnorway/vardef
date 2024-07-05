@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.micronaut.micrometer.registry.prometheus)
     implementation(libs.micronaut.serde.jackson)
     implementation(libs.micronaut.jackson.xml)
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.+")
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.nanoid)

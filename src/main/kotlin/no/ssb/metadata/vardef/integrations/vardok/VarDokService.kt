@@ -17,7 +17,7 @@ open class VarDokService(
             logger.info("Retrieving definition by id from vardok")
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
-            logger.warn("Id is not valid")
+            logger.warn("Id is not valid",e)
             throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id not found"))
         }
     }

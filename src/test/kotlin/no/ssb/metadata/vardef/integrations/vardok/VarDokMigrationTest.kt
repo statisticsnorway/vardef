@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.micronaut.context.annotation.Requires
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-//@Requires(env = ["integration-test"])
+// @Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
@@ -34,12 +33,16 @@ class VarDokMigrationTest {
         val res = varDokApiService.getVarDokItem("901")
         var englishRes: VardokResponse? = null
         if (res?.otherLanguages != "") {
-            englishRes = res?.let { it.otherLanguages?.let { it1 ->
-                varDokApiService.getVardokByIdAndLanguage("901",
-                    it1
-                )
-            } }
-           // englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("901", it.otherLanguages) }
+            englishRes =
+                res?.let {
+                    it.otherLanguages?.let { it1 ->
+                        varDokApiService.getVardokByIdAndLanguage(
+                            "901",
+                            it1,
+                        )
+                    }
+                }
+            // englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("901", it.otherLanguages) }
         }
         assertThat(englishRes?.common?.title).isEqualTo("System for heating, has closed stoves for solid fuel")
         assertThat(englishRes?.id).isEqualTo(res?.id)
@@ -158,7 +161,7 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `test mapper`(){
+    fun `test mapper`() {
         val mapper = ObjectMapper().registerKotlinModule()
         val value = mapper.writeValueAsString(validFromDateAndEnInOtherLanguages1466)
         println(value)

@@ -1,10 +1,10 @@
 package no.ssb.metadata.vardef
 
-import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
-import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
+import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test

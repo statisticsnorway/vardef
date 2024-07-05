@@ -30,7 +30,7 @@ class VarDokMigrationController {
      *
      * New variable definitions must have status DRAFT and include all required fields.
      */
-    @Post()
+    @Post
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")

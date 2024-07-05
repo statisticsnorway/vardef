@@ -22,17 +22,6 @@ open class VarDokApiService(
         }
     }
 
-    open fun getListOfVardokById(vardokIdList: List<String>): List<FIMD?> {
-        return try {
-            logger.info("Retrieving multiple definitions from vardok")
-            val vardokList = vardokIdList.map { getVarDokItem(it) }
-            vardokList
-        } catch (e: Exception) {
-            logger.warn("Error while fetching list of vardok", e)
-            emptyList()
-        }
-    }
-
     open fun getVardokByIdAndLanguage(
         id: String,
         language: String,

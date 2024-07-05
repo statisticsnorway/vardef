@@ -20,7 +20,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `post request id with no content`(spec: RequestSpecification) {
+    fun `post request id not found`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -28,7 +28,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/vardok-migration/1")
             .then()
-            .statusCode(204)
+            .statusCode(404)
     }
 
     @Test

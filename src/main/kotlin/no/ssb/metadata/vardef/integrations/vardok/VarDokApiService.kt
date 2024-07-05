@@ -1,5 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import org.slf4j.LoggerFactory
@@ -15,8 +17,8 @@ open class VarDokApiService(
             logger.info("Retrieving definition by id from vardok")
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
-            logger.warn("Error while fetching vardok item", e)
-            null
+            logger.warn("Id is not valid")
+            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id not found"))
         }
     }
 
@@ -59,15 +61,8 @@ open class VarDokApiService(
     }
 
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
+        checkVardokForMissingElements(varDokItems)
         val varDefInput = toVarDefFromVarDok(varDokItems)
-
-        // TODO Consider if we should skip if there is no date
-//        if (varDefInput.validFrom == null) {
-//            varDefInput.validFrom = LocalDate.now().toString()
-//        }
-
-        // val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-
         return varDefInput
     }
 }

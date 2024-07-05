@@ -6,20 +6,20 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
 
-@Client
+@Client(id = "vardok")
 @Produces(MediaType.APPLICATION_XML)
 @Header(name = ACCEPT, value = "application/xml")
 interface VarDokClient {
     @Produces(MediaType.APPLICATION_XML)
-    @Get("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/{id}")
+    @Get("{id}")
     @SingleResult
-    fun fetchVarDokById(id: String): FIMD
+    fun fetchVarDokById(id: String): VardokResponse
 
     @Produces(MediaType.APPLICATION_XML)
-    @Get("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/{id}/{language}")
+    @Get("{id}/{language}")
     @SingleResult
     fun fetchVarDokByIdAndLanguage(
         id: String,
         language: String,
-    ): FIMD
+    ): VardokResponse
 }

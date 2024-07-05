@@ -8,7 +8,7 @@ import java.net.URI
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-fun mapVardokContactDivisionToOwner(vardokItem: FIMD): Owner {
+fun mapVardokContactDivisionToOwner(vardokItem: VardokResponse): Owner {
     val owner = vardokItem.common?.contactDivision
     val mappedOwner = Owner(owner!!.codeValue, owner.codeText)
     return mappedOwner
@@ -22,7 +22,7 @@ private fun sliceValidDate(
     return dateString
 }
 
-fun mapValidDateFrom(vardokItem: FIMD): CharSequence? {
+fun mapValidDateFrom(vardokItem: VardokResponse): CharSequence? {
     val range = 0..9
     val validDate = vardokItem.dc?.valid
     if (validDate != null) {
@@ -33,7 +33,7 @@ fun mapValidDateFrom(vardokItem: FIMD): CharSequence? {
     return null
 }
 
-fun mapValidDateUntil(vardokItem: FIMD): CharSequence? {
+fun mapValidDateUntil(vardokItem: VardokResponse): CharSequence? {
     val range = 13..22
     val validDate = vardokItem.dc?.valid
     if (validDate != null) {
@@ -44,15 +44,15 @@ fun mapValidDateUntil(vardokItem: FIMD): CharSequence? {
     return null
 }
 
-fun mapVardokIdentifier(vardokItem: FIMD): String {
+fun mapVardokIdentifier(vardokItem: VardokResponse): String {
     val vardokId = vardokItem.id
     val splitId = vardokId.split(":")
     return splitId[splitId.size - 1]
 }
 
-fun toVarDefFromVarDok(vardokItems: MutableMap<String, FIMD>): InputVariableDefinition {
-    val vardokItem = vardokItems["nb"]!!
-    val vardokId = mapVardokIdentifier(vardokItem)
+fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): InputVariableDefinition {
+    val vardokItemNb = vardokItem["nb"]!!
+    val vardokId = mapVardokIdentifier(vardokItemNb)
 
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
@@ -60,20 +60,20 @@ fun toVarDefFromVarDok(vardokItems: MutableMap<String, FIMD>): InputVariableDefi
         InputVariableDefinition(
             name =
                 LanguageStringType(
-                    vardokItem.common?.title,
-                    vardokItems["nn"]?.common?.title,
-                    vardokItems["en"]?.common?.title,
+                    vardokItemNb.common?.title,
+                    vardokItem["nn"]?.common?.title,
+                    vardokItem["en"]?.common?.title,
                 ),
-            shortName = vardokItem.variable?.dataElementName!!,
+            shortName = vardokItemNb.variable?.dataElementName!!,
             definition =
                 LanguageStringType(
-                    vardokItem.common?.description,
-                    vardokItems["nn"]?.common?.description,
-                    vardokItems["en"]?.common?.description,
+                    vardokItemNb.common?.description,
+                    vardokItem["nn"]?.common?.description,
+                    vardokItem["en"]?.common?.description,
                 ),
-            validFrom = mapValidDateFrom(vardokItem)?.let { LocalDate.parse(it, formatter) }!!,
-            validUntil = mapValidDateUntil(vardokItem)?.let { LocalDate.parse(it, formatter) },
-            unitTypes = listOf(unitTypeConverter[vardokItem.variable.statisticalUnit]!!),
+            validFrom = mapValidDateFrom(vardokItemNb)?.let { LocalDate.parse(it, formatter) }!!,
+            validUntil = mapValidDateUntil(vardokItemNb)?.let { LocalDate.parse(it, formatter) },
+            unitTypes = listOf(unitTypeConverter[vardokItemNb.variable.statisticalUnit]!!),
             externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId").toURL(),
             variableStatus = VariableStatus.DRAFT,
             classificationReference = null,

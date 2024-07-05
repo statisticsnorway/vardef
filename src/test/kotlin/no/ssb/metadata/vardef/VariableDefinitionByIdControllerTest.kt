@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef
 
-import SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification

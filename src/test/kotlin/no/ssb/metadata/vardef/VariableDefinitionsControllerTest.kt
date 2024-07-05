@@ -1,8 +1,8 @@
 package no.ssb.metadata.vardef
 
-import INPUT_VARIABLE_DEFINITION_COPY
-import JSON_TEST_INPUT
-import JSON_TEST_INPUT_NULL_CONTACT
+import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION_COPY
+import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
+import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT_NULL_CONTACT
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType

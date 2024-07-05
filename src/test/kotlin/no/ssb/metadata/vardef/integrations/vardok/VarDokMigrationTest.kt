@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-@Requires(env = ["integration-test"])
+//@Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
-    lateinit var varDokApiService: VarDokApiService
+    lateinit var varDokApiService: VarDokService
 
     @Test
     fun `get vardok by id`() {

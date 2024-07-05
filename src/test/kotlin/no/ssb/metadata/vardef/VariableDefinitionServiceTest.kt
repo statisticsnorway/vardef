@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef
 
-import RENDERED_VARIABLE_DEFINITION
-import SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import com.mongodb.assertions.Assertions.assertTrue
 import io.mockk.clearAllMocks
 import io.mockk.every

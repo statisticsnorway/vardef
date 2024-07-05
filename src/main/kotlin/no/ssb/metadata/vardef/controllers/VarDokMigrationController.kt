@@ -10,7 +10,7 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
+import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokException
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -23,7 +23,7 @@ class VarDokMigrationController {
     lateinit var varDefService: VariableDefinitionService
 
     @Inject
-    lateinit var varDokApiService: VarDokApiService
+    lateinit var varDokApiService: VarDokService
 
     /**
      * Create a variable definition from a VarDok variable.

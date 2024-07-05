@@ -7,10 +7,10 @@ import no.ssb.metadata.vardef.models.InputVariableDefinition
 import org.slf4j.LoggerFactory
 
 @Singleton
-open class VarDokApiService(
+open class VarDokService(
     private val varDokClient: VarDokClient,
 ) {
-    private val logger = LoggerFactory.getLogger(VarDokApiService::class.java)
+    private val logger = LoggerFactory.getLogger(VarDokService::class.java)
 
     open fun getVarDokItem(id: String): VardokResponse? {
         return try {

@@ -1,3 +1,5 @@
+package no.ssb.metadata.vardef.utils
+
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.*
 import org.bson.types.ObjectId

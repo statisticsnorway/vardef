@@ -29,7 +29,7 @@ class VarDokMigrationTest {
     @Test
     fun `get vardok by id and language if other languages`() {
         val res = varDokApiService.getVarDokItem("901")
-        var englishRes: FIMD? = null
+        var englishRes: VardokResponse? = null
         if (res?.otherLanguages != "") {
             englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("901", it.otherLanguages) }
         }
@@ -77,7 +77,7 @@ class VarDokMigrationTest {
     fun `set link to vardok`(vardokId: String) {
         val result = varDokApiService.getVarDokItem(vardokId)
         if (result != null) {
-            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
+            val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val renderVarDok = toVarDefFromVarDok(mapResult)
             assertThat(renderVarDok).isNotNull
             assertThat(
@@ -118,7 +118,7 @@ class VarDokMigrationTest {
     fun `vardok item has not short name`() {
         val result = varDokApiService.getVarDokItem("2450")
         if (result != null) {
-            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
+            val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: VardokException =
                 org.junit.jupiter.api.Assertions.assertThrows(VardokException::class.java) {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
@@ -135,7 +135,7 @@ class VarDokMigrationTest {
     fun `vardok item has not valid dates`() {
         val result = varDokApiService.getVarDokItem("100")
         if (result != null) {
-            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
+            val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: MissingValidDatesException =
                 org.junit.jupiter.api.Assertions.assertThrows(MissingValidDatesException::class.java) {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)

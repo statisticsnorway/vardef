@@ -13,7 +13,7 @@ interface VarDokClient {
     @Produces(MediaType.APPLICATION_XML)
     @Get("{id}")
     @SingleResult
-    fun fetchVarDokById(id: String): FIMD
+    fun fetchVarDokById(id: String): VardokResponse
 
     @Produces(MediaType.APPLICATION_XML)
     @Get("{id}/{language}")
@@ -21,5 +21,5 @@ interface VarDokClient {
     fun fetchVarDokByIdAndLanguage(
         id: String,
         language: String,
-    ): FIMD
+    ): VardokResponse
 }

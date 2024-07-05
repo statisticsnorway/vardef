@@ -8,7 +8,7 @@ import java.net.URI
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-fun mapVardokContactDivisionToOwner(vardokItem: FIMD): Owner {
+fun mapVardokContactDivisionToOwner(vardokItem: VardokResponse): Owner {
     val owner = vardokItem.common?.contactDivision
     val mappedOwner = Owner(owner!!.codeValue, owner.codeText)
     return mappedOwner
@@ -22,7 +22,7 @@ private fun sliceValidDate(
     return dateString
 }
 
-fun mapValidDateFrom(vardokItem: FIMD): CharSequence? {
+fun mapValidDateFrom(vardokItem: VardokResponse): CharSequence? {
     val range = 0..9
     val validDate = vardokItem.dc?.valid
     if (validDate != null) {
@@ -33,7 +33,7 @@ fun mapValidDateFrom(vardokItem: FIMD): CharSequence? {
     return null
 }
 
-fun mapValidDateUntil(vardokItem: FIMD): CharSequence? {
+fun mapValidDateUntil(vardokItem: VardokResponse): CharSequence? {
     val range = 13..22
     val validDate = vardokItem.dc?.valid
     if (validDate != null) {
@@ -44,13 +44,13 @@ fun mapValidDateUntil(vardokItem: FIMD): CharSequence? {
     return null
 }
 
-fun mapVardokIdentifier(vardokItem: FIMD): String {
+fun mapVardokIdentifier(vardokItem: VardokResponse): String {
     val vardokId = vardokItem.id
     val splitId = vardokId.split(":")
     return splitId[splitId.size - 1]
 }
 
-fun toVarDefFromVarDok(vardokItems: MutableMap<String, FIMD>): InputVariableDefinition {
+fun toVarDefFromVarDok(vardokItems: MutableMap<String, VardokResponse>): InputVariableDefinition {
     val vardokItem = vardokItems["nb"]!!
     val vardokId = mapVardokIdentifier(vardokItem)
 

@@ -101,7 +101,7 @@ data class Variable(
 @Serdeable
 @Introspected
 @JacksonXmlRootElement(localName = "fimd")
-data class FIMD(
+data class VardokResponse(
     val createdOn: String,
     val defaultValidFrom: String,
     val defaultValidTo: String? = null,

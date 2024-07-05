@@ -12,7 +12,7 @@ open class VarDokApiService(
 ) {
     private val logger = LoggerFactory.getLogger(VarDokApiService::class.java)
 
-    open fun getVarDokItem(id: String): FIMD? {
+    open fun getVarDokItem(id: String): VardokResponse? {
         return try {
             logger.info("Retrieving definition by id from vardok")
             varDokClient.fetchVarDokById(id)
@@ -25,7 +25,7 @@ open class VarDokApiService(
     open fun getVardokByIdAndLanguage(
         id: String,
         language: String,
-    ): FIMD? {
+    ): VardokResponse? {
         return try {
             logger.info("Retrieving $id by $language")
             varDokClient.fetchVarDokByIdAndLanguage(id, language)
@@ -35,9 +35,9 @@ open class VarDokApiService(
         }
     }
 
-    fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, FIMD> {
+    fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVarDokItem(id)
-        val responseMap = mutableMapOf<String, FIMD>()
+        val responseMap = mutableMapOf<String, VardokResponse>()
         result?.let {
             responseMap["nb"] = it
         }
@@ -49,7 +49,7 @@ open class VarDokApiService(
         return responseMap
     }
 
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD>): InputVariableDefinition {
+    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): InputVariableDefinition {
         checkVardokForMissingElements(varDokItems)
         val varDefInput = toVarDefFromVarDok(varDokItems)
         return varDefInput

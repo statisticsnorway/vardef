@@ -6,8 +6,7 @@ val validFromDateAndEnInOtherLanguages1466 =
     xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2005-12-12" defaultValidFrom="2003-11-18" 
     defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1466" lastChangedDate="2009-05-27" otherLanguages="en" 
-    type="ConceptVariable" xml:lang="nb" x
-    si:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
         <DC>
             <dc:contributor>Seksjon for statistiske populasjoner</dc:contributor>
             <dc:creator>Liv Reidun Sletmoen</dc:creator>
@@ -126,7 +125,7 @@ val vardokResponseOk =
                 sensitivity = "Ordinï¿½r",
                 externalDocument = null,
                 dataElementName = "wies",
-                shortNameWeb = null,
+                //shortNameWeb = null,
                 calculation = null,
                 internalDocument = null,
                 externalComment = null,

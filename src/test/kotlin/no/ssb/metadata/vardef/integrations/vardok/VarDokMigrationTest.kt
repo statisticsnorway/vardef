@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
@@ -162,8 +163,9 @@ class VarDokMigrationTest {
 
     @Test
     fun `test mapper`() {
-        val mapper = ObjectMapper().registerKotlinModule()
-        val value = mapper.writeValueAsString(validFromDateAndEnInOtherLanguages1466)
-        println(value)
+        val xmlMapper = XmlMapper().registerKotlinModule()
+        val varDokResponse: VardokResponse = xmlMapper.readValue(validFromDateAndEnInOtherLanguages1466, VardokResponse::class.java)
+        println(varDokResponse)
+        assertThat(varDokResponse.xmlLang).isEqualTo("nb")
     }
 }

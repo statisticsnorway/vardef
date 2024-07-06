@@ -1,5 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
 import io.mockk.clearAllMocks
@@ -8,6 +10,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -21,7 +24,8 @@ class VardokServiceTest {
     fun setUp() {
         varDokClient = mockk<VarDokClient>(relaxed = true)
         varDokService = VarDokService(varDokClient)
-        vardokResponse = vardokResponseOk
+        val xmlMapper = XmlMapper().registerKotlinModule()
+        vardokResponse = xmlMapper.readValue(validFromDateAndEnInOtherLanguages1466, VardokResponse::class.java)
     }
 
     @AfterEach
@@ -32,10 +36,10 @@ class VardokServiceTest {
     @Test
     fun `get vardok with valid and data element name returns 200 OK`() {
         every {
-            varDokClient.fetchVarDokById("2")
+            varDokClient.fetchVarDokById("1466")
         } returns
             vardokResponse
-        val result = varDokService.getVarDokItem("2")
+        val result = varDokService.getVarDokItem("1466")
         assertThat(result).isEqualTo(vardokResponse)
     }
 
@@ -45,7 +49,10 @@ class VardokServiceTest {
             varDokClient.fetchVarDokById("1")
         } throws
             HttpStatusException(HttpStatus.NOT_FOUND, "Id not found")
-        // val result = varDokService.getVarDokItem("1")
+        assertThrows(HttpStatusException::class.java) {
+            varDokService.getVarDokItem("1")
+        }
+        //val result = varDokService.getVarDokItem("1")
         // assertThat(result).isNull()
     }
 }

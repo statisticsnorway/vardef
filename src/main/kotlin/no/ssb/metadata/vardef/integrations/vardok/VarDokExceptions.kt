@@ -6,7 +6,7 @@ class MissingDataElementNameException : VardokException("Vardok is missing short
 
 class MissingValidDatesException : VardokException("Vardok is missing valid dates and can not be saved")
 
-fun checkVardokForMissingElements(varDokItems: MutableMap<String, FIMD>) {
+fun checkVardokForMissingElements(varDokItems: MutableMap<String, FIMD?>) {
     if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()) {
         throw MissingDataElementNameException()
     }

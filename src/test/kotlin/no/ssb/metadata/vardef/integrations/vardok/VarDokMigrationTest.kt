@@ -1,10 +1,15 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.context.annotation.Requires
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.restassured.http.ContentType
+import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -87,12 +92,14 @@ class VarDokMigrationTest {
     fun `set link to vardok`(vardokId: String) {
         val result = varDokApiService.getVarDokItem(vardokId)
         if (result != null) {
-            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
+            val mapResult: MutableMap<String, FIMD?> = mutableMapOf("nb" to result)
             val renderVarDok = toVarDefFromVarDok(mapResult)
             Assertions.assertThat(renderVarDok).isNotNull
-            Assertions.assertThat(
-                renderVarDok.externalReferenceUri.toString(),
-            ).isEqualTo("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId")
+            if (renderVarDok != null) {
+                Assertions.assertThat(
+                    renderVarDok.externalReferenceUri.toString(),
+                ).isEqualTo("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId")
+            }
         }
     }
 
@@ -128,7 +135,7 @@ class VarDokMigrationTest {
     fun `vardok item has not short name`() {
         val result = varDokApiService.getVarDokItem("2450")
         if (result != null) {
-            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
+            val mapResult: MutableMap<String, FIMD?> = mutableMapOf("nb" to result)
             val exception: VardokException =
                 org.junit.jupiter.api.Assertions.assertThrows(VardokException::class.java) {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
@@ -145,7 +152,7 @@ class VarDokMigrationTest {
     fun `vardok item has not valid dates`() {
         val result = varDokApiService.getVarDokItem("100")
         if (result != null) {
-            val mapResult: MutableMap<String, FIMD> = mutableMapOf("nb" to result)
+            val mapResult: MutableMap<String, FIMD?> = mutableMapOf("nb" to result)
             val exception: MissingValidDatesException =
                 org.junit.jupiter.api.Assertions.assertThrows(MissingValidDatesException::class.java) {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
@@ -157,4 +164,54 @@ class VarDokMigrationTest {
             Assertions.assertThat(expectedMessage).isEqualTo(actualMessage)
         }
     }
+
+
+
+
+
+    @Test
+    fun `get list of vardok results by id and return response`(spec: RequestSpecification) {
+        // val idList = listOf("190")
+
+        // 190 nb en nn, 2 nb en, 100 har shortname
+        val id = "100"
+
+        val result = varDokApiService.getVarDokItem(id)
+        val responseMap = mutableMapOf("nb" to result)
+
+        result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
+            responseMap[l] = varDokApiService.getVardokByIdAndLanguage(id, l)
+        }
+
+
+        val l = result?.let { toVarDefFromVarDok(responseMap) }
+        //TODO Consider if we should skip if there is no date
+        if (l?.validFrom == null) {
+            l?.validFrom = "2020-01-01"
+        }
+
+        val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+
+        val jsonFromVardoc = mapper.writeValueAsString(l)
+
+        println(jsonFromVardoc)
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonFromVardoc)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+
+
+
+        assertThat(result).isNotNull()
+//        result.forEach { assertThat(it?.id).isNotNull() }
+//        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
+//        assertThat(result).size().isEqualTo(idList.size)
+    }
+
+
+
 }

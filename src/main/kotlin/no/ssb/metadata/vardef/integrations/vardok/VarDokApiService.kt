@@ -14,7 +14,7 @@ open class VarDokApiService(
 ) {
     private val logger = LoggerFactory.getLogger(VarDokApiService::class.java)
 
-    open fun getVarDokItem(id: String): FIMD? {
+    open fun getVarDokItem(id: String): VardokResponse? {
         return try {
             logger.info("Retrieving definition by id from vardok")
             println("Id: $id")
@@ -25,21 +25,10 @@ open class VarDokApiService(
         }
     }
 
-    open fun getListOfVardokById(vardokIdList: List<String>): List<FIMD?> {
-        return try {
-            logger.info("Retrieving multiple definitions from vardok")
-            val vardokList = vardokIdList.map { getVarDokItem(it) }
-            vardokList
-        } catch (e: Exception) {
-            logger.warn("Error while fetching list of vardok", e)
-            emptyList()
-        }
-    }
-
     open fun getVardokByIdAndLanguage(
         id: String,
         language: String,
-    ): FIMD? {
+    ): VardokResponse? {
         return try {
             logger.info("Retrieving $id by $language")
             varDokClient.fetchVarDokByIdAndLanguage(id, language)
@@ -49,9 +38,10 @@ open class VarDokApiService(
         }
     }
 
-    fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, FIMD?> {
+
+    fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVarDokItem(id)
-        val responseMap = mutableMapOf<String, FIMD?>()
+        val responseMap = mutableMapOf<String, VardokResponse>()
         result?.let {
             responseMap["nb"] = it
         }
@@ -63,7 +53,7 @@ open class VarDokApiService(
         return responseMap
     }
 
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, FIMD?>): String {
+    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)
         val varDefInput = toVarDefFromVarDok(varDokItems)
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)

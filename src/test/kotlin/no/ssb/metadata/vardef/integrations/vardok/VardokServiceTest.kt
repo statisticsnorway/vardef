@@ -52,7 +52,7 @@ class VardokServiceTest {
         assertThrows(HttpStatusException::class.java) {
             varDokService.getVarDokItem("1")
         }
-        //val result = varDokService.getVarDokItem("1")
+        // val result = varDokService.getVarDokItem("1")
         // assertThat(result).isNull()
     }
 }

@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.exceptions.HttpStatusException

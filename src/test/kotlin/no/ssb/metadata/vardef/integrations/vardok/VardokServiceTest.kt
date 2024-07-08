@@ -19,16 +19,24 @@ import org.junit.jupiter.api.Test
 class VardokServiceTest {
     private lateinit var varDokClient: VarDokClient
     private lateinit var varDokService: VarDokService
-    private lateinit var vardokResponse: VardokResponse
+    private lateinit var vardokResponse1: VardokResponse
     private lateinit var vardokResponse2: VardokResponse
+    private lateinit var vardokResponse3: VardokResponse
+    private lateinit var vardokResponse4: VardokResponse
+    private lateinit var vardokResponse5: VardokResponse
+    private lateinit var vardokResponse6: VardokResponse
 
     @BeforeEach
     fun setUp() {
         varDokClient = mockk<VarDokClient>(relaxed = true)
         varDokService = VarDokService(varDokClient)
         val xmlMapper = XmlMapper().registerKotlinModule()
-        vardokResponse = xmlMapper.readValue(validFromDateAndEnInOtherLanguages1466, VardokResponse::class.java)
-        vardokResponse2 = xmlMapper.readValue(validUntilDate49)
+        vardokResponse1 = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
+        vardokResponse2 = xmlMapper.readValue(vardokId49validUntilDate)
+        vardokResponse3 = xmlMapper.readValue(vardokId476validFromDateAndNNInOtherLanguages)
+        vardokResponse4 = xmlMapper.readValue(vardokId120validUntilDateAndOtherLanguages)
+        vardokResponse5 = xmlMapper.readValue(vardokId100NoValidDates)
+        vardokResponse6 = xmlMapper.readValue(vardokId123NoDataElementName)
     }
 
     @AfterEach
@@ -41,9 +49,9 @@ class VardokServiceTest {
         every {
             varDokClient.fetchVarDokById("1466")
         } returns
-            vardokResponse
+            vardokResponse1
         val result = varDokService.getVarDokItem("1466")
-        assertThat(result).isEqualTo(vardokResponse)
+        assertThat(result).isEqualTo(vardokResponse1)
     }
 
     @Test

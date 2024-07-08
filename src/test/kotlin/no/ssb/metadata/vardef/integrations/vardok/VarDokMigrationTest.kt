@@ -163,7 +163,7 @@ class VarDokMigrationTest {
     @Test
     fun `test mapper`() {
         val xmlMapper = XmlMapper().registerKotlinModule()
-        val varDokResponse: VardokResponse = xmlMapper.readValue(validFromDateAndEnInOtherLanguages1466, VardokResponse::class.java)
+        val varDokResponse: VardokResponse = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
         println(varDokResponse)
         assertThat(varDokResponse.xmlLang).isEqualTo("nb")
     }

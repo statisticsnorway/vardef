@@ -97,12 +97,12 @@ class VardokServiceTest {
         every {
             varDokClient.fetchVarDokById("1")
         } throws
-            HttpStatusException(HttpStatus.NOT_FOUND, "Id not found")
+            HttpStatusException(HttpStatus.NOT_FOUND, "Id 1 not found")
         val exception: Exception =
             assertThrows(HttpStatusException::class.java) {
                 varDokService.getVarDokItem("1")
             }
-        val expectedMessage = "Id not found"
+        val expectedMessage = "Id 1 not found"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)

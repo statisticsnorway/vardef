@@ -71,15 +71,6 @@ data class SubjectArea(
 
 @Serdeable
 @Introspected
-data class ShortNameWeb(
-    @field:JacksonXmlProperty(localName = "CodeValue")
-    val codeValue: String? = null,
-    @field:JacksonXmlProperty(localName = "CodeText")
-    val codeText: String? = null,
-)
-
-@Serdeable
-@Introspected
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Variable(
     @field:JacksonXmlProperty(localName = "InternalNotes")
@@ -98,9 +89,6 @@ data class Variable(
     val externalDocument: String? = null,
     @field:JacksonXmlProperty(localName = "DataElementName")
     val dataElementName: String? = null,
-    // @field:JacksonXmlProperty(localName = "ShortNameWeb")
-    // @JsonIgnore(true)
-    // val shortNameWeb: ShortNameWeb? = null,
     val calculation: String? = null,
     val internalDocument: String? = null,
     val externalComment: String? = null,

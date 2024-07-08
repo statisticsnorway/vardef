@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test
 class VardokServiceTest {
     private lateinit var varDokClient: VarDokClient
     private lateinit var varDokService: VarDokService
+    private lateinit var varDokMockkService: VarDokService
     private lateinit var vardokResponse1: VardokResponse
     private lateinit var vardokResponse2: VardokResponse
     private lateinit var vardokResponse3: VardokResponse
@@ -30,6 +31,7 @@ class VardokServiceTest {
     fun setUp() {
         varDokClient = mockk<VarDokClient>(relaxed = true)
         varDokService = VarDokService(varDokClient)
+        varDokMockkService = mockk<VarDokService>(relaxed = true)
         val xmlMapper = XmlMapper().registerKotlinModule()
         vardokResponse1 = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
         vardokResponse2 = xmlMapper.readValue(vardokId49validUntilDate)
@@ -45,7 +47,7 @@ class VardokServiceTest {
     }
 
     @Test
-    fun `get vardok with valid and data element name returns 200 OK`() {
+    fun `get vardok with valid and data element name`() {
         every {
             varDokClient.fetchVarDokById("1466")
         } returns
@@ -71,8 +73,49 @@ class VardokServiceTest {
             varDokClient.fetchVarDokById("1")
         } throws
             HttpStatusException(HttpStatus.NOT_FOUND, "Id not found")
-        assertThrows(HttpStatusException::class.java) {
-            varDokService.getVarDokItem("1")
-        }
+        val exception: Exception =
+            assertThrows(HttpStatusException::class.java) {
+                varDokService.getVarDokItem("1")
+            }
+        val expectedMessage = "Id not found"
+        val actualMessage = exception.message
+
+        assertThat(expectedMessage).isEqualTo(actualMessage)
+    }
+
+    @Test
+    fun `get vardok with missing valid`() {
+        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse5)
+        every {
+            varDokMockkService.createVarDefInputFromVarDokItems(mapVardokResponse)
+        } throws
+            MissingValidDatesException()
+
+        val exception: VardokException =
+            assertThrows(MissingValidDatesException::class.java) {
+                varDokService.createVarDefInputFromVarDokItems(mapVardokResponse)
+            }
+        val expectedMessage = "Vardok is missing valid dates and can not be saved"
+        val actualMessage = exception.message
+
+        assertThat(expectedMessage).isEqualTo(actualMessage)
+    }
+
+    @Test
+    fun `get vardok with missing data element name`() {
+        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse6)
+        every {
+            varDokMockkService.createVarDefInputFromVarDokItems(mapVardokResponse)
+        } throws
+            MissingDataElementNameException()
+
+        val exception: VardokException =
+            assertThrows(MissingDataElementNameException::class.java) {
+                varDokService.createVarDefInputFromVarDokItems(mapVardokResponse)
+            }
+        val expectedMessage = "Vardok is missing short name and can not be saved"
+        val actualMessage = exception.message
+
+        assertThat(expectedMessage).isEqualTo(actualMessage)
     }
 }

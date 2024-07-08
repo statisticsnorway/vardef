@@ -8,19 +8,18 @@ import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton
-open class VarDokApiService(
+open class VarDokService(
     private val varDokClient: VarDokClient,
 ) {
-    private val logger = LoggerFactory.getLogger(VarDokApiService::class.java)
+    private val logger = LoggerFactory.getLogger(VarDokService::class.java)
 
     open fun getVarDokItem(id: String): VardokResponse? {
         return try {
-            logger.info("Retrieving definition by id from vardok")
-            println("Id: $id")
+            logger.info("Retrieving definition by $id from vardok")
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
-            logger.warn("Id is not valid")
-            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id not found"))
+            logger.warn("$id is not valid")
+            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id $id not found"))
         }
     }
 
@@ -33,7 +32,7 @@ open class VarDokApiService(
             varDokClient.fetchVarDokByIdAndLanguage(id, language)
         } catch (e: Exception) {
             logger.warn("Error while fetching vardok by id and language", e)
-            null
+            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
         }
     }
 

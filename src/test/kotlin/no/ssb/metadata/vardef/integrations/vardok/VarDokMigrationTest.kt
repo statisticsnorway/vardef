@@ -1,10 +1,14 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Requires
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -13,7 +17,7 @@ import org.junit.jupiter.params.provider.ValueSource
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
-    lateinit var varDokApiService: VarDokApiService
+    lateinit var varDokApiService: VarDokService
 
     @Test
     fun `get vardok by id`() {
@@ -104,11 +108,11 @@ class VarDokMigrationTest {
     @Test
     fun `vardok id not found`() {
         val exception: Exception =
-            org.junit.jupiter.api.Assertions.assertThrows(HttpStatusException::class.java) {
+            assertThrows(HttpStatusException::class.java) {
                 varDokApiService.getVarDokItem("1")
             }
         assertThat(exception).isInstanceOf(HttpStatusException::class.java)
-        val expectedMessage = "Id not found"
+        val expectedMessage = "Id 1 not found"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
@@ -120,7 +124,7 @@ class VarDokMigrationTest {
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: VardokException =
-                org.junit.jupiter.api.Assertions.assertThrows(VardokException::class.java) {
+                assertThrows(VardokException::class.java) {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(VardokException::class.java)
@@ -137,7 +141,7 @@ class VarDokMigrationTest {
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: MissingValidDatesException =
-                org.junit.jupiter.api.Assertions.assertThrows(MissingValidDatesException::class.java) {
+                assertThrows(MissingValidDatesException::class.java) {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(MissingValidDatesException::class.java)
@@ -146,5 +150,13 @@ class VarDokMigrationTest {
 
             assertThat(expectedMessage).isEqualTo(actualMessage)
         }
+    }
+
+    @Test
+    fun `test mapper`() {
+        val xmlMapper = XmlMapper().registerKotlinModule()
+        val varDokResponse: VardokResponse = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
+        println(varDokResponse)
+        assertThat(varDokResponse.xmlLang).isEqualTo("nb")
     }
 }

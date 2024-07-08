@@ -27,6 +27,7 @@ dependencies {
     ksp(libs.micronaut.openapi)
     ksp(libs.micronaut.serde.processor)
     ksp(libs.micronaut.validation.processor)
+    implementation(libs.jackson.module.kotlin)
     implementation(libs.micronaut.mongo.sync)
     implementation(libs.micronaut.cache.caffeine)
     implementation(libs.micronaut.data.mongodb)

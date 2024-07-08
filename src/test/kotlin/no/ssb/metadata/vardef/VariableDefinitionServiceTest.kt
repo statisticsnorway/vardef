@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef
 
-import RENDERED_VARIABLE_DEFINITION
-import SAVED_VARIABLE_DEFINITION
 import com.mongodb.assertions.Assertions.assertTrue
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -13,6 +11,8 @@ import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.services.VariableDefinitionService
+import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach

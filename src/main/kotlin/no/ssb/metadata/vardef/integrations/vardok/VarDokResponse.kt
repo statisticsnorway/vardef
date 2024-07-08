@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import io.micronaut.core.annotation.Introspected
@@ -29,8 +30,10 @@ data class DC(
 @Serdeable
 @Introspected
 data class ContactPerson(
-    val codeValue: String,
-    val codeText: String,
+    @field:JacksonXmlProperty(localName = "CodeValue")
+    val codeValue: String?,
+    @field:JacksonXmlProperty(localName = "CodeText")
+    val codeText: String?,
 )
 
 @Serdeable
@@ -45,13 +48,15 @@ data class ContactDivision(
 @Serdeable
 @Introspected
 data class Common(
-    @JacksonXmlProperty(localName = "Title", namespace = "xml:lang")
+    @field:JacksonXmlProperty(localName = "Title", namespace = "xml:lang")
     val title: String,
     @field:JacksonXmlProperty(localName = "Description")
     val description: String?,
+    @field:JacksonXmlProperty(localName = "ContactPerson")
     val contactPerson: ContactPerson?,
     @field:JacksonXmlProperty(localName = "ContactDivision")
     val contactDivision: ContactDivision,
+    @field:JacksonXmlProperty(localName = "Notes")
     val notes: String? = null,
 )
 
@@ -66,15 +71,7 @@ data class SubjectArea(
 
 @Serdeable
 @Introspected
-data class ShortNameWeb(
-    @field:JacksonXmlProperty(localName = "CodeValue")
-    val codeValue: String? = null,
-    @field:JacksonXmlProperty(localName = "CodeText")
-    val codeText: String? = null,
-)
-
-@Serdeable
-@Introspected
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Variable(
     @field:JacksonXmlProperty(localName = "InternalNotes")
     val internalNotes: String? = null,
@@ -88,10 +85,10 @@ data class Variable(
     val internalSource: String? = null,
     @field:JacksonXmlProperty(localName = "Sensitivity")
     val sensitivity: String,
+    @field:JacksonXmlProperty(localName = "ExternalDocument")
     val externalDocument: String? = null,
     @field:JacksonXmlProperty(localName = "DataElementName")
     val dataElementName: String? = null,
-    val shortNameWeb: ShortNameWeb? = null,
     val calculation: String? = null,
     val internalDocument: String? = null,
     val externalComment: String? = null,
@@ -100,7 +97,8 @@ data class Variable(
 
 @Serdeable
 @Introspected
-@JacksonXmlRootElement(localName = "fimd")
+@JacksonXmlRootElement(localName = "FIMD")
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class VardokResponse(
     val createdOn: String,
     val defaultValidFrom: String,

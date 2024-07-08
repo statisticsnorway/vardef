@@ -19,10 +19,7 @@ import no.ssb.metadata.vardef.models.InputVariableDefinition
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
     @Inject
-    lateinit var varDokApiService: VarDokApiService
-
-//    @Inject
-//    lateinit var varDefService: varDefService
+    lateinit var varDokApiService: VarDokService
 
     @Client("/")
     @Inject
@@ -42,7 +39,6 @@ class VarDokMigrationController {
                 varDokApiService.createVarDefInputFromVarDokItems(
                     varDokApiService.fetchMultipleVarDokItemsByLanguage(id),
                 )
-
             return httpClient.toBlocking().retrieve(
                 HttpRequest.POST("/variable-definitions", varDefInput),
                 InputVariableDefinition::class.java,
@@ -52,5 +48,3 @@ class VarDokMigrationController {
         }
     }
 }
-
-// return vardefApiService.postNewVariableDefinition(varDefInput)

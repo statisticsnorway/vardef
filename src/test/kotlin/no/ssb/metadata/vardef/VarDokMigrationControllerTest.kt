@@ -14,7 +14,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body("")
             .`when`()
-            .post("/variable-definitions/vardok-migration/2")
+            .post("/vardok-migration/2")
             .then()
             .statusCode(201)
     }
@@ -26,7 +26,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body("")
             .`when`()
-            .post("/variable-definitions/vardok-migration/1")
+            .post("/vardok-migration/1")
             .then()
             .statusCode(404)
     }
@@ -38,7 +38,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body("")
             .`when`()
-            .post("/variable-definitions/vardok-migration/100")
+            .post("/vardok-migration/100")
             .then()
             .statusCode(400)
             .body(
@@ -56,7 +56,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body("")
             .`when`()
-            .post("/variable-definitions/vardok-migration/123")
+            .post("/vardok-migration/123")
             .then()
             .statusCode(400)
             .body(

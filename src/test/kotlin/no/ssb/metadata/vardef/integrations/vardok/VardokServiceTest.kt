@@ -118,4 +118,10 @@ class VardokServiceTest {
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
     }
+
+    @Test
+    fun `parse valid date from`() {
+        val dateFrom = mapValidDateFrom(vardokResponse3)
+        assertThat(dateFrom).isNotNull
+    }
 }

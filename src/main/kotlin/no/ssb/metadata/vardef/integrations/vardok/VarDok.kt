@@ -22,20 +22,22 @@ private fun sliceValidDate(
     return dateString
 }
 
-fun mapValidDateFrom(vardokItem: VardokResponse): CharSequence? {
+private val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+
+fun mapValidDateFrom(vardokItem: VardokResponse): LocalDate {
     val range = 0..9
     val validDate = vardokItem.dc?.valid
     if (!validDate.isNullOrEmpty()) {
-        return sliceValidDate(range, validDate)
+        return LocalDate.parse(sliceValidDate(range, validDate), formatter)
     }
-    return null
+    throw MissingValidDatesException()
 }
 
-fun mapValidDateUntil(vardokItem: VardokResponse): CharSequence? {
+fun mapValidDateUntil(vardokItem: VardokResponse): LocalDate? {
     val range = 13..22
     val validDate = vardokItem.dc?.valid
     if (validDate != null && validDate.length >= 20) {
-        return sliceValidDate(range, validDate)
+        return LocalDate.parse(sliceValidDate(range, validDate), formatter)
     }
     return null
 }
@@ -50,37 +52,37 @@ fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): InputVar
     val vardokItemNb = vardokItem["nb"]!!
     val vardokId = mapVardokIdentifier(vardokItemNb)
 
-    val formatter = DateTimeFormatter.ISO_LOCAL_DATE
-
     val vardefInput =
-        InputVariableDefinition(
-            name =
-                LanguageStringType(
-                    vardokItemNb.common?.title,
-                    vardokItem["nn"]?.common?.title,
-                    vardokItem["en"]?.common?.title,
-                ),
-            shortName = vardokItemNb.variable?.dataElementName!!,
-            definition =
-                LanguageStringType(
-                    vardokItemNb.common?.description,
-                    vardokItem["nn"]?.common?.description,
-                    vardokItem["en"]?.common?.description,
-                ),
-            validFrom = mapValidDateFrom(vardokItemNb)?.let { LocalDate.parse(it, formatter) }!!,
-            validUntil = mapValidDateUntil(vardokItemNb)?.let { LocalDate.parse(it, formatter) },
-            unitTypes = listOf(unitTypeConverter[vardokItemNb.variable.statisticalUnit]!!),
-            externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId").toURL(),
-            variableStatus = VariableStatus.DRAFT,
-            classificationReference = null,
-            containsSensitivePersonalInformation = false,
-            contact = null,
-            id = null,
-            measurementType = null,
-            relatedVariableDefinitionUris = emptyList(),
-            subjectFields = emptyList(),
-            // TODO Consider if we want to use owner by patching the variable definition
-            // owner = mapVardokContactDivisionToOwner(vardokItem),
-        )
-    return vardefInput
+        mapValidDateFrom(vardokItemNb)?.let {
+            InputVariableDefinition(
+                name =
+                    LanguageStringType(
+                        vardokItemNb.common?.title,
+                        vardokItem["nn"]?.common?.title,
+                        vardokItem["en"]?.common?.title,
+                    ),
+                shortName = vardokItemNb.variable?.dataElementName!!,
+                definition =
+                    LanguageStringType(
+                        vardokItemNb.common?.description,
+                        vardokItem["nn"]?.common?.description,
+                        vardokItem["en"]?.common?.description,
+                    ),
+                validFrom = mapValidDateFrom(vardokItemNb),
+                validUntil = mapValidDateUntil(vardokItemNb),
+                unitTypes = listOf(unitTypeConverter[vardokItemNb.variable.statisticalUnit]!!),
+                externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId").toURL(),
+                variableStatus = VariableStatus.DRAFT,
+                classificationReference = null,
+                containsSensitivePersonalInformation = false,
+                contact = null,
+                id = null,
+                measurementType = null,
+                relatedVariableDefinitionUris = emptyList(),
+                subjectFields = emptyList(),
+                // TODO Consider if we want to use owner by patching the variable definition
+                // owner = mapVardokContactDivisionToOwner(vardokItem),
+            )
+        }
+    return vardefInput!!
 }

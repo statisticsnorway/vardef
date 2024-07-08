@@ -72,8 +72,6 @@ class VarDokMigrationTest {
     fun `map vardok missing valid date`() {
         val res = varDokApiService.getVarDokItem("100")
         assertThat(res).isNotNull()
-        val mappedFromDate = res?.let { mapValidDateFrom(it) }
-        assertThat(mappedFromDate).isNull()
     }
 
     @Test

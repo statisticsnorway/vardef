@@ -57,7 +57,6 @@ open class VarDokApiService(
         checkVardokForMissingElements(varDokItems)
         val varDefInput = toVarDefFromVarDok(varDokItems)
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-        val jsonFromVardoc = mapper.writeValueAsString(varDefInput)
-        return jsonFromVardoc
+        return mapper.writeValueAsString(varDefInput)
     }
 }

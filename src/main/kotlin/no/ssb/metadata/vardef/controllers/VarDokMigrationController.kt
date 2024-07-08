@@ -62,7 +62,7 @@ class VarDokMigrationController {
                 validFrom = "2024-07-04",
                 validUntil = null,
                 unitTypes = listOf("01"),
-                externalReferenceUri = URI("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/2").toURL(),
+                externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/2",
                 classificationReference = null,
                 containsSensitivePersonalInformation = false,
                 contact = null,

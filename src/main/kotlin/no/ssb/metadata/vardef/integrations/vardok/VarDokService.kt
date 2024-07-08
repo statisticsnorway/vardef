@@ -30,8 +30,8 @@ open class VarDokService(
             logger.info("Retrieving $id by $language")
             varDokClient.fetchVarDokByIdAndLanguage(id, language)
         } catch (e: Exception) {
-            logger.warn("Error while fetching vardok by id and language", e)
-            null
+            logger.warn("Id is not valid", e)
+            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id not found"))
         }
     }
 

@@ -68,6 +68,13 @@ class VardokServiceTest {
     }
 
     @Test
+    fun `get vardok by valid id and not valid nn language returns nb language`() {
+        val resultNNLanguage = varDokService.getVardokByIdAndLanguage("1466", "nn")
+        val resultNBLanguage = varDokService.getVardokByIdAndLanguage("1466", "nb")
+        assertThat(resultNNLanguage?.common?.title).isEqualTo(resultNBLanguage?.common?.title)
+    }
+
+    @Test
     fun `fetch multiple languages`() {
         val result = varDokService.fetchMultipleVarDokItemsByLanguage("476")
         assertThat(result).isInstanceOf(MutableMap::class.java)

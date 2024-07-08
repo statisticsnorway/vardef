@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef.controllers
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
@@ -13,13 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.HttpRequest
-import java.net.URI
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import no.ssb.metadata.vardef.integrations.vardok.*
 import no.ssb.metadata.vardef.models.InputVariableDefinition
-import no.ssb.metadata.vardef.models.LanguageStringType
-import no.ssb.metadata.vardef.models.VariableStatus
 
 @Validated
 @Controller("/variable-definitions/vardok-migration/{id}")
@@ -46,42 +39,14 @@ class VarDokMigrationController {
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinitionFromVarDok(id: String): InputVariableDefinition? {
         try {
-            var varDefInput = varDokApiService.createVarDefInputFromVarDokItems(
-                    varDokApiService.fetchMultipleVarDokItemsByLanguage(id),
-                )
-
-            val dateString = "2024-07-04"
-            val formatter = DateTimeFormatter.ISO_LOCAL_DATE
-            val localDate = LocalDate.parse(dateString, formatter)
-
-
-            val varDefInput_2 = VarDokStructure(
-                name = LanguageStringType("navn", null, null),
-                shortName = "sname",
-                definition = LanguageStringType("def", null, null),
-                validFrom = "2024-07-04",
-                validUntil = null,
-                unitTypes = listOf("01"),
-                externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/2",
-                classificationReference = null,
-                containsSensitivePersonalInformation = false,
-                contact = null,
-                measurementType = null,
-                relatedVariableDefinitionUris = emptyList(),
-                subjectFields = emptyList(),
+            val varDefInput = varDokApiService.createVarDefInputFromVarDokItems(
+                    varDokApiService.fetchMultipleVarDokItemsByLanguage(id)
             )
 
-            val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-            val jsonFromVardoc = mapper.writeValueAsString(varDefInput_2)
-
-            println(jsonFromVardoc)
-
-            val response = httpClient.toBlocking().retrieve(
+            return httpClient.toBlocking().retrieve(
                 HttpRequest.POST("/variable-definitions", varDefInput),
                 InputVariableDefinition::class.java
             )
-
-            return response
 
         } catch (e: VardokException) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)

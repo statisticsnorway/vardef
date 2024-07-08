@@ -81,7 +81,7 @@ class VarDokMigrationTest {
             val renderVarDok = toVarDefFromVarDok(mapResult)
             assertThat(renderVarDok).isNotNull
             assertThat(
-                renderVarDok.externalReferenceUri.toString(),
+                renderVarDok.externalReferenceUri,
             ).isEqualTo("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId")
         }
     }

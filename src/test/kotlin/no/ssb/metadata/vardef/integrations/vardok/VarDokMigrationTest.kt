@@ -147,47 +147,4 @@ class VarDokMigrationTest {
             assertThat(expectedMessage).isEqualTo(actualMessage)
         }
     }
-
-    @Test
-    fun `get list of vardok results by id and return response`(spec: RequestSpecification) {
-//        // val idList = listOf("190")
-//
-//        // 190 nb en nn, 2 nb en, 100 har shortname
-//        val id = "100"
-//
-//        val result = varDokApiService.getVarDokItem(id)
-//        val responseMap = mutableMapOf("nb" to result)
-//
-//        result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
-//            responseMap[l] = varDokApiService.getVardokByIdAndLanguage(id, l)
-//        }
-//
-//        val l: VarDokStructure = result?.let { toVarDefFromVarDok(responseMap) }
-//
-//        //TODO Consider if we should skip if there is no date
-//        if (l?.validFrom == null) {
-//            l?.validFrom = "2020-01-01"
-//        }
-//
-//        val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-//
-//        val jsonFromVardoc = mapper.writeValueAsString(l)
-//
-//        println(jsonFromVardoc)
-//
-//        spec
-//            .given()
-//            .contentType(ContentType.JSON)
-//            .body(jsonFromVardoc)
-//            .`when`()
-//            .post("/variable-definitions")
-//            .then()
-//
-//
-//
-//        assertThat(result).isNotNull()
-//        result.forEach { assertThat(it?.id).isNotNull() }
-//        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
-//        assertThat(result).size().isEqualTo(idList.size)
-    }
 }

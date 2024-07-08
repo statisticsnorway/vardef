@@ -1,5 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import no.ssb.metadata.vardef.models.Owner
+
 val unitTypeConverter =
     mapOf(
         "Adresse" to "01",
@@ -29,3 +31,24 @@ val unitTypeConverter =
         "Verdipapir" to "25",
         "Virksomhet" to "26",
     )
+
+fun getValidDates(vardokItem: VardokResponse): Pair<String?, String?> {
+    val dateString = vardokItem.dc?.valid?.split(" - ")
+
+    val firstDate = dateString?.getOrNull(0)?.trim()?.takeIf { it.isNotEmpty() }
+    val secondDate = dateString?.getOrNull(1)?.trim()?.takeIf { it.isNotEmpty() }
+
+    return Pair(firstDate, secondDate)
+}
+
+fun mapVardokIdentifier(vardokItem: VardokResponse): String {
+    val vardokId = vardokItem.id
+    val splitId = vardokId.split(":")
+    return splitId[splitId.size - 1]
+}
+
+fun mapVardokContactDivisionToOwner(vardokItem: VardokResponse): Owner {
+    val owner = vardokItem.common?.contactDivision
+    val mappedOwner = Owner(owner!!.codeValue, owner.codeText)
+    return mappedOwner
+}

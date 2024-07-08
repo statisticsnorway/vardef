@@ -33,7 +33,7 @@ class VardokServiceTest {
         varDokService = VarDokService(varDokClient)
         varDokMockkService = mockk<VarDokService>(relaxed = true)
         val xmlMapper = XmlMapper().registerKotlinModule()
-        vardokResponse1 = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
+        vardokResponse1 = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages)
         vardokResponse2 = xmlMapper.readValue(vardokId49validUntilDate)
         vardokResponse3 = xmlMapper.readValue(vardokId476validFromDateAndNNInOtherLanguages)
         vardokResponse4 = xmlMapper.readValue(vardokId120validUntilDateAndOtherLanguages)
@@ -57,12 +57,30 @@ class VardokServiceTest {
     }
 
     @Test
-    fun `get vardok with valid end date returns 200 OK`() {
+    fun `get vardok by id and language nn language`() {
+        every {
+            varDokClient.fetchVarDokByIdAndLanguage("476", "nn")
+        } returns
+            vardokResponse3
+        val result = varDokService.getVardokByIdAndLanguage("476", "nn")
+        assertThat(result).isEqualTo(vardokResponse3)
+        assertThat(result?.otherLanguages).isEqualTo("nn;en")
+    }
+
+    @Test
+    fun `fetch multiple languages`() {
+        val result = varDokService.fetchMultipleVarDokItemsByLanguage("476")
+        assertThat(result).isInstanceOf(MutableMap::class.java)
+    }
+
+    @Test
+    fun `get vardok with valid end date returns VardokResponse`() {
         every {
             varDokClient.fetchVarDokById("49")
         } returns
             vardokResponse2
         val result = varDokService.getVarDokItem("49")
+        assertThat(result).isInstanceOf(VardokResponse::class.java)
         assertThat(result).isEqualTo(vardokResponse2)
         assertThat(result?.dc?.valid).hasSizeGreaterThan(13)
     }

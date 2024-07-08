@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class VardokTestStaticData {
-
     private lateinit var vardokResponse1: VardokResponse
     private lateinit var vardokResponse2: VardokResponse
     private lateinit var vardokResponse3: VardokResponse
@@ -35,7 +34,6 @@ class VardokTestStaticData {
         clearAllMocks()
     }
 
-
     @Test
     fun `parse valid date from`() {
         val dateFrom = mapValidDateFrom(vardokResponse3)
@@ -49,7 +47,7 @@ class VardokTestStaticData {
     }
 
     @Test
-    fun `parse valid date until`(){
+    fun `parse valid date until`() {
         val dateUntil = mapValidDateUntil(vardokResponse4)
         assertThat(dateUntil).isNotNull
         assertThat(dateUntil).isInstanceOf(LocalDate::class.java)
@@ -59,14 +57,14 @@ class VardokTestStaticData {
     }
 
     @Test
-    fun `parse data element name to short name`(){
+    fun `parse data element name to short name`() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse2)
         val migrateVardokToVardef = toVarDefFromVarDok(mapVardokResponse)
         assertThat(migrateVardokToVardef.shortName).isEqualTo(vardokResponse2.variable?.dataElementName)
     }
 
     @Test
-    fun `parse contact division to owner`(){
+    fun `parse contact division to owner`() {
         val owner = mapVardokContactDivisionToOwner(vardokResponse1)
         assertThat(owner).isNotNull
         assertThat(owner.code).isEqualTo(vardokResponse1.common?.contactDivision?.codeValue)
@@ -74,7 +72,7 @@ class VardokTestStaticData {
     }
 
     @Test
-    fun `parse vardok id`(){
+    fun `parse vardok id`() {
         val id = mapVardokIdentifier(vardokResponse3)
         assertThat(id).isEqualTo("476")
     }

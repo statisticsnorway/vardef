@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
@@ -19,6 +20,7 @@ class VardokServiceTest {
     private lateinit var varDokClient: VarDokClient
     private lateinit var varDokService: VarDokService
     private lateinit var vardokResponse: VardokResponse
+    private lateinit var vardokResponse2: VardokResponse
 
     @BeforeEach
     fun setUp() {
@@ -26,6 +28,7 @@ class VardokServiceTest {
         varDokService = VarDokService(varDokClient)
         val xmlMapper = XmlMapper().registerKotlinModule()
         vardokResponse = xmlMapper.readValue(validFromDateAndEnInOtherLanguages1466, VardokResponse::class.java)
+        vardokResponse2 = xmlMapper.readValue(validUntilDate49)
     }
 
     @AfterEach
@@ -41,6 +44,17 @@ class VardokServiceTest {
             vardokResponse
         val result = varDokService.getVarDokItem("1466")
         assertThat(result).isEqualTo(vardokResponse)
+    }
+
+    @Test
+    fun `get vardok with valid end date returns 200 OK`() {
+        every {
+            varDokClient.fetchVarDokById("49")
+        } returns
+                vardokResponse2
+        val result = varDokService.getVarDokItem("49")
+        assertThat(result).isEqualTo(vardokResponse2)
+        assertThat(result?.dc?.valid).hasSizeGreaterThan(13)
     }
 
     @Test

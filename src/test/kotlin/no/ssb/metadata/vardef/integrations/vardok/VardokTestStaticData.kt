@@ -1,38 +1,10 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.mockk.clearAllMocks
+import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class VardokTestStaticData {
-    private lateinit var vardokResponse1: VardokResponse
-    private lateinit var vardokResponse2: VardokResponse
-    private lateinit var vardokResponse3: VardokResponse
-    private lateinit var vardokResponse4: VardokResponse
-    private lateinit var vardokResponse5: VardokResponse
-    private lateinit var vardokResponse6: VardokResponse
-
-    @BeforeEach
-    fun setUp() {
-        val xmlMapper = XmlMapper().registerKotlinModule()
-        vardokResponse1 = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
-        vardokResponse2 = xmlMapper.readValue(vardokId49validUntilDate)
-        vardokResponse3 = xmlMapper.readValue(vardokId476validFromDateAndNNInOtherLanguages)
-        vardokResponse4 = xmlMapper.readValue(vardokId120validUntilDateAndOtherLanguages)
-        vardokResponse5 = xmlMapper.readValue(vardokId100NoValidDates)
-        vardokResponse6 = xmlMapper.readValue(vardokId123NoDataElementName)
-    }
-
-    @AfterEach
-    internal fun tearDown() {
-        clearAllMocks()
-    }
-
+class VardokTestStaticData : BaseVardokTest() {
     @Test
     fun `parse valid date from`() {
         val validDates = getValidDates(vardokResponse3)

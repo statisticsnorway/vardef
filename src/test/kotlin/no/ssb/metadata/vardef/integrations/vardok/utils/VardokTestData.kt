@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.vardok
+package no.ssb.metadata.vardef.integrations.vardok.utils
 
 val vardokId1466validFromDateAndOtherLanguages =
     """

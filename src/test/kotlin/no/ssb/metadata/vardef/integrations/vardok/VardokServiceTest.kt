@@ -1,14 +1,12 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import no.ssb.metadata.vardef.integrations.vardok.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -16,29 +14,17 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @MockK
-class VardokServiceTest {
-    private lateinit var varDokClient: VarDokClient
+class VardokServiceTest : BaseVardokTest() {
+    private lateinit var varDokMockkClient: VarDokClient
     private lateinit var varDokService: VarDokService
     private lateinit var varDokMockkService: VarDokService
-    private lateinit var vardokResponse1: VardokResponse
-    private lateinit var vardokResponse2: VardokResponse
-    private lateinit var vardokResponse3: VardokResponse
-    private lateinit var vardokResponse4: VardokResponse
-    private lateinit var vardokResponse5: VardokResponse
-    private lateinit var vardokResponse6: VardokResponse
 
     @BeforeEach
-    fun setUp() {
-        varDokClient = mockk<VarDokClient>(relaxed = true)
-        varDokService = VarDokService(varDokClient)
+    override fun setUp() {
+        super.setUp()
+        varDokMockkClient = mockk<VarDokClient>(relaxed = true)
+        varDokService = VarDokService(varDokMockkClient)
         varDokMockkService = mockk<VarDokService>(relaxed = true)
-        val xmlMapper = XmlMapper().registerKotlinModule()
-        vardokResponse1 = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages)
-        vardokResponse2 = xmlMapper.readValue(vardokId49validUntilDate)
-        vardokResponse3 = xmlMapper.readValue(vardokId476validFromDateAndNNInOtherLanguages)
-        vardokResponse4 = xmlMapper.readValue(vardokId120validUntilDateAndOtherLanguages)
-        vardokResponse5 = xmlMapper.readValue(vardokId100NoValidDates)
-        vardokResponse6 = xmlMapper.readValue(vardokId123NoDataElementName)
     }
 
     @AfterEach
@@ -49,7 +35,7 @@ class VardokServiceTest {
     @Test
     fun `get vardok with valid and data element name`() {
         every {
-            varDokClient.fetchVarDokById("1466")
+            varDokMockkClient.fetchVarDokById("1466")
         } returns
             vardokResponse1
         val result = varDokService.getVarDokItem("1466")
@@ -59,7 +45,7 @@ class VardokServiceTest {
     @Test
     fun `get vardok by id and language nn language`() {
         every {
-            varDokClient.fetchVarDokByIdAndLanguage("476", "nn")
+            varDokMockkClient.fetchVarDokByIdAndLanguage("476", "nn")
         } returns
             vardokResponse3
         val result = varDokService.getVardokByIdAndLanguage("476", "nn")
@@ -70,7 +56,7 @@ class VardokServiceTest {
     @Test
     fun `get vardok by id and language - invalid id`() {
         every {
-            varDokClient.fetchVarDokByIdAndLanguage("2990", "nb")
+            varDokMockkClient.fetchVarDokByIdAndLanguage("2990", "nb")
         } throws
             HttpStatusException(HttpStatus.NOT_FOUND, "Id 2990 in language: nb not found")
         val exception: Exception =
@@ -99,7 +85,7 @@ class VardokServiceTest {
     @Test
     fun `get vardok with valid end date returns VardokResponse`() {
         every {
-            varDokClient.fetchVarDokById("49")
+            varDokMockkClient.fetchVarDokById("49")
         } returns
             vardokResponse2
         val result = varDokService.getVarDokItem("49")
@@ -111,7 +97,7 @@ class VardokServiceTest {
     @Test
     fun `get vardok with invalid id`() {
         every {
-            varDokClient.fetchVarDokById("1")
+            varDokMockkClient.fetchVarDokById("1")
         } throws
             HttpStatusException(HttpStatus.NOT_FOUND, "Id 1 not found")
         val exception: Exception =

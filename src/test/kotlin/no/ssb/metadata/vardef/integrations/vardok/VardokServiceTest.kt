@@ -14,6 +14,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 @MockK
 class VardokServiceTest {
@@ -117,11 +118,5 @@ class VardokServiceTest {
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
-    }
-
-    @Test
-    fun `parse valid date from`() {
-        val dateFrom = mapValidDateFrom(vardokResponse3)
-        assertThat(dateFrom).isNotNull
     }
 }

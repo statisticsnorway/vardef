@@ -53,21 +53,21 @@ fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): InputVar
     val vardokId = mapVardokIdentifier(vardokItemNb)
 
     val vardefInput =
-        mapValidDateFrom(vardokItemNb)?.let {
+        mapValidDateFrom(vardokItemNb).let {
             InputVariableDefinition(
                 name =
-                    LanguageStringType(
-                        vardokItemNb.common?.title,
-                        vardokItem["nn"]?.common?.title,
-                        vardokItem["en"]?.common?.title,
-                    ),
+                LanguageStringType(
+                    vardokItemNb.common?.title,
+                    vardokItem["nn"]?.common?.title,
+                    vardokItem["en"]?.common?.title,
+                ),
                 shortName = vardokItemNb.variable?.dataElementName!!,
                 definition =
-                    LanguageStringType(
-                        vardokItemNb.common?.description,
-                        vardokItem["nn"]?.common?.description,
-                        vardokItem["en"]?.common?.description,
-                    ),
+                LanguageStringType(
+                    vardokItemNb.common?.description,
+                    vardokItem["nn"]?.common?.description,
+                    vardokItem["en"]?.common?.description,
+                ),
                 validFrom = mapValidDateFrom(vardokItemNb),
                 validUntil = mapValidDateUntil(vardokItemNb),
                 unitTypes = listOf(unitTypeConverter[vardokItemNb.variable.statisticalUnit]!!),
@@ -84,5 +84,5 @@ fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): InputVar
                 // owner = mapVardokContactDivisionToOwner(vardokItem),
             )
         }
-    return vardefInput!!
+    return vardefInput
 }

@@ -26,7 +26,7 @@ fun mapValidDateFrom(vardokItem: VardokResponse): CharSequence? {
     val range = 0..9
     val validDate = vardokItem.dc?.valid
     if (!validDate.isNullOrEmpty()) {
-            return sliceValidDate(range, validDate)
+        return sliceValidDate(range, validDate)
     }
     return null
 }

@@ -51,7 +51,7 @@ class VardokServiceTest {
         every {
             varDokClient.fetchVarDokById("49")
         } returns
-                vardokResponse2
+            vardokResponse2
         val result = varDokService.getVarDokItem("49")
         assertThat(result).isEqualTo(vardokResponse2)
         assertThat(result?.dc?.valid).hasSizeGreaterThan(13)
@@ -66,7 +66,5 @@ class VardokServiceTest {
         assertThrows(HttpStatusException::class.java) {
             varDokService.getVarDokItem("1")
         }
-        // val result = varDokService.getVarDokItem("1")
-        // assertThat(result).isNull()
     }
 }

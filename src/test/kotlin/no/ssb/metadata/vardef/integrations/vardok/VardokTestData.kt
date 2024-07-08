@@ -63,8 +63,8 @@ val validFromDateAndEnInOtherLanguages1466 =
     </FIMD>
     """.trimIndent()
 
-
-val validUntilDate49 = """
+val validUntilDate49 =
+    """
     <FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-10" defaultValidFrom="1993-01-01" defaultValidTo="2005-12-31" id="urn:ssb:conceptvariable:vardok:49" lastChangedDate="2016-01-04" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
     <DC>
     <dc:contributor>Seksjon for inntekts- og lønnsstatistikk</dc:contributor>
@@ -129,4 +129,4 @@ val validUntilDate49 = """
     <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04619" xlink:title="04619: Inntektsregnskap for bosatte personer (avslutta serie)" xlink:type="simple"/>
     </Relations>
     </FIMD>
-""".trimIndent()
+    """.trimIndent()

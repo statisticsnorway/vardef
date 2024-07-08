@@ -68,6 +68,22 @@ class VardokServiceTest {
     }
 
     @Test
+    fun `get vardok by id and language - invalid id`() {
+        every {
+            varDokClient.fetchVarDokByIdAndLanguage("2990", "nb")
+        } throws
+            HttpStatusException(HttpStatus.NOT_FOUND, "Id 2990 in language: nb not found")
+        val exception: Exception =
+            assertThrows(HttpStatusException::class.java) {
+                varDokService.getVardokByIdAndLanguage("2990", "nb")
+            }
+        val expectedMessage = "Id 2990 in language: nb not found"
+        val actualMessage = exception.message
+
+        assertThat(expectedMessage).isEqualTo(actualMessage)
+    }
+
+    @Test
     fun `get vardok by valid id and not valid nn language returns nb language`() {
         val resultNNLanguage = varDokService.getVardokByIdAndLanguage("1466", "nn")
         val resultNBLanguage = varDokService.getVardokByIdAndLanguage("1466", "nb")

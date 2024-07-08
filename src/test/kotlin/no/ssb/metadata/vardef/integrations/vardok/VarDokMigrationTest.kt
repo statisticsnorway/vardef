@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-@Requires(env = ["integration-test"])
+//@Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
@@ -54,7 +54,7 @@ class VarDokMigrationTest {
         val res = varDokApiService.getVarDokItem("901")
         assertThat(res?.dc?.valid).isNotNull()
         assertThat(res?.dc?.valid).hasSizeGreaterThan(10)
-        val mappedFromDate = res?.let { mapValidDateFrom(it) }
+        val mappedFromDate = res?.let { getValidDates(it).first }
         assertThat(mappedFromDate).isNotNull()
         assertThat(mappedFromDate).isEqualTo("2001-01-01")
     }
@@ -64,7 +64,7 @@ class VarDokMigrationTest {
         val res = varDokApiService.getVarDokItem("901")
         assertThat(res?.dc?.valid).isNotNull()
         assertThat(res?.dc?.valid).hasSizeGreaterThan(20)
-        val mappedUntilDate = res?.let { mapValidDateUntil(it) }
+        val mappedUntilDate = res?.let { getValidDates(it).second }
         assertThat(mappedUntilDate).isNotNull()
         assertThat(mappedUntilDate).isEqualTo("2001-12-31")
     }
@@ -78,7 +78,7 @@ class VarDokMigrationTest {
     @Test
     fun `map vardok missing valid end date`() {
         val res = varDokApiService.getVarDokItem("1422")
-        val mappedUntilDate = res?.let { mapValidDateUntil(it) }
+        val mappedUntilDate = res?.let { getValidDates(it).second }
         assertThat(mappedUntilDate).isNull()
     }
 
@@ -91,7 +91,7 @@ class VarDokMigrationTest {
             val renderVarDok = toVarDefFromVarDok(mapResult)
             assertThat(renderVarDok).isNotNull
             assertThat(
-                renderVarDok.externalReferenceUri.toString(),
+                renderVarDok.externalReferenceUri,
             ).isEqualTo("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId")
         }
     }
@@ -119,7 +119,7 @@ class VarDokMigrationTest {
                 varDokApiService.getVarDokItem("1")
             }
         assertThat(exception).isInstanceOf(HttpStatusException::class.java)
-        val expectedMessage = "Id not found"
+        val expectedMessage = "Id 1 not found"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)

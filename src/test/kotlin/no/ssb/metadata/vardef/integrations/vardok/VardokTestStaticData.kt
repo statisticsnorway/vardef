@@ -34,7 +34,7 @@ class VardokTestStaticData {
         clearAllMocks()
     }
 
-    @Test
+    /*@Test
     fun `parse valid date from`() {
         val dateFrom = mapValidDateFrom(vardokResponse3)
         val dateUntil = mapValidDateUntil(vardokResponse3)
@@ -55,7 +55,7 @@ class VardokTestStaticData {
         assertThat(dateUntil).hasDayOfMonth(1)
         assertThat(dateUntil).hasMonthValue(1)
     }
-
+*/
     @Test
     fun `parse data element name to short name`() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse2)

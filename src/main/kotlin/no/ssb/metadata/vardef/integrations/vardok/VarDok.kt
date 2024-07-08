@@ -2,7 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.vardef.models.LanguageStringType
 
-data class VarDokStructure(
+data class VarDok(
     val name: LanguageStringType?,
     val shortName: String?,
     val definition: LanguageStringType?,
@@ -15,15 +15,14 @@ data class VarDokStructure(
     val classificationReference: String?,
     val contact: String?,
     val measurementType: String?,
-    val relatedVariableDefinitionUris: List<String?>
+    val relatedVariableDefinitionUris: List<String?>,
 )
 
-
-fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): VarDokStructure {
+fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): VarDok {
     val vardokItemNb = vardokItem["nb"]!!
     val vardokId = mapVardokIdentifier(vardokItemNb)
 
-    return VarDokStructure(
+    return VarDok(
         name =
             LanguageStringType(
                 vardokItemNb.common?.title,

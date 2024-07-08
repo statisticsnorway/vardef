@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-//@Requires(env = ["integration-test"])
+// @Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
@@ -118,7 +118,6 @@ class VarDokMigrationTest {
     fun `vardok item has not short name`() {
         val result = varDokApiService.getVarDokItem("2450")
         if (result != null) {
-
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: VardokException =
                 org.junit.jupiter.api.Assertions.assertThrows(VardokException::class.java) {
@@ -136,7 +135,6 @@ class VarDokMigrationTest {
     fun `vardok item has not valid dates`() {
         val result = varDokApiService.getVarDokItem("100")
         if (result != null) {
-
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: MissingValidDatesException =
                 org.junit.jupiter.api.Assertions.assertThrows(MissingValidDatesException::class.java) {
@@ -149,10 +147,6 @@ class VarDokMigrationTest {
             assertThat(expectedMessage).isEqualTo(actualMessage)
         }
     }
-
-
-
-
 
     @Test
     fun `get list of vardok results by id and return response`(spec: RequestSpecification) {
@@ -196,7 +190,4 @@ class VarDokMigrationTest {
 //        assertThat(result[0]?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
 //        assertThat(result).size().isEqualTo(idList.size)
     }
-
-
-
 }

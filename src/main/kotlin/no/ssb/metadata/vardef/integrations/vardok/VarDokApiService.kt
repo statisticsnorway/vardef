@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.models.InputVariableDefinition
 import org.slf4j.LoggerFactory
 
 @Singleton
@@ -37,7 +36,6 @@ open class VarDokApiService(
             null
         }
     }
-
 
     fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVarDokItem(id)

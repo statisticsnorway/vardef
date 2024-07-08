@@ -34,10 +34,8 @@ fun mapValidDateFrom(vardokItem: VardokResponse): CharSequence? {
 fun mapValidDateUntil(vardokItem: VardokResponse): CharSequence? {
     val range = 13..22
     val validDate = vardokItem.dc?.valid
-    if (validDate != null) {
-        if (validDate.length >= 20) {
-            return sliceValidDate(range, validDate)
-        }
+    if (validDate != null && validDate.length >= 20) {
+        return sliceValidDate(range, validDate)
     }
     return null
 }

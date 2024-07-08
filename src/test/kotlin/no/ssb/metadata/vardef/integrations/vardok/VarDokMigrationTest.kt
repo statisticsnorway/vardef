@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

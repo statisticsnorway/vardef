@@ -15,7 +15,7 @@ import no.ssb.metadata.vardef.integrations.vardok.*
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 
 @Validated
-@Controller("/variable-definitions/vardok-migration/{id}")
+@Controller("/vardok-migration/{id}")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
     @Inject

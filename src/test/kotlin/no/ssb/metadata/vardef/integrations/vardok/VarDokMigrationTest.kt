@@ -34,16 +34,7 @@ class VarDokMigrationTest {
         val res = varDokApiService.getVarDokItem("901")
         var englishRes: VardokResponse? = null
         if (res?.otherLanguages != "") {
-            englishRes =
-                res?.let {
-                    it.otherLanguages.let { it1 ->
-                        varDokApiService.getVardokByIdAndLanguage(
-                            "901",
-                            it1,
-                        )
-                    }
-                }
-            // englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("901", it.otherLanguages) }
+            englishRes = res?.let { varDokApiService.getVardokByIdAndLanguage("901", it.otherLanguages) }
         }
         assertThat(englishRes?.common?.title).isEqualTo("System for heating, has closed stoves for solid fuel")
         assertThat(englishRes?.id).isEqualTo(res?.id)
@@ -73,6 +64,8 @@ class VarDokMigrationTest {
     fun `map vardok missing valid date`() {
         val res = varDokApiService.getVarDokItem("100")
         assertThat(res).isNotNull()
+        val mappedFromDate = res?.let { getValidDates(it).first }
+        assertThat(mappedFromDate).isNull()
     }
 
     @Test
@@ -106,7 +99,6 @@ class VarDokMigrationTest {
     fun `map owner from vardok`(vardokId: Int) {
         val result = varDokApiService.getVarDokItem(vardokId.toString())
         assertThat(result).isNotNull
-        println(result)
         assertThat(result?.common?.contactDivision).isNotNull
         assertThat(result?.common?.contactDivision?.codeValue).isNotNull()
         assertThat(result?.common?.contactDivision?.codeText).isNotNull()

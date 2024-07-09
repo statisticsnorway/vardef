@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.models
 
+import io.micronaut.context.annotation.Property
 import io.micronaut.core.annotation.Nullable
 import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
@@ -78,6 +79,10 @@ data class InputVariableDefinition(
     @Valid
     val contact: Contact?,
 ) {
+
+    @Property(name = "micronaut.http.services.klass.url")
+    private var klassUrl: String = ""
+
     fun toSavedVariableDefinition(): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: NanoId.generate(8),
@@ -85,7 +90,7 @@ data class InputVariableDefinition(
             shortName = shortName,
             definition = definition,
             // TODO
-            classificationUri = "",
+            classificationUri = klassUrl + classificationReference,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,

@@ -147,4 +147,5 @@ open class KlassApiService(
     private fun cacheHasExpired(): Boolean =
         classificationCache.isEmpty() ||
             LocalDateTime.now().plusSeconds(timeout) < classificationCacheLastFetched
+
 }

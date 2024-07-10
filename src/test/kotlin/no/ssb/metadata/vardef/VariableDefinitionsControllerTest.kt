@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef
 
 import INPUT_VARIABLE_DEFINITION_COPY
 import JSON_TEST_INPUT
-import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
@@ -50,7 +49,6 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
 }
 
 class VariableDefinitionsControllerTest : BaseVardefTest() {
-
     @Test
     fun `create variable definition`(spec: RequestSpecification) {
         val startTime = LocalDateTime.now()
@@ -80,9 +78,10 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create variable definition with no contact information`(spec: RequestSpecification) {
-        val updatedJsonString = JSONObject(JSON_TEST_INPUT).apply {
-            put("contact", JSONObject.NULL)
-        }.toString()
+        val updatedJsonString =
+            JSONObject(JSON_TEST_INPUT).apply {
+                put("contact", JSONObject.NULL)
+            }.toString()
         val definitionId =
             spec
                 .given()

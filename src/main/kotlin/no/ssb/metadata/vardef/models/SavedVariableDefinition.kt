@@ -45,7 +45,6 @@ data class SavedVariableDefinition(
     @Nullable
     var lastUpdatedBy: Person?,
 ) {
-
     fun toRenderedVariableDefinition(
         language: SupportedLanguages,
         klassService: KlassService,
@@ -109,7 +108,7 @@ data class SavedVariableDefinition(
             shortName = varDefUpdates.shortName ?: shortName,
             definition = varDefUpdates.definition ?: definition,
             // TODO DPMETA-257 convert reference to URI
-            classificationUri = varDefUpdates.classificationReference?: classificationUri,
+            classificationUri = varDefUpdates.classificationReference ?: classificationUri,
             unitTypes = varDefUpdates.unitTypes ?: unitTypes,
             subjectFields = varDefUpdates.subjectFields ?: subjectFields,
             containsSensitivePersonalInformation =

@@ -17,5 +17,4 @@ interface KlassService {
     ): KlassReference?
 
     fun getKlassUrlForId(id: String): String
-
 }

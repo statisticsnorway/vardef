@@ -61,11 +61,11 @@ class StaticKlassService : KlassService {
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
             val name = if (language == SupportedLanguages.NB) it.name.nb else null
-            KlassReference(klassUrl + "classifications/" + id + "/", it.code, name)
+            KlassReference(klassUrl + "klassifikasjoner/" + id + "/", it.code, name)
         }
     }
 
     override fun getKlassUrlForId(id: String): String {
-        return klassUrl + "classifications/" + id
+        return klassUrl + "klassifikasjoner/" + id
     }
 }

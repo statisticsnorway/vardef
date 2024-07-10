@@ -323,7 +323,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body(
                 "classification_uri",
                 equalTo(
-                    "https://data.ssb.no/api/klass/v1/classifications/91",
+                    "https://www.ssb.no/klass/v1/klassifikasjoner/91",
                 ),
             )
     }

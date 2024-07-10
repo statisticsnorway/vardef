@@ -133,7 +133,7 @@ open class KlassApiService(
         return classification?.let {
             val name = if (language == SupportedLanguages.NB) it.name else null
             KlassReference(
-                klassUrl + "classifications/" + classificationId + "/",
+                klassUrl + "klassifikasjoner/" + classificationId + "/",
                 it.code,
                 name,
             )
@@ -141,7 +141,7 @@ open class KlassApiService(
     }
 
     override fun getKlassUrlForId(id: String): String {
-        return klassUrl + "classifications/" + id
+        return klassUrl + "klassifikasjoner/" + id
     }
 
     fun classificationCacheSize(): Int = classificationCache.size

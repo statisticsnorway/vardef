@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.models
 
-import io.micronaut.context.annotation.Property
 import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.*
 import io.micronaut.data.model.naming.NamingStrategies
@@ -47,9 +46,6 @@ data class SavedVariableDefinition(
     var lastUpdatedBy: Person?,
 ) {
 
-    @Property(name = "micronaut.http.services.klass.url")
-    private var klassUrl: String = ""
-
     fun toRenderedVariableDefinition(
         language: SupportedLanguages,
         klassService: KlassService,
@@ -59,7 +55,7 @@ data class SavedVariableDefinition(
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),
-            classificationUri = classificationUri,
+            classificationUri = classificationUri?.let { klassService.getKlassUrlForId(it) },
             unitTypes = unitTypes.map { klassService.getCodeItemFor("702", it, language) },
             subjectFields = subjectFields.map { klassService.getCodeItemFor("618", it, language) },
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
@@ -113,7 +109,7 @@ data class SavedVariableDefinition(
             shortName = varDefUpdates.shortName ?: shortName,
             definition = varDefUpdates.definition ?: definition,
             // TODO DPMETA-257 convert reference to URI
-            classificationUri = varDefUpdates.classificationReference?.let { it + klassUrl } ?: classificationUri,
+            classificationUri = varDefUpdates.classificationReference?: classificationUri,
             unitTypes = varDefUpdates.unitTypes ?: unitTypes,
             subjectFields = varDefUpdates.subjectFields ?: subjectFields,
             containsSensitivePersonalInformation =

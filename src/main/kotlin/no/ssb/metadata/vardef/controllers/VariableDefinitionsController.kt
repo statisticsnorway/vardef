@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -57,6 +58,9 @@ class VariableDefinitionsController {
                 "Variable status may not be specified on creation.",
             )
         }
+        @Property(name = "micronaut.http.services.klass.url")
+        val klassUrl = ""
+
         return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
     }
 }

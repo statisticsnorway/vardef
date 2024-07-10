@@ -140,6 +140,10 @@ open class KlassApiService(
         }
     }
 
+    override fun getKlassUrlForId(id: String): String {
+        return klassUrl + "classifications/" + id
+    }
+
     fun classificationCacheSize(): Int = classificationCache.size
 
     fun classificationItemListCache(): Int = classificationItemListCache.size

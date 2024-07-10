@@ -64,4 +64,8 @@ class StaticKlassService : KlassService {
             KlassReference(klassUrl + "classifications/" + id + "/", it.code, name)
         }
     }
+
+    override fun getKlassUrlForId(id: String): String {
+        return klassUrl + "classifications/" + id
+    }
 }

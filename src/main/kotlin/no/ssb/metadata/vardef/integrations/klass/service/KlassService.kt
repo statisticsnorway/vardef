@@ -15,4 +15,7 @@ interface KlassService {
         code: String,
         language: SupportedLanguages,
     ): KlassReference?
+
+    fun getKlassUrlForId(id: String): String
+
 }

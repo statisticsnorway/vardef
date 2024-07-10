@@ -28,6 +28,9 @@ open class BaseVardefTest {
     @Inject
     lateinit var jsonMapper: JsonMapper
 
+    @Property(name = "micronaut.http.services.klass.url")
+    private var klassUrl: String = ""
+
     @BeforeEach
     fun setUp() {
         variableDefinitionService.clear()

@@ -81,8 +81,7 @@ data class InputVariableDefinition(
             name = name,
             shortName = shortName,
             definition = definition,
-            // TODO
-            classificationUri = "",
+            classificationUri = classificationReference,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,

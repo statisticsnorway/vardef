@@ -54,7 +54,7 @@ data class SavedVariableDefinition(
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),
-            classificationUri = classificationUri,
+            classificationUri = classificationUri?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
             unitTypes = unitTypes.map { klassService.getCodeItemFor("702", it, language) },
             subjectFields = subjectFields.map { klassService.getCodeItemFor("618", it, language) },
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
@@ -78,8 +78,7 @@ data class SavedVariableDefinition(
             name = name,
             shortName = shortName,
             definition = definition,
-            // TODO
-            classificationReference = "",
+            classificationReference = classificationUri?.split("/")?.lastOrNull(),
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,

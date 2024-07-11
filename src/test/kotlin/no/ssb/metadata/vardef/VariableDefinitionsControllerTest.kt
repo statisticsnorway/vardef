@@ -11,7 +11,6 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION_COPY
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT_NULL_CONTACT
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -79,11 +78,15 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create variable definition with no contact information`(spec: RequestSpecification) {
+        val updatedJsonString =
+            JSONObject(JSON_TEST_INPUT).apply {
+                put("contact", JSONObject.NULL)
+            }.toString()
         val definitionId =
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(JSON_TEST_INPUT_NULL_CONTACT)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -277,23 +280,51 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body(
                 "[0].measurement_type.reference_uri",
                 equalTo(
-                    "https://data.ssb.no/api/klass/v1/classifications/303/",
+                    "https://www.ssb.no/klass/klassifikasjoner/303",
                 ),
             ).body("[0].measurement_type.code", equalTo("02.01"))
             .body("[0].measurement_type.title", equalTo("antall"))
             .body(
                 "[0].unit_types[0].reference_uri",
                 equalTo(
-                    "https://data.ssb.no/api/klass/v1/classifications/702/",
+                    "https://www.ssb.no/klass/klassifikasjoner/702",
                 ),
             ).body("[0].unit_types[0].code", equalTo("01"))
             .body("[0].unit_types[0].title", equalTo("Adresse"))
             .body(
                 "[0].subject_fields[0].reference_uri",
                 equalTo(
-                    "https://data.ssb.no/api/klass/v1/classifications/618/",
+                    "https://www.ssb.no/klass/klassifikasjoner/618",
                 ),
             ).body("[0].subject_fields[0].code", equalTo("he04"))
             .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
+    }
+
+    @Test
+    fun `create variable definition and check klass url`(spec: RequestSpecification) {
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(JSON_TEST_INPUT)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .path<String>("id")
+
+        spec
+            .given()
+            .`when`()
+            .get("/variable-definitions/$definitionId")
+            .then()
+            .body(
+                "classification_uri",
+                equalTo(
+                    "https://www.ssb.no/klass/klassifikasjoner/91",
+                ),
+            )
     }
 }

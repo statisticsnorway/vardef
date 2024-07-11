@@ -27,4 +27,20 @@ class KlassValidationFactory {
                     },
                 )
         }
+
+    @Singleton
+    fun klassIdValidator(): ConstraintValidator<KlassId, String> =
+        ConstraintValidator {
+                value,
+                annotationMetadata,
+                _,
+            ->
+            value == null ||
+                    value in
+                    klassService.getCodesFor(
+                        annotationMetadata["id", String::class.java].getOrElse {
+                            throw IllegalStateException("no id supplied on annotation")
+                        },
+                    )
+        }
 }

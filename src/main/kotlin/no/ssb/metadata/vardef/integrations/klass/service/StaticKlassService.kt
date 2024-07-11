@@ -52,6 +52,10 @@ class StaticKlassService : KlassService {
             .toList()
     }
 
+    override fun getIds(): List<String> {
+        TODO("Not yet implemented")
+    }
+
     override fun getCodeItemFor(
         id: String,
         code: String,

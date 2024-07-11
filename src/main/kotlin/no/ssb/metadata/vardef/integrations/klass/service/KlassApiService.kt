@@ -126,6 +126,10 @@ open class KlassApiService(
 
     override fun getCodesFor(id: String): List<String> = getClassificationItemsById(id.toInt()).map { it.code }
 
+    override fun getIds(): List<String> {
+        TODO("Not yet implemented")
+    }
+
     override fun getCodeItemFor(
         id: String,
         code: String,

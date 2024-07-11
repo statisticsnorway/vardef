@@ -143,11 +143,15 @@ open class KlassApiService(
         }
     }
 
-    override fun getKlassUrlForIdAndLanguage(id: String, language: SupportedLanguages): String {
-        val baseUrl = when (language) {
-            SupportedLanguages.NB, SupportedLanguages.NN -> klassUrlNb
-            SupportedLanguages.EN -> klassUrlEn
-        }
+    override fun getKlassUrlForIdAndLanguage(
+        id: String,
+        language: SupportedLanguages,
+    ): String {
+        val baseUrl =
+            when (language) {
+                SupportedLanguages.NB, SupportedLanguages.NN -> klassUrlNb
+                SupportedLanguages.EN -> klassUrlEn
+            }
         return "$baseUrl/klassifikasjoner/$id"
     }
 

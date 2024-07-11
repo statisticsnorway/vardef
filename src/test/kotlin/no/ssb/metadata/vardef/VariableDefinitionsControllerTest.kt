@@ -328,5 +328,3 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             )
     }
 }
-
-

@@ -68,12 +68,16 @@ class StaticKlassService : KlassService {
         }
     }
 
-    override fun getKlassUrlForIdAndLanguage(id: String, language: SupportedLanguages): String {
-        val baseUrl = when (language) {
-            SupportedLanguages.NB -> klassUrlNb
-            SupportedLanguages.NN -> klassUrlNb
-            else -> klassUrlEn
-        }
+    override fun getKlassUrlForIdAndLanguage(
+        id: String,
+        language: SupportedLanguages,
+    ): String {
+        val baseUrl =
+            when (language) {
+                SupportedLanguages.NB -> klassUrlNb
+                SupportedLanguages.NN -> klassUrlNb
+                else -> klassUrlEn
+            }
         print("Hello, $baseUrl")
         return "$baseUrl/klassifikasjoner/$id"
     }

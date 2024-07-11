@@ -140,7 +140,7 @@ class VardokServiceTest : BaseVardokTest() {
             assertThrows(MissingDataElementNameException::class.java) {
                 varDokService.createVarDefInputFromVarDokItems(mapVardokResponse)
             }
-        val expectedMessage = "Vardok is missing short name and can not be saved"
+        val expectedMessage = "Vardok is missing data element name (short name) and can not be saved"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)

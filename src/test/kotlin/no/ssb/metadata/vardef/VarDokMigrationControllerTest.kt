@@ -62,7 +62,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Vardok is missing short name and can not be saved",
+                    "Vardok is missing data element name (short name) and can not be saved",
                 ),
             )
     }

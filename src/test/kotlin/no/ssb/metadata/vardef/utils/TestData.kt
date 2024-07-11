@@ -73,7 +73,7 @@ val SAVED_VARIABLE_DEFINITION =
                 nn = "For personer født",
                 en = "Country background is",
             ),
-        classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+        classificationUri = "91",
         unitTypes = listOf("01", "02"),
         subjectFields = listOf("he04"),
         containsSensitivePersonalInformation = false,

@@ -280,21 +280,21 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body(
                 "[0].measurement_type.reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/v1/klassifikasjoner/303/",
+                    "https://www.ssb.no/klass/klassifikasjoner/303",
                 ),
             ).body("[0].measurement_type.code", equalTo("02.01"))
             .body("[0].measurement_type.title", equalTo("antall"))
             .body(
                 "[0].unit_types[0].reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/v1/klassifikasjoner/702/",
+                    "https://www.ssb.no/klass/klassifikasjoner/702",
                 ),
             ).body("[0].unit_types[0].code", equalTo("01"))
             .body("[0].unit_types[0].title", equalTo("Adresse"))
             .body(
                 "[0].subject_fields[0].reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/v1/klassifikasjoner/618/",
+                    "https://www.ssb.no/klass/klassifikasjoner/618",
                 ),
             ).body("[0].subject_fields[0].code", equalTo("he04"))
             .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
@@ -323,8 +323,10 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body(
                 "classification_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/v1/klassifikasjoner/91",
+                    "https://www.ssb.no/klass/klassifikasjoner/91",
                 ),
             )
     }
 }
+
+

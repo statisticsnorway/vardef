@@ -54,7 +54,7 @@ data class SavedVariableDefinition(
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),
-            classificationUri = classificationUri?.let { klassService.getKlassUrlForId(it) },
+            classificationUri = classificationUri?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
             unitTypes = unitTypes.map { klassService.getCodeItemFor("702", it, language) },
             subjectFields = subjectFields.map { klassService.getCodeItemFor("618", it, language) },
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,

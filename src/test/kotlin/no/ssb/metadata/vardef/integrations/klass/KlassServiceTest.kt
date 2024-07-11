@@ -17,7 +17,7 @@ class KlassServiceTest {
         klassService
             .getCodeItemFor("702", "01", SupportedLanguages.NB)
             ?.let { klassItem ->
-                assertThat(klassItem.referenceUri).isEqualTo("https://data.ssb.no/klass/v1/klassifikasjoner/702/")
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/702")
                 assertThat(klassItem.code).isEqualTo("01")
                 assertThat(klassItem.title).isEqualTo("Adresse")
             }
@@ -31,7 +31,7 @@ class KlassServiceTest {
         klassService
             .getCodeItemFor("702", "01", SupportedLanguages.NN)
             ?.let { klassItem ->
-                assertThat(klassItem.referenceUri).isEqualTo("https://data.ssb.no/klass/v1/klassifikasjoner/702/")
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/702")
                 assertThat(klassItem.code).isEqualTo("01")
                 assertThat(klassItem.title).isEqualTo(null)
             }

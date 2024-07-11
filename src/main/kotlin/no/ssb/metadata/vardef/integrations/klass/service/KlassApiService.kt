@@ -27,8 +27,11 @@ open class KlassApiService(
     private val timeout: Long = 360
     private val status500 = "Klass Api: Service is not available"
 
-    @Property(name = "micronaut.http.services.klass.url")
-    private var klassUrl: String = ""
+    @Property(name = "micronaut.http.services.klass.url.nb")
+    private var klassUrlNb: String = ""
+
+    @Property(name = "micronaut.http.services.klass.url.en")
+    private var klassUrlEn: String = ""
 
     @Cacheable("classifications")
     open fun fetchAllClassifications(): List<Classification> {
@@ -133,15 +136,19 @@ open class KlassApiService(
         return classification?.let {
             val name = if (language == SupportedLanguages.NB) it.name else null
             KlassReference(
-                klassUrl + "klassifikasjoner/" + classificationId + "/",
+                getKlassUrlForIdAndLanguage(id, language),
                 it.code,
                 name,
             )
         }
     }
 
-    override fun getKlassUrlForId(id: String): String {
-        return klassUrl + "klassifikasjoner/" + id
+    override fun getKlassUrlForIdAndLanguage(id: String, language: SupportedLanguages): String {
+        val baseUrl = when (language) {
+            SupportedLanguages.NB, SupportedLanguages.NN -> klassUrlNb
+            SupportedLanguages.EN -> klassUrlEn
+        }
+        return "$baseUrl/klassifikasjoner/$id"
     }
 
     fun classificationCacheSize(): Int = classificationCache.size

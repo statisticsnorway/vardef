@@ -80,7 +80,11 @@ class VariableDefinitionServiceTest {
         every {
             mockKlassService.getCodeItemFor(any(), any(), any())
         } returns
-            KlassReference("", "01", "Adresse")
+            KlassReference("https://www.ssb.no/en/klass/klassifikasjoner/91", "01", "Adresse")
+
+        every {
+            mockKlassService.getKlassUrlForIdAndLanguage(any(), any())
+        } returns "https://www.ssb.no/en/klass/klassifikasjoner/91"
 
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
 

@@ -57,6 +57,7 @@ class VariableDefinitionsController {
                 "Variable status may not be specified on creation.",
             )
         }
+
         return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
     }
 }

@@ -29,6 +29,7 @@ class StaticClassification(
     var codes: List<StaticKlassCode>? = null
 }
 
+
 @Primary
 @Requires(env = ["test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 @Singleton
@@ -36,16 +37,15 @@ class StaticKlassService : KlassService {
     @Inject
     lateinit var beanContext: BeanContext
 
-    @Property(name = "micronaut.http.services.klass.url.nb")
+    @Property(name = "micronaut.klass-web.url.nb")
     private var klassUrlNb: String = ""
 
-    @Property(name = "micronaut.http.services.klass.url.en")
+    @Property(name = "micronaut.klass-web.url.en")
     private var klassUrlEn: String = ""
 
     override fun getCodesFor(id: String): List<String> {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
-        println(classification)
         return classification.codes
             ?.map { it.code }
             .orEmpty()
@@ -53,7 +53,9 @@ class StaticKlassService : KlassService {
     }
 
     override fun getIds(): List<String> {
-        TODO("Not yet implemented")
+        val classifications: List<StaticClassification> =
+            beanContext.getBeansOfType(StaticClassification::class.java).toList()
+        return classifications.map { it.id }
     }
 
     override fun getCodeItemFor(
@@ -63,7 +65,6 @@ class StaticKlassService : KlassService {
     ): KlassReference? {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
-        println(classification)
 
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
@@ -82,7 +83,6 @@ class StaticKlassService : KlassService {
                 SupportedLanguages.NN -> klassUrlNb
                 else -> klassUrlEn
             }
-        print("Hello, $baseUrl")
         return "$baseUrl/klassifikasjoner/$id"
     }
 }

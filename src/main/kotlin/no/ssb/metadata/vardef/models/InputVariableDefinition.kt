@@ -15,6 +15,7 @@ import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
 
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -35,7 +36,8 @@ data class InputVariableDefinition(
     // TODO Validate against klass data
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
-    @Pattern(regexp = KLASS_ID_PATTERN)
+    //@Pattern(regexp = KLASS_ID_PATTERN)
+    @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @NotEmpty

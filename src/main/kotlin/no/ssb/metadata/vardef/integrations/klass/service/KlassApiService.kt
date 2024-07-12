@@ -27,10 +27,10 @@ open class KlassApiService(
     private val timeout: Long = 360
     private val status500 = "Klass Api: Service is not available"
 
-    @Property(name = "micronaut.http.services.klass.url.nb")
+    @Property(name = "micronaut.klass-web.url.nb")
     private var klassUrlNb: String = ""
 
-    @Property(name = "micronaut.http.services.klass.url.en")
+    @Property(name = "micronaut.klass-web.url.en")
     private var klassUrlEn: String = ""
 
     @Cacheable("classifications")
@@ -127,7 +127,7 @@ open class KlassApiService(
     override fun getCodesFor(id: String): List<String> = getClassificationItemsById(id.toInt()).map { it.code }
 
     override fun getIds(): List<String> {
-        TODO("Not yet implemented")
+        return getClassifications().map { it.id.toString() }
     }
 
     override fun getCodeItemFor(

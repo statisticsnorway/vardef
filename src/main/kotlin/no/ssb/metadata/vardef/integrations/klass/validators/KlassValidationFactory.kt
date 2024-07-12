@@ -32,15 +32,9 @@ class KlassValidationFactory {
     fun klassIdValidator(): ConstraintValidator<KlassId, String> =
         ConstraintValidator {
                 value,
-                annotationMetadata,
+                _,
                 _,
             ->
-            value == null ||
-                    value in
-                    klassService.getCodesFor(
-                        annotationMetadata["id", String::class.java].getOrElse {
-                            throw IllegalStateException("no id supplied on annotation")
-                        },
-                    )
+            value == null || value in klassService.getIds()
         }
 }

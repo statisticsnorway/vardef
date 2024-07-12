@@ -20,7 +20,6 @@ import kotlin.reflect.KClass
 @MustBeDocumented
 @Constraint(validatedBy = [])
 annotation class KlassId(
-    val id: String,
     val message: String = "Code {validatedValue} is not a member of classification with id {id}",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = [],

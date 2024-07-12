@@ -24,7 +24,7 @@ data class TestCodeObject(
 
 @Introspected
 data class TestIdObject(
-    var id: @KlassId String
+    var id: @KlassId String,
 )
 
 @MicronautTest(startApplication = true)
@@ -116,7 +116,7 @@ class KlassApiCodeValidatorTest(
     fun `klass id validation legal ids`() {
         assertThat(
             validator.validate(
-                TestIdObject("91")
+                TestIdObject("91"),
             ),
         ).isEmpty()
     }

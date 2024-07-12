@@ -27,4 +27,14 @@ class KlassValidationFactory {
                     },
                 )
         }
+
+    @Singleton
+    fun klassIdValidator(): ConstraintValidator<KlassId, String> =
+        ConstraintValidator {
+                value,
+                _,
+                _,
+            ->
+            value == null || value in klassService.getAllIds()
+        }
 }

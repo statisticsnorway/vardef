@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -35,7 +36,7 @@ data class InputVariableDefinition(
     // TODO Validate against klass data
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
-    @Pattern(regexp = KLASS_ID_PATTERN)
+    @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @NotEmpty

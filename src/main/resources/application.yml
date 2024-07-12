@@ -54,6 +54,8 @@ micronaut:
     services:
       klass:
         url: https://data.ssb.no/api/klass/v1/
+      vardok:
+        url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
 
   klass-web:
     url:

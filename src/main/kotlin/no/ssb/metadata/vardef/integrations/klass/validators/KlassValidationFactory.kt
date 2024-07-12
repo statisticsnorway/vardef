@@ -35,6 +35,6 @@ class KlassValidationFactory {
                 _,
                 _,
             ->
-            value == null || value in klassService.getIds()
+            value == null || value in klassService.getAllIds()
         }
 }

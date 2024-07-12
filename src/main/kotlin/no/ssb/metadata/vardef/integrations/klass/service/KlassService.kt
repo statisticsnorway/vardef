@@ -10,7 +10,7 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 interface KlassService {
     fun getCodesFor(id: String): List<String>
 
-    fun getIds(): List<String>
+    fun getAllIds(): Collection<String>
 
     fun getCodeItemFor(
         id: String,

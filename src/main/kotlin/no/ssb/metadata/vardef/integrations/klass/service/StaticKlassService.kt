@@ -51,8 +51,8 @@ class StaticKlassService : KlassService {
             .toList()
     }
 
-    override fun getIds(): List<String> {
-        val classifications: List<StaticClassification> =
+    override fun getAllIds(): Collection<String> {
+        val classifications: Collection<StaticClassification> =
             beanContext.getBeansOfType(StaticClassification::class.java).toList()
         return classifications.map { it.id }
     }

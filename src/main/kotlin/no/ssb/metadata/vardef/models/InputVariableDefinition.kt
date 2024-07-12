@@ -36,7 +36,6 @@ data class InputVariableDefinition(
     // TODO Validate against klass data
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
-    // @Pattern(regexp = KLASS_ID_PATTERN)
     @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)

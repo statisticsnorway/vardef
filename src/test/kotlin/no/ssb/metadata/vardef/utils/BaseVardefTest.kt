@@ -1,10 +1,5 @@
 package no.ssb.metadata.vardef.utils
 
-import INPUT_VARIABLE_DEFINITION
-import INPUT_VARIABLE_DEFINITION_COPY
-import INPUT_VARIABLE_DEFINITION_NO_NAME
-import SAVED_VARIABLE_DEFINITION
-import SAVED_VARIABLE_DEFINITION_COPY
 import io.micronaut.json.JsonMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.RestAssured

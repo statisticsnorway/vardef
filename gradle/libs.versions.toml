@@ -52,6 +52,7 @@ micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson
 micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor", version.ref = "micronautSerde" }
 micronaut-test-rest-assured = { module = "io.micronaut.test:micronaut-test-rest-assured", version.ref = "micronautTest"}
 micronaut-validation-processor = { module = "io.micronaut.validation:micronaut-validation-processor", version.ref = "micronaut" }
+micronaut-jackson-xml = {module = "io.micronaut.xml:micronaut-jackson-xml", version.ref = "jackson"}
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 nanoid = { module = "io.viascom.nanoid:nanoid", version.ref = "nanoid" }
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }

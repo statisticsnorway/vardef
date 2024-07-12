@@ -7,7 +7,6 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import io.viascom.nanoid.NanoId
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.constants.*
@@ -39,13 +38,11 @@ data class InputVariableDefinition(
     @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    @NotEmpty
     val unitTypes: List<
             @KlassCode("702")
             String,
             >,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    @NotEmpty
     val subjectFields: List<
             @KlassCode("618")
             String,

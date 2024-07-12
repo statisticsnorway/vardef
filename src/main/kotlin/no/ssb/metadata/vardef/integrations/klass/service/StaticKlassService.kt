@@ -29,7 +29,6 @@ class StaticClassification(
     var codes: List<StaticKlassCode>? = null
 }
 
-
 @Primary
 @Requires(env = ["test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 @Singleton

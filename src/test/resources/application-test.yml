@@ -1064,3 +1064,12 @@ klass:
           name:
             en: øre per kWh
             nb: øre/kWh
+    91:
+      name:
+        en: "dummy"
+        nb: "Kodeliste for statistikkområder i Statistikkbanken"
+      codes:
+        - code: al
+          name:
+            en: ''
+            nb: Arbeid og lønn

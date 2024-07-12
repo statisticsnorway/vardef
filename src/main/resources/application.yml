@@ -53,11 +53,12 @@ micronaut:
   http:
     services:
       klass:
-        url:
-          en: https://www.ssb.no/en/klass
-          nb: https://www.ssb.no/klass
-      vardok:
-        url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
+        url: https://data.ssb.no/api/klass/v1/
+
+  klass-web:
+    url:
+      en: https://www.ssb.no/en/klass
+      nb: https://www.ssb.no/klass
 
 klass:
   cached-classifications:

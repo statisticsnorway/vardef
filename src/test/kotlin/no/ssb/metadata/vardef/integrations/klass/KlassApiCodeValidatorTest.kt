@@ -4,6 +4,7 @@ import io.micronaut.core.annotation.Introspected
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -19,6 +20,11 @@ data class TestCodeObject(
             @KlassCode("618")
             String,
             >? = null,
+)
+
+@Introspected
+data class TestIdObject(
+    var id: @KlassId String,
 )
 
 @MicronautTest(startApplication = true)
@@ -75,7 +81,7 @@ class KlassApiCodeValidatorTest(
     }
 
     @Test
-    fun `klass code validation illegal code`() {
+    fun `klass id validation illegal code`() {
         val result = validator.validate(TestCodeObject(listOf("999", "33")))
         assertThat(
             result.map { res ->
@@ -90,5 +96,28 @@ class KlassApiCodeValidatorTest(
         assertThat(result.elementAt(1).invalidValue).isEqualTo("33")
         assertThat(result).isNotEmpty()
         assertThat(result).hasSize(2)
+    }
+
+    @Test
+    fun `klass code validation illegal code`() {
+        val result = validator.validate(TestIdObject(("999")))
+        assertThat(
+            result.map { res ->
+                res.message
+            },
+        ).isEqualTo(
+            listOf(
+                "Code 999 is not a valid classification id",
+            ),
+        )
+    }
+
+    @Test
+    fun `klass id validation legal ids`() {
+        assertThat(
+            validator.validate(
+                TestIdObject("91"),
+            ),
+        ).isEmpty()
     }
 }

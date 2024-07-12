@@ -36,20 +36,25 @@ class StaticKlassService : KlassService {
     @Inject
     lateinit var beanContext: BeanContext
 
-    @Property(name = "micronaut.http.services.klass.url.nb")
+    @Property(name = "micronaut.klass-web.url.nb")
     private var klassUrlNb: String = ""
 
-    @Property(name = "micronaut.http.services.klass.url.en")
+    @Property(name = "micronaut.klass-web.url.en")
     private var klassUrlEn: String = ""
 
     override fun getCodesFor(id: String): List<String> {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
-        println(classification)
         return classification.codes
             ?.map { it.code }
             .orEmpty()
             .toList()
+    }
+
+    override fun getAllIds(): Collection<String> {
+        val classifications: Collection<StaticClassification> =
+            beanContext.getBeansOfType(StaticClassification::class.java).toList()
+        return classifications.map { it.id }
     }
 
     override fun getCodeItemFor(
@@ -59,7 +64,6 @@ class StaticKlassService : KlassService {
     ): KlassReference? {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
-        println(classification)
 
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
@@ -78,7 +82,6 @@ class StaticKlassService : KlassService {
                 SupportedLanguages.NN -> klassUrlNb
                 else -> klassUrlEn
             }
-        print("Hello, $baseUrl")
         return "$baseUrl/klassifikasjoner/$id"
     }
 }

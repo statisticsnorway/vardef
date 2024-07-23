@@ -19,7 +19,7 @@ open class VarDokService(
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
             logger.warn("$id is not valid")
-            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id $id not found"))
+            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id $id not found ${e.message}"))
         }
     }
 

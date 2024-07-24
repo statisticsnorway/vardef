@@ -26,6 +26,12 @@ spec:
   envFrom:
     - secret: vardef-mongo-mongodb
 
+  env:
+    - name: MONGODB_USER
+      value: vardef-user
+    - name: MONGODB_HOST
+      value: vardef-mongo-mongodb.dapla-metadata.svc.cluster.local:27017
+
   liveness:
     path: /health
     port: 8080

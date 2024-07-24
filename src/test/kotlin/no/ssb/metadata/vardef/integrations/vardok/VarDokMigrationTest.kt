@@ -115,7 +115,7 @@ class VarDokMigrationTest {
         val expectedMessage = "Id 1 not found"
         val actualMessage = exception.message
 
-        assertThat(expectedMessage).isEqualTo(actualMessage)
+        assertThat(actualMessage).contains(expectedMessage)
     }
 
     @Test

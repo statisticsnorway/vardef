@@ -18,6 +18,8 @@ spec:
       external:
         # Allow egress to Klass
         - host: data.ssb.no
+        # Allow egress to Vardok
+        - host: ssb.no
       rules:
         - application: mongodb
 

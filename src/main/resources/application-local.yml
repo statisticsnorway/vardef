@@ -1,8 +1,11 @@
 # Config for running vardef in local dev environments
+micronaut:
+  server:
+    port: 8081
 
 logger:
   levels:
     io.micronaut.core.reflect: TRACE
-
-mongodb:
-  uri: mongodb://localhost:27017
+#
+#mongodb:
+#  uri: mongodb://localhost:27017

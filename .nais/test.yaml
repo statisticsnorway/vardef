@@ -14,6 +14,9 @@ spec:
     - https://vardef.test.ssb.cloud.nais.io
 
   accessPolicy:
+    inbound:
+      rules:
+        - application: metadata-api-gateway
     outbound:
       external:
         # Allow egress to Klass

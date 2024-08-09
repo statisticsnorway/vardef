@@ -136,5 +136,5 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: test
           RESOURCE: .nais/test.yaml
-          VAR: image=${{ needs.docker-build.outputs.image-tag }},pr-number=${{github.event.number}}
+          VAR: image=${{ needs.docker-build.outputs.image-tag }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

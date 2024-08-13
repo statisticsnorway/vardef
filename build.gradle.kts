@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.micronaut.aot)
     alias(libs.plugins.shadow)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.jib)
 
     id("jacoco")
 }

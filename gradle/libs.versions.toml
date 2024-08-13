@@ -6,6 +6,7 @@
 [versions]
 assertj = "3.25.3"
 jackson = "2.17.0"
+jib = "3.4.3"
 json = "20240303"
 junit = "5.10.2"
 kotlin = "1.9.23"
@@ -58,6 +59,7 @@ snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 
 [plugins]
 allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

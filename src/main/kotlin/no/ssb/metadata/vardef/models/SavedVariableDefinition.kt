@@ -15,6 +15,7 @@ data class SavedVariableDefinition(
     var definitionId: String,
     @field:Id @GeneratedValue
     var id: ObjectId? = null,
+    var versionId: Int,
     var name: LanguageStringType,
     var shortName: String,
     var definition: LanguageStringType,

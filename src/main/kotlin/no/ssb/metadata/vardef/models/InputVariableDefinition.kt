@@ -79,6 +79,7 @@ data class InputVariableDefinition(
     fun toSavedVariableDefinition(): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: NanoId.generate(8),
+            versionId = 1,  // TODO Increment from highest existing
             name = name,
             shortName = shortName,
             definition = definition,

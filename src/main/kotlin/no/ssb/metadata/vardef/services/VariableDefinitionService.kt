@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
@@ -62,7 +63,18 @@ class VariableDefinitionService(
                     definitionId,
                 ).ifEmpty { throw EmptyResultException() }
         val validFromDates = versions.map { it.validFrom }.toSortedSet()
-        val latestValidFromMatchingGivenDate = validFromDates.last { dateOfValidity.isAfter(it) }
+        val validUntilDates =
+            versions
+                .mapNotNull {
+                    it.validUntil
+                }.toSortedSet()
+        if (validUntilDates.lastOrNull { dateOfValidity.isAfter(it) } != null) {
+            throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity")
+        }
+        val latestValidFromMatchingGivenDate = validFromDates.lastOrNull { dateOfValidity.isAfter(it) }
+        if (latestValidFromMatchingGivenDate == null) {
+            throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity")
+        }
         return versions.last { it.validFrom == latestValidFromMatchingGivenDate }
     }
 }

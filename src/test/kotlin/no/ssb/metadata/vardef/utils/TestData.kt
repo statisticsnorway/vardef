@@ -62,6 +62,7 @@ val SAVED_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
+        versionId = 1,
         name =
             LanguageStringType(
                 nb = "Landbakgrunn",
@@ -82,7 +83,7 @@ val SAVED_VARIABLE_DEFINITION =
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
         validFrom = LocalDate.of(2021, 1, 4),
-        validUntil = LocalDate.of(2021, 1, 4),
+        validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =

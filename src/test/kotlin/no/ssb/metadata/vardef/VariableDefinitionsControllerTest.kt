@@ -69,7 +69,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .body()
                 .path<String>("id")
 
-        val createdVariableDefinition = variableDefinitionService.getOneById(definitionId)
+        val createdVariableDefinition = variableDefinitionService.getLatestVersionById(definitionId)
 
         assertThat(createdVariableDefinition.shortName).isEqualTo("landbak")
         assertThat(createdVariableDefinition.createdAt).isCloseTo(startTime, within(1, ChronoUnit.MINUTES))
@@ -79,9 +79,10 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `create variable definition with no contact information`(spec: RequestSpecification) {
         val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT).apply {
-                put("contact", JSONObject.NULL)
-            }.toString()
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    put("contact", JSONObject.NULL)
+                }.toString()
         val definitionId =
             spec
                 .given()
@@ -96,7 +97,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .body()
                 .path<String>("id")
 
-        val createdVariableDefinition = variableDefinitionService.getOneById(definitionId)
+        val createdVariableDefinition = variableDefinitionService.getLatestVersionById(definitionId)
 
         assertThat(createdVariableDefinition.contact).isNull()
         assertThat(createdVariableDefinition.shortName).isEqualTo("landbak")
@@ -192,8 +193,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .assertThat()
             .statusCode(200)
-            .body("[4]", hasKey("name"))
-            .body("[4].name", equalTo(null))
+            .body("[-1]", hasKey("name"))
+            .body("[-1].name", equalTo(null))
     }
 
     @ParameterizedTest

@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.services
 
+import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -30,16 +31,20 @@ class VariableDefinitionService(
             )
         }
 
-    fun getOneById(id: String): SavedVariableDefinition = variableDefinitionRepository.findByDefinitionId(id)
+    fun getLatestVersionById(id: String): SavedVariableDefinition =
+        variableDefinitionRepository.findByDefinitionIdOrderByVersionId(id).ifEmpty { throw EmptyResultException() }.last()
 
     fun getOneByIdAndRenderForLanguage(
         language: SupportedLanguages,
         id: String,
-    ): RenderedVariableDefinition = getOneById(id).toRenderedVariableDefinition(language, klassService)
+    ): RenderedVariableDefinition = getLatestVersionById(id).toRenderedVariableDefinition(language, klassService)
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
 
-    fun deleteById(id: String): Any = variableDefinitionRepository.deleteById(variableDefinitionRepository.findByDefinitionId(id).id)
+    fun deleteById(id: String): Any =
+        variableDefinitionRepository.findByDefinitionIdOrderByVersionId(id).map {
+            variableDefinitionRepository.deleteById(it.id)
+        }
 }

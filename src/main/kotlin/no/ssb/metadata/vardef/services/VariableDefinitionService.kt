@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import java.time.LocalDate
 
 @Singleton
 class VariableDefinitionService(
@@ -50,4 +51,18 @@ class VariableDefinitionService(
             .map {
                 variableDefinitionRepository.deleteById(it.id)
             }
+
+    fun getLatestVersionByDateAndById(
+        definitionId: String,
+        dateOfValidity: LocalDate,
+    ): SavedVariableDefinition {
+        val versions =
+            variableDefinitionRepository
+                .findByDefinitionIdOrderByVersionId(
+                    definitionId,
+                ).ifEmpty { throw EmptyResultException() }
+        val validFromDates = versions.map { it.validFrom }.toSortedSet()
+        val latestValidFromMatchingGivenDate = validFromDates.last { dateOfValidity.isAfter(it) }
+        return versions.last { it.validFrom == latestValidFromMatchingGivenDate }
+    }
 }

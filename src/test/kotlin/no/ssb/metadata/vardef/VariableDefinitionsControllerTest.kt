@@ -193,8 +193,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .assertThat()
             .statusCode(200)
-            .body("[4]", hasKey("name"))
-            .body("[4].name", equalTo(null))
+            .body("[-1]", hasKey("name"))
+            .body("[-1].name", equalTo(null))
     }
 
     @ParameterizedTest

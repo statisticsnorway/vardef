@@ -44,7 +44,10 @@ class VariableDefinitionService(
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
 
     fun deleteById(id: String): Any =
-        variableDefinitionRepository.findByDefinitionIdOrderByVersionId(id).map {
-            variableDefinitionRepository.deleteById(it.id)
-        }
+        variableDefinitionRepository
+            .findByDefinitionIdOrderByVersionId(id)
+            .ifEmpty { throw EmptyResultException() }
+            .map {
+                variableDefinitionRepository.deleteById(it.id)
+            }
 }

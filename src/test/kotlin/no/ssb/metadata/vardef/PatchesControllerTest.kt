@@ -1,8 +1,10 @@
 package no.ssb.metadata.vardef
 
+import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
@@ -77,5 +79,20 @@ class PatchesControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(405)
+    }
+
+    @Test
+    fun `create new patch`(spec: RequestSpecification) {
+        val previousPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSON_TEST_INPUT)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("patch_id", equalTo(previousPatchId + 1))
     }
 }

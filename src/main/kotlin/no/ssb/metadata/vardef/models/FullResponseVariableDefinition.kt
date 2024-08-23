@@ -23,13 +23,9 @@ data class FullResponseVariableDefinition(
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<
-        String,
-    >,
+    val unitTypes: List<String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    val subjectFields: List<
-        String,
-    >,
+    val subjectFields: List<String>,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     val containsSensitivePersonalInformation: Boolean,
     @Schema(

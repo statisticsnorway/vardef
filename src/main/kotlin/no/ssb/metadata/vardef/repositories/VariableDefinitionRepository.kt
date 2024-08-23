@@ -7,5 +7,10 @@ import org.bson.types.ObjectId
 
 @MongoRepository(databaseName = "vardef")
 interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition, ObjectId> {
-    fun findByDefinitionIdOrderByVersionId(definitionId: String): List<SavedVariableDefinition>
+    fun findByDefinitionIdOrderByPatchId(definitionId: String): List<SavedVariableDefinition>
+
+    fun findByDefinitionIdAndPatchId(
+        definitionId: String,
+        patchId: Int,
+    ): SavedVariableDefinition
 }

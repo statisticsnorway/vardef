@@ -10,18 +10,18 @@ import java.time.LocalDate
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
-    fun `get latest version`() {
-        assertThat(variableDefinitionService.getLatestVersionById(SAVED_VARIABLE_DEFINITION.definitionId).versionId).isEqualTo(6)
+    fun `get latest patch`() {
+        assertThat(variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId).isEqualTo(6)
     }
 
     @Test
     fun `get valid period at date`() {
         assertThat(
             variableDefinitionService
-                .getLatestVersionByDateAndById(
+                .getLatestPatchByDateAndById(
                     SAVED_VARIABLE_DEFINITION.definitionId,
                     LocalDate.of(1990, 1, 1),
-                ).versionId,
+                ).patchId,
         ).isEqualTo(6)
     }
 
@@ -29,7 +29,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     fun `get valid period at date before range`() {
         assertThrows<NoMatchingValidityPeriodFound> {
             variableDefinitionService
-                .getLatestVersionByDateAndById(
+                .getLatestPatchByDateAndById(
                     SAVED_VARIABLE_DEFINITION.definitionId,
                     LocalDate.of(1760, 1, 1),
                 )
@@ -40,7 +40,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     fun `get valid period at date after range`() {
         assertThrows<NoMatchingValidityPeriodFound> {
             variableDefinitionService
-                .getLatestVersionByDateAndById(
+                .getLatestPatchByDateAndById(
                     SAVED_VARIABLE_DEFINITION.definitionId,
                     LocalDate.of(3000, 1, 1),
                 )

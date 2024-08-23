@@ -125,7 +125,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
         assertThat(body.definition).isEqualTo(SAVED_VARIABLE_DEFINITION.definition)
 
-        val updatedVariableDefinition = variableDefinitionService.getLatestVersionById(expectedVariableDefinition.definitionId)
+        val updatedVariableDefinition = variableDefinitionService.getLatestPatchById(expectedVariableDefinition.definitionId)
         assertThat(
             updatedVariableDefinition.definitionId,
         ).isEqualTo(expectedVariableDefinition.definitionId)

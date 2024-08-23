@@ -33,6 +33,30 @@ class VariableDefinitionService(
             )
         }
 
+    fun listAllPatchesById(id: String): List<SavedVariableDefinition> = variableDefinitionRepository.findByDefinitionIdOrderByVersionId(id)
+
+    fun listAllPatchesByIdAndRenderForLanguage(
+        id: String,
+        language: SupportedLanguages,
+    ): List<RenderedVariableDefinition> =
+        listAllPatchesById(id).map {
+            it.toRenderedVariableDefinition(
+                language,
+                klassService,
+            )
+        }
+
+    fun getOnePatchByIdAndRenderForLanguage(
+        variableDefinitionId: String,
+        patchId: Int,
+        language: SupportedLanguages,
+    ): RenderedVariableDefinition =
+        variableDefinitionRepository
+            .findByDefinitionIdAndVersionId(
+                variableDefinitionId,
+                patchId,
+            ).toRenderedVariableDefinition(language, klassService)
+
     fun getLatestVersionById(id: String): SavedVariableDefinition =
         variableDefinitionRepository.findByDefinitionIdOrderByVersionId(id).ifEmpty { throw EmptyResultException() }.last()
 

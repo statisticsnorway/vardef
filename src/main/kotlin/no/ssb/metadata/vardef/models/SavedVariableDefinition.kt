@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.models
 import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.*
 import io.micronaut.data.model.naming.NamingStrategies
+import io.micronaut.serde.annotation.Serdeable
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.bson.types.ObjectId
 import java.net.URI
@@ -10,6 +11,7 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+@Serdeable
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
     var definitionId: String,
@@ -90,6 +92,30 @@ data class SavedVariableDefinition(
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
+        )
+
+    fun toFullResponseVariableDefinition(): FullResponseVariableDefinition =
+        FullResponseVariableDefinition(
+            id = definitionId,
+            patchId = patchId,
+            name = name,
+            shortName = shortName,
+            definition = definition,
+            classificationReference = classificationUri?.split("/")?.lastOrNull(),
+            unitTypes = unitTypes,
+            subjectFields = subjectFields,
+            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            variableStatus = variableStatus,
+            measurementType = measurementType,
+            validFrom = validFrom,
+            validUntil = validUntil,
+            externalReferenceUri = externalReferenceUri,
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
+            contact = contact,
+            lastUpdatedAt = lastUpdatedAt,
+            lastUpdatedBy = lastUpdatedBy,
+            createdAt = createdAt,
+            createdBy = createdBy,
         )
 
     fun copyAndUpdate(varDefUpdates: UpdateVariableDefinition): SavedVariableDefinition =

@@ -5,7 +5,6 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -34,17 +33,20 @@ class VariableDefinitionService(
             )
         }
 
-    fun listAllPatchesById(id: String): List<SavedVariableDefinition> = variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id)
+    fun listAllPatchesById(id: String): List<SavedVariableDefinition> =
+        variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty {
+            throw EmptyResultException()
+        }
 
     fun getOnePatchById(
         variableDefinitionId: String,
         patchId: Int,
-    ): InputVariableDefinition =
+    ): SavedVariableDefinition =
         variableDefinitionRepository
             .findByDefinitionIdAndPatchId(
                 variableDefinitionId,
                 patchId,
-            ).toInputVariableDefinition()
+            )
 
     fun getLatestPatchById(id: String): SavedVariableDefinition =
         variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty { throw EmptyResultException() }.last()

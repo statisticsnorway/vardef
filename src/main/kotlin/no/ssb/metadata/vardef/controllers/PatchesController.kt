@@ -12,7 +12,7 @@ import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
-import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
@@ -26,17 +26,17 @@ class PatchesController {
     @Get
     fun getAllPatches(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
-    ): MutableHttpResponse<List<InputVariableDefinition>> =
+    ): MutableHttpResponse<List<FullResponseVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listAllPatchesById(id = variableDefinitionId).map { it.toInputVariableDefinition() })
+            .ok(varDefService.listAllPatchesById(id = variableDefinitionId).map { it.toFullResponseVariableDefinition() })
             .contentType(MediaType.APPLICATION_JSON)
 
     @Get("/{patch-id}")
     fun getOnePatch(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
         @PathVariable("patch-id") patchId: Int,
-    ): MutableHttpResponse<InputVariableDefinition> =
+    ): MutableHttpResponse<FullResponseVariableDefinition> =
         HttpResponse
-            .ok(varDefService.getOnePatchById(variableDefinitionId, patchId = patchId))
+            .ok(varDefService.getOnePatchById(variableDefinitionId, patchId = patchId).toFullResponseVariableDefinition())
             .contentType(MediaType.APPLICATION_JSON)
 }

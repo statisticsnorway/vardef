@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.constants
 
 const val ID_FIELD_DESCRIPTION = "Unique identifier for the variable definition."
+const val PATCH_ID_FIELD_DESCRIPTION = "Integer identifying a patch of a variable definition."
 const val NAME_FIELD_DESCRIPTION = "Name of the variable. Must be unique for a given Unit Type and Owner combination."
 const val SHORT_NAME_FIELD_DESCRIPTION = "Recommended short name. Must be unique within an organization."
 const val DEFINITION_FIELD_DESCRIPTION = "Definition of the variable."
@@ -31,3 +32,7 @@ const val RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION =
         "a list of one or more definitions. For example for a variable after-tax income it could be relevant to " +
         "link to definitions of income from work, property income etc."
 const val CONTACT_FIELD_DESCRIPTION = "Contact details"
+const val CREATED_AT_FIELD_DESCRIPTION = "The timestamp at which this variable definition was first created."
+const val CREATED_BY_FIELD_DESCRIPTION = "The user who created this variable definition."
+const val LAST_UPDATED_AT_FIELD_DESCRIPTION = "The timestamp at which this variable definition was last modified."
+const val LAST_UPDATED_BY_FIELD_DESCRIPTION = "The user who last modified this variable definition."

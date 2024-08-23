@@ -62,7 +62,7 @@ val SAVED_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
-        versionId = 1,
+        patchId = 1,
         name =
             LanguageStringType(
                 nb = "Landbakgrunn",

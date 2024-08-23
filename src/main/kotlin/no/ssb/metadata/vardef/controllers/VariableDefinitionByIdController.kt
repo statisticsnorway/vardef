@@ -68,6 +68,6 @@ class VariableDefinitionByIdController {
         @Body @Valid varDefUpdates: UpdateVariableDefinition,
     ): InputVariableDefinition =
         varDefService
-            .update(varDefService.getLatestVersionById(id).copyAndUpdate(varDefUpdates))
+            .update(varDefService.getLatestPatchById(id).copyAndUpdate(varDefUpdates))
             .toInputVariableDefinition()
 }

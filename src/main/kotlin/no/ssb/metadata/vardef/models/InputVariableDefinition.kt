@@ -80,7 +80,7 @@ data class InputVariableDefinition(
         SavedVariableDefinition(
             definitionId = id ?: NanoId.generate(8),
             // TODO Increment from highest existing
-            versionId = 1,
+            patchId = 1,
             name = name,
             shortName = shortName,
             definition = definition,

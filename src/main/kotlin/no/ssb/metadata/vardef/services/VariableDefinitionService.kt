@@ -34,25 +34,25 @@ class VariableDefinitionService(
             )
         }
 
-    fun listAllPatchesById(id: String): List<SavedVariableDefinition> = variableDefinitionRepository.findByDefinitionIdOrderByVersionId(id)
+    fun listAllPatchesById(id: String): List<SavedVariableDefinition> = variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id)
 
     fun getOnePatchById(
         variableDefinitionId: String,
         patchId: Int,
     ): InputVariableDefinition =
         variableDefinitionRepository
-            .findByDefinitionIdAndVersionId(
+            .findByDefinitionIdAndPatchId(
                 variableDefinitionId,
                 patchId,
             ).toInputVariableDefinition()
 
-    fun getLatestVersionById(id: String): SavedVariableDefinition =
-        variableDefinitionRepository.findByDefinitionIdOrderByVersionId(id).ifEmpty { throw EmptyResultException() }.last()
+    fun getLatestPatchById(id: String): SavedVariableDefinition =
+        variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty { throw EmptyResultException() }.last()
 
     fun getOneByIdAndRenderForLanguage(
         language: SupportedLanguages,
         id: String,
-    ): RenderedVariableDefinition = getLatestVersionById(id).toRenderedVariableDefinition(language, klassService)
+    ): RenderedVariableDefinition = getLatestPatchById(id).toRenderedVariableDefinition(language, klassService)
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 
@@ -60,24 +60,24 @@ class VariableDefinitionService(
 
     fun deleteById(id: String): Any =
         variableDefinitionRepository
-            .findByDefinitionIdOrderByVersionId(id)
+            .findByDefinitionIdOrderByPatchId(id)
             .ifEmpty { throw EmptyResultException() }
             .map {
                 variableDefinitionRepository.deleteById(it.id)
             }
 
-    fun getLatestVersionByDateAndById(
+    fun getLatestPatchByDateAndById(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): SavedVariableDefinition {
-        val versions =
+        val patches =
             variableDefinitionRepository
-                .findByDefinitionIdOrderByVersionId(
+                .findByDefinitionIdOrderByPatchId(
                     definitionId,
                 ).ifEmpty { throw EmptyResultException() }
-        val validFromDates = versions.map { it.validFrom }.toSortedSet()
+        val validFromDates = patches.map { it.validFrom }.toSortedSet()
         val validUntilDates =
-            versions
+            patches
                 .mapNotNull {
                     it.validUntil
                 }.toSortedSet()
@@ -88,6 +88,6 @@ class VariableDefinitionService(
         if (latestValidFromMatchingGivenDate == null) {
             throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity")
         }
-        return versions.last { it.validFrom == latestValidFromMatchingGivenDate }
+        return patches.last { it.validFrom == latestValidFromMatchingGivenDate }
     }
 }

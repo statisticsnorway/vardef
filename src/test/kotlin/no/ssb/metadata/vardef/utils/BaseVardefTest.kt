@@ -49,8 +49,8 @@ open class BaseVardefTest {
                 patchId = 6
             },
         )
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
+        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))
+        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition(null))
+        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition(null))
     }
 }

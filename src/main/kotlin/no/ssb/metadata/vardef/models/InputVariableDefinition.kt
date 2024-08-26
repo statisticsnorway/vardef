@@ -76,11 +76,11 @@ data class InputVariableDefinition(
     @Valid
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(): SavedVariableDefinition =
+    fun toSavedVariableDefinition(previousPatchId: Int?): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: NanoId.generate(8),
             // TODO Increment from highest existing
-            patchId = 1,
+            patchId = (previousPatchId ?: 0) + 1,
             name = name,
             shortName = shortName,
             definition = definition,

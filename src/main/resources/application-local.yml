@@ -3,9 +3,6 @@ micronaut:
   server:
     port: 8081
 
-logger:
-  levels:
-    io.micronaut.core.reflect: TRACE
-#
-#mongodb:
-#  uri: mongodb://localhost:27017
+#logger:
+#  levels:
+#    io.micronaut.data: DEBUG

@@ -101,11 +101,12 @@ val SAVED_VARIABLE_DEFINITION =
             Person("", ""),
     )
 
-val SAVED_DRAFT_VARIABLE_DEFINITION = SAVED_VARIABLE_DEFINITION.copy(
-    id = ObjectId(),
-    definitionId = NanoId.generate(8),
-    variableStatus = VariableStatus.DRAFT,
-)
+val SAVED_DRAFT_VARIABLE_DEFINITION =
+    SAVED_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = NanoId.generate(8),
+        variableStatus = VariableStatus.DRAFT,
+    )
 
 val SAVED_VARIABLE_DEFINITION_COPY =
     SAVED_VARIABLE_DEFINITION.copy(

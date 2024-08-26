@@ -7,6 +7,7 @@ import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.SAVED_DRAFT_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.temporal.ChronoUnit
-import no.ssb.metadata.vardef.utils.SAVED_DRAFT_VARIABLE_DEFINITION
 
 class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
@@ -142,7 +142,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `patch variable with published status` (spec: RequestSpecification) {
+    fun `patch variable with published status`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -159,7 +159,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(405)
     }
-
 
     @ParameterizedTest
     @MethodSource("TestUtils#invalidVariableDefinitions")

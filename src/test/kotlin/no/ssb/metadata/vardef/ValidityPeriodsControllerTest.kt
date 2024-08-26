@@ -10,12 +10,6 @@ import org.junit.jupiter.api.Test
 class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period`(spec: RequestSpecification) {
-        val jsonInput =
-            """
-            {   
-                "valid_from": "2024-06-05",    
-            }
-            """.trimIndent()
         spec
             .given()
             .contentType(ContentType.JSON)

@@ -1,5 +1,4 @@
 # Configuration which applies under unit/integration tests (NOT the deployment environment called "test")
-
 klass:
   classifications:
     702:
@@ -1073,3 +1072,7 @@ klass:
           name:
             en: ''
             nb: Arbeid og lønn
+#logger:
+#  levels:
+#    root: INFO
+#    org.mongodb.driver: DEBUG

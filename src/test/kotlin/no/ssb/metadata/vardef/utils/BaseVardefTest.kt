@@ -31,6 +31,7 @@ open class BaseVardefTest {
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.apply { patchId = 2 })
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.apply { patchId = 3 })
+        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.apply {
                 validFrom = LocalDate.of(1980, 12, 1)
@@ -52,6 +53,5 @@ open class BaseVardefTest {
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
-        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
     }
 }

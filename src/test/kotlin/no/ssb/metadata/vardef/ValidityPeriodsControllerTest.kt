@@ -1,39 +1,28 @@
 package no.ssb.metadata.vardef
 
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import org.junit.jupiter.api.Test
+import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.Test
 
-@MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ValidityPeriodsControllerTest {
-
+class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period`(spec: RequestSpecification) {
-
         val jsonInput =
             """
-        {
-            "definition": {
-                nb = "For personer født i går",
-                nn = "For personer født i går",
-                en = "For persons born yesterday",
-            },
-            "valid_from": "2024-06-05",
-        }
-        """.trimIndent()
-        
+            {   
+                "valid_from": "2024-06-05",    
+            }
+            """.trimIndent()
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(jsonInput)
+            .body(JSON_TEST_INPUT)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(201)
-
     }
 }

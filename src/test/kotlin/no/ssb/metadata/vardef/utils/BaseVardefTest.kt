@@ -53,6 +53,5 @@ open class BaseVardefTest {
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
         variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
-
     }
 }

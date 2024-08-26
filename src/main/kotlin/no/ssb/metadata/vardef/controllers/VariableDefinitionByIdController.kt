@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -11,10 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
-import no.ssb.metadata.vardef.models.InputVariableDefinition
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
-import no.ssb.metadata.vardef.models.SupportedLanguages
-import no.ssb.metadata.vardef.models.UpdateVariableDefinition
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
@@ -66,8 +64,14 @@ class VariableDefinitionByIdController {
     fun updateVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
         @Body @Valid varDefUpdates: UpdateVariableDefinition,
-    ): InputVariableDefinition =
-        varDefService
-            .update(varDefService.getLatestPatchById(id).copyAndUpdate(varDefUpdates))
-            .toInputVariableDefinition()
+    ): InputVariableDefinition {
+        val variable = varDefService.getLatestPatchById(id)
+        if (variable.variableStatus != VariableStatus.DRAFT) {
+            throw HttpStatusException(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "The variable is published or deprecated and cannot be updated with this method",
+            )
+        }
+        return varDefService.update(varDefService.getLatestPatchById(id).copyAndUpdate(varDefUpdates)).toInputVariableDefinition()
+    }
 }

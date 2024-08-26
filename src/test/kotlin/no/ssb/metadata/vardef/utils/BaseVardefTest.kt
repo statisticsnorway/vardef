@@ -28,6 +28,7 @@ open class BaseVardefTest {
     fun setUp() {
         variableDefinitionService.clear()
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
+        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.apply { patchId = 2 })
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.apply { patchId = 3 })

@@ -20,16 +20,12 @@ import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 @Tag(name = "Patches")
 @Validated
 @Controller("/variable-definitions/{variable-definition-id}/patches")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController {
-    val logger: Logger = LoggerFactory.getLogger(PatchesController::class.java)
-
     @Inject
     lateinit var varDefService: VariableDefinitionService
 
@@ -84,7 +80,6 @@ class PatchesController {
         @Body @Valid patch: InputVariableDefinition,
     ): FullResponseVariableDefinition {
         // TODO validate content of the new patch
-        logger.info(varDefService.listAll().toString())
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")

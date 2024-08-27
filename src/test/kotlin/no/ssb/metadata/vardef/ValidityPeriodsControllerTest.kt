@@ -27,7 +27,10 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
-    fun `create new validity period draft`(variableStatus: VariableStatus,  spec: RequestSpecification) {
+    fun `create new validity period with invalid status`(
+        variableStatus: VariableStatus,
+        spec: RequestSpecification
+    ) {
         var id =
             variableDefinitionService
                 .save(

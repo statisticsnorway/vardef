@@ -11,6 +11,7 @@ import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import org.bson.types.ObjectId
 import java.time.LocalDate
 
 @Singleton
@@ -29,13 +30,13 @@ class VariableDefinitionService(
 
     fun listAllAndRenderForLanguage(
         language: SupportedLanguages,
-        validFrom: LocalDate,
-        validUntil: LocalDate,
+        validFrom: LocalDate = LocalDate.now(),
+        validUntil: LocalDate = LocalDate.now(),
     ): List<RenderedVariableDefinition> =
         listAll()
             .filter { savedVariableDefinition ->
-                savedVariableDefinition.validFrom.isEqualOrAfter(validFrom)
-                        && (savedVariableDefinition.validUntil ?: validUntil).isEqualOrBefore(validUntil)
+                validFrom.isEqualOrAfter(savedVariableDefinition.validFrom)
+                       && validUntil.isEqualOrBefore(savedVariableDefinition.validUntil ?: LocalDate.now())
             }
             .map { savedVariableDefinition ->
                 savedVariableDefinition.toRenderedVariableDefinition(
@@ -44,11 +45,7 @@ class VariableDefinitionService(
                 )
             }
             .groupBy { renderedVariableDefinition -> renderedVariableDefinition.id }
-            .mapValues { (_, renderedVariableDefinitionList) ->
-                renderedVariableDefinitionList.maxBy { renderedVariableDefinition ->
-                    renderedVariableDefinition.lastUpdatedAt
-                }
-            }
+            .mapValues { entry -> entry.value.maxBy { it.patchId } }
             .values
             .toList()
 
@@ -103,7 +100,7 @@ class VariableDefinitionService(
                 .mapNotNull {
                     it.validUntil
                 }.toSortedSet()
-        if (validUntilDates.lastOrNull { dateOfValidity.isAfter(it) } != null) {
+        if (validUntilDates.any { dateOfValidity.isAfter(it) }) {
             throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity")
         }
         val latestValidFromMatchingGivenDate = validFromDates.lastOrNull { dateOfValidity.isAfter(it) }

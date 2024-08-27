@@ -101,17 +101,8 @@ class VariableDefinitionService(
         return variableDefinitionRepository.save(vardef)
     }
 
-    fun checkNewDefinition(vardef: InputVariableDefinition): Boolean {
-        // compare last patch/last validity period?
-        val compareVersion = vardef.id?.let { getLatestPatchById(it) }
-        if (compareVersion != null) {
-            if (compareVersion.definition == vardef.definition) {
-                val message = "Definition text must be changed"
-                println(message)
-                return false
-            }
-            return true
-        }
-        return false
+    fun checkDefinition(vardef: InputVariableDefinition, variableDefinitionId: String): Boolean {
+        val latestExistingPatch = getLatestPatchById(variableDefinitionId)
+        return vardef.definition != latestExistingPatch.definition
     }
 }

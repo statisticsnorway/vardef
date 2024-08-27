@@ -37,9 +37,12 @@ class ValidityPeriodsController {
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
-        if(patch.definition == latestExistingPatch.definition) {
+        if(!varDefService.checkDefinition(patch, variableDefinitionId)){
             throw HttpStatusException(HttpStatus.BAD_REQUEST, "Definition text must be changed")
         }
+        /*if(patch.definition == latestExistingPatch.definition) {
+            throw HttpStatusException(HttpStatus.BAD_REQUEST, "Definition text must be changed")
+        }*/
         return varDefService.save(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
         // return varDefService.saveNewValidityPeriod(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }

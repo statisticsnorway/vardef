@@ -54,6 +54,7 @@ data class SavedVariableDefinition(
     ): RenderedVariableDefinition =
         RenderedVariableDefinition(
             id = definitionId,
+            patchId = patchId,
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),

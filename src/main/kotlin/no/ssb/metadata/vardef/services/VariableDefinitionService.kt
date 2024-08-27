@@ -91,14 +91,7 @@ class VariableDefinitionService(
         return patches.last { it.validFrom == latestValidFromMatchingGivenDate }
     }
 
-    fun checkDefinition(
-        vardef: InputVariableDefinition,
-        variableDefinitionId: String,
-    ): Boolean {
-        val latestExistingPatch = getLatestPatchById(variableDefinitionId)
-        return vardef.definition != latestExistingPatch.definition
-    }
-
+    // Move to custom exception class
     fun checkAllLanguages(
         vardef: InputVariableDefinition,
         variableDefinitionId: String,
@@ -106,20 +99,20 @@ class VariableDefinitionService(
         val latestExistingPatch = getLatestPatchById(variableDefinitionId)
         val definition = vardef.definition
         val nbCheck =
-            if (latestExistingPatch.definition.nb != null) {
-                definition.nb != null && latestExistingPatch.definition.nb != definition.nb
+            if (!latestExistingPatch.definition.nb.isNullOrBlank()) {
+                !definition.nb.isNullOrBlank() && !latestExistingPatch.definition.nb.equals(definition.nb, true)
             } else {
                 true
             }
         val nnCheck =
-            if (latestExistingPatch.definition.nn != null) {
-                definition.nn != null && latestExistingPatch.definition.nn != definition.nn
+            if (!latestExistingPatch.definition.nn.isNullOrBlank()) {
+                !definition.nn.isNullOrBlank() && !latestExistingPatch.definition.nn.equals(definition.nn)
             } else {
                 true
             }
         val enCheck =
-            if (latestExistingPatch.definition.nn != null) {
-                definition.nn != null && latestExistingPatch.definition.nn != definition.nn
+            if (!latestExistingPatch.definition.nn.isNullOrBlank()) {
+                !definition.nn.isNullOrBlank() && !latestExistingPatch.definition.nn.equals(definition.nn)
             } else {
                 true
             }

@@ -12,6 +12,4 @@ enum class VariableStatus {
     DEPRECATED,
 }
 
-fun VariableStatus.isPublished(): Boolean =
-    this in
-        listOf(VariableStatus.PUBLISHED_EXTERNAL, VariableStatus.PUBLISHED_INTERNAL)
+fun VariableStatus.isPublished(): Boolean = this in listOf(VariableStatus.PUBLISHED_EXTERNAL, VariableStatus.PUBLISHED_INTERNAL)

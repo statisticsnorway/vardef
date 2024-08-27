@@ -19,7 +19,7 @@ open class VarDokService(
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
             logger.warn("$id is not found. Exception message: ${e.message}")
-            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id $id not found"))
+            throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id not found"))
         }
     }
 
@@ -32,7 +32,7 @@ open class VarDokService(
             varDokClient.fetchVarDokByIdAndLanguage(id, language)
         } catch (e: Exception) {
             logger.warn("Error while fetching vardok by id and language", e)
-            throw(HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
+            throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
         }
     }
 

@@ -12,7 +12,8 @@ import java.time.LocalDate
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get latest patch`() {
-        assertThat(variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId).isEqualTo(6)
+        assertThat(variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId)
+            .isEqualTo(6)
     }
 
     @Test
@@ -50,13 +51,13 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @Test
     fun `list variable definition`() {
-            variableDefinitionService
-                .listAllAndRenderForLanguage(
-                    SupportedLanguages.EN,
-                    LocalDate.now(),
-                    LocalDate.now()
-                )
-                .onEach { println(it) }
-                .let{ renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(2) }
+        variableDefinitionService
+            .listAllAndRenderForLanguage(
+                SupportedLanguages.EN,
+                LocalDate.now(),
+                LocalDate.now(),
+            )
+            .onEach { println(it) }
+            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(2) }
     }
 }

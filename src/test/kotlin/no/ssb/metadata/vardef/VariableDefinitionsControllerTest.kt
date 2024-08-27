@@ -187,17 +187,18 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `get request no value in selected language`(spec: RequestSpecification) {
-        val definitionId = spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT_NO_ENGLISH_NAME)
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(201)
-            .extract()
-            .body()
-            .path<String>("id")
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(JSON_TEST_INPUT_NO_ENGLISH_NAME)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .path<String>("id")
 
         spec
             .`when`()
@@ -363,7 +364,5 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("size()", greaterThan(0))
-
-
     }
 }

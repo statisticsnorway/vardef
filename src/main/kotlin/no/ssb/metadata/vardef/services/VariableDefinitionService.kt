@@ -11,7 +11,6 @@ import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import org.bson.types.ObjectId
 import java.time.LocalDate
 
 @Singleton
@@ -35,13 +34,13 @@ class VariableDefinitionService(
     ): List<RenderedVariableDefinition> =
         listAll()
             .filter { savedVariableDefinition ->
-                validFrom.isEqualOrAfter(savedVariableDefinition.validFrom)
-                       && validUntil.isEqualOrBefore(savedVariableDefinition.validUntil ?: LocalDate.now())
+                validFrom.isEqualOrAfter(savedVariableDefinition.validFrom) &&
+                    validUntil.isEqualOrBefore(savedVariableDefinition.validUntil ?: LocalDate.now())
             }
             .map { savedVariableDefinition ->
                 savedVariableDefinition.toRenderedVariableDefinition(
                     language,
-                    klassService
+                    klassService,
                 )
             }
             .groupBy { renderedVariableDefinition -> renderedVariableDefinition.id }

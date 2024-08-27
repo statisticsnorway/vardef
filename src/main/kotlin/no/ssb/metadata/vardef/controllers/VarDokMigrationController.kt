@@ -2,7 +2,9 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.annotation.*
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Status
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
@@ -11,7 +13,8 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.vardok.*
+import no.ssb.metadata.vardef.integrations.vardok.VarDokService
+import no.ssb.metadata.vardef.integrations.vardok.VardokException
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 
 @Validated

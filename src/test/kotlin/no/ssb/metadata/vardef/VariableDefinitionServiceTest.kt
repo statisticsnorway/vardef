@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION_NEW_DEFINITION
@@ -49,7 +48,6 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 )
         }
     }
-
 
     @Test
     fun `save new validity period definition is changed`() {

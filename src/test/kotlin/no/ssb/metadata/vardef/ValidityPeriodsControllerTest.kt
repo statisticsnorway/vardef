@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
-
 class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period`(spec: RequestSpecification) {
@@ -23,8 +22,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create new validity period definition text is changed`( spec: RequestSpecification) {
-
+    fun `create new validity period definition text is changed`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -40,7 +38,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT_NEW_VALIDITY_PERIOD)
+            .body(JSON_TEST_INPUT_NOT_NEW_VALIDITY_PERIOD)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()

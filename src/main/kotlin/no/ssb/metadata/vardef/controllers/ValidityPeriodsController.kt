@@ -21,10 +21,8 @@ import no.ssb.metadata.vardef.validators.VardefId
 @Controller("/variable-definitions/{variable-definition-id}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class ValidityPeriodsController {
-
     @Inject
     lateinit var varDefService: VariableDefinitionService
-
 
     @Post()
     @Status(HttpStatus.CREATED)
@@ -39,8 +37,10 @@ class ValidityPeriodsController {
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
+        if(patch.definition == latestExistingPatch.definition) {
+            throw HttpStatusException(HttpStatus.BAD_REQUEST, "Definition text must be changed")
+        }
         return varDefService.save(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
-        //return varDefService.saveNewValidityPeriod(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
+        // return varDefService.saveNewValidityPeriod(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }
-
 }

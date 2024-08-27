@@ -112,6 +112,6 @@ class VariableDefinitionService(
             }
             return true
         }
-       return false
+        return false
     }
 }

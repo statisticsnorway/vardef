@@ -68,6 +68,16 @@ val INPUT_VARIABLE_DEFINITION_NEW_DEFINITION =
             ),
     )
 
+val INPUT_VARIABLE_DEFINITION_NEW_DEFINITION2 =
+    INPUT_VARIABLE_DEFINITION.copy(
+        definition =
+        LanguageStringType(
+            nb = "For personer født i går",
+            nn = null,
+            en = "Persons born yesterday",
+        ),
+    )
+
 val SAVED_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),
@@ -300,18 +310,5 @@ val JSON_TEST_INPUT_NEW_VALIDITY_PERIOD =
             },
             "email": "user@example.com"
         }
-    }
-    """.trimIndent()
-
-val JSON_TEST_NEW_VALIDITY_PERIOD =
-    """
-    {
-        "definition": {
-            "en": "Persons born yesterday",
-            "nb": "Personer født i går",
-            "nn": "Personer født i går"
-        },
-        "valid_from": "2024-06-05",
-        "valid_until": "2024-06-05"
     }
     """.trimIndent()

@@ -91,16 +91,6 @@ class VariableDefinitionService(
         return patches.last { it.validFrom == latestValidFromMatchingGivenDate }
     }
 
-    fun saveNewValidityPeriod(vardef: SavedVariableDefinition): SavedVariableDefinition {
-        // compare last patch/last validity period?
-        val compareVersion = getLatestPatchById(vardef.definitionId)
-        if (compareVersion.definition == vardef.definition) {
-            val message = "Definition text must be changed"
-            println(message)
-        }
-        return variableDefinitionRepository.save(vardef)
-    }
-
     fun checkDefinition(
         vardef: InputVariableDefinition,
         variableDefinitionId: String,
@@ -119,24 +109,20 @@ class VariableDefinitionService(
             if (latestExistingPatch.definition.nb != null) {
                 definition.nb != null && latestExistingPatch.definition.nb != definition.nb
             } else {
-                true // must check not adding new
+                true
             }
         val nnCheck =
             if (latestExistingPatch.definition.nn != null) {
                 definition.nn != null && latestExistingPatch.definition.nn != definition.nn
             } else {
-                true // must check not adding new
+                true
             }
         val enCheck =
             if (latestExistingPatch.definition.nn != null) {
                 definition.nn != null && latestExistingPatch.definition.nn != definition.nn
             } else {
-                true // must check not adding new
+                true
             }
-        // val nbCheck = (latestExistingPatch.definition.nb != null) == (definition.nb != null)
-        // val nnCheck = (latestExistingPatch.definition.nn != null) == (definition.nn != null)
-        // val enCheck = (latestExistingPatch.definition.en != null) == (definition.en != null)
-
         return nbCheck && nnCheck && enCheck
     }
 }

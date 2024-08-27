@@ -47,14 +47,6 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `save new validity period definition is changed`() {
-        val result = variableDefinitionService.saveNewValidityPeriod(INPUT_VARIABLE_DEFINITION_NEW_DEFINITION.toSavedVariableDefinition(3))
-        assertThat(result).isNotNull
-        assertThat(result.definitionId).isEqualTo(INPUT_VARIABLE_DEFINITION.id)
-        assertThat(result.definition).isNotEqualTo(INPUT_VARIABLE_DEFINITION.definition)
-    }
-
-    @Test
     fun `check definition text is changed`() {
         val latestExistingPatch = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId)
         val result = variableDefinitionService.checkDefinition(INPUT_VARIABLE_DEFINITION, latestExistingPatch.definitionId)

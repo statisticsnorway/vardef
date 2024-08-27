@@ -31,19 +31,18 @@ class ValidityPeriodsController {
     @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status DRAFT or DEPRECATED.")
     fun createValidityPeriod(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
-        @Body @Valid patch: InputVariableDefinition,
+        @Body @Valid newPeriod: InputVariableDefinition,
     ): FullResponseVariableDefinition {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
-        if (!varDefService.checkDefinition(patch, variableDefinitionId)) {
+        if (!varDefService.checkDefinition(newPeriod, variableDefinitionId)) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, "Definition text must be changed")
         }
-        if (!varDefService.checkAllLanguages(patch, variableDefinitionId)) {
+        if (!varDefService.checkAllLanguages(newPeriod, variableDefinitionId)) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, "Definition text must be changed for all languages")
         }
-        return varDefService.save(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
-        // return varDefService.saveNewValidityPeriod(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
+        return varDefService.save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }
 }

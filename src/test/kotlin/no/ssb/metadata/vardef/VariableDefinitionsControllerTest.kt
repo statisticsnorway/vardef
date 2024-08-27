@@ -6,16 +6,16 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION_COPY
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT_NO_ENGLISH_NAME
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
@@ -155,7 +155,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/variable-definitions")
+            .get("/variable-definitions?validFrom=2024-01-01")
             .then()
             .statusCode(200)
             .body("[0].definition", equalTo("For personer født"))
@@ -187,16 +187,28 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `get request no value in selected language`(spec: RequestSpecification) {
+        val definitionId = spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSON_TEST_INPUT_NO_ENGLISH_NAME)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(201)
+            .extract()
+            .body()
+            .path<String>("id")
+
         spec
             .`when`()
             .contentType(ContentType.JSON)
             .header("Accept-Language", "en")
-            .get("/variable-definitions")
+            .get("/variable-definitions/$definitionId")
             .then()
             .assertThat()
             .statusCode(200)
-            .body("[-1]", hasKey("name"))
-            .body("[-1].name", equalTo(null))
+            .body("", hasKey("name"))
+            .body("name", equalTo(null))
     }
 
     @ParameterizedTest
@@ -276,7 +288,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .contentType(ContentType.JSON)
             .header("Accept-Language", "nb")
-            .get("/variable-definitions")
+            .get("/variable-definitions?validFrom=2024-01-01")
             .then()
             .assertThat()
             .statusCode(200)
@@ -332,30 +344,26 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list variable definition`(spec: RequestSpecification) {
-        val v0 =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(JSON_TEST_INPUT)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(201)
-                .extract()
-                .body()
-                .path<String>("id")
+    fun `list valid variable definitions by now`(spec: RequestSpecification) {
+        spec
+            .given()
+            .`when`()
+            .get("/variable-definitions")
+            .then()
+            .statusCode(200)
+            .body("size()", Matchers.equalTo(2))
+    }
 
-        val v1 =
-            spec
-                .given()
-                .`when`()
-                .get("/variable-definitions/")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .path<List<Any>>(".")
+    @Test
+    fun `list valid variable definition by given date`(spec: RequestSpecification) {
+        spec
+            .given()
+            .`when`()
+            .get("/variable-definitions?validFrom=2024-06-05")
+            .then()
+            .statusCode(200)
+            .body("size()", greaterThan(0))
+
 
     }
 }

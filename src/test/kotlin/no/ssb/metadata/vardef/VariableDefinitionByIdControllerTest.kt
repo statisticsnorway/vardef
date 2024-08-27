@@ -141,7 +141,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#invalidVariableDefinitions")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `update variable definition with invalid inputs`(
         updatedJsonString: String,
         errorMessage: String,

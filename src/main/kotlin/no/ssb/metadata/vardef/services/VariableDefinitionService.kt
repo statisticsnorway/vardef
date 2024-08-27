@@ -79,21 +79,14 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean {
-        val patches = listAllPatchesById(definitionId)
-        val validityDates = patches.map { it.validFrom }.toSortedSet()
-        validityDates.addAll(
-            patches
-                .mapNotNull {
-                    it.validUntil
-                }.toSortedSet(),
-        )
-        // Step through the combined validFrom and validTo dates 2 by 2
+        return listAllPatchesById(definitionId)
+            .map { it.validFrom to it.validUntil }
+            .sortedBy { it.first }
         // If the dateOfValidity is between any set of two dates, return false. Otherwise, return true.
-        return validityDates
-            .windowed(size = 2, step = 1, partialWindows = false) { dates: List<LocalDate> ->
-                dateOfValidity.isAfter(dates[0]) &&
-                    dateOfValidity.isBefore(dates[1])
-            }.none { it }
+            .map { (validFrom, validUntil) ->
+                dateOfValidity.isAfter(validFrom) && dateOfValidity.isBefore(validUntil)
+            }
+            .none { it }
     }
 
     fun getLatestPatchByDateAndById(

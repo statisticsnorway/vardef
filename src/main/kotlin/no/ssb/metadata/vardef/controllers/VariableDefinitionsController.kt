@@ -61,6 +61,6 @@ class VariableDefinitionsController {
             )
         }
 
-        return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
+        return varDefService.save(varDef.toSavedVariableDefinition(null)).toInputVariableDefinition()
     }
 }

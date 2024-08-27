@@ -40,6 +40,7 @@ class ValidityPeriodsController {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
         return varDefService.save(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
+        //return varDefService.saveNewValidityPeriod(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }
 
 }

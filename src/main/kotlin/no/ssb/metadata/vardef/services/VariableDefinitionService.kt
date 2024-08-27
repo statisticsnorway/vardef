@@ -5,9 +5,7 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
 
@@ -93,7 +91,27 @@ class VariableDefinitionService(
         return patches.last { it.validFrom == latestValidFromMatchingGivenDate }
     }
 
-    fun saveNewValidityPeriod() {
-        TODO("Not yet implemented")
+    fun saveNewValidityPeriod(vardef: SavedVariableDefinition): SavedVariableDefinition {
+        // compare last patch/last validity period?
+        val compareVersion = getLatestPatchById(vardef.definitionId)
+        if (compareVersion.definition == vardef.definition) {
+            val message = "Definition text must be changed"
+            println(message)
+        }
+        return variableDefinitionRepository.save(vardef)
+    }
+
+    fun checkNewDefinition(vardef: InputVariableDefinition): Boolean {
+        // compare last patch/last validity period?
+        val compareVersion = vardef.id?.let { getLatestPatchById(it) }
+        if (compareVersion != null) {
+            if (compareVersion.definition == vardef.definition) {
+                val message = "Definition text must be changed"
+                println(message)
+                return false
+            }
+            return true
+        }
+       return false
     }
 }

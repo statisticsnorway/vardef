@@ -1,7 +1,10 @@
 package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION_NEW_DEFINITION
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
@@ -50,8 +53,9 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @Test
     fun `save new validity period definition is changed`() {
-        variableDefinitionService.saveNewValidityPeriod()
-        TODO("Add test logic for checking definition text")
-
+        val result = variableDefinitionService.saveNewValidityPeriod(INPUT_VARIABLE_DEFINITION_NEW_DEFINITION.toSavedVariableDefinition(3))
+        assertThat(result).isNotNull
+        assertThat(result.definitionId).isEqualTo(INPUT_VARIABLE_DEFINITION.id)
+        assertThat(result.definition).isNotEqualTo(INPUT_VARIABLE_DEFINITION.definition)
     }
 }

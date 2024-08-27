@@ -4,6 +4,8 @@ import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
+import no.ssb.metadata.vardef.extensions.isEqualOrAfter
+import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
@@ -25,13 +27,30 @@ class VariableDefinitionService(
             .findAll()
             .toList()
 
-    fun listAllAndRenderForLanguage(language: SupportedLanguages): List<RenderedVariableDefinition> =
-        listAll().map { savedVariableDefinition ->
-            savedVariableDefinition.toRenderedVariableDefinition(
-                language,
-                klassService,
-            )
-        }
+    fun listAllAndRenderForLanguage(
+        language: SupportedLanguages,
+        validFrom: LocalDate,
+        validUntil: LocalDate,
+    ): List<RenderedVariableDefinition> =
+        listAll()
+            .filter { savedVariableDefinition ->
+                savedVariableDefinition.validFrom.isEqualOrAfter(validFrom)
+                        && (savedVariableDefinition.validUntil ?: validUntil).isEqualOrBefore(validUntil)
+            }
+            .map { savedVariableDefinition ->
+                savedVariableDefinition.toRenderedVariableDefinition(
+                    language,
+                    klassService
+                )
+            }
+            .groupBy { renderedVariableDefinition -> renderedVariableDefinition.id }
+            .mapValues { (_, renderedVariableDefinitionList) ->
+                renderedVariableDefinitionList.maxBy { renderedVariableDefinition ->
+                    renderedVariableDefinition.lastUpdatedAt
+                }
+            }
+            .values
+            .toList()
 
     fun listAllPatchesById(id: String): List<SavedVariableDefinition> =
         variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty {
@@ -49,7 +68,8 @@ class VariableDefinitionService(
             )
 
     fun getLatestPatchById(id: String): SavedVariableDefinition =
-        variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty { throw EmptyResultException() }.last()
+        variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty { throw EmptyResultException() }
+            .last()
 
     fun getOneByIdAndRenderForLanguage(
         language: SupportedLanguages,

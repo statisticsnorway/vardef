@@ -6,11 +6,13 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION_COPY
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
+import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -198,7 +200,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#invalidVariableDefinitions")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `create variable definition with invalid inputs`(
         updatedJsonString: String,
         errorMessage: String,
@@ -218,7 +220,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#variableDefinitionsNonMandatoryFieldsRemoved")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsNonMandatoryFieldsRemoved")
     fun `create variable definition with non mandatory fields removed`(
         updatedJsonString: String,
         spec: RequestSpecification,
@@ -233,7 +235,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#variableDefinitionsMandatoryFieldsRemoved")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsMandatoryFieldsRemoved")
     fun `create variable definition with mandatory fields removed`(
         updatedJsonString: String,
         errorMessage: String,
@@ -253,7 +255,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#variableDefinitionsVariousVariableStatus")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsVariousVariableStatus")
     fun `test variable status inputs`(
         updatedJsonString: String,
         errorCode: Int,
@@ -327,5 +329,33 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                     "https://www.ssb.no/klass/klassifikasjoner/91",
                 ),
             )
+    }
+
+    @Test
+    fun `list variable definition`(spec: RequestSpecification) {
+        val v0 =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(JSON_TEST_INPUT)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .path<String>("id")
+
+        val v1 =
+            spec
+                .given()
+                .`when`()
+                .get("/variable-definitions/")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .path<List<Any>>(".")
+
     }
 }

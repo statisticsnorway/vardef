@@ -15,6 +15,7 @@ import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
+import java.time.LocalDate
 
 @Validated
 @Controller("/variable-definitions")
@@ -31,9 +32,11 @@ class VariableDefinitionsController {
     @Get()
     fun listVariableDefinitions(
         @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
+        @QueryValue validFrom: LocalDate = LocalDate.now(),
+        @QueryValue validUntil: LocalDate = LocalDate.now(),
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listAllAndRenderForLanguage(language))
+            .ok(varDefService.listAllAndRenderForLanguage(language, validFrom, validUntil))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**

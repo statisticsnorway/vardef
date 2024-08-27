@@ -48,8 +48,7 @@ class VariableDefinitionService(
                 patchId,
             )
 
-    fun getLatestPatchById(id: String): SavedVariableDefinition =
-        variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty { throw EmptyResultException() }.last()
+    fun getLatestPatchById(id: String): SavedVariableDefinition = listAllPatchesById(id).last()
 
     fun getOneByIdAndRenderForLanguage(
         language: SupportedLanguages,
@@ -61,22 +60,47 @@ class VariableDefinitionService(
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
 
     fun deleteById(id: String): Any =
-        variableDefinitionRepository
-            .findByDefinitionIdOrderByPatchId(id)
-            .ifEmpty { throw EmptyResultException() }
+        listAllPatchesById(id)
             .map {
                 variableDefinitionRepository.deleteById(it.id)
             }
+
+    /**
+     * Check that a given date is not between any existing validity dates for the given variable definition.
+     *
+     * This is important to preserve metadata immutability, such that a consumer specifying a particular date
+     * will not suddenly get a different result because a new period was inserted between existing ones.
+     *
+     * @param definitionId the ID variable definition to run the validation for.
+     * @param dateOfValidity the new date supplied.
+     * @return True if the date is valid, false otherwise.
+     */
+    fun isValidValidFromValue(
+        definitionId: String,
+        dateOfValidity: LocalDate,
+    ): Boolean {
+        val patches = listAllPatchesById(definitionId)
+        val validityDates = patches.map { it.validFrom }.toSortedSet()
+        validityDates.addAll(
+            patches
+                .mapNotNull {
+                    it.validUntil
+                }.toSortedSet(),
+        )
+        // Step through the combined validFrom and validTo dates 2 by 2
+        // If the dateOfValidity is between any set of two dates, return false. Otherwise, return true.
+        return validityDates
+            .windowed(size = 2, step = 1, partialWindows = false) { dates: List<LocalDate> ->
+                dateOfValidity.isAfter(dates[0]) &&
+                    dateOfValidity.isBefore(dates[1])
+            }.none { it }
+    }
 
     fun getLatestPatchByDateAndById(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): SavedVariableDefinition {
-        val patches =
-            variableDefinitionRepository
-                .findByDefinitionIdOrderByPatchId(
-                    definitionId,
-                ).ifEmpty { throw EmptyResultException() }
+        val patches = listAllPatchesById(definitionId)
         val validFromDates = patches.map { it.validFrom }.toSortedSet()
         val validUntilDates =
             patches

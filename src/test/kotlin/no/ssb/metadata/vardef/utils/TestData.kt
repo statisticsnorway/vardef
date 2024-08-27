@@ -77,7 +77,7 @@ val SAVED_VARIABLE_DEFINITION =
             LanguageStringType(
                 nb = "Landbakgrunn",
                 nn = "Landbakgrunn",
-                en = null,
+                en = "Country Background",
             ),
         shortName = "landbak",
         definition =

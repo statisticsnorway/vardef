@@ -18,7 +18,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
-            .statusCode(201)
+            .statusCode(400)
     }
 
     @Test

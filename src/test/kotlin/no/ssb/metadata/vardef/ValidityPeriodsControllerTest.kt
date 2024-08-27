@@ -3,10 +3,7 @@ package no.ssb.metadata.vardef
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.VariableStatus
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -22,6 +19,32 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(201)
+    }
+
+    @Test
+    fun `create new validity period definition text is changed`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSON_TEST_INPUT_NEW_VALIDITY_PERIOD)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(201)
+    }
+
+    @Test
+    fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSON_TEST_INPUT_NEW_VALIDITY_PERIOD)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(400)
+        TODO("check status")
+
     }
 
     @ParameterizedTest

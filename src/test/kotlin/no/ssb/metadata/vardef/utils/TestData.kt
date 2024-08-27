@@ -208,3 +208,45 @@ val JSON_TEST_INPUT =
         }
     }
     """.trimIndent()
+
+val JSON_TEST_INPUT_NEW_VALIDITY_PERIOD =
+    """
+    {
+        "name": {
+            "en": "Country Background",
+            "nb": "Landbakgrunn",
+            "nn": "Landbakgrunn"
+        },
+        "short_name": "landbak",
+        "definition": {
+            "en": "Persons born yesterday",
+            "nb": "Personer født i går",
+            "nn": "Personer født i går"
+        },
+        "classification_reference": "91",
+        "unit_types": [
+            "03",
+            "04",
+            "05"
+        ],
+        "subject_fields": [
+            "he04"
+        ],
+        "contains_sensitive_personal_information": true,
+        "measurement_type": "02.01",
+        "valid_from": "2024-06-05",
+        "valid_until": "2024-06-05",
+        "external_reference_uri": "https://example.com/",
+        "related_variable_definition_uris": [
+            "https://example.com/"
+        ],
+        "contact": {
+            "title": {
+                "en": "string",
+                "nb": "string",
+                "nn": "string"
+            },
+            "email": "user@example.com"
+        }
+    }
+    """.trimIndent()

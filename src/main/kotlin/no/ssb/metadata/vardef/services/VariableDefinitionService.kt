@@ -92,4 +92,8 @@ class VariableDefinitionService(
         }
         return patches.last { it.validFrom == latestValidFromMatchingGivenDate }
     }
+
+    fun saveNewValidityPeriod() {
+        TODO("Not yet implemented")
+    }
 }

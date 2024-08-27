@@ -46,4 +46,12 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 )
         }
     }
+
+
+    @Test
+    fun `save new validity period definition is changed`() {
+        variableDefinitionService.saveNewValidityPeriod()
+        TODO("Add test logic for checking definition text")
+
+    }
 }

@@ -1,10 +1,7 @@
 package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION_NEW_DEFINITION
-import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -55,5 +52,24 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(result).isNotNull
         assertThat(result.definitionId).isEqualTo(INPUT_VARIABLE_DEFINITION.id)
         assertThat(result.definition).isNotEqualTo(INPUT_VARIABLE_DEFINITION.definition)
+    }
+
+    @Test
+    fun `check definition text is changed`() {
+        val latestExistingPatch = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId)
+        val result = variableDefinitionService.checkDefinition(INPUT_VARIABLE_DEFINITION, latestExistingPatch.definitionId)
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `check definition text all languages`() {
+        val result = variableDefinitionService.checkAllLanguages(INPUT_VARIABLE_DEFINITION, SAVED_VARIABLE_DEFINITION.definitionId)
+        assertThat(result).isFalse()
+        val result2 =
+            variableDefinitionService.checkAllLanguages(
+                INPUT_VARIABLE_DEFINITION_NEW_DEFINITION,
+                SAVED_VARIABLE_DEFINITION.definitionId,
+            )
+        assertThat(result2).isTrue()
     }
 }

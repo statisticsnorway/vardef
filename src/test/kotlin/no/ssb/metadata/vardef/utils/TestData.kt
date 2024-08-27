@@ -61,11 +61,11 @@ val INPUT_VARIABLE_DEFINITION_NO_NAME =
 val INPUT_VARIABLE_DEFINITION_NEW_DEFINITION =
     INPUT_VARIABLE_DEFINITION.copy(
         definition =
-            LanguageStringType(
-                nb = "Personer født i går",
-                nn = "Personer født i går",
-                en = "Persons born yesterday",
-            ),
+        LanguageStringType(
+            nb = "For personer født i går",
+            nn = "For personer født i går",
+            en = "Persons born yesterday",
+        ),
     )
 
 val SAVED_VARIABLE_DEFINITION =
@@ -77,7 +77,7 @@ val SAVED_VARIABLE_DEFINITION =
             LanguageStringType(
                 nb = "Landbakgrunn",
                 nn = "Landbakgrunn",
-                en = "Country Background",
+                en = null,
             ),
         shortName = "landbak",
         definition =

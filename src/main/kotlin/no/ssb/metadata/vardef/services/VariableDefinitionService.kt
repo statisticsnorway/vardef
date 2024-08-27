@@ -101,8 +101,42 @@ class VariableDefinitionService(
         return variableDefinitionRepository.save(vardef)
     }
 
-    fun checkDefinition(vardef: InputVariableDefinition, variableDefinitionId: String): Boolean {
+    fun checkDefinition(
+        vardef: InputVariableDefinition,
+        variableDefinitionId: String,
+    ): Boolean {
         val latestExistingPatch = getLatestPatchById(variableDefinitionId)
         return vardef.definition != latestExistingPatch.definition
+    }
+
+    fun checkAllLanguages(
+        vardef: InputVariableDefinition,
+        variableDefinitionId: String,
+    ): Boolean {
+        val latestExistingPatch = getLatestPatchById(variableDefinitionId)
+        val definition = vardef.definition
+        val nbCheck =
+            if (latestExistingPatch.definition.nb != null) {
+                definition.nb != null && latestExistingPatch.definition.nb != definition.nb
+            } else {
+                true // must check not adding new
+            }
+        val nnCheck =
+            if (latestExistingPatch.definition.nn != null) {
+                definition.nn != null && latestExistingPatch.definition.nn != definition.nn
+            } else {
+                true // must check not adding new
+            }
+        val enCheck =
+            if (latestExistingPatch.definition.nn != null) {
+                definition.nn != null && latestExistingPatch.definition.nn != definition.nn
+            } else {
+                true // must check not adding new
+            }
+        // val nbCheck = (latestExistingPatch.definition.nb != null) == (definition.nb != null)
+        // val nnCheck = (latestExistingPatch.definition.nn != null) == (definition.nn != null)
+        // val enCheck = (latestExistingPatch.definition.en != null) == (definition.en != null)
+
+        return nbCheck && nnCheck && enCheck
     }
 }

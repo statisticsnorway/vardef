@@ -116,6 +116,7 @@ val SAVED_VARIABLE_DEFINITION_COPY =
 val RENDERED_VARIABLE_DEFINITION =
     RenderedVariableDefinition(
         id = "",
+        patchId = 1,
         name = "Landbakgrunn",
         shortName = "landbak",
         definition = "For personer født",
@@ -144,6 +145,7 @@ val RENDERED_VARIABLE_DEFINITION =
 val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
     RenderedVariableDefinition(
         id = "",
+        patchId = 1,
         name = "Landbakgrunn",
         shortName = "landbak",
         definition = "For personer født",
@@ -173,6 +175,47 @@ val JSON_TEST_INPUT =
     {
         "name": {
             "en": "Country Background",
+            "nb": "Landbakgrunn",
+            "nn": "Landbakgrunn"
+        },
+        "short_name": "landbak",
+        "definition": {
+            "en": "C.",
+            "nb": "F"
+        },
+        "classification_reference": "91",
+        "unit_types": [
+            "03",
+            "04",
+            "05"
+        ],
+        "subject_fields": [
+            "he04"
+        ],
+        "contains_sensitive_personal_information": true,
+        "measurement_type": "02.01",
+        "valid_from": "2024-06-05",
+        "valid_until": "2024-06-05",
+        "external_reference_uri": "https://example.com/",
+        "related_variable_definition_uris": [
+            "https://example.com/"
+        ],
+        "contact": {
+            "title": {
+                "en": "string",
+                "nb": "string",
+                "nn": "string"
+            },
+            "email": "user@example.com"
+        }
+    }
+    """.trimIndent()
+
+val JSON_TEST_INPUT_NO_ENGLISH_NAME =
+    """
+    {
+        "name": {
+            "en": null,
             "nb": "Landbakgrunn",
             "nn": "Landbakgrunn"
         },

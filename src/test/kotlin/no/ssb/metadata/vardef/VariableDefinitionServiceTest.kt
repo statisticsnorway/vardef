@@ -47,14 +47,27 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `check definition text all languages`() {
+    fun `add new language and definition text for languages not changed`() {
         val result = variableDefinitionService.isNewDefinition(INPUT_VARIABLE_DEFINITION, SAVED_VARIABLE_DEFINITION)
         assertThat(result).isFalse()
-        val result2 =
+    }
+
+    @Test
+    fun `definition text changed for all languages present`(){
+        val result =
             variableDefinitionService.isNewDefinition(
                 INPUT_VARIABLE_DEFINITION_NEW_DEFINITION,
                 SAVED_VARIABLE_DEFINITION,
             )
-        assertThat(result2).isTrue()
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `definition text not changed`(){
+        val result = variableDefinitionService.isNewDefinition(
+            INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS,
+            SAVED_VARIABLE_DEFINITION
+        )
+        assertThat(result).isFalse()
     }
 }

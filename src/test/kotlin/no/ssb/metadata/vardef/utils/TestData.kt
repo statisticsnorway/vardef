@@ -68,13 +68,13 @@ val INPUT_VARIABLE_DEFINITION_NEW_DEFINITION =
             ),
     )
 
-val INPUT_VARIABLE_DEFINITION_NEW_DEFINITION2 =
+val INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS =
     INPUT_VARIABLE_DEFINITION.copy(
         definition =
             LanguageStringType(
-                nb = "For personer født i går",
-                nn = null,
-                en = "Persons born yesterday",
+                nb = "For personer født",
+                nn = "For personer født",
+                en = "Country background is",
             ),
     )
 

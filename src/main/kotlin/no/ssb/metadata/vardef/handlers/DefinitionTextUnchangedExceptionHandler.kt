@@ -10,11 +10,12 @@ import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 
 @Produces
 @Singleton
-class DefinitionTextUnchangedExceptionHandler: ExceptionHandler<DefinitionTextUnchangedException, HttpResponse<*>>  {
-    override fun handle(request: HttpRequest<*>, exception: DefinitionTextUnchangedException): HttpResponse<*> {
+class DefinitionTextUnchangedExceptionHandler : ExceptionHandler<DefinitionTextUnchangedException, HttpResponse<*>> {
+    override fun handle(
+        request: HttpRequest<*>,
+        exception: DefinitionTextUnchangedException,
+    ): HttpResponse<*> {
         return HttpResponse.status<String>(HttpStatus.BAD_REQUEST)
             .body(exception.message)
     }
-
 }
-

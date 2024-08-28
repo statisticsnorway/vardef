@@ -63,11 +63,11 @@ val INPUT_VARIABLE_DEFINITION_NO_NAME =
 val INPUT_VARIABLE_DEFINITIONS_UNCHANGED =
     INPUT_VARIABLE_DEFINITION.copy(
         definition =
-        LanguageStringType(
-            nb = "For personer født",
-            nn = "For personer født",
-            en = "Country background is",
-        ),
+            LanguageStringType(
+                nb = "For personer født",
+                nn = "For personer født",
+                en = "Country background is",
+            ),
     )
 
 val INPUT_VARIABLE_DEFINITION_SLIGHTLY_NEW_DEFINITIONS =
@@ -83,13 +83,12 @@ val INPUT_VARIABLE_DEFINITION_SLIGHTLY_NEW_DEFINITIONS =
 val INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS =
     INPUT_VARIABLE_DEFINITION.copy(
         definition =
-        LanguageStringType(
-            nb = "Hester og kuer født",
-            nn = "Hester og kuer født",
-            en = "Horses and cows born",
-        ),
+            LanguageStringType(
+                nb = "Hester og kuer født",
+                nn = "Hester og kuer født",
+                en = "Horses and cows born",
+            ),
     )
-
 
 val INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS_AND_ADDED_LANGUAGE =
     INPUT_VARIABLE_DEFINITION.copy(
@@ -109,7 +108,7 @@ val INPUT_VARIABLE_DEFINITIONS_NEW_DEFINITION_NOT_ALL_LANGUAGES =
                 nn = "For personer født",
                 en = "Country background is",
             ),
-        )
+    )
 
 val INPUT_VARIABLE_DEFINITIONS_UNCHANGED_TWO_LANGUAGES =
     INPUT_VARIABLE_DEFINITION.copy(
@@ -118,17 +117,17 @@ val INPUT_VARIABLE_DEFINITIONS_UNCHANGED_TWO_LANGUAGES =
                 nb = "For personer født",
                 nn = null,
                 en = "Country background is",
-        ),
+            ),
     )
 
 val INPUT_VARIABLE_DEFINITIONS_CHANGED_TWO_LANGUAGES =
     INPUT_VARIABLE_DEFINITION.copy(
         definition =
-        LanguageStringType(
-            nb = "For personer født i går",
-            nn = null,
-            en = "Country background is born",
-        ),
+            LanguageStringType(
+                nb = "For personer født i går",
+                nn = null,
+                en = "Country background is born",
+            ),
     )
 
 val SAVED_VARIABLE_DEFINITION =
@@ -181,7 +180,7 @@ val SAVED_VARIABLE_DEFINITION_TWO_LANGUAGES =
                 nb = "For personer født",
                 nn = null,
                 en = "Country background is",
-        ),
+            ),
     )
 
 val SAVED_VARIABLE_DEFINITION_COPY =
@@ -303,7 +302,6 @@ val JSON_TEST_INPUT_ONLY_NEW_DEFINITIONS =
     }
     """.trimIndent()
 
-
 val JSON_TEST_INPUT_NOT_NEW_VALIDITY_PERIOD =
     """
     {
@@ -400,7 +398,7 @@ class TestDataProvider {
                 Arguments.of(INPUT_VARIABLE_DEFINITION_SLIGHTLY_NEW_DEFINITIONS, true),
                 Arguments.of(INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS_AND_ADDED_LANGUAGE, false),
                 Arguments.of(INPUT_VARIABLE_DEFINITIONS_NEW_DEFINITION_NOT_ALL_LANGUAGES, false),
-                Arguments.of(INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS , true),
+                Arguments.of(INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS, true),
             )
         }
     }

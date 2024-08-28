@@ -11,7 +11,10 @@ import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 @Produces
 @Singleton
 class PublishedVariableAccessExceptionHandler : ExceptionHandler<PublishedVariableAccessException, HttpResponse<*>> {
-    override fun handle(request: HttpRequest<*>, exception: PublishedVariableAccessException): HttpResponse<*> {
+    override fun handle(
+        request: HttpRequest<*>,
+        exception: PublishedVariableAccessException,
+    ): HttpResponse<*> {
         return HttpResponse.status<String>(HttpStatus.METHOD_NOT_ALLOWED)
             .body(exception.message)
     }

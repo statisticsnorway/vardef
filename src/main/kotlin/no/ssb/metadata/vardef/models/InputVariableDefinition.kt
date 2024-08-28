@@ -114,7 +114,6 @@ data class InputVariableDefinition(
             else -> {
                 null
             }
-
         }
     }
 }

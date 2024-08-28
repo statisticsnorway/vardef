@@ -5,13 +5,11 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
 class ValidityPeriodsControllerTest : BaseVardefTest() {
-
     @Test
     fun `create new validity period not all definitions changed`(spec: RequestSpecification) {
         spec
@@ -47,7 +45,6 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
-
     }
 
     @ParameterizedTest

@@ -95,17 +95,22 @@ class VariableDefinitionService(
         newDefinition: InputVariableDefinition,
         latestExistingPatch: SavedVariableDefinition,
     ): Boolean {
-        val allLanguagesPresent = latestExistingPatch.definition.listPresentLanguages().all { lang ->
-            newDefinition.definition.listPresentLanguages().contains(lang)
-        }
-        if(!allLanguagesPresent) {
+        val allLanguagesPresent =
+            latestExistingPatch.definition.listPresentLanguages().all { lang ->
+                newDefinition.definition.listPresentLanguages().contains(lang)
+            }
+        if (!allLanguagesPresent) {
             return false
         }
         val allDefinitionsChanged =
             latestExistingPatch.definition.listPresentLanguages().all { lang ->
-                // TODO("A change to null or empty string is not valid change, important when adding language")
-                latestExistingPatch.toInputVariableDefinition().getDefinitionValue(lang)?.equals(newDefinition.getDefinitionValue(lang), ignoreCase = true) == false
+                // TODO(
+                //  "A change to null or empty string is not valid change,
+                //  important when adding language")
+                latestExistingPatch.toInputVariableDefinition().getDefinitionValue(lang)?.equals(
+                    newDefinition.getDefinitionValue(lang), ignoreCase = true,
+                ) == false
             }
         return allDefinitionsChanged
-        }
+    }
 }

@@ -16,6 +16,14 @@ data class LanguageStringType(
             SupportedLanguages.NN -> nn
             SupportedLanguages.EN -> en
         }
+
+    fun listPresentLanguages(): List<String> {
+        val presentLanguages = mutableListOf<String>()
+        if (nb != null) presentLanguages.add("nb")
+        if (nn != null) presentLanguages.add("nn")
+        if (en != null) presentLanguages.add("en")
+        return presentLanguages
+    }
 }
 
 @Serdeable(naming = SnakeCaseStrategy::class)

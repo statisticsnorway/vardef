@@ -105,4 +105,16 @@ data class InputVariableDefinition(
             // TODO depends on authentication to make user information available
             lastUpdatedBy = null,
         )
+
+    fun getDefinitionValue(lang: String): String? {
+        when (lang) {
+            "nb" -> return definition.nb
+            "nn" -> return definition.nn
+            "en" -> return definition.en
+            else -> {
+                return null
+            }
+
+        }
+    }
 }

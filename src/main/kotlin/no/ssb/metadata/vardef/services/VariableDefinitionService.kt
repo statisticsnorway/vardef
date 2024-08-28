@@ -96,25 +96,20 @@ class VariableDefinitionService(
         variableDefinitionId: String,
     ): Boolean {
         val latestExistingPatch = getLatestPatchById(variableDefinitionId)
-        val definition = vardef.definition
-        val nbCheck =
-            if (!latestExistingPatch.definition.nb.isNullOrBlank()) {
-                !definition.nb.isNullOrBlank() && !latestExistingPatch.definition.nb.equals(definition.nb, true)
-            } else {
-                true
+        var isChanged = false
+        val allLanguagesPresent = latestExistingPatch.definition.listPresentLanguages().all { lang ->
+            vardef.getDefinitionValue(lang) != null
+        }
+        if (allLanguagesPresent) {
+            latestExistingPatch.definition.listPresentLanguages().forEach { lang ->
+                val latestPatchValue = latestExistingPatch.toInputVariableDefinition().getDefinitionValue(lang)
+                val newDefinition = vardef.getDefinitionValue(lang)
+
+                if (!latestPatchValue.equals(newDefinition,true)) {
+                    isChanged = true
+                }
             }
-        val nnCheck =
-            if (!latestExistingPatch.definition.nn.isNullOrBlank()) {
-                !definition.nn.isNullOrBlank() && !latestExistingPatch.definition.nn.equals(definition.nn)
-            } else {
-                true
-            }
-        val enCheck =
-            if (!latestExistingPatch.definition.nn.isNullOrBlank()) {
-                !definition.nn.isNullOrBlank() && !latestExistingPatch.definition.nn.equals(definition.nn)
-            } else {
-                true
-            }
-        return nbCheck && nnCheck && enCheck
+        }
+        return isChanged
     }
 }

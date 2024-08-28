@@ -51,8 +51,8 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @ParameterizedTest
     @CsvSource(
-        "1760,true",
         "1990,false",
+        "1760,true",
         "3000,true",
     )
     fun `validate valid_from values`(

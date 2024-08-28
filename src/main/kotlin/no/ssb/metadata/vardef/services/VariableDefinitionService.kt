@@ -79,14 +79,11 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean {
-        return listAllPatchesById(definitionId)
-            .map { it.validFrom to it.validUntil }
-            .sortedBy { it.first }
-            // If the dateOfValidity is between any set of two dates, return false. Otherwise, return true.
-            .map { (validFrom, validUntil) ->
-                dateOfValidity.isAfter(validFrom) && dateOfValidity.isBefore(validUntil)
-            }
-            .none { it }
+        val validFromDates = listAllPatchesById(definitionId)
+        val p = validFromDates.map { it.patchId }
+        val d = validFromDates.map { it.validFrom }
+        return true
+        //return validFromDates.isEmpty() || dateOfValidity.isBefore(validFromDates.min()) || dateOfValidity.isAfter(validFromDates.max())
     }
 
     fun getLatestPatchByDateAndById(

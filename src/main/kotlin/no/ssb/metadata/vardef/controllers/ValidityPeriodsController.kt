@@ -12,6 +12,7 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
+import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.isPublished
@@ -36,7 +37,7 @@ class ValidityPeriodsController {
     ): FullResponseVariableDefinition {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         if (!latestExistingPatch.variableStatus.isPublished()) {
-            throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
+            throw PublishedVariableAccessException()
         }
         if (!varDefService.isNewDefinition(newPeriod, latestExistingPatch)) {
             throw DefinitionTextUnchangedException()

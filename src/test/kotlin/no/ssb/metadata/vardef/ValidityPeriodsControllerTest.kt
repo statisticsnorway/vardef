@@ -4,6 +4,8 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -44,6 +46,8 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(400)
+            .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
+
     }
 
     @ParameterizedTest
@@ -68,5 +72,6 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .post("/variable-definitions/$id/validity-periods")
             .then()
             .statusCode(405)
+            .body(containsString("Only allowed for published variables."))
     }
 }

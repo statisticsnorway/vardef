@@ -7,6 +7,7 @@ import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.SAVED_DRAFT_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -95,8 +96,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
     fun `update variable definition`(spec: RequestSpecification) {
         val expectedVariableDefinition =
-            SAVED_VARIABLE_DEFINITION.copy(
-                name = SAVED_VARIABLE_DEFINITION.name.copy(en = "Update"),
+            SAVED_DRAFT_VARIABLE_DEFINITION.copy(
+                name = SAVED_DRAFT_VARIABLE_DEFINITION.name.copy(en = "Update"),
             )
 
         val bodyString =
@@ -121,9 +122,9 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .asString()
         val body = jsonMapper.readValue(bodyString, InputVariableDefinition::class.java)
 
-        assertThat(body.id).isEqualTo(SAVED_VARIABLE_DEFINITION.definitionId)
+        assertThat(body.id).isEqualTo(SAVED_DRAFT_VARIABLE_DEFINITION.definitionId)
         assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
-        assertThat(body.definition).isEqualTo(SAVED_VARIABLE_DEFINITION.definition)
+        assertThat(body.definition).isEqualTo(SAVED_DRAFT_VARIABLE_DEFINITION.definition)
 
         val updatedVariableDefinition = variableDefinitionService.getLatestPatchById(expectedVariableDefinition.definitionId)
         assertThat(
@@ -138,6 +139,25 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         assertThat(
             updatedVariableDefinition.lastUpdatedAt,
         ).isAfter(expectedVariableDefinition.lastUpdatedAt)
+    }
+
+    @Test
+    fun `patch variable with published status`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
+            .then()
+            .statusCode(405)
     }
 
     @ParameterizedTest

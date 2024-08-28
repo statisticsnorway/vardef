@@ -7,6 +7,7 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 
@@ -73,5 +74,23 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 SAVED_VARIABLE_DEFINITION_TWO_LANGUAGES,
             )
         assertThat(result2).isTrue()
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "1760,true",
+        "1990,false",
+        "3000,true",
+    )
+    fun `validate valid_from values`(
+        year: Int,
+        expected: Boolean,
+    ) {
+        assertThat(
+            variableDefinitionService.isValidValidFromValue(
+                SAVED_VARIABLE_DEFINITION.definitionId,
+                LocalDate.of(year, 1, 1),
+            ),
+        ).isEqualTo(expected)
     }
 }

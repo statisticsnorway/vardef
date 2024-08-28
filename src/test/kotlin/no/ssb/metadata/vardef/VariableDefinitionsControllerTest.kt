@@ -195,7 +195,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                     )
                 }
             }
-            .toString()
+                .toString()
 
         val definitionId =
             spec

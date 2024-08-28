@@ -152,4 +152,5 @@ data class SavedVariableDefinition(
                 } ?: relatedVariableDefinitionUris,
             contact = varDefUpdates.contact ?: contact,
         )
+
 }

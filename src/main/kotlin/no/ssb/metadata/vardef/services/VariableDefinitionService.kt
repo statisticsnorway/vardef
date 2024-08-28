@@ -93,9 +93,8 @@ class VariableDefinitionService(
 
     fun isNewDefinition(
         vardef: InputVariableDefinition,
-        variableDefinitionId: String,
+        latestExistingPatch: SavedVariableDefinition,
     ): Boolean {
-        val latestExistingPatch = getLatestPatchById(variableDefinitionId)
         var isChanged = false
         val allLanguagesPresent = latestExistingPatch.definition.listPresentLanguages().all { lang ->
             vardef.getDefinitionValue(lang) != null

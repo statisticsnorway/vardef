@@ -11,7 +11,6 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION_COPY
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT_NO_ENGLISH_NAME
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -187,11 +186,20 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `get request no value in selected language`(spec: RequestSpecification) {
+        val updatedJsonString = JSONObject(JSON_TEST_INPUT).apply {
+            getJSONObject("name").apply {
+                put(
+                    "en",
+                    JSONObject.NULL,
+                )
+            }
+        }
+
         val definitionId =
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(JSON_TEST_INPUT_NO_ENGLISH_NAME)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then()

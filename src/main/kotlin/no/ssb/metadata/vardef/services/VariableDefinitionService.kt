@@ -82,7 +82,7 @@ class VariableDefinitionService(
         return listAllPatchesById(definitionId)
             .map { it.validFrom to it.validUntil }
             .sortedBy { it.first }
-        // If the dateOfValidity is between any set of two dates, return false. Otherwise, return true.
+            // If the dateOfValidity is between any set of two dates, return false. Otherwise, return true.
             .map { (validFrom, validUntil) ->
                 dateOfValidity.isAfter(validFrom) && dateOfValidity.isBefore(validUntil)
             }
@@ -92,21 +92,13 @@ class VariableDefinitionService(
     fun getLatestPatchByDateAndById(
         definitionId: String,
         dateOfValidity: LocalDate,
-    ): SavedVariableDefinition {
-        val patches = listAllPatchesById(definitionId)
-        val validFromDates = patches.map { it.validFrom }.toSortedSet()
-        val validUntilDates =
-            patches
-                .mapNotNull {
-                    it.validUntil
-                }.toSortedSet()
-        if (validUntilDates.lastOrNull { dateOfValidity.isAfter(it) } != null) {
-            throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity")
-        }
-        val latestValidFromMatchingGivenDate = validFromDates.lastOrNull { dateOfValidity.isAfter(it) }
-        if (latestValidFromMatchingGivenDate == null) {
-            throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity")
-        }
-        return patches.last { it.validFrom == latestValidFromMatchingGivenDate }
-    }
+    ): SavedVariableDefinition =
+        variableDefinitionRepository
+            .findByDefinitionIdOrderByPatchId(definitionId)
+            .ifEmpty { throw EmptyResultException() }
+            .filter { patch ->
+                dateOfValidity.isAfter(patch.validFrom) && dateOfValidity.isBefore(patch.validUntil ?: LocalDate.MAX)
+            }
+            .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
+            .last()
 }

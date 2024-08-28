@@ -95,18 +95,17 @@ class VariableDefinitionService(
         newDefinition: InputVariableDefinition,
         latestExistingPatch: SavedVariableDefinition,
     ): Boolean {
-        var isChanged = false
         val allLanguagesPresent = latestExistingPatch.definition.listPresentLanguages().all { lang ->
             newDefinition.getDefinitionValue(lang) != null
         }
-        if (allLanguagesPresent) {
-            latestExistingPatch.definition.listPresentLanguages().forEach { lang ->
-
-                if (!latestExistingPatch.toInputVariableDefinition().getDefinitionValue(lang).equals(newDefinition.getDefinitionValue(lang),true)) {
-                    isChanged = true
-                }
-            }
+        if(!allLanguagesPresent) {
+            return false
         }
-        return isChanged
-    }
+        val allDefinitionsChanged =
+            latestExistingPatch.definition.listPresentLanguages().all { lang ->
+
+                latestExistingPatch.toInputVariableDefinition().getDefinitionValue(lang)?.equals(newDefinition.getDefinitionValue(lang), ignoreCase = true) == false
+            }
+        return allDefinitionsChanged
+        }
 }

@@ -107,12 +107,12 @@ data class InputVariableDefinition(
         )
 
     fun getDefinitionValue(lang: String): String? {
-        when (lang) {
-            "nb" -> return definition.nb
-            "nn" -> return definition.nn
-            "en" -> return definition.en
+        return when (lang) {
+            "nb" -> definition.nb
+            "nn" -> definition.nn
+            "en" -> definition.en
             else -> {
-                return null
+                null
             }
 
         }

@@ -58,4 +58,18 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(actualResult).isEqualTo(expected)
     }
 
+    @Test
+    fun `check definition changed for two languages present`(){
+        val result = variableDefinitionService.isNewDefinition(
+            INPUT_VARIABLE_DEFINITIONS_UNCHANGED_TWO_LANGUAGES,
+            SAVED_VARIABLE_DEFINITION_TWO_LANGUAGES
+        )
+        assertThat(result).isFalse()
+        val result2 = variableDefinitionService.isNewDefinition(
+            INPUT_VARIABLE_DEFINITIONS_CHANGED_TWO_LANGUAGES,
+            SAVED_VARIABLE_DEFINITION_TWO_LANGUAGES
+        )
+        assertThat(result2).isTrue()
+    }
+
 }

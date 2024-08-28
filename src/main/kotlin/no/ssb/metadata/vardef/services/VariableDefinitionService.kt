@@ -96,7 +96,7 @@ class VariableDefinitionService(
         latestExistingPatch: SavedVariableDefinition,
     ): Boolean {
         val allLanguagesPresent = latestExistingPatch.definition.listPresentLanguages().all { lang ->
-            newDefinition.getDefinitionValue(lang) != null
+            newDefinition.definition.listPresentLanguages().contains(lang)
         }
         if(!allLanguagesPresent) {
             return false

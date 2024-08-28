@@ -111,6 +111,26 @@ val INPUT_VARIABLE_DEFINITIONS_NEW_DEFINITION_NOT_ALL_LANGUAGES =
             ),
         )
 
+val INPUT_VARIABLE_DEFINITIONS_UNCHANGED_TWO_LANGUAGES =
+    INPUT_VARIABLE_DEFINITION.copy(
+        definition =
+            LanguageStringType(
+                nb = "For personer født",
+                nn = null,
+                en = "Country background is",
+        ),
+    )
+
+val INPUT_VARIABLE_DEFINITIONS_CHANGED_TWO_LANGUAGES =
+    INPUT_VARIABLE_DEFINITION.copy(
+        definition =
+        LanguageStringType(
+            nb = "For personer født i går",
+            nn = null,
+            en = "Country background is born",
+        ),
+    )
+
 val SAVED_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),
@@ -152,6 +172,16 @@ val SAVED_VARIABLE_DEFINITION =
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy =
             Person("", ""),
+    )
+
+val SAVED_VARIABLE_DEFINITION_TWO_LANGUAGES =
+    SAVED_VARIABLE_DEFINITION.copy(
+        definition =
+            LanguageStringType(
+                nb = "For personer født",
+                nn = null,
+                en = "Country background is",
+        ),
     )
 
 val SAVED_VARIABLE_DEFINITION_COPY =
@@ -262,6 +292,18 @@ val JSON_TEST_INPUT =
     }
     """.trimIndent()
 
+val JSON_TEST_INPUT_ONLY_NEW_DEFINITIONS =
+    """
+    {
+         "definition": {
+            "en": "Ca",
+            "nb": "Fa",
+            "nn": "A"
+        }
+    }
+    """.trimIndent()
+
+
 val JSON_TEST_INPUT_NOT_NEW_VALIDITY_PERIOD =
     """
     {
@@ -358,7 +400,7 @@ class TestDataProvider {
                 Arguments.of(INPUT_VARIABLE_DEFINITION_SLIGHTLY_NEW_DEFINITIONS, true),
                 Arguments.of(INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS_AND_ADDED_LANGUAGE, false),
                 Arguments.of(INPUT_VARIABLE_DEFINITIONS_NEW_DEFINITION_NOT_ALL_LANGUAGES, false),
-                Arguments.of(INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS , true)
+                Arguments.of(INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS , true),
             )
         }
     }

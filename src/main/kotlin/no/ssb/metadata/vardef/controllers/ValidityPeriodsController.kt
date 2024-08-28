@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
+import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.isPublished
@@ -37,8 +38,8 @@ class ValidityPeriodsController {
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
-        if (!varDefService.checkAllLanguages(newPeriod, variableDefinitionId)) {
-            throw HttpStatusException(HttpStatus.BAD_REQUEST, "Definition text must be changed for all languages")
+        if (!varDefService.isNewDefinition(newPeriod, variableDefinitionId)) {
+            throw DefinitionTextUnchangedException()
         }
         return varDefService.save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }

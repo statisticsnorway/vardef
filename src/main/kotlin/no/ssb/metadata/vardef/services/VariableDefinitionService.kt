@@ -90,9 +90,11 @@ class VariableDefinitionService(
         }
         return patches.last { it.validFrom == latestValidFromMatchingGivenDate }
     }
+    fun createNewValidityPeriod(){
 
-    // Move to custom exception class
-    fun checkAllLanguages(
+    }
+
+    fun isNewDefinition(
         vardef: InputVariableDefinition,
         variableDefinitionId: String,
     ): Boolean {

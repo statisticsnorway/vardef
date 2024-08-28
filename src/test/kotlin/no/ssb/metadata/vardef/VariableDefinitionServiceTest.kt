@@ -59,7 +59,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 LocalDate.now(),
                 LocalDate.now(),
             )
-            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(2) }
+            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(3) }
     }
 
     @ParameterizedTest

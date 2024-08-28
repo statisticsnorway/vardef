@@ -51,7 +51,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestDataProvider#provideTestDataCheckDefinition")
+    @MethodSource("TestUtils#provideTestDataCheckDefinition")
     fun `check definition texts for all languages`(
         inputObject: InputVariableDefinition,
         expected: Boolean,

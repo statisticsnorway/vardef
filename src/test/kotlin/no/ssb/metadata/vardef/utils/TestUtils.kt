@@ -1,5 +1,5 @@
 import io.micronaut.http.HttpStatus
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
+import no.ssb.metadata.vardef.utils.*
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import java.util.stream.Stream
@@ -115,5 +115,16 @@ object TestUtils {
             )
 
         return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }
+    }
+
+    @JvmStatic
+    fun provideTestDataCheckDefinition(): Stream<Arguments> {
+        return Stream.of(
+            Arguments.of(INPUT_VARIABLE_DEFINITIONS_UNCHANGED, false),
+            Arguments.of(INPUT_VARIABLE_DEFINITION_SLIGHTLY_NEW_DEFINITIONS, true),
+            Arguments.of(INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS_AND_ADDED_LANGUAGE, false),
+            Arguments.of(INPUT_VARIABLE_DEFINITIONS_NEW_DEFINITION_NOT_ALL_LANGUAGES, false),
+            Arguments.of(INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS, true),
+        )
     }
 }

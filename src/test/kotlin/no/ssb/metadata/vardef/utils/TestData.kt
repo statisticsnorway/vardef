@@ -3,11 +3,9 @@ package no.ssb.metadata.vardef.utils
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.*
 import org.bson.types.ObjectId
-import org.junit.jupiter.params.provider.Arguments
 import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.stream.Stream
 
 val INPUT_VARIABLE_DEFINITION =
     InputVariableDefinition(
@@ -392,21 +390,3 @@ val JSON_TEST_INPUT_NEW_VALIDITY_PERIOD =
         }
     }
     """.trimIndent()
-
-/**
- * Test class used in VariableDefinitionServiceTest
- */
-class TestDataProvider {
-    companion object {
-        @JvmStatic
-        fun provideTestDataCheckDefinition(): Stream<Arguments> {
-            return Stream.of(
-                Arguments.of(INPUT_VARIABLE_DEFINITIONS_UNCHANGED, false),
-                Arguments.of(INPUT_VARIABLE_DEFINITION_SLIGHTLY_NEW_DEFINITIONS, true),
-                Arguments.of(INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS_AND_ADDED_LANGUAGE, false),
-                Arguments.of(INPUT_VARIABLE_DEFINITIONS_NEW_DEFINITION_NOT_ALL_LANGUAGES, false),
-                Arguments.of(INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS, true),
-            )
-        }
-    }
-}

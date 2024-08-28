@@ -186,14 +186,16 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `get request no value in selected language`(spec: RequestSpecification) {
-        val updatedJsonString = JSONObject(JSON_TEST_INPUT).apply {
-            getJSONObject("name").apply {
-                put(
-                    "en",
-                    JSONObject.NULL,
-                )
+        val updatedJsonString =
+            JSONObject(JSON_TEST_INPUT).apply {
+                getJSONObject("name").apply {
+                    put(
+                        "en",
+                        JSONObject.NULL,
+                    )
+                }
             }
-        }
+            .toString()
 
         val definitionId =
             spec

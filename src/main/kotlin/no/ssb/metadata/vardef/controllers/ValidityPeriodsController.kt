@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -40,6 +41,9 @@ class ValidityPeriodsController {
         }
         if (!varDefService.isNewDefinition(newPeriod, latestExistingPatch)) {
             throw DefinitionTextUnchangedException()
+        }
+        if(!varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom)){
+            throw HttpStatusException(HttpStatus.BAD_REQUEST, "Not valid date.")
         }
         return varDefService.save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }

@@ -113,9 +113,6 @@ class VariableDefinitionService(
         }
         val allDefinitionsChanged =
             latestExistingPatch.definition.listPresentLanguages().all { lang ->
-                // TODO(
-                //  "A change to null or empty string is not valid change,
-                //  important when adding language")
                 latestExistingPatch.toInputVariableDefinition().getDefinitionValue(lang)?.equals(
                     newDefinition.getDefinitionValue(lang), ignoreCase = true,
                 ) == false

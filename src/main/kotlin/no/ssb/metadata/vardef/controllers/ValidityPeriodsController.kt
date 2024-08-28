@@ -36,15 +36,18 @@ class ValidityPeriodsController {
         @Body @Valid newPeriod: InputVariableDefinition,
     ): FullResponseVariableDefinition {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
-        if (!latestExistingPatch.variableStatus.isPublished()) {
-            throw PublishedVariableAccessException()
+        // try except
+        when {
+            !latestExistingPatch.variableStatus.isPublished() ->
+                throw PublishedVariableAccessException()
+
+            !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->
+                throw DefinitionTextUnchangedException()
+
+            !varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom) ->
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Not valid date.")
         }
-        if (!varDefService.isNewDefinition(newPeriod, latestExistingPatch)) {
-            throw DefinitionTextUnchangedException()
-        }
-        if (!varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom)) {
-            throw HttpStatusException(HttpStatus.BAD_REQUEST, "Not valid date.")
-        }
+
         return varDefService.save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }
 }

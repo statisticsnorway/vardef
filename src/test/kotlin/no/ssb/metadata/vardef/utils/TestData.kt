@@ -71,11 +71,11 @@ val INPUT_VARIABLE_DEFINITION_NEW_DEFINITION =
 val INPUT_VARIABLE_DEFINITION_NEW_DEFINITION2 =
     INPUT_VARIABLE_DEFINITION.copy(
         definition =
-        LanguageStringType(
-            nb = "For personer født i går",
-            nn = null,
-            en = "Persons born yesterday",
-        ),
+            LanguageStringType(
+                nb = "For personer født i går",
+                nn = null,
+                en = "Persons born yesterday",
+            ),
     )
 
 val SAVED_VARIABLE_DEFINITION =

@@ -90,9 +90,6 @@ class VariableDefinitionService(
         }
         return patches.last { it.validFrom == latestValidFromMatchingGivenDate }
     }
-    fun createNewValidityPeriod(){
-
-    }
 
     fun isNewDefinition(
         vardef: InputVariableDefinition,

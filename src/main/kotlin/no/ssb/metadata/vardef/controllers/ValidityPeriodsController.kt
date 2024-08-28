@@ -42,9 +42,10 @@ class ValidityPeriodsController {
         if (!varDefService.isNewDefinition(newPeriod, latestExistingPatch)) {
             throw DefinitionTextUnchangedException()
         }
-        if(!varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom)){
-            throw HttpStatusException(HttpStatus.BAD_REQUEST, "Not valid date.")
-        }
+        if (!varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom))
+            {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Not valid date.")
+            }
         return varDefService.save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }
 }

@@ -4,6 +4,8 @@ import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
+import no.ssb.metadata.vardef.extensions.isEqualOrAfter
+import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
@@ -25,13 +27,26 @@ class VariableDefinitionService(
             .findAll()
             .toList()
 
-    fun listAllAndRenderForLanguage(language: SupportedLanguages): List<RenderedVariableDefinition> =
-        listAll().map { savedVariableDefinition ->
-            savedVariableDefinition.toRenderedVariableDefinition(
-                language,
-                klassService,
-            )
-        }
+    fun listAllAndRenderForLanguage(
+        language: SupportedLanguages,
+        validFrom: LocalDate = LocalDate.now(),
+        validUntil: LocalDate = LocalDate.now(),
+    ): List<RenderedVariableDefinition> =
+        listAll()
+            .filter { savedVariableDefinition ->
+                validFrom.isEqualOrAfter(savedVariableDefinition.validFrom) &&
+                    validUntil.isEqualOrBefore(savedVariableDefinition.validUntil ?: LocalDate.now())
+            }
+            .map { savedVariableDefinition ->
+                savedVariableDefinition.toRenderedVariableDefinition(
+                    language,
+                    klassService,
+                )
+            }
+            .groupBy { renderedVariableDefinition -> renderedVariableDefinition.id }
+            .mapValues { entry -> entry.value.maxBy { it.patchId } }
+            .values
+            .toList()
 
     fun listAllPatchesById(id: String): List<SavedVariableDefinition> =
         variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty {
@@ -97,7 +112,7 @@ class VariableDefinitionService(
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
             .filter { patch ->
-                dateOfValidity.isAfter(patch.validFrom) && dateOfValidity.isBefore(patch.validUntil ?: LocalDate.MAX)
+                dateOfValidity.isEqualOrAfter(patch.validFrom) && dateOfValidity.isEqualOrBefore(patch.validUntil ?: LocalDate.MAX)
             }
             .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             .last()

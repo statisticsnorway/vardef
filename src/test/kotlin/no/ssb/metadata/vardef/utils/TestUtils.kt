@@ -1,5 +1,6 @@
+package no.ssb.metadata.vardef.utils
+
 import io.micronaut.http.HttpStatus
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import java.util.stream.Stream

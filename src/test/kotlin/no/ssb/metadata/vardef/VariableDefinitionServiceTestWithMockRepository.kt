@@ -18,6 +18,7 @@ import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 @MockK
 class VariableDefinitionServiceTestWithMockRepository {
@@ -91,7 +92,7 @@ class VariableDefinitionServiceTestWithMockRepository {
         val renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
 
         val result =
-            variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB)
+            variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB, LocalDate.now(), LocalDate.now())
         assertThat(result.isNotEmpty())
         assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })
         assertThat(result[0].id).isEqualTo(renderedVariableDefinition.id)

@@ -3,7 +3,9 @@ package no.ssb.metadata.vardef.integrations.vardok
 import io.micronaut.core.async.annotation.SingleResult
 import io.micronaut.http.HttpHeaders.ACCEPT
 import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.*
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Header
+import io.micronaut.http.annotation.Produces
 import io.micronaut.http.client.annotation.Client
 
 @Client(id = "vardok")

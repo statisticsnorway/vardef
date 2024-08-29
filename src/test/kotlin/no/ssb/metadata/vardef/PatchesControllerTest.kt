@@ -22,7 +22,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(200)
-            .body("size()", equalTo(6))
+            .body("size()", equalTo(7))
     }
 
     @Test

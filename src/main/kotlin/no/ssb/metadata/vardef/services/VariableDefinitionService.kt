@@ -10,7 +10,6 @@ import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
-import java.time.Period
 
 @Singleton
 class VariableDefinitionService(
@@ -100,11 +99,14 @@ class VariableDefinitionService(
             }
     }
 
-    fun closeLastValidityPeriod(definitionId: String, dateOfValidity: LocalDate,){
-        val closeDate = dateOfValidity.minus(Period.ofDays(1))
+    /*fun closeLastValidityPeriod(
+        // definitionId: String,
+        dateOfValidity: LocalDate,
+    )  {
+        // val closeDate = dateOfValidity.minus(Period.ofDays(1))
         // get latest valid from -> null?
         // what happens when closed?
-    }
+    }*/
 
     fun getLatestPatchByDateAndById(
         definitionId: String,

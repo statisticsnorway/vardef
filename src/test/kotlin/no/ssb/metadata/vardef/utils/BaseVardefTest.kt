@@ -6,6 +6,7 @@ import io.restassured.RestAssured
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
@@ -51,6 +52,20 @@ open class BaseVardefTest {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 6
+            },
+        )
+
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(2021, 1, 1)
+                validUntil = null
+                definition =
+                    LanguageStringType(
+                        nb = "For personer født på siden",
+                        nn = "For personer født på siden",
+                        en = "Persons born on the side",
+                    )
+                patchId = 7
             },
         )
 

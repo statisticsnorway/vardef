@@ -6,6 +6,7 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.containsString
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -79,6 +80,17 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(containsString("Not valid date"))
+
+        val correctValidFrom =  JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2030-01-11")}.toString()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(correctValidFrom)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(400)
+            .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
     }
 
     @ParameterizedTest

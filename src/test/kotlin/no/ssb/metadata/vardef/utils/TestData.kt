@@ -391,7 +391,6 @@ val JSON_TEST_INPUT_NEW_VALIDITY_PERIOD =
     }
     """.trimIndent()
 
-
 val JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD =
     """
     {
@@ -433,8 +432,6 @@ val JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD =
         }
     }
     """.trimIndent()
-
-
 
 val JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD_AND_NO_NEW_DEFINITION =
     """

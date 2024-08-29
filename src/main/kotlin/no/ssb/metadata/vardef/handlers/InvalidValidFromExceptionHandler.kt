@@ -8,10 +8,9 @@ import io.micronaut.http.server.exceptions.ExceptionHandler
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 
-
 @Produces
 @Singleton
-class InvalidValidFromExceptionHandler  : ExceptionHandler<InvalidValidFromException, HttpResponse<*>> {
+class InvalidValidFromExceptionHandler : ExceptionHandler<InvalidValidFromException, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,
         exception: InvalidValidFromException,

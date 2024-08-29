@@ -14,6 +14,7 @@ import java.time.LocalDateTime
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class RenderedVariableDefinition(
     val id: String,
+    val patchId: Int,
     val name: String?,
     val shortName: String,
     val definition: String?,

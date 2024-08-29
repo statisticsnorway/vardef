@@ -54,6 +54,7 @@ data class SavedVariableDefinition(
     ): RenderedVariableDefinition =
         RenderedVariableDefinition(
             id = definitionId,
+            patchId = patchId,
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),
@@ -139,17 +140,14 @@ data class SavedVariableDefinition(
             unitTypes = varDefUpdates.unitTypes ?: unitTypes,
             subjectFields = varDefUpdates.subjectFields ?: subjectFields,
             containsSensitivePersonalInformation =
-                varDefUpdates.containsSensitivePersonalInformation
-                    ?: containsSensitivePersonalInformation,
+                varDefUpdates.containsSensitivePersonalInformation ?: containsSensitivePersonalInformation,
             variableStatus = varDefUpdates.variableStatus ?: variableStatus,
             measurementType = varDefUpdates.measurementType ?: measurementType,
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
             relatedVariableDefinitionUris =
-                varDefUpdates.relatedVariableDefinitionUris?.map {
-                    it.toString()
-                } ?: relatedVariableDefinitionUris,
+                varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             contact = varDefUpdates.contact ?: contact,
         )
 }

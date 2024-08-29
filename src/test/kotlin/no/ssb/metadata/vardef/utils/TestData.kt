@@ -129,6 +129,7 @@ val SAVED_VARIABLE_DEFINITION_COPY =
 val RENDERED_VARIABLE_DEFINITION =
     RenderedVariableDefinition(
         id = "",
+        patchId = 1,
         name = "Landbakgrunn",
         shortName = "landbak",
         definition = "For personer født",
@@ -157,6 +158,7 @@ val RENDERED_VARIABLE_DEFINITION =
 val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
     RenderedVariableDefinition(
         id = "",
+        patchId = 1,
         name = "Landbakgrunn",
         shortName = "landbak",
         definition = "For personer født",

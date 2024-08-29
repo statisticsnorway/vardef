@@ -41,13 +41,13 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @Test
     fun `get valid period at date after range`() {
-        assertThrows<NoMatchingValidityPeriodFound> {
+        assertThat(
             variableDefinitionService
                 .getLatestPatchByDateAndById(
                     SAVED_VARIABLE_DEFINITION.definitionId,
                     LocalDate.of(3000, 1, 1),
-                )
-        }
+                ).patchId,
+        ).isEqualTo(6)
     }
 
     @ParameterizedTest

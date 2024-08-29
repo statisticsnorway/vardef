@@ -94,7 +94,7 @@ class VariableDefinitionService(
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
             .filter { patch ->
-                dateOfValidity.isAfter(patch.validFrom) && dateOfValidity.isBefore(patch.validUntil ?: LocalDate.MAX)
+                dateOfValidity.isAfter(patch.validFrom)
             }
             .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             .last()

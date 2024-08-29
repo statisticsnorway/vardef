@@ -64,7 +64,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 LocalDate.now(),
                 LocalDate.now(),
             )
-            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(1) } // TODO(check why changed)
+            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(1) }
         // .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(3) }
     }
 

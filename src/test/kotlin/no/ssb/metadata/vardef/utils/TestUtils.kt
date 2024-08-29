@@ -178,46 +178,61 @@ object TestUtils {
     @JvmStatic
     fun provideTestDataCheckDefinition(): Stream<Arguments> {
         return Stream.of(
-            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
-                definition =
-                LanguageStringType(
-                    nb = "For personer født",
-                    nn = "For personer født",
-                    en = "Country background is",
+            Arguments.of(
+                INPUT_VARIABLE_DEFINITION.copy(
+                    definition =
+                        LanguageStringType(
+                            nb = "For personer født",
+                            nn = "For personer født",
+                            en = "Country background is",
+                        ),
                 ),
-            ), false),
-            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
-                definition =
-                LanguageStringType(
-                    nb = "For personer født i går",
-                    nn = "For personer født i går",
-                    en = "Persons born yesterday",
+                false,
+            ),
+            Arguments.of(
+                INPUT_VARIABLE_DEFINITION.copy(
+                    definition =
+                        LanguageStringType(
+                            nb = "For personer født i går",
+                            nn = "For personer født i går",
+                            en = "Persons born yesterday",
+                        ),
                 ),
-            ), true),
-            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
-                definition =
-                LanguageStringType(
-                    nb = "For personer født",
-                    nn = "For personer født",
-                    en = "Country background is",
+                true,
+            ),
+            Arguments.of(
+                INPUT_VARIABLE_DEFINITION.copy(
+                    definition =
+                        LanguageStringType(
+                            nb = "For personer født",
+                            nn = "For personer født",
+                            en = "Country background is",
+                        ),
                 ),
-            ), false),
-            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
-                definition =
-                LanguageStringType(
-                    nb = "For personer født i går",
-                    nn = "For personer født",
-                    en = "Country background is",
+                false,
+            ),
+            Arguments.of(
+                INPUT_VARIABLE_DEFINITION.copy(
+                    definition =
+                        LanguageStringType(
+                            nb = "For personer født i går",
+                            nn = "For personer født",
+                            en = "Country background is",
+                        ),
                 ),
-            ), false),
-            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
-                definition =
-                LanguageStringType(
-                    nb = "Hester og kuer født",
-                    nn = "Hester og kuer født",
-                    en = "Horses and cows born",
+                false,
+            ),
+            Arguments.of(
+                INPUT_VARIABLE_DEFINITION.copy(
+                    definition =
+                        LanguageStringType(
+                            nb = "Hester og kuer født",
+                            nn = "Hester og kuer født",
+                            en = "Horses and cows born",
+                        ),
                 ),
-            ), true),
+                true,
+            ),
         )
     }
 }

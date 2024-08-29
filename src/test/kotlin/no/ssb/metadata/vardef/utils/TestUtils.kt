@@ -132,7 +132,7 @@ object TestUtils {
     }
 
     @JvmStatic
-    fun postValidityPeriodOk(): String  {
+    fun postValidityPeriodOk(): String {
         val testCase =
             JSONObject(JSON_TEST_INPUT).apply {
                 put("valid_from", "2040-01-11")
@@ -146,7 +146,7 @@ object TestUtils {
     }
 
     @JvmStatic
-    fun postValidityPeriodInvalidValidFrom(): String  {
+    fun postValidityPeriodInvalidValidFrom(): String {
         val testCase =
             JSONObject(JSON_TEST_INPUT).apply {
                 put("valid_from", "1996-01-11")
@@ -160,7 +160,7 @@ object TestUtils {
     }
 
     @JvmStatic
-    fun postValidityPeriodInvalidValidFromAndInvalidDefinition(): String  {
+    fun postValidityPeriodInvalidValidFromAndInvalidDefinition(): String {
         val testCase =
             JSONObject(JSON_TEST_INPUT).apply {
                 put("valid_from", "1996-01-11")

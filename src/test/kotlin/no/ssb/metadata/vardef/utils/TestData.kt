@@ -224,15 +224,15 @@ val RENDERED_VARIABLE_DEFINITION =
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
-        Owner("", ""),
+            Owner("", ""),
         contact =
-        RenderedContact("", "me@example.com"),
+            RenderedContact("", "me@example.com"),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy =
-        Person("", ""),
+            Person("", ""),
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy =
-        Person("", ""),
+            Person("", ""),
     )
 
 val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =

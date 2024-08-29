@@ -1,12 +1,12 @@
 package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
+import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.utils.*
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.SINGLE_SAVED_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.models.InputVariableDefinition
-import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

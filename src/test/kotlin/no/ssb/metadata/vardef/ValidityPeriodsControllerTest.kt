@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef
 
-import TestUtils
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.VariableStatus

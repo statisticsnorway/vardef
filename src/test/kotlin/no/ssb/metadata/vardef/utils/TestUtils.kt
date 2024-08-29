@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.utils
 
 import io.micronaut.http.HttpStatus
+import no.ssb.metadata.vardef.models.LanguageStringType
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import java.util.stream.Stream
@@ -177,11 +178,46 @@ object TestUtils {
     @JvmStatic
     fun provideTestDataCheckDefinition(): Stream<Arguments> {
         return Stream.of(
-            Arguments.of(INPUT_VARIABLE_DEFINITIONS_UNCHANGED, false),
-            Arguments.of(INPUT_VARIABLE_DEFINITION_SLIGHTLY_NEW_DEFINITIONS, true),
-            Arguments.of(INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS_AND_ADDED_LANGUAGE, false),
-            Arguments.of(INPUT_VARIABLE_DEFINITIONS_NEW_DEFINITION_NOT_ALL_LANGUAGES, false),
-            Arguments.of(INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS, true),
+            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
+                definition =
+                LanguageStringType(
+                    nb = "For personer født",
+                    nn = "For personer født",
+                    en = "Country background is",
+                ),
+            ), false),
+            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
+                definition =
+                LanguageStringType(
+                    nb = "For personer født i går",
+                    nn = "For personer født i går",
+                    en = "Persons born yesterday",
+                ),
+            ), true),
+            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
+                definition =
+                LanguageStringType(
+                    nb = "For personer født",
+                    nn = "For personer født",
+                    en = "Country background is",
+                ),
+            ), false),
+            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
+                definition =
+                LanguageStringType(
+                    nb = "For personer født i går",
+                    nn = "For personer født",
+                    en = "Country background is",
+                ),
+            ), false),
+            Arguments.of(INPUT_VARIABLE_DEFINITION.copy(
+                definition =
+                LanguageStringType(
+                    nb = "Hester og kuer født",
+                    nn = "Hester og kuer født",
+                    en = "Horses and cows born",
+                ),
+            ), true),
         )
     }
 }

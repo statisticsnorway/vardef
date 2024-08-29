@@ -58,56 +58,6 @@ val INPUT_VARIABLE_DEFINITION_NO_NAME =
         shortName = "landbak 2",
     )
 
-val INPUT_VARIABLE_DEFINITIONS_UNCHANGED =
-    INPUT_VARIABLE_DEFINITION.copy(
-        definition =
-            LanguageStringType(
-                nb = "For personer født",
-                nn = "For personer født",
-                en = "Country background is",
-            ),
-    )
-
-val INPUT_VARIABLE_DEFINITION_SLIGHTLY_NEW_DEFINITIONS =
-    INPUT_VARIABLE_DEFINITION.copy(
-        definition =
-            LanguageStringType(
-                nb = "For personer født i går",
-                nn = "For personer født i går",
-                en = "Persons born yesterday",
-            ),
-    )
-
-val INPUT_VARIABLE_DEFINITION_TOTAL_NEW_DEFINITIONS =
-    INPUT_VARIABLE_DEFINITION.copy(
-        definition =
-            LanguageStringType(
-                nb = "Hester og kuer født",
-                nn = "Hester og kuer født",
-                en = "Horses and cows born",
-            ),
-    )
-
-val INPUT_VARIABLE_DEFINITION_NO_NEW_DEFINITIONS_AND_ADDED_LANGUAGE =
-    INPUT_VARIABLE_DEFINITION.copy(
-        definition =
-            LanguageStringType(
-                nb = "For personer født",
-                nn = "For personer født",
-                en = "Country background is",
-            ),
-    )
-
-val INPUT_VARIABLE_DEFINITIONS_NEW_DEFINITION_NOT_ALL_LANGUAGES =
-    INPUT_VARIABLE_DEFINITION.copy(
-        definition =
-            LanguageStringType(
-                nb = "For personer født i går",
-                nn = "For personer født",
-                en = "Country background is",
-            ),
-    )
-
 val INPUT_VARIABLE_DEFINITIONS_UNCHANGED_TWO_LANGUAGES =
     INPUT_VARIABLE_DEFINITION.copy(
         definition =

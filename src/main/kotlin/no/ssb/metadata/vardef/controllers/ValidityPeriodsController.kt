@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
-import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -12,6 +11,7 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
+import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
 import no.ssb.metadata.vardef.models.InputVariableDefinition
@@ -34,20 +34,27 @@ class ValidityPeriodsController {
     fun createValidityPeriod(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
         @Body @Valid newPeriod: InputVariableDefinition,
-    ): FullResponseVariableDefinition {
+    ): FullResponseVariableDefinition? {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         // try except
         when {
             !latestExistingPatch.variableStatus.isPublished() ->
                 throw PublishedVariableAccessException()
 
+            !varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom) ->
+                throw InvalidValidFromException()
+
             !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->
                 throw DefinitionTextUnchangedException()
-
-            !varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom) ->
-                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Not valid date.")
         }
 
-        return varDefService.save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
+        try {
+            return varDefService.save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId))
+                .toFullResponseVariableDefinition()
+        }
+        catch (e: RuntimeException) {
+            print(e.message)
+            return null
+        }
     }
 }

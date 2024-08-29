@@ -23,7 +23,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             variableDefinitionService
                 .getLatestPatchByDateAndById(
                     SAVED_VARIABLE_DEFINITION.definitionId,
-                    LocalDate.of(1990, 1, 1),
+                    LocalDate.of(2024, 1, 1),
                 ).patchId,
         ).isEqualTo(6)
     }
@@ -79,7 +79,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @CsvSource(
         "1760,true",
-        "1990,false",
+        "1997,false",
         "3000,true",
     )
     fun `validate valid_from values`(

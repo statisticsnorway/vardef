@@ -118,6 +118,21 @@ object TestUtils {
     }
 
     @JvmStatic
+    fun newValidityPeriod(): JSONObject{
+        val testCases =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("valid_from", "2040-01-11")
+                    getJSONObject("definition").apply {
+                        put("nb", "For personer født")
+                        put("nn", "For personer født")
+                        put("en", "Country background is")
+                    }
+                }
+        return testCases
+
+    }
+
+    @JvmStatic
     fun provideTestDataCheckDefinition(): Stream<Arguments> {
         return Stream.of(
             Arguments.of(INPUT_VARIABLE_DEFINITIONS_UNCHANGED, false),

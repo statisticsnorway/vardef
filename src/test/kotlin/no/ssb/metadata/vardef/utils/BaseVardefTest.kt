@@ -34,19 +34,19 @@ open class BaseVardefTest {
         variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.apply {
-                validFrom = LocalDate.of(1980, 12, 1)
+                validFrom = LocalDate.of(1995, 8, 29)
                 patchId = 4
             },
         )
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.apply {
-                validFrom = LocalDate.of(1980, 12, 1)
+                validFrom = LocalDate.of(1996, 1, 1)
                 patchId = 5
             },
         )
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.apply {
-                validUntil = LocalDate.of(2030, 12, 31)
+                validUntil = LocalDate.of(2024, 12, 31)
                 patchId = 6
             },
         )

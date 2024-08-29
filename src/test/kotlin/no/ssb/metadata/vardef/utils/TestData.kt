@@ -152,8 +152,8 @@ val SAVED_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
-        validFrom = LocalDate.of(2021, 1, 4),
-        validUntil = LocalDate.of(2024, 8, 28),
+        validFrom = LocalDate.of(1990, 1, 4),
+        validUntil = LocalDate.of(1995, 8, 28),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
@@ -332,7 +332,7 @@ val JSON_TEST_INPUT_NOT_NEW_VALIDITY_PERIOD =
         ],
         "contains_sensitive_personal_information": true,
         "measurement_type": "02.01",
-        "valid_from": "2021-01-04",
+        "valid_from": "2025-01-04",
         "valid_until": null,
         "external_reference_uri": "https://example.com/",
         "related_variable_definition_uris": [
@@ -375,6 +375,93 @@ val JSON_TEST_INPUT_NEW_VALIDITY_PERIOD =
         "contains_sensitive_personal_information": true,
         "measurement_type": "02.01",
         "valid_from": "2040-06-05",
+        "valid_until": null,
+        "external_reference_uri": "https://example.com/",
+        "related_variable_definition_uris": [
+            "https://example.com/"
+        ],
+        "contact": {
+            "title": {
+                "en": "string",
+                "nb": "string",
+                "nn": "string"
+            },
+            "email": "user@example.com"
+        }
+    }
+    """.trimIndent()
+
+
+val JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD =
+    """
+    {
+        "name": {
+            "en": "Country Background",
+            "nb": "Landbakgrunn",
+            "nn": "Landbakgrunn"
+        },
+        "short_name": "landbak",
+        "definition": {
+            "nb": "For personer født i går",
+            "nn": "For personer født i går",
+            "en": "Persons born yesterday"
+        },
+        "classification_reference": "91",
+        "unit_types": [
+            "03",
+            "04",
+            "05"
+        ],
+        "subject_fields": [
+            "he04"
+        ],
+        "contains_sensitive_personal_information": true,
+        "measurement_type": "02.01",
+        "valid_from": "1996-06-05",
+        "valid_until": null,
+        "external_reference_uri": "https://example.com/",
+        "related_variable_definition_uris": [
+            "https://example.com/"
+        ],
+        "contact": {
+            "title": {
+                "en": "string",
+                "nb": "string",
+                "nn": "string"
+            },
+            "email": "user@example.com"
+        }
+    }
+    """.trimIndent()
+
+
+
+val JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD_AND_NO_NEW_DEFINITION =
+    """
+    {
+        "name": {
+            "en": "Country Background",
+            "nb": "Landbakgrunn",
+            "nn": "Landbakgrunn"
+        },
+        "short_name": "landbak",
+        "definition": {
+            "nb": "For personer født",
+            "nn": "For personer født",
+            "en": "Country background is"
+        },
+        "classification_reference": "91",
+        "unit_types": [
+            "03",
+            "04",
+            "05"
+        ],
+        "subject_fields": [
+            "he04"
+        ],
+        "contains_sensitive_personal_information": true,
+        "measurement_type": "02.01",
+        "valid_from": "1996-06-05",
         "valid_until": null,
         "external_reference_uri": "https://example.com/",
         "related_variable_definition_uris": [

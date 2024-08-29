@@ -1,13 +1,16 @@
 package no.ssb.metadata.vardef
 
+import TestUtils
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.containsString
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.MethodSource
 
 class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
@@ -36,15 +39,43 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
+        val modifiedJson: JSONObject = TestUtils.newValidityPeriod()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT_NOT_NEW_VALIDITY_PERIOD)
+            .body(modifiedJson.toString())
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
+    }
+
+    @Test
+    fun `create new validity period invalid valid from`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(400)
+            .body(containsString("Not valid date"))
+    }
+
+    @Test
+    fun `create new validity period invalid valid from and not changed definition`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD_AND_NO_NEW_DEFINITION)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(400)
+            .body(containsString("Not valid date"))
     }
 
     @ParameterizedTest

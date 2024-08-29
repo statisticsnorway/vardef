@@ -95,13 +95,10 @@ class VariableDefinitionService(
         dateOfValidity: LocalDate,
     ): Boolean {
         return listAllPatchesById(definitionId)
-            .map { it.validFrom to it.validUntil }
-            .sortedBy { it.first }
-            // If the dateOfValidity is between any set of two dates, return false. Otherwise, return true.
-            .map { (validFrom, validUntil) ->
-                dateOfValidity.isAfter(validFrom) && dateOfValidity.isBefore(validUntil)
+            .map { it.validFrom }
+            .let { dates ->
+                dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
             }
-            .none { it }
     }
 
     fun getLatestPatchByDateAndById(
@@ -112,7 +109,7 @@ class VariableDefinitionService(
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
             .filter { patch ->
-                dateOfValidity.isEqualOrAfter(patch.validFrom) && dateOfValidity.isEqualOrBefore(patch.validUntil ?: LocalDate.MAX)
+                dateOfValidity.isEqualOrAfter(patch.validFrom)
             }
             .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             .last()

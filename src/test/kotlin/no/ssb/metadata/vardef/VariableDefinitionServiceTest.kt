@@ -4,6 +4,7 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.SINGLE_SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -42,13 +43,13 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @Test
     fun `get valid period at date after range`() {
-        assertThrows<NoMatchingValidityPeriodFound> {
+        assertThat(
             variableDefinitionService
                 .getLatestPatchByDateAndById(
                     SAVED_VARIABLE_DEFINITION.definitionId,
                     LocalDate.of(3000, 1, 1),
-                )
-        }
+                ).patchId,
+        ).isEqualTo(6)
     }
 
     @Test
@@ -64,8 +65,8 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @ParameterizedTest
     @CsvSource(
-        "1760,true",
         "1990,false",
+        "1760,true",
         "3000,true",
     )
     fun `validate valid_from values`(
@@ -78,5 +79,16 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 LocalDate.of(year, 1, 1),
             ),
         ).isEqualTo(expected)
+    }
+
+    @Test
+    fun `get id with only one patch`() {
+        variableDefinitionService.save(SINGLE_SAVED_VARIABLE_DEFINITION)
+        assertThat(
+            variableDefinitionService.isValidValidFromValue(
+                SINGLE_SAVED_VARIABLE_DEFINITION.definitionId,
+                LocalDate.of(3000, 1, 1),
+            ),
+        ).isEqualTo(true)
     }
 }

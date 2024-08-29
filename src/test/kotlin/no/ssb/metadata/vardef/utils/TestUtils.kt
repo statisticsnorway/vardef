@@ -1,3 +1,5 @@
+package no.ssb.metadata.vardef.utils
+
 import io.micronaut.http.HttpStatus
 import no.ssb.metadata.vardef.utils.*
 import org.json.JSONObject

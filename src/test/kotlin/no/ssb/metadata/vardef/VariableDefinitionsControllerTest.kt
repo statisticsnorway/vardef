@@ -14,6 +14,7 @@ import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
@@ -153,7 +154,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/variable-definitions")
+            .get("/variable-definitions?validFrom=2024-01-01")
             .then()
             .statusCode(200)
             .body("[0].definition", equalTo("For personer født"))
@@ -185,20 +186,44 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `get request no value in selected language`(spec: RequestSpecification) {
+        val updatedJsonString =
+            JSONObject(JSON_TEST_INPUT).apply {
+                getJSONObject("name").apply {
+                    put(
+                        "en",
+                        JSONObject.NULL,
+                    )
+                }
+            }
+                .toString()
+
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .path<String>("id")
+
         spec
             .`when`()
             .contentType(ContentType.JSON)
             .header("Accept-Language", "en")
-            .get("/variable-definitions")
+            .get("/variable-definitions/$definitionId")
             .then()
             .assertThat()
             .statusCode(200)
-            .body("[-1]", hasKey("name"))
-            .body("[-1].name", equalTo(null))
+            .body("", hasKey("name"))
+            .body("name", equalTo(null))
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#invalidVariableDefinitions")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `create variable definition with invalid inputs`(
         updatedJsonString: String,
         errorMessage: String,
@@ -218,7 +243,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#variableDefinitionsNonMandatoryFieldsRemoved")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsNonMandatoryFieldsRemoved")
     fun `create variable definition with non mandatory fields removed`(
         updatedJsonString: String,
         spec: RequestSpecification,
@@ -233,7 +258,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#variableDefinitionsMandatoryFieldsRemoved")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsMandatoryFieldsRemoved")
     fun `create variable definition with mandatory fields removed`(
         updatedJsonString: String,
         errorMessage: String,
@@ -253,7 +278,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("TestUtils#variableDefinitionsVariousVariableStatus")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsVariousVariableStatus")
     fun `test variable status inputs`(
         updatedJsonString: String,
         errorCode: Int,
@@ -274,7 +299,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .contentType(ContentType.JSON)
             .header("Accept-Language", "nb")
-            .get("/variable-definitions")
+            .get("/variable-definitions?validFrom=2024-01-01")
             .then()
             .assertThat()
             .statusCode(200)
@@ -327,5 +352,27 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                     "https://www.ssb.no/klass/klassifikasjoner/91",
                 ),
             )
+    }
+
+    @Test
+    fun `list valid variable definitions by now`(spec: RequestSpecification) {
+        spec
+            .given()
+            .`when`()
+            .get("/variable-definitions")
+            .then()
+            .statusCode(200)
+            .body("size()", Matchers.equalTo(3))
+    }
+
+    @Test
+    fun `list valid variable definition by given date`(spec: RequestSpecification) {
+        spec
+            .given()
+            .`when`()
+            .get("/variable-definitions?validFrom=2024-06-05")
+            .then()
+            .statusCode(200)
+            .body("size()", greaterThan(0))
     }
 }

@@ -29,8 +29,8 @@ val INPUT_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = "",
-        validFrom = LocalDate.of(2021, 1, 4),
-        validUntil = LocalDate.of(2021, 1, 4),
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://www.example.com").toURL(),
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
@@ -152,8 +152,8 @@ val SAVED_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
-        validFrom = LocalDate.of(1990, 1, 4),
-        validUntil = LocalDate.of(1995, 8, 28),
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
@@ -188,6 +188,12 @@ val SAVED_DRAFT_VARIABLE_DEFINITION =
         variableStatus = VariableStatus.DRAFT,
     )
 
+val SINGLE_SAVED_VARIABLE_DEFINITION =
+    SAVED_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = NanoId.generate(8),
+    )
+
 val SAVED_VARIABLE_DEFINITION_COPY =
     SAVED_VARIABLE_DEFINITION.copy(
         id = ObjectId(),
@@ -203,6 +209,7 @@ val SAVED_VARIABLE_DEFINITION_COPY =
 val RENDERED_VARIABLE_DEFINITION =
     RenderedVariableDefinition(
         id = "",
+        patchId = 1,
         name = "Landbakgrunn",
         shortName = "landbak",
         definition = "For personer født",
@@ -212,25 +219,26 @@ val RENDERED_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = null,
-        validFrom = LocalDate.of(2021, 1, 4),
-        validUntil = LocalDate.of(2021, 1, 4),
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("", ""),
+        Owner("", ""),
         contact =
-            RenderedContact("", "me@example.com"),
+        RenderedContact("", "me@example.com"),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy =
-            Person("", ""),
+        Person("", ""),
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy =
-            Person("", ""),
+        Person("", ""),
     )
 
 val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
     RenderedVariableDefinition(
         id = "",
+        patchId = 1,
         name = "Landbakgrunn",
         shortName = "landbak",
         definition = "For personer født",
@@ -240,8 +248,8 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = null,
-        validFrom = LocalDate.of(2021, 1, 4),
-        validUntil = LocalDate.of(2021, 1, 4),
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =

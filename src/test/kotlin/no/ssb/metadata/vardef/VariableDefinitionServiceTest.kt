@@ -3,13 +3,13 @@ package no.ssb.metadata.vardef
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.SINGLE_SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
-import no.ssb.metadata.vardef.utils.SINGLE_SAVED_VARIABLE_DEFINITION
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
@@ -55,7 +55,6 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         "1990,false",
         "1760,true",
         "3000,true",
-
     )
     fun `validate valid_from values`(
         year: Int,
@@ -72,11 +71,11 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get id with only one patch`() {
         variableDefinitionService.save(SINGLE_SAVED_VARIABLE_DEFINITION)
-            assertThat(variableDefinitionService.isValidValidFromValue(
-                    SINGLE_SAVED_VARIABLE_DEFINITION.definitionId,
-                    LocalDate.of(3000, 1, 1),
-                )
-            ).isEqualTo(true)
-
+        assertThat(
+            variableDefinitionService.isValidValidFromValue(
+                SINGLE_SAVED_VARIABLE_DEFINITION.definitionId,
+                LocalDate.of(3000, 1, 1),
+            ),
+        ).isEqualTo(true)
     }
 }

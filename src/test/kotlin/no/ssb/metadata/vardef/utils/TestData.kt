@@ -29,8 +29,8 @@ val INPUT_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = "",
-        validFrom = LocalDate.of(2021, 1, 4),
-        validUntil = LocalDate.of(2021, 1, 4),
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://www.example.com").toURL(),
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
@@ -82,7 +82,7 @@ val SAVED_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
-        validFrom = LocalDate.of(2021, 1, 4),
+        validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
@@ -106,6 +106,12 @@ val SAVED_DRAFT_VARIABLE_DEFINITION =
         id = ObjectId(),
         definitionId = NanoId.generate(8),
         variableStatus = VariableStatus.DRAFT,
+    )
+
+val SINGLE_SAVED_VARIABLE_DEFINITION =
+    SAVED_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = NanoId.generate(8),
     )
 
 val SAVED_VARIABLE_DEFINITION_COPY =
@@ -132,8 +138,8 @@ val RENDERED_VARIABLE_DEFINITION =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = null,
-        validFrom = LocalDate.of(2021, 1, 4),
-        validUntil = LocalDate.of(2021, 1, 4),
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
@@ -160,8 +166,8 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = null,
-        validFrom = LocalDate.of(2021, 1, 4),
-        validUntil = LocalDate.of(2021, 1, 4),
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =

@@ -29,27 +29,31 @@ open class BaseVardefTest {
         variableDefinitionService.clear()
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
-        //variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.apply { patchId = 2 })
-        //variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.apply { patchId = 3 })
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
         variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
         variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.apply {
+            SAVED_VARIABLE_DEFINITION.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 4
             },
         )
-//        variableDefinitionService.save(
-//            SAVED_VARIABLE_DEFINITION.apply {
-//                validFrom = LocalDate.of(1980, 12, 1)
-//                patchId = 5
-//            },
-//        )
-//        variableDefinitionService.save(
-//            SAVED_VARIABLE_DEFINITION.apply {
-//                validUntil = LocalDate.of(2030, 12, 31)
-//                patchId = 6
-//            },
-//        )
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 5
+            },
+        )
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 6
+            },
+        )
+
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition(null))
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition(null))

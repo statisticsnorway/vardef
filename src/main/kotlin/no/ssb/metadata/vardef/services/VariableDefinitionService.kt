@@ -79,11 +79,11 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean {
-        val validFromDates = listAllPatchesById(definitionId)
-        val p = validFromDates.map { it.patchId }
-        val d = validFromDates.map { it.validFrom }
-        return true
-        //return validFromDates.isEmpty() || dateOfValidity.isBefore(validFromDates.min()) || dateOfValidity.isAfter(validFromDates.max())
+        return listAllPatchesById(definitionId)
+            .map { it.validFrom }
+            .let { dates ->
+                dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
+            }
     }
 
     fun getLatestPatchByDateAndById(

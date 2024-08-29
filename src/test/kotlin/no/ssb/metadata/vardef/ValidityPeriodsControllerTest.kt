@@ -26,10 +26,12 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period all definitions in all languages are changed`(spec: RequestSpecification) {
+        val modifiedJson: String = TestUtils.postValidityPeriodOk()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT_NEW_VALIDITY_PERIOD)
+            .body(modifiedJson)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
@@ -38,12 +40,12 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
-        val modifiedJson: JSONObject = TestUtils.newValidityPeriod()
+        val modifiedJson: String = TestUtils.postValidityPeriodDefinitionNotChanged()
 
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(modifiedJson.toString())
+            .body(modifiedJson)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
@@ -53,10 +55,12 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period invalid valid from`(spec: RequestSpecification) {
+        val modifiedJson: String = TestUtils.postValidityPeriodInvalidValidFrom()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD)
+            .body(modifiedJson)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
@@ -66,10 +70,11 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period invalid valid from and not changed definition`(spec: RequestSpecification) {
+        val modifiedJson: String = TestUtils.postValidityPeriodInvalidValidFromAndInvalidDefinition()
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT_INVALID_VALIDITY_PERIOD_AND_NO_NEW_DEFINITION)
+            .body(modifiedJson)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()

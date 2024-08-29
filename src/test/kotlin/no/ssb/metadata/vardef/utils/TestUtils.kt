@@ -118,8 +118,8 @@ object TestUtils {
     }
 
     @JvmStatic
-    fun newValidityPeriod(): JSONObject  {
-        val testCases =
+    fun postValidityPeriodDefinitionNotChanged(): String {
+        val testCase =
             JSONObject(JSON_TEST_INPUT).apply {
                 put("valid_from", "2040-01-11")
                 getJSONObject("definition").apply {
@@ -127,8 +127,50 @@ object TestUtils {
                     put("nn", "For personer født")
                     put("en", "Country background is")
                 }
-            }
-        return testCases
+            }.toString()
+        return testCase
+    }
+
+    @JvmStatic
+    fun postValidityPeriodOk(): String  {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT).apply {
+                put("valid_from", "2040-01-11")
+                getJSONObject("definition").apply {
+                    put("nb", "For personer født i går")
+                    put("nn", "For personer født i går")
+                    put("en", "person born yesterday")
+                }
+            }.toString()
+        return testCase
+    }
+
+    @JvmStatic
+    fun postValidityPeriodInvalidValidFrom(): String  {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT).apply {
+                put("valid_from", "1996-01-11")
+                getJSONObject("definition").apply {
+                    put("nb", "For personer født i går")
+                    put("nn", "For personer født i går")
+                    put("en", "person born yesterday")
+                }
+            }.toString()
+        return testCase
+    }
+
+    @JvmStatic
+    fun postValidityPeriodInvalidValidFromAndInvalidDefinition(): String  {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT).apply {
+                put("valid_from", "1996-01-11")
+                getJSONObject("definition").apply {
+                    put("nb", "For personer født")
+                    put("nn", "For personer født")
+                    put("en", "person born yesterday")
+                }
+            }.toString()
+        return testCase
     }
 
     @JvmStatic

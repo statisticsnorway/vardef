@@ -81,7 +81,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .statusCode(400)
             .body(containsString("Not valid date"))
 
-        val correctValidFrom =  JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2030-01-11")}.toString()
+        val correctValidFrom = JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2030-01-11") }.toString()
         spec
             .given()
             .contentType(ContentType.JSON)

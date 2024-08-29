@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
 import no.ssb.metadata.vardef.utils.BaseVardefTest
@@ -78,16 +79,39 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @Test
     fun `check definition changed for two languages present`() {
+        val savedVariableDefinitionTwoLanguages =
+            SAVED_VARIABLE_DEFINITION.copy(
+                definition =
+                    LanguageStringType(
+                        nb = "For personer født",
+                        nn = null,
+                        en = "Country background is",
+                    ),
+            )
         val result =
             variableDefinitionService.isNewDefinition(
-                INPUT_VARIABLE_DEFINITIONS_UNCHANGED_TWO_LANGUAGES,
-                SAVED_VARIABLE_DEFINITION_TWO_LANGUAGES,
+                INPUT_VARIABLE_DEFINITION.copy(
+                    definition =
+                        LanguageStringType(
+                            nb = "For personer født",
+                            nn = null,
+                            en = "Country background is",
+                        ),
+                ),
+                savedVariableDefinitionTwoLanguages,
             )
         assertThat(result).isFalse()
         val result2 =
             variableDefinitionService.isNewDefinition(
-                INPUT_VARIABLE_DEFINITIONS_CHANGED_TWO_LANGUAGES,
-                SAVED_VARIABLE_DEFINITION_TWO_LANGUAGES,
+                INPUT_VARIABLE_DEFINITION.copy(
+                    definition =
+                        LanguageStringType(
+                            nb = "For personer født i går",
+                            nn = null,
+                            en = "Country background is born",
+                        ),
+                ),
+                savedVariableDefinitionTwoLanguages,
             )
         assertThat(result2).isTrue()
     }

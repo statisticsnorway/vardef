@@ -58,26 +58,6 @@ val INPUT_VARIABLE_DEFINITION_NO_NAME =
         shortName = "landbak 2",
     )
 
-val INPUT_VARIABLE_DEFINITIONS_UNCHANGED_TWO_LANGUAGES =
-    INPUT_VARIABLE_DEFINITION.copy(
-        definition =
-            LanguageStringType(
-                nb = "For personer født",
-                nn = null,
-                en = "Country background is",
-            ),
-    )
-
-val INPUT_VARIABLE_DEFINITIONS_CHANGED_TWO_LANGUAGES =
-    INPUT_VARIABLE_DEFINITION.copy(
-        definition =
-            LanguageStringType(
-                nb = "For personer født i går",
-                nn = null,
-                en = "Country background is born",
-            ),
-    )
-
 val SAVED_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),
@@ -119,16 +99,6 @@ val SAVED_VARIABLE_DEFINITION =
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy =
             Person("", ""),
-    )
-
-val SAVED_VARIABLE_DEFINITION_TWO_LANGUAGES =
-    SAVED_VARIABLE_DEFINITION.copy(
-        definition =
-            LanguageStringType(
-                nb = "For personer født",
-                nn = null,
-                en = "Country background is",
-            ),
     )
 
 val SAVED_DRAFT_VARIABLE_DEFINITION =

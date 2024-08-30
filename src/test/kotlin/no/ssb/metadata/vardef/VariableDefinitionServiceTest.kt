@@ -146,7 +146,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         ).isEqualTo(true)
     }
 
-    // Maybe remove 
+    // Maybe remove
     @Test
     fun `get all validity periods`() {
         val result = variableDefinitionService.listAllPatchesById(SAVED_VARIABLE_DEFINITION.definitionId)

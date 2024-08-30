@@ -36,7 +36,6 @@ class ValidityPeriodsController {
         @Body @Valid newPeriod: InputVariableDefinition,
     ): FullResponseVariableDefinition? {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
-        // try except
         when {
             !latestExistingPatch.variableStatus.isPublished() ->
                 throw PublishedVariableAccessException()

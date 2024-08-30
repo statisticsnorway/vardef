@@ -99,14 +99,15 @@ class VariableDefinitionService(
             }
     }
 
-    /*fun closeLastValidityPeriod(
+    fun closeLastValidityPeriod(
         // definitionId: String,
         dateOfValidity: LocalDate,
     )  {
+        TODO("Not implemented yet")
         // val closeDate = dateOfValidity.minus(Period.ofDays(1))
         // get latest valid from -> null?
         // what happens when closed?
-    }*/
+    }
 
     fun getLatestPatchByDateAndById(
         definitionId: String,

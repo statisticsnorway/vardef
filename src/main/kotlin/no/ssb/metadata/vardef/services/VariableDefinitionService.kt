@@ -101,7 +101,7 @@ class VariableDefinitionService(
 
     fun closeLastValidityPeriod(
         // definitionId: String,
-        dateOfValidity: LocalDate,
+        //dateOfValidity: LocalDate,
     )  {
         TODO("Not implemented yet")
         // val closeDate = dateOfValidity.minus(Period.ofDays(1))

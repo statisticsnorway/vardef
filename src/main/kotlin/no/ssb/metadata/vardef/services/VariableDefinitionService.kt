@@ -25,6 +25,15 @@ class VariableDefinitionService(
             .findAll()
             .toList()
 
+    fun listAllById(): Any =
+        listAll()
+            .groupBy { it.definitionId }
+            .values
+            .toList()
+
+
+
+
     fun listAllAndRenderForLanguage(
         language: SupportedLanguages,
         validFrom: LocalDate = LocalDate.now(),

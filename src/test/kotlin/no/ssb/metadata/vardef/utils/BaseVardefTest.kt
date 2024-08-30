@@ -28,11 +28,11 @@ open class BaseVardefTest {
     @BeforeEach
     fun setUp() {
         variableDefinitionService.clear()
+
+        // Collection of one variable definition
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
-        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
@@ -69,8 +69,15 @@ open class BaseVardefTest {
             },
         )
 
+        // Collection of one variable definition
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition(null))
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition(null))
+
+        // Collection of one variable definition
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
+
+        // Collection of one variable definition
+        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
     }
 }

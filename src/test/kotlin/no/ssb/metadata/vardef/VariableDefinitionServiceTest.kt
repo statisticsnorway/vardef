@@ -64,8 +64,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 LocalDate.now(),
                 LocalDate.now(),
             )
-            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(1) }
-        // .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(3) }
+            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(2) }
     }
 
     @ParameterizedTest
@@ -78,6 +77,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(actualResult).isEqualTo(expected)
     }
 
+    // Maybe remove
     @Test
     fun `check definition changed for two languages present`() {
         val savedVariableDefinitionTwoLanguages =
@@ -89,7 +89,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                         en = "Country background is",
                     ),
             )
-        val result =
+        val resultDefintionNotChanged =
             variableDefinitionService.isNewDefinition(
                 INPUT_VARIABLE_DEFINITION.copy(
                     definition =
@@ -101,8 +101,8 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
                 savedVariableDefinitionTwoLanguages,
             )
-        assertThat(result).isFalse()
-        val result2 =
+        assertThat(resultDefintionNotChanged).isFalse()
+        val resultDefinitionChanged =
             variableDefinitionService.isNewDefinition(
                 INPUT_VARIABLE_DEFINITION.copy(
                     definition =
@@ -114,7 +114,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
                 savedVariableDefinitionTwoLanguages,
             )
-        assertThat(result2).isTrue()
+        assertThat(resultDefinitionChanged).isTrue()
     }
 
     @ParameterizedTest
@@ -146,6 +146,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         ).isEqualTo(true)
     }
 
+    // Maybe remove 
     @Test
     fun `get all validity periods`() {
         val result = variableDefinitionService.listAllPatchesById(SAVED_VARIABLE_DEFINITION.definitionId)
@@ -160,6 +161,5 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         val filterFirstDate = result.filter { it.validFrom == firstDate }
         assertThat(filteredLastDate.size).isEqualTo(1)
         assertThat(filterFirstDate.size).isEqualTo(3)
-        // filteredObjects.forEach { println(it) }
     }
 }

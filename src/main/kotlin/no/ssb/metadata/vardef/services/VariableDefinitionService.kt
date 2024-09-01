@@ -25,7 +25,6 @@ class VariableDefinitionService(
             .findAll()
             .toList()
 
-    // TODO(problem with method, when valid now is null)
     fun listAllAndRenderForLanguage(
         language: SupportedLanguages,
         validFrom: LocalDate = LocalDate.now(),

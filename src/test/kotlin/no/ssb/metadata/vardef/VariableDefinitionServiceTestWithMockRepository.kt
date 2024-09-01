@@ -67,7 +67,6 @@ class VariableDefinitionServiceTestWithMockRepository {
         assertThat(result.definitionId).isEqualTo(savedVariableDefinition.definitionId)
     }
 
-    // TODO(affected num variables by the method list and render)
     @Test
     fun `find variables in selected language`() {
         val variableDefinition = SAVED_VARIABLE_DEFINITION

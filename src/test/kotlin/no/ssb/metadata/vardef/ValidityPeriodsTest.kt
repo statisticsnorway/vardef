@@ -63,33 +63,63 @@ class ValidityPeriodsTest {
                 Person("", ""),
         )
 
+    val inputVariableDefinition =
+        InputVariableDefinition(
+            id = NanoId.generate(8),
+            name =
+                LanguageStringType(
+                    nb = "Landbakgrunn",
+                    nn = "Landbakgrunn",
+                    en = "Country Background",
+                ),
+            shortName = "landbak",
+            definition =
+                LanguageStringType(
+                    nb = "For personer født på torsdag",
+                    nn = "For personer født på torsdag",
+                    en = "Persons born on thursday",
+                ),
+            classificationReference = "91",
+            unitTypes = listOf("", ""),
+            subjectFields = listOf("", ""),
+            containsSensitivePersonalInformation = false,
+            variableStatus = VariableStatus.PUBLISHED_INTERNAL,
+            measurementType = "",
+            validFrom = LocalDate.of(2022, 1, 1),
+            validUntil = null,
+            externalReferenceUri = URI("https://www.example.com").toURL(),
+            relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+            contact =
+                Contact(
+                    LanguageStringType("", "", ""),
+                    "",
+                ),
+        )
+
     @BeforeEach
     fun setUp() {
         variableDefinitionService.clear()
 
-        // Collection of one variable definition
         variableDefinitionService.save(savedVariableDefinition)
-        variableDefinitionService.save(savedVariableDefinition.copy().apply { patchId = 2 })
-        variableDefinitionService.save(savedVariableDefinition.copy().apply { patchId = 3 })
+        variableDefinitionService.save(
+            savedVariableDefinition.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 2
+            },
+        )
+        variableDefinitionService.save(
+            savedVariableDefinition.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 3
+            },
+        )
         variableDefinitionService.save(
             savedVariableDefinition.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 4
-            },
-        )
-        variableDefinitionService.save(
-            savedVariableDefinition.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 5
-            },
-        )
-        variableDefinitionService.save(
-            savedVariableDefinition.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 6
             },
         )
 
@@ -103,25 +133,16 @@ class ValidityPeriodsTest {
                         nn = "For personer født på siden",
                         en = "Persons born on the side",
                     )
-                patchId = 7
+                patchId = 5
             },
         )
     }
 
     @Test
-    fun `get correct validity periods`() {
-        val definitionId = savedVariableDefinition.definitionId
-        val result = variableDefinitionService.listVariableDefinitionByValidityPeriod(definitionId, LocalDate.now())
-        assertThat(result.size).isEqualTo(1)
-        assertThat(result[0].validUntil).isNull()
-        val result2 = variableDefinitionService.listVariableDefinitionByValidityPeriod(definitionId, LocalDate.of(1990, 1, 1))
-        assertThat(result2.size).isEqualTo(4)
-        val result3 =
-            variableDefinitionService.listVariableDefinitionByValidityPeriod(
-                definitionId,
-                LocalDate.of(1960, 1, 1),
-                LocalDate.of(1969, 1, 1),
-            )
-        assertThat(result3.size).isEqualTo(3)
+    fun `save new validity period`() {
+        val latestPatchId = variableDefinitionService.getLatestPatchById(savedVariableDefinition.definitionId)
+        val result = variableDefinitionService.saveNewValidityPeriod(inputVariableDefinition, latestPatchId)
+        assertThat(result.patchId).isEqualTo(6)
+        assertThat(result.validFrom).isEqualTo(inputVariableDefinition.validFrom)
     }
 }

@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
+import io.restassured.path.json.JsonPath
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
@@ -11,6 +12,7 @@ import no.ssb.metadata.vardef.utils.*
 import org.bson.types.ObjectId
 import org.hamcrest.Matchers.containsString
 import org.json.JSONObject
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -190,14 +192,22 @@ class ValidityPeriodsControllerTest {
     fun `create new validity period all definitions in all languages are changed`(spec: RequestSpecification) {
         val modifiedJson: String = postValidityPeriodOk()
 
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(modifiedJson)
-            .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
-            .then()
-            .statusCode(201)
+        val response: JsonPath =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(modifiedJson)
+                .`when`()
+                .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+                .then()
+                .statusCode(201)
+                .extract().response()
+                .body().jsonPath()
+
+        val id = response.getString("id")
+        val patchId = response.getInt("patchId")
+        val name = response.getString("name")
+        assertEquals(name, "[nb:Landbakgrunn, nn:Landbakgrunn, en:Country Background]")
     }
 
     @Test

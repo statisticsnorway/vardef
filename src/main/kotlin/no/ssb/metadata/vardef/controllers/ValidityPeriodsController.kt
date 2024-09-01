@@ -48,8 +48,7 @@ class ValidityPeriodsController {
         }
 
         try {
-            return varDefService.save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId))
-                .toFullResponseVariableDefinition()
+            return varDefService.saveNewValidityPeriod(newPeriod, latestExistingPatch)
         } catch (e: RuntimeException) {
             print(e.message)
             return null

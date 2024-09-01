@@ -46,26 +46,6 @@ class VariableDefinitionService(
             .values
             .toList()
 
-    fun listVariableDefinitionByValidityPeriod(
-        definitionId: String,
-        validFrom: LocalDate = LocalDate.now(),
-        validUntil: LocalDate = LocalDate.now(),
-    ): List<SavedVariableDefinition> {
-        val variables = listAllPatchesById(definitionId)
-        val resList: MutableList<SavedVariableDefinition> = mutableListOf()
-        for (variable in variables) {
-            val variableValidUntil = variable.validUntil ?: LocalDate.MAX
-
-            if (validFrom.isBefore(variableValidUntil) && validUntil.isAfter(variable.validFrom) ||
-                validFrom.isEqual(variable.validFrom) || validUntil.isEqual(variableValidUntil)
-            ) {
-                resList.add(variable)
-            }
-        }
-
-        return resList
-    }
-
     fun listAllPatchesById(id: String): List<SavedVariableDefinition> =
         variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty {
             throw EmptyResultException()
@@ -160,5 +140,13 @@ class VariableDefinitionService(
                 ) == false
             }
         return allDefinitionsChanged
+    }
+
+    fun saveNewValidityPeriod(
+        newPeriod: InputVariableDefinition,
+        latestExistingPatch: SavedVariableDefinition,
+    ): FullResponseVariableDefinition {
+        return save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId))
+            .toFullResponseVariableDefinition()
     }
 }

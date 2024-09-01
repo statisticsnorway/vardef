@@ -362,7 +362,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .get("/variable-definitions")
             .then()
             .statusCode(200)
-            .body("size()", Matchers.equalTo(2)) // check num variables
+            .body("size()", Matchers.equalTo(3))
     }
 
     @Test

@@ -25,6 +25,7 @@ class VariableDefinitionService(
             .findAll()
             .toList()
 
+    // TODO(problem with method, when valid now is null)
     fun listAllAndRenderForLanguage(
         language: SupportedLanguages,
         validFrom: LocalDate = LocalDate.now(),
@@ -45,6 +46,26 @@ class VariableDefinitionService(
             .mapValues { entry -> entry.value.maxBy { it.patchId } }
             .values
             .toList()
+
+    fun listAllByValidityPeriod(
+        definitionId: String,
+        validFrom: LocalDate = LocalDate.now(),
+        validUntil: LocalDate = LocalDate.now(),
+    ): List<SavedVariableDefinition> {
+        val variables = listAllPatchesById(definitionId)
+        val resList: MutableList<SavedVariableDefinition> = mutableListOf()
+        for (variable in variables) {
+            val variableValidUntil = variable.validUntil ?: LocalDate.MAX
+
+            if (validFrom.isBefore(variableValidUntil) && validUntil.isAfter(variable.validFrom) ||
+                validFrom.isEqual(variable.validFrom) || validUntil.isEqual(variableValidUntil)
+            ) {
+                resList.add(variable)
+            }
+        }
+
+        return resList
+    }
 
     fun listAllPatchesById(id: String): List<SavedVariableDefinition> =
         variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty {
@@ -101,8 +122,8 @@ class VariableDefinitionService(
 
     fun closeLastValidityPeriod(
         // definitionId: String,
-        //dateOfValidity: LocalDate,
-    )  {
+        // dateOfValidity: LocalDate,
+    ) {
         TODO("Not implemented yet")
         // val closeDate = dateOfValidity.minus(Period.ofDays(1))
         // get latest valid from -> null?

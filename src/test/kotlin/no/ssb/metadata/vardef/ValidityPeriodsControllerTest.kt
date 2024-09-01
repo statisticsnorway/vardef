@@ -11,6 +11,64 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
 class ValidityPeriodsControllerTest : BaseVardefTest() {
+    companion object {
+        @JvmStatic
+        fun postValidityPeriodDefinitionNotChanged(): String {
+            val testCase =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("valid_from", "2040-01-11")
+                    getJSONObject("definition").apply {
+                        put("nb", "For personer født på siden")
+                        put("nn", "For personer født på siden")
+                        put("en", "Persons born on the side")
+                    }
+                }.toString()
+            return testCase
+        }
+
+        @JvmStatic
+        fun postValidityPeriodOk(): String {
+            val testCase =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("valid_from", "2040-01-11")
+                    getJSONObject("definition").apply {
+                        put("nb", "For personer født i går")
+                        put("nn", "For personer født i går")
+                        put("en", "person born yesterday")
+                    }
+                }.toString()
+            return testCase
+        }
+
+        @JvmStatic
+        fun postValidityPeriodInvalidValidFrom(): String {
+            val testCase =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("valid_from", "1996-01-11")
+                    getJSONObject("definition").apply {
+                        put("nb", "For personer født i går")
+                        put("nn", "For personer født i går")
+                        put("en", "person born yesterday")
+                    }
+                }.toString()
+            return testCase
+        }
+
+        @JvmStatic
+        fun postValidityPeriodInvalidValidFromAndInvalidDefinition(): String {
+            val testCase =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("valid_from", "1996-01-11")
+                    getJSONObject("definition").apply {
+                        put("nb", "For personer født")
+                        put("nn", "For personer født")
+                        put("en", "person born yesterday")
+                    }
+                }.toString()
+            return testCase
+        }
+    }
+
     @Test
     fun `create new validity period not all definitions changed`(spec: RequestSpecification) {
         spec
@@ -25,7 +83,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period all definitions in all languages are changed`(spec: RequestSpecification) {
-        val modifiedJson: String = TestUtils.postValidityPeriodOk()
+        val modifiedJson: String = postValidityPeriodOk()
 
         spec
             .given()
@@ -39,7 +97,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
-        val modifiedJson: String = TestUtils.postValidityPeriodDefinitionNotChanged()
+        val modifiedJson: String = postValidityPeriodDefinitionNotChanged()
 
         spec
             .given()
@@ -54,7 +112,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period invalid valid from`(spec: RequestSpecification) {
-        val modifiedJson: String = TestUtils.postValidityPeriodInvalidValidFrom()
+        val modifiedJson: String = postValidityPeriodInvalidValidFrom()
 
         spec
             .given()
@@ -69,7 +127,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period invalid valid from and not changed definition`(spec: RequestSpecification) {
-        val modifiedJson: String = TestUtils.postValidityPeriodInvalidValidFromAndInvalidDefinition()
+        val modifiedJson: String = postValidityPeriodInvalidValidFromAndInvalidDefinition()
         spec
             .given()
             .contentType(ContentType.JSON)

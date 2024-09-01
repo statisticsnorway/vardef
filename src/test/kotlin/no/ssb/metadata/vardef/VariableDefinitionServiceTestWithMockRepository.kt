@@ -67,6 +67,7 @@ class VariableDefinitionServiceTestWithMockRepository {
         assertThat(result.definitionId).isEqualTo(savedVariableDefinition.definitionId)
     }
 
+    // TODO(affected num variables by the method list and render)
     @Test
     fun `find variables in selected language`() {
         val variableDefinition = SAVED_VARIABLE_DEFINITION
@@ -94,9 +95,9 @@ class VariableDefinitionServiceTestWithMockRepository {
         val result =
             variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB, LocalDate.now(), LocalDate.now())
         assertThat(result.isNotEmpty())
-        assertThat(result.size).isEqualTo(0) // TODO(Fix this - result should not be 0)
-        // assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })
-        // assertThat(result[0].id).isEqualTo(renderedVariableDefinition.id)
+        assertThat(result.size).isEqualTo(1)
+        assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })
+        assertThat(result[0].id).isEqualTo(renderedVariableDefinition.id)
         verify { variableDefinitionMockRepository.findAll() }
     }
 

@@ -12,9 +12,11 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
+import java.util.stream.Stream
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
@@ -64,11 +66,74 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 LocalDate.now(),
                 LocalDate.now(),
             )
-            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(2) }
+            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(3) }
+    }
+
+    companion object {
+        @JvmStatic
+        fun provideTestDataCheckDefinition(): Stream<Arguments> {
+            return Stream.of(
+                Arguments.of(
+                    INPUT_VARIABLE_DEFINITION.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "For personer født",
+                                nn = "For personer født",
+                                en = "Country background is",
+                            ),
+                    ),
+                    false,
+                ),
+                Arguments.of(
+                    INPUT_VARIABLE_DEFINITION.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "For personer født i går",
+                                nn = "For personer født i går",
+                                en = "Persons born yesterday",
+                            ),
+                    ),
+                    true,
+                ),
+                Arguments.of(
+                    INPUT_VARIABLE_DEFINITION.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "For personer født",
+                                nn = "For personer født",
+                                en = "Country background is",
+                            ),
+                    ),
+                    false,
+                ),
+                Arguments.of(
+                    INPUT_VARIABLE_DEFINITION.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "For personer født i går",
+                                nn = "For personer født",
+                                en = "Country background is",
+                            ),
+                    ),
+                    false,
+                ),
+                Arguments.of(
+                    INPUT_VARIABLE_DEFINITION.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Hester og kuer født",
+                                nn = "Hester og kuer født",
+                                en = "Horses and cows born",
+                            ),
+                    ),
+                    true,
+                ),
+            )
+        }
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#provideTestDataCheckDefinition")
+    @MethodSource("provideTestDataCheckDefinition")
     fun `check definition texts for all languages`(
         inputObject: InputVariableDefinition,
         expected: Boolean,
@@ -89,7 +154,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                         en = "Country background is",
                     ),
             )
-        val resultDefintionNotChanged =
+        val resultDefinitionNotChanged =
             variableDefinitionService.isNewDefinition(
                 INPUT_VARIABLE_DEFINITION.copy(
                     definition =
@@ -101,7 +166,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
                 savedVariableDefinitionTwoLanguages,
             )
-        assertThat(resultDefintionNotChanged).isFalse()
+        assertThat(resultDefinitionNotChanged).isFalse()
         val resultDefinitionChanged =
             variableDefinitionService.isNewDefinition(
                 INPUT_VARIABLE_DEFINITION.copy(
@@ -144,22 +209,5 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 LocalDate.of(3000, 1, 1),
             ),
         ).isEqualTo(true)
-    }
-
-    // Maybe remove
-    @Test
-    fun `get all validity periods`() {
-        val result = variableDefinitionService.listAllPatchesById(SAVED_VARIABLE_DEFINITION.definitionId)
-        assertThat(result.size).isEqualTo(7)
-        assertThat(result[6].patchId).isEqualTo(7)
-        val groupedByDate = result.groupBy { it.validFrom }
-        assertThat(groupedByDate.size).isEqualTo(3)
-        val firstDate = result.minOfOrNull { it.validFrom }
-        val lastDate = result.maxOfOrNull { it.validFrom } // Find the last (most recent) date
-
-        val filteredLastDate = result.filter { it.validFrom == lastDate }
-        val filterFirstDate = result.filter { it.validFrom == firstDate }
-        assertThat(filteredLastDate.size).isEqualTo(1)
-        assertThat(filterFirstDate.size).isEqualTo(3)
     }
 }

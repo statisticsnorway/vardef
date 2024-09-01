@@ -3,8 +3,10 @@ package no.ssb.metadata.vardef
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
+import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeEach
@@ -111,12 +113,12 @@ class ValidityPeriodsTest {
     @Test
     fun `get correct validity periods`() {
         val definitionId = savedVariableDefinition.definitionId
-        val result = variableDefinitionService.listAllByValidityPeriod(definitionId, LocalDate.now())
+        val result = variableDefinitionService.listVariableDefinitionByValidityPeriod(definitionId, LocalDate.now())
         assertThat(result.size).isEqualTo(1)
         assertThat(result[0].validUntil).isNull()
-        val result2 = variableDefinitionService.listAllByValidityPeriod(definitionId, LocalDate.of(1990, 1, 1))
+        val result2 = variableDefinitionService.listVariableDefinitionByValidityPeriod(definitionId, LocalDate.of(1990, 1, 1))
         assertThat(result2.size).isEqualTo(4)
-        val result3 = variableDefinitionService.listAllByValidityPeriod(definitionId, LocalDate.of(1960, 1, 1), LocalDate.of(1969, 1, 1))
+        val result3 = variableDefinitionService.listVariableDefinitionByValidityPeriod(definitionId, LocalDate.of(1960, 1, 1), LocalDate.of(1969, 1, 1))
         assertThat(result3.size).isEqualTo(3)
     }
 }

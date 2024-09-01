@@ -46,7 +46,7 @@ class VariableDefinitionService(
             .values
             .toList()
 
-    fun listAllByValidityPeriod(
+    fun listVariableDefinitionByValidityPeriod(
         definitionId: String,
         validFrom: LocalDate = LocalDate.now(),
         validUntil: LocalDate = LocalDate.now(),

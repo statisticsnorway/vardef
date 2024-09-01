@@ -1,9 +1,6 @@
 package no.ssb.metadata.vardef
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.restassured.RestAssured
-import io.restassured.filter.log.RequestLoggingFilter
-import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
@@ -25,8 +22,7 @@ import java.time.LocalDateTime
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ValidityPeriodsControllerTest{
-
+class ValidityPeriodsControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
@@ -36,18 +32,18 @@ class ValidityPeriodsControllerTest{
             definitionId = NanoId.generate(8),
             patchId = 1,
             name =
-            LanguageStringType(
-                nb = "Landbakgrunn",
-                nn = "Landbakgrunn",
-                en = "Country Background",
-            ),
+                LanguageStringType(
+                    nb = "Landbakgrunn",
+                    nn = "Landbakgrunn",
+                    en = "Country Background",
+                ),
             shortName = "landbak",
             definition =
-            LanguageStringType(
-                nb = "For personer født",
-                nn = "For personer født",
-                en = "Country background is",
-            ),
+                LanguageStringType(
+                    nb = "For personer født",
+                    nn = "For personer født",
+                    en = "Country background is",
+                ),
             classificationUri = "91",
             unitTypes = listOf("01", "02"),
             subjectFields = listOf("he04"),
@@ -59,18 +55,18 @@ class ValidityPeriodsControllerTest{
             externalReferenceUri = URI("https://example.com/").toURL(),
             relatedVariableDefinitionUris = listOf(),
             owner =
-            Owner("", ""),
+                Owner("", ""),
             contact =
-            Contact(
-                LanguageStringType("", "", ""),
-                "me@example.com",
-            ),
+                Contact(
+                    LanguageStringType("", "", ""),
+                    "me@example.com",
+                ),
             createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
             createdBy =
-            Person("", ""),
+                Person("", ""),
             lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
             lastUpdatedBy =
-            Person("", ""),
+                Person("", ""),
         )
 
     @BeforeEach

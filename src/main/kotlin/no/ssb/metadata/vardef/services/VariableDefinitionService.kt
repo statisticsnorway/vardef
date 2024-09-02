@@ -52,6 +52,8 @@ class VariableDefinitionService(
             throw EmptyResultException()
         }
 
+    fun listPatchesById(id: String): List<SavedVariableDefinition> = variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id)
+
     fun getOnePatchById(
         variableDefinitionId: String,
         patchId: Int,
@@ -149,9 +151,9 @@ class VariableDefinitionService(
 
     fun saveNewValidityPeriod(
         newPeriod: InputVariableDefinition,
-        latestExistingPatch: SavedVariableDefinition,
-    ): FullResponseVariableDefinition {
-        return save(newPeriod.toSavedVariableDefinition(latestExistingPatch.patchId))
-            .toFullResponseVariableDefinition()
+        definitionId: String,
+    ): SavedVariableDefinition {
+        val closeValidityPeriod = closeLastValidityPeriod(definitionId, newPeriod.validFrom)
+        return save(newPeriod.toSavedVariableDefinition(closeValidityPeriod.patchId))
     }
 }

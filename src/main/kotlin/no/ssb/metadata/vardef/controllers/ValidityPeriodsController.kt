@@ -46,9 +46,8 @@ class ValidityPeriodsController {
             !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->
                 throw DefinitionTextUnchangedException()
         }
-
         try {
-            return varDefService.saveNewValidityPeriod(newPeriod, latestExistingPatch)
+            return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toFullResponseVariableDefinition()
         } catch (e: RuntimeException) {
             print(e.message)
             return null

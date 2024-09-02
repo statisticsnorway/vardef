@@ -99,7 +99,7 @@ class ValidityPeriodsTest {
 
     val newValidityPeriod =
         InputVariableDefinition(
-            id = NanoId.generate(8),
+            id = saveVariableDefinition.definitionId,
             name =
                 LanguageStringType(
                     nb = "Landbakgrunn",
@@ -184,10 +184,18 @@ class ValidityPeriodsTest {
 
     @Test
     fun `save new validity period`() {
-        val latestPatchId = variableDefinitionService.getLatestPatchById(saveVariableDefinition.definitionId)
-        val result = variableDefinitionService.saveNewValidityPeriod(inputVariableDefinition, latestPatchId)
-        assertThat(result.patchId).isEqualTo(6)
-        assertThat(result.validFrom).isEqualTo(inputVariableDefinition.validFrom)
+        val saveNewValidityPeriod =
+            variableDefinitionService.saveNewValidityPeriod(
+                newValidityPeriod,
+                saveVariableDefinition.definitionId,
+            )
+        assertThat(saveNewValidityPeriod.patchId).isEqualTo(7)
+        val patches = variableDefinitionService.listAllPatchesById(saveVariableDefinition.definitionId)
+        assertThat(saveNewValidityPeriod.validUntil).isNull()
+        assertThat(saveNewValidityPeriod.validFrom).isEqualTo(newValidityPeriod.validFrom)
+        assertThat(saveNewValidityPeriod.definitionId).isEqualTo(saveVariableDefinition.definitionId)
+        assertThat(patches.size).isEqualTo(7)
+        assertThat(patches.last().validFrom).isEqualTo(newValidityPeriod.validFrom)
     }
 
     @Test

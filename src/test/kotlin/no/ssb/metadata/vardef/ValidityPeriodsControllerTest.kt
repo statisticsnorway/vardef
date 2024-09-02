@@ -205,7 +205,6 @@ class ValidityPeriodsControllerTest {
                 .body().jsonPath()
 
         val id = response.getString("id")
-        val patchId = response.getInt("patchId")
         val name = response.getString("name")
         assertEquals(name, "[nb:Landbakgrunn, nn:Landbakgrunn, en:Country Background]")
     }

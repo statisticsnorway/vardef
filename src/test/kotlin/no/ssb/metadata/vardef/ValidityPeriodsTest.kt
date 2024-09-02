@@ -21,7 +21,7 @@ class ValidityPeriodsTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
-    val saveVariableDefinition =
+    private val saveVariableDefinition =
         SavedVariableDefinition(
             id = ObjectId(),
             definitionId = NanoId.generate(8),
@@ -64,40 +64,7 @@ class ValidityPeriodsTest {
                 Person("", ""),
         )
 
-    val inputVariableDefinition =
-        InputVariableDefinition(
-            id = NanoId.generate(8),
-            name =
-                LanguageStringType(
-                    nb = "Landbakgrunn",
-                    nn = "Landbakgrunn",
-                    en = "Country Background",
-                ),
-            shortName = "landbak",
-            definition =
-                LanguageStringType(
-                    nb = "For personer født på torsdag",
-                    nn = "For personer født på torsdag",
-                    en = "Persons born on thursday",
-                ),
-            classificationReference = "91",
-            unitTypes = listOf("", ""),
-            subjectFields = listOf("", ""),
-            containsSensitivePersonalInformation = false,
-            variableStatus = VariableStatus.PUBLISHED_INTERNAL,
-            measurementType = "",
-            validFrom = LocalDate.of(2022, 1, 1),
-            validUntil = null,
-            externalReferenceUri = URI("https://www.example.com").toURL(),
-            relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
-            contact =
-                Contact(
-                    LanguageStringType("", "", ""),
-                    "",
-                ),
-        )
-
-    val newValidityPeriod =
+    private val newValidityPeriod =
         InputVariableDefinition(
             id = saveVariableDefinition.definitionId,
             name =
@@ -183,6 +150,24 @@ class ValidityPeriodsTest {
     }
 
     @Test
+    fun `end validity period`() {
+        val patchValidUntil =
+            variableDefinitionService.closeLastValidityPeriod(
+                saveVariableDefinition.definitionId,
+                newValidityPeriod.validFrom,
+            )
+
+        assertThat(patchValidUntil.validUntil).isAfter(patchValidUntil.validFrom)
+
+        val expectedPatchId = variableDefinitionService.getLatestPatchById(
+            saveVariableDefinition.definitionId).patchId
+        val expectedValidUntil = newValidityPeriod.validFrom.minus(Period.ofDays(1))
+
+        assertThat(patchValidUntil.patchId).isEqualTo(expectedPatchId)
+        assertThat(patchValidUntil.validUntil).isEqualTo(expectedValidUntil)
+    }
+
+    @Test
     fun `save new validity period`() {
         val saveNewValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
@@ -231,21 +216,5 @@ class ValidityPeriodsTest {
         )
     }
 
-    @Test
-    fun `close validity period`() {
-        val result =
-            variableDefinitionService.closeLastValidityPeriod(
-                saveVariableDefinition.definitionId,
-                newValidityPeriod.validFrom,
-            )
-        assertThat(result).isNotNull
-        assertThat(result.patchId).isEqualTo(6)
-        assertThat(result.validUntil).isNotNull()
-        assertThat(result.validUntil).isAfter(
-            variableDefinitionService.getOnePatchById(
-                saveVariableDefinition.definitionId,
-                6,
-            ).validFrom,
-        )
-    }
+
 }

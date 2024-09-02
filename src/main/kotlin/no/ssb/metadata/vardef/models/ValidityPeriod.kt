@@ -48,7 +48,7 @@ class ValidityPeriod(
             unitTypes = savedVariableDefinition.unitTypes,
             subjectFields = savedVariableDefinition.subjectFields,
             containsSensitivePersonalInformation = savedVariableDefinition.containsSensitivePersonalInformation,
-            variableStatus = savedVariableDefinition.variableStatus ?: VariableStatus.DRAFT,
+            variableStatus = savedVariableDefinition.variableStatus,
             measurementType = savedVariableDefinition.measurementType,
             externalReferenceUri = savedVariableDefinition.externalReferenceUri,
             relatedVariableDefinitionUris = savedVariableDefinition.relatedVariableDefinitionUris,

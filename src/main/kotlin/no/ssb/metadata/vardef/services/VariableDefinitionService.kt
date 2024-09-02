@@ -52,8 +52,6 @@ class VariableDefinitionService(
             throw EmptyResultException()
         }
 
-    fun listPatchesById(id: String): List<SavedVariableDefinition> = variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id)
-
     fun getOnePatchById(
         variableDefinitionId: String,
         patchId: Int,
@@ -106,13 +104,13 @@ class VariableDefinitionService(
      * date for new validity period
      * get last patch, set validUntil to day before new validity period and save patch
      */
-    fun closeLastValidityPeriod(
+    fun endLastValidityPeriod(
         definitionId: String,
         dateOfNewValidity: LocalDate,
     ): SavedVariableDefinition {
-        val closeDate = dateOfNewValidity.minus(Period.ofDays(1))
+        val endDate = dateOfNewValidity.minus(Period.ofDays(1))
         val latestExistingPatch = getLatestPatchById(definitionId)
-        val newPatch = latestExistingPatch.copy(validUntil = closeDate)
+        val newPatch = latestExistingPatch.apply {  validUntil = endDate }
         return save(newPatch.toInputVariableDefinition().toSavedVariableDefinition(latestExistingPatch.patchId))
     }
 
@@ -153,7 +151,7 @@ class VariableDefinitionService(
         newPeriod: InputVariableDefinition,
         definitionId: String,
     ): SavedVariableDefinition {
-        val closeValidityPeriod = closeLastValidityPeriod(definitionId, newPeriod.validFrom)
-        return save(newPeriod.toSavedVariableDefinition(closeValidityPeriod.patchId))
+        val endValidityPeriod = endLastValidityPeriod(definitionId, newPeriod.validFrom)
+        return save(newPeriod.toSavedVariableDefinition(endValidityPeriod.patchId))
     }
 }

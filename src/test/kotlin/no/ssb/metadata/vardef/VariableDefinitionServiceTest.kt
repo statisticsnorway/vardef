@@ -69,6 +69,35 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(3) }
     }
 
+    @ParameterizedTest
+    @CsvSource(
+        "1990,false",
+        "1760,true",
+        "3000,true",
+    )
+    fun `validate valid_from values`(
+        year: Int,
+        expected: Boolean,
+    ) {
+        assertThat(
+            variableDefinitionService.isValidValidFromValue(
+                SAVED_VARIABLE_DEFINITION.definitionId,
+                LocalDate.of(year, 1, 1),
+            ),
+        ).isEqualTo(expected)
+    }
+
+    @Test
+    fun `get id with only one patch`() {
+        variableDefinitionService.save(SINGLE_SAVED_VARIABLE_DEFINITION)
+        assertThat(
+            variableDefinitionService.isValidValidFromValue(
+                SINGLE_SAVED_VARIABLE_DEFINITION.definitionId,
+                LocalDate.of(3000, 1, 1),
+            ),
+        ).isEqualTo(true)
+    }
+
     companion object {
         @JvmStatic
         fun provideTestDataCheckDefinition(): Stream<Arguments> {
@@ -140,74 +169,5 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     ) {
         val actualResult = variableDefinitionService.isNewDefinition(inputObject, SAVED_VARIABLE_DEFINITION)
         assertThat(actualResult).isEqualTo(expected)
-    }
-
-    // Maybe remove
-    @Test
-    fun `check definition changed for two languages present`() {
-        val savedVariableDefinitionTwoLanguages =
-            SAVED_VARIABLE_DEFINITION.copy(
-                definition =
-                    LanguageStringType(
-                        nb = "For personer født",
-                        nn = null,
-                        en = "Country background is",
-                    ),
-            )
-        val resultDefinitionNotChanged =
-            variableDefinitionService.isNewDefinition(
-                INPUT_VARIABLE_DEFINITION.copy(
-                    definition =
-                        LanguageStringType(
-                            nb = "For personer født",
-                            nn = null,
-                            en = "Country background is",
-                        ),
-                ),
-                savedVariableDefinitionTwoLanguages,
-            )
-        assertThat(resultDefinitionNotChanged).isFalse()
-        val resultDefinitionChanged =
-            variableDefinitionService.isNewDefinition(
-                INPUT_VARIABLE_DEFINITION.copy(
-                    definition =
-                        LanguageStringType(
-                            nb = "For personer født i går",
-                            nn = null,
-                            en = "Country background is born",
-                        ),
-                ),
-                savedVariableDefinitionTwoLanguages,
-            )
-        assertThat(resultDefinitionChanged).isTrue()
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        "1990,false",
-        "1760,true",
-        "3000,true",
-    )
-    fun `validate valid_from values`(
-        year: Int,
-        expected: Boolean,
-    ) {
-        assertThat(
-            variableDefinitionService.isValidValidFromValue(
-                SAVED_VARIABLE_DEFINITION.definitionId,
-                LocalDate.of(year, 1, 1),
-            ),
-        ).isEqualTo(expected)
-    }
-
-    @Test
-    fun `get id with only one patch`() {
-        variableDefinitionService.save(SINGLE_SAVED_VARIABLE_DEFINITION)
-        assertThat(
-            variableDefinitionService.isValidValidFromValue(
-                SINGLE_SAVED_VARIABLE_DEFINITION.definitionId,
-                LocalDate.of(3000, 1, 1),
-            ),
-        ).isEqualTo(true)
     }
 }

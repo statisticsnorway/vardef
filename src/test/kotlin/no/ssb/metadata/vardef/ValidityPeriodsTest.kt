@@ -191,7 +191,7 @@ class ValidityPeriodsTest {
     }
 
     @Test
-    fun `set last validity period valid until`()  {
+    fun `set last validity period valid until`() {
         val lastPatch = variableDefinitionService.getLatestPatchById(saveVariableDefinition.definitionId)
         assertThat(lastPatch.validUntil == null)
         val patchesBefore = variableDefinitionService.listAllPatchesById(saveVariableDefinition.definitionId)
@@ -224,7 +224,7 @@ class ValidityPeriodsTest {
     }
 
     @Test
-    fun `close validity period`()  {
+    fun `close validity period`() {
         val result =
             variableDefinitionService.closeLastValidityPeriod(
                 saveVariableDefinition.definitionId,

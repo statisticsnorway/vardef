@@ -107,7 +107,7 @@ class VariableDefinitionService(
     fun closeLastValidityPeriod(
         definitionId: String,
         dateOfNewValidity: LocalDate,
-    ): SavedVariableDefinition  {
+    ): SavedVariableDefinition {
         val closeDate = dateOfNewValidity.minus(Period.ofDays(1))
         val latestExistingPatch = getLatestPatchById(definitionId)
         val newPatch = latestExistingPatch.copy(validUntil = closeDate)

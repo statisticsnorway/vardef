@@ -82,3 +82,15 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     }
 }
 """
+
+const val VALIDITY_PERIOD_EXAMPLE =
+    """{
+            "definition": {.",
+                "nb": "For personer født i utlandet, er dette eget fødeland.",
+                "nn": "For personar fødd i utlandet, er dette eige fødeland.",
+                "en": "For persons born abroad, is this own birth country."
+            },
+            "valid_from": "2020-01-01",
+            "valid_until": null,
+        }
+    """

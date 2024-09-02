@@ -106,6 +106,7 @@ data class InputVariableDefinition(
             lastUpdatedBy = null,
         )
 
+    // TODO(move method
     fun getDefinitionValue(lang: String): String? {
         return when (lang) {
             "nb" -> definition.nb

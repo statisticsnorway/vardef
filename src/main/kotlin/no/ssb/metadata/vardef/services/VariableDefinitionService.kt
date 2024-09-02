@@ -10,6 +10,7 @@ import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
+import java.time.Period
 
 @Singleton
 class VariableDefinitionService(
@@ -99,14 +100,18 @@ class VariableDefinitionService(
             }
     }
 
+    /**
+     * date for new validity period
+     * get last patch, set validUntil to day before new validity period and save patch
+     */
     fun closeLastValidityPeriod(
-        // definitionId: String,
-        // dateOfValidity: LocalDate,
-    ) {
-        TODO("Not implemented yet")
-        // val closeDate = dateOfValidity.minus(Period.ofDays(1))
-        // get latest valid from -> null?
-        // what happens when closed?
+        definitionId: String,
+        dateOfNewValidity: LocalDate,
+    ): SavedVariableDefinition{
+        val closeDate = dateOfNewValidity.minus(Period.ofDays(1))
+        val latestExistingPatch = getLatestPatchById(definitionId)
+        val newPatch = latestExistingPatch.copy(validUntil = closeDate)
+        return save(newPatch.toInputVariableDefinition().toSavedVariableDefinition(latestExistingPatch.patchId))
     }
 
     fun getLatestPatchByDateAndById(

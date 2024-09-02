@@ -101,18 +101,18 @@ class ValidityPeriodsTest {
         InputVariableDefinition(
             id = NanoId.generate(8),
             name =
-            LanguageStringType(
-                nb = "Landbakgrunn",
-                nn = "Landbakgrunn",
-                en = "Country Background",
-            ),
+                LanguageStringType(
+                    nb = "Landbakgrunn",
+                    nn = "Landbakgrunn",
+                    en = "Country Background",
+                ),
             shortName = "landbak",
             definition =
-            LanguageStringType(
-                nb = "For personer født på torsdag og fredag",
-                nn = "For personer født på torsdag og fredag",
-                en = "Persons born on thursday and friday",
-            ),
+                LanguageStringType(
+                    nb = "For personer født på torsdag og fredag",
+                    nn = "For personer født på torsdag og fredag",
+                    en = "Persons born on thursday and friday",
+                ),
             classificationReference = "91",
             unitTypes = listOf("", ""),
             subjectFields = listOf("", ""),
@@ -124,10 +124,10 @@ class ValidityPeriodsTest {
             externalReferenceUri = URI("https://www.example.com").toURL(),
             relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
             contact =
-            Contact(
-                LanguageStringType("", "", ""),
-                "",
-            ),
+                Contact(
+                    LanguageStringType("", "", ""),
+                    "",
+                ),
         )
 
     @BeforeEach
@@ -191,42 +191,53 @@ class ValidityPeriodsTest {
     }
 
     @Test
-    fun `set last validity period valid until`(){
+    fun `set last validity period valid until`()  {
         val lastPatch = variableDefinitionService.getLatestPatchById(saveVariableDefinition.definitionId)
         assertThat(lastPatch.validUntil == null)
         val patchesBefore = variableDefinitionService.listAllPatchesById(saveVariableDefinition.definitionId)
         assertThat(patchesBefore.size).isEqualTo(5)
-        val resultCloseLastValidityPeriod = variableDefinitionService.closeLastValidityPeriod(
-            saveVariableDefinition.definitionId,
-            newValidityPeriod.validFrom
-        )
+        val resultCloseLastValidityPeriod =
+            variableDefinitionService.closeLastValidityPeriod(
+                saveVariableDefinition.definitionId,
+                newValidityPeriod.validFrom,
+            )
         val patchesAfter = variableDefinitionService.listAllPatchesById(saveVariableDefinition.definitionId)
         assertThat(patchesAfter.size).isEqualTo(6)
         assertThat(resultCloseLastValidityPeriod.patchId).isEqualTo(6)
-        assertThat(resultCloseLastValidityPeriod.validFrom).isEqualTo(variableDefinitionService.getLatestPatchById(
-            saveVariableDefinition.definitionId).validFrom
+        assertThat(resultCloseLastValidityPeriod.validFrom).isEqualTo(
+            variableDefinitionService.getLatestPatchById(
+                saveVariableDefinition.definitionId,
+            ).validFrom,
         )
-        assertThat(resultCloseLastValidityPeriod.validUntil).isEqualTo(variableDefinitionService.getLatestPatchById(
-            saveVariableDefinition.definitionId).validUntil
+        assertThat(resultCloseLastValidityPeriod.validUntil).isEqualTo(
+            variableDefinitionService.getLatestPatchById(
+                saveVariableDefinition.definitionId,
+            ).validUntil,
         )
-        assertThat(variableDefinitionService.getLatestPatchById(
-            saveVariableDefinition.definitionId).validUntil).isEqualTo(
-            newValidityPeriod.validFrom.minus(Period.ofDays(1)))
+        assertThat(
+            variableDefinitionService.getLatestPatchById(
+                saveVariableDefinition.definitionId,
+            ).validUntil,
+        ).isEqualTo(
+            newValidityPeriod.validFrom.minus(Period.ofDays(1)),
+        )
     }
 
     @Test
-    fun `close validity period`(){
-        val result = variableDefinitionService.closeLastValidityPeriod(
-            saveVariableDefinition.definitionId,
-            newValidityPeriod.validFrom
-        )
+    fun `close validity period`()  {
+        val result =
+            variableDefinitionService.closeLastValidityPeriod(
+                saveVariableDefinition.definitionId,
+                newValidityPeriod.validFrom,
+            )
         assertThat(result).isNotNull
         assertThat(result.patchId).isEqualTo(6)
         assertThat(result.validUntil).isNotNull()
         assertThat(result.validUntil).isAfter(
             variableDefinitionService.getOnePatchById(
-                saveVariableDefinition.definitionId,6
-            ).validFrom
+                saveVariableDefinition.definitionId,
+                6,
+            ).validFrom,
         )
     }
 }

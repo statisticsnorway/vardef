@@ -40,7 +40,7 @@ class ValidityPeriodsController {
             !latestExistingPatch.variableStatus.isPublished() ->
                 throw PublishedVariableAccessException()
 
-           !varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom) ->
+            !varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom) ->
                 throw InvalidValidFromException()
 
             !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->

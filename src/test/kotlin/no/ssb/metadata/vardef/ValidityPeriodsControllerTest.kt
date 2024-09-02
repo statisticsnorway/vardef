@@ -191,7 +191,7 @@ class ValidityPeriodsControllerTest {
     fun `create new validity period all definitions in all languages are changed`(spec: RequestSpecification) {
         val modifiedJson: String = postValidityPeriodOk()
         val previousPatchId = variableDefinitionService.getLatestPatchById(savedVariableDefinition.definitionId).patchId
-        // if latest validity period == null, two patches up
+
         spec
             .given()
             .contentType(ContentType.JSON)

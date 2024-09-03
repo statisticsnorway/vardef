@@ -30,7 +30,7 @@ class ValidityPeriodsController {
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
-    @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status DRAFT or DEPRECATED.")
+    @ApiResponse(responseCode = "405", description = "Method not allowed.")
     fun createValidityPeriod(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
         @Body @Valid newPeriod: InputVariableDefinition,

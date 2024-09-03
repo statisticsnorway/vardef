@@ -17,6 +17,15 @@ data class LanguageStringType(
             SupportedLanguages.EN -> en
         }
 
+    /**
+     * Returns a list of languages currently present in the object,
+     * based on non-null *LanguageStringType* fields.
+     *
+     * This function checks each language field (e.g., "nb", "nn", "en")
+     * and adds the corresponding language code to the list if the field is not null.
+     *
+     * @return A list of language codes representing the present languages.
+     */
     fun listPresentLanguages(): List<String> {
         val presentLanguages = mutableListOf<String>()
         if (nb != null) presentLanguages.add("nb")

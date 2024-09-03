@@ -165,6 +165,9 @@ class VariableDefinitionService(
         return allDefinitionsChanged
     }
 
+    /**
+     *
+     */
     fun saveNewValidityPeriod(
         newPeriod: InputVariableDefinition,
         definitionId: String,

@@ -107,6 +107,9 @@ data class InputVariableDefinition(
         )
 
     // TODO(move method when new validityPeriod class)
+    /**
+     *
+     */
     fun getDefinitionValue(lang: String): String? {
         return when (lang) {
             "nb" -> definition.nb

@@ -1,18 +1,16 @@
 package no.ssb.metadata.vardef
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
+import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import java.net.URI
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.Period
 
 @MicronautTest
@@ -21,81 +19,22 @@ class ValidityPeriodsTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
-    private val saveVariableDefinition =
-        SavedVariableDefinition(
-            id = ObjectId(),
-            definitionId = NanoId.generate(8),
-            patchId = 1,
-            name =
-                LanguageStringType(
-                    nb = "Landbakgrunn",
-                    nn = "Landbakgrunn",
-                    en = "Country Background",
-                ),
-            shortName = "landbak",
-            definition =
-                LanguageStringType(
-                    nb = "For personer født",
-                    nn = "For personer født",
-                    en = "Country background is",
-                ),
-            classificationUri = "91",
-            unitTypes = listOf("01", "02"),
-            subjectFields = listOf("he04"),
-            containsSensitivePersonalInformation = false,
-            variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
-            measurementType = "02.01",
-            validFrom = LocalDate.of(1960, 1, 1),
-            validUntil = LocalDate.of(1980, 11, 30),
-            externalReferenceUri = URI("https://example.com/").toURL(),
-            relatedVariableDefinitionUris = listOf(),
-            owner =
-                Owner("", ""),
-            contact =
-                Contact(
-                    LanguageStringType("", "", ""),
-                    "me@example.com",
-                ),
-            createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-            createdBy =
-                Person("", ""),
-            lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-            lastUpdatedBy =
-                Person("", ""),
-        )
+    private val saveVariableDefinition = SAVED_VARIABLE_DEFINITION.copy(
+        validFrom = LocalDate.of(1960, 1, 1),
+        validUntil = LocalDate.of(1980, 11, 30),
+    )
 
-    private val newValidityPeriod =
-        InputVariableDefinition(
-            id = saveVariableDefinition.definitionId,
-            name =
-                LanguageStringType(
-                    nb = "Landbakgrunn",
-                    nn = "Landbakgrunn",
-                    en = "Country Background",
-                ),
-            shortName = "landbak",
-            definition =
-                LanguageStringType(
-                    nb = "For personer født på torsdag og fredag",
-                    nn = "For personer født på torsdag og fredag",
-                    en = "Persons born on thursday and friday",
-                ),
-            classificationReference = "91",
-            unitTypes = listOf("", ""),
-            subjectFields = listOf("", ""),
-            containsSensitivePersonalInformation = false,
-            variableStatus = VariableStatus.PUBLISHED_INTERNAL,
-            measurementType = "",
-            validFrom = LocalDate.of(2024, 9, 2),
-            validUntil = null,
-            externalReferenceUri = URI("https://www.example.com").toURL(),
-            relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
-            contact =
-                Contact(
-                    LanguageStringType("", "", ""),
-                    "",
-                ),
-        )
+    private val newValidityPeriod = INPUT_VARIABLE_DEFINITION.copy(
+        id = saveVariableDefinition.definitionId,
+        definition =
+            LanguageStringType(
+                nb = "For personer født på torsdag og fredag",
+                nn = "For personer født på torsdag og fredag",
+                en = "Persons born on thursday and friday",
+            ),
+        validFrom = LocalDate.of(2024, 9, 2),
+        validUntil = null,
+    )
 
     private val newValidityPeriodPreFirstPeriod =
         newValidityPeriod.copy(

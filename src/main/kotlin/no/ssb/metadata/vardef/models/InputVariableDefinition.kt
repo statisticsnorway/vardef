@@ -105,5 +105,4 @@ data class InputVariableDefinition(
             // TODO depends on authentication to make user information available
             lastUpdatedBy = null,
         )
-
 }

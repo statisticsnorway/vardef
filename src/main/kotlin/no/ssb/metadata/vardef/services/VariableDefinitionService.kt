@@ -108,7 +108,7 @@ class VariableDefinitionService(
      *
      * @param definitionId The id of the variable definition
      * @param dateOfNewValidity The starting date of the new validity period.
-     * The *validUntil* field will be set to the day before this date.
+     *
      */
     fun endLastValidityPeriod(
         definitionId: String,
@@ -171,8 +171,11 @@ class VariableDefinitionService(
     /**
      * Ends the current validity period and saves a new validity period as separate patches.
      *
-     * This function performs two actions:
-     *  1. Ends the current validity period by setting its *validUntil* date to the day before
+     * If new valid from is before first validity period, new version valid until is set to the day
+     * before first valid from. And only one new patch is created.
+     *
+     * Otherwise, two patches are created:
+     *  1.Ends the current validity period by setting its *validUntil* date to the day before
      *  the new validity period starts. This action creates a new patch to reflect the end of the
      *  previous validity period.
      *  2. Saves the new validity period as a separate new patch with updated validity information.
@@ -185,7 +188,16 @@ class VariableDefinitionService(
         newPeriod: InputVariableDefinition,
         definitionId: String,
     ): SavedVariableDefinition {
-        val endValidityPeriod = endLastValidityPeriod(definitionId, newPeriod.validFrom)
-        return save(newPeriod.toSavedVariableDefinition(endValidityPeriod.patchId))
+        val patches = listAllPatchesById(definitionId)
+
+        return if (newPeriod.validFrom.isBefore(patches.first().validFrom)) {
+            newPeriod.copy(validUntil = patches.first().validFrom.minusDays(1))
+                .toSavedVariableDefinition(patches.last().patchId)
+                .let { save(it) }
+        } else {
+            endLastValidityPeriod(definitionId, newPeriod.validFrom)
+                .let { newPeriod.toSavedVariableDefinition(it.patchId) }
+                .let { save(it) }
+        }
     }
 }

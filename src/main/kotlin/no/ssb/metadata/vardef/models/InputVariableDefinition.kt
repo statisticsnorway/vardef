@@ -107,8 +107,17 @@ data class InputVariableDefinition(
         )
 
     // TODO(move method when new validityPeriod class)
-
     /**
+     * Retrieves the definition value based on the specified language.
+     *
+     *  This function returns a definition string corresponding to the provided language code.
+     *  If the language code does not match any of the supported languages ("nb", "nn", "en"),
+     *  the function returns `null`.
+     *
+     *  @param lang A string representing the language code.
+     *  Supported values are "nb" (Norwegian Bokmål), "nn" (Norwegian Nynorsk), and "en" (English).
+     *  @return The definition string associated with the given language code,
+     *  or `null` if the language code is not supported.
      *
      */
     fun getDefinitionValue(lang: String): String? {

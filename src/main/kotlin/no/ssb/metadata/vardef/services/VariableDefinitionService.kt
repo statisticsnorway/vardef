@@ -101,8 +101,15 @@ class VariableDefinitionService(
     }
 
     /**
-     * date for new validity period
-     * get last patch, set validUntil to day before new validity period and save patch
+     * End previous *validity period*
+     *
+     * This method set value for field *validUntil* to the day before new validity period.
+     * There is no check for value, if *validUntil* is not null, the value is ignored.
+     * A new patch with the updated value for *validUntil* is created.
+     *
+     * @param definitionId The id of the variable definition
+     * @param dateOfNewValidity The starting date of the new validity period.
+     * The *validUntil* field will be set to the day before this date.
      */
     fun endLastValidityPeriod(
         definitionId: String,

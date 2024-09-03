@@ -134,6 +134,17 @@ class VariableDefinitionService(
             .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             .last()
 
+    /**
+     * Check if *definition* is eligible for a new validity period.
+     *
+     * To be eligible, all values for all languages present in the previous patch for the variable definition
+     * must be changed in the new definition. The changes are verified by comparing string values, ignoring case.
+     *
+     * @param newDefinition The input object containing the proposed variable definition.
+     * @param latestExistingPatch The existing object  to compare against.
+     * @return Returns `true` if all values for all languages are changed compared to the previous patch,
+     * `false` otherwise
+     */
     fun isNewDefinition(
         newDefinition: InputVariableDefinition,
         latestExistingPatch: SavedVariableDefinition,

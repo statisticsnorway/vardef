@@ -26,11 +26,11 @@ data class LanguageStringType(
      *
      * @return A list of language codes representing the present languages.
      */
-    fun listPresentLanguages(): List<String> {
-        val presentLanguages = mutableListOf<String>()
-        if (nb != null) presentLanguages.add("nb")
-        if (nn != null) presentLanguages.add("nn")
-        if (en != null) presentLanguages.add("en")
+    fun listPresentLanguages(): List<SupportedLanguages> {
+        val presentLanguages = mutableListOf<SupportedLanguages>()
+        if (nb != null) presentLanguages.add(SupportedLanguages.NB)
+        if (nn != null) presentLanguages.add(SupportedLanguages.NN)
+        if (en != null) presentLanguages.add(SupportedLanguages.EN)
         return presentLanguages
     }
 }

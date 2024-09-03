@@ -129,6 +129,15 @@ class ValidityPeriodsControllerTest {
                 }.toString()
             return testCase
         }
+
+        @JvmStatic
+        fun postValidityPeriodValidFromNull(): String {
+            val testCase =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("valid_from", "null")
+                }.toString()
+            return testCase
+        }
     }
 
     @Test
@@ -212,6 +221,25 @@ class ValidityPeriodsControllerTest {
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
+    }
+
+    @Test
+    fun `post no valid from`(spec: RequestSpecification) {
+        val modifiedJson: String = postValidityPeriodValidFromNull()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(modifiedJson)
+            .`when`()
+            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .then()
+            .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "Invalid date format, a valid date follows this format: YYYY-MM-DD",
+                ),
+            )
     }
 
     @ParameterizedTest

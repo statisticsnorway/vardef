@@ -158,9 +158,9 @@ class VariableDefinitionService(
         }
         val allDefinitionsChanged =
             latestExistingPatch.definition.listPresentLanguages().all { lang ->
-                latestExistingPatch.toInputVariableDefinition().getDefinitionValue(lang)?.equals(
-                    newDefinition.getDefinitionValue(lang), ignoreCase = true,
-                ) == false
+                !latestExistingPatch.toInputVariableDefinition().definition.getValidLanguage(lang).equals(
+                    newDefinition.definition.getValidLanguage(lang), ignoreCase = true,
+                )
             }
         return allDefinitionsChanged
     }

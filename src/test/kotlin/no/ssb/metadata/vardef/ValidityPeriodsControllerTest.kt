@@ -24,10 +24,11 @@ class ValidityPeriodsControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
-    private val savedVariableDefinition = SAVED_VARIABLE_DEFINITION.copy(
-        validFrom = LocalDate.of(1960, 1, 1),
-        validUntil = LocalDate.of(1980, 11, 30),
-    )
+    private val savedVariableDefinition =
+        SAVED_VARIABLE_DEFINITION.copy(
+            validFrom = LocalDate.of(1960, 1, 1),
+            validUntil = LocalDate.of(1980, 11, 30),
+        )
 
     @BeforeEach
     fun setUp() {

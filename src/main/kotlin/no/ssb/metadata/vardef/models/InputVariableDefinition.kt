@@ -106,7 +106,6 @@ data class InputVariableDefinition(
             lastUpdatedBy = null,
         )
 
-    // TODO(move method when new validityPeriod class)
     /**
      * Retrieves the definition value based on the specified language.
      *

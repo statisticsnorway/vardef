@@ -10,7 +10,6 @@ import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
-import java.time.Period
 
 @Singleton
 class VariableDefinitionService(
@@ -115,9 +114,13 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfNewValidity: LocalDate,
     ): SavedVariableDefinition {
-     val endDate = dateOfNewValidity.minusDays(1)
+        val endDate = dateOfNewValidity.minusDays(1)
         val latestExistingPatch = getLatestPatchById(definitionId)
-        return save(latestExistingPatch.copy(validUntil = endDate).toInputVariableDefinition().toSavedVariableDefinition(latestExistingPatch.patchId))
+        return save(
+            latestExistingPatch.copy(
+                validUntil = endDate,
+            ).toInputVariableDefinition().toSavedVariableDefinition(latestExistingPatch.patchId),
+        )
     }
 
     fun getLatestPatchByDateAndById(
@@ -158,7 +161,8 @@ class VariableDefinitionService(
         val allDefinitionsChanged =
             latestExistingPatch.definition.listPresentLanguages().all { lang ->
                 !latestExistingPatch.toInputVariableDefinition().getDefinitionValue(lang).equals(
-                    newDefinition.getDefinitionValue(lang), ignoreCase = true,
+                    newDefinition.getDefinitionValue(lang),
+                    ignoreCase = true,
                 )
             }
         return allDefinitionsChanged

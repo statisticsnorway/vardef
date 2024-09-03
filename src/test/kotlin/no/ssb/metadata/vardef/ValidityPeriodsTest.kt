@@ -19,22 +19,24 @@ class ValidityPeriodsTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
-    private val saveVariableDefinition = SAVED_VARIABLE_DEFINITION.copy(
-        validFrom = LocalDate.of(1960, 1, 1),
-        validUntil = LocalDate.of(1980, 11, 30),
-    )
+    private val saveVariableDefinition =
+        SAVED_VARIABLE_DEFINITION.copy(
+            validFrom = LocalDate.of(1960, 1, 1),
+            validUntil = LocalDate.of(1980, 11, 30),
+        )
 
-    private val newValidityPeriod = INPUT_VARIABLE_DEFINITION.copy(
-        id = saveVariableDefinition.definitionId,
-        definition =
-            LanguageStringType(
-                nb = "For personer født på torsdag og fredag",
-                nn = "For personer født på torsdag og fredag",
-                en = "Persons born on thursday and friday",
-            ),
-        validFrom = LocalDate.of(2024, 9, 2),
-        validUntil = null,
-    )
+    private val newValidityPeriod =
+        INPUT_VARIABLE_DEFINITION.copy(
+            id = saveVariableDefinition.definitionId,
+            definition =
+                LanguageStringType(
+                    nb = "For personer født på torsdag og fredag",
+                    nn = "For personer født på torsdag og fredag",
+                    en = "Persons born on thursday and friday",
+                ),
+            validFrom = LocalDate.of(2024, 9, 2),
+            validUntil = null,
+        )
 
     private val newValidityPeriodPreFirstPeriod =
         newValidityPeriod.copy(

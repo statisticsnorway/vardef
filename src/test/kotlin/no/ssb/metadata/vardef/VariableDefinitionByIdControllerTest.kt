@@ -30,7 +30,14 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("id", equalTo(SAVED_VARIABLE_DEFINITION.definitionId))
             .body("name", equalTo(SAVED_VARIABLE_DEFINITION.name.nb))
             .body("short_name", equalTo(SAVED_VARIABLE_DEFINITION.shortName))
-            .body("definition", equalTo(SAVED_VARIABLE_DEFINITION.definition.nb))
+            .body(
+                "definition",
+                equalTo(
+                    variableDefinitionService.getLatestPatchById(
+                        SAVED_VARIABLE_DEFINITION.definitionId,
+                    ).definition.nb,
+                ),
+            )
             .header(
                 "Content-Language",
                 SupportedLanguages.NB

@@ -6,6 +6,7 @@ import io.restassured.RestAssured
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
@@ -27,11 +28,11 @@ open class BaseVardefTest {
     @BeforeEach
     fun setUp() {
         variableDefinitionService.clear()
+
+        // Collection of one variable definition
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
-        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
@@ -54,8 +55,29 @@ open class BaseVardefTest {
             },
         )
 
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(2021, 1, 1)
+                validUntil = null
+                definition =
+                    LanguageStringType(
+                        nb = "For personer født på siden",
+                        nn = "For personer født på siden",
+                        en = "Persons born on the side",
+                    )
+                patchId = 7
+            },
+        )
+
+        // Collection of one variable definition
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition(null))
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition(null))
+
+        // Collection of one variable definition
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
+
+        // Collection of one variable definition
+        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
     }
 }

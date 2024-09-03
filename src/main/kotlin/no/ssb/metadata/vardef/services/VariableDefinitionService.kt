@@ -115,10 +115,9 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfNewValidity: LocalDate,
     ): SavedVariableDefinition {
-        val endDate = dateOfNewValidity.minus(Period.ofDays(1))
+     val endDate = dateOfNewValidity.minusDays(1)
         val latestExistingPatch = getLatestPatchById(definitionId)
-        val newPatch = latestExistingPatch.apply { validUntil = endDate }
-        return save(newPatch.toInputVariableDefinition().toSavedVariableDefinition(latestExistingPatch.patchId))
+        return save(latestExistingPatch.copy(validUntil = endDate).toInputVariableDefinition().toSavedVariableDefinition(latestExistingPatch.patchId))
     }
 
     fun getLatestPatchByDateAndById(

@@ -166,7 +166,17 @@ class VariableDefinitionService(
     }
 
     /**
+     * Ends the current validity period and saves a new validity period as separate patches.
      *
+     * This function performs two actions:
+     *  1. Ends the current validity period by setting its *validUntil* date to the day before
+     *  the new validity period starts. This action creates a new patch to reflect the end of the
+     *  previous validity period.
+     *  2. Saves the new validity period as a separate new patch with updated validity information.
+     *
+     * @param newPeriod The new variable definition that specifies the start of a new validity period.
+     * @param definitionId The ID of the existing variable definition whose validity period will be updated.
+     * @return The newly saved variable definition with the updated validity period.
      */
     fun saveNewValidityPeriod(
         newPeriod: InputVariableDefinition,

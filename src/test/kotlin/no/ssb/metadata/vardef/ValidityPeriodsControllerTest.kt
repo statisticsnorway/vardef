@@ -3,12 +3,11 @@ package no.ssb.metadata.vardef
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import io.viascom.nanoid.NanoId
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.models.LanguageStringType
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
-import org.bson.types.ObjectId
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.json.JSONObject
@@ -17,9 +16,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import java.net.URI
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -27,48 +24,7 @@ class ValidityPeriodsControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
-    val savedVariableDefinition =
-        SavedVariableDefinition(
-            id = ObjectId(),
-            definitionId = NanoId.generate(8),
-            patchId = 1,
-            name =
-                LanguageStringType(
-                    nb = "Landbakgrunn",
-                    nn = "Landbakgrunn",
-                    en = "Country Background",
-                ),
-            shortName = "landbak",
-            definition =
-                LanguageStringType(
-                    nb = "For personer født",
-                    nn = "For personer født",
-                    en = "Country background is",
-                ),
-            classificationUri = "91",
-            unitTypes = listOf("01", "02"),
-            subjectFields = listOf("he04"),
-            containsSensitivePersonalInformation = false,
-            variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
-            measurementType = "02.01",
-            validFrom = LocalDate.of(1960, 1, 1),
-            validUntil = LocalDate.of(1980, 11, 30),
-            externalReferenceUri = URI("https://example.com/").toURL(),
-            relatedVariableDefinitionUris = listOf(),
-            owner =
-                Owner("", ""),
-            contact =
-                Contact(
-                    LanguageStringType("", "", ""),
-                    "me@example.com",
-                ),
-            createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-            createdBy =
-                Person("", ""),
-            lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-            lastUpdatedBy =
-                Person("", ""),
-        )
+    private val savedVariableDefinition = SAVED_VARIABLE_DEFINITION.copy()
 
     @BeforeEach
     fun setUp() {
@@ -230,7 +186,7 @@ class ValidityPeriodsControllerTest {
             .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .body(containsString("Not valid date"))
+            .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
     }
 
     @Test
@@ -244,7 +200,7 @@ class ValidityPeriodsControllerTest {
             .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .body(containsString("Not valid date"))
+            .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
 
         val correctValidFrom = JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2030-01-11") }.toString()
         spec

@@ -1,45 +1,33 @@
 package no.ssb.metadata.vardef
 
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.VariableStatus
-import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.containsString
 import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import java.time.LocalDate
 
-@MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ValidityPeriodsControllerTest {
-    @Inject
-    lateinit var variableDefinitionService: VariableDefinitionService
-
-    private val savedVariableDefinition =
-        SAVED_VARIABLE_DEFINITION.copy(
-            validFrom = LocalDate.of(1960, 1, 1),
-            validUntil = LocalDate.of(1980, 11, 30),
-        )
-
+class ValidityPeriodsControllerTest : BaseVardefTest() {
     @BeforeEach
-    fun setUp() {
-        variableDefinitionService.clear()
-
+    fun setUpValidityPeriods() {
         // Collection of one variable definition
-        variableDefinitionService.save(savedVariableDefinition)
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1960, 1, 1)
+                validUntil = LocalDate.of(1980, 11, 30)
+            },
+        )
 
         // Start new validity period
         variableDefinitionService.save(
-            savedVariableDefinition.copy().apply {
+            SAVED_VARIABLE_DEFINITION.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = null
                 definition =
@@ -54,7 +42,7 @@ class ValidityPeriodsControllerTest {
 
         // End validity period
         variableDefinitionService.save(
-            savedVariableDefinition.copy().apply {
+            SAVED_VARIABLE_DEFINITION.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 3
@@ -63,7 +51,7 @@ class ValidityPeriodsControllerTest {
 
         // Start new validity period
         variableDefinitionService.save(
-            savedVariableDefinition.copy().apply {
+            SAVED_VARIABLE_DEFINITION.copy().apply {
                 validFrom = LocalDate.of(2021, 1, 1)
                 validUntil = null
                 definition =
@@ -158,7 +146,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(newValidityPeriod())
             .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(201)
     }
@@ -171,7 +159,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(JSON_TEST_INPUT)
             .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(400)
     }
@@ -184,7 +172,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(definitionNotChanged())
             .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
@@ -198,7 +186,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(invalidValidFrom())
             .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(
@@ -217,7 +205,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(invalidValidFromAndInvalidDefinition())
             .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
@@ -228,7 +216,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(correctValidFrom)
             .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
@@ -242,7 +230,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(validFromIsNull())
             .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(

@@ -6,11 +6,9 @@ import io.restassured.RestAssured
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
-import java.time.LocalDate
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -31,7 +29,7 @@ open class BaseVardefTest {
 
         // Collection of one variable definition
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
+        /*variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.copy().apply {
@@ -67,7 +65,7 @@ open class BaseVardefTest {
                     )
                 patchId = 7
             },
-        )
+        )*/
 
         // Collection of one variable definition
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))

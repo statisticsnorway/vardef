@@ -10,11 +10,26 @@ import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import java.time.LocalDate
 
 class PatchesControllerTest : BaseVardefTest() {
+    @BeforeEach
+    fun setUpPatches() {
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 4
+            },
+        )
+    }
+
     @Test
     fun `get all patches`(spec: RequestSpecification) {
         spec
@@ -22,7 +37,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(200)
-            .body("size()", equalTo(7))
+            .body("size()", equalTo(4))
     }
 
     @Test

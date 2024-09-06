@@ -36,6 +36,8 @@ class ValidityPeriodsControllerTest {
 
         // Collection of one variable definition
         variableDefinitionService.save(savedVariableDefinition)
+
+        // Start new validity period
         variableDefinitionService.save(
             savedVariableDefinition.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
@@ -49,12 +51,17 @@ class ValidityPeriodsControllerTest {
                 patchId = 2
             },
         )
+
+        // End validity period
         variableDefinitionService.save(
             savedVariableDefinition.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 3
             },
         )
+
+        // Start new validity period
         variableDefinitionService.save(
             savedVariableDefinition.copy().apply {
                 validFrom = LocalDate.of(2021, 1, 1)

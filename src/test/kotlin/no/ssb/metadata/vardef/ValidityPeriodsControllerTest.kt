@@ -15,10 +15,8 @@ import org.junit.jupiter.params.provider.EnumSource
 import java.time.LocalDate
 
 class ValidityPeriodsControllerTest : BaseVardefTest() {
-
     @BeforeEach
     fun setUpValidityPeriods() {
-
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.copy().apply {
                 validFrom = LocalDate.of(1960, 1, 1)

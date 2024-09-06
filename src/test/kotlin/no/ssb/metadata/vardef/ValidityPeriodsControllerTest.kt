@@ -239,7 +239,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
-    @DisplayName("Post new validity period must have valid status")
+    @DisplayName("New validity period must have valid status Published")
     fun `create new validity period with invalid status`(
         variableStatus: VariableStatus,
         spec: RequestSpecification,

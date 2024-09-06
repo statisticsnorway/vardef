@@ -40,24 +40,6 @@ val INPUT_VARIABLE_DEFINITION =
             ),
     )
 
-val INPUT_VARIABLE_DEFINITION_COPY =
-    INPUT_VARIABLE_DEFINITION.copy(
-        name =
-            LanguageStringType(
-                nb = "Landbakgrunn 2",
-                nn = "Landbakgrunn 2",
-                en = "Country Background 2",
-            ),
-        shortName = "landbak 2",
-    )
-
-val INPUT_VARIABLE_DEFINITION_NO_NAME =
-    INPUT_VARIABLE_DEFINITION.copy(
-        name =
-            LanguageStringType(nb = "Landbakgrunn", nn = "", en = null),
-        shortName = "landbak 2",
-    )
-
 val SAVED_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),
@@ -108,12 +90,6 @@ val SAVED_DRAFT_VARIABLE_DEFINITION =
         variableStatus = VariableStatus.DRAFT,
     )
 
-val SINGLE_SAVED_VARIABLE_DEFINITION =
-    SAVED_VARIABLE_DEFINITION.copy(
-        id = ObjectId(),
-        definitionId = NanoId.generate(8),
-    )
-
 val SAVED_VARIABLE_DEFINITION_COPY =
     SAVED_VARIABLE_DEFINITION.copy(
         id = ObjectId(),
@@ -147,34 +123,6 @@ val RENDERED_VARIABLE_DEFINITION =
             Owner("", ""),
         contact =
             RenderedContact("", "me@example.com"),
-        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy =
-            Person("", ""),
-        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy =
-            Person("", ""),
-    )
-
-val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
-    RenderedVariableDefinition(
-        id = "",
-        patchId = 1,
-        name = "Landbakgrunn",
-        shortName = "landbak",
-        definition = "For personer født",
-        classificationUri = "https://www.ssb.no/en/klass/klassifikasjoner/91",
-        unitTypes = emptyList(),
-        subjectFields = emptyList(),
-        containsSensitivePersonalInformation = false,
-        variableStatus = VariableStatus.DRAFT,
-        measurementType = null,
-        validFrom = LocalDate.of(2021, 1, 1),
-        validUntil = LocalDate.of(2021, 1, 1),
-        externalReferenceUri = URI("https://example.com/").toURL(),
-        relatedVariableDefinitionUris = listOf(),
-        owner =
-            Owner("", ""),
-        contact = null,
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy =
             Person("", ""),

@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef
 
+import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.LanguageStringType
@@ -7,8 +8,8 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.SINGLE_SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -131,10 +132,16 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @Test
     fun `get id with only one patch`() {
-        variableDefinitionService.save(SINGLE_SAVED_VARIABLE_DEFINITION)
+        val singleSavedVariableDefinition =
+            SAVED_VARIABLE_DEFINITION.copy(
+                id = ObjectId(),
+                definitionId = NanoId.generate(8),
+            )
+        variableDefinitionService.save(singleSavedVariableDefinition)
+
         assertThat(
             variableDefinitionService.isValidValidFromValue(
-                SINGLE_SAVED_VARIABLE_DEFINITION.definitionId,
+                singleSavedVariableDefinition.definitionId,
                 LocalDate.of(3000, 1, 1),
             ),
         ).isEqualTo(true)

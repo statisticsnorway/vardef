@@ -109,7 +109,7 @@ class ValidityPeriodsTest : BaseVardefTest() {
                 savedVariableDefinitionId,
             )
 
-        val endLastValidityPeriod =
+        val endValidityPeriodPatch =
             variableDefinitionService.getOnePatchById(
                 savedVariableDefinitionId,
                 saveNewValidityPeriod.patchId - 1,
@@ -119,7 +119,7 @@ class ValidityPeriodsTest : BaseVardefTest() {
         assertThat(saveNewValidityPeriod.patchId).isEqualTo(patches.last().patchId + 2)
         assertThat(saveNewValidityPeriod.patchId).isEqualTo(patchesAfterSave.last().patchId)
         assertThat(saveNewValidityPeriod.validFrom).isEqualTo(inputData.validFrom)
-        assertThat(endLastValidityPeriod.validUntil).isEqualTo(
+        assertThat(endValidityPeriodPatch.validUntil).isEqualTo(
             saveNewValidityPeriod.validFrom.minusDays(1),
         )
     }

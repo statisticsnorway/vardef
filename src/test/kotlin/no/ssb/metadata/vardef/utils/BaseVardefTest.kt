@@ -18,7 +18,7 @@ open class BaseVardefTest {
     }
 
     @Inject
-    lateinit var variableDefinitionService: VariableDefinitionService
+    open lateinit var variableDefinitionService: VariableDefinitionService
 
     @Inject
     lateinit var jsonMapper: JsonMapper

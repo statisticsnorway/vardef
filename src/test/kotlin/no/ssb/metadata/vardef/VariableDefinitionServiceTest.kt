@@ -20,7 +20,6 @@ import java.time.LocalDate
 import java.util.stream.Stream
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
-
     @BeforeEach
     fun setUpServiceTest() {
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })

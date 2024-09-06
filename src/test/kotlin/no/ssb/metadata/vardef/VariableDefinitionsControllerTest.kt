@@ -50,8 +50,6 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
 }
 
 class VariableDefinitionsControllerTest : BaseVardefTest() {
-
-
     @Test
     fun `create variable definition`(spec: RequestSpecification) {
         val startTime = LocalDateTime.now()

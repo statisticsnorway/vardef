@@ -9,6 +9,7 @@ import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.SINGLE_SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -19,6 +20,48 @@ import java.time.LocalDate
 import java.util.stream.Stream
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
+
+    @BeforeEach
+    fun setUpServiceTest() {
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 4
+            },
+        )
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 5
+            },
+        )
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 6
+            },
+        )
+
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(2021, 1, 1)
+                validUntil = null
+                definition =
+                    LanguageStringType(
+                        nb = "For personer født på siden",
+                        nn = "For personer født på siden",
+                        en = "Persons born on the side",
+                    )
+                patchId = 7
+            },
+        )
+    }
+
     @Test
     fun `get latest patch`() {
         assertThat(variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId)

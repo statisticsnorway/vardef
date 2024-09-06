@@ -29,43 +29,6 @@ open class BaseVardefTest {
 
         // Collection of one variable definition
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
-        /*variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
-        variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 4
-            },
-        )
-        variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 5
-            },
-        )
-        variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 6
-            },
-        )
-
-        variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(2021, 1, 1)
-                validUntil = null
-                definition =
-                    LanguageStringType(
-                        nb = "For personer født på siden",
-                        nn = "For personer født på siden",
-                        en = "Persons born on the side",
-                    )
-                patchId = 7
-            },
-        )*/
 
         // Collection of one variable definition
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))

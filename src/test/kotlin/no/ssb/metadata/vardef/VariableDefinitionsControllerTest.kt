@@ -50,6 +50,8 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
 }
 
 class VariableDefinitionsControllerTest : BaseVardefTest() {
+
+
     @Test
     fun `create variable definition`(spec: RequestSpecification) {
         val startTime = LocalDateTime.now()
@@ -157,7 +159,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .get("/variable-definitions?validFrom=2024-01-01")
             .then()
             .statusCode(200)
-            .body("[0].definition", equalTo("For personer født på siden"))
+            .body("[0].definition", equalTo("For personer født"))
             .body("[0].id", notNullValue())
             .header(
                 "Content-Language",

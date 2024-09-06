@@ -64,8 +64,11 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @Test
     fun `get latest patch`() {
-        assertThat(variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId)
-            .isEqualTo(7)
+        assertThat(
+            variableDefinitionService.getLatestPatchById(
+                SAVED_VARIABLE_DEFINITION.definitionId,
+            ).patchId,
+        ).isEqualTo(7)
     }
 
     @Test
@@ -149,7 +152,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     companion object {
         @JvmStatic
-        fun provideTestDataCheckDefinition(): Stream<Arguments> {
+        fun checkDefinitionText(): Stream<Arguments> {
             return Stream.of(
                 Arguments.of(
                     INPUT_VARIABLE_DEFINITION.copy(
@@ -206,12 +209,23 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     ),
                     true,
                 ),
+                Arguments.of(
+                    INPUT_VARIABLE_DEFINITION.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Hester og kuer født",
+                                nn = null,
+                                en = "Horses and cows born",
+                            ),
+                    ),
+                    false,
+                ),
             )
         }
     }
 
     @ParameterizedTest
-    @MethodSource("provideTestDataCheckDefinition")
+    @MethodSource("checkDefinitionText")
     fun `check definition texts for all languages`(
         inputObject: InputVariableDefinition,
         expected: Boolean,

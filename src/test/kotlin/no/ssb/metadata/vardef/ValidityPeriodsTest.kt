@@ -65,7 +65,7 @@ class ValidityPeriodsTest : BaseVardefTest() {
 
     companion object {
         @JvmStatic
-        fun saveValidityPeriod(): Stream<Arguments> {
+        fun newValidityPeriod(): Stream<Arguments> {
             val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId
             return Stream.of(
                 Arguments.of(
@@ -94,7 +94,7 @@ class ValidityPeriodsTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("saveValidityPeriod")
+    @MethodSource("newValidityPeriod")
     @DisplayName("Save a new validity period creates two new patches")
     fun `save new validity period`(inputData: InputVariableDefinition) {
         val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId

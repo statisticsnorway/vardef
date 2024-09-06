@@ -8,7 +8,9 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 import java.time.Period
 import java.util.stream.Stream
@@ -61,7 +63,6 @@ class ValidityPeriodsTest : BaseVardefTest() {
         assertThat(newPatchEndValidityPeriod.validUntil).isEqualTo(expectedValidUntil)
     }
 
-    // create parameterized tests for these
     companion object {
         @JvmStatic
         fun saveValidityPeriod(): Stream<Arguments> {
@@ -73,15 +74,13 @@ class ValidityPeriodsTest : BaseVardefTest() {
                         validFrom = LocalDate.now(),
                         validUntil = null,
                     ),
-                    2,
                 ),
                 Arguments.of(
                     INPUT_VARIABLE_DEFINITION.copy(
                         id = savedVariableDefinitionId,
-                        validFrom = LocalDate.of(1796, 1, 1),
+                        validFrom = LocalDate.of(2025, 10, 5),
                         validUntil = null,
                     ),
-                    1,
                 ),
                 Arguments.of(
                     INPUT_VARIABLE_DEFINITION.copy(
@@ -89,111 +88,63 @@ class ValidityPeriodsTest : BaseVardefTest() {
                         validFrom = LocalDate.of(2050, 1, 1),
                         validUntil = null,
                     ),
-                    2,
                 ),
             )
         }
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("saveValidityPeriod")
     @DisplayName("Save a new validity period creates two new patches")
-    fun `save new validity period valid from today`() {
+    fun `save new validity period`(inputData: InputVariableDefinition) {
         val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId
         val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
-
-        val newValidityPeriod =
-            INPUT_VARIABLE_DEFINITION.copy(
-                id = savedVariableDefinitionId,
-                validFrom = LocalDate.now(),
-                validUntil = null,
-            )
-
         val saveNewValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
-                newValidityPeriod,
+                inputData,
                 savedVariableDefinitionId,
             )
         val patchesAfterSave =
             variableDefinitionService.listAllPatchesById(
                 savedVariableDefinitionId,
             )
-        val endValidityPeriod =
+
+        val endLastValidityPeriod =
             variableDefinitionService.getOnePatchById(
                 savedVariableDefinitionId,
                 saveNewValidityPeriod.patchId - 1,
             )
-        val startValidityPeriodPatchId = patchesAfterSave.last().patchId
 
         assertThat(patchesAfterSave.size).isEqualTo(patches.size + 2)
-
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(startValidityPeriodPatchId)
-
-        assertThat(saveNewValidityPeriod.validUntil).isNull()
-        assertThat(saveNewValidityPeriod.validFrom).isEqualTo(newValidityPeriod.validFrom)
-        assertThat(endValidityPeriod.validUntil).isEqualTo(
-            newValidityPeriod.validFrom.minusDays(1),
+        assertThat(saveNewValidityPeriod.patchId).isEqualTo(patches.last().patchId + 2)
+        assertThat(saveNewValidityPeriod.patchId).isEqualTo(patchesAfterSave.last().patchId)
+        assertThat(saveNewValidityPeriod.validFrom).isEqualTo(inputData.validFrom)
+        assertThat(endLastValidityPeriod.validUntil).isEqualTo(
+            saveNewValidityPeriod.validFrom.minusDays(1),
         )
     }
 
     @Test
-    @DisplayName("Save a new validity period before all valid from creates one patch with valid from and valid until")
+    @DisplayName("Save a new validity period before all valid from is special case and creates one patch")
     fun `save new validity period before all valid from`() {
         val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId
         val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
-        val newValidityPeriodPreFirstPeriod =
-            INPUT_VARIABLE_DEFINITION.copy(
-                id = savedVariableDefinitionId,
-                validFrom = LocalDate.of(1796, 1, 1),
-                validUntil = null,
-            )
-
         val saveNewValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
-                newValidityPeriodPreFirstPeriod,
-                savedVariableDefinitionId,
+                INPUT_VARIABLE_DEFINITION.copy(
+                    id = savedVariableDefinitionId,
+                    validFrom = LocalDate.of(1796, 1, 1),
+                    validUntil = null,
+                ),
+                SAVED_VARIABLE_DEFINITION.definitionId,
             )
-
         val patchesAfterSave = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
 
         assertThat(saveNewValidityPeriod.patchId).isEqualTo(4)
+        assertThat(patchesAfterSave.size).isEqualTo(patches.size + 1)
         assertThat(saveNewValidityPeriod.validUntil).isEqualTo(
             patchesAfterSave.first().validFrom.minusDays(1),
         )
         assertThat(saveNewValidityPeriod.validFrom).isBefore(patchesAfterSave.first().validFrom)
-    }
-
-    @Test
-    fun `save new validity period in the future`() {
-        val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId
-        val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
-        val newValidityPeriodFuture =
-            INPUT_VARIABLE_DEFINITION.copy(
-                id = savedVariableDefinitionId,
-                validFrom = LocalDate.of(2050, 1, 1),
-                validUntil = null,
-            )
-        val saveNewValidityPeriod =
-            variableDefinitionService.saveNewValidityPeriod(
-                newValidityPeriodFuture,
-                savedVariableDefinitionId,
-            )
-        val patchesAfterSave = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
-        assertThat(patchesAfterSave.size).isEqualTo(patches.size + 2)
-        assertThat(saveNewValidityPeriod).isNotNull
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(5)
-        assertThat(
-            variableDefinitionService.getOnePatchById(
-                savedVariableDefinitionId,
-                4,
-            ).validUntil,
-        ).isEqualTo(
-            saveNewValidityPeriod.validFrom.minus(Period.ofDays(1)),
-        )
-        assertThat(patchesAfterSave[patchesAfterSave.size - 2].validUntil).isEqualTo(
-            saveNewValidityPeriod.validFrom.minus(Period.ofDays(1)),
-        )
-        assertThat(patchesAfterSave[patchesAfterSave.size - 2].validUntil).isEqualTo(
-            saveNewValidityPeriod.validFrom.minus(Period.ofDays(1)),
-        )
     }
 }

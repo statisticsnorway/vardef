@@ -9,7 +9,6 @@ import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.equalTo
 import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -150,7 +149,6 @@ class ValidityPeriodsControllerTest {
     @Test
     @DisplayName("Post new validity period with new valid from and all defintion texts changed returns 201.")
     fun `create new validity period`(spec: RequestSpecification) {
-
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -175,10 +173,11 @@ class ValidityPeriodsControllerTest {
     }
 
     @Test
-    @DisplayName("Post new validity period will return 400 if not all defintion texts are changed " +
-            "and returns exception message.")
+    @DisplayName(
+        "Post new validity period will return 400 if not all defintion texts are changed " +
+            "and returns exception message.",
+    )
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
-
         spec
             .given()
             .contentType(ContentType.JSON)

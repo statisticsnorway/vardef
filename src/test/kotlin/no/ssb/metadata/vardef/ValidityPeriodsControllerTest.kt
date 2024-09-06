@@ -12,6 +12,7 @@ import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
@@ -36,27 +37,25 @@ class ValidityPeriodsControllerTest {
 
         // Collection of one variable definition
         variableDefinitionService.save(savedVariableDefinition)
-        variableDefinitionService.save(savedVariableDefinition.copy().apply { patchId = 2 })
-        variableDefinitionService.save(savedVariableDefinition.copy().apply { patchId = 3 })
+        variableDefinitionService.save(
+            savedVariableDefinition.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 2
+            },
+        )
+        variableDefinitionService.save(
+            savedVariableDefinition.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 3
+            },
+        )
         variableDefinitionService.save(
             savedVariableDefinition.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 4
-            },
-        )
-        variableDefinitionService.save(
-            savedVariableDefinition.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 5
-            },
-        )
-        variableDefinitionService.save(
-            savedVariableDefinition.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 6
             },
         )
 
@@ -70,16 +69,20 @@ class ValidityPeriodsControllerTest {
                         nn = "For personer født på siden",
                         en = "Persons born on the side",
                     )
-                patchId = 7
+                patchId = 5
             },
         )
 
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))
     }
 
+    /**
+     * Testdata with inputdata for testing different scenarios for endpoint for
+     * new validity period.
+     */
     companion object {
         @JvmStatic
-        fun postValidityPeriodDefinitionNotChanged(): String {
+        fun definitionNotChanged(): String {
             val testCase =
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("valid_from", "2040-01-11")
@@ -93,7 +96,7 @@ class ValidityPeriodsControllerTest {
         }
 
         @JvmStatic
-        fun postValidityPeriodOk(): String {
+        fun newValidityPeriod(): String {
             val testCase =
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("valid_from", "2040-01-11")
@@ -107,7 +110,7 @@ class ValidityPeriodsControllerTest {
         }
 
         @JvmStatic
-        fun postValidityPeriodInvalidValidFrom(): String {
+        fun invalidValidFrom(): String {
             val testCase =
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("valid_from", "1996-01-11")
@@ -121,7 +124,7 @@ class ValidityPeriodsControllerTest {
         }
 
         @JvmStatic
-        fun postValidityPeriodInvalidValidFromAndInvalidDefinition(): String {
+        fun invalidValidFromAndInvalidDefinition(): String {
             val testCase =
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("valid_from", "1996-01-11")
@@ -135,7 +138,7 @@ class ValidityPeriodsControllerTest {
         }
 
         @JvmStatic
-        fun postValidityPeriodValidFromNull(): String {
+        fun validFromIsNull(): String {
             val testCase =
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("valid_from", "null")
@@ -145,7 +148,22 @@ class ValidityPeriodsControllerTest {
     }
 
     @Test
-    fun `create new validity period not all definitions changed`(spec: RequestSpecification) {
+    @DisplayName("Post new validity period with new valid from and all defintion texts changed returns 201.")
+    fun `create new validity period`(spec: RequestSpecification) {
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(newValidityPeriod())
+            .`when`()
+            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .then()
+            .statusCode(201)
+    }
+
+    @Test
+    @DisplayName("Post new validity period will return 400 if not all languages present are changed")
+    fun `create new validity period missing language`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -157,29 +175,14 @@ class ValidityPeriodsControllerTest {
     }
 
     @Test
-    fun `create new validity period all definitions in all languages are changed`(spec: RequestSpecification) {
-        val modifiedJson: String = postValidityPeriodOk()
-        val previousPatchId = variableDefinitionService.getLatestPatchById(savedVariableDefinition.definitionId).patchId
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(modifiedJson)
-            .`when`()
-            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
-            .then()
-            .statusCode(201)
-            .body("patch_id", equalTo(previousPatchId + 2))
-    }
-
-    @Test
+    @DisplayName("Post new validity period will return 400 if not all defintion texts are changed " +
+            "and returns exception message.")
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
-        val modifiedJson: String = postValidityPeriodDefinitionNotChanged()
 
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(modifiedJson)
+            .body(definitionNotChanged())
             .`when`()
             .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
             .then()
@@ -188,8 +191,9 @@ class ValidityPeriodsControllerTest {
     }
 
     @Test
+    @DisplayName("")
     fun `create new validity period invalid valid from`(spec: RequestSpecification) {
-        val modifiedJson: String = postValidityPeriodInvalidValidFrom()
+        val modifiedJson: String = invalidValidFrom()
 
         spec
             .given()
@@ -203,8 +207,9 @@ class ValidityPeriodsControllerTest {
     }
 
     @Test
+    @DisplayName("")
     fun `create new validity period invalid valid from and not changed definition`(spec: RequestSpecification) {
-        val modifiedJson: String = postValidityPeriodInvalidValidFromAndInvalidDefinition()
+        val modifiedJson: String = invalidValidFromAndInvalidDefinition()
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -228,8 +233,9 @@ class ValidityPeriodsControllerTest {
     }
 
     @Test
+    @DisplayName("")
     fun `post no valid from`(spec: RequestSpecification) {
-        val modifiedJson: String = postValidityPeriodValidFromNull()
+        val modifiedJson: String = validFromIsNull()
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -248,6 +254,7 @@ class ValidityPeriodsControllerTest {
 
     @ParameterizedTest
     @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
+    @DisplayName("")
     fun `create new validity period with invalid status`(
         variableStatus: VariableStatus,
         spec: RequestSpecification,

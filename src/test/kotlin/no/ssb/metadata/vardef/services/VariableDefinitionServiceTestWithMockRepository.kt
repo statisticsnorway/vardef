@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef
+package no.ssb.metadata.vardef.services
 
 import com.mongodb.assertions.Assertions.assertTrue
 import io.mockk.clearAllMocks
@@ -10,7 +10,6 @@ import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat

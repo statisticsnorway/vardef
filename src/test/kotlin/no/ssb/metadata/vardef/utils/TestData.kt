@@ -12,16 +12,20 @@ val INPUT_VARIABLE_DEFINITION =
         id = NanoId.generate(8),
         name =
             LanguageStringType(
-                nb = "Landbakgrunn",
-                nn = "Landbakgrunn",
-                en = "Country Background",
+                nb = "Fagstillinger",
+                nn = "Fagstillinger",
+                en = "Specialised positions",
             ),
-        shortName = "landbak",
+        shortName = "fagu",
         definition =
             LanguageStringType(
-                nb = "For personer født",
+                nb =
+                    "Angir ubesatte fagstillinger i barneverntjenesten per 31.12. " +
+                        "En stilling blir definert som ledig dersom den har vært ubesatt fire måneder eller lengre.",
                 nn = null,
-                en = "Country background is",
+                en =
+                    "Indicates the vacant specialised positions in the child welfare service as per 31 December. " +
+                        "A position is defined as vacant if it has been unfilled for four months or longer.",
             ),
         classificationReference = "91",
         unitTypes = listOf("", ""),
@@ -87,6 +91,7 @@ val SAVED_DRAFT_VARIABLE_DEFINITION =
     SAVED_VARIABLE_DEFINITION.copy(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
+        shortName = "ETASJENR",
         variableStatus = VariableStatus.DRAFT,
     )
 
@@ -96,10 +101,11 @@ val SAVED_VARIABLE_DEFINITION_COPY =
         definitionId = NanoId.generate(8),
         name =
             LanguageStringType(
-                nb = "Landbakgrunn 2",
-                nn = "Landbakgrunn 2",
-                en = "Country Background 2",
+                nb = "Rolletype",
+                nn = "Rolletype",
+                en = "Role type",
             ),
+        shortName = "Rolletype",
     )
 
 val RENDERED_VARIABLE_DEFINITION =

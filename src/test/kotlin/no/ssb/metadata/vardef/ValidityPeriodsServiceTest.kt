@@ -15,7 +15,7 @@ import java.time.LocalDate
 import java.time.Period
 import java.util.stream.Stream
 
-class ValidityPeriodsTest : BaseVardefTest() {
+class ValidityPeriodsServiceTest : BaseVardefTest() {
     @BeforeEach
     fun setUpValidityPeriod() {
         variableDefinitionService.save(
@@ -65,7 +65,7 @@ class ValidityPeriodsTest : BaseVardefTest() {
 
     companion object {
         @JvmStatic
-        fun newValidityPeriod(): Stream<Arguments> {
+        fun provideNewValidityPeriods(): Stream<Arguments> {
             val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId
             return Stream.of(
                 Arguments.of(
@@ -94,7 +94,7 @@ class ValidityPeriodsTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("newValidityPeriod")
+    @MethodSource("provideNewValidityPeriods")
     @DisplayName("Save a new validity period creates two new patches")
     fun `save new validity period`(inputData: InputVariableDefinition) {
         val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId

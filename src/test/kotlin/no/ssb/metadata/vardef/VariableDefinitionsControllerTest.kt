@@ -9,8 +9,8 @@ import no.ssb.metadata.vardef.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
+import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -180,7 +180,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("[0].id", notNullValue())
-            .body("[0].name", equalTo(INPUT_VARIABLE_DEFINITION.name.getValidLanguage(language)))
+            .body("[0].name", equalTo(SAVED_VARIABLE_DEFINITION.name.getValidLanguage(language)))
             .header("Content-Language", language.toString())
     }
 

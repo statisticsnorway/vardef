@@ -34,9 +34,11 @@ open class BaseVardefTest {
         variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))
 
         // Collection of one variable definition
+        // unique definitionId and shortName, but content equals SAVED_VARIABLE_DEFINITION
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
 
-        // Variable definition in Draft
+        // Collection of one variable definition unique definitionId and shortName,
+        // but content other than variableStatus equals SAVED_VARIABLE_DEFINITION
         variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
     }
 }

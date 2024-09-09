@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef
 
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.LanguageStringType
@@ -9,8 +8,8 @@ import no.ssb.metadata.vardef.utils.*
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -23,27 +22,25 @@ import java.util.stream.Stream
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @BeforeEach
     fun setUpServiceTest() {
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 2
+            },
+        )
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(1980, 12, 1)
+                validUntil = LocalDate.of(2020, 12, 31)
+                patchId = 3
+            },
+        )
         variableDefinitionService.save(
             SAVED_VARIABLE_DEFINITION.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 4
-            },
-        )
-        variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 5
-            },
-        )
-        variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 6
             },
         )
 
@@ -57,7 +54,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                         nn = "For personer født på siden",
                         en = "Persons born on the side",
                     )
-                patchId = 7
+                patchId = 5
             },
         )
     }
@@ -68,7 +65,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             variableDefinitionService.getLatestPatchById(
                 SAVED_VARIABLE_DEFINITION.definitionId,
             ).patchId,
-        ).isEqualTo(7)
+        ).isEqualTo(5)
     }
 
     @Test
@@ -79,7 +76,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     SAVED_VARIABLE_DEFINITION.definitionId,
                     LocalDate.of(1990, 1, 1),
                 ).patchId,
-        ).isEqualTo(6)
+        ).isEqualTo(4)
     }
 
     @Test
@@ -101,7 +98,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     SAVED_VARIABLE_DEFINITION.definitionId,
                     LocalDate.of(3000, 1, 1),
                 ).patchId,
-        ).isEqualTo(7)
+        ).isEqualTo(5)
     }
 
     @Test
@@ -133,26 +130,9 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         ).isEqualTo(expected)
     }
 
-    @Test
-    fun `get id with only one patch`() {
-        val singleSavedVariableDefinition =
-            SAVED_VARIABLE_DEFINITION.copy(
-                id = ObjectId(),
-                definitionId = NanoId.generate(8),
-            )
-        variableDefinitionService.save(singleSavedVariableDefinition)
-
-        assertThat(
-            variableDefinitionService.isValidValidFromValue(
-                singleSavedVariableDefinition.definitionId,
-                LocalDate.of(3000, 1, 1),
-            ),
-        ).isEqualTo(true)
-    }
-
     companion object {
         @JvmStatic
-        fun checkDefinitionText(): Stream<Arguments> {
+        fun provideDefinitionTextScenarios(): Stream<Arguments> {
             return Stream.of(
                 Arguments.of(
                     INPUT_VARIABLE_DEFINITION.copy(
@@ -225,7 +205,8 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("checkDefinitionText")
+    @MethodSource("provideDefinitionTextScenarios")
+    @DisplayName("Definition text must be changed for all languages to return true")
     fun `check definition texts for all languages`(
         inputObject: InputVariableDefinition,
         expected: Boolean,

@@ -7,7 +7,10 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
 
@@ -31,19 +34,20 @@ class VariableDefinitionService(
         validUntil: LocalDate = LocalDate.now(),
     ): List<RenderedVariableDefinition> =
         listAll()
-            .filter { savedVariableDefinition ->
-                validFrom.isEqualOrAfter(savedVariableDefinition.validFrom) &&
-                    validUntil.isEqualOrBefore(savedVariableDefinition.validUntil ?: LocalDate.now())
-            }
-            .map { savedVariableDefinition ->
-                savedVariableDefinition.toRenderedVariableDefinition(
+            .filter {
+                // If the variable's validity period overlaps the given period, return true
+                validFrom.isEqualOrBefore(it.validUntil ?: LocalDate.now()) &&
+                    validUntil.isEqualOrAfter(it.validFrom)
+            }.map {
+                it.toRenderedVariableDefinition(
                     language,
                     klassService,
                 )
-            }
-            .groupBy { renderedVariableDefinition -> renderedVariableDefinition.id }
-            .mapValues { entry -> entry.value.maxBy { it.patchId } }
-            .values
+            }.groupBy {
+                it.id
+            }.mapValues { entry ->
+                entry.value.maxBy { it.patchId }
+            }.values
             .toList()
 
     fun listAllPatchesById(id: String): List<SavedVariableDefinition> =
@@ -91,13 +95,12 @@ class VariableDefinitionService(
     fun isValidValidFromValue(
         definitionId: String,
         dateOfValidity: LocalDate,
-    ): Boolean {
-        return listAllPatchesById(definitionId)
+    ): Boolean =
+        listAllPatchesById(definitionId)
             .map { it.validFrom }
             .let { dates ->
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
             }
-    }
 
     /**
      * End previous *validity period*
@@ -117,9 +120,11 @@ class VariableDefinitionService(
         val endDate = dateOfNewValidity.minusDays(1)
         val latestExistingPatch = getLatestPatchById(definitionId)
         return save(
-            latestExistingPatch.copy(
-                validUntil = endDate,
-            ).toInputVariableDefinition().toSavedVariableDefinition(latestExistingPatch.patchId),
+            latestExistingPatch
+                .copy(
+                    validUntil = endDate,
+                ).toInputVariableDefinition()
+                .toSavedVariableDefinition(latestExistingPatch.patchId),
         )
     }
 
@@ -132,8 +137,7 @@ class VariableDefinitionService(
             .ifEmpty { throw EmptyResultException() }
             .filter { patch ->
                 dateOfValidity.isEqualOrAfter(patch.validFrom)
-            }
-            .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
+            }.ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             .last()
 
     /**
@@ -191,7 +195,8 @@ class VariableDefinitionService(
         val patches = listAllPatchesById(definitionId)
 
         return if (newPeriod.validFrom.isBefore(patches.first().validFrom)) {
-            newPeriod.copy(validUntil = patches.first().validFrom.minusDays(1))
+            newPeriod
+                .copy(validUntil = patches.first().validFrom.minusDays(1))
                 .toSavedVariableDefinition(patches.last().patchId)
                 .let { save(it) }
         } else {

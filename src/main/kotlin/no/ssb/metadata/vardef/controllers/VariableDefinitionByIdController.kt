@@ -11,10 +11,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
+import no.ssb.metadata.vardef.constants.DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
+import java.time.LocalDate
 
 @Validated
 @Controller("/variable-definitions/{id}")
@@ -34,10 +36,18 @@ class VariableDefinitionByIdController {
     fun getVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
         @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
+        @QueryValue("date_of_validity")
+        @Schema(description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION, format = "YYYY-MM-DD")
+        dateOfValidity: LocalDate? = null,
     ): MutableHttpResponse<RenderedVariableDefinition?>? =
         HttpResponse
-            .ok(varDefService.getOneByIdAndRenderForLanguage(id = id, language = language))
-            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+            .ok(
+                varDefService.getOneByIdAndDateAndRenderForLanguage(
+                    id = id,
+                    language = language,
+                    dateOfValidity = dateOfValidity,
+                ),
+            ).header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
             .contentType(MediaType.APPLICATION_JSON)
 
     /**

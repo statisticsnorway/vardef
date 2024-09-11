@@ -16,6 +16,7 @@ import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.temporal.ChronoUnit
 
@@ -33,12 +34,12 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body(
                 "definition",
                 equalTo(
-                    variableDefinitionService.getLatestPatchById(
-                        SAVED_VARIABLE_DEFINITION.definitionId,
-                    ).definition.nb,
+                    variableDefinitionService
+                        .getLatestPatchById(
+                            SAVED_VARIABLE_DEFINITION.definitionId,
+                        ).definition.nb,
                 ),
-            )
-            .header(
+            ).header(
                 "Content-Language",
                 SupportedLanguages.NB
                     .toString(),
@@ -63,6 +64,34 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(404)
             .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "1800-01-01, 404, null, null",
+        "null, 200, 2021-01-01, null",
+        "2021-01-01, 200, 2021-01-01, null",
+        "2020-01-01, 200, 1980-12-01, 2020-12-31",
+        "2024-06-05, 200, 2021-01-01, null",
+        "3000-12-31, 200, 2021-01-01, null",
+        nullValues = ["null"],
+    )
+    fun `get request specific date`(
+        dateOfValidity: String?,
+        expectedStatusCode: Int,
+        expectedValidFrom: String?,
+        expectedValidUntil: String?,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .queryParam("date_of_validity", dateOfValidity)
+            .`when`()
+            .get("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
+            .then()
+            .statusCode(expectedStatusCode)
+            .body("valid_from", equalTo(expectedValidFrom))
+            .body("valid_until", equalTo(expectedValidUntil))
     }
 
     @Test

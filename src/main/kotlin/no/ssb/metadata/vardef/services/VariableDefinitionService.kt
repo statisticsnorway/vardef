@@ -73,10 +73,17 @@ class VariableDefinitionService(
 
     fun getLatestPatchById(id: String): SavedVariableDefinition = listAllPatchesById(id).last()
 
-    fun getOneByIdAndRenderForLanguage(
+    fun getOneByIdAndDateAndRenderForLanguage(
         language: SupportedLanguages,
         id: String,
-    ): RenderedVariableDefinition = getLatestPatchById(id).toRenderedVariableDefinition(language, klassService)
+        dateOfValidity: LocalDate?,
+    ): RenderedVariableDefinition {
+        if (dateOfValidity != null) {
+            return getLatestPatchByDateAndById(id, dateOfValidity).toRenderedVariableDefinition(language, klassService)
+        } else {
+            return getLatestPatchById(id).toRenderedVariableDefinition(language, klassService)
+        }
+    }
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 
@@ -141,8 +148,8 @@ class VariableDefinitionService(
         variableDefinitionRepository
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
-            .filter { patch ->
-                dateOfValidity.isEqualOrAfter(patch.validFrom)
+            .filter {
+                dateOfValidity.isEqualOrAfter(it.validFrom)
             }.ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             .last()
 

@@ -9,19 +9,20 @@ jackson = "2.17.0"
 jib = "3.4.3"
 json = "20240303"
 junit = "5.10.2"
-kotlin = "1.9.23"
-ksp = "1.9.23-1.0.19"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
 ktlint = "12.1.1"
 logback = "1.5.3"
-micronaut = "4.4.0"
+micronaut = "4.6.1"
 micronautCache = "4.3.0"
-micronautData = "4.8.1"
-micronautKotlin = "4.3.0"
+micronautData = "4.9.3"
+micronautGradle = "4.4.2"
+micronautKotlin = "4.4.0"
 micronautManagement = "4.5.3"
 micronautMicrometer = "5.7.0"
 micronautMongoDb = "5.3.0"
 micronautOpenapi = "6.11.0"
-micronautSerde = "2.10.1"
+micronautSerde = "2.11.0"
 micronautTest = "4.3.0"
 mockk = "1.13.10"
 nanoid = "1.0.1"
@@ -47,6 +48,7 @@ micronaut-micrometer-registry-prometheus = { module = "io.micronaut.micrometer:m
 micronaut-mongo-sync = { module = "io.micronaut.mongodb:micronaut-mongo-sync", version.ref = "micronautMongoDb" }
 micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi", version.ref = "micronautOpenapi" }
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronautOpenapi" }
+micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronaut" }
 micronaut-security-annotations = { module = "io.micronaut.security:micronaut-security-annotations", version.ref = "micronaut" }
 micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt", version.ref = "micronaut" }
 micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson", version.ref = "micronautSerde" }
@@ -64,7 +66,7 @@ jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
-micronaut-aot = { id = "io.micronaut.aot", version.ref = "micronaut" }
-micronaut-application = { id = "io.micronaut.application", version.ref = "micronaut" }
-micronaut-test-resources = { id = "io.micronaut.test-resources", version.ref = "micronaut" }
+micronaut-aot = { id = "io.micronaut.aot", version.ref = "micronautGradle" }
+micronaut-application = { id = "io.micronaut.application", version.ref = "micronautGradle" }
+micronaut-test-resources = { id = "io.micronaut.test-resources", version.ref = "micronautGradle" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }

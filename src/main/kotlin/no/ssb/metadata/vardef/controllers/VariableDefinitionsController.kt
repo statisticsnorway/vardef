@@ -10,6 +10,7 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION
@@ -19,6 +20,7 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
+@Tag(name = "Variable Definitions")
 @Validated
 @Controller("/variable-definitions")
 @ExecuteOn(TaskExecutors.BLOCKING)

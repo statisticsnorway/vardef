@@ -12,11 +12,13 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokException
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 
+@Tag(name = "Data Migration")
 @Validated
 @Controller("/vardok-migration/{id}")
 @ExecuteOn(TaskExecutors.BLOCKING)

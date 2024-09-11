@@ -9,6 +9,7 @@ import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION
@@ -18,6 +19,7 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
+@Tag(name = "Variable Definitions")
 @Validated
 @Controller("/variable-definitions/{id}")
 @ExecuteOn(TaskExecutors.BLOCKING)

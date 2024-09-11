@@ -81,65 +81,70 @@ class ValidityPeriodsControllerTest {
         @JvmStatic
         fun postValidityPeriodDefinitionNotChanged(): String {
             val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "2040-01-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født på siden")
-                        put("nn", "For personer født på siden")
-                        put("en", "Persons born on the side")
-                    }
-                }.toString()
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("valid_from", "2040-01-11")
+                        getJSONObject("definition").apply {
+                            put("nb", "For personer født på siden")
+                            put("nn", "For personer født på siden")
+                            put("en", "Persons born on the side")
+                        }
+                    }.toString()
             return testCase
         }
 
         @JvmStatic
         fun postValidityPeriodOk(): String {
             val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "2040-01-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født i går")
-                        put("nn", "For personer født i går")
-                        put("en", "person born yesterday")
-                    }
-                }.toString()
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("valid_from", "2040-01-11")
+                        getJSONObject("definition").apply {
+                            put("nb", "For personer født i går")
+                            put("nn", "For personer født i går")
+                            put("en", "person born yesterday")
+                        }
+                    }.toString()
             return testCase
         }
 
         @JvmStatic
         fun postValidityPeriodInvalidValidFrom(): String {
             val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "1996-01-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født i går")
-                        put("nn", "For personer født i går")
-                        put("en", "person born yesterday")
-                    }
-                }.toString()
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("valid_from", "1996-01-11")
+                        getJSONObject("definition").apply {
+                            put("nb", "For personer født i går")
+                            put("nn", "For personer født i går")
+                            put("en", "person born yesterday")
+                        }
+                    }.toString()
             return testCase
         }
 
         @JvmStatic
         fun postValidityPeriodInvalidValidFromAndInvalidDefinition(): String {
             val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "1996-01-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født")
-                        put("nn", "For personer født")
-                        put("en", "person born yesterday")
-                    }
-                }.toString()
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("valid_from", "1996-01-11")
+                        getJSONObject("definition").apply {
+                            put("nb", "For personer født")
+                            put("nn", "For personer født")
+                            put("en", "person born yesterday")
+                        }
+                    }.toString()
             return testCase
         }
 
         @JvmStatic
         fun postValidityPeriodValidFromNull(): String {
             val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "null")
-                }.toString()
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("valid_from", "null")
+                    }.toString()
             return testCase
         }
     }
@@ -241,7 +246,7 @@ class ValidityPeriodsControllerTest {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Invalid date format, a valid date follows this format: YYYY-MM-DD",
+                    "Failed to convert argument",
                 ),
             )
     }

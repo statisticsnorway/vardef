@@ -30,15 +30,20 @@ class VariableDefinitionService(
 
     fun listAllAndRenderForLanguage(
         language: SupportedLanguages,
-        validFrom: LocalDate = LocalDate.now(),
-        validUntil: LocalDate = LocalDate.now(),
-    ): List<RenderedVariableDefinition> =
-        listAll()
-            .filter {
-                // If the variable's validity period overlaps the given period, return true
-                validFrom.isEqualOrBefore(it.validUntil ?: LocalDate.now()) &&
-                    validUntil.isEqualOrAfter(it.validFrom)
-            }.map {
+        dateOfValidity: LocalDate?,
+    ): List<RenderedVariableDefinition> {
+        var definitionList = listAll()
+        if (dateOfValidity != null) {
+            definitionList =
+                definitionList
+                    .filter { dateOfValidity.isEqualOrAfter(it.validFrom) }
+                    .filter { definition ->
+                        definition.validUntil?.let { dateOfValidity.isEqualOrBefore(definition.validUntil!!) }
+                            ?: true
+                    }
+        }
+        return definitionList
+            .map {
                 it.toRenderedVariableDefinition(
                     language,
                     klassService,
@@ -49,6 +54,7 @@ class VariableDefinitionService(
                 entry.value.maxBy { it.patchId }
             }.values
             .toList()
+    }
 
     fun listAllPatchesById(id: String): List<SavedVariableDefinition> =
         variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty {

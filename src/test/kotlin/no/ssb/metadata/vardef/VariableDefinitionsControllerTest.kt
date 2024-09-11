@@ -300,7 +300,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .contentType(ContentType.JSON)
             .header("Accept-Language", "nb")
-            .get("/variable-definitions?valid_from=2024-01-01")
+            .get("/variable-definitions?date_of_validity=2024-01-01")
             .then()
             .assertThat()
             .statusCode(200)
@@ -355,43 +355,27 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             )
     }
 
-    @Test
-    fun `list valid variable definitions by now`(spec: RequestSpecification) {
-        spec
-            .given()
-            .`when`()
-            .get("/variable-definitions")
-            .then()
-            .statusCode(200)
-            .body("size()", Matchers.equalTo(3))
-    }
-
     @ParameterizedTest
     @CsvSource(
-        // This period covers all the definitions we have
-        "1800-01-01, 3000-01-01, 4",
-        "2021-01-01, 2021-01-01, 4",
-        "2020-01-01, 2020-12-31, 1",
-        "2021-01-01, null, 4",
-        // All definitions without a defined validUntil will still be valid
-        "2024-06-05, null, 3",
-        // null turns into today's date, all definitions without a defined validUntil will still be valid
-        "null, 3000-01-01, 3",
-        // These dates are "backwards", not possible to fulfill
-        "3000-01-01, 1800-01-01, 0",
-        // Today's date
-        "null, null, 3",
+        // No definitions are valid on this date
+        "1800-01-01, 0",
+        // Specific definitions are valid on these dates
+        "2021-01-01, 4",
+        "2020-01-01, 1",
+        // Definitions without a validUntil date defined
+        "2024-06-05, 3",
+        "3000-12-31, 3",
+        // All definitions
+        "null, 4",
     )
     fun `filter variable definitions by date`(
-        validFrom: String,
-        validUntil: String,
+        dateOfValidity: String,
         expectedNumber: Int,
         spec: RequestSpecification,
     ) {
         spec
             .given()
-            .queryParam("valid_from", if (validFrom == "null") null else validFrom)
-            .queryParam("valid_until", if (validUntil == "null") null else validUntil)
+            .queryParam("date_of_validity", if (dateOfValidity == "null") null else dateOfValidity)
             .`when`()
             .get("/variable-definitions")
             .then()

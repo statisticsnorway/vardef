@@ -12,8 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.inject.Inject
 import jakarta.validation.Valid
-import no.ssb.metadata.vardef.constants.VALID_FROM_FIELD_DESCRIPTION
-import no.ssb.metadata.vardef.constants.VALID_UNTIL_FIELD_DESCRIPTION
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -36,15 +34,12 @@ class VariableDefinitionsController {
     fun listVariableDefinitions(
         @Header("Accept-Language", defaultValue = "nb")
         language: SupportedLanguages,
-        @QueryValue("valid_from")
-        @Schema(description = VALID_FROM_FIELD_DESCRIPTION, format = "YYYY-MM-DD")
-        validFrom: LocalDate = LocalDate.now(),
-        @QueryValue("valid_until")
-        @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION, format = "YYYY-MM-DD")
-        validUntil: LocalDate = LocalDate.now(),
+        @QueryValue("date_of_validity")
+        @Schema(description = "List only variable definitions which are valid on this date.", format = "YYYY-MM-DD")
+        dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listAllAndRenderForLanguage(language, validFrom, validUntil))
+            .ok(varDefService.listAllAndRenderForLanguage(language = language, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**

@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
             description = "",
             version = "0.1",
             license = License(name = "CC BY 4.0", url = "https://creativecommons.org/licenses/by/4.0/deed.no"),
-            contact = Contact(email = "mmw@ssb.no", name = "Team Metadata"),
+            contact = Contact(email = "metadata@ssb.no", name = "Team Metadata"),
             extensions =
                 arrayOf(
                     Extension(

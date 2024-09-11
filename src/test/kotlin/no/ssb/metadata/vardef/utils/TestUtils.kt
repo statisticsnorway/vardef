@@ -42,15 +42,15 @@ object TestUtils {
                 JSONObject(
                     JSON_TEST_INPUT,
                 ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",
-                JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2024-20-11") } to "Invalid date format",
-                JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2024-20-11") } to "Invalid date format",
-                JSONObject(JSON_TEST_INPUT).apply { put("external_reference_uri", "Not url") } to "Not url",
+                JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2024-20-11") } to "Failed to convert argument",
+                JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2024-20-11") } to "Failed to convert argument",
+                JSONObject(JSON_TEST_INPUT).apply { put("external_reference_uri", "Not url") } to "Failed to convert argument",
                 JSONObject(JSON_TEST_INPUT).apply {
                     put(
                         "related_variable_definition_uris",
                         listOf("not a url", "https://example.com/", ""),
                     )
-                } to "not a url",
+                } to "Failed to convert argument",
                 JSONObject(JSON_TEST_INPUT).apply {
                     getJSONObject("contact").put(
                         "email",

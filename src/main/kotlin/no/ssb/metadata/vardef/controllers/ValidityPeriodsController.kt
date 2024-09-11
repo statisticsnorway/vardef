@@ -34,7 +34,7 @@ class ValidityPeriodsController {
     fun createValidityPeriod(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
         @Body @Valid newPeriod: InputVariableDefinition,
-    ): FullResponseVariableDefinition? {
+    ): FullResponseVariableDefinition {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         when {
             !latestExistingPatch.variableStatus.isPublished() ->
@@ -46,11 +46,6 @@ class ValidityPeriodsController {
             !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->
                 throw DefinitionTextUnchangedException()
         }
-        try {
-            return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toFullResponseVariableDefinition()
-        } catch (e: RuntimeException) {
-            print(e.message)
-            return null
-        }
+        return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toFullResponseVariableDefinition()
     }
 }

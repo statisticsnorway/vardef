@@ -4,8 +4,8 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SupportedLanguages
-import no.ssb.metadata.vardef.utils.*
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.SINGLE_SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -64,9 +64,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             .listAllAndRenderForLanguage(
                 SupportedLanguages.EN,
                 LocalDate.now(),
-                LocalDate.now(),
-            )
-            .let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(3) }
+            ).let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(3) }
     }
 
     @ParameterizedTest
@@ -100,8 +98,8 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     companion object {
         @JvmStatic
-        fun provideTestDataCheckDefinition(): Stream<Arguments> {
-            return Stream.of(
+        fun provideTestDataCheckDefinition(): Stream<Arguments> =
+            Stream.of(
                 Arguments.of(
                     INPUT_VARIABLE_DEFINITION.copy(
                         definition =
@@ -158,7 +156,6 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     true,
                 ),
             )
-        }
     }
 
     @ParameterizedTest

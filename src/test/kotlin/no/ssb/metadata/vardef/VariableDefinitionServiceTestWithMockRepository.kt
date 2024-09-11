@@ -92,7 +92,7 @@ class VariableDefinitionServiceTestWithMockRepository {
         val renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
 
         val result =
-            variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB, LocalDate.now(), LocalDate.now())
+            variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB, LocalDate.now())
         assertThat(result.isNotEmpty())
         assertThat(result.size).isEqualTo(1)
         assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })

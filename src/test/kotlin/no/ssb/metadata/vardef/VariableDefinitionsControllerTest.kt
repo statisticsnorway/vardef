@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDateTime
@@ -154,7 +155,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/variable-definitions?validFrom=2024-01-01")
+            .get("/variable-definitions?valid_from=2024-01-01")
             .then()
             .statusCode(200)
             .body("[0].definition", equalTo("For personer født på siden"))
@@ -187,15 +188,15 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `get request no value in selected language`(spec: RequestSpecification) {
         val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT).apply {
-                getJSONObject("name").apply {
-                    put(
-                        "en",
-                        JSONObject.NULL,
-                    )
-                }
-            }
-                .toString()
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    getJSONObject("name").apply {
+                        put(
+                            "en",
+                            JSONObject.NULL,
+                        )
+                    }
+                }.toString()
 
         val definitionId =
             spec
@@ -299,7 +300,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .contentType(ContentType.JSON)
             .header("Accept-Language", "nb")
-            .get("/variable-definitions?validFrom=2024-01-01")
+            .get("/variable-definitions?date_of_validity=2024-01-01")
             .then()
             .assertThat()
             .statusCode(200)
@@ -354,25 +355,31 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             )
     }
 
-    @Test
-    fun `list valid variable definitions by now`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @CsvSource(
+        // No definitions are valid on this date
+        "1800-01-01, 0",
+        // Specific definitions are valid on these dates
+        "2021-01-01, 4",
+        "2020-01-01, 1",
+        // Definitions without a validUntil date defined
+        "2024-06-05, 3",
+        "3000-12-31, 3",
+        // All definitions
+        "null, 4",
+    )
+    fun `filter variable definitions by date`(
+        dateOfValidity: String,
+        expectedNumber: Int,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
+            .queryParam("date_of_validity", if (dateOfValidity == "null") null else dateOfValidity)
             .`when`()
             .get("/variable-definitions")
             .then()
             .statusCode(200)
-            .body("size()", Matchers.equalTo(3))
-    }
-
-    @Test
-    fun `list valid variable definition by given date`(spec: RequestSpecification) {
-        spec
-            .given()
-            .`when`()
-            .get("/variable-definitions?validFrom=2024-06-05")
-            .then()
-            .statusCode(200)
-            .body("size()", greaterThan(0))
+            .body("size()", Matchers.equalTo(expectedNumber))
     }
 }

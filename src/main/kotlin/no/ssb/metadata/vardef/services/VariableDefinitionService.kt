@@ -7,7 +7,10 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
 
@@ -27,24 +30,31 @@ class VariableDefinitionService(
 
     fun listAllAndRenderForLanguage(
         language: SupportedLanguages,
-        validFrom: LocalDate = LocalDate.now(),
-        validUntil: LocalDate = LocalDate.now(),
-    ): List<RenderedVariableDefinition> =
-        listAll()
-            .filter { savedVariableDefinition ->
-                validFrom.isEqualOrAfter(savedVariableDefinition.validFrom) &&
-                    validUntil.isEqualOrBefore(savedVariableDefinition.validUntil ?: LocalDate.now())
-            }
-            .map { savedVariableDefinition ->
-                savedVariableDefinition.toRenderedVariableDefinition(
+        dateOfValidity: LocalDate?,
+    ): List<RenderedVariableDefinition> {
+        var definitionList = listAll()
+        if (dateOfValidity != null) {
+            definitionList =
+                definitionList
+                    .filter { dateOfValidity.isEqualOrAfter(it.validFrom) }
+                    .filter { definition ->
+                        definition.validUntil?.let { dateOfValidity.isEqualOrBefore(definition.validUntil!!) }
+                            ?: true
+                    }
+        }
+        return definitionList
+            .map {
+                it.toRenderedVariableDefinition(
                     language,
                     klassService,
                 )
-            }
-            .groupBy { renderedVariableDefinition -> renderedVariableDefinition.id }
-            .mapValues { entry -> entry.value.maxBy { it.patchId } }
-            .values
+            }.groupBy {
+                it.id
+            }.mapValues { entry ->
+                entry.value.maxBy { it.patchId }
+            }.values
             .toList()
+    }
 
     fun listAllPatchesById(id: String): List<SavedVariableDefinition> =
         variableDefinitionRepository.findByDefinitionIdOrderByPatchId(id).ifEmpty {
@@ -63,10 +73,17 @@ class VariableDefinitionService(
 
     fun getLatestPatchById(id: String): SavedVariableDefinition = listAllPatchesById(id).last()
 
-    fun getOneByIdAndRenderForLanguage(
+    fun getOneByIdAndDateAndRenderForLanguage(
         language: SupportedLanguages,
         id: String,
-    ): RenderedVariableDefinition = getLatestPatchById(id).toRenderedVariableDefinition(language, klassService)
+        dateOfValidity: LocalDate?,
+    ): RenderedVariableDefinition {
+        if (dateOfValidity != null) {
+            return getLatestPatchByDateAndById(id, dateOfValidity).toRenderedVariableDefinition(language, klassService)
+        } else {
+            return getLatestPatchById(id).toRenderedVariableDefinition(language, klassService)
+        }
+    }
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 
@@ -91,13 +108,12 @@ class VariableDefinitionService(
     fun isValidValidFromValue(
         definitionId: String,
         dateOfValidity: LocalDate,
-    ): Boolean {
-        return listAllPatchesById(definitionId)
+    ): Boolean =
+        listAllPatchesById(definitionId)
             .map { it.validFrom }
             .let { dates ->
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
             }
-    }
 
     /**
      * End previous *validity period*
@@ -117,9 +133,11 @@ class VariableDefinitionService(
         val endDate = dateOfNewValidity.minusDays(1)
         val latestExistingPatch = getLatestPatchById(definitionId)
         return save(
-            latestExistingPatch.copy(
-                validUntil = endDate,
-            ).toInputVariableDefinition().toSavedVariableDefinition(latestExistingPatch.patchId),
+            latestExistingPatch
+                .copy(
+                    validUntil = endDate,
+                ).toInputVariableDefinition()
+                .toSavedVariableDefinition(latestExistingPatch.patchId),
         )
     }
 
@@ -130,10 +148,9 @@ class VariableDefinitionService(
         variableDefinitionRepository
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
-            .filter { patch ->
-                dateOfValidity.isEqualOrAfter(patch.validFrom)
-            }
-            .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
+            .filter {
+                dateOfValidity.isEqualOrAfter(it.validFrom)
+            }.ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             .last()
 
     /**
@@ -191,7 +208,8 @@ class VariableDefinitionService(
         val patches = listAllPatchesById(definitionId)
 
         return if (newPeriod.validFrom.isBefore(patches.first().validFrom)) {
-            newPeriod.copy(validUntil = patches.first().validFrom.minusDays(1))
+            newPeriod
+                .copy(validUntil = patches.first().validFrom.minusDays(1))
                 .toSavedVariableDefinition(patches.last().patchId)
                 .let { save(it) }
         } else {

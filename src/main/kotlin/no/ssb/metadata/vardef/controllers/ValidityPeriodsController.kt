@@ -26,10 +26,6 @@ class ValidityPeriodsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
 
-    /**
-     * Create a new validity period for a variable definition.
-     *
-     */
     @Post
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")

@@ -78,7 +78,7 @@ data class InputVariableDefinition(
     fun toSavedVariableDefinition(previousPatchId: Int?): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: NanoId.generate(8),
-            // Set to 0 here?
+            // TODO set to 0 when input validity period dataclass
             patchId = (previousPatchId ?: 0) + 1,
             name = name,
             shortName = shortName,

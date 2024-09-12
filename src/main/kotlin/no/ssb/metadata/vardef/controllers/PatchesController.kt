@@ -16,6 +16,7 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
+import no.ssb.metadata.vardef.models.InputPatchVariableDefinition
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -77,13 +78,13 @@ class PatchesController {
     @ApiResponse(responseCode = "405", description = "Method not allowed.")
     fun createPatch(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
-        @Body @Valid patch: InputVariableDefinition,
+        @Body @Valid patch: InputPatchVariableDefinition,
     ): FullResponseVariableDefinition {
         // TODO validate content of the new patch
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw PublishedVariableAccessException()
         }
-        return varDefService.save(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
+        return varDefService.save(patch.toSavedVariableDefinition(latestExistingPatch, latestExistingPatch.patchId)).toFullResponseVariableDefinition()
     }
 }

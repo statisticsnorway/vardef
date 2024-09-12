@@ -4,12 +4,10 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.VariableStatus
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
+import org.json.JSONObject
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -87,9 +85,8 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch`(spec: RequestSpecification) {
-        val previousPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
-
+    @DisplayName("It is not allowed to send in valid from at patches endpoint")
+    fun `create new patch valid from in request`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -97,19 +94,23 @@ class PatchesControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
-            .statusCode(201)
-            .body("patch_id", equalTo(previousPatchId + 1))
+            .statusCode(400)
     }
 
     @Test
-    @DisplayName("It should not be possible to edit valid from on patches endpoint")
-    fun `create new patch valid from`(spec: RequestSpecification) {
-       // val previousPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
+    @DisplayName("It is not possible to edit valid from on patches endpoint")
+    fun `create new patch valid from not in request`(spec: RequestSpecification) {
+        //val previousPatch = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId)
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("valid_from")
+                }.toString()
 
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT)
+            .body(testCase)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
@@ -122,7 +123,13 @@ class PatchesControllerTest : BaseVardefTest() {
         variableStatus: VariableStatus,
         spec: RequestSpecification,
     ) {
-        var id =
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("valid_from")
+                }.toString()
+
+        val id =
             variableDefinitionService
                 .save(
                     INPUT_VARIABLE_DEFINITION
@@ -134,7 +141,7 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT)
+            .body(testCase)
             .`when`()
             .post("/variable-definitions/$id/patches")
             .then()

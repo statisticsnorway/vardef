@@ -70,7 +70,7 @@ class PatchesController {
      * Create a new patch for a variable definition.
      *
      */
-    @Post()
+    @Post
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")

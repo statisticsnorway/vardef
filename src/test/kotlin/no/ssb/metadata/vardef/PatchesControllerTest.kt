@@ -10,6 +10,7 @@ import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -100,8 +101,23 @@ class PatchesControllerTest : BaseVardefTest() {
             .body("patch_id", equalTo(previousPatchId + 1))
     }
 
+    @Test
+    @DisplayName("It should not be possible to edit valid from on patches endpoint")
+    fun `create new patch valid from`(spec: RequestSpecification) {
+       // val previousPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSON_TEST_INPUT)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(201)
+    }
+
     @ParameterizedTest
-    @EnumSource(value = VariableStatus::class, names = arrayOf("PUBLISHED.*"), mode = EnumSource.Mode.MATCH_NONE)
+    @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
     fun `create new patch with invalid status`(
         variableStatus: VariableStatus,
         spec: RequestSpecification,

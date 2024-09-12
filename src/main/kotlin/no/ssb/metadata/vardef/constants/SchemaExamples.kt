@@ -82,3 +82,5 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     }
 }
 """
+
+const val DATE_EXAMPLE = "1970-01-01"

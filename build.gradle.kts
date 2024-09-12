@@ -83,6 +83,11 @@ micronaut {
     }
 }
 
+ksp {
+    // Necessary for incremental processing ref: https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html#kotlin
+    arg("micronaut.openapi.project.dir", projectDir.toString())
+}
+
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "no.ssb.metadata.vardef.ApplicationKt"

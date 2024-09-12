@@ -8,12 +8,17 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
+import no.ssb.metadata.vardef.constants.DATE_EXAMPLE
 import no.ssb.metadata.vardef.constants.DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION
+import no.ssb.metadata.vardef.constants.RENDERED_VARIABLE_DEFINITION_EXAMPLE
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -33,12 +38,29 @@ class VariableDefinitionsController {
      *
      * These are rendered in the given language, with the default being Norwegian Bokmål.
      */
+    @ApiResponse(
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(
+                        name = "List of one variable definition",
+                        value = "[\n$RENDERED_VARIABLE_DEFINITION_EXAMPLE\n]",
+                    ), ExampleObject(name = "Empty list", value = "[\n]"),
+                ],
+            ),
+        ],
+    )
     @Get()
     fun listVariableDefinitions(
         @Header("Accept-Language", defaultValue = "nb")
+        @Parameter(example = "nb")
         language: SupportedLanguages,
         @QueryValue("date_of_validity")
-        @Schema(description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION, format = "YYYY-MM-DD")
+        @Parameter(
+            description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
+            schema = Schema(format = "YYYY-MM-DD"),
+            example = DATE_EXAMPLE,
+        )
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse

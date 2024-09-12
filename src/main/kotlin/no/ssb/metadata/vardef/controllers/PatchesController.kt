@@ -17,7 +17,6 @@ import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
 import no.ssb.metadata.vardef.models.InputPatchVariableDefinition
-import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId

@@ -45,11 +45,6 @@ data class InputPatchVariableDefinition(
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     val containsSensitivePersonalInformation: Boolean,
-    @Schema(
-        description = VARIABLE_STATUS_FIELD_DESCRIPTION,
-        accessMode = Schema.AccessMode.READ_ONLY,
-    )
-    var variableStatus: VariableStatus?,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
@@ -68,7 +63,10 @@ data class InputPatchVariableDefinition(
     @Valid
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(previousPatch: SavedVariableDefinition, previousPatchId: Int?): SavedVariableDefinition =
+    fun toSavedVariableDefinition(
+        previousPatch: SavedVariableDefinition,
+        previousPatchId: Int?,
+    ): SavedVariableDefinition =
         previousPatch.copy(
             patchId = (previousPatchId ?: 0) + 1,
             name = name,
@@ -78,7 +76,6 @@ data class InputPatchVariableDefinition(
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus ?: VariableStatus.DRAFT,
             measurementType = measurementType,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

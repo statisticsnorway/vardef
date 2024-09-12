@@ -84,6 +84,8 @@ class PatchesController {
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw PublishedVariableAccessException()
         }
-        return varDefService.save(patch.toSavedVariableDefinition(latestExistingPatch, latestExistingPatch.patchId)).toFullResponseVariableDefinition()
+        return varDefService.save(
+            patch.toSavedVariableDefinition(latestExistingPatch, latestExistingPatch.patchId),
+        ).toFullResponseVariableDefinition()
     }
 }

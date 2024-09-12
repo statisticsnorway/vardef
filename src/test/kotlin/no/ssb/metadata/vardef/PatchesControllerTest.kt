@@ -100,7 +100,6 @@ class PatchesControllerTest : BaseVardefTest() {
     @Test
     @DisplayName("It is not possible to edit valid from on patches endpoint")
     fun `create new patch valid from not in request`(spec: RequestSpecification) {
-        //val previousPatch = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId)
         val testCase =
             JSONObject(JSON_TEST_INPUT)
                 .apply {
@@ -113,6 +112,25 @@ class PatchesControllerTest : BaseVardefTest() {
             .body(testCase)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(201)
+    }
+
+    @Test
+    @DisplayName("Case first patch")
+    fun `create new patch when none patches`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("valid_from")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION_COPY.definitionId}/patches")
             .then()
             .statusCode(201)
     }

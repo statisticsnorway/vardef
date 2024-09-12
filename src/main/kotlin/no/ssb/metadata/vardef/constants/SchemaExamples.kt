@@ -35,7 +35,6 @@ const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """
 }
 """
 
-
 const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
 {
     "name": {
@@ -68,8 +67,6 @@ const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
     }
 }
 """
-
-
 
 const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "id": "wypvb3wd",

@@ -1,3 +1,4 @@
+#nonk8s
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
@@ -16,6 +17,8 @@ spec:
   system: metadata
   providesApis:
     - vardef-api
+  consumesApis:
+    - klass-api
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API

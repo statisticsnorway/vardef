@@ -42,16 +42,19 @@ class VariableDefinitionsController {
                 examples = [
                     ExampleObject(
                         name = "List of one variable definition",
-                        value = "[\n$RENDERED_VARIABLE_DEFINITION_EXAMPLE\n]",
-                    ), ExampleObject(name = "Empty list", value = "[\n]"),
+                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                    ), ExampleObject(
+                        name = "Empty list",
+                        value = EMPTY_LIST_EXAMPLE,
+                    ),
                 ],
             ),
         ],
     )
     @Get()
     fun listVariableDefinitions(
+        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
-        @Parameter(example = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
         @QueryValue("date_of_validity")
         @Parameter(

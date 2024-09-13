@@ -10,9 +10,9 @@ import java.time.LocalDateTime
 
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class FullResponseVariableDefinition(
-    @Schema(description = ID_FIELD_DESCRIPTION)
+    @Schema(description = ID_FIELD_DESCRIPTION, format = VARDEF_ID_PATTERN)
     var id: String?,
-    @Schema(description = PATCH_ID_FIELD_DESCRIPTION)
+    @Schema(description = PATCH_ID_FIELD_DESCRIPTION, example = "1")
     var patchId: Int,
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,

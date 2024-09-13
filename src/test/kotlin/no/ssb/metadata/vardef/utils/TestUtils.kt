@@ -30,18 +30,18 @@ object TestUtils {
                 } to "Unknown property [se]",
                 JSONObject(
                     JSON_TEST_INPUT,
-                ).apply { put("unit_types", listOf("blah")) } to "Code blah is not a member of classification with id",
+                ).apply { put("unit_types", listOf("blah.json")) } to "Code blah.json is not a member of classification with id",
                 JSONObject(
                     JSON_TEST_INPUT,
                 ).apply {
                     put(
                         "subject_fields",
-                        listOf("blah"),
+                        listOf("blah.json"),
                     )
-                } to "Code blah is not a member of classification with id",
+                } to "Code blah.json is not a member of classification with id",
                 JSONObject(
                     JSON_TEST_INPUT,
-                ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",
+                ).apply { put("measurement_type", "blah.json") } to "Code blah.json is not a member of classification with id",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2024-20-11") } to "Failed to convert argument",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2024-20-11") } to "Failed to convert argument",
                 JSONObject(JSON_TEST_INPUT).apply { put("external_reference_uri", "Not url") } to "Failed to convert argument",

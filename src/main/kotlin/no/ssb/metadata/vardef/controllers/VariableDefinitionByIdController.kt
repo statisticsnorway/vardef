@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION
+import no.ssb.metadata.vardef.constants.DEFAULT_LANGUAGE
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -37,7 +38,7 @@ class VariableDefinitionByIdController {
     @Get()
     fun getVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
-        @Header("Accept-Language", defaultValue = "nb") language: SupportedLanguages,
+        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE) language: SupportedLanguages,
         @QueryValue("date_of_validity")
         @Schema(description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION, format = "YYYY-MM-DD")
         dateOfValidity: LocalDate? = null,

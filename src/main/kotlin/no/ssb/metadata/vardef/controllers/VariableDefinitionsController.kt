@@ -16,9 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
-import no.ssb.metadata.vardef.constants.DATE_EXAMPLE
-import no.ssb.metadata.vardef.constants.DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION
-import no.ssb.metadata.vardef.constants.RENDERED_VARIABLE_DEFINITION_EXAMPLE
+import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -52,8 +50,8 @@ class VariableDefinitionsController {
     )
     @Get()
     fun listVariableDefinitions(
-        @Header("Accept-Language", defaultValue = "nb")
-        @Parameter(example = "nb")
+        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
+        @Parameter(example = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
         @QueryValue("date_of_validity")
         @Parameter(
@@ -76,10 +74,23 @@ class VariableDefinitionsController {
      */
     @Post()
     @Status(HttpStatus.CREATED)
-    @ApiResponse(responseCode = "201", description = "Successfully created.")
+    @ApiResponse(
+        responseCode = "201",
+        description = "Successfully created.",
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(
+                        name = "Created variable definition",
+                        value = INPUT_VARIABLE_DEFINITION_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinition(
-        @Body @Valid varDef: InputVariableDefinition,
+        @Parameter(example = INPUT_VARIABLE_DEFINITION_EXAMPLE) @Body @Valid varDef: InputVariableDefinition,
     ): InputVariableDefinition {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
         if (varDef.variableStatus != null) {

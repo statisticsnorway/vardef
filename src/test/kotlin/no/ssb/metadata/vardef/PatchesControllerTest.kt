@@ -95,7 +95,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body(containsString("Valid"))
+            .body("_embedded.errors[0].message", containsString("Valid from is not allowed"))
     }
 
     @Test

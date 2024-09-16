@@ -1,50 +1,56 @@
 package no.ssb.metadata.vardef.handlers
 
 import io.micronaut.context.annotation.Primary
+import io.micronaut.context.annotation.Requirements
+import io.micronaut.context.annotation.Requires
 import io.micronaut.core.convert.exceptions.ConversionErrorException
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Produces
 import io.micronaut.http.server.exceptions.ExceptionHandler
-import io.micronaut.serde.annotation.Serdeable
+import io.micronaut.http.server.exceptions.response.ErrorContext
+import io.micronaut.http.server.exceptions.response.ErrorResponseProcessor
 import io.micronaut.serde.exceptions.SerdeException
 import jakarta.inject.Singleton
 
+/**
+ * Handler for overriding ConversionErrorException to enable custom message
+ * when trying to post fields not available at patches endpoint:
+ * valid_from and short_name
+ * Annotated with Primary to set order and choose custom before
+ * default ConversionErrorExceptionHandler
+ */
 @Produces
 @Primary
 @Singleton
-class PropertyConversionErrorHandler() : ExceptionHandler<ConversionErrorException, HttpResponse<ErrorResponse>> {
-    override fun handle(
-        request: HttpRequest<*>,
-        exception: ConversionErrorException,
-    ): HttpResponse<ErrorResponse> {
-        val cause = exception.cause
-
-        if (cause != null) {
-            return if (cause is SerdeException) {
-                if (cause.message?.contains("Unknown property [valid_from]") == true) {
-                    HttpResponse.badRequest(
-                        ErrorResponse("Custom Error: Valid from is not allowed", HttpStatus.BAD_REQUEST.code),
-                    )
-                } else {
-                    HttpResponse.badRequest(
-                        ErrorResponse("Custom Error: Invalid data format", HttpStatus.BAD_REQUEST.code),
-                    )
+@Requirements(
+    Requires(classes = [ConversionErrorException::class, ExceptionHandler::class]),
+)
+class PropertyConversionErrorHandler(
+    private val errorResponseProcessor: ErrorResponseProcessor<*>,
+    ): ExceptionHandler<ConversionErrorException, HttpResponse<*>>{
+        override fun handle(
+            request: HttpRequest<*>,
+            exception: ConversionErrorException
+        ): HttpResponse<*> {
+            val cause = exception.cause
+            var message = exception.message.toString()
+            if (cause != null) {
+                if (cause is SerdeException) {
+                    message = if(cause.message?.contains("Unknown property [valid_from]") == true){
+                        "Valid from is not allowed at patches endpoint"
+                    } else{
+                        cause.message.toString()
+                    }
                 }
-            } else {
-                return HttpResponse.badRequest(
-                    ErrorResponse(cause.toString(), HttpStatus.BAD_REQUEST.code),
-                )
             }
-        } else {
-            return HttpResponse.badRequest(
-                ErrorResponse("Outside all", HttpStatus.BAD_REQUEST.code),
+            return  errorResponseProcessor.processResponse(
+                ErrorContext
+                    .builder(request)
+                    .cause(exception)
+                    .errorMessage(message)
+                    .build(),
+                HttpResponse.badRequest<Any>(),
             )
         }
     }
-}
-
-// Data class to represent error response
-@Serdeable
-data class ErrorResponse(val message: String, val code: Int)

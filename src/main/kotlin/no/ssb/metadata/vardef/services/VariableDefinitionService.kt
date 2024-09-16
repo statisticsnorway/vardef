@@ -218,9 +218,4 @@ class VariableDefinitionService(
                 .let { save(it) }
         }
     }
-
-    fun savePatch(varDef: SavedVariableDefinition){
-
-
-    }
 }

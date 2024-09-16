@@ -14,15 +14,16 @@ import no.ssb.metadata.vardef.exceptions.InvalidPatchesInputException
 @Produces
 @Singleton
 @Requirements(
-    Requires(classes = [
-        InvalidPatchesInputException::class,
-        ExceptionHandler::class
-    ]
+    Requires(
+        classes = [
+            InvalidPatchesInputException::class,
+            ExceptionHandler::class,
+        ],
     ),
 )
 class PatchesMethodNotAllowedExceptionsHandler(
     private val errorResponseProcessor: ErrorResponseProcessor<Any>,
-    ) : ExceptionHandler<InvalidPatchesInputException, HttpResponse<*>> {
+) : ExceptionHandler<InvalidPatchesInputException, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,
         exception: InvalidPatchesInputException,

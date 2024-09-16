@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef
 
 import io.micronaut.runtime.Micronaut
+import io.swagger.v3.oas.annotations.ExternalDocumentation
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.extensions.Extension
 import io.swagger.v3.oas.annotations.extensions.ExtensionProperty
@@ -8,6 +9,8 @@ import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
+import no.ssb.metadata.vardef.constants.*
 
 @OpenAPIDefinition(
     info =
@@ -28,6 +31,33 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
                 ),
         ),
     security = [SecurityRequirement(name = "Keycloak token")],
+    tags = [
+        Tag(
+            name = VARIABLE_DEFINITIONS,
+            description = "Access variable definitions.",
+        ),
+        Tag(
+            name = VALIDITY_PERIODS,
+            description = "Create and access validity periods.",
+        ),
+        Tag(
+            name = PATCHES,
+            description = "Create and access 'patch' changes.",
+        ),
+        Tag(
+            name = DATA_MIGRATION,
+            description = "Create variable definitions from existing definitions in Vardok.",
+            externalDocs =
+                ExternalDocumentation(
+                    description = "Vardok website",
+                    url = "https://www.ssb.no/a/metadata/definisjoner/variabler/main.html",
+                ),
+        ),
+        Tag(
+            name = DRAFT,
+            description = "Create, update and delete variable definitions with DRAFT status.",
+        ),
+    ],
 )
 object Api
 

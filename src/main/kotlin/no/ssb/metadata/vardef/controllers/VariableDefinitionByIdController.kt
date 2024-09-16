@@ -20,7 +20,6 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
-@Tag(name = "Variable Definitions")
 @Validated
 @Controller("/variable-definitions/{id}")
 @ExecuteOn(TaskExecutors.BLOCKING)
@@ -33,6 +32,7 @@ class VariableDefinitionByIdController {
      *
      * This is rendered in the given language, with the default being Norwegian Bokmål.
      */
+    @Tag(name = VARIABLE_DEFINITIONS)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(responseCode = "200", content = [Content(examples = [ExampleObject(value = RENDERED_VARIABLE_DEFINITION_EXAMPLE)])])
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
@@ -61,6 +61,7 @@ class VariableDefinitionByIdController {
     /**
      * Delete a variable definition.
      */
+    @Tag(name = DRAFT)
     @ApiResponse(responseCode = "204", description = "Successfully deleted", content = [Content()])
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Status(HttpStatus.NO_CONTENT)
@@ -76,6 +77,7 @@ class VariableDefinitionByIdController {
     /**
      * Update a variable definition. Only the fields which need updating should be supplied.
      */
+    @Tag(name = DRAFT)
     @ApiResponse(responseCode = "200", description = "Successfully updated")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status DRAFT or DEPRECATED.")

@@ -19,6 +19,8 @@ import jakarta.inject.Singleton
  * valid_from and short_name
  * Annotated with Primary to set order and choose custom before
  * default ConversionErrorExceptionHandler
+ *
+ * @property errorResponseProcessor
  */
 @Produces
 @Primary

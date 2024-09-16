@@ -1,11 +1,9 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
-import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
-import no.ssb.metadata.vardef.exceptions.ValidFromNotAllowedException
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService

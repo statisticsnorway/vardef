@@ -42,7 +42,6 @@ class PropertyConversionErrorHandler(
                 cause.message?.contains("Unknown property [short_name]") == true -> "ShortName is not allowed at patches endpoint"
                 else -> {
                     cause.message
-
                 }
             }.also { message = it }
         } else {

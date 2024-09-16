@@ -1,9 +1,6 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.MediaType
-import io.micronaut.http.MutableHttpResponse
+import io.micronaut.http.*
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
@@ -84,6 +81,7 @@ class PatchesController {
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw PublishedVariableAccessException()
         }
+
         return varDefService.save(
             patch.toSavedVariableDefinition(latestExistingPatch, latestExistingPatch.patchId),
         ).toFullResponseVariableDefinition()

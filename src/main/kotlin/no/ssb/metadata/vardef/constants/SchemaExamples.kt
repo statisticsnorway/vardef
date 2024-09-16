@@ -53,6 +53,7 @@ const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
     "subject_fields": ["he04"],
     "contains_sensitive_personal_information": true,
     "measurement_type": null,
+    "valid_until": "2026-01-01",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
     "related_variable_definition_uris": [
         "https://example.com/"

@@ -23,7 +23,6 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
-@Tag(name = "Variable Definitions")
 @Validated
 @Controller("/variable-definitions")
 @ExecuteOn(TaskExecutors.BLOCKING)
@@ -51,6 +50,7 @@ class VariableDefinitionsController {
             ),
         ],
     )
+    @Tag(name = VARIABLE_DEFINITIONS)
     @Get()
     fun listVariableDefinitions(
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
@@ -75,6 +75,7 @@ class VariableDefinitionsController {
      *
      * Attempts to specify id or variable_status in a request will receive 400 BAD REQUEST responses.
      */
+    @Tag(name = DRAFT)
     @Post()
     @Status(HttpStatus.CREATED)
     @ApiResponse(

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.ID_FIELD_DESCRIPTION
+import no.ssb.metadata.vardef.constants.VALIDITY_PERIODS
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
@@ -20,7 +21,7 @@ import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
-@Tag(name = "Validity Periods")
+@Tag(name = VALIDITY_PERIODS)
 @Validated
 @Controller("/variable-definitions/{variable-definition-id}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)

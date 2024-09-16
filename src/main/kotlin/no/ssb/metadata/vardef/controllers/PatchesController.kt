@@ -71,13 +71,13 @@ class PatchesController {
     @Status(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "Successfully created.")
     @ApiResponse(responseCode = "400", description = "Bad request.")
-    @ApiResponse(responseCode = "405", description = "Method not allowed.")
+    @ApiResponse(responseCode = "405", description = "Only allowed for published variables.")
     fun createPatch(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
         @Body @Valid patch: InputPatchVariableDefinition,
     ): FullResponseVariableDefinition {
-        // TODO validate content of the new patch
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
+
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw PublishedVariableAccessException()
         }

@@ -17,7 +17,7 @@ import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
     Requires(classes = [DefinitionTextUnchangedException::class, ExceptionHandler::class]),
 )
 class DefinitionTextUnchangedExceptionHandler(
-    private val errorResponseProcessor: ErrorResponseProcessor<Any>,
+    private val errorResponseProcessor: ErrorResponseProcessor<*>,
 ) : ExceptionHandler<DefinitionTextUnchangedException, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,

@@ -5,8 +5,8 @@ import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.equalTo
+import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -85,22 +85,28 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("It is not allowed to send in valid from at patches endpoint")
+    @DisplayName("It is not allowed to edit valid from at patches endpoint")
     fun `create new patch valid from in request`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                }.toString()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT)
+            .body(testCase)
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("Valid from is not allowed"))
+            .body("_embedded.errors[0].message", containsString("Valid from is not allowed at patches endpoint"))
     }
 
     @Test
-    @DisplayName("It is not possible to edit valid from on patches endpoint")
-    fun `create new patch valid from not in request`(spec: RequestSpecification) {
+    @DisplayName("It is not allowed to edit short name at patches endpoint")
+    fun `create new patch short name in request`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
                 .apply {
@@ -114,7 +120,64 @@ class PatchesControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
-            .statusCode(201)
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("ShortName is not allowed at patches endpoint"))
+    }
+
+    @Test
+    @DisplayName("Unknown properties other than [valid from, short name] the original message is returned")
+    fun `create new patch with random props in request`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    put("small_winter", "fall")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "Unknown property [small_winter] " +
+                        "encountered during deserialization of type: InputPatchVariableDefinition patch",
+                ),
+            )
+    }
+
+    @Test
+    @DisplayName("When both unknown properties present, short name error is caught first")
+    fun `create new patch valid from and short name in request`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSON_TEST_INPUT)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("ShortName is not allowed at patches endpoint"))
+
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("Valid from is not allowed at patches endpoint"))
     }
 
     @Test
@@ -124,6 +187,7 @@ class PatchesControllerTest : BaseVardefTest() {
             JSONObject(JSON_TEST_INPUT)
                 .apply {
                     remove("valid_from")
+                    remove("short_name")
                 }.toString()
 
         spec
@@ -134,6 +198,10 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION_COPY.definitionId}/patches")
             .then()
             .statusCode(201)
+
+        val createdVariableDefinition = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION_COPY.definitionId)
+
+        assertThat(createdVariableDefinition.patchId).isEqualTo(1)
     }
 
     @ParameterizedTest
@@ -146,6 +214,7 @@ class PatchesControllerTest : BaseVardefTest() {
             JSONObject(JSON_TEST_INPUT)
                 .apply {
                     remove("valid_from")
+                    remove("short_name")
                 }.toString()
 
         val id =

@@ -40,36 +40,6 @@ val INPUT_VARIABLE_DEFINITION =
             ),
     )
 
-val INPUT_PATCH_VARIABLE_DEFINITION =
-    InputPatchVariableDefinition(
-        name =
-            LanguageStringType(
-                nb = "Landbakgrunn",
-                nn = "Landbakgrunn",
-                en = "Country Background",
-            ),
-        shortName = "landbak",
-        definition =
-            LanguageStringType(
-                nb = "For personer født",
-                nn = null,
-                en = "Country background is",
-            ),
-        classificationReference = "91",
-        unitTypes = listOf("", ""),
-        subjectFields = listOf("", ""),
-        containsSensitivePersonalInformation = false,
-        measurementType = "",
-        validUntil = LocalDate.of(2021, 1, 1),
-        externalReferenceUri = URI("https://www.example.com").toURL(),
-        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
-        contact =
-            Contact(
-                LanguageStringType("", "", ""),
-                "",
-            ),
-    )
-
 val INPUT_VARIABLE_DEFINITION_COPY =
     INPUT_VARIABLE_DEFINITION.copy(
         name =
@@ -148,6 +118,7 @@ val SAVED_VARIABLE_DEFINITION_COPY =
     SAVED_VARIABLE_DEFINITION.copy(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
+        patchId = 0,
         name =
             LanguageStringType(
                 nb = "Landbakgrunn 2",

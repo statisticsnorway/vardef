@@ -17,7 +17,7 @@ import java.time.format.DateTimeParseException
     Requires(classes = [DateTimeParseException::class, ExceptionHandler::class]),
 )
 class DateTimeParseExceptionHandler(
-    private val errorResponseProcessor: ErrorResponseProcessor<Any>,
+    private val errorResponseProcessor: ErrorResponseProcessor<*>,
 ) : ExceptionHandler<DateTimeParseException, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,

@@ -7,7 +7,6 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
@@ -23,9 +22,6 @@ import java.time.LocalDateTime
 data class InputPatchVariableDefinition(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
-    @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
-    @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
-    val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
@@ -70,7 +66,6 @@ data class InputPatchVariableDefinition(
         previousPatch.copy(
             patchId = (previousPatchId ?: 0) + 1,
             name = name,
-            shortName = shortName,
             definition = definition,
             classificationUri = classificationReference,
             unitTypes = unitTypes,

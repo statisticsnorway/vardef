@@ -17,7 +17,7 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
     Requires(classes = [NoMatchingValidityPeriodFound::class, ExceptionHandler::class]),
 )
 class NoMatchingValidityPeriodFoundHandler(
-    private val errorResponseProcessor: ErrorResponseProcessor<Any>,
+    private val errorResponseProcessor: ErrorResponseProcessor<*>,
 ) : ExceptionHandler<NoMatchingValidityPeriodFound, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,

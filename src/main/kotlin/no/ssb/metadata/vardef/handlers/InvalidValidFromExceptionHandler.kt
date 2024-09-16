@@ -17,7 +17,7 @@ import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
     Requires(classes = [InvalidValidFromException::class, ExceptionHandler::class]),
 )
 class InvalidValidFromExceptionHandler(
-    private val errorResponseProcessor: ErrorResponseProcessor<Any>,
+    private val errorResponseProcessor: ErrorResponseProcessor<*>,
 ) : ExceptionHandler<InvalidValidFromException, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,

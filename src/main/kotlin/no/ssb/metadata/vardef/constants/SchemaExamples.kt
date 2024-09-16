@@ -39,10 +39,9 @@ const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
 {
     "name": {
         "en": "Country Background",
-        "nb": "Landbakgrunn",
-        "nn": "Landbakgrunn"
+        "nb": "Landbakgrunnen",
+        "nn": "Landbakgrunnen"
     },
-    "short_name": "landbak",
     "definition": {
         "en": "Country background is the person's own, the mother's or possibly the father's country of birth. Persons without an immigrant background always have Norway as country background. In cases where the parents have different countries of birth the mother's country of birth is chosen. If neither the person nor the parents are born abroad, country background is chosen from the first person born abroad in the order mother's mother, mother's father, father's mother, father's father.",
         "nb": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
@@ -51,7 +50,7 @@ const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
     "classification_reference": "91",
     "unit_types": ["01", "02"],
     "subject_fields": ["he04"],
-    "contains_sensitive_personal_information": true,
+    "contains_sensitive_personal_information": false,
     "measurement_type": null,
     "valid_until": "2026-01-01",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",

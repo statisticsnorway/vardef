@@ -34,24 +34,19 @@ class PropertyConversionErrorHandler(
         exception: ConversionErrorException,
     ): HttpResponse<*> {
         val cause = exception.cause
-        var message = exception.message.toString()
+        var message = exception.message
 
         if (cause != null && cause is SerdeException) {
-            message =
-                when {
-                    cause.message?.contains("Unknown property [valid_from]") == true -> {
-                        "Valid from is not allowed at patches endpoint"
-                    }
-                    cause.message?.contains("Unknown property [short_name]") == true -> {
-                        "ShortName is not allowed at patches endpoint"
-                    }
-                    else -> {
-                        val defaultMessage = cause.message.toString()
-                        defaultMessage
-                    }
+            when {
+                cause.message?.contains("Unknown property [valid_from]") == true -> "Valid from is not allowed at patches endpoint"
+                cause.message?.contains("Unknown property [short_name]") == true -> "ShortName is not allowed at patches endpoint"
+                else -> {
+                    cause.message
+
                 }
+            }.also { message = it }
         } else {
-            exception.message.toString()
+            exception.message
         }
 
         return errorResponseProcessor.processResponse(

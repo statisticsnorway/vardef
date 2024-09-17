@@ -5,6 +5,7 @@ import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
+import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.DisplayName
@@ -84,12 +85,16 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
+    @DisplayName("New patch with changed name in one language")
     fun `create new patch`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
                 .apply {
                     remove("short_name")
                     remove("valid_from")
+                    getJSONObject("name").apply {
+                        put("nb","Bybakgrunn")
+                    }
                 }.toString()
 
         spec
@@ -100,6 +105,18 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(201)
+            .body("id", equalTo(SAVED_VARIABLE_DEFINITION.definitionId))
+
+        val createdPatch = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId)
+        val prevousPatch = variableDefinitionService.getOnePatchById(
+            SAVED_VARIABLE_DEFINITION.definitionId,
+            createdPatch.patchId - 1
+        )
+
+        assertThat(createdPatch.shortName).isEqualTo(prevousPatch.shortName)
+        assertThat(createdPatch.validFrom).isEqualTo(prevousPatch.validFrom)
+        assertThat(createdPatch.name.nb).isNotEqualTo(prevousPatch.name.nb)
+        assertThat(createdPatch.name.en).isEqualTo(prevousPatch.name.en)
     }
 
     @Test

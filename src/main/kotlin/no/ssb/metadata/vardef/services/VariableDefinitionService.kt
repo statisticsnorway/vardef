@@ -133,8 +133,8 @@ class VariableDefinitionService(
             latestExistingPatch
                 .copy(
                     validUntil = endDate,
-                ).toInputVariableDefinition()
-                .toSavedVariableDefinition(latestExistingPatch.patchId),
+                ).toInputPatchVariableDefinition()
+                .toSavedVariableDefinition(latestExistingPatch,latestExistingPatch.patchId),
         )
     }
 

@@ -20,27 +20,37 @@ import java.time.LocalDateTime
     example = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE,
 )
 data class InputPatchVariableDefinition(
+    @Nullable
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
+    @Nullable
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @KlassId
     val classificationReference: String?,
+    @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     val unitTypes: List<
             @KlassCode("702")
             String,
             >,
+    @Nullable
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     val subjectFields: List<
             @KlassCode("618")
             String,
             >,
+    @Nullable
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
-    @NotNull
     val containsSensitivePersonalInformation: Boolean,
+    @Nullable
+    @Schema(
+        description = VARIABLE_STATUS_FIELD_DESCRIPTION,
+        accessMode = Schema.AccessMode.READ_ONLY,
+    )
+    var variableStatus: VariableStatus?,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
@@ -57,6 +67,7 @@ data class InputPatchVariableDefinition(
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
+    @Nullable
     val contact: Contact?,
 ) {
     fun toSavedVariableDefinition(
@@ -67,10 +78,11 @@ data class InputPatchVariableDefinition(
             patchId = (previousPatchId ?: 0) + 1,
             name = name,
             definition = definition,
-            classificationUri = classificationReference,
+            classificationUri = classificationReference?: previousPatch.classificationUri,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
-            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            containsSensitivePersonalInformation = containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
+            variableStatus = variableStatus ?: previousPatch.variableStatus,
             measurementType = measurementType,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

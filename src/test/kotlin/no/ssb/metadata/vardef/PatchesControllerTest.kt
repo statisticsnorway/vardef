@@ -204,6 +204,34 @@ class PatchesControllerTest : BaseVardefTest() {
         assertThat(createdVariableDefinition.patchId).isEqualTo(1)
     }
 
+    @Test
+    @DisplayName("Just testing the limits for input")
+    fun `create new patch no changes`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("valid_from")
+                    remove("short_name")
+                    remove( "classification_reference")
+                    remove("contains_sensitive_personal_information")
+                    remove("measurement_type")
+                    remove("valid_until")
+                    remove("external_reference_uri")
+                    getJSONObject("name").apply {
+                        remove("en")
+                    }
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION_COPY.definitionId}/patches")
+            .then()
+            .statusCode(201)
+    }
+
     @ParameterizedTest
     @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
     fun `create new patch with invalid status`(

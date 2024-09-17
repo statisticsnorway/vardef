@@ -22,8 +22,10 @@ micronaut:
       spec: |
         swagger-ui.enabled=true,
         swagger-ui.js.url=/docs/swagger/res/,
+        swagger-ui.tagsSorter=Function=(a => a),
         redoc.enabled=true,
         redoc.js.url=/docs/redoc/res/,
+        redoc.sort-tags-alphabetically=false,
   serde:
     deserialization:
       ignore-unknown: false

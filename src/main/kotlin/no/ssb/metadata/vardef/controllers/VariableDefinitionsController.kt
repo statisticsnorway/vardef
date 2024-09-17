@@ -8,19 +8,21 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
-import no.ssb.metadata.vardef.constants.DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION
+import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
-@Tag(name = "Variable Definitions")
 @Validated
 @Controller("/variable-definitions")
 @ExecuteOn(TaskExecutors.BLOCKING)
@@ -33,12 +35,33 @@ class VariableDefinitionsController {
      *
      * These are rendered in the given language, with the default being Norwegian Bokmål.
      */
+    @ApiResponse(
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(
+                        name = "List of one variable definition",
+                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                    ), ExampleObject(
+                        name = "Empty list",
+                        value = EMPTY_LIST_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
+    @Tag(name = VARIABLE_DEFINITIONS)
     @Get()
     fun listVariableDefinitions(
-        @Header("Accept-Language", defaultValue = "nb")
+        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
         @QueryValue("date_of_validity")
-        @Schema(description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION, format = "YYYY-MM-DD")
+        @Parameter(
+            description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
+            schema = Schema(format = "YYYY-MM-DD"),
+            example = DATE_EXAMPLE,
+        )
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
@@ -52,12 +75,26 @@ class VariableDefinitionsController {
      *
      * Attempts to specify id or variable_status in a request will receive 400 BAD REQUEST responses.
      */
+    @Tag(name = DRAFT)
     @Post()
     @Status(HttpStatus.CREATED)
-    @ApiResponse(responseCode = "201", description = "Successfully created.")
+    @ApiResponse(
+        responseCode = "201",
+        description = "Successfully created.",
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(
+                        name = "Created variable definition",
+                        value = INPUT_VARIABLE_DEFINITION_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinition(
-        @Body @Valid varDef: InputVariableDefinition,
+        @Parameter(example = INPUT_VARIABLE_DEFINITION_EXAMPLE) @Body @Valid varDef: InputVariableDefinition,
     ): InputVariableDefinition {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
         if (varDef.variableStatus != null) {

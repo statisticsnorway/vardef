@@ -38,3 +38,4 @@ const val LAST_UPDATED_AT_FIELD_DESCRIPTION = "The timestamp at which this varia
 const val LAST_UPDATED_BY_FIELD_DESCRIPTION = "The user who last modified this variable definition."
 
 const val DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION = "List only variable definitions which are valid on this date."
+const val ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION = "Render the variable definition in the given language."

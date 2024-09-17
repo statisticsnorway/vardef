@@ -43,7 +43,7 @@ class PropertyConversionErrorHandler(
                 cause.message?.contains("Unknown property [valid_from]") == true -> "Valid from is not allowed at patches endpoint"
                 cause.message?.contains("Unknown property [short_name]") == true -> "ShortName is not allowed at patches endpoint"
                 else -> {
-                    cause.message
+                    exception.message
                 }
             }.also { message = it }
         } else {

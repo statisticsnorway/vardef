@@ -35,21 +35,7 @@ class PropertyConversionErrorHandler(
         request: HttpRequest<*>,
         exception: ConversionErrorException,
     ): HttpResponse<*> {
-        val cause = exception.cause
-        var message = exception.message
-
-        if (cause != null && cause is SerdeException) {
-            when {
-                cause.message?.contains("Unknown property [valid_from]") == true -> "Valid from is not allowed at patches endpoint"
-                cause.message?.contains("Unknown property [short_name]") == true -> "ShortName is not editable"
-                else -> {
-                    exception.message
-                }
-            }.also { message = it }
-        } else {
-            exception.message
-        }
-
+        val message = getErrorMessage(exception)
         return errorResponseProcessor.processResponse(
             ErrorContext
                 .builder(request)
@@ -58,5 +44,18 @@ class PropertyConversionErrorHandler(
                 .build(),
             HttpResponse.badRequest<Any>(),
         )
+    }
+}
+
+private fun getErrorMessage(exception: ConversionErrorException): String? {
+    val cause = exception.cause
+    return if (cause is SerdeException && cause.message != null) {
+        when {
+            "Unknown property [valid_from]" in cause.message!! -> "Valid from is not allowed at patches endpoint"
+            "Unknown property [short_name]" in cause.message!! -> "ShortName is not editable"
+            else -> exception.message
+        }
+    } else {
+        exception.message
     }
 }

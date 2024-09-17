@@ -162,7 +162,7 @@ class PatchesControllerTest : BaseVardefTest() {
 
     @Test
     @DisplayName("Unknown properties other than [valid from, short name] the original exception message is returned")
-    fun `create new patch with general unknown fields`(spec: RequestSpecification) {
+    fun `create new patch with unknown fields`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
                 .apply {

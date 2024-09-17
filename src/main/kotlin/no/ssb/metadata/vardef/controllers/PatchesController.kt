@@ -83,7 +83,7 @@ class PatchesController {
         }
 
         return varDefService.save(
-            patch.toSavedVariableDefinition(latestExistingPatch, latestExistingPatch.patchId),
+            patch.toSavedVariableDefinition(latestExistingPatch),
         ).toFullResponseVariableDefinition()
     }
 }

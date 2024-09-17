@@ -70,11 +70,10 @@ data class InputPatchVariableDefinition(
     val contact: Contact?,
 ) {
     fun toSavedVariableDefinition(
-        previousPatch: SavedVariableDefinition,
-        previousPatchId: Int?,
+        previousPatch: SavedVariableDefinition
     ): SavedVariableDefinition =
         previousPatch.copy(
-            patchId = (previousPatchId ?: 0) + 1,
+            patchId = previousPatch.patchId + 1,
             name = name,
             definition = definition,
             classificationUri = classificationReference ?: previousPatch.classificationUri,

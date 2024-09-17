@@ -121,7 +121,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("ShortName is not allowed at patches endpoint"))
+            .body("_embedded.errors[0].message", containsString("ShortName is not editable"))
     }
 
     @Test
@@ -161,7 +161,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("ShortName is not allowed at patches endpoint"))
+            .body("_embedded.errors[0].message", containsString("ShortName is not editable"))
 
         val testCase =
             JSONObject(JSON_TEST_INPUT)

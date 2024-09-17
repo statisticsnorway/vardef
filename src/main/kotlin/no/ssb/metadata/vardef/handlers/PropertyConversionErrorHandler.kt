@@ -41,7 +41,7 @@ class PropertyConversionErrorHandler(
         if (cause != null && cause is SerdeException) {
             when {
                 cause.message?.contains("Unknown property [valid_from]") == true -> "Valid from is not allowed at patches endpoint"
-                cause.message?.contains("Unknown property [short_name]") == true -> "ShortName is not allowed at patches endpoint"
+                cause.message?.contains("Unknown property [short_name]") == true -> "ShortName is not editable"
                 else -> {
                     exception.message
                 }

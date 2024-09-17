@@ -212,14 +212,17 @@ class PatchesControllerTest : BaseVardefTest() {
                 .apply {
                     remove("valid_from")
                     remove("short_name")
-                    remove( "classification_reference")
+                    remove("classification_reference")
                     remove("contains_sensitive_personal_information")
                     remove("measurement_type")
                     remove("valid_until")
                     remove("external_reference_uri")
+                    remove("subject_fields")
+                    put("unit_types", listOf("28"))
                     getJSONObject("name").apply {
                         remove("en")
                     }
+                    put("variable_status","PUBLISHED_EXTERNAL")
                 }.toString()
 
         spec
@@ -230,6 +233,13 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION_COPY.definitionId}/patches")
             .then()
             .statusCode(201)
+
+        val createdVariableDefinition = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION_COPY.definitionId)
+
+        assertThat(createdVariableDefinition.name.en).isNull()
+        assertThat(createdVariableDefinition.name.nb).isNotNull()
+        assertThat(createdVariableDefinition.subjectFields).isNotNull
+
     }
 
     @ParameterizedTest

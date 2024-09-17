@@ -6,7 +6,6 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotNull
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
@@ -42,15 +41,15 @@ data class InputPatchVariableDefinition(
             @KlassCode("618")
             String,
             >,
-    @Nullable
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
-    val containsSensitivePersonalInformation: Boolean,
+    @Nullable
+    val containsSensitivePersonalInformation: Boolean?,
     @Nullable
     @Schema(
         description = VARIABLE_STATUS_FIELD_DESCRIPTION,
         accessMode = Schema.AccessMode.READ_ONLY,
     )
-    var variableStatus: VariableStatus?,
+    val variableStatus: VariableStatus?,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
@@ -78,18 +77,19 @@ data class InputPatchVariableDefinition(
             patchId = (previousPatchId ?: 0) + 1,
             name = name,
             definition = definition,
-            classificationUri = classificationReference?: previousPatch.classificationUri,
+            classificationUri = classificationReference ?: previousPatch.classificationUri,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
-            containsSensitivePersonalInformation = containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
-            variableStatus = variableStatus ?: previousPatch.variableStatus,
-            measurementType = measurementType,
-            validUntil = validUntil,
-            externalReferenceUri = externalReferenceUri,
+            containsSensitivePersonalInformation =
+                containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
+            variableStatus = variableStatus?: previousPatch.variableStatus,
+            measurementType = measurementType ?: previousPatch.measurementType,
+            validUntil = validUntil ?: previousPatch.validUntil,
+            externalReferenceUri = externalReferenceUri?: previousPatch.externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             // TODO depends on authentication to make user information available
             owner = null,
-            contact = contact,
+            contact = contact?: previousPatch.contact,
             createdAt = LocalDateTime.now(),
             // TODO depends on authentication to make user information available
             createdBy = null,

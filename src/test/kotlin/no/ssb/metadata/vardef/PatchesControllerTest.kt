@@ -85,7 +85,7 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("New patch with changed name in one language")
+    @DisplayName("Change name in norwegian")
     fun `create new patch`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
@@ -93,7 +93,7 @@ class PatchesControllerTest : BaseVardefTest() {
                     remove("short_name")
                     remove("valid_from")
                     getJSONObject("name").apply {
-                        put("nb","Bybakgrunn")
+                        put("nb", "Bybakgrunn")
                     }
                 }.toString()
 
@@ -108,15 +108,16 @@ class PatchesControllerTest : BaseVardefTest() {
             .body("id", equalTo(SAVED_VARIABLE_DEFINITION.definitionId))
 
         val createdPatch = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId)
-        val prevousPatch = variableDefinitionService.getOnePatchById(
-            SAVED_VARIABLE_DEFINITION.definitionId,
-            createdPatch.patchId - 1
-        )
+        val previousPatch =
+            variableDefinitionService.getOnePatchById(
+                SAVED_VARIABLE_DEFINITION.definitionId,
+                createdPatch.patchId - 1,
+            )
 
-        assertThat(createdPatch.shortName).isEqualTo(prevousPatch.shortName)
-        assertThat(createdPatch.validFrom).isEqualTo(prevousPatch.validFrom)
-        assertThat(createdPatch.name.nb).isNotEqualTo(prevousPatch.name.nb)
-        assertThat(createdPatch.name.en).isEqualTo(prevousPatch.name.en)
+        assertThat(createdPatch.shortName).isEqualTo(previousPatch.shortName)
+        assertThat(createdPatch.validFrom).isEqualTo(previousPatch.validFrom)
+        assertThat(createdPatch.name.nb).isNotEqualTo(previousPatch.name.nb)
+        assertThat(createdPatch.name.en).isEqualTo(previousPatch.name.en)
     }
 
     @Test

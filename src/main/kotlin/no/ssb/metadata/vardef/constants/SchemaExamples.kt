@@ -48,7 +48,7 @@ const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
         "nn": "For personar fødd i utlandet, er dette (med nokre få unntak) eige fødeland. For personar fødd i Noreg er det fødelandet til foreldra. I dei tilfella der foreldra har ulikt fødeland, er det fødelandet til mora som blir valt. Viss ikkje personen sjølv eller nokon av foreldra er utenlandsfødt, blir henta landsbakgrunn frå dei første utenlandsfødte ein treffar på i rekkjefølgja mormor, morfar, farmor eller farfar."
     },
     "classification_reference": "91",
-    "unit_types": ["01", "02"],
+    "unit_types": ["01", "05"],
     "subject_fields": ["he04"],
     "contains_sensitive_personal_information": false,
     "measurement_type": null,

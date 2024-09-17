@@ -222,7 +222,7 @@ class PatchesControllerTest : BaseVardefTest() {
                     getJSONObject("name").apply {
                         remove("en")
                     }
-                    put("variable_status","PUBLISHED_EXTERNAL")
+                    put("variable_status", "PUBLISHED_EXTERNAL")
                 }.toString()
 
         spec
@@ -239,7 +239,6 @@ class PatchesControllerTest : BaseVardefTest() {
         assertThat(createdVariableDefinition.name.en).isNull()
         assertThat(createdVariableDefinition.name.nb).isNotNull()
         assertThat(createdVariableDefinition.subjectFields).isNotNull
-
     }
 
     @ParameterizedTest

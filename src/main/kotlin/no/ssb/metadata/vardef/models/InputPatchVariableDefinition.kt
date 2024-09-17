@@ -82,14 +82,14 @@ data class InputPatchVariableDefinition(
             subjectFields = subjectFields,
             containsSensitivePersonalInformation =
                 containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
-            variableStatus = variableStatus?: previousPatch.variableStatus,
+            variableStatus = variableStatus ?: previousPatch.variableStatus,
             measurementType = measurementType ?: previousPatch.measurementType,
             validUntil = validUntil ?: previousPatch.validUntil,
-            externalReferenceUri = externalReferenceUri?: previousPatch.externalReferenceUri,
+            externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             // TODO depends on authentication to make user information available
             owner = null,
-            contact = contact?: previousPatch.contact,
+            contact = contact ?: previousPatch.contact,
             createdAt = LocalDateTime.now(),
             // TODO depends on authentication to make user information available
             createdBy = null,

@@ -19,36 +19,36 @@ import java.time.LocalDateTime
     example = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE,
 )
 data class InputPatchVariableDefinition(
-    @Nullable
     @Schema(description = NAME_FIELD_DESCRIPTION)
-    val name: LanguageStringType,
     @Nullable
+    val name: LanguageStringType?,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
-    val definition: LanguageStringType,
+    @Nullable
+    val definition: LanguageStringType?,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @KlassId
     val classificationReference: String?,
-    @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
+    @Nullable
     val unitTypes: List<
             @KlassCode("702")
             String,
-            >,
-    @Nullable
+            >?,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
+    @Nullable
     val subjectFields: List<
             @KlassCode("618")
             String,
-            >,
+            >?,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @Nullable
     val containsSensitivePersonalInformation: Boolean?,
-    @Nullable
     @Schema(
         description = VARIABLE_STATUS_FIELD_DESCRIPTION,
         accessMode = Schema.AccessMode.READ_ONLY,
     )
+    @Nullable
     val variableStatus: VariableStatus?,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
@@ -72,11 +72,11 @@ data class InputPatchVariableDefinition(
     fun toSavedVariableDefinition(previousPatch: SavedVariableDefinition): SavedVariableDefinition =
         previousPatch.copy(
             patchId = previousPatch.patchId + 1,
-            name = name,
-            definition = definition,
+            name = name?: previousPatch.name,
+            definition = definition?: previousPatch.definition,
             classificationUri = classificationReference ?: previousPatch.classificationUri,
-            unitTypes = unitTypes,
-            subjectFields = subjectFields,
+            unitTypes = unitTypes?: previousPatch.unitTypes,
+            subjectFields = subjectFields?: previousPatch.subjectFields,
             containsSensitivePersonalInformation =
                 containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
             variableStatus = variableStatus ?: previousPatch.variableStatus,

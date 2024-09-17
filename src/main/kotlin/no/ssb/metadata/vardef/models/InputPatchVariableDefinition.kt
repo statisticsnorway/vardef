@@ -72,11 +72,11 @@ data class InputPatchVariableDefinition(
     fun toSavedVariableDefinition(previousPatch: SavedVariableDefinition): SavedVariableDefinition =
         previousPatch.copy(
             patchId = previousPatch.patchId + 1,
-            name = name?: previousPatch.name,
-            definition = definition?: previousPatch.definition,
+            name = name ?: previousPatch.name,
+            definition = definition ?: previousPatch.definition,
             classificationUri = classificationReference ?: previousPatch.classificationUri,
-            unitTypes = unitTypes?: previousPatch.unitTypes,
-            subjectFields = subjectFields?: previousPatch.subjectFields,
+            unitTypes = unitTypes ?: previousPatch.unitTypes,
+            subjectFields = subjectFields ?: previousPatch.subjectFields,
             containsSensitivePersonalInformation =
                 containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
             variableStatus = variableStatus ?: previousPatch.variableStatus,

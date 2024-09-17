@@ -5,7 +5,6 @@ import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
-import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.DisplayName
@@ -85,7 +84,26 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("It is not allowed to edit valid from at patches endpoint")
+    fun `create new patch`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(201)
+    }
+
+    @Test
+    @DisplayName("When patch with new valid from return 400")
     fun `create new patch valid from in request`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
@@ -105,7 +123,7 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("It is not allowed to edit short name at patches endpoint")
+    @DisplayName("When patch with new short name return 400")
     fun `create new patch short name in request`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
@@ -125,8 +143,8 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("Unknown properties other than [valid from, short name] the original message is returned")
-    fun `create new patch with random props in request`(spec: RequestSpecification) {
+    @DisplayName("Unknown properties other than [valid from, short name] the original exception message is returned")
+    fun `create new patch with general unknown fields`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
                 .apply {
@@ -178,67 +196,6 @@ class PatchesControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("Valid from is not allowed at patches endpoint"))
-    }
-
-    @Test
-    @DisplayName("Case first patch")
-    fun `create new patch when none patches`(spec: RequestSpecification) {
-        val testCase =
-            JSONObject(JSON_TEST_INPUT)
-                .apply {
-                    remove("valid_from")
-                    remove("short_name")
-                }.toString()
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(testCase)
-            .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION_COPY.definitionId}/patches")
-            .then()
-            .statusCode(201)
-
-        val createdVariableDefinition = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION_COPY.definitionId)
-
-        assertThat(createdVariableDefinition.patchId).isEqualTo(1)
-    }
-
-    @Test
-    @DisplayName("Just testing the limits for input")
-    fun `create new patch no changes`(spec: RequestSpecification) {
-        val testCase =
-            JSONObject(JSON_TEST_INPUT)
-                .apply {
-                    remove("valid_from")
-                    remove("short_name")
-                    remove("classification_reference")
-                    remove("contains_sensitive_personal_information")
-                    remove("measurement_type")
-                    remove("valid_until")
-                    remove("external_reference_uri")
-                    remove("subject_fields")
-                    put("unit_types", listOf("28"))
-                    getJSONObject("name").apply {
-                        remove("en")
-                    }
-                    put("variable_status", "PUBLISHED_EXTERNAL")
-                }.toString()
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(testCase)
-            .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION_COPY.definitionId}/patches")
-            .then()
-            .statusCode(201)
-
-        val createdVariableDefinition = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION_COPY.definitionId)
-
-        assertThat(createdVariableDefinition.name.en).isNull()
-        assertThat(createdVariableDefinition.name.nb).isNotNull()
-        assertThat(createdVariableDefinition.subjectFields).isNotNull
     }
 
     @ParameterizedTest

@@ -69,9 +69,7 @@ data class InputPatchVariableDefinition(
     @Nullable
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(
-        previousPatch: SavedVariableDefinition
-    ): SavedVariableDefinition =
+    fun toSavedVariableDefinition(previousPatch: SavedVariableDefinition): SavedVariableDefinition =
         previousPatch.copy(
             patchId = previousPatch.patchId + 1,
             name = name,

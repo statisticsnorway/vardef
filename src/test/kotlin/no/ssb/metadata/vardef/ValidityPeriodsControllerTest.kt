@@ -234,11 +234,10 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `post no valid from`(spec: RequestSpecification) {
-        val modifiedJson: String = postValidityPeriodValidFromNull()
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(modifiedJson)
+            .body(postValidityPeriodValidFromNull())
             .`when`()
             .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
             .then()
@@ -246,7 +245,7 @@ class ValidityPeriodsControllerTest {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Failed to convert argument",
+                    "Error deserializing type: InputVariableDefinition newPeriod",
                 ),
             )
     }

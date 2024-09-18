@@ -80,7 +80,7 @@ class VariableDefinitionByIdController {
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "200", description = "Successfully updated")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
-    @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status DRAFT or DEPRECATED.")
+    @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status other than DRAFT.")
     @Patch
     fun updateVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,

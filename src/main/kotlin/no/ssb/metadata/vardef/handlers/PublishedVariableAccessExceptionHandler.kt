@@ -18,7 +18,7 @@ import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
     Requires(classes = [PublishedVariableAccessException::class, ExceptionHandler::class]),
 )
 class PublishedVariableAccessExceptionHandler(
-    private val errorResponseProcessor: ErrorResponseProcessor<Any>,
+    private val errorResponseProcessor: ErrorResponseProcessor<*>,
 ) : ExceptionHandler<PublishedVariableAccessException, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,

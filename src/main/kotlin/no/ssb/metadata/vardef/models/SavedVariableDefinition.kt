@@ -95,6 +95,22 @@ data class SavedVariableDefinition(
             contact = contact,
         )
 
+    fun toInputPatchVariableDefinition(): InputPatchVariableDefinition =
+        InputPatchVariableDefinition(
+            name = name,
+            definition = definition,
+            classificationReference = classificationUri?.split("/")?.lastOrNull(),
+            unitTypes = unitTypes,
+            subjectFields = subjectFields,
+            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            variableStatus = variableStatus,
+            measurementType = measurementType,
+            validUntil = validUntil,
+            externalReferenceUri = externalReferenceUri,
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
+            contact = contact,
+        )
+
     fun toFullResponseVariableDefinition(): FullResponseVariableDefinition =
         FullResponseVariableDefinition(
             id = definitionId,

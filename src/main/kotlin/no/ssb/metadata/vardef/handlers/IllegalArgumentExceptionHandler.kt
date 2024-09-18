@@ -27,7 +27,7 @@ import jakarta.inject.Singleton
     Requires(classes = [IllegalArgumentException::class, ExceptionHandler::class]),
 )
 class IllegalArgumentExceptionHandler(
-    private val errorResponseProcessor: ErrorResponseProcessor<Any>,
+    private val errorResponseProcessor: ErrorResponseProcessor<*>,
 ) : ExceptionHandler<IllegalArgumentException, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,

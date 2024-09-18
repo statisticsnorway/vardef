@@ -4,12 +4,10 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.VariableStatus
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.equalTo
+import no.ssb.metadata.vardef.utils.*
+import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.Matchers.*
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -87,8 +85,79 @@ class PatchesControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new patch`(spec: RequestSpecification) {
-        val previousPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                    getJSONObject("name").apply {
+                        put("nb", "Bybakgrunn")
+                    }
+                }.toString()
 
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("id", equalTo(SAVED_VARIABLE_DEFINITION.definitionId))
+
+        val createdPatch = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId)
+        val previousPatch =
+            variableDefinitionService.getOnePatchById(
+                SAVED_VARIABLE_DEFINITION.definitionId,
+                createdPatch.patchId - 1,
+            )
+
+        assertThat(createdPatch.shortName).isEqualTo(previousPatch.shortName)
+        assertThat(createdPatch.validFrom).isEqualTo(previousPatch.validFrom)
+        assertThat(createdPatch.name.nb).isNotEqualTo(previousPatch.name.nb)
+        assertThat(createdPatch.name.en).isEqualTo(previousPatch.name.en)
+    }
+
+    @Test
+    fun `create new patch valid from in request`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))
+    }
+
+    @Test
+    fun `create new patch short name in request`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("valid_from")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
+    }
+
+    @Test
+    fun `create new patch valid from and short name in request`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -96,17 +165,40 @@ class PatchesControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
-            .statusCode(201)
-            .body("patch_id", equalTo(previousPatchId + 1))
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
+
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(400)
+            .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))
     }
 
     @ParameterizedTest
-    @EnumSource(value = VariableStatus::class, names = arrayOf("PUBLISHED.*"), mode = EnumSource.Mode.MATCH_NONE)
+    @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
     fun `create new patch with invalid status`(
         variableStatus: VariableStatus,
         spec: RequestSpecification,
     ) {
-        var id =
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("valid_from")
+                    remove("short_name")
+                }.toString()
+
+        val id =
             variableDefinitionService
                 .save(
                     INPUT_VARIABLE_DEFINITION
@@ -118,7 +210,7 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT)
+            .body(testCase)
             .`when`()
             .post("/variable-definitions/$id/patches")
             .then()

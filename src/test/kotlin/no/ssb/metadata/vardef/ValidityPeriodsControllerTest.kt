@@ -89,6 +89,7 @@ class ValidityPeriodsControllerTest {
                             put("nn", "For personer født på siden")
                             put("en", "Persons born on the side")
                         }
+                        remove("short_name")
                     }.toString()
             return testCase
         }
@@ -104,6 +105,8 @@ class ValidityPeriodsControllerTest {
                             put("nn", "For personer født i går")
                             put("en", "person born yesterday")
                         }
+                        remove("valid_until")
+                        remove("short_name")
                     }.toString()
             return testCase
         }
@@ -119,6 +122,7 @@ class ValidityPeriodsControllerTest {
                             put("nn", "For personer født i går")
                             put("en", "person born yesterday")
                         }
+                        remove("short_name")
                     }.toString()
             return testCase
         }
@@ -134,6 +138,7 @@ class ValidityPeriodsControllerTest {
                             put("nn", "For personer født")
                             put("en", "person born yesterday")
                         }
+                        remove("short_name")
                     }.toString()
             return testCase
         }
@@ -144,6 +149,7 @@ class ValidityPeriodsControllerTest {
                 JSONObject(JSON_TEST_INPUT)
                     .apply {
                         put("valid_from", "null")
+                        remove("short_name")
                     }.toString()
             return testCase
         }
@@ -159,11 +165,11 @@ class ValidityPeriodsControllerTest {
                             put("nn", "For personer født i går")
                             put("en", "person born yesterday")
                         }
-                        put("short_name","something")
+                        put("short_name", "something")
                     }.toString()
             return testCase
-    }
         }
+    }
 
     @Test
     fun `create new validity period not all definitions changed`(spec: RequestSpecification) {
@@ -236,7 +242,11 @@ class ValidityPeriodsControllerTest {
             .statusCode(400)
             .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
 
-        val correctValidFrom = JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2030-01-11") }.toString()
+        val correctValidFrom =
+            JSONObject(JSON_TEST_INPUT).apply {
+                put("valid_from", "2030-01-11")
+                remove("short_name")
+            }.toString()
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -261,7 +271,8 @@ class ValidityPeriodsControllerTest {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Error deserializing type: InputVariableDefinition newPeriod",
+                    "Failed to convert argument [newPeriod] for value [null] due to: Error deserializing type: " +
+                        "InputValidityPeriod newPeriod",
                 ),
             )
     }
@@ -279,7 +290,7 @@ class ValidityPeriodsControllerTest {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Failed to convert argument",
+                    "short_name may not be specified here",
                 ),
             )
     }

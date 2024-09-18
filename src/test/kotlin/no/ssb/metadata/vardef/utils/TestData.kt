@@ -40,6 +40,37 @@ val INPUT_VARIABLE_DEFINITION =
             ),
     )
 
+val INPUT_VALIDITY_PERIOD =
+    InputValidityPeriod(
+        name =
+            LanguageStringType(
+                nb = "Landbakgrunn",
+                nn = "Landbakgrunn",
+                en = "Country Background",
+            ),
+        definition =
+            LanguageStringType(
+                nb = "For personer født",
+                nn = null,
+                en = "Country background is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("", ""),
+        subjectFields = listOf("", ""),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.DRAFT,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    )
+
 val INPUT_VARIABLE_DEFINITION_COPY =
     INPUT_VARIABLE_DEFINITION.copy(
         name =

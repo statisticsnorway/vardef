@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
-import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.InputValidityPeriod
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
@@ -98,7 +98,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         fun provideTestDataCheckDefinition(): Stream<Arguments> =
             Stream.of(
                 Arguments.of(
-                    INPUT_VARIABLE_DEFINITION.copy(
+                    INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
                                 nb = "For personer født",
@@ -109,7 +109,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     false,
                 ),
                 Arguments.of(
-                    INPUT_VARIABLE_DEFINITION.copy(
+                    INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
                                 nb = "For personer født i går",
@@ -120,7 +120,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     true,
                 ),
                 Arguments.of(
-                    INPUT_VARIABLE_DEFINITION.copy(
+                    INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
                                 nb = "For personer født",
@@ -131,7 +131,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     false,
                 ),
                 Arguments.of(
-                    INPUT_VARIABLE_DEFINITION.copy(
+                    INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
                                 nb = "For personer født i går",
@@ -142,7 +142,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     false,
                 ),
                 Arguments.of(
-                    INPUT_VARIABLE_DEFINITION.copy(
+                    INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
                                 nb = "Hester og kuer født",
@@ -158,7 +158,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("provideTestDataCheckDefinition")
     fun `check definition texts for all languages`(
-        inputObject: InputVariableDefinition,
+        inputObject: InputValidityPeriod,
         expected: Boolean,
     ) {
         val actualResult = variableDefinitionService.isNewDefinition(inputObject, SAVED_VARIABLE_DEFINITION)

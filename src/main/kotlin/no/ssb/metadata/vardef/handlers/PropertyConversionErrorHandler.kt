@@ -51,7 +51,7 @@ private fun getErrorMessage(exception: ConversionErrorException): String? {
     val cause = exception.cause
     return if (cause is SerdeException && cause.message != null) {
         when {
-            "Unknown property [valid_from]" in cause.message!! -> "Valid from is not allowed at patches endpoint"
+            "Unknown property [valid_from]" in cause.message!! -> "valid_from may not be specified here"
             "Unknown property [short_name]" in cause.message!! -> "ShortName is not editable"
             else -> exception.message
         }

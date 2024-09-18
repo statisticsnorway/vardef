@@ -70,7 +70,7 @@ data class InputValidityPeriod(
     @Valid
     @Nullable
     val contact: Contact?,
-){
+) {
     fun toSavedVariableDefinition(previousPatch: SavedVariableDefinition): SavedVariableDefinition =
         previousPatch.copy(
             patchId = previousPatch.patchId + 1,

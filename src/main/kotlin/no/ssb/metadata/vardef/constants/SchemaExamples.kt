@@ -106,7 +106,6 @@ const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
 }
 """
 
-
 const val INPUT_VALIDITY_PERIOD_EXAMPLE = """
 {
     "name": {

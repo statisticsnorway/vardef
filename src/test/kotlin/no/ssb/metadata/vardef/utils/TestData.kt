@@ -118,6 +118,7 @@ val SAVED_VARIABLE_DEFINITION_COPY =
     SAVED_VARIABLE_DEFINITION.copy(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
+        patchId = 1,
         name =
             LanguageStringType(
                 nb = "Landbakgrunn 2",

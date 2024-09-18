@@ -1,9 +1,6 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.MediaType
-import io.micronaut.http.MutableHttpResponse
+import io.micronaut.http.*
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
@@ -16,7 +13,7 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
-import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.InputPatchVariableDefinition
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -86,7 +83,7 @@ class PatchesController {
      * Create a new patch for a variable definition.
      *
      */
-    @Post()
+    @Post
     @Status(HttpStatus.CREATED)
     @ApiResponse(
         responseCode = "201",
@@ -108,13 +105,16 @@ class PatchesController {
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
         variableDefinitionId: String,
-        @Parameter(example = INPUT_VARIABLE_DEFINITION_EXAMPLE) @Body @Valid patch: InputVariableDefinition,
+        @Parameter(example = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE) @Body @Valid patch: InputPatchVariableDefinition,
     ): FullResponseVariableDefinition {
-        // TODO validate content of the new patch
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
+
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw PublishedVariableAccessException()
         }
-        return varDefService.save(patch.toSavedVariableDefinition(latestExistingPatch.patchId)).toFullResponseVariableDefinition()
+
+        return varDefService.save(
+            patch.toSavedVariableDefinition(latestExistingPatch),
+        ).toFullResponseVariableDefinition()
     }
 }

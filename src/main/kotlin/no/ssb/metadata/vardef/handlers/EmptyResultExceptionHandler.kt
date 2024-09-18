@@ -17,7 +17,7 @@ import jakarta.inject.Singleton
     Requires(classes = [EmptyResultException::class, ExceptionHandler::class]),
 )
 class EmptyResultExceptionHandler(
-    private val errorResponseProcessor: ErrorResponseProcessor<Any>,
+    private val errorResponseProcessor: ErrorResponseProcessor<*>,
 ) : ExceptionHandler<EmptyResultException, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,

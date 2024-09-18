@@ -7,10 +7,7 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.InputVariableDefinition
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
 
@@ -136,8 +133,8 @@ class VariableDefinitionService(
             latestExistingPatch
                 .copy(
                     validUntil = endDate,
-                ).toInputVariableDefinition()
-                .toSavedVariableDefinition(latestExistingPatch.patchId),
+                ).toInputPatchVariableDefinition()
+                .toSavedVariableDefinition(latestExistingPatch),
         )
     }
 

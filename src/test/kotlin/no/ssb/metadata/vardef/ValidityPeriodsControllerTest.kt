@@ -74,7 +74,7 @@ class ValidityPeriodsControllerTest {
             },
         )
 
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition(null))
+        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
     }
 
     companion object {
@@ -307,7 +307,7 @@ class ValidityPeriodsControllerTest {
                     INPUT_VARIABLE_DEFINITION
                         .apply {
                             this.variableStatus = variableStatus
-                        }.toSavedVariableDefinition(null),
+                        }.toSavedVariableDefinition(),
                 ).definitionId
         spec
             .given()

@@ -204,7 +204,7 @@ class PatchesControllerTest : BaseVardefTest() {
                     INPUT_VARIABLE_DEFINITION
                         .apply {
                             this.variableStatus = variableStatus
-                        }.toSavedVariableDefinition(null),
+                        }.toSavedVariableDefinition(),
                 ).definitionId
 
         spec

@@ -75,8 +75,7 @@ data class InputVariableDefinition(
     @Valid
     val contact: Contact?,
 ) {
-    // TODO When data class for new ValidityPeriod then remove previousPatchId param and set patchId to 1
-    fun toSavedVariableDefinition(previousPatchId: Int?): SavedVariableDefinition =
+    fun toSavedVariableDefinition(): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: NanoId.generate(8),
             patchId = 1,

@@ -11,6 +11,7 @@ spec:
   port: 8080
 
   ingresses:
+    - https://vardef.intern.test.ssb.no
     - https://vardef.test.ssb.cloud.nais.io
 
   accessPolicy:

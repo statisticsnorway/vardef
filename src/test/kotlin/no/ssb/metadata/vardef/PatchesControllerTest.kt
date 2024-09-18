@@ -135,7 +135,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("Valid from is not allowed at patches endpoint"))
+            .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))
     }
 
     @Test
@@ -154,7 +154,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("ShortName is not editable"))
+            .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
     }
 
     @Test
@@ -193,7 +193,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("ShortName is not editable"))
+            .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
 
         val testCase =
             JSONObject(JSON_TEST_INPUT)
@@ -209,7 +209,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("Valid from is not allowed at patches endpoint"))
+            .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))
     }
 
     @ParameterizedTest

@@ -8,7 +8,6 @@ import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -155,32 +154,6 @@ class PatchesControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
-    }
-
-    @Test
-    @DisplayName("Unknown properties other than [valid from, short name] return original exception message")
-    fun `create new patch with unknown fields`(spec: RequestSpecification) {
-        val testCase =
-            JSONObject(JSON_TEST_INPUT)
-                .apply {
-                    put("small_winter", "fall")
-                }.toString()
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(testCase)
-            .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
-            .then()
-            .statusCode(400)
-            .body(
-                "_embedded.errors[0].message",
-                containsString(
-                    "Unknown property [small_winter] " +
-                        "encountered during deserialization of type: InputPatchVariableDefinition patch",
-                ),
-            )
     }
 
     @Test

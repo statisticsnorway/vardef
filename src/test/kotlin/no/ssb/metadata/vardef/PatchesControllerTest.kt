@@ -85,7 +85,6 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("Change name in norwegian")
     fun `create new patch`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
@@ -121,7 +120,6 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("When patch with new valid from return 400")
     fun `create new patch valid from in request`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
@@ -141,7 +139,6 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("When patch with new short name return 400")
     fun `create new patch short name in request`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
@@ -161,7 +158,7 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("Unknown properties other than [valid from, short name] the original exception message is returned")
+    @DisplayName("Unknown properties other than [valid from, short name] return original exception message")
     fun `create new patch with unknown fields`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)
@@ -187,7 +184,6 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    @DisplayName("When both unknown properties present, short name error is caught first")
     fun `create new patch valid from and short name in request`(spec: RequestSpecification) {
         spec
             .given()

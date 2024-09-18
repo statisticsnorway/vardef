@@ -147,7 +147,23 @@ class ValidityPeriodsControllerTest {
                     }.toString()
             return testCase
         }
+
+        @JvmStatic
+        fun postValidityPeriodInvalidField(): String {
+            val testCase =
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("valid_from", "2040-01-11")
+                        getJSONObject("definition").apply {
+                            put("nb", "For personer født i går")
+                            put("nn", "For personer født i går")
+                            put("en", "person born yesterday")
+                        }
+                        put("short_name","something")
+                    }.toString()
+            return testCase
     }
+        }
 
     @Test
     fun `create new validity period not all definitions changed`(spec: RequestSpecification) {
@@ -239,6 +255,24 @@ class ValidityPeriodsControllerTest {
             .given()
             .contentType(ContentType.JSON)
             .body(modifiedJson)
+            .`when`()
+            .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
+            .then()
+            .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "Failed to convert argument",
+                ),
+            )
+    }
+
+    @Test
+    fun `create validity period new short name`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(postValidityPeriodInvalidField())
             .`when`()
             .post("/variable-definitions/${savedVariableDefinition.definitionId}/validity-periods")
             .then()

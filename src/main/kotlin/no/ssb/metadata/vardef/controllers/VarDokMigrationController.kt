@@ -57,7 +57,9 @@ class VarDokMigrationController {
     )
     @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
     fun createVariableDefinitionFromVarDok(
-        @Parameter(name = "The ID of the definition in Vardok.", example = "1607") @PathVariable("vardok-id") id: String,
+        @Parameter(name = "vardok-id", description = "The ID of the definition in Vardok.", example = "1607")
+        @PathVariable("vardok-id")
+        id: String,
     ): InputVariableDefinition? {
         try {
             val varDefInput =

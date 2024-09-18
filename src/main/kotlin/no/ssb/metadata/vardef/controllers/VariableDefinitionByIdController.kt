@@ -38,13 +38,16 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get()
     fun getVariableDefinitionById(
-        @Schema(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
+        @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
         id: String,
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
-        @Schema(description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION, example = DATE_EXAMPLE, format = "YYYY-MM-DD")
+        @Parameter(
+            description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
+            examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
+        )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
     ): MutableHttpResponse<RenderedVariableDefinition?>? =

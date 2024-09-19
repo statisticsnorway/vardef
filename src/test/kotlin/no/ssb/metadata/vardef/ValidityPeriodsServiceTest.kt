@@ -17,21 +17,16 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @Test
     fun `end validity period`() {
         val newValidityPeriodValidFrom = LocalDate.of(2024, 9, 2)
-
+        val latestPatch = variableDefinitionService.getLatestPatchById(savedVariableDefinitionId)
         val patchEndValidityPeriod =
             variableDefinitionService.endLastValidityPeriod(
                 savedVariableDefinitionId,
                 newValidityPeriodValidFrom,
             )
-        val expectedNewPatchId =
-            variableDefinitionService.getLatestPatchById(
-                savedVariableDefinitionId,
-            ).patchId
-        val expectedValidUntil = newValidityPeriodValidFrom.minus(Period.ofDays(1))
 
         assertThat(patchEndValidityPeriod.validUntil).isAfter(patchEndValidityPeriod.validFrom)
-        assertThat(patchEndValidityPeriod.patchId).isEqualTo(expectedNewPatchId)
-        assertThat(patchEndValidityPeriod.validUntil).isEqualTo(expectedValidUntil)
+        assertThat(patchEndValidityPeriod.patchId).isEqualTo(latestPatch.patchId + 1)
+        assertThat(patchEndValidityPeriod.validUntil).isEqualTo(newValidityPeriodValidFrom.minus(Period.ofDays(1)))
     }
 
     companion object {

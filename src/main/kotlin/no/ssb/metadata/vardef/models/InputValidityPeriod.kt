@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
+import jakarta.validation.constraints.NotNull
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -23,6 +24,7 @@ data class InputValidityPeriod(
     @Nullable
     val name: LanguageStringType?,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
+    @NotNull
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
@@ -55,6 +57,7 @@ data class InputValidityPeriod(
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format("yyyy-MM-dd")
+    @NotNull
     val validFrom: LocalDate,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable

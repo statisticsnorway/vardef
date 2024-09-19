@@ -4,7 +4,6 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
-import no.ssb.metadata.vardef.ValidityPeriodsControllerTest.Companion.newValidityPeriod
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.BaseVardefTest
@@ -291,7 +290,10 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @Test
     fun `post not allowed`(spec: RequestSpecification) {
-        val input = JSONObject(JSON_TEST_INPUT).apply { put("short_name", "nothing") }.toString()
+        val input =
+            JSONObject(JSON_TEST_INPUT).apply {
+                put("short_name", "nothing")
+            }.toString()
 
         spec
             .given()

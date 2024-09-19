@@ -7,7 +7,7 @@ micronaut:
     static-resources:
       swagger:
         paths: classpath:META-INF/swagger
-        mapping: /swagger/**
+        mapping: /docs/openapi/**
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /docs/swagger/**
@@ -20,6 +20,7 @@ micronaut:
         strategy: SNAKE_CASE
     views:
       spec: |
+        mapping.path=docs/openapi,
         swagger-ui.enabled=true,
         swagger-ui.js.url=/docs/swagger/res/,
         swagger-ui.tagsSorter=Function=(a => a),

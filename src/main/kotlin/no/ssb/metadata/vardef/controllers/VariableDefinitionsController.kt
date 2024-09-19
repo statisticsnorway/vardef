@@ -60,7 +60,7 @@ class VariableDefinitionsController {
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             schema = Schema(format = "YYYY-MM-DD"),
-            example = DATE_EXAMPLE,
+            examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
         )
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =

@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef.constants
 
-const val ID_EXAMPLE = """"wypvb3wd""""
+const val ID_EXAMPLE = """wypvb3wd"""
 
 const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """{
     "name": {
@@ -37,7 +37,7 @@ const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """{
 """
 
 const val FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE = """{
-    "id": $ID_EXAMPLE,
+    "id": "$ID_EXAMPLE",
     "patch_id": 1,
     "name": {
         "en": "Country Background",
@@ -158,7 +158,7 @@ const val CONTACT_EXAMPLE = """{
 """
 
 const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
-    "id": $ID_EXAMPLE,
+    "id": "$ID_EXAMPLE",
     "name": "Landbakgrunn",
     "short_name": "string",
     "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",

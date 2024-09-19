@@ -106,6 +106,39 @@ const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
 }
 """
 
+const val INPUT_VALIDITY_PERIOD_EXAMPLE = """
+{
+    "name": {
+        "en": "Country Background",
+        "nb": "Landbakgrunnen",
+        "nn": "Landbakgrunnen"
+    },
+    "definition": {
+        "en": "Country background is the mothers birth country.",
+        "nb": "For personer født i utlandet er dette mors fødeland.",
+        "nn": "For personar fødd i utlandet mors fødeland."
+    },
+    "classification_reference": "91",
+    "unit_types": ["01", "05"],
+    "subject_fields": ["he04"],
+    "contains_sensitive_personal_information": false,
+    "measurement_type": null,
+    "valid_from": "2026-01-02",
+    "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "related_variable_definition_uris": [
+        "https://example.com/"
+    ],
+    "contact": {
+        "title": {
+            "en": "Division for population statistics",
+            "nb": "Seksjon for befolkningsstatistikk",
+            "nn": "Seksjon for befolkningsstatistikk"
+        },
+        "email": "s320@ssb.no"
+    }
+}
+"""
+
 const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
             "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
             "code": "be07",

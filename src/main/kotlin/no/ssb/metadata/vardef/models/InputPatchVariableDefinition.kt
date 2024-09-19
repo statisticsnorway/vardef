@@ -84,12 +84,7 @@ data class InputPatchVariableDefinition(
             validUntil = validUntil ?: previousPatch.validUntil,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            // TODO depends on authentication to make user information available
-            owner = null,
             contact = contact ?: previousPatch.contact,
-            createdAt = LocalDateTime.now(),
-            // TODO depends on authentication to make user information available
-            createdBy = null,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
             // TODO depends on authentication to make user information available

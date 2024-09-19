@@ -162,7 +162,7 @@ class VariableDefinitionService(
      * `false` otherwise
      */
     fun isNewDefinition(
-        newDefinition: InputVariableDefinition,
+        newDefinition: InputValidityPeriod,
         latestExistingPatch: SavedVariableDefinition,
     ): Boolean {
         val allLanguagesPresent =
@@ -199,7 +199,7 @@ class VariableDefinitionService(
      * @return The newly saved variable definition with the updated validity period.
      */
     fun saveNewValidityPeriod(
-        newPeriod: InputVariableDefinition,
+        newPeriod: InputValidityPeriod,
         definitionId: String,
     ): SavedVariableDefinition {
         val patches = listAllPatchesById(definitionId)
@@ -207,11 +207,11 @@ class VariableDefinitionService(
         return if (newPeriod.validFrom.isBefore(patches.first().validFrom)) {
             newPeriod
                 .copy(validUntil = patches.first().validFrom.minusDays(1))
-                .toSavedVariableDefinition(patches.last().patchId)
+                .toSavedVariableDefinition(patches.last())
                 .let { save(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
-                .let { newPeriod.toSavedVariableDefinition(it.patchId) }
+                .let { newPeriod.toSavedVariableDefinition(it) }
                 .let { save(it) }
         }
     }

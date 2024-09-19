@@ -13,9 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
-
 class ValidityPeriodsControllerTest : BaseVardefTest() {
-
     /**
      * test cases new validity period.
      */
@@ -38,7 +36,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                     getJSONObject("definition").apply {
                         put("nb", "For personer født på mandag")
                         put("nn", "For personer født på mandag")
-                        put("en","Persons born on the side")
+                        put("en", "Persons born on the side")
                     }
                     remove("short_name")
                 }.toString()
@@ -160,7 +158,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .body(
                 containsString(
                     "The date selected cannot be added because it falls between previously added valid " +
-                            "from dates.",
+                        "from dates.",
                 ),
             )
     }

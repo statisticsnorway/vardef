@@ -6,10 +6,10 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
-import jakarta.validation.constraints.NotNull
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime

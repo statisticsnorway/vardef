@@ -23,6 +23,11 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             val testCase =
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("valid_from", "2040-01-11")
+                    getJSONObject("definition").apply {
+                        put("nb", "For personer født på siden")
+                        put("nn", "For personer født på siden")
+                        put("en", "Persons born on the side")
+                    }
                     remove("short_name")
                 }.toString()
             return testCase

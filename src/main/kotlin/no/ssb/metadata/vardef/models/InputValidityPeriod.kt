@@ -90,8 +90,6 @@ data class InputValidityPeriod(
             validUntil = validUntil ?: previousPatch.validUntil,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            // TODO depends on authentication to make user information available
-            owner = null,
             contact = contact ?: previousPatch.contact,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),

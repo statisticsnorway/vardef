@@ -89,14 +89,12 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         )
     }
 
-    /*@Test
+    @Test
     fun `save new validity period before all valid from`() {
-        val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId
         val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
         val saveNewValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
-                INPUT_VARIABLE_DEFINITION.copy(
-                    id = savedVariableDefinitionId,
+                INPUT_VALIDITY_PERIOD.copy(
                     validFrom = LocalDate.of(1796, 1, 1),
                     validUntil = null,
                 ),
@@ -104,11 +102,10 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             )
         val patchesAfterSave = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
 
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(4)
-        assertThat(patchesAfterSave.size).isEqualTo(patches.size + 1)
+        assertThat(saveNewValidityPeriod.patchId).isEqualTo(patches.last().patchId + 1)
         assertThat(saveNewValidityPeriod.validUntil).isEqualTo(
             patchesAfterSave.first().validFrom.minusDays(1),
         )
         assertThat(saveNewValidityPeriod.validFrom).isBefore(patchesAfterSave.first().validFrom)
-    }*/
+    }
 }

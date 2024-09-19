@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.models.InputValidityPeriod
-import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -11,7 +10,6 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 import java.time.Period
 import java.util.stream.Stream
-
 
 class ValidityPeriodsServiceTest : BaseVardefTest() {
     private val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId

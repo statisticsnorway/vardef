@@ -34,5 +34,3 @@ spec:
   system: metadata
   owner: dapla-metadata-developers
   lifecycle: experimental
-  definition:
-   $text: ./openapi/openapi.yaml

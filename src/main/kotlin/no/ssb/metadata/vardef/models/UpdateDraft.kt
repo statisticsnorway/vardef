@@ -22,7 +22,7 @@ import java.time.LocalDate
 @Schema(
     example = DRAFT_EXAMPLE,
 )
-data class UpdateVariableDefinition(
+data class UpdateDraft(
     @Nullable
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType?,

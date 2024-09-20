@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*
+import io.micronaut.http.annotation.Patch
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
@@ -87,7 +88,7 @@ class VariableDefinitionByIdController {
     @Patch
     fun updateVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
-        @Body @Valid varDefUpdates: UpdateVariableDefinition,
+        @Body @Valid updateDraft: UpdateDraft,
     ): Draft {
         val variable = varDefService.getLatestPatchById(id)
         if (variable.variableStatus != VariableStatus.DRAFT) {
@@ -96,6 +97,6 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
         }
-        return varDefService.update(varDefService.getLatestPatchById(id).copyAndUpdate(varDefUpdates)).toDraft()
+        return varDefService.update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft)).toDraft()
     }
 }

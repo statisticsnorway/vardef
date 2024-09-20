@@ -135,7 +135,7 @@ data class SavedVariableDefinition(
             createdBy = createdBy,
         )
 
-    fun copyAndUpdate(varDefUpdates: UpdateVariableDefinition): SavedVariableDefinition =
+    fun copyAndUpdate(varDefUpdates: UpdateDraft): SavedVariableDefinition =
         copy(
             // Carry over value from existing object
             id = id,

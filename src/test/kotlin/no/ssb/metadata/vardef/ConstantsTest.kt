@@ -7,7 +7,7 @@ import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.constants.RENDERED_VARIABLE_DEFINITION_EXAMPLE
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
-import no.ssb.metadata.vardef.models.UpdateVariableDefinition
+import no.ssb.metadata.vardef.models.UpdateDraft
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -55,7 +55,7 @@ class ConstantsTest {
         Assertions.assertNotNull(
             jsonMapper.readValue(
                 DRAFT_EXAMPLE,
-                UpdateVariableDefinition::class.java,
+                UpdateDraft::class.java,
             ),
         )
     }

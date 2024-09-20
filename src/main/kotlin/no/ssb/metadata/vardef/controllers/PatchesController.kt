@@ -1,11 +1,15 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.http.*
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
+import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
@@ -33,11 +37,25 @@ class PatchesController {
      */
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @ApiResponse(
+        responseCode = "200",
+        content = [
+            io.swagger.v3.oas.annotations.media.Content(
+                examples = [
+                    io.swagger.v3.oas.annotations.media.ExampleObject(
+                        name = "one_patch",
+                        value = """[$FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE]""",
+                    ),
+                ],
+            ),
+        ],
+    )
     @Get
     fun getAllPatches(
-        @PathVariable(
-            "variable-definition-id",
-        ) @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE) @VardefId variableDefinitionId: String,
+        @PathVariable("variable-definition-id")
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
+        @VardefId
+        variableDefinitionId: String,
     ): MutableHttpResponse<List<FullResponseVariableDefinition>> =
         HttpResponse
             .ok(
@@ -58,6 +76,7 @@ class PatchesController {
             io.swagger.v3.oas.annotations.media.Content(
                 examples = [
                     io.swagger.v3.oas.annotations.media.ExampleObject(
+                        name = "patch_1",
                         value = FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE,
                     ),
                 ],
@@ -67,10 +86,13 @@ class PatchesController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/{patch-id}")
     fun getOnePatch(
-        @PathVariable(
-            "variable-definition-id",
-        ) @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE) @VardefId variableDefinitionId: String,
-        @PathVariable("patch-id") @Parameter(example = "1") patchId: Int,
+        @PathVariable("variable-definition-id")
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
+        @VardefId
+        variableDefinitionId: String,
+        @PathVariable("patch-id")
+        @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "patch_1", value = "1")])
+        patchId: Int,
     ): MutableHttpResponse<FullResponseVariableDefinition> =
         HttpResponse
             .ok(
@@ -92,6 +114,7 @@ class PatchesController {
             io.swagger.v3.oas.annotations.media.Content(
                 examples = [
                     io.swagger.v3.oas.annotations.media.ExampleObject(
+                        name = "create_patch",
                         value = FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE,
                     ),
                 ],
@@ -99,13 +122,16 @@ class PatchesController {
         ],
     )
     @ApiResponse(responseCode = "400", description = "Bad request.")
-    @ApiResponse(responseCode = "405", description = "Method not allowed.")
+    @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     fun createPatch(
         @PathVariable("variable-definition-id")
-        @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
-        @Parameter(example = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE) @Body @Valid patch: InputPatchVariableDefinition,
+        @Parameter(examples = [ExampleObject(name = "create_patch", value = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE)])
+        @Body
+        @Valid
+        patch: InputPatchVariableDefinition,
     ): FullResponseVariableDefinition {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
 
@@ -113,8 +139,9 @@ class PatchesController {
             throw PublishedVariableAccessException()
         }
 
-        return varDefService.save(
-            patch.toSavedVariableDefinition(latestExistingPatch),
-        ).toFullResponseVariableDefinition()
+        return varDefService
+            .save(
+                patch.toSavedVariableDefinition(latestExistingPatch),
+            ).toFullResponseVariableDefinition()
     }
 }

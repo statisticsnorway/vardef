@@ -35,19 +35,25 @@ class VariableDefinitionByIdController {
      */
     @Tag(name = VARIABLE_DEFINITIONS)
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiResponse(responseCode = "200", content = [Content(examples = [ExampleObject(value = RENDERED_VARIABLE_DEFINITION_EXAMPLE)])])
+    @ApiResponse(
+        responseCode = "200",
+        content = [Content(examples = [ExampleObject(name = "No date specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE)])],
+    )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get()
     fun getVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
         id: String,
-        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Parameter(
+            description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
+            examples = [ExampleObject(name = "No date specified", value = DEFAULT_LANGUAGE)],
+        )
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
+            examples = [ExampleObject(name = "No date specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
@@ -66,12 +72,14 @@ class VariableDefinitionByIdController {
      * Delete a variable definition.
      */
     @Tag(name = DRAFT)
-    @ApiResponse(responseCode = "204", description = "Successfully deleted", content = [Content()])
+    @ApiResponse(responseCode = "204", description = "Successfully deleted")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Status(HttpStatus.NO_CONTENT)
     @Delete()
     fun deleteVariableDefinitionById(
-        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
+        @VardefId
+        id: String,
     ): MutableHttpResponse<Unit> {
         varDefService.deleteById(id = id)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611

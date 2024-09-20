@@ -16,7 +16,7 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
-import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -42,12 +42,12 @@ class PatchesController {
         @PathVariable(
             "variable-definition-id",
         ) @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE) @VardefId variableDefinitionId: String,
-    ): MutableHttpResponse<List<FullResponseVariableDefinition>> =
+    ): MutableHttpResponse<List<CompleteResponse>> =
         HttpResponse
             .ok(
                 varDefService
                     .listAllPatchesById(id = variableDefinitionId)
-                    .map { it.toFullResponseVariableDefinition() },
+                    .map { it.toCompleteResponse() },
             ).contentType(MediaType.APPLICATION_JSON)
 
     /**
@@ -75,12 +75,12 @@ class PatchesController {
             "variable-definition-id",
         ) @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE) @VardefId variableDefinitionId: String,
         @PathVariable("patch-id") @Parameter(example = "1") patchId: Int,
-    ): MutableHttpResponse<FullResponseVariableDefinition> =
+    ): MutableHttpResponse<CompleteResponse> =
         HttpResponse
             .ok(
                 varDefService
                     .getOnePatchById(variableDefinitionId, patchId = patchId)
-                    .toFullResponseVariableDefinition(),
+                    .toCompleteResponse(),
             ).contentType(MediaType.APPLICATION_JSON)
 
     /**
@@ -113,7 +113,7 @@ class PatchesController {
         @Body
         @Valid
         patch: Patch,
-    ): FullResponseVariableDefinition {
+    ): CompleteResponse {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
@@ -123,6 +123,6 @@ class PatchesController {
         return varDefService
             .save(
                 patch.toSavedVariableDefinition(latestExistingPatch),
-            ).toFullResponseVariableDefinition()
+            ).toCompleteResponse()
     }
 }

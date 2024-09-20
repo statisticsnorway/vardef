@@ -15,7 +15,7 @@ import no.ssb.metadata.vardef.constants.VALIDITY_PERIODS
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
-import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -40,7 +40,7 @@ class ValidityPeriodsController {
     fun createValidityPeriod(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
         @Body @Valid newPeriod: ValidityPeriod,
-    ): FullResponseVariableDefinition {
+    ): CompleteResponse {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         when {
             !latestExistingPatch.variableStatus.isPublished() ->
@@ -52,6 +52,6 @@ class ValidityPeriodsController {
             !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->
                 throw DefinitionTextUnchangedException()
         }
-        return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toFullResponseVariableDefinition()
+        return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()
     }
 }

@@ -111,8 +111,8 @@ data class SavedVariableDefinition(
             contact = contact,
         )
 
-    fun toFullResponseVariableDefinition(): FullResponseVariableDefinition =
-        FullResponseVariableDefinition(
+    fun toCompleteResponse(): CompleteResponse =
+        CompleteResponse(
             id = definitionId,
             patchId = patchId,
             name = name,

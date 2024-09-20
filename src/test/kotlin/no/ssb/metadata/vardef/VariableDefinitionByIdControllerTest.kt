@@ -198,6 +198,30 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .statusCode(405)
     }
 
+    @Test
+    fun `patch variable with new short name`(spec: RequestSpecification) {
+        val bodyString =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """
+                    {"short_name":"hoppebek"}
+                    """.trimIndent(),
+                ).`when`()
+                .patch("/variable-definitions/${SAVED_DRAFT_VARIABLE_DEFINITION.definitionId}")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .extract()
+                .body()
+                .asString()
+
+        val body = jsonMapper.readValue(bodyString, InputVariableDefinition::class.java)
+        assertThat(body.shortName).isNotEqualTo(SAVED_DRAFT_VARIABLE_DEFINITION.shortName)
+        assertThat(body.id).isEqualTo(SAVED_DRAFT_VARIABLE_DEFINITION.definitionId)
+    }
+
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `update variable definition with invalid inputs`(

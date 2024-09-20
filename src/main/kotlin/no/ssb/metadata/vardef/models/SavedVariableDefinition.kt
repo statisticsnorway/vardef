@@ -11,6 +11,11 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Saved variable definition
+ *
+ * The object which is persisted to the data store. This should not be exposed externally.
+ */
 @Serdeable
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -48,7 +53,14 @@ data class SavedVariableDefinition(
     @Nullable
     var lastUpdatedBy: Person?,
 ) {
-    fun toRenderedVariableDefinition(
+    /**
+     * Render the variable definition, so it's suitable for display to humans.
+     *
+     * @param language The language to render in.
+     * @param klassService The service from which to obtain details for classification codes.
+     * @return The rendered object.
+     */
+    fun render(
         language: SupportedLanguages,
         klassService: KlassService,
     ): RenderedVariableDefinition =

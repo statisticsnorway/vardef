@@ -44,7 +44,7 @@ class VariableDefinitionService(
         }
         return definitionList
             .map {
-                it.toRenderedVariableDefinition(
+                it.render(
                     language,
                     klassService,
                 )
@@ -79,9 +79,9 @@ class VariableDefinitionService(
         dateOfValidity: LocalDate?,
     ): RenderedVariableDefinition {
         if (dateOfValidity != null) {
-            return getLatestPatchByDateAndById(id, dateOfValidity).toRenderedVariableDefinition(language, klassService)
+            return getLatestPatchByDateAndById(id, dateOfValidity).render(language, klassService)
         } else {
-            return getLatestPatchById(id).toRenderedVariableDefinition(language, klassService)
+            return getLatestPatchById(id).render(language, klassService)
         }
     }
 

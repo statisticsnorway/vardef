@@ -73,7 +73,7 @@ const val FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE = """{
 }
 """
 
-const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
+const val PATCH_EXAMPLE = """
 {
     "name": {
         "en": "Country Background",

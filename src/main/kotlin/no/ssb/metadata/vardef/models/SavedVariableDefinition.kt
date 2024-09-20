@@ -95,8 +95,8 @@ data class SavedVariableDefinition(
             contact = contact,
         )
 
-    fun toInputPatchVariableDefinition(): InputPatchVariableDefinition =
-        InputPatchVariableDefinition(
+    fun toPatch(): Patch =
+        Patch(
             name = name,
             definition = definition,
             classificationReference = classificationUri?.split("/")?.lastOrNull(),

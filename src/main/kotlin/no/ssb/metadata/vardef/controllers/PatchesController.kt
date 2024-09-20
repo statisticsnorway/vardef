@@ -1,11 +1,15 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.http.*
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
+import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
@@ -13,7 +17,7 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
-import no.ssb.metadata.vardef.models.InputPatchVariableDefinition
+import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -105,7 +109,10 @@ class PatchesController {
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
         variableDefinitionId: String,
-        @Parameter(example = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE) @Body @Valid patch: InputPatchVariableDefinition,
+        @Parameter(examples = [ExampleObject(name = "create_patch", value = PATCH_EXAMPLE)])
+        @Body
+        @Valid
+        patch: Patch,
     ): FullResponseVariableDefinition {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
 
@@ -113,8 +120,9 @@ class PatchesController {
             throw PublishedVariableAccessException()
         }
 
-        return varDefService.save(
-            patch.toSavedVariableDefinition(latestExistingPatch),
-        ).toFullResponseVariableDefinition()
+        return varDefService
+            .save(
+                patch.toSavedVariableDefinition(latestExistingPatch),
+            ).toFullResponseVariableDefinition()
     }
 }

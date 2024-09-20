@@ -19,9 +19,9 @@ import java.time.LocalDateTime
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = INPUT_VARIABLE_DEFINITION_EXAMPLE,
+    example = DRAFT_EXAMPLE,
 )
-data class InputVariableDefinition(
+data class Draft(
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @Nullable
     var id: String?,

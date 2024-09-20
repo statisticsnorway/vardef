@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -86,7 +86,7 @@ class VariableDefinitionsController {
                 examples = [
                     ExampleObject(
                         name = "Created variable definition",
-                        value = INPUT_VARIABLE_DEFINITION_EXAMPLE,
+                        value = DRAFT_EXAMPLE,
                     ),
                 ],
             ),
@@ -94,8 +94,8 @@ class VariableDefinitionsController {
     )
     @ApiResponse(responseCode = "400", description = "Bad request.")
     fun createVariableDefinition(
-        @Parameter(example = INPUT_VARIABLE_DEFINITION_EXAMPLE) @Body @Valid varDef: InputVariableDefinition,
-    ): InputVariableDefinition {
+        @Parameter(example = DRAFT_EXAMPLE) @Body @Valid varDef: Draft,
+    ): Draft {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
         if (varDef.variableStatus != null) {
             throw HttpStatusException(
@@ -104,6 +104,6 @@ class VariableDefinitionsController {
             )
         }
 
-        return varDefService.save(varDef.toSavedVariableDefinition()).toInputVariableDefinition()
+        return varDefService.save(varDef.toSavedVariableDefinition()).toDraft()
     }
 }

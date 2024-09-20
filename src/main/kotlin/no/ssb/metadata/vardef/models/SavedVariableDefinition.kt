@@ -76,8 +76,8 @@ data class SavedVariableDefinition(
             lastUpdatedBy = lastUpdatedBy,
         )
 
-    fun toInputVariableDefinition(): InputVariableDefinition =
-        InputVariableDefinition(
+    fun toDraft(): Draft =
+        Draft(
             id = definitionId,
             name = name,
             shortName = shortName,

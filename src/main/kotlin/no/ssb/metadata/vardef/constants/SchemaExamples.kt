@@ -2,7 +2,7 @@ package no.ssb.metadata.vardef.constants
 
 const val ID_EXAMPLE = """wypvb3wd"""
 
-const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """{
+const val DRAFT_EXAMPLE = """{
     "name": {
         "en": "Country Background",
         "nb": "Landbakgrunn",

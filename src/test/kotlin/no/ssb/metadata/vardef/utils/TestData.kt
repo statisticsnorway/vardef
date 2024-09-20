@@ -41,7 +41,7 @@ val INPUT_VARIABLE_DEFINITION =
     )
 
 val INPUT_VALIDITY_PERIOD =
-    InputValidityPeriod(
+    ValidityPeriod(
         name =
             LanguageStringType(
                 nb = "Landbakgrunn",

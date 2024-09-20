@@ -7,10 +7,10 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.InputValidityPeriod
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
 
@@ -165,7 +165,7 @@ class VariableDefinitionService(
      * `false` otherwise
      */
     fun isNewDefinition(
-        newDefinition: InputValidityPeriod,
+        newDefinition: ValidityPeriod,
         latestExistingPatch: SavedVariableDefinition,
     ): Boolean {
         val allLanguagesPresent =
@@ -202,7 +202,7 @@ class VariableDefinitionService(
      * @return The newly saved variable definition with the updated validity period.
      */
     fun saveNewValidityPeriod(
-        newPeriod: InputValidityPeriod,
+        newPeriod: ValidityPeriod,
         definitionId: String,
     ): SavedVariableDefinition {
         val patches = listAllPatchesById(definitionId)

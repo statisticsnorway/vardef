@@ -16,7 +16,7 @@ import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
-import no.ssb.metadata.vardef.models.InputValidityPeriod
+import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -39,7 +39,7 @@ class ValidityPeriodsController {
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     fun createValidityPeriod(
         @PathVariable("variable-definition-id") @Schema(description = ID_FIELD_DESCRIPTION) @VardefId variableDefinitionId: String,
-        @Body @Valid newPeriod: InputValidityPeriod,
+        @Body @Valid newPeriod: ValidityPeriod,
     ): FullResponseVariableDefinition {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         when {

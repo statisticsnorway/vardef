@@ -1,9 +1,9 @@
 package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
-import no.ssb.metadata.vardef.models.InputValidityPeriod
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
@@ -158,7 +158,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("provideTestDataCheckDefinition")
     fun `check definition texts for all languages`(
-        inputObject: InputValidityPeriod,
+        inputObject: ValidityPeriod,
         expected: Boolean,
     ) {
         val actualResult = variableDefinitionService.isNewDefinition(inputObject, SAVED_VARIABLE_DEFINITION)

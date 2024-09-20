@@ -7,6 +7,7 @@ import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.InputVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import no.ssb.metadata.vardef.utils.SAVED_DRAFT_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
 import org.assertj.core.api.Assertions.assertThat
@@ -14,6 +15,7 @@ import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.nullValue
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -284,5 +286,22 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .map { it.definitionId },
         ).contains(SAVED_VARIABLE_DEFINITION.definitionId)
         assertThat(variableDefinitionService.listAll().map { it.name }).contains(SAVED_VARIABLE_DEFINITION.name)
+    }
+
+    @Test
+    fun `post not allowed`(spec: RequestSpecification) {
+        val input =
+            JSONObject(JSON_TEST_INPUT).apply {
+                put("short_name", "nothing")
+            }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}")
+            .then()
+            .statusCode(405)
     }
 }

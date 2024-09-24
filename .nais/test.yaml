@@ -2,7 +2,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: vardef
+  name: metadata-vardef-test
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
@@ -24,11 +24,15 @@ spec:
         - host: data.ssb.no
         # Allow egress to Vardok
         - host: ssb.no
+        # allow egress to mongodb ?
       rules:
         - application: mongodb
 
   envFrom:
+    # remove ?
     - secret: vardef-mongo-mongodb
+    # password mongodb user
+    - secret: metadata-vardef-test
 
   env:
     - name: MONGODB_USER

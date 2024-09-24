@@ -28,9 +28,9 @@ class VariableDefinitionTest {
 
     @ParameterizedTest
     @CsvSource(
-        "EN, Country Background",
-        "NN, Landbakgrunn",
-        "NB, Landbakgrunn",
+        "EN, Income tax",
+        "NN, Inntektsskatt",
+        "NB, Inntektsskatt",
     )
     fun `get variable name by language code`(
         languageCode: SupportedLanguages,
@@ -42,9 +42,9 @@ class VariableDefinitionTest {
 
     @ParameterizedTest
     @CsvSource(
-        "EN, Country background is",
-        "NN, For personer født",
-        "NB, For personer født",
+        "EN, Income tax",
+        "NN, Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
+        "NB, Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
     )
     fun `get variable definition by language code`(
         languageCode: SupportedLanguages,

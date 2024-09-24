@@ -7,10 +7,9 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.VALIDITY_PERIOD
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
 import org.json.JSONObject
@@ -32,9 +31,12 @@ class ValidityPeriodsControllerTest {
     fun setUpValidityPeriods() {
         variableDefinitionService.clear()
 
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
+        variableDefinitionService.save(VALIDITY_PERIOD)
+        variableDefinitionService.save(VALIDITY_PERIOD.copy().apply {
+            validUntil = LocalDate.of(2022,12,31)
+            patchId = 2 })
         variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
+            VALIDITY_PERIOD.copy().apply {
                 validFrom = LocalDate.of(2023, 1, 1)
                 validUntil = null
                 definition =
@@ -43,7 +45,7 @@ class ValidityPeriodsControllerTest {
                         nn = "For personer født på siden",
                         en = "Persons born on the side",
                     )
-                patchId = 2
+                patchId = 3
             },
         )
     }
@@ -117,7 +119,7 @@ class ValidityPeriodsControllerTest {
         fun invalidValidFrom(): String {
             val testCase =
                 JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "1996-01-11")
+                    put("valid_from", "2021-05-11")
                     getJSONObject("definition").apply {
                         put("nb", "For personer født på søndag")
                         put("nn", "For personer født på søndag")
@@ -132,7 +134,7 @@ class ValidityPeriodsControllerTest {
         fun invalidValidFromAndInvalidDefinition(): String {
             val testCase =
                 JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "1996-01-11")
+                    put("valid_from", "2021-05-11")
                     remove("short_name")
                 }.toString()
             return testCase
@@ -170,16 +172,16 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(newValidityPeriod())
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(201)
-        val lastPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
+        val lastPatchId = variableDefinitionService.getLatestPatchById(VALIDITY_PERIOD.definitionId).patchId
         assertThat(variableDefinitionService.getLatestPatchById(
-            SAVED_VARIABLE_DEFINITION.definitionId).patchId).isEqualTo(lastPatchId)
+            VALIDITY_PERIOD.definitionId).patchId).isEqualTo(lastPatchId)
         assertThat(variableDefinitionService.getLatestPatchById(
-            SAVED_VARIABLE_DEFINITION.definitionId).validUntil).isNull()
+            VALIDITY_PERIOD.definitionId).validUntil).isNull()
         assertThat(variableDefinitionService.getOnePatchById(
-            SAVED_VARIABLE_DEFINITION.definitionId,lastPatchId -1).validUntil).isNotNull()
+            VALIDITY_PERIOD.definitionId,lastPatchId -1).validUntil).isNotNull()
     }
 
     @Test
@@ -189,14 +191,14 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(newValidityPeriodBeforeAll())
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(201)
-        val lastPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
+        val lastPatchId = variableDefinitionService.getLatestPatchById(VALIDITY_PERIOD.definitionId).patchId
         assertThat(variableDefinitionService.getLatestPatchById(
-            SAVED_VARIABLE_DEFINITION.definitionId).patchId).isEqualTo(lastPatchId)
+            VALIDITY_PERIOD.definitionId).patchId).isEqualTo(lastPatchId)
         assertThat(variableDefinitionService.getLatestPatchById(
-            SAVED_VARIABLE_DEFINITION.definitionId).validUntil).isEqualTo(LocalDate.of(2020,12,31))
+            VALIDITY_PERIOD.definitionId).validUntil).isEqualTo(LocalDate.of(2020,12,31))
     }
 
     @Test
@@ -206,7 +208,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(definitionNotChangedForAll())
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(400)
     }
@@ -218,7 +220,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(definitionNotChanged())
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
@@ -231,7 +233,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(invalidValidFrom())
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(
@@ -249,7 +251,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(invalidValidFromAndInvalidDefinition())
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
@@ -260,7 +262,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(correctValidFrom)
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
@@ -273,7 +275,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(validFromIsNull())
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(
@@ -291,7 +293,7 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(shortNameIsIncluded())
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(

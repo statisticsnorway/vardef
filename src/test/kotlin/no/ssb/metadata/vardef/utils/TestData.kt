@@ -12,16 +12,16 @@ val INPUT_VARIABLE_DEFINITION =
         id = NanoId.generate(8),
         name =
             LanguageStringType(
-                nb = "Landbakgrunn",
-                nn = "Landbakgrunn",
-                en = "Country Background",
+                nb = "Inntektsskatt",
+                nn = "Inntektsskatt",
+                en = "Income tax",
             ),
-        shortName = "landbak",
+        shortName = "intskatt",
         definition =
             LanguageStringType(
-                nb = "For personer født",
+                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
                 nn = null,
-                en = "Country background is",
+                en = "Income tax",
             ),
         classificationReference = "91",
         unitTypes = listOf("", ""),
@@ -44,15 +44,15 @@ val INPUT_VALIDITY_PERIOD =
     InputValidityPeriod(
         name =
             LanguageStringType(
-                nb = "Landbakgrunn",
-                nn = "Landbakgrunn",
-                en = "Country Background",
+                nb = "Inntektsskatt",
+                nn = "Inntektsskatt",
+                en = "Income tax",
             ),
         definition =
             LanguageStringType(
-                nb = "For personer født",
+                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
                 nn = null,
-                en = "Country background is",
+                en = "Income tax",
             ),
         classificationReference = "91",
         unitTypes = listOf("", ""),
@@ -75,18 +75,18 @@ val INPUT_VARIABLE_DEFINITION_COPY =
     INPUT_VARIABLE_DEFINITION.copy(
         name =
             LanguageStringType(
-                nb = "Landbakgrunn 2",
-                nn = "Landbakgrunn 2",
-                en = "Country Background 2",
+                nb = "Inntektsskatt 2",
+                nn = "Inntektsskatt 2",
+                en = "Income tax 2",
             ),
-        shortName = "landbak 2",
+        shortName = "Inntektsskatt_2",
     )
 
 val INPUT_VARIABLE_DEFINITION_NO_NAME =
     INPUT_VARIABLE_DEFINITION.copy(
         name =
-            LanguageStringType(nb = "Landbakgrunn", nn = "", en = null),
-        shortName = "landbak 2",
+            LanguageStringType(nb = "Inntektsskatt", nn = "", en = null),
+        shortName = "Inntektsskatt_2",
     )
 
 val SAVED_VARIABLE_DEFINITION =
@@ -96,16 +96,16 @@ val SAVED_VARIABLE_DEFINITION =
         patchId = 1,
         name =
             LanguageStringType(
-                nb = "Landbakgrunn",
-                nn = "Landbakgrunn",
-                en = "Country Background",
+                nb = "Inntektsskatt",
+                nn = "Inntektsskatt",
+                en = "Income tax",
             ),
-        shortName = "landbak",
+        shortName = "intskatt",
         definition =
             LanguageStringType(
-                nb = "For personer født",
-                nn = "For personer født",
-                en = "Country background is",
+                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
+                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
+                en = "Income tax",
             ),
         classificationUri = "91",
         unitTypes = listOf("01", "02"),
@@ -152,9 +152,9 @@ val SAVED_VARIABLE_DEFINITION_COPY =
         patchId = 1,
         name =
             LanguageStringType(
-                nb = "Landbakgrunn 2",
-                nn = "Landbakgrunn 2",
-                en = "Country Background 2",
+                nb = "Inntektsskatt 2",
+                nn = "Inntektsskatt 2",
+                en = "Income tax 2",
             ),
     )
 
@@ -219,11 +219,11 @@ val JSON_TEST_INPUT =
     """
     {
         "name": {
-            "en": "Country Background",
-            "nb": "Landbakgrunn",
-            "nn": "Landbakgrunn"
+            "en": "Income tax",
+            "nb": "Inntektsskatt",
+            "nn": "Inntektsskatt"
         },
-        "short_name": "landbak",
+        "short_name": "intskatt",
         "definition": {
             "en": "C.",
             "nb": "F"

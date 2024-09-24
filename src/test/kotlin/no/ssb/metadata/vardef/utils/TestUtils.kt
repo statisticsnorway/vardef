@@ -66,10 +66,18 @@ object TestUtils {
     fun variableDefinitionsNonMandatoryFieldsRemoved(): List<String> {
         val testCases =
             listOf(
-                JSONObject(JSON_TEST_INPUT).apply { remove("measurement_type") }.toString(),
-                JSONObject(JSON_TEST_INPUT).apply { remove("valid_until") }.toString(),
-                JSONObject(JSON_TEST_INPUT).apply { remove("external_reference_uri") }.toString(),
-                JSONObject(JSON_TEST_INPUT).apply { remove("related_variable_definition_uris") }.toString(),
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("short_name", "blah")
+                    remove("measurement_type") }.toString(),
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("short_name", "blah")
+                    remove("valid_until") }.toString(),
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("short_name", "blah")
+                    remove("external_reference_uri") }.toString(),
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("short_name", "blah")
+                    remove("related_variable_definition_uris") }.toString(),
             )
         return testCases
     }

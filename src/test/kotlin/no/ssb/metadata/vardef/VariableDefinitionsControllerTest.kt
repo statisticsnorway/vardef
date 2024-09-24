@@ -54,18 +54,23 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `create variable definition`(spec: RequestSpecification) {
         val startTime = LocalDateTime.now()
+        val updatedJsonString =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    put("short_name", "blah")
+                }.toString()
 
         val definitionId =
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(JSON_TEST_INPUT)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
                 .statusCode(201)
-                .body("short_name", equalTo("landbak"))
-                .body("name.nb", equalTo("Landbakgrunn"))
+                .body("short_name", equalTo("blah"))
+                .body("name.nb", equalTo("Inntektsskatt"))
                 .body("id", matchesRegex("^[a-zA-Z0-9-_]{8}\$"))
                 .extract()
                 .body()
@@ -73,7 +78,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
         val createdVariableDefinition = variableDefinitionService.getLatestPatchById(definitionId)
 
-        assertThat(createdVariableDefinition.shortName).isEqualTo("landbak")
+        assertThat(createdVariableDefinition.shortName).isEqualTo("blah")
         assertThat(createdVariableDefinition.createdAt).isCloseTo(startTime, within(1, ChronoUnit.MINUTES))
         assertThat(createdVariableDefinition.createdAt).isEqualTo(createdVariableDefinition.lastUpdatedAt)
     }
@@ -84,7 +89,11 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             JSONObject(JSON_TEST_INPUT)
                 .apply {
                     put("contact", JSONObject.NULL)
+                }
+                .apply {
+                    put("short_name", "landbak_copy")
                 }.toString()
+
         val definitionId =
             spec
                 .given()
@@ -102,7 +111,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         val createdVariableDefinition = variableDefinitionService.getLatestPatchById(definitionId)
 
         assertThat(createdVariableDefinition.contact).isNull()
-        assertThat(createdVariableDefinition.shortName).isEqualTo("landbak")
+        assertThat(createdVariableDefinition.shortName).isEqualTo("landbak_copy")
     }
 
     @Test
@@ -190,6 +199,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         val updatedJsonString =
             JSONObject(JSON_TEST_INPUT)
                 .apply {
+                    put("short_name",
+                        "landbak_copy"
+                    )
                     getJSONObject("name").apply {
                         put(
                             "en",
@@ -197,7 +209,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                         )
                     }
                 }.toString()
-
         val definitionId =
             spec
                 .given()
@@ -329,11 +340,16 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create variable definition and check klass url`(spec: RequestSpecification) {
+        val updatedJsonString =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    put("short_name", "landbak_copy")
+                }.toString()
         val definitionId =
             spec
                 .given()
                 .contentType(ContentType.JSON)
-                .body(JSON_TEST_INPUT)
+                .body(updatedJsonString)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -381,5 +397,23 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("size()", Matchers.equalTo(expectedNumber))
+    }
+
+    @Test
+    fun `create new variable with existing shortname`(spec: RequestSpecification) {
+        val updatedJsonString = JSONObject(JSON_TEST_INPUT).toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString("already exists."),
+            )
     }
 }

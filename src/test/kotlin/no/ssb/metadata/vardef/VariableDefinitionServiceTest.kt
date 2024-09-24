@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 import java.util.stream.Stream
+import org.json.JSONObject
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
@@ -101,9 +102,9 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
-                                nb = "For personer født",
-                                nn = "For personer født",
-                                en = "Country background is",
+                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
+                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
+                                en = "Income tax",
                             ),
                     ),
                     false,
@@ -112,9 +113,9 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
-                                nb = "For personer født i går",
-                                nn = "For personer født i går",
-                                en = "Persons born yesterday",
+                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
+                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
+                                en = "Income tax. small change",
                             ),
                     ),
                     true,
@@ -123,9 +124,9 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
-                                nb = "For personer født",
-                                nn = "For personer født",
-                                en = "Country background is",
+                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
+                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
+                                en = "Income tax",
                             ),
                     ),
                     false,
@@ -134,20 +135,9 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     INPUT_VALIDITY_PERIOD.copy(
                         definition =
                             LanguageStringType(
-                                nb = "For personer født i går",
-                                nn = "For personer født",
-                                en = "Country background is",
-                            ),
-                    ),
-                    false,
-                ),
-                Arguments.of(
-                    INPUT_VALIDITY_PERIOD.copy(
-                        definition =
-                            LanguageStringType(
-                                nb = "Hester og kuer født",
-                                nn = "Hester og kuer født",
-                                en = "Horses and cows born",
+                                nb = "Endring",
+                                nn = "Endring",
+                                en = "Endring",
                             ),
                     ),
                     true,
@@ -163,5 +153,18 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     ) {
         val actualResult = variableDefinitionService.isNewDefinition(inputObject, SAVED_VARIABLE_DEFINITION)
         assertThat(actualResult).isEqualTo(expected)
+    }
+
+
+    @ParameterizedTest
+    @CsvSource(
+        "intskatt, true",
+        "nyttkortnavn, false"
+    )
+    fun `check if short name is valid`(
+        shortName: String,
+        expectedResult: Boolean
+    ) {
+        assertThat(variableDefinitionService.checkIfShortNameExists(shortName)).isEqualTo(expectedResult)
     }
 }

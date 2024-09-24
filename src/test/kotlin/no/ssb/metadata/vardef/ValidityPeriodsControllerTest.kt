@@ -5,23 +5,17 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.models.LanguageStringType
-import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.VALIDITY_PERIOD
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
 import org.json.JSONObject
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.api.*
 import java.time.LocalDate
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class ValidityPeriodsControllerTest {
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
@@ -30,6 +24,7 @@ class ValidityPeriodsControllerTest {
     fun setUpValidityPeriods() {
         variableDefinitionService.clear()
 
+        // collection 1
         variableDefinitionService.save(VALIDITY_PERIOD)
         variableDefinitionService.save(
             VALIDITY_PERIOD.copy().apply {
@@ -50,6 +45,12 @@ class ValidityPeriodsControllerTest {
                 patchId = 3
             },
         )
+
+        // collection 2
+        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
+
+        // collection3
+        variableDefinitionService.save(SAVED_DEPRECATED_VARIABLE_DEFINITION)
     }
 
     /**
@@ -323,28 +324,27 @@ class ValidityPeriodsControllerTest {
             )
     }
 
-    @ParameterizedTest
-    @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
-    fun `create new validity period with invalid status`(
-        variableStatus: VariableStatus,
-        spec: RequestSpecification,
-    ) {
-        val id =
-            variableDefinitionService
-                .save(
-                    INPUT_VARIABLE_DEFINITION
-                        .apply {
-                            this.variableStatus = variableStatus
-                        }.toSavedVariableDefinition(),
-                ).definitionId
+    @Test
+    fun `create new validity period with draft status`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(newValidityPeriod())
             .`when`()
-            .post("/variable-definitions/$id/validity-periods")
+            .post("/variable-definitions/${SAVED_DRAFT_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(405)
-            .body(containsString("Only allowed for published variables."))
+    }
+
+    @Test
+    fun `create new validity period with deprecated status`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(newValidityPeriod())
+            .`when`()
+            .post("/variable-definitions/${SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(405)
     }
 }

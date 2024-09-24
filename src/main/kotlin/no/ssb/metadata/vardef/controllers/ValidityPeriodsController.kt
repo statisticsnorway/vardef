@@ -62,6 +62,7 @@ class ValidityPeriodsController {
         newPeriod: InputValidityPeriod,
     ): FullResponseVariableDefinition {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
+
         when {
             !latestExistingPatch.variableStatus.isPublished() ->
                 throw PublishedVariableAccessException()
@@ -72,6 +73,7 @@ class ValidityPeriodsController {
             !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->
                 throw DefinitionTextUnchangedException()
         }
-        return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toFullResponseVariableDefinition()
+        return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId)
+            .toFullResponseVariableDefinition()
     }
 }

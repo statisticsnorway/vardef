@@ -40,6 +40,46 @@ val INPUT_VARIABLE_DEFINITION =
             ),
     )
 
+val SAVED_DEPRECATED_VARIABLE_DEFINITION =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = NanoId.generate(8),
+        patchId = 5,
+        name =
+            LanguageStringType(
+                nb = "A",
+                nn = "A",
+                en = "B",
+            ),
+        shortName = "alphabet",
+        definition =
+            LanguageStringType(
+                nb = "Test bokstaver.",
+                nn = null,
+                en = "Letters",
+            ),
+        classificationUri = "91",
+        unitTypes = listOf("", ""),
+        subjectFields = listOf("", ""),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.DEPRECATED,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        relatedVariableDefinitionUris = listOf(),
+        owner = Owner("", ""),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "me@example.com",
+            ),
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = Person("", ""),
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = Person("", ""),
+    )
+
 val INPUT_VALIDITY_PERIOD =
     InputValidityPeriod(
         name =

@@ -216,11 +216,8 @@ class VariableDefinitionService(
         }
     }
 
-    fun checkIfShortNameExists(
-        shortName: String,
-    ): Boolean{
-        variableDefinitionRepository.findByShortName(shortName).ifEmpty { return false}
+    fun checkIfShortNameExists(shortName: String): Boolean {
+        variableDefinitionRepository.findByShortName(shortName).ifEmpty { return false }
         return true
     }
-
 }

@@ -199,8 +199,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         val updatedJsonString =
             JSONObject(JSON_TEST_INPUT)
                 .apply {
-                    put("short_name",
-                        "landbak_copy"
+                    put(
+                        "short_name",
+                        "landbak_copy",
                     )
                     getJSONObject("name").apply {
                         put(

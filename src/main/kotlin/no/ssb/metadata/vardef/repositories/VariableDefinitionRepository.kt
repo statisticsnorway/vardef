@@ -14,10 +14,5 @@ interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition,
         patchId: Int,
     ): SavedVariableDefinition
 
-    fun findByShortName(
-        shortName: String
-    ): List<SavedVariableDefinition>
+    fun findByShortName(shortName: String): List<SavedVariableDefinition>
 }
-
-
-

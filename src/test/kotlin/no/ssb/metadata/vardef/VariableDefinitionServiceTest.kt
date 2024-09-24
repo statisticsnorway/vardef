@@ -14,7 +14,6 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 import java.util.stream.Stream
-import org.json.JSONObject
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
@@ -155,15 +154,14 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(actualResult).isEqualTo(expected)
     }
 
-
     @ParameterizedTest
     @CsvSource(
         "intskatt, true",
-        "nyttkortnavn, false"
+        "nyttkortnavn, false",
     )
     fun `check if short name is valid`(
         shortName: String,
-        expectedResult: Boolean
+        expectedResult: Boolean,
     ) {
         assertThat(variableDefinitionService.checkIfShortNameExists(shortName)).isEqualTo(expectedResult)
     }

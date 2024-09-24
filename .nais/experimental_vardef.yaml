@@ -1,13 +1,13 @@
-# Deploy config for the test cluster
+# Deploy config for experimental test mongodb nais
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: vardef
+  name: metadata-vardef-test
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
 spec:
-  image: "{{ image }}"  # Injected from the GitHub Action
+  image: sha256:6da452ea3ddb184030943ce4ea10de990a980e5c0662fa70b036af6feda65e93
   port: 8080
 
   ingresses:
@@ -24,17 +24,16 @@ spec:
         - host: data.ssb.no
         # Allow egress to Vardok
         - host: ssb.no
+        # allow egress to mongodb
+        - host: metadata-vardef-test-shard-00-01.fuld2.mongodb.net
+          ports:
+            - port: 27017
       rules:
         - application: mongodb
 
   envFrom:
-    - secret: vardef-mongo-mongodb
-
-  env:
-    - name: MONGODB_USER
-      value: vardef-user
-    - name: MONGODB_HOST
-      value: vardef-mongo-mongodb.dapla-metadata.svc.cluster.local:27017
+    # secrets nais
+    - secret: metadata-vardef-test
 
   liveness:
     path: /health
@@ -45,3 +44,4 @@ spec:
   startup:
     path: /health
     port: 8080
+  

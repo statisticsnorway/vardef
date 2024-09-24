@@ -138,18 +138,18 @@ val VALIDITY_PERIOD =
         definitionId = NanoId.generate(8),
         patchId = 1,
         name =
-        LanguageStringType(
-            nb = "Fødselsnummer",
-            nn = "Fødselsnummer",
-            en = "Birth number",
-        ),
+            LanguageStringType(
+                nb = "Fødselsnummer",
+                nn = "Fødselsnummer",
+                en = "Birth number",
+            ),
         shortName = "fnr_test",
         definition =
-        LanguageStringType(
-            nb = "Offisielt registreringsnummer person.",
-            nn = "Offisielt registreringsnummer person.",
-            en = "Official registration number person",
-        ),
+            LanguageStringType(
+                nb = "Offisielt registreringsnummer person.",
+                nn = "Offisielt registreringsnummer person.",
+                en = "Official registration number person",
+            ),
         classificationUri = "91",
         unitTypes = listOf("01", "02"),
         subjectFields = listOf("he04"),
@@ -161,18 +161,18 @@ val VALIDITY_PERIOD =
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
-        Owner("", ""),
+            Owner("", ""),
         contact =
-        Contact(
-            LanguageStringType("", "", ""),
-            "me@example.com",
-        ),
+            Contact(
+                LanguageStringType("", "", ""),
+                "me@example.com",
+            ),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy =
-        Person("", ""),
+            Person("", ""),
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy =
-        Person("", ""),
+            Person("", ""),
     )
 
 val SAVED_DRAFT_VARIABLE_DEFINITION =

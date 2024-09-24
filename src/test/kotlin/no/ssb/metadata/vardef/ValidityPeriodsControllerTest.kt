@@ -23,7 +23,6 @@ import java.time.LocalDate
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ValidityPeriodsControllerTest {
-
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
@@ -32,9 +31,12 @@ class ValidityPeriodsControllerTest {
         variableDefinitionService.clear()
 
         variableDefinitionService.save(VALIDITY_PERIOD)
-        variableDefinitionService.save(VALIDITY_PERIOD.copy().apply {
-            validUntil = LocalDate.of(2022,12,31)
-            patchId = 2 })
+        variableDefinitionService.save(
+            VALIDITY_PERIOD.copy().apply {
+                validUntil = LocalDate.of(2022, 12, 31)
+                patchId = 2
+            },
+        )
         variableDefinitionService.save(
             VALIDITY_PERIOD.copy().apply {
                 validFrom = LocalDate.of(2023, 1, 1)
@@ -49,6 +51,7 @@ class ValidityPeriodsControllerTest {
             },
         )
     }
+
     /**
      * test cases new validity period.
      */
@@ -176,12 +179,22 @@ class ValidityPeriodsControllerTest {
             .then()
             .statusCode(201)
         val lastPatchId = variableDefinitionService.getLatestPatchById(VALIDITY_PERIOD.definitionId).patchId
-        assertThat(variableDefinitionService.getLatestPatchById(
-            VALIDITY_PERIOD.definitionId).patchId).isEqualTo(lastPatchId)
-        assertThat(variableDefinitionService.getLatestPatchById(
-            VALIDITY_PERIOD.definitionId).validUntil).isNull()
-        assertThat(variableDefinitionService.getOnePatchById(
-            VALIDITY_PERIOD.definitionId,lastPatchId -1).validUntil).isNotNull()
+        assertThat(
+            variableDefinitionService.getLatestPatchById(
+                VALIDITY_PERIOD.definitionId,
+            ).patchId,
+        ).isEqualTo(lastPatchId)
+        assertThat(
+            variableDefinitionService.getLatestPatchById(
+                VALIDITY_PERIOD.definitionId,
+            ).validUntil,
+        ).isNull()
+        assertThat(
+            variableDefinitionService.getOnePatchById(
+                VALIDITY_PERIOD.definitionId,
+                lastPatchId - 1,
+            ).validUntil,
+        ).isNotNull()
     }
 
     @Test
@@ -195,10 +208,16 @@ class ValidityPeriodsControllerTest {
             .then()
             .statusCode(201)
         val lastPatchId = variableDefinitionService.getLatestPatchById(VALIDITY_PERIOD.definitionId).patchId
-        assertThat(variableDefinitionService.getLatestPatchById(
-            VALIDITY_PERIOD.definitionId).patchId).isEqualTo(lastPatchId)
-        assertThat(variableDefinitionService.getLatestPatchById(
-            VALIDITY_PERIOD.definitionId).validUntil).isEqualTo(LocalDate.of(2020,12,31))
+        assertThat(
+            variableDefinitionService.getLatestPatchById(
+                VALIDITY_PERIOD.definitionId,
+            ).patchId,
+        ).isEqualTo(lastPatchId)
+        assertThat(
+            variableDefinitionService.getLatestPatchById(
+                VALIDITY_PERIOD.definitionId,
+            ).validUntil,
+        ).isEqualTo(LocalDate.of(2020, 12, 31))
     }
 
     @Test

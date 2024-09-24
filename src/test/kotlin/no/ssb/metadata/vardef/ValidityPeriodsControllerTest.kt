@@ -1,19 +1,52 @@
 package no.ssb.metadata.vardef
 
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import jakarta.inject.Inject
+import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
 import org.json.JSONObject
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import java.time.LocalDate
 
-class ValidityPeriodsControllerTest : BaseVardefTest() {
+@MicronautTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ValidityPeriodsControllerTest {
+
+    @Inject
+    lateinit var variableDefinitionService: VariableDefinitionService
+
+    @BeforeEach
+    fun setUpValidityPeriods() {
+        variableDefinitionService.clear()
+
+        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
+        variableDefinitionService.save(
+            SAVED_VARIABLE_DEFINITION.copy().apply {
+                validFrom = LocalDate.of(2023, 1, 1)
+                validUntil = null
+                definition =
+                    LanguageStringType(
+                        nb = "For personer født på siden",
+                        nn = "For personer født på siden",
+                        en = "Persons born on the side",
+                    )
+                patchId = 2
+            },
+        )
+    }
     /**
      * test cases new validity period.
      */
@@ -59,6 +92,23 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                         put("en", "Persons born yesterday")
                     }
                     remove("short_name")
+                    remove("valid_until")
+                }.toString()
+            return testCase
+        }
+
+        @JvmStatic
+        fun newValidityPeriodBeforeAll(): String {
+            val testCase =
+                JSONObject(JSON_TEST_INPUT).apply {
+                    put("valid_from", "1923-01-11")
+                    getJSONObject("definition").apply {
+                        put("nb", "For personer født hver dag")
+                        put("nn", "For personer født hver dag")
+                        put("en", "Persons born every day")
+                    }
+                    remove("short_name")
+                    remove("valid_until")
                 }.toString()
             return testCase
         }
@@ -69,9 +119,9 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 JSONObject(JSON_TEST_INPUT).apply {
                     put("valid_from", "1996-01-11")
                     getJSONObject("definition").apply {
-                        put("nb", "For personer født på siden")
-                        put("nn", "For personer født på siden")
-                        put("en", "Persons born on the side")
+                        put("nb", "For personer født på søndag")
+                        put("nn", "For personer født på søndag")
+                        put("en", "Persons born on sunday")
                     }
                     remove("short_name")
                 }.toString()
@@ -123,6 +173,30 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(201)
+        val lastPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
+        assertThat(variableDefinitionService.getLatestPatchById(
+            SAVED_VARIABLE_DEFINITION.definitionId).patchId).isEqualTo(lastPatchId)
+        assertThat(variableDefinitionService.getLatestPatchById(
+            SAVED_VARIABLE_DEFINITION.definitionId).validUntil).isNull()
+        assertThat(variableDefinitionService.getOnePatchById(
+            SAVED_VARIABLE_DEFINITION.definitionId,lastPatchId -1).validUntil).isNotNull()
+    }
+
+    @Test
+    fun `create new validity period before all validity periods`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(newValidityPeriodBeforeAll())
+            .`when`()
+            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(201)
+        val lastPatchId = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId
+        assertThat(variableDefinitionService.getLatestPatchById(
+            SAVED_VARIABLE_DEFINITION.definitionId).patchId).isEqualTo(lastPatchId)
+        assertThat(variableDefinitionService.getLatestPatchById(
+            SAVED_VARIABLE_DEFINITION.definitionId).validUntil).isEqualTo(LocalDate.of(2020,12,31))
     }
 
     @Test

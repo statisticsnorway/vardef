@@ -87,7 +87,7 @@ data class InputValidityPeriod(
             variableStatus = variableStatus ?: previousPatch.variableStatus,
             measurementType = measurementType ?: previousPatch.measurementType,
             validFrom = validFrom,
-            validUntil = validUntil ?: previousPatch.validUntil,
+            validUntil = validUntil,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             contact = contact ?: previousPatch.contact,

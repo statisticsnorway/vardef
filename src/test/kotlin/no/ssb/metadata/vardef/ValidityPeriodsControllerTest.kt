@@ -179,12 +179,9 @@ class ValidityPeriodsControllerTest {
             .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(201)
-        val lastPatchId = variableDefinitionService.getLatestPatchById(VALIDITY_PERIOD.definitionId).patchId
-        assertThat(
-            variableDefinitionService.getLatestPatchById(
-                VALIDITY_PERIOD.definitionId,
-            ).patchId,
-        ).isEqualTo(lastPatchId)
+
+        val lastPatch = variableDefinitionService.getLatestPatchById(VALIDITY_PERIOD.definitionId)
+
         assertThat(
             variableDefinitionService.getLatestPatchById(
                 VALIDITY_PERIOD.definitionId,
@@ -193,9 +190,9 @@ class ValidityPeriodsControllerTest {
         assertThat(
             variableDefinitionService.getOnePatchById(
                 VALIDITY_PERIOD.definitionId,
-                lastPatchId - 1,
+                lastPatch.patchId - 1,
             ).validUntil,
-        ).isNotNull()
+        ).isEqualTo(lastPatch.validFrom.minusDays(1))
     }
 
     @Test
@@ -208,12 +205,6 @@ class ValidityPeriodsControllerTest {
             .post("/variable-definitions/${VALIDITY_PERIOD.definitionId}/validity-periods")
             .then()
             .statusCode(201)
-        val lastPatchId = variableDefinitionService.getLatestPatchById(VALIDITY_PERIOD.definitionId).patchId
-        assertThat(
-            variableDefinitionService.getLatestPatchById(
-                VALIDITY_PERIOD.definitionId,
-            ).patchId,
-        ).isEqualTo(lastPatchId)
         assertThat(
             variableDefinitionService.getLatestPatchById(
                 VALIDITY_PERIOD.definitionId,

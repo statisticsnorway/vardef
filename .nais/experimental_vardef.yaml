@@ -28,12 +28,18 @@ spec:
         # allow egress to mongodb
         - host: metadata-vardef-test-shard-00-01.fuld2.mongodb.net
           ports:
+            - port: 27015
+            - port: 27016
             - port: 27017
         - host: metadata-vardef-test-shard-00-02.fuld2.mongodb.net
           ports:
+            - port: 27015
+            - port: 27016
             - port: 27017
         - host: metadata-vardef-test-shard-00-00.fuld2.mongodb.net
           ports:
+            - port: 27015
+            - port: 27016
             - port: 27017
       rules:
         - application: mongodb

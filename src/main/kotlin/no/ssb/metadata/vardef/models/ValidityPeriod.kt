@@ -14,6 +14,9 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Create a new Validity Period on a Published Variable Definition.
+ */
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(

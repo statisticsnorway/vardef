@@ -19,6 +19,8 @@ spec:
     - vardef-api
   consumesApis:
     - klass-api
+  dependsOn:
+    - resource:metadata-mongodb
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API

@@ -40,6 +40,46 @@ val INPUT_VARIABLE_DEFINITION =
             ),
     )
 
+val SAVED_DEPRECATED_VARIABLE_DEFINITION =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = NanoId.generate(8),
+        patchId = 5,
+        name =
+            LanguageStringType(
+                nb = "A",
+                nn = "A",
+                en = "B",
+            ),
+        shortName = "alphabet",
+        definition =
+            LanguageStringType(
+                nb = "Test bokstaver.",
+                nn = null,
+                en = "Letters",
+            ),
+        classificationUri = "91",
+        unitTypes = listOf("", ""),
+        subjectFields = listOf("", ""),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.DEPRECATED,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        relatedVariableDefinitionUris = listOf(),
+        owner = Owner("", ""),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "me@example.com",
+            ),
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = Person("", ""),
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = Person("", ""),
+    )
+
 val INPUT_VALIDITY_PERIOD =
     ValidityPeriod(
         name =
@@ -112,6 +152,49 @@ val SAVED_VARIABLE_DEFINITION =
         subjectFields = listOf("he04"),
         containsSensitivePersonalInformation = false,
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+        measurementType = "02.01",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        relatedVariableDefinitionUris = listOf(),
+        owner =
+            Owner("", ""),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "me@example.com",
+            ),
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy =
+            Person("", ""),
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy =
+            Person("", ""),
+    )
+
+val VALIDITY_PERIOD =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = NanoId.generate(8),
+        patchId = 1,
+        name =
+            LanguageStringType(
+                nb = "Fødselsnummer",
+                nn = "Fødselsnummer",
+                en = "Birth number",
+            ),
+        shortName = "fnr_test",
+        definition =
+            LanguageStringType(
+                nb = "Offisielt registreringsnummer person.",
+                nn = "Offisielt registreringsnummer person.",
+                en = "Official registration number person",
+            ),
+        classificationUri = "91",
+        unitTypes = listOf("01", "02"),
+        subjectFields = listOf("he04"),
+        containsSensitivePersonalInformation = true,
+        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
         measurementType = "02.01",
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,

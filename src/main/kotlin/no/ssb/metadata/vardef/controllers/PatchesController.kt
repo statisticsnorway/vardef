@@ -128,10 +128,10 @@ class PatchesController {
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
-        @Parameter(examples = [ExampleObject(name = "create_patch", value = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE)])
+        @Parameter(examples = [ExampleObject(name = "create_patch", value = PATCH_EXAMPLE)])
         @Body
         @Valid
-        patch: InputPatchVariableDefinition,
+        patch: Patch,
     ): CompleteResponse {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
 

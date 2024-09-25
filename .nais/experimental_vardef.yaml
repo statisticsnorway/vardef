@@ -2,17 +2,18 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: metadata-vardef-test
+  name: vardef-dev
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
 spec:
-  image: sha256:6da452ea3ddb184030943ce4ea10de990a980e5c0662fa70b036af6feda65e93
+  # image: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef/vardef:8f23e08afd25ffe9438d5d238e3e58aeb02a58e9
+  image: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef/vardef:mongodb-connection
   port: 8080
 
   ingresses:
-    - https://vardef.intern.test.ssb.no
-    - https://vardef.test.ssb.cloud.nais.io
+    - https://vardef-dev.intern.test.ssb.no
+    - https://vardef-dev.test.ssb.cloud.nais.io
 
   accessPolicy:
     inbound:
@@ -26,6 +27,12 @@ spec:
         - host: ssb.no
         # allow egress to mongodb
         - host: metadata-vardef-test-shard-00-01.fuld2.mongodb.net
+          ports:
+            - port: 27017
+        - host: metadata-vardef-test-shard-00-02.fuld2.mongodb.net
+          ports:
+            - port: 27017
+        - host: metadata-vardef-test-shard-00-00.fuld2.mongodb.net
           ports:
             - port: 27017
       rules:

@@ -149,17 +149,6 @@ data class SavedVariableDefinition(
 
     fun copyAndUpdate(varDefUpdates: UpdateDraft): SavedVariableDefinition =
         copy(
-            // Carry over value from existing object
-            id = id,
-            definitionId = definitionId,
-            owner = owner,
-            createdAt = createdAt,
-            createdBy = createdBy,
-            // TODO DPMETA-268
-            lastUpdatedAt = createdAt,
-            // TODO DPMETA-268
-            lastUpdatedBy = createdBy,
-            // Update field if non-null value provided
             name = varDefUpdates.name ?: name,
             shortName = varDefUpdates.shortName ?: shortName,
             definition = varDefUpdates.definition ?: definition,

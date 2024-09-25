@@ -32,7 +32,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .statusCode(200)
             .body("id", equalTo(SAVED_VARIABLE_DEFINITION.definitionId))
             .body("patch_id", equalTo(3))
-            .body("short_name", equalTo("landbak"))
+            .body("short_name", equalTo("intskatt"))
     }
 
     @Test

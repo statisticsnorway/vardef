@@ -2,7 +2,7 @@ package no.ssb.metadata.vardef.constants
 
 const val ID_EXAMPLE = """wypvb3wd"""
 
-const val INPUT_VARIABLE_DEFINITION_EXAMPLE = """{
+const val DRAFT_EXAMPLE = """{
     "name": {
         "en": "Country Background",
         "nb": "Landbakgrunn",
@@ -73,7 +73,7 @@ const val FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE = """{
 }
 """
 
-const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
+const val PATCH_EXAMPLE = """
 {
     "name": {
         "en": "Country Background",
@@ -106,7 +106,7 @@ const val INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE = """
 }
 """
 
-const val INPUT_VALIDITY_PERIOD_EXAMPLE = """
+const val VALIDITY_PERIOD_EXAMPLE = """
 {
     "name": {
         "en": "Country Background",

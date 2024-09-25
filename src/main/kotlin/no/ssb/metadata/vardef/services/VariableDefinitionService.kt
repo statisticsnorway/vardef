@@ -7,7 +7,10 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
 
@@ -41,7 +44,7 @@ class VariableDefinitionService(
         }
         return definitionList
             .map {
-                it.toRenderedVariableDefinition(
+                it.render(
                     language,
                     klassService,
                 )
@@ -76,9 +79,9 @@ class VariableDefinitionService(
         dateOfValidity: LocalDate?,
     ): RenderedVariableDefinition {
         if (dateOfValidity != null) {
-            return getLatestPatchByDateAndById(id, dateOfValidity).toRenderedVariableDefinition(language, klassService)
+            return getLatestPatchByDateAndById(id, dateOfValidity).render(language, klassService)
         } else {
-            return getLatestPatchById(id).toRenderedVariableDefinition(language, klassService)
+            return getLatestPatchById(id).render(language, klassService)
         }
     }
 
@@ -133,7 +136,7 @@ class VariableDefinitionService(
             latestExistingPatch
                 .copy(
                     validUntil = endDate,
-                ).toInputPatchVariableDefinition()
+                ).toPatch()
                 .toSavedVariableDefinition(latestExistingPatch),
         )
     }
@@ -162,7 +165,7 @@ class VariableDefinitionService(
      * `false` otherwise
      */
     fun isNewDefinition(
-        newDefinition: InputValidityPeriod,
+        newDefinition: ValidityPeriod,
         latestExistingPatch: SavedVariableDefinition,
     ): Boolean {
         val allLanguagesPresent =
@@ -174,7 +177,7 @@ class VariableDefinitionService(
         }
         val allDefinitionsChanged =
             latestExistingPatch.definition.listPresentLanguages().all { lang ->
-                !latestExistingPatch.toInputVariableDefinition().definition.getValidLanguage(lang).equals(
+                !latestExistingPatch.toDraft().definition.getValidLanguage(lang).equals(
                     newDefinition.definition.getValidLanguage(lang),
                     ignoreCase = true,
                 )
@@ -199,7 +202,7 @@ class VariableDefinitionService(
      * @return The newly saved variable definition with the updated validity period.
      */
     fun saveNewValidityPeriod(
-        newPeriod: InputValidityPeriod,
+        newPeriod: ValidityPeriod,
         definitionId: String,
     ): SavedVariableDefinition {
         val patches = listAllPatchesById(definitionId)

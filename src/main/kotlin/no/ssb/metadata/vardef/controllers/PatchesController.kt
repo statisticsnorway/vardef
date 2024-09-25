@@ -16,8 +16,8 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
-import no.ssb.metadata.vardef.models.FullResponseVariableDefinition
-import no.ssb.metadata.vardef.models.InputPatchVariableDefinition
+import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -56,12 +56,12 @@ class PatchesController {
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
-    ): MutableHttpResponse<List<FullResponseVariableDefinition>> =
+    ): MutableHttpResponse<List<CompleteResponse>> =
         HttpResponse
             .ok(
                 varDefService
                     .listAllPatchesById(id = variableDefinitionId)
-                    .map { it.toFullResponseVariableDefinition() },
+                    .map { it.toCompleteResponse() },
             ).contentType(MediaType.APPLICATION_JSON)
 
     /**
@@ -93,12 +93,12 @@ class PatchesController {
         @PathVariable("patch-id")
         @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "patch_1", value = "1")])
         patchId: Int,
-    ): MutableHttpResponse<FullResponseVariableDefinition> =
+    ): MutableHttpResponse<CompleteResponse> =
         HttpResponse
             .ok(
                 varDefService
                     .getOnePatchById(variableDefinitionId, patchId = patchId)
-                    .toFullResponseVariableDefinition(),
+                    .toCompleteResponse(),
             ).contentType(MediaType.APPLICATION_JSON)
 
     /**
@@ -128,11 +128,11 @@ class PatchesController {
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
-        @Parameter(examples = [ExampleObject(name = "create_patch", value = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE)])
+        @Parameter(examples = [ExampleObject(name = "create_patch", value = PATCH_EXAMPLE)])
         @Body
         @Valid
-        patch: InputPatchVariableDefinition,
-    ): FullResponseVariableDefinition {
+        patch: Patch,
+    ): CompleteResponse {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
@@ -142,6 +142,6 @@ class PatchesController {
         return varDefService
             .save(
                 patch.toSavedVariableDefinition(latestExistingPatch),
-            ).toFullResponseVariableDefinition()
+            ).toCompleteResponse()
     }
 }

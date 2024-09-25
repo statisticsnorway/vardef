@@ -58,8 +58,8 @@ class ValidityPeriodsController {
         variableDefinitionId: String,
         @Body
         @Valid
-        @Parameter(examples = [ExampleObject(name = "create_validity_period", value = INPUT_VALIDITY_PERIOD_EXAMPLE)])
-        newPeriod: InputValidityPeriod,
+        @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
+        newPeriod: ValidityPeriod,
     ): CompleteResponse {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
         when {

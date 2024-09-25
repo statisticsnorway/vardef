@@ -13,7 +13,6 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-
 /**
  * Create a new Patch version on a Published Variable Definition.
  */

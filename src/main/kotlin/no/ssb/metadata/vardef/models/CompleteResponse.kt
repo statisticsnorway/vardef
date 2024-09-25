@@ -8,8 +8,13 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Complete response
+ *
+ * For internal users who need all details while maintaining variable definitions.
+ */
 @Serdeable(naming = SnakeCaseStrategy::class)
-data class FullResponseVariableDefinition(
+data class CompleteResponse(
     @Schema(description = ID_FIELD_DESCRIPTION, format = VARDEF_ID_PATTERN)
     var id: String?,
     @Schema(description = PATCH_ID_FIELD_DESCRIPTION, example = "1")

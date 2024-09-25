@@ -6,6 +6,7 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
@@ -13,18 +14,21 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Create a new Validity Period on a Published Variable Definition.
+ */
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = INPUT_PATCH_VARIABLE_DEFINITION_EXAMPLE,
+    example = VALIDITY_PERIOD_EXAMPLE,
 )
-data class InputPatchVariableDefinition(
+data class ValidityPeriod(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
     val name: LanguageStringType?,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
-    @Nullable
-    val definition: LanguageStringType?,
+    @NotNull
+    val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @KlassId
@@ -54,6 +58,10 @@ data class InputPatchVariableDefinition(
     @Nullable
     @KlassCode("303")
     val measurementType: String?,
+    @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
+    @Format("yyyy-MM-dd")
+    @NotNull
+    val validFrom: LocalDate,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable
     @Format("yyyy-MM-dd")
@@ -73,14 +81,15 @@ data class InputPatchVariableDefinition(
         previousPatch.copy(
             patchId = previousPatch.patchId + 1,
             name = name ?: previousPatch.name,
-            definition = definition ?: previousPatch.definition,
+            definition = definition,
             classificationUri = classificationReference ?: previousPatch.classificationUri,
             unitTypes = unitTypes ?: previousPatch.unitTypes,
             subjectFields = subjectFields ?: previousPatch.subjectFields,
             containsSensitivePersonalInformation =
-                containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
+            containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
             variableStatus = variableStatus ?: previousPatch.variableStatus,
             measurementType = measurementType ?: previousPatch.measurementType,
+            validFrom = validFrom,
             validUntil = validUntil ?: previousPatch.validUntil,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },

@@ -8,6 +8,9 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Render a Variable Definition in a specific language, for display to end users.
+ */
 @Schema(
     example = RENDERED_VARIABLE_DEFINITION_EXAMPLE,
 )

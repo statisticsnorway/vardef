@@ -11,6 +11,11 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Saved variable definition
+ *
+ * The object which is persisted to the data store. This should not be exposed externally.
+ */
 @Serdeable
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
 data class SavedVariableDefinition(
@@ -48,7 +53,14 @@ data class SavedVariableDefinition(
     @Nullable
     var lastUpdatedBy: Person?,
 ) {
-    fun toRenderedVariableDefinition(
+    /**
+     * Render the variable definition, so it's suitable for display to humans.
+     *
+     * @param language The language to render in.
+     * @param klassService The service from which to obtain details for classification codes.
+     * @return The rendered object.
+     */
+    fun render(
         language: SupportedLanguages,
         klassService: KlassService,
     ): RenderedVariableDefinition =
@@ -76,8 +88,8 @@ data class SavedVariableDefinition(
             lastUpdatedBy = lastUpdatedBy,
         )
 
-    fun toInputVariableDefinition(): InputVariableDefinition =
-        InputVariableDefinition(
+    fun toDraft(): Draft =
+        Draft(
             id = definitionId,
             name = name,
             shortName = shortName,
@@ -95,8 +107,8 @@ data class SavedVariableDefinition(
             contact = contact,
         )
 
-    fun toInputPatchVariableDefinition(): InputPatchVariableDefinition =
-        InputPatchVariableDefinition(
+    fun toPatch(): Patch =
+        Patch(
             name = name,
             definition = definition,
             classificationReference = classificationUri?.split("/")?.lastOrNull(),
@@ -111,8 +123,8 @@ data class SavedVariableDefinition(
             contact = contact,
         )
 
-    fun toFullResponseVariableDefinition(): FullResponseVariableDefinition =
-        FullResponseVariableDefinition(
+    fun toCompleteResponse(): CompleteResponse =
+        CompleteResponse(
             id = definitionId,
             patchId = patchId,
             name = name,
@@ -135,19 +147,8 @@ data class SavedVariableDefinition(
             createdBy = createdBy,
         )
 
-    fun copyAndUpdate(varDefUpdates: UpdateVariableDefinition): SavedVariableDefinition =
+    fun copyAndUpdate(varDefUpdates: UpdateDraft): SavedVariableDefinition =
         copy(
-            // Carry over value from existing object
-            id = id,
-            definitionId = definitionId,
-            owner = owner,
-            createdAt = createdAt,
-            createdBy = createdBy,
-            // TODO DPMETA-268
-            lastUpdatedAt = createdAt,
-            // TODO DPMETA-268
-            lastUpdatedBy = createdBy,
-            // Update field if non-null value provided
             name = varDefUpdates.name ?: name,
             shortName = varDefUpdates.shortName ?: shortName,
             definition = varDefUpdates.definition ?: definition,

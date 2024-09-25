@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 val INPUT_VARIABLE_DEFINITION =
-    InputVariableDefinition(
+    Draft(
         id = NanoId.generate(8),
         name =
             LanguageStringType(
@@ -41,7 +41,7 @@ val INPUT_VARIABLE_DEFINITION =
     )
 
 val INPUT_VALIDITY_PERIOD =
-    InputValidityPeriod(
+    ValidityPeriod(
         name =
             LanguageStringType(
                 nb = "Inntektsskatt",

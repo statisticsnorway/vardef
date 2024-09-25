@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef
 
-import no.ssb.metadata.vardef.models.InputValidityPeriod
+import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -31,8 +31,8 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
 
     companion object {
         @JvmStatic
-        fun provideNewValidityPeriods(): Stream<Arguments> {
-            return Stream.of(
+        fun provideNewValidityPeriods(): Stream<Arguments> =
+            Stream.of(
                 Arguments.of(
                     INPUT_VALIDITY_PERIOD.copy(
                         validFrom = LocalDate.now(),
@@ -52,12 +52,11 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                     ),
                 ),
             )
-        }
     }
 
     @ParameterizedTest
     @MethodSource("provideNewValidityPeriods")
-    fun `save new validity period`(inputData: InputValidityPeriod) {
+    fun `save new validity period`(inputData: ValidityPeriod) {
         val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
         val saveNewValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(

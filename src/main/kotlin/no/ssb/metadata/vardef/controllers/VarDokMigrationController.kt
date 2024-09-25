@@ -19,10 +19,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
-import no.ssb.metadata.vardef.constants.INPUT_VARIABLE_DEFINITION_EXAMPLE
+import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokException
-import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.Draft
 
 @Tag(name = DATA_MIGRATION)
 @Validated
@@ -49,7 +49,7 @@ class VarDokMigrationController {
                 Content(
                     examples = [
                         ExampleObject(
-                            INPUT_VARIABLE_DEFINITION_EXAMPLE,
+                            DRAFT_EXAMPLE,
                         ),
                     ],
                 ),
@@ -60,7 +60,7 @@ class VarDokMigrationController {
         @Parameter(name = "vardok-id", description = "The ID of the definition in Vardok.", example = "1607")
         @PathVariable("vardok-id")
         id: String,
-    ): InputVariableDefinition? {
+    ): Draft? {
         try {
             val varDefInput =
                 varDokApiService.createVarDefInputFromVarDokItems(
@@ -68,7 +68,7 @@ class VarDokMigrationController {
                 )
             return httpClient.toBlocking().retrieve(
                 HttpRequest.POST("/variable-definitions", varDefInput),
-                InputVariableDefinition::class.java,
+                Draft::class.java,
             )
         } catch (e: VardokException) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)

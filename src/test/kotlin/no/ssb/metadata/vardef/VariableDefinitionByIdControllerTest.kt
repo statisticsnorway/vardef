@@ -4,7 +4,7 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
-import no.ssb.metadata.vardef.models.InputVariableDefinition
+import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
@@ -158,7 +158,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val body = jsonMapper.readValue(bodyString, InputVariableDefinition::class.java)
+        val body = jsonMapper.readValue(bodyString, Draft::class.java)
 
         assertThat(body.id).isEqualTo(SAVED_DRAFT_VARIABLE_DEFINITION.definitionId)
         assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
@@ -217,7 +217,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val body = jsonMapper.readValue(bodyString, InputVariableDefinition::class.java)
+        val body = jsonMapper.readValue(bodyString, Draft::class.java)
         assertThat(body.shortName).isNotEqualTo(SAVED_DRAFT_VARIABLE_DEFINITION.shortName)
         assertThat(body.id).isEqualTo(SAVED_DRAFT_VARIABLE_DEFINITION.definitionId)
     }
@@ -315,9 +315,10 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
     fun `post not allowed`(spec: RequestSpecification) {
         val input =
-            JSONObject(JSON_TEST_INPUT).apply {
-                put("short_name", "nothing")
-            }.toString()
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    put("short_name", "nothing")
+                }.toString()
 
         spec
             .given()

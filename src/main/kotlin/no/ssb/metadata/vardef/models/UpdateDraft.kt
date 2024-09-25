@@ -15,14 +15,14 @@ import java.time.LocalDate
 /**
  * Update variable definition
  *
- * Data structure with all fields optional for updating an existing variable definition.
+ * Data structure with all fields optional for updating a Draft Variable Definition.
  */
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = INPUT_VARIABLE_DEFINITION_EXAMPLE,
+    example = DRAFT_EXAMPLE,
 )
-data class UpdateVariableDefinition(
+data class UpdateDraft(
     @Nullable
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType?,

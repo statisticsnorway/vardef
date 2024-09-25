@@ -5,8 +5,10 @@ import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
+import io.viascom.nanoid.NanoId
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
@@ -14,50 +16,53 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+/**
+ * Create a Draft Variable Definition
+ */
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = INPUT_VALIDITY_PERIOD_EXAMPLE,
+    example = DRAFT_EXAMPLE,
 )
-data class InputValidityPeriod(
-    @Schema(description = NAME_FIELD_DESCRIPTION)
+data class Draft(
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @Nullable
-    val name: LanguageStringType?,
+    var id: String?,
+    @Schema(description = NAME_FIELD_DESCRIPTION)
+    val name: LanguageStringType,
+    @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
+    @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
+    val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
-    @NotNull
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    @Nullable
     val unitTypes: List<
             @KlassCode("702")
             String,
-            >?,
+            >,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    @Nullable
     val subjectFields: List<
             @KlassCode("618")
             String,
-            >?,
+            >,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
-    @Nullable
-    val containsSensitivePersonalInformation: Boolean?,
+    @NotNull
+    val containsSensitivePersonalInformation: Boolean,
     @Schema(
         description = VARIABLE_STATUS_FIELD_DESCRIPTION,
         accessMode = Schema.AccessMode.READ_ONLY,
     )
-    @Nullable
-    val variableStatus: VariableStatus?,
+    var variableStatus: VariableStatus?,
     @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format("yyyy-MM-dd")
-    @NotNull
     val validFrom: LocalDate,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable
@@ -71,26 +76,32 @@ data class InputValidityPeriod(
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
-    @Nullable
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(previousPatch: SavedVariableDefinition): SavedVariableDefinition =
-        previousPatch.copy(
-            patchId = previousPatch.patchId + 1,
-            name = name ?: previousPatch.name,
+    fun toSavedVariableDefinition(): SavedVariableDefinition =
+        SavedVariableDefinition(
+            definitionId = id ?: NanoId.generate(8),
+            patchId = 1,
+            name = name,
+            shortName = shortName,
             definition = definition,
-            classificationUri = classificationReference ?: previousPatch.classificationUri,
-            unitTypes = unitTypes ?: previousPatch.unitTypes,
-            subjectFields = subjectFields ?: previousPatch.subjectFields,
-            containsSensitivePersonalInformation =
-            containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
-            variableStatus = variableStatus ?: previousPatch.variableStatus,
-            measurementType = measurementType ?: previousPatch.measurementType,
+            classificationUri = classificationReference,
+            unitTypes = unitTypes,
+            subjectFields = subjectFields,
+            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            variableStatus = variableStatus ?: VariableStatus.DRAFT,
+            measurementType = measurementType,
             validFrom = validFrom,
-            validUntil = validUntil ?: previousPatch.validUntil,
-            externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
+            validUntil = validUntil,
+            externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            contact = contact ?: previousPatch.contact,
+            // TODO depends on authentication to make user information available
+            owner = null,
+            contact = contact,
+            // Provide a placeholder value, actual value set by data layer
+            createdAt = LocalDateTime.now(),
+            // TODO depends on authentication to make user information available
+            createdBy = null,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
             // TODO depends on authentication to make user information available

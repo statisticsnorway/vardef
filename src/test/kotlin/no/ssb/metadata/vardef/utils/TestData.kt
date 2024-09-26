@@ -80,7 +80,7 @@ val SAVED_DEPRECATED_VARIABLE_DEFINITION =
         lastUpdatedBy = Person("", ""),
     )
 
-val INPUT_VALIDITY_PERIOD =
+val VALIDITY_PERIOD_TAX_EXAMPLE =
     ValidityPeriod(
         name =
             LanguageStringType(
@@ -112,7 +112,7 @@ val INPUT_VALIDITY_PERIOD =
     )
 
 
-val SAVED_VARIABLE_DEFINITION =
+val SAVED_TAX_EXAMPLE =
     SavedVariableDefinition(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
@@ -155,7 +155,7 @@ val SAVED_VARIABLE_DEFINITION =
             Person("", ""),
     )
 
-val VALIDITY_PERIOD =
+val SAVED_FNR_EXAMPLE =
     SavedVariableDefinition(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
@@ -198,31 +198,49 @@ val VALIDITY_PERIOD =
             Person("", ""),
     )
 
-val SAVED_DRAFT_VARIABLE_DEFINITION =
-    SAVED_VARIABLE_DEFINITION.copy(
-        id = ObjectId(),
-        definitionId = NanoId.generate(8),
-        variableStatus = VariableStatus.DRAFT,
-    )
-
-val SINGLE_SAVED_VARIABLE_DEFINITION =
-    SAVED_VARIABLE_DEFINITION.copy(
-        id = ObjectId(),
-        definitionId = NanoId.generate(8),
-    )
-
-val SAVED_VARIABLE_DEFINITION_COPY =
-    SAVED_VARIABLE_DEFINITION.copy(
+val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
+    SavedVariableDefinition(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
         patchId = 1,
         name =
-            LanguageStringType(
-                nb = "Inntektsskatt 2",
-                nn = "Inntektsskatt 2",
-                en = "Income tax 2",
-            ),
+        LanguageStringType(
+            nb = "Dødvekt",
+            nn = "Dødvekt",
+            en = "Dead weight",
+        ),
+        shortName = "dvkt",
+        definition =
+        LanguageStringType(
+            nb = "Dødvekt er den største vekt skipet kan bære av last og beholdninger.",
+            nn = null,
+            en = "Dead weight",
+        ),
+        classificationUri = "91",
+        unitTypes = listOf("01", "02"),
+        subjectFields = listOf("he04"),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.DRAFT,
+        measurementType = "02.01",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        relatedVariableDefinitionUris = listOf(),
+        owner =
+        Owner("", ""),
+        contact =
+        Contact(
+            LanguageStringType("", "", ""),
+            "me@example.com",
+        ),
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy =
+        Person("", ""),
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy =
+        Person("", ""),
     )
+
 
 val RENDERED_VARIABLE_DEFINITION =
     RenderedVariableDefinition(

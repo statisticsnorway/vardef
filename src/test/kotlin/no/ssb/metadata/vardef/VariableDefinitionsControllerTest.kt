@@ -190,7 +190,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("[0].id", notNullValue())
-            .body("{ it.short_name == bus }.name", equalTo(DRAFT_BUS_EXAMPLE.name.getValidLanguage(language)))
+            .body("find { it.short_name == 'bus' }.name", equalTo(DRAFT_BUS_EXAMPLE.name.getValidLanguage(language)))
             .header("Content-Language", language.toString())
     }
 

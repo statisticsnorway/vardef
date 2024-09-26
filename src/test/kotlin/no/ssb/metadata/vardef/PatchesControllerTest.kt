@@ -17,7 +17,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get all patches`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(200)
             .body("size()", equalTo(7))
@@ -27,10 +27,10 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get one patch`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches/3")
+            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/3")
             .then()
             .statusCode(200)
-            .body("id", equalTo(SAVED_VARIABLE_DEFINITION.definitionId))
+            .body("id", equalTo(SAVED_TAX_EXAMPLE.definitionId))
             .body("patch_id", equalTo(3))
             .body("short_name", equalTo("intskatt"))
     }
@@ -59,7 +59,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get request unknown patch id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches/8987563")
+            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/8987563")
             .then()
             .statusCode(404)
             .body("_embedded.errors[0].message", containsString("No such variable definition found"))
@@ -69,7 +69,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `delete request`(spec: RequestSpecification) {
         spec
             .`when`()
-            .delete("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .delete("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(405)
     }
@@ -78,7 +78,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `patch request`(spec: RequestSpecification) {
         spec
             .`when`()
-            .patch("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .patch("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(405)
     }
@@ -100,15 +100,15 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(testCase)
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(201)
-            .body("id", equalTo(SAVED_VARIABLE_DEFINITION.definitionId))
+            .body("id", equalTo(SAVED_TAX_EXAMPLE.definitionId))
 
-        val createdPatch = variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId)
+        val createdPatch = variableDefinitionService.getLatestPatchById(SAVED_TAX_EXAMPLE.definitionId)
         val previousPatch =
             variableDefinitionService.getOnePatchById(
-                SAVED_VARIABLE_DEFINITION.definitionId,
+                SAVED_TAX_EXAMPLE.definitionId,
                 createdPatch.patchId - 1,
             )
 
@@ -131,7 +131,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(testCase)
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))
@@ -150,7 +150,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(testCase)
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
@@ -163,7 +163,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(JSON_TEST_INPUT)
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
@@ -179,7 +179,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(testCase)
             .`when`()
-            .post("/variable-definitions/${SAVED_VARIABLE_DEFINITION.definitionId}/patches")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(400)
             .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))

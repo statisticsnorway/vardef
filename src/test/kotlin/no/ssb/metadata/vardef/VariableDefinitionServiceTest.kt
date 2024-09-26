@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef
 
+import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -14,11 +15,12 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 import java.util.stream.Stream
+import org.bson.types.ObjectId
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get latest patch`() {
-        assertThat(variableDefinitionService.getLatestPatchById(SAVED_VARIABLE_DEFINITION.definitionId).patchId)
+        assertThat(variableDefinitionService.getLatestPatchById(SAVED_TAX_EXAMPLE.definitionId).patchId)
             .isEqualTo(7)
     }
 
@@ -27,7 +29,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    SAVED_VARIABLE_DEFINITION.definitionId,
+                    SAVED_TAX_EXAMPLE.definitionId,
                     LocalDate.of(1990, 1, 1),
                 ).patchId,
         ).isEqualTo(6)
@@ -38,7 +40,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThrows<NoMatchingValidityPeriodFound> {
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    SAVED_VARIABLE_DEFINITION.definitionId,
+                    SAVED_TAX_EXAMPLE.definitionId,
                     LocalDate.of(1760, 1, 1),
                 )
         }
@@ -49,7 +51,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    SAVED_VARIABLE_DEFINITION.definitionId,
+                    SAVED_TAX_EXAMPLE.definitionId,
                     LocalDate.of(3000, 1, 1),
                 ).patchId,
         ).isEqualTo(7)
@@ -76,7 +78,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     ) {
         assertThat(
             variableDefinitionService.isValidValidFromValue(
-                SAVED_VARIABLE_DEFINITION.definitionId,
+                SAVED_TAX_EXAMPLE.definitionId,
                 LocalDate.of(year, 1, 1),
             ),
         ).isEqualTo(expected)
@@ -84,10 +86,15 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
 
     @Test
     fun `get id with only one patch`() {
-        variableDefinitionService.save(SINGLE_SAVED_VARIABLE_DEFINITION)
+        val singleSavedTaxExample =
+            SAVED_TAX_EXAMPLE.copy(
+                id = ObjectId(),
+                definitionId = NanoId.generate(8),
+            )
+        variableDefinitionService.save(singleSavedTaxExample)
         assertThat(
             variableDefinitionService.isValidValidFromValue(
-                SINGLE_SAVED_VARIABLE_DEFINITION.definitionId,
+                singleSavedTaxExample.definitionId,
                 LocalDate.of(3000, 1, 1),
             ),
         ).isEqualTo(true)
@@ -98,7 +105,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         fun provideTestDataCheckDefinition(): Stream<Arguments> =
             Stream.of(
                 Arguments.of(
-                    INPUT_VALIDITY_PERIOD.copy(
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
                                 nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
@@ -109,7 +116,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     false,
                 ),
                 Arguments.of(
-                    INPUT_VALIDITY_PERIOD.copy(
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
                                 nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
@@ -120,7 +127,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     true,
                 ),
                 Arguments.of(
-                    INPUT_VALIDITY_PERIOD.copy(
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
                                 nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
@@ -131,7 +138,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     false,
                 ),
                 Arguments.of(
-                    INPUT_VALIDITY_PERIOD.copy(
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
                                 nb = "Endring",
@@ -150,7 +157,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         inputObject: ValidityPeriod,
         expected: Boolean,
     ) {
-        val actualResult = variableDefinitionService.isNewDefinition(inputObject, SAVED_VARIABLE_DEFINITION)
+        val actualResult = variableDefinitionService.isNewDefinition(inputObject, SAVED_TAX_EXAMPLE)
         assertThat(actualResult).isEqualTo(expected)
     }
 

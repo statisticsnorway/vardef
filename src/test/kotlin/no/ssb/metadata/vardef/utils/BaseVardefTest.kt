@@ -29,26 +29,26 @@ open class BaseVardefTest {
     fun setUp() {
         variableDefinitionService.clear()
 
-        // Collection of one variable definition
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
+        // One variable definition with many periods and patches
+        variableDefinitionService.save(SAVED_TAX_EXAMPLE)
+        variableDefinitionService.save(SAVED_TAX_EXAMPLE.copy().apply { patchId = 2 })
+        variableDefinitionService.save(SAVED_TAX_EXAMPLE.copy().apply { patchId = 3 })
         variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
+            SAVED_TAX_EXAMPLE.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 4
             },
         )
         variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
+            SAVED_TAX_EXAMPLE.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 5
             },
         )
         variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
+            SAVED_TAX_EXAMPLE.copy().apply {
                 validFrom = LocalDate.of(1980, 12, 1)
                 validUntil = LocalDate.of(2020, 12, 31)
                 patchId = 6
@@ -56,7 +56,7 @@ open class BaseVardefTest {
         )
 
         variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
+            SAVED_TAX_EXAMPLE.copy().apply {
                 validFrom = LocalDate.of(2021, 1, 1)
                 validUntil = null
                 definition =
@@ -69,12 +69,10 @@ open class BaseVardefTest {
             },
         )
 
+        // One variable definition
         variableDefinitionService.save(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
 
-        // Collection of one variable definition
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
-
-        // Collection of one variable definition
-        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
+        // One variable definition
+        variableDefinitionService.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
     }
 }

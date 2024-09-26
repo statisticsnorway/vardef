@@ -12,7 +12,7 @@ import java.time.Period
 import java.util.stream.Stream
 
 class ValidityPeriodsServiceTest : BaseVardefTest() {
-    private val savedVariableDefinitionId = SAVED_VARIABLE_DEFINITION.definitionId
+    private val savedVariableDefinitionId = SAVED_TAX_EXAMPLE.definitionId
 
     @Test
     fun `end validity period`() {
@@ -34,19 +34,19 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         fun provideNewValidityPeriods(): Stream<Arguments> =
             Stream.of(
                 Arguments.of(
-                    INPUT_VALIDITY_PERIOD.copy(
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.now(),
                         validUntil = null,
                     ),
                 ),
                 Arguments.of(
-                    INPUT_VALIDITY_PERIOD.copy(
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2025, 10, 5),
                         validUntil = null,
                     ),
                 ),
                 Arguments.of(
-                    INPUT_VALIDITY_PERIOD.copy(
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2050, 1, 1),
                         validUntil = null,
                     ),
@@ -88,11 +88,11 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
         val saveNewValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
-                INPUT_VALIDITY_PERIOD.copy(
+                VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                     validFrom = LocalDate.of(1796, 1, 1),
                     validUntil = null,
                 ),
-                SAVED_VARIABLE_DEFINITION.definitionId,
+                SAVED_TAX_EXAMPLE.definitionId,
             )
         val patchesAfterSave = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
 

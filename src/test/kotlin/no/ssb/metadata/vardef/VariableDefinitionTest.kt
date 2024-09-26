@@ -4,7 +4,7 @@ import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
-import no.ssb.metadata.vardef.utils.SAVED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -21,7 +21,7 @@ class VariableDefinitionTest {
 
     @BeforeAll
     fun setUp() {
-        variableDefinition = SAVED_VARIABLE_DEFINITION
+        variableDefinition = SAVED_TAX_EXAMPLE
         nanoIdSize = 8
         renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
     }

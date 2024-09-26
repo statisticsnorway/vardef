@@ -7,21 +7,21 @@ import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-val INPUT_VARIABLE_DEFINITION =
+val DRAFT_BUS_EXAMPLE =
     Draft(
         id = NanoId.generate(8),
         name =
             LanguageStringType(
-                nb = "Inntektsskatt",
-                nn = "Inntektsskatt",
-                en = "Income tax",
+                nb = "Buss",
+                nn = "Buss",
+                en = "Bus",
             ),
-        shortName = "intskatt",
+        shortName = "bus",
         definition =
             LanguageStringType(
-                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
                 nn = null,
-                en = "Income tax",
+                en = "A bus is",
             ),
         classificationReference = "91",
         unitTypes = listOf("", ""),
@@ -30,7 +30,7 @@ val INPUT_VARIABLE_DEFINITION =
         variableStatus = VariableStatus.DRAFT,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
-        validUntil = LocalDate.of(2021, 1, 1),
+        validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
@@ -111,23 +111,6 @@ val INPUT_VALIDITY_PERIOD =
             ),
     )
 
-val INPUT_VARIABLE_DEFINITION_COPY =
-    INPUT_VARIABLE_DEFINITION.copy(
-        name =
-            LanguageStringType(
-                nb = "Inntektsskatt 2",
-                nn = "Inntektsskatt 2",
-                en = "Income tax 2",
-            ),
-        shortName = "Inntektsskatt_2",
-    )
-
-val INPUT_VARIABLE_DEFINITION_NO_NAME =
-    INPUT_VARIABLE_DEFINITION.copy(
-        name =
-            LanguageStringType(nb = "Inntektsskatt", nn = "", en = null),
-        shortName = "Inntektsskatt_2",
-    )
 
 val SAVED_VARIABLE_DEFINITION =
     SavedVariableDefinition(

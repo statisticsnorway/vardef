@@ -69,10 +69,7 @@ open class BaseVardefTest {
             },
         )
 
-        // Collection of one variable definition
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
+        variableDefinitionService.save(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
 
         // Collection of one variable definition
         variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)

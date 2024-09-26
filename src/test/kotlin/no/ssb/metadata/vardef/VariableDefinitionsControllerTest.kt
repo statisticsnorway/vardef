@@ -9,7 +9,7 @@ import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -190,7 +190,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("[0].id", notNullValue())
-            .body("[0].name", equalTo(INPUT_VARIABLE_DEFINITION.name.getValidLanguage(language)))
+            .body("{ it.short_name == bus }.name", equalTo(DRAFT_BUS_EXAMPLE.name.getValidLanguage(language)))
             .header("Content-Language", language.toString())
     }
 
@@ -377,13 +377,13 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         // No definitions are valid on this date
         "1800-01-01, 0",
         // Specific definitions are valid on these dates
-        "2021-01-01, 4",
+        "2021-01-01, 3",
         "2020-01-01, 1",
         // Definitions without a validUntil date defined
         "2024-06-05, 3",
         "3000-12-31, 3",
         // All definitions
-        "null, 4",
+        "null, 3",
     )
     fun `filter variable definitions by date`(
         dateOfValidity: String,

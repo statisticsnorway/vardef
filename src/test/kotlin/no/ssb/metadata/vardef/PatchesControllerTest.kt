@@ -201,7 +201,7 @@ class PatchesControllerTest : BaseVardefTest() {
         val id =
             variableDefinitionService
                 .save(
-                    INPUT_VARIABLE_DEFINITION
+                    DRAFT_BUS_EXAMPLE
                         .apply {
                             this.variableStatus = variableStatus
                         }.toSavedVariableDefinition(),

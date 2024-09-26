@@ -111,7 +111,6 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
             ),
     )
 
-
 val SAVED_TAX_EXAMPLE =
     SavedVariableDefinition(
         id = ObjectId(),
@@ -204,18 +203,18 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         definitionId = NanoId.generate(8),
         patchId = 1,
         name =
-        LanguageStringType(
-            nb = "Dødvekt",
-            nn = "Dødvekt",
-            en = "Dead weight",
-        ),
+            LanguageStringType(
+                nb = "Dødvekt",
+                nn = "Dødvekt",
+                en = "Dead weight",
+            ),
         shortName = "dvkt",
         definition =
-        LanguageStringType(
-            nb = "Dødvekt er den største vekt skipet kan bære av last og beholdninger.",
-            nn = null,
-            en = "Dead weight",
-        ),
+            LanguageStringType(
+                nb = "Dødvekt er den største vekt skipet kan bære av last og beholdninger.",
+                nn = null,
+                en = "Dead weight",
+            ),
         classificationUri = "91",
         unitTypes = listOf("01", "02"),
         subjectFields = listOf("he04"),
@@ -227,20 +226,19 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
-        Owner("", ""),
+            Owner("", ""),
         contact =
-        Contact(
-            LanguageStringType("", "", ""),
-            "me@example.com",
-        ),
+            Contact(
+                LanguageStringType("", "", ""),
+                "me@example.com",
+            ),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy =
-        Person("", ""),
+            Person("", ""),
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy =
-        Person("", ""),
+            Person("", ""),
     )
-
 
 val RENDERED_VARIABLE_DEFINITION =
     RenderedVariableDefinition(

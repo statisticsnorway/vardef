@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -15,7 +16,6 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 import java.util.stream.Stream
-import org.bson.types.ObjectId
 
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test

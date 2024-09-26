@@ -145,8 +145,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .body(
                     """
                     {"name": {
-                        "nb": "Inntektsskatt",
-                        "nn": "Inntektsskatt",
+                        "nb": "Dødvekt",
+                        "nn": "Dødvekt",
                         "en": "Update"
                     }}
                     """.trimIndent(),

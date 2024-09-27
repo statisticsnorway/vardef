@@ -20,7 +20,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(200)
-            .body("size()", equalTo(7))
+            .body("size()", equalTo(numSavedTaxDefinitions))
     }
 
     @Test

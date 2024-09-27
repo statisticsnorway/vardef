@@ -21,7 +21,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get latest patch`() {
         assertThat(variableDefinitionService.getLatestPatchById(SAVED_TAX_EXAMPLE.definitionId).patchId)
-            .isEqualTo(7)
+            .isEqualTo(numSavedTaxDefinitions)
     }
 
     @Test
@@ -54,7 +54,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     SAVED_TAX_EXAMPLE.definitionId,
                     LocalDate.of(3000, 1, 1),
                 ).patchId,
-        ).isEqualTo(7)
+        ).isEqualTo(numSavedTaxDefinitions)
     }
 
     @Test

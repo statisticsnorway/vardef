@@ -34,61 +34,64 @@ open class BaseVardefTest {
         variableDefinitionService.save(
             SAVED_TAX_EXAMPLE.copy(
                 unitTypes = listOf("01", "02", "03"),
-                patchId = 2
-            )
+                patchId = 2,
+            ),
         )
 
         variableDefinitionService.save(
             SAVED_TAX_EXAMPLE.copy(
                 patchId = 3,
-                unitTypes = listOf("01", "02", "03", "04")
-            )
+                unitTypes = listOf("01", "02", "03", "04"),
+            ),
         )
 
         variableDefinitionService.save(
             SAVED_TAX_EXAMPLE.copy(
                 validFrom = LocalDate.of(1980, 12, 1),
                 validUntil = LocalDate.of(2020, 12, 31),
-                definition = LanguageStringType(
-                    "Intektsskatt ny definisjon",
-                    "Intektsskatt ny definisjon",
-                    "Income tax new definition",
-                ),
-                patchId = 4
-            )
+                definition =
+                    LanguageStringType(
+                        "Intektsskatt ny definisjon",
+                        "Intektsskatt ny definisjon",
+                        "Income tax new definition",
+                    ),
+                patchId = 4,
+            ),
         )
 
         variableDefinitionService.save(
             SAVED_TAX_EXAMPLE.copy(
                 validFrom = LocalDate.of(1980, 12, 1),
                 validUntil = LocalDate.of(2020, 12, 31),
-                definition = LanguageStringType(
-                    "Intektsskatt ny definisjon",
-                    "Intektsskatt ny definisjon",
-                    "Income tax new definition",
-                ),
-                patchId = 5
-            )
+                definition =
+                    LanguageStringType(
+                        "Intektsskatt ny definisjon",
+                        "Intektsskatt ny definisjon",
+                        "Income tax new definition",
+                    ),
+                patchId = 5,
+            ),
         )
 
         variableDefinitionService.save(
             SAVED_TAX_EXAMPLE.copy(
                 validFrom = LocalDate.of(1980, 12, 1),
                 validUntil = LocalDate.of(2020, 12, 31),
-                definition = LanguageStringType(
-                    "Intektsskatt ny definisjon",
-                    "Intektsskatt ny definisjon",
-                    "Income tax new definition",
-                ),
-                patchId = 6
-            )
+                definition =
+                    LanguageStringType(
+                        "Intektsskatt ny definisjon",
+                        "Intektsskatt ny definisjon",
+                        "Income tax new definition",
+                    ),
+                patchId = 6,
+            ),
         )
 
         variableDefinitionService.save(
             SAVED_TAX_EXAMPLE.copy(
                 unitTypes = listOf("01", "02"),
-                patchId = 7
-            )
+                patchId = 7,
+            ),
         )
 
         // One variable definition

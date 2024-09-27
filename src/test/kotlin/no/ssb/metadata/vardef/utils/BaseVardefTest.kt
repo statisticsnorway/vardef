@@ -66,7 +66,7 @@ open class BaseVardefTest {
                 definition =
                     LanguageStringType(
                         "Intektsskatt ny definisjon",
-                        "Intektsskatt ny definisjon",
+                        "Intektsskatt ny definisjon, rette feil",
                         "Income tax new definition",
                     ),
                 patchId = 5,
@@ -79,8 +79,8 @@ open class BaseVardefTest {
                 validUntil = LocalDate.of(2020, 12, 31),
                 definition =
                     LanguageStringType(
-                        "Intektsskatt ny definisjon",
-                        "Intektsskatt ny definisjon",
+                        "Intektsskatt ny definisjon, rette feil",
+                        "Intektsskatt ny definisjon, rette feil",
                         "Income tax new definition",
                     ),
                 patchId = 6,

@@ -167,7 +167,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .get("/variable-definitions?valid_from=2024-01-01")
             .then()
             .statusCode(200)
-            .body("[0].definition", equalTo("For personer født på siden"))
+            .body("[0].definition", containsString("Inntektsskatt utlignes"))
             .body("[0].id", notNullValue())
             .header(
                 "Content-Language",

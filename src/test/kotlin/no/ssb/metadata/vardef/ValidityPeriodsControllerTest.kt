@@ -1,11 +1,8 @@
 package no.ssb.metadata.vardef
 
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.models.LanguageStringType
-import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
@@ -13,18 +10,13 @@ import org.json.JSONObject
 import org.junit.jupiter.api.*
 import java.time.LocalDate
 
-@MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-class ValidityPeriodsControllerTest {
-    @Inject
-    lateinit var variableDefinitionService: VariableDefinitionService
+
+class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @BeforeEach
     fun setUpValidityPeriods() {
-        variableDefinitionService.clear()
+        //variableDefinitionService.clear()
 
-        // collection 1
         variableDefinitionService.save(SAVED_FNR_EXAMPLE)
         variableDefinitionService.save(
             SAVED_FNR_EXAMPLE.copy().apply {
@@ -45,28 +37,21 @@ class ValidityPeriodsControllerTest {
                 patchId = 3
             },
         )
-
-        // collection 2
-        variableDefinitionService.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
-
-        // collection3
-        variableDefinitionService.save(SAVED_DEPRECATED_VARIABLE_DEFINITION)
     }
 
     /**
-     * test cases new validity period.
+     * test case new valid validity period.
      */
     companion object {
-
         @JvmStatic
         fun newValidityPeriod(): String {
             val testCase =
                 JSONObject().apply {
                     put("valid_from", "2024-01-11")
                     put("definition", JSONObject().apply {
-                        put("nb", "For personer født i går")
-                        put("nn", "For personer født i går")
-                        put("en", "Persons born yesterday")
+                        put("nb", "Intektsskatt atter ny definisjon")
+                        put("nn", "Intektsskatt atter ny definisjon")
+                        put("en", "Yet another definition")
                     })
                 }.toString()
             return testCase
@@ -81,20 +66,18 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(newValidityPeriod())
             .`when`()
-            .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(201)
 
-        val lastPatch = variableDefinitionService.getLatestPatchById(SAVED_FNR_EXAMPLE.definitionId)
+        val lastPatch = variableDefinitionService.getLatestPatchById(SAVED_TAX_EXAMPLE.definitionId)
 
         assertThat(
-            variableDefinitionService.getLatestPatchById(
-                SAVED_FNR_EXAMPLE.definitionId,
-            ).validUntil,
+           lastPatch.validUntil,
         ).isNull()
         assertThat(
             variableDefinitionService.getOnePatchById(
-                SAVED_FNR_EXAMPLE.definitionId,
+                lastPatch.definitionId,
                 lastPatch.patchId - 1,
             ).validUntil,
         ).isEqualTo(lastPatch.validFrom.minusDays(1))
@@ -104,13 +87,8 @@ class ValidityPeriodsControllerTest {
     fun `create new validity period before all validity periods`(spec: RequestSpecification) {
 
         val newValidityPeriodBeforeAll =
-            JSONObject().apply {
+            JSONObject(newValidityPeriod()).apply {
                 put("valid_from", "1923-01-11")
-                put("definition", JSONObject().apply {
-                    put("nb", "For personer født hver dag")
-                    put("nn", "For personer født hver dag")
-                    put("en", "Persons born every day")
-                })
             }.toString()
 
         spec
@@ -118,14 +96,14 @@ class ValidityPeriodsControllerTest {
             .contentType(ContentType.JSON)
             .body(newValidityPeriodBeforeAll)
             .`when`()
-            .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(201)
         assertThat(
             variableDefinitionService.getLatestPatchById(
-                SAVED_FNR_EXAMPLE.definitionId,
+                SAVED_TAX_EXAMPLE.definitionId,
             ).validUntil,
-        ).isEqualTo(LocalDate.of(2020, 12, 31))
+        ).isEqualTo(LocalDate.of(1979, 12, 31))
     }
 
     @Test
@@ -267,13 +245,7 @@ class ValidityPeriodsControllerTest {
     fun `create new validity period with new short name`(spec: RequestSpecification) {
 
         val newShortName =
-            JSONObject().apply {
-                put("valid_from", "2024-01-11")
-                put("definition", JSONObject().apply {
-                    put("nb", "For personer født i går")
-                    put("nn", "For personer født i går")
-                    put("en", "Persons born yesterday")
-                })
+            JSONObject(newValidityPeriod()).apply {
                 put("short_name","car")
             }.toString()
 
@@ -295,8 +267,6 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period with draft status`(spec: RequestSpecification) {
-
-
         spec
             .given()
             .contentType(ContentType.JSON)

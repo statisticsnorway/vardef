@@ -167,7 +167,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .get("/variable-definitions?valid_from=2024-01-01")
             .then()
             .statusCode(200)
-            .body("[0].definition", containsString("Inntektsskatt utlignes"))
+            .body("[0].definition", containsString("Intektsskatt ny definisjon"))
             .body("[0].id", notNullValue())
             .header(
                 "Content-Language",
@@ -377,13 +377,13 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         // No definitions are valid on this date
         "1800-01-01, 0",
         // Specific definitions are valid on these dates
-        "2021-01-01, 3",
+        "2021-01-01, 4",
         "2020-01-01, 1",
         // Definitions without a validUntil date defined
-        "2024-06-05, 3",
-        "3000-12-31, 3",
+        "2024-06-05, 4",
+        "3000-12-31, 4",
         // All definitions
-        "null, 3",
+        "null, 4",
     )
     fun `filter variable definitions by date`(
         dateOfValidity: String,

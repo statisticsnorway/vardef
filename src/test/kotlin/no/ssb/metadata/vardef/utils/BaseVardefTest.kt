@@ -84,5 +84,8 @@ open class BaseVardefTest {
 
         // One variable definition
         variableDefinitionService.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
+
+        // One variable definition
+        variableDefinitionService.save(SAVED_DEPRECATED_VARIABLE_DEFINITION)
     }
 }

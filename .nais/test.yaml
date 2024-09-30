@@ -12,7 +12,6 @@ spec:
 
   ingresses:
     - https://vardef.intern.test.ssb.no
-    - https://vardef.test.ssb.cloud.nais.io
 
   accessPolicy:
     inbound:
@@ -24,7 +23,7 @@ spec:
         - host: data.ssb.no
         # Allow egress to Vardok
         - host: ssb.no
-        # allow egress to mongodb
+        # Allow egress to mongodb
         - host: metadata-test-shard-00-01.fuld2.mongodb.net
           ports:
             - port: 27016
@@ -39,7 +38,6 @@ spec:
             - port: 27017
 
   envFrom:
-    # secrets nais
     - secret: metadata-vardef-test
 
   liveness:

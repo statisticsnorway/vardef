@@ -243,13 +243,8 @@ class ValidityPeriodsControllerTest {
     fun `create new validity period no valid from`(spec: RequestSpecification) {
 
         val validFromIsNull =
-            JSONObject().apply {
-                put("valid_from", "null")
-                put("definition", JSONObject().apply {
-                    put("nb", "For personer født i går")
-                    put("nn", "For personer født i går")
-                    put("en", "Persons born yesterday")
-                })
+            JSONObject(newValidityPeriod()).apply {
+                remove("valid_from")
             }.toString()
 
         spec

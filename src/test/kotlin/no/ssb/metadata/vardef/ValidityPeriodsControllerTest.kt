@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
@@ -11,34 +10,8 @@ import org.junit.jupiter.api.*
 import java.time.LocalDate
 
 class ValidityPeriodsControllerTest : BaseVardefTest() {
-    @BeforeEach
-    fun setUpValidityPeriods() {
-        // variableDefinitionService.clear()
-
-        variableDefinitionService.save(SAVED_FNR_EXAMPLE)
-        variableDefinitionService.save(
-            SAVED_FNR_EXAMPLE.copy().apply {
-                validUntil = LocalDate.of(2022, 12, 31)
-                patchId = 2
-            },
-        )
-        variableDefinitionService.save(
-            SAVED_FNR_EXAMPLE.copy().apply {
-                validFrom = LocalDate.of(2023, 1, 1)
-                validUntil = null
-                definition =
-                    LanguageStringType(
-                        nb = "For personer født på siden",
-                        nn = "For personer født på siden",
-                        en = "Persons born on the side",
-                    )
-                patchId = 3
-            },
-        )
-    }
-
     /**
-     * test case new valid validity period.
+     * Test input data new valid validity period
      */
     companion object {
         @JvmStatic
@@ -52,6 +25,23 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                             put("nb", "Intektsskatt atter ny definisjon")
                             put("nn", "Intektsskatt atter ny definisjon")
                             put("en", "Yet another definition")
+                        },
+                    )
+                }.toString()
+            return testCase
+        }
+
+        @JvmStatic
+        fun noNewData(): String {
+            val testCase =
+                JSONObject().apply {
+                    put("valid_from", "2021-01-01")
+                    put(
+                        "definition",
+                        JSONObject().apply {
+                            put("nb", "Intektsskatt ny definisjon")
+                            put("nn", "Intektsskatt ny definisjon")
+                            put("en", "Income tax new definition")
                         },
                     )
                 }.toString()
@@ -108,14 +98,13 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period missing language`(spec: RequestSpecification) {
         val definitionNotChangedForAll =
-            JSONObject().apply {
+            JSONObject(noNewData()).apply {
                 put("valid_from", "2040-01-11")
                 put(
                     "definition",
                     JSONObject().apply {
-                        put("nb", "For personer født på mandag")
-                        put("nn", "For personer født på mandag")
-                        put("en", "Persons born on the side")
+                        put("nb", "Intektsskatt i økonomi")
+                        put("nn", "Intektsskatt i økonomi")
                     },
                 )
             }.toString()
@@ -125,7 +114,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(definitionNotChangedForAll)
             .`when`()
-            .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(400)
     }
@@ -133,16 +122,8 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
         val definitionNotChanged =
-            JSONObject().apply {
+            JSONObject(noNewData()).apply {
                 put("valid_from", "2040-01-11")
-                put(
-                    "definition",
-                    JSONObject().apply {
-                        put("nb", "For personer født på siden")
-                        put("nn", "For personer født på siden")
-                        put("en", "Persons born on the side")
-                    },
-                )
             }.toString()
 
         spec
@@ -150,7 +131,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(definitionNotChanged)
             .`when`()
-            .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
@@ -159,16 +140,8 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period invalid valid from`(spec: RequestSpecification) {
         val invalidValidFrom =
-            JSONObject().apply {
-                put("valid_from", "2021-05-11")
-                put(
-                    "definition",
-                    JSONObject().apply {
-                        put("nb", "For personer født på søndag")
-                        put("nn", "For personer født på søndag")
-                        put("en", "Persons born on sunday")
-                    },
-                )
+            JSONObject(newValidityPeriod()).apply {
+                put("valid_from", "1990-05-11")
             }.toString()
 
         spec
@@ -176,7 +149,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(invalidValidFrom)
             .`when`()
-            .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(
@@ -189,36 +162,23 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new validity period invalid input`(spec: RequestSpecification) {
-        val invalidValidFromAndInvalidDefinition =
-            JSONObject().apply {
-                put("valid_from", "2021-05-11")
-                put(
-                    "definition",
-                    JSONObject().apply {
-                        put("nb", "For personer født på siden")
-                        put("nn", "For personer født på siden")
-                        put("en", "Persons born on the side")
-                    },
-                )
-            }.toString()
-
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(invalidValidFromAndInvalidDefinition)
+            .body(noNewData())
             .`when`()
-            .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
 
-        val correctValidFrom = JSONObject(invalidValidFromAndInvalidDefinition).apply { put("valid_from", "2030-01-11") }.toString()
+        val correctValidFrom = JSONObject(noNewData()).apply { put("valid_from", "2030-01-11") }.toString()
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(correctValidFrom)
             .`when`()
-            .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))

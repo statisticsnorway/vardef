@@ -161,7 +161,7 @@ class VarDokMigrationTest {
     }
 
     @Test
-    fun `data element name with uppercase`()  {
+    fun `data element name with uppercase`() {
         val vardok = varDokApiService.getVarDokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
         val varDefInput =

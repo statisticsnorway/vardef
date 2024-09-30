@@ -48,6 +48,7 @@ open class BaseVardefTest {
             SAVED_TAX_EXAMPLE.copy(
                 patchId = 4,
                 validUntil = LocalDate.of(2020, 12, 31),
+                unitTypes = listOf("01", "02", "03", "04"),
             ),
         )
 
@@ -60,6 +61,7 @@ open class BaseVardefTest {
                         "Intektsskatt ny definisjon",
                         "Income tax new definition",
                     ),
+                unitTypes = listOf("01", "02", "03", "04"),
                 patchId = 5,
             ),
         )

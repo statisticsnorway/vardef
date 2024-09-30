@@ -98,7 +98,7 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
         containsSensitivePersonalInformation = false,
-        variableStatus = VariableStatus.DRAFT,
+        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
@@ -136,49 +136,6 @@ val SAVED_TAX_EXAMPLE =
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
         validFrom = LocalDate.of(1980, 1, 1),
-        validUntil = null,
-        externalReferenceUri = URI("https://example.com/").toURL(),
-        relatedVariableDefinitionUris = listOf(),
-        owner =
-            Owner("", ""),
-        contact =
-            Contact(
-                LanguageStringType("", "", ""),
-                "me@example.com",
-            ),
-        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy =
-            Person("", ""),
-        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy =
-            Person("", ""),
-    )
-
-val SAVED_FNR_EXAMPLE =
-    SavedVariableDefinition(
-        id = ObjectId(),
-        definitionId = NanoId.generate(8),
-        patchId = 1,
-        name =
-            LanguageStringType(
-                nb = "Fødselsnummer",
-                nn = "Fødselsnummer",
-                en = "Birth number",
-            ),
-        shortName = "fnr_test",
-        definition =
-            LanguageStringType(
-                nb = "Offisielt registreringsnummer person.",
-                nn = "Offisielt registreringsnummer person.",
-                en = "Official registration number person",
-            ),
-        classificationUri = "91",
-        unitTypes = listOf("01", "02"),
-        subjectFields = listOf("he04"),
-        containsSensitivePersonalInformation = true,
-        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
-        measurementType = "02.01",
-        validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),

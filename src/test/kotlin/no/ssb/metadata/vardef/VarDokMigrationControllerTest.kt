@@ -66,4 +66,16 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 ),
             )
     }
+
+    @Test
+    fun `post vardok with uppercase data element name`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/vardok-migration/130")
+            .then()
+            .statusCode(201)
+    }
 }

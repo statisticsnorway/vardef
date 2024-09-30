@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Requires
+import org.json.JSONObject
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-@Requires(env = ["integration-test"])
+//@Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
@@ -158,5 +159,17 @@ class VarDokMigrationTest {
         val varDokResponse: VardokResponse = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
         println(varDokResponse)
         assertThat(varDokResponse.xmlLang).isEqualTo("nb")
+    }
+
+    @Test
+    fun `data element name with uppercase`(){
+        val vardok = varDokApiService.getVarDokItem("130")
+        assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
+        val varDefInput =
+            varDokApiService.createVarDefInputFromVarDokItems(
+                varDokApiService.fetchMultipleVarDokItemsByLanguage("130"),
+            )
+        val testThing = JSONObject(varDefInput)
+        assertThat(testThing["short_name"]).isEqualTo("ufg")
     }
 }

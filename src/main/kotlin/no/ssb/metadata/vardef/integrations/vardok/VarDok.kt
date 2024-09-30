@@ -29,7 +29,7 @@ fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): VarDok {
                 vardokItem["nn"]?.common?.title,
                 vardokItem["en"]?.common?.title,
             ),
-        shortName = vardokItemNb.variable?.dataElementName!!,
+        shortName = vardokItemNb.variable?.dataElementName!!.lowercase(),
         definition =
             LanguageStringType(
                 vardokItemNb.common?.description,

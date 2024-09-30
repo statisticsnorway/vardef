@@ -9,7 +9,7 @@ import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INPUT_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -167,7 +167,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .get("/variable-definitions?valid_from=2024-01-01")
             .then()
             .statusCode(200)
-            .body("[0].definition", equalTo("For personer født på siden"))
+            .body("[0].definition", containsString("Intektsskatt ny definisjon"))
             .body("[0].id", notNullValue())
             .header(
                 "Content-Language",
@@ -190,7 +190,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("[0].id", notNullValue())
-            .body("[0].name", equalTo(INPUT_VARIABLE_DEFINITION.name.getValidLanguage(language)))
+            .body("find { it.short_name == 'bus' }.name", equalTo(DRAFT_BUS_EXAMPLE.name.getValidLanguage(language)))
             .header("Content-Language", language.toString())
     }
 
@@ -380,8 +380,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         "2021-01-01, 4",
         "2020-01-01, 1",
         // Definitions without a validUntil date defined
-        "2024-06-05, 3",
-        "3000-12-31, 3",
+        "2024-06-05, 4",
+        "3000-12-31, 4",
         // All definitions
         "null, 4",
     )

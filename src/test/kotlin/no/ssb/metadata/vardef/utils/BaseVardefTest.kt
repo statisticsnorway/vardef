@@ -29,55 +29,65 @@ open class BaseVardefTest {
     fun setUp() {
         variableDefinitionService.clear()
 
-        // Collection of one variable definition
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION)
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 2 })
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION.copy().apply { patchId = 3 })
+        // One variable definition with many periods and patches
+        variableDefinitionService.save(SAVED_TAX_EXAMPLE)
         variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 4
-            },
-        )
-        variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 5
-            },
-        )
-        variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(1980, 12, 1)
-                validUntil = LocalDate.of(2020, 12, 31)
-                patchId = 6
-            },
+            SAVED_TAX_EXAMPLE.copy(
+                unitTypes = listOf("01", "02", "03"),
+                patchId = 2,
+            ),
         )
 
         variableDefinitionService.save(
-            SAVED_VARIABLE_DEFINITION.copy().apply {
-                validFrom = LocalDate.of(2021, 1, 1)
-                validUntil = null
+            SAVED_TAX_EXAMPLE.copy(
+                patchId = 3,
+                unitTypes = listOf("01", "02", "03", "04"),
+            ),
+        )
+        variableDefinitionService.save(
+            SAVED_TAX_EXAMPLE.copy(
+                patchId = 4,
+                validUntil = LocalDate.of(2020, 12, 31),
+                unitTypes = listOf("01", "02", "03", "04"),
+            ),
+        )
+
+        variableDefinitionService.save(
+            SAVED_TAX_EXAMPLE.copy(
+                validFrom = LocalDate.of(2021, 1, 1),
                 definition =
                     LanguageStringType(
-                        nb = "For personer født på siden",
-                        nn = "For personer født på siden",
-                        en = "Persons born on the side",
-                    )
-                patchId = 7
-            },
+                        "Intektsskatt ny definisjon",
+                        "Intektsskatt ny definisjon",
+                        "Income tax new definition",
+                    ),
+                unitTypes = listOf("01", "02", "03", "04"),
+                patchId = 5,
+            ),
         )
 
-        // Collection of one variable definition
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION.toSavedVariableDefinition())
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_COPY.toSavedVariableDefinition())
-        variableDefinitionService.save(INPUT_VARIABLE_DEFINITION_NO_NAME.toSavedVariableDefinition())
+        variableDefinitionService.save(
+            SAVED_TAX_EXAMPLE.copy(
+                unitTypes = listOf("01", "02"),
+                patchId = 6,
+                validFrom = LocalDate.of(2021, 1, 1),
+                validUntil = null,
+                definition =
+                    LanguageStringType(
+                        "Intektsskatt ny definisjon",
+                        "Intektsskatt ny definisjon",
+                        "Income tax new definition",
+                    ),
+            ),
+        )
 
-        // Collection of one variable definition
-        variableDefinitionService.save(SAVED_VARIABLE_DEFINITION_COPY)
+        // One variable definition
+        variableDefinitionService.save(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
 
-        // Collection of one variable definition
-        variableDefinitionService.save(SAVED_DRAFT_VARIABLE_DEFINITION)
+        // One variable definition
+        variableDefinitionService.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
+
+        // One variable definition
+        variableDefinitionService.save(SAVED_DEPRECATED_VARIABLE_DEFINITION)
     }
 }

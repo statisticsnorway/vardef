@@ -14,7 +14,6 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
      * Test input data new valid validity period
      */
     companion object {
-
         @JvmStatic
         fun allMandatoryFieldsChanged(): String {
             val testCase =

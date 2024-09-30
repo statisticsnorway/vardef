@@ -57,113 +57,17 @@ class ValidityPeriodsControllerTest {
      * test cases new validity period.
      */
     companion object {
-        @JvmStatic
-        fun definitionNotChanged(): String {
-            val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "2040-01-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født på siden")
-                        put("nn", "For personer født på siden")
-                        put("en", "Persons born on the side")
-                    }
-                    remove("short_name")
-                }.toString()
-            return testCase
-        }
-
-        @JvmStatic
-        fun definitionNotChangedForAll(): String {
-            val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "2040-01-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født på mandag")
-                        put("nn", "For personer født på mandag")
-                        put("en", "Persons born on the side")
-                    }
-                    remove("short_name")
-                }.toString()
-            return testCase
-        }
 
         @JvmStatic
         fun newValidityPeriod(): String {
             val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
+                JSONObject().apply {
                     put("valid_from", "2024-01-11")
-                    getJSONObject("definition").apply {
+                    put("definition", JSONObject().apply {
                         put("nb", "For personer født i går")
                         put("nn", "For personer født i går")
                         put("en", "Persons born yesterday")
-                    }
-                    remove("short_name")
-                    remove("valid_until")
-                }.toString()
-            return testCase
-        }
-
-        @JvmStatic
-        fun newValidityPeriodBeforeAll(): String {
-            val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "1923-01-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født hver dag")
-                        put("nn", "For personer født hver dag")
-                        put("en", "Persons born every day")
-                    }
-                    remove("short_name")
-                    remove("valid_until")
-                }.toString()
-            return testCase
-        }
-
-        @JvmStatic
-        fun invalidValidFrom(): String {
-            val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "2021-05-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født på søndag")
-                        put("nn", "For personer født på søndag")
-                        put("en", "Persons born on sunday")
-                    }
-                    remove("short_name")
-                }.toString()
-            return testCase
-        }
-
-        @JvmStatic
-        fun invalidValidFromAndInvalidDefinition(): String {
-            val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "2021-05-11")
-                    remove("short_name")
-                }.toString()
-            return testCase
-        }
-
-        @JvmStatic
-        fun validFromIsNull(): String {
-            val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "null")
-                    remove("short_name")
-                }.toString()
-            return testCase
-        }
-
-        @JvmStatic
-        fun shortNameIsIncluded(): String {
-            val testCase =
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("valid_from", "2024-01-11")
-                    getJSONObject("definition").apply {
-                        put("nb", "For personer født i går")
-                        put("nn", "For personer født i går")
-                        put("en", "Persons born yesterday")
-                    }
+                    })
                 }.toString()
             return testCase
         }
@@ -171,6 +75,7 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period`(spec: RequestSpecification) {
+
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -197,10 +102,21 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period before all validity periods`(spec: RequestSpecification) {
+
+        val newValidityPeriodBeforeAll =
+            JSONObject().apply {
+                put("valid_from", "1923-01-11")
+                put("definition", JSONObject().apply {
+                    put("nb", "For personer født hver dag")
+                    put("nn", "For personer født hver dag")
+                    put("en", "Persons born every day")
+                })
+            }.toString()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(newValidityPeriodBeforeAll())
+            .body(newValidityPeriodBeforeAll)
             .`when`()
             .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
             .then()
@@ -214,10 +130,21 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period missing language`(spec: RequestSpecification) {
+
+        val definitionNotChangedForAll =
+            JSONObject().apply {
+                put("valid_from", "2040-01-11")
+                put("definition", JSONObject().apply {
+                    put("nb", "For personer født på mandag")
+                    put("nn", "For personer født på mandag")
+                    put("en", "Persons born on the side")
+                })
+            }.toString()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(definitionNotChangedForAll())
+            .body(definitionNotChangedForAll)
             .`when`()
             .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
             .then()
@@ -226,10 +153,21 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
+
+        val definitionNotChanged =
+            JSONObject().apply {
+                put("valid_from", "2040-01-11")
+                put("definition", JSONObject().apply {
+                    put("nb", "For personer født på siden")
+                    put("nn", "For personer født på siden")
+                    put("en", "Persons born on the side")
+                })
+            }.toString()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(definitionNotChanged())
+            .body(definitionNotChanged)
             .`when`()
             .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
             .then()
@@ -239,10 +177,21 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period invalid valid from`(spec: RequestSpecification) {
+
+        val invalidValidFrom =
+            JSONObject().apply {
+                put("valid_from", "2021-05-11")
+                put("definition", JSONObject().apply {
+                    put("nb", "For personer født på søndag")
+                    put("nn", "For personer født på søndag")
+                    put("en", "Persons born on sunday")
+                })
+            }.toString()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(invalidValidFrom())
+            .body(invalidValidFrom)
             .`when`()
             .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
             .then()
@@ -257,17 +206,28 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period invalid input`(spec: RequestSpecification) {
+
+        val invalidValidFromAndInvalidDefinition =
+            JSONObject().apply {
+                put("valid_from", "2021-05-11")
+                put("definition", JSONObject().apply {
+                    put("nb", "For personer født på siden")
+                    put("nn", "For personer født på siden")
+                    put("en", "Persons born on the side")
+                })
+            }.toString()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(invalidValidFromAndInvalidDefinition())
+            .body(invalidValidFromAndInvalidDefinition)
             .`when`()
             .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
 
-        val correctValidFrom = JSONObject(invalidValidFromAndInvalidDefinition()).apply { put("valid_from", "2030-01-11") }.toString()
+        val correctValidFrom = JSONObject(invalidValidFromAndInvalidDefinition).apply { put("valid_from", "2030-01-11") }.toString()
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -281,10 +241,21 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period no valid from`(spec: RequestSpecification) {
+
+        val validFromIsNull =
+            JSONObject().apply {
+                put("valid_from", "null")
+                put("definition", JSONObject().apply {
+                    put("nb", "For personer født i går")
+                    put("nn", "For personer født i går")
+                    put("en", "Persons born yesterday")
+                })
+            }.toString()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(validFromIsNull())
+            .body(validFromIsNull)
             .`when`()
             .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
             .then()
@@ -299,10 +270,22 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period with new short name`(spec: RequestSpecification) {
+
+        val newShortName =
+            JSONObject().apply {
+                put("valid_from", "2024-01-11")
+                put("definition", JSONObject().apply {
+                    put("nb", "For personer født i går")
+                    put("nn", "For personer født i går")
+                    put("en", "Persons born yesterday")
+                })
+                put("short_name","car")
+            }.toString()
+
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(shortNameIsIncluded())
+            .body(newShortName)
             .`when`()
             .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
             .then()
@@ -317,6 +300,8 @@ class ValidityPeriodsControllerTest {
 
     @Test
     fun `create new validity period with draft status`(spec: RequestSpecification) {
+
+
         spec
             .given()
             .contentType(ContentType.JSON)

@@ -71,11 +71,11 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @CsvSource(
         "1800-01-01, 404, null, null",
-        //"null, 200, 2021-01-01, null",
-        //"2021-01-01, 200, 2021-01-01, null",
-        //"2020-01-01, 200, 1980-12-01, 2020-12-31",
-        //"2024-06-05, 200, 2021-01-01, null",
-        //"3000-12-31, 200, 2021-01-01, null",
+        "null, 200, 2021-01-01, null",
+        "2021-01-01, 200, 2021-01-01, null",
+        "2020-01-01, 200, 1980-01-01, 2020-12-31",
+        "2024-06-05, 200, 2021-01-01, null",
+        "3000-12-31, 200, 2021-01-01, null",
         nullValues = ["null"],
     )
     fun `get request specific date`(

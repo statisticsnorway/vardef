@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import io.micronaut.context.annotation.Requires
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-// @Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
@@ -64,9 +65,16 @@ class VarDokMigrationTest {
     @Test
     fun `map vardok missing valid date`() {
         val res = varDokApiService.getVarDokItem("100")
-        assertThat(res).isNotNull()
-        val mappedFromDate = res?.let { getValidDates(it).first }
-        assertThat(mappedFromDate).isNull()
+
+        val exception: VardokException =
+            assertThrows(MissingValidDatesException::class.java) {
+                if (res != null) {
+                    getValidDates(res)
+                }
+            }
+
+        val expectedMessage = "Vardok is missing valid dates and can not be saved"
+        assertThat(exception.message).isEqualTo(expectedMessage)
     }
 
     @Test
@@ -165,9 +173,11 @@ class VarDokMigrationTest {
         val vardok = varDokApiService.getVarDokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
         val varDefInput =
-            varDokApiService.createVarDefInputFromVarDokItems(
-                varDokApiService.fetchMultipleVarDokItemsByLanguage("130"),
-            )
+            varDokApiService.fetchMultipleVarDokItemsByLanguage("130").let {
+                varDokApiService.createVarDefInputFromVarDokItems(
+                    it,
+                )
+            }
         val testThing = JSONObject(varDefInput)
         assertThat(testThing["short_name"]).isEqualTo("ufg")
     }

@@ -6,7 +6,7 @@ data class VarDok(
     val name: LanguageStringType?,
     val shortName: String?,
     val definition: LanguageStringType?,
-    var validFrom: String?,
+    var validFrom: String,
     val validUntil: String?,
     val unitTypes: List<String?>,
     val externalReferenceUri: String,

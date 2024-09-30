@@ -38,10 +38,9 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     val firstDate = dateString?.getOrNull(0)?.trim()?.takeIf { it.isNotEmpty() }
     val secondDate = dateString?.getOrNull(1)?.trim()?.takeIf { it.isNotEmpty() }
 
-    if (firstDate != null)
-        {
-            return Pair(firstDate, secondDate)
-        }
+    if (firstDate != null) {
+        return Pair(firstDate, secondDate)
+    }
     throw MissingValidDatesException()
 }
 

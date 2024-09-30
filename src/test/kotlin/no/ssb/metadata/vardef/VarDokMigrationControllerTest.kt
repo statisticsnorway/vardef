@@ -78,4 +78,16 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
     }
+
+    @Test
+    fun `post vardok missing valid from but with valid until`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/vardok-migration/134")
+            .then()
+            .statusCode(400)
+    }
 }

@@ -32,13 +32,16 @@ val unitTypeConverter =
         "Virksomhet" to "26",
     )
 
-fun getValidDates(vardokItem: VardokResponse): Pair<String?, String?> {
+fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     val dateString = vardokItem.dc?.valid?.split(" - ")
 
     val firstDate = dateString?.getOrNull(0)?.trim()?.takeIf { it.isNotEmpty() }
     val secondDate = dateString?.getOrNull(1)?.trim()?.takeIf { it.isNotEmpty() }
 
-    return Pair(firstDate, secondDate)
+    if (firstDate != null){
+        return Pair(firstDate, secondDate)
+    }
+    throw MissingValidDatesException()
 }
 
 fun mapVardokIdentifier(vardokItem: VardokResponse): String {

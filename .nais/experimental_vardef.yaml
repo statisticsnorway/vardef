@@ -7,7 +7,6 @@ metadata:
   labels:
     team: dapla-metadata
 spec:
-  # image: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef/vardef:8f23e08afd25ffe9438d5d238e3e58aeb02a58e9
   image: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef/vardef:mongodb-connection
   port: 8080
 

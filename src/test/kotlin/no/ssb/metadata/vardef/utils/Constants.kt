@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef.utils
 
 /**
- * Constant values that reflect stored testdata in base test.
+ * Constant values that reflect stored testdata set up in BaseVardefTest.
  */
 const val NUM_SAVED_TAX_DEFINITIONS = 6
 

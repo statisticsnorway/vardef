@@ -24,17 +24,23 @@ spec:
         - host: data.ssb.no
         # Allow egress to Vardok
         - host: ssb.no
-      rules:
-        - application: mongodb
+        # allow egress to mongodb
+        - host: metadata-test-shard-00-01.fuld2.mongodb.net
+          ports:
+            - port: 27016
+            - port: 27017
+        - host: metadata-test-shard-00-02.fuld2.mongodb.net
+          ports:
+            - port: 27016
+            - port: 27017
+        - host: metadata-test-shard-00-00.fuld2.mongodb.net
+          ports:
+            - port: 27016
+            - port: 27017
 
   envFrom:
-    - secret: vardef-mongo-mongodb
-
-  env:
-    - name: MONGODB_USER
-      value: vardef-user
-    - name: MONGODB_HOST
-      value: vardef-mongo-mongodb.dapla-metadata.svc.cluster.local:27017
+    # secrets nais
+    - secret: metadata-vardef-test
 
   liveness:
     path: /health

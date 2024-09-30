@@ -219,7 +219,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(newShortName)
             .`when`()
-            .post("/variable-definitions/${SAVED_FNR_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(

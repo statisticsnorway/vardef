@@ -63,8 +63,11 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             .listAllAndRenderForLanguage(
                 SupportedLanguages.EN,
                 LocalDate.now(),
-            ).let { renderedVariableDefinitions -> assertThat(renderedVariableDefinitions.size).isEqualTo(
-                NUM_ALL_VARIABLE_DEFINITIONS) }
+            ).let { renderedVariableDefinitions ->
+                assertThat(renderedVariableDefinitions.size).isEqualTo(
+                    NUM_ALL_VARIABLE_DEFINITIONS,
+                )
+            }
     }
 
     @ParameterizedTest

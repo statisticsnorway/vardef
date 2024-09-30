@@ -10,12 +10,10 @@ import org.json.JSONObject
 import org.junit.jupiter.api.*
 import java.time.LocalDate
 
-
-class ValidityPeriodsControllerTest: BaseVardefTest() {
-
+class ValidityPeriodsControllerTest : BaseVardefTest() {
     @BeforeEach
     fun setUpValidityPeriods() {
-        //variableDefinitionService.clear()
+        // variableDefinitionService.clear()
 
         variableDefinitionService.save(SAVED_FNR_EXAMPLE)
         variableDefinitionService.save(
@@ -48,11 +46,14 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
             val testCase =
                 JSONObject().apply {
                     put("valid_from", "2024-01-11")
-                    put("definition", JSONObject().apply {
-                        put("nb", "Intektsskatt atter ny definisjon")
-                        put("nn", "Intektsskatt atter ny definisjon")
-                        put("en", "Yet another definition")
-                    })
+                    put(
+                        "definition",
+                        JSONObject().apply {
+                            put("nb", "Intektsskatt atter ny definisjon")
+                            put("nn", "Intektsskatt atter ny definisjon")
+                            put("en", "Yet another definition")
+                        },
+                    )
                 }.toString()
             return testCase
         }
@@ -60,7 +61,6 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @Test
     fun `create new validity period`(spec: RequestSpecification) {
-
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -73,7 +73,7 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
         val lastPatch = variableDefinitionService.getLatestPatchById(SAVED_TAX_EXAMPLE.definitionId)
 
         assertThat(
-           lastPatch.validUntil,
+            lastPatch.validUntil,
         ).isNull()
         assertThat(
             variableDefinitionService.getOnePatchById(
@@ -85,7 +85,6 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @Test
     fun `create new validity period before all validity periods`(spec: RequestSpecification) {
-
         val newValidityPeriodBeforeAll =
             JSONObject(newValidityPeriod()).apply {
                 put("valid_from", "1923-01-11")
@@ -108,15 +107,17 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @Test
     fun `create new validity period missing language`(spec: RequestSpecification) {
-
         val definitionNotChangedForAll =
             JSONObject().apply {
                 put("valid_from", "2040-01-11")
-                put("definition", JSONObject().apply {
-                    put("nb", "For personer født på mandag")
-                    put("nn", "For personer født på mandag")
-                    put("en", "Persons born on the side")
-                })
+                put(
+                    "definition",
+                    JSONObject().apply {
+                        put("nb", "For personer født på mandag")
+                        put("nn", "For personer født på mandag")
+                        put("en", "Persons born on the side")
+                    },
+                )
             }.toString()
 
         spec
@@ -131,15 +132,17 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @Test
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
-
         val definitionNotChanged =
             JSONObject().apply {
                 put("valid_from", "2040-01-11")
-                put("definition", JSONObject().apply {
-                    put("nb", "For personer født på siden")
-                    put("nn", "For personer født på siden")
-                    put("en", "Persons born on the side")
-                })
+                put(
+                    "definition",
+                    JSONObject().apply {
+                        put("nb", "For personer født på siden")
+                        put("nn", "For personer født på siden")
+                        put("en", "Persons born on the side")
+                    },
+                )
             }.toString()
 
         spec
@@ -155,15 +158,17 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @Test
     fun `create new validity period invalid valid from`(spec: RequestSpecification) {
-
         val invalidValidFrom =
             JSONObject().apply {
                 put("valid_from", "2021-05-11")
-                put("definition", JSONObject().apply {
-                    put("nb", "For personer født på søndag")
-                    put("nn", "For personer født på søndag")
-                    put("en", "Persons born on sunday")
-                })
+                put(
+                    "definition",
+                    JSONObject().apply {
+                        put("nb", "For personer født på søndag")
+                        put("nn", "For personer født på søndag")
+                        put("en", "Persons born on sunday")
+                    },
+                )
             }.toString()
 
         spec
@@ -184,15 +189,17 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @Test
     fun `create new validity period invalid input`(spec: RequestSpecification) {
-
         val invalidValidFromAndInvalidDefinition =
             JSONObject().apply {
                 put("valid_from", "2021-05-11")
-                put("definition", JSONObject().apply {
-                    put("nb", "For personer født på siden")
-                    put("nn", "For personer født på siden")
-                    put("en", "Persons born on the side")
-                })
+                put(
+                    "definition",
+                    JSONObject().apply {
+                        put("nb", "For personer født på siden")
+                        put("nn", "For personer født på siden")
+                        put("en", "Persons born on the side")
+                    },
+                )
             }.toString()
 
         spec
@@ -219,7 +226,6 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @Test
     fun `create new validity period no valid from`(spec: RequestSpecification) {
-
         val validFromIsNull =
             JSONObject(newValidityPeriod()).apply {
                 remove("valid_from")
@@ -243,10 +249,9 @@ class ValidityPeriodsControllerTest: BaseVardefTest() {
 
     @Test
     fun `create new validity period with new short name`(spec: RequestSpecification) {
-
         val newShortName =
             JSONObject(newValidityPeriod()).apply {
-                put("short_name","car")
+                put("short_name", "car")
             }.toString()
 
         spec

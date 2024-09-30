@@ -71,11 +71,11 @@ open class BaseVardefTest {
                 validFrom = LocalDate.of(2021, 1, 1),
                 validUntil = null,
                 definition =
-                LanguageStringType(
-                    "Intektsskatt ny definisjon",
-                    "Intektsskatt ny definisjon",
-                    "Income tax new definition",
-                ),
+                    LanguageStringType(
+                        "Intektsskatt ny definisjon",
+                        "Intektsskatt ny definisjon",
+                        "Income tax new definition",
+                    ),
             ),
         )
 

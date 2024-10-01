@@ -43,7 +43,7 @@ jobs:
           echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}" >> $GITHUB_ENV
       - name: "Authenticate to Google Cloud"
         id: "auth"
-        uses: "google-github-actions/auth@v2.1.3"
+        uses: "google-github-actions/auth@v2.1.5"
         with:
           workload_identity_provider: "projects/848539402404/locations/global/workloadIdentityPools/gh-actions/providers/gh-actions"
           service_account: "gh-actions-dapla-metadata@artifact-registry-5n.iam.gserviceaccount.com"
@@ -64,7 +64,7 @@ jobs:
           distribution: 'zulu'
 
       - name: Set up gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build and push Docker image
         run: >

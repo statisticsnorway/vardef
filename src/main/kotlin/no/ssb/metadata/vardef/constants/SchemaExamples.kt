@@ -97,6 +97,11 @@ const val PATCH_EXAMPLE = """
     "measurement_type": null,
     "valid_until": "2026-01-01",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "en": "Changes in unit types",
+        "nb": "Endring i enhetstyper.",
+        "nn": "Endring i enhetstyper."
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
@@ -130,6 +135,11 @@ const val VALIDITY_PERIOD_EXAMPLE = """
     "measurement_type": null,
     "valid_from": "2026-01-02",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "en": "Change in legislation triggers change of definition text.",
+        "nb": "Endring i lovgiving utløser endring av definisjonstekst.",
+        "nn": "Endring i lovgiving utløser endring av definisjonstekst."
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],

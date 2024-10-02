@@ -345,27 +345,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body(
                 """
                 {"comment": {
-                    "nb": "Merknad til",
-                    "nn": "Merknad til",
-                    "en": "Comment to"
-                }}
-                """.trimIndent(),
-            ).`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
-            .then()
-            .statusCode(200)
-            .body("comment.nb", containsString("Merknad til"))
-            .body("comment.en", containsString("Comment to"))
-    }
-
-    @Test
-    fun `change comment variable definition`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"comment": {
                     "nb": "Legger til merknad",
                     "nn": "Endrer merknad",
                     "en": null

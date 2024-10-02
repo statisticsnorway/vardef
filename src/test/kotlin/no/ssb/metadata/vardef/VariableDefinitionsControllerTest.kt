@@ -419,7 +419,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list variable definitions return comment field`(spec: RequestSpecification) {
+    fun `list variable definitions has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
             .contentType(ContentType.JSON)
@@ -429,5 +429,21 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(200)
             .body("[1]", hasKey("comment"))
             .body("[0].comment", notNullValue())
+    }
+
+    @Test
+    fun `create new variable has comment field`(spec: RequestSpecification) {
+        /*
+        GIVEN ny variabel definisjon med merknad
+
+POST til /variable-definitions
+
+THEN 201 og merknad i response
+         */
+        val inputData =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    put("comment", "Dette er starten")
+                }.toString()
     }
 }

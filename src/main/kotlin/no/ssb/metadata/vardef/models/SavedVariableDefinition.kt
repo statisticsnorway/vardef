@@ -40,7 +40,7 @@ data class SavedVariableDefinition(
     @Nullable
     var externalReferenceUri: URL?,
     @Nullable
-    var comment: String?,
+    var comment: LanguageStringType?,
     @Nullable
     var relatedVariableDefinitionUris: List<String>?,
     @Nullable
@@ -80,7 +80,7 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            comment = comment,
+            comment = comment?.getValidLanguage(language),
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact?.let { RenderedContact(contact?.title?.getValidLanguage(language), it.email) },
             lastUpdatedAt = lastUpdatedAt,

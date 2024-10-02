@@ -331,12 +331,12 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `get variable definition return comment field`(spec: RequestSpecification) {
+    fun `variable definition has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
             .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
             .then()
             .statusCode(200)
-            .body("comment", equalTo(SAVED_TAX_EXAMPLE.comment))
+            .body("comment", equalTo(SAVED_TAX_EXAMPLE.comment?.nb))
     }
 }

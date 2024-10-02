@@ -237,4 +237,30 @@ class PatchesControllerTest : BaseVardefTest() {
             .statusCode(200)
             .body("comment.nb", containsString("Ny standard for navn til enhetstypeidentifikatorer."))
     }
+
+    @Test
+    fun `create new patch with comment`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                    put(
+                        "comment",
+                        JSONObject().apply {
+                            put("en", "This is the reason")
+                        },
+                    )
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("comment.en", equalTo("This is the reason"))
+    }
 }

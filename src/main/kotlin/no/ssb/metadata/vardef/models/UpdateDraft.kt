@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
 import java.net.URL
 import java.time.LocalDate
 
@@ -33,9 +34,9 @@ data class UpdateDraft(
     @Nullable
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType?,
-    @Nullable
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
-    @Pattern(regexp = KLASS_ID_PATTERN)
+    @Nullable
+    @KlassId
     val classificationReference: String?,
     @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)

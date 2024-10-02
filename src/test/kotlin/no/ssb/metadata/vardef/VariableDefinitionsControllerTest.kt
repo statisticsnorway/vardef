@@ -427,7 +427,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .get("/variable-definitions")
             .then()
             .statusCode(200)
-            .body("[0]", hasKey("comment"))
-            .body("[1].comment", notNullValue())
+            .body("[1]", hasKey("comment"))
+            .body("[0].comment", notNullValue())
     }
 }

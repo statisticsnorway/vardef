@@ -92,8 +92,14 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/vardok-migration/${id}")
             .then()
             .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "Vardok is missing valid dates and can not be saved",
+                ),
+            )
     }
-
+    // nullpointer exception unit types
     @ParameterizedTest
     @ValueSource(ints = [69, 141])
     fun `post vardok missing unitype for statistical`(id: Int,spec: RequestSpecification) {
@@ -104,7 +110,13 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/${id}")
             .then()
-            .statusCode(500)
+            .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "Variabel is missing valid unit types",
+                ),
+            )
     }
 
     @ParameterizedTest
@@ -170,6 +182,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/$id")
             .then()
-            .statusCode(500)
+            .statusCode(400)
     }
 }

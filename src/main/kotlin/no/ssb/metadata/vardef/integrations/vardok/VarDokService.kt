@@ -19,7 +19,8 @@ open class VarDokService(
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
             logger.warn("$id is not found. Exception message: ${e.message}")
-            throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id not found"))
+            throw VardokNotFoundException(id)
+            //throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id not found"))
         }
     }
 
@@ -49,6 +50,7 @@ open class VarDokService(
 
         return responseMap
     }
+
 
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)

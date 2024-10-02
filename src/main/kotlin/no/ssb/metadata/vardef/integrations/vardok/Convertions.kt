@@ -41,7 +41,7 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     if (firstDate != null) {
         return Pair(firstDate, secondDate)
     }
-    throw MissingValidDatesException()
+    throw MissingValidDatesException(vardokItem.id.substringAfterLast(":"))
 }
 
 fun mapVardokIdentifier(vardokItem: VardokResponse): String {

@@ -49,6 +49,6 @@ fun mapVardokIdentifier(vardokItem: VardokResponse): String {
 
 fun mapVardokContactDivisionToOwner(vardokItem: VardokResponse): Owner {
     val owner = vardokItem.common?.contactDivision
-    val mappedOwner = Owner(owner!!.codeValue, owner.codeText)
+    val mappedOwner = Owner(owner!!.codeValue)
     return mappedOwner
 }

@@ -68,7 +68,7 @@ val SAVED_DEPRECATED_VARIABLE_DEFINITION =
         validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
         relatedVariableDefinitionUris = listOf(),
-        owner = Owner("", ""),
+        owner = Owner("", emptyList()),
         contact =
             Contact(
                 LanguageStringType("", "", ""),
@@ -140,7 +140,7 @@ val SAVED_TAX_EXAMPLE =
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("", ""),
+            Owner("", emptyList()),
         contact =
             Contact(
                 LanguageStringType("", "", ""),
@@ -183,7 +183,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("", ""),
+            Owner("", emptyList()),
         contact =
             Contact(
                 LanguageStringType("", "", ""),

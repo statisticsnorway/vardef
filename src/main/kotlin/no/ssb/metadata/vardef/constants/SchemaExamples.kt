@@ -157,6 +157,11 @@ const val CONTACT_EXAMPLE = """{
     }
 """
 
+const val OWNER_EXAMPLE = """{
+    "team": "play-obr-b",
+    "groups": ["play-obr-b-developers"]
+}"""
+
 const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
     "name": "Landbakgrunn",

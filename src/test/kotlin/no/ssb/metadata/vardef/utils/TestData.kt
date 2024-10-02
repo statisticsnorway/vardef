@@ -246,7 +246,7 @@ val JSON_TEST_INPUT =
             "nb": "Inntektsskatt",
             "nn": "Inntektsskatt"
         },
-        "short_name": "intskatt",
+        "short_name": "my_new_short_name",
         "definition": {
             "en": "C.",
             "nb": "F"

@@ -43,6 +43,7 @@ object TestUtils {
                     JSON_TEST_INPUT,
                 ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2024-20-11") } to "Error deserializing type",
+                JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2030-06-30") } to "unknown",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2024-20-11") } to "Error deserializing type",
                 JSONObject(JSON_TEST_INPUT).apply { put("external_reference_uri", "Not url") } to "Error deserializing type",
                 JSONObject(JSON_TEST_INPUT).apply {
@@ -66,22 +67,26 @@ object TestUtils {
     fun variableDefinitionsNonMandatoryFieldsRemoved(): List<String> {
         val testCases =
             listOf(
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("short_name", "blah")
-                    remove("measurement_type")
-                }.toString(),
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("short_name", "blah")
-                    remove("valid_until")
-                }.toString(),
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("short_name", "blah")
-                    remove("external_reference_uri")
-                }.toString(),
-                JSONObject(JSON_TEST_INPUT).apply {
-                    put("short_name", "blah")
-                    remove("related_variable_definition_uris")
-                }.toString(),
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("short_name", "blah")
+                        remove("measurement_type")
+                    }.toString(),
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("short_name", "blah")
+                        remove("valid_until")
+                    }.toString(),
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("short_name", "blah")
+                        remove("external_reference_uri")
+                    }.toString(),
+                JSONObject(JSON_TEST_INPUT)
+                    .apply {
+                        put("short_name", "blah")
+                        remove("related_variable_definition_uris")
+                    }.toString(),
             )
         return testCases
     }

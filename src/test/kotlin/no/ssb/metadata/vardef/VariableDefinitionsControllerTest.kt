@@ -419,7 +419,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list variable definitions has comment field`(spec: RequestSpecification) {
+    fun `all variable definitions has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
             .contentType(ContentType.JSON)
@@ -432,7 +432,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create new variable has comment field in two languages`(spec: RequestSpecification) {
+    fun `create new variable with comment field in two languages`(spec: RequestSpecification) {
         val input =
             JSONObject(JSON_TEST_INPUT)
                 .apply {

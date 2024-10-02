@@ -256,7 +256,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create new validity period with new comment`(spec: RequestSpecification) {
+    fun `create new validity period with comment`(spec: RequestSpecification) {
         val addComment =
             JSONObject(allMandatoryFieldsChanged()).apply {
                 put(

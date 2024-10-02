@@ -42,6 +42,7 @@ open class BaseVardefTest {
             SAVED_TAX_EXAMPLE.copy(
                 patchId = 3,
                 unitTypes = listOf("01", "02", "03", "04"),
+                comment = "Ny standard for navn til enhetstypeidentifikatorer.",
             ),
         )
         variableDefinitionService.save(

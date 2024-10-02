@@ -227,4 +227,14 @@ class PatchesControllerTest : BaseVardefTest() {
             .statusCode(200)
             .body("find { it }", hasKey("comment"))
     }
+
+    @Test
+    fun `get one patch has comment field`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/3")
+            .then()
+            .statusCode(200)
+            .body("comment", containsString("Ny standard for navn til enhetstypeidentifikatorer."))
+    }
 }

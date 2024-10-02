@@ -331,7 +331,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `get variable definition return comment field`(spec: RequestSpecification)  {
+    fun `get variable definition return comment field`(spec: RequestSpecification) {
         spec
             .`when`()
             .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")

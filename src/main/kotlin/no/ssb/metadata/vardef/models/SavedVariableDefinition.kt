@@ -118,6 +118,7 @@ data class SavedVariableDefinition(
             measurementType = measurementType,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
+            comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
         )
@@ -138,6 +139,7 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
+            comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
             lastUpdatedAt = lastUpdatedAt,

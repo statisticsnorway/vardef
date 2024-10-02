@@ -100,7 +100,6 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
         variableStatus = VariableStatus.PUBLISHED_INTERNAL,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
-        validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =

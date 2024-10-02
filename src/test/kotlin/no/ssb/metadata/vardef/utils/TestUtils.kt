@@ -98,7 +98,7 @@ object TestUtils {
             argumentSet(
                 "valid_until specified",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2030-06-30") }.toString(),
-                "Unknown property [valid_until] encountered during deserialization",
+                "valid_until may not be specified here",
             ),
             argumentSet(
                 "external_reference_uri invalid",

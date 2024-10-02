@@ -209,12 +209,14 @@ class VariableDefinitionService(
 
         return if (newPeriod.validFrom.isBefore(patches.first().validFrom)) {
             newPeriod
-                .copy(validUntil = patches.first().validFrom.minusDays(1))
                 .toSavedVariableDefinition(patches.last())
+                .apply { validUntil = patches.first().validFrom.minusDays(1) }
                 .let { save(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
                 .let { newPeriod.toSavedVariableDefinition(it) }
+                // New validity period is always open-ended. A valid_until date may be set via a patch.
+                .apply { validUntil = null }
                 .let { save(it) }
         }
     }

@@ -52,6 +52,7 @@ private fun getErrorMessage(exception: ConversionErrorException): String? {
     return if (cause is SerdeException && cause.message != null) {
         when {
             "Unknown property [valid_from]" in cause.message!! -> "valid_from may not be specified here"
+            "Unknown property [valid_until]" in cause.message!! -> "valid_until may not be specified here"
             "Unknown property [short_name]" in cause.message!! -> "short_name may not be specified here"
             else -> exception.message
         }

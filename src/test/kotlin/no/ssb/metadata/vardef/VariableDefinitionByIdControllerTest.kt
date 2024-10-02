@@ -6,10 +6,7 @@ import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.SupportedLanguages
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
-import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -338,5 +335,48 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("comment", equalTo(SAVED_TAX_EXAMPLE.comment?.nb))
+    }
+
+    @Test
+    fun `add comment to draft variable definition`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"comment": {
+                    "nb": "Merknad til",
+                    "nn": "Merknad til",
+                    "en": "Comment to"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
+            .then()
+            .statusCode(200)
+            .body("comment.nb", containsString("Merknad til"))
+            .body("comment.en", containsString("Comment to"))
+    }
+
+    @Test
+    fun `change comment variable definition`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"comment": {
+                    "nb": "Legger til merknad",
+                    "nn": "Endrer merknad",
+                    "en": null
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(200)
+            .body("comment.nb", containsString("Legger til merknad"))
+            .body("comment.nn", containsString("Endrer merknad"))
+            .body("comment.en", nullValue())
     }
 }

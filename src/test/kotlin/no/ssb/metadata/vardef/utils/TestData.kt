@@ -189,7 +189,12 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
-        comment = null,
+        comment =
+            LanguageStringType(
+                "Legger til merknad",
+                null,
+                null,
+            ),
         relatedVariableDefinitionUris = listOf(),
         owner =
             Owner("", ""),

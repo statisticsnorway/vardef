@@ -164,6 +164,7 @@ data class SavedVariableDefinition(
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
+            comment = varDefUpdates.comment ?: comment,
             relatedVariableDefinitionUris =
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             contact = varDefUpdates.contact ?: contact,

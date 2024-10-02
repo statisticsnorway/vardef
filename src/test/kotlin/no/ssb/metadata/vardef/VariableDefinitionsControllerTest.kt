@@ -419,7 +419,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list variable definitions with field comment`(spec: RequestSpecification) {
+    fun `list variable definitions return comment field`(spec: RequestSpecification) {
         spec
             .`when`()
             .contentType(ContentType.JSON)
@@ -427,7 +427,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .get("/variable-definitions")
             .then()
             .statusCode(200)
-            .body("[0].id", notNullValue())
+            .body("[0]", hasKey("comment"))
             .body("[1].comment", notNullValue())
     }
 }

@@ -20,8 +20,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
-import no.ssb.metadata.vardef.integrations.vardok.MissingDataElementNameException
-import no.ssb.metadata.vardef.integrations.vardok.MissingValidDatesException
 import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokException
 import no.ssb.metadata.vardef.models.Draft
@@ -73,16 +71,18 @@ class VarDokMigrationController {
                 Draft::class.java,
             )
         } catch (e: VardokException) {
-            if (e.message == "Vardok is missing valid dates and can not be saved"
-                || e.message == "Vardok is missing data element name (short name) and can not be saved") {
+            if (e.message == "Vardok is missing valid dates and can not be saved" ||
+                e.message == "Vardok is missing data element name (short name) and can not be saved"
+            ) {
                 throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
             }
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)
         } catch (e: Exception) {
-            if(e is NullPointerException){
-                print(e.stackTrace.toString())
-                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Variabel is missing valid unit types")
-            }
+            if (e is NullPointerException)
+                {
+                    print(e.stackTrace.toString())
+                    throw HttpStatusException(HttpStatus.BAD_REQUEST, "Variabel is missing valid unit types")
+                }
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }

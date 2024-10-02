@@ -443,18 +443,18 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                             put("en", "This definition needs additional explanation")
                         },
                     )
-                    put("short_name","unique")
+                    put("short_name", "unique")
                 }.toString()
 
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(input)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(201)
-                .body("comment.nb", equalTo("Denne definisjonen trenger tilleggsforklaring"))
-                .body("comment.nn", nullValue())
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(201)
+            .body("comment.nb", equalTo("Denne definisjonen trenger tilleggsforklaring"))
+            .body("comment.nn", nullValue())
     }
 }

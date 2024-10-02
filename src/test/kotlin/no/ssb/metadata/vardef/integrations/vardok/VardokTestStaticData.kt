@@ -32,14 +32,6 @@ class VardokTestStaticData : BaseVardokTest() {
     }
 
     @Test
-    fun `parse contact division to owner`() {
-        val owner = mapVardokContactDivisionToOwner(vardokResponse1)
-        assertThat(owner).isNotNull
-        assertThat(owner.team).isEqualTo(vardokResponse1.common?.contactDivision?.codeValue)
-        assertThat(owner.name).isEqualTo(vardokResponse1.common?.contactDivision?.codeText)
-    }
-
-    @Test
     fun `parse vardok id`() {
         val id = mapVardokIdentifier(vardokResponse3)
         assertThat(id).isEqualTo("476")

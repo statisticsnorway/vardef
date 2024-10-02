@@ -208,22 +208,14 @@ val RENDERED_VARIABLE_DEFINITION =
         unitTypes = emptyList(),
         subjectFields = emptyList(),
         containsSensitivePersonalInformation = false,
-        variableStatus = VariableStatus.DRAFT,
         measurementType = null,
         validFrom = LocalDate.of(1960, 1, 1),
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
-        owner =
-            Owner("", ""),
         contact =
             RenderedContact("", "me@example.com"),
-        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy =
-            Person("", ""),
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy =
-            Person("", ""),
     )
 
 val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
@@ -237,21 +229,13 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         unitTypes = emptyList(),
         subjectFields = emptyList(),
         containsSensitivePersonalInformation = false,
-        variableStatus = VariableStatus.DRAFT,
         measurementType = null,
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
-        owner =
-            Owner("", ""),
         contact = null,
-        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy =
-            Person("", ""),
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy =
-            Person("", ""),
     )
 
 val JSON_TEST_INPUT =

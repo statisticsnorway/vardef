@@ -22,6 +22,9 @@ const val DRAFT_EXAMPLE = """{
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "nb": "Landbakgrunn: “Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.”
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
@@ -92,6 +95,11 @@ const val PATCH_EXAMPLE = """
     "measurement_type": null,
     "valid_until": "2026-01-01",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "nb": "Endring av enhetstyper",
+        "nn": "Endring av enhetstyper",
+        "en": "Changing unit types"
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
@@ -125,6 +133,11 @@ const val VALIDITY_PERIOD_EXAMPLE = """
     "measurement_type": null,
     "valid_from": "2026-01-02",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "nb": "Endret etter lovendring",
+        "nn": "Endret etter lovendring",
+        "en": "Changed caused by legislative change"
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
@@ -177,6 +190,9 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "nb": "Landbakgrunn: “Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.”
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],

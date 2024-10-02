@@ -96,7 +96,6 @@ data class SavedVariableDefinition(
             variableStatus = variableStatus,
             measurementType = measurementType,
             validFrom = validFrom,
-            validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
@@ -156,7 +155,6 @@ data class SavedVariableDefinition(
             variableStatus = varDefUpdates.variableStatus ?: variableStatus,
             measurementType = varDefUpdates.measurementType ?: measurementType,
             validFrom = varDefUpdates.validFrom ?: validFrom,
-            validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
             relatedVariableDefinitionUris =
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,

@@ -30,7 +30,6 @@ val DRAFT_BUS_EXAMPLE =
         variableStatus = VariableStatus.DRAFT,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
-        validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
@@ -263,7 +262,6 @@ val JSON_TEST_INPUT =
         "contains_sensitive_personal_information": true,
         "measurement_type": "02.01",
         "valid_from": "2024-06-05",
-        "valid_until": null,
         "external_reference_uri": "https://example.com/",
         "related_variable_definition_uris": [
             "https://example.com/"

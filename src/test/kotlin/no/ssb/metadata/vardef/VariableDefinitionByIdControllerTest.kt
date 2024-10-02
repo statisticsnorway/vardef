@@ -6,10 +6,7 @@ import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.SupportedLanguages
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
-import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
-import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -224,7 +221,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
-    fun `update variable definition with invalid inputs`(
+    fun `update draft variable definition with invalid inputs`(
         updatedJsonString: String,
         errorMessage: String,
         spec: RequestSpecification,
@@ -233,7 +230,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .`when`()
-            .patch("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(

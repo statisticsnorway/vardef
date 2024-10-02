@@ -40,15 +40,9 @@ data class Draft(
     @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<
-            @KlassCode("702")
-            String,
-            >,
+    val unitTypes: List<@KlassCode(id = "702") String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    val subjectFields: List<
-            @KlassCode("618")
-            String,
-            >,
+    val subjectFields: List<@KlassCode(id = "618") String>,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     val containsSensitivePersonalInformation: Boolean,
@@ -64,10 +58,6 @@ data class Draft(
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format("yyyy-MM-dd")
     val validFrom: LocalDate,
-    @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
-    @Nullable
-    @Format("yyyy-MM-dd")
-    val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,
@@ -92,7 +82,7 @@ data class Draft(
             variableStatus = variableStatus ?: VariableStatus.DRAFT,
             measurementType = measurementType,
             validFrom = validFrom,
-            validUntil = validUntil,
+            validUntil = null,
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             // TODO depends on authentication to make user information available

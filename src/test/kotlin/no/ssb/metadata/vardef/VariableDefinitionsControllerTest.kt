@@ -89,8 +89,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             JSONObject(JSON_TEST_INPUT)
                 .apply {
                     put("contact", JSONObject.NULL)
-                }
-                .apply {
+                }.apply {
                     put("short_name", "landbak_copy")
                 }.toString()
 
@@ -402,7 +401,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new variable with existing shortname`(spec: RequestSpecification) {
-        val updatedJsonString = JSONObject(JSON_TEST_INPUT).toString()
+        val updatedJsonString = JSONObject(JSON_TEST_INPUT).apply { put("short_name", "intskatt") }.toString()
 
         spec
             .given()

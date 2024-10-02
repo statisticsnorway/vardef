@@ -42,8 +42,8 @@ object TestUtils {
                 JSONObject(
                     JSON_TEST_INPUT,
                 ).apply { put("measurement_type", "blah") } to "Code blah is not a member of classification with id",
-                JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2024-20-11") } to "Error deserializing type",
-                JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2030-06-30") } to "unknown",
+                JSONObject(JSON_TEST_INPUT).apply { put("valid_until", "2030-06-30") } to
+                    "Unknown property [valid_until] encountered during deserialization",
                 JSONObject(JSON_TEST_INPUT).apply { put("valid_from", "2024-20-11") } to "Error deserializing type",
                 JSONObject(JSON_TEST_INPUT).apply { put("external_reference_uri", "Not url") } to "Error deserializing type",
                 JSONObject(JSON_TEST_INPUT).apply {

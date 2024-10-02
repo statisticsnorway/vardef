@@ -157,6 +157,11 @@ const val CONTACT_EXAMPLE = """{
     }
 """
 
+const val OWNER_EXAMPLE = """{
+    "team": "play-obr-b",
+    "groups": ["play-obr-b-developers"]
+}"""
+
 const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
     "name": "Landbakgrunn",
@@ -181,10 +186,7 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
-    "owner": {
-        "code": "320",
-        "name": "Seksjon for befolkningsstatistikk"
-    },
+    "owner": $OWNER_EXAMPLE,
     "contact": $CONTACT_EXAMPLE,
     "created_at": "2024-06-12T10:39:41.038Z",
     "created_by": $PERSON_EXAMPLE,

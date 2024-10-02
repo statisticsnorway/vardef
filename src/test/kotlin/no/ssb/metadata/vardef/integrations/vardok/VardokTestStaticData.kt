@@ -35,7 +35,7 @@ class VardokTestStaticData : BaseVardokTest() {
     fun `parse contact division to owner`() {
         val owner = mapVardokContactDivisionToOwner(vardokResponse1)
         assertThat(owner).isNotNull
-        assertThat(owner.code).isEqualTo(vardokResponse1.common?.contactDivision?.codeValue)
+        assertThat(owner.team).isEqualTo(vardokResponse1.common?.contactDivision?.codeValue)
         assertThat(owner.name).isEqualTo(vardokResponse1.common?.contactDivision?.codeText)
     }
 

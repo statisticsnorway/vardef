@@ -432,18 +432,29 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create new variable has comment field`(spec: RequestSpecification) {
-        /*
-        GIVEN ny variabel definisjon med merknad
-
-POST til /variable-definitions
-
-THEN 201 og merknad i response
-         */
-        val inputData =
+    fun `create new variable has comment field in two languages`(spec: RequestSpecification) {
+        val input =
             JSONObject(JSON_TEST_INPUT)
                 .apply {
-                    put("comment", "Dette er starten")
+                    put(
+                        "comment",
+                        JSONObject().apply {
+                            put("nb", "Denne definisjonen trenger tilleggsforklaring")
+                            put("en", "This definition needs additional explanation")
+                        },
+                    )
+                    put("short_name","unique")
                 }.toString()
+
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(input)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .body("comment.nb", equalTo("Denne definisjonen trenger tilleggsforklaring"))
+                .body("comment.nn", nullValue())
     }
 }

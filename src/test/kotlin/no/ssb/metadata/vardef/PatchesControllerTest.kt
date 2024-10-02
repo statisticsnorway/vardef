@@ -235,6 +235,6 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/3")
             .then()
             .statusCode(200)
-            .body("comment", containsString("Ny standard for navn til enhetstypeidentifikatorer."))
+            .body("comment.nb", containsString("Ny standard for navn til enhetstypeidentifikatorer."))
     }
 }

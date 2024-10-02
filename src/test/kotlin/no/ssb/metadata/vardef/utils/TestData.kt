@@ -32,6 +32,7 @@ val DRAFT_BUS_EXAMPLE =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = "Variabelen er viktig",
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
             Contact(
@@ -67,6 +68,7 @@ val SAVED_DEPRECATED_VARIABLE_DEFINITION =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = "Variabelen er viktig",
         relatedVariableDefinitionUris = listOf(),
         owner = Owner("", ""),
         contact =
@@ -138,6 +140,7 @@ val SAVED_TAX_EXAMPLE =
         validFrom = LocalDate.of(1980, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(),
         owner =
             Owner("", ""),
@@ -181,6 +184,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(),
         owner =
             Owner("", ""),
@@ -212,6 +216,7 @@ val RENDERED_VARIABLE_DEFINITION =
         validFrom = LocalDate.of(1960, 1, 1),
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(),
         contact =
             RenderedContact("", "me@example.com"),
@@ -233,6 +238,7 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(),
         contact = null,
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),

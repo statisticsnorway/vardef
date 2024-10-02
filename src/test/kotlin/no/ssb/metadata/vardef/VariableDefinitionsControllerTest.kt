@@ -417,4 +417,17 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 containsString("already exists."),
             )
     }
+
+    @Test
+    fun `list variable definitions with field comment`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .contentType(ContentType.JSON)
+            .header("Accept-Language", "nb")
+            .get("/variable-definitions")
+            .then()
+            .statusCode(200)
+            .body("[0].id", notNullValue())
+            .body("[1].comment", notNullValue())
+    }
 }

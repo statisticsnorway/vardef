@@ -178,7 +178,6 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     $KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
     ],
     "contains_sensitive_personal_information": true,
-    "variable_status": "PUBLISHED_EXTERNAL",
     "measurement_type": null,
     "valid_from": "2003-01-01",
     "valid_until": null,
@@ -186,12 +185,8 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
-    "owner": $OWNER_EXAMPLE,
     "contact": $CONTACT_EXAMPLE,
-    "created_at": "2024-06-12T10:39:41.038Z",
-    "created_by": $PERSON_EXAMPLE,
-    "last_updated_at": "2024-06-12T10:39:41.038Z",
-    "last_updated_by": $PERSON_EXAMPLE
+    "last_updated_at": "2024-06-12T10:39:41.038Z"
 }
 """
 

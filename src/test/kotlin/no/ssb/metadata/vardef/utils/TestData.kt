@@ -68,7 +68,7 @@ val SAVED_DEPRECATED_VARIABLE_DEFINITION =
         validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
         relatedVariableDefinitionUris = listOf(),
-        owner = Owner("", emptyList()),
+        owner = Owner("my-team", listOf("my-team-developers", "other-group")),
         contact =
             Contact(
                 LanguageStringType("", "", ""),
@@ -140,7 +140,7 @@ val SAVED_TAX_EXAMPLE =
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("", emptyList()),
+            Owner("pers-skatt", listOf("pers-skatt-developers", "neighbourhood-dogs")),
         contact =
             Contact(
                 LanguageStringType("", "", ""),
@@ -183,7 +183,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("", emptyList()),
+            Owner("skip-stat", listOf("skip-stat-developers")),
         contact =
             Contact(
                 LanguageStringType("", "", ""),
@@ -214,8 +214,7 @@ val RENDERED_VARIABLE_DEFINITION =
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
-        owner =
-            Owner("", emptyList()),
+        owner = Owner("my-team", listOf("my-team-developers", "other-group")),
         contact =
             RenderedContact("", "me@example.com"),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
@@ -243,8 +242,7 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         relatedVariableDefinitionUris = listOf(),
-        owner =
-            Owner("", emptyList()),
+        owner = Owner("my-team", listOf("my-team-developers", "other-group")),
         contact = null,
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy =

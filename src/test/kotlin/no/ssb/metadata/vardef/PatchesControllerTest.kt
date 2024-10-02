@@ -6,8 +6,8 @@ import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.Matchers.hasKey
 import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

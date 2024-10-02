@@ -33,8 +33,8 @@ import no.ssb.metadata.vardef.constants.*
     security = [SecurityRequirement(name = "Keycloak token")],
     tags = [
         Tag(
-            name = VARIABLE_DEFINITIONS,
-            description = "Access variable definitions.",
+            name = PUBLIC,
+            description = "Operations which are available to the general public without authentication.",
         ),
         Tag(
             name = VALIDITY_PERIODS,

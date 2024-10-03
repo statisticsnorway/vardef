@@ -72,7 +72,7 @@ class VarDokMigrationTest {
                 }
             }
 
-        val expectedMessage = "Vardok id 134 is missing valid from and can not be saved"
+        val expectedMessage = "Vardok id 134 Valid is missing 'from' date and can not be saved"
         assertThat(exception.message).isEqualTo(expectedMessage)
     }
 
@@ -135,7 +135,7 @@ class VarDokMigrationTest {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(VardokException::class.java)
-            val expectedMessage = "Vardok id 2450 is missing data element name (short name) and can not be saved"
+            val expectedMessage = "Vardok id 2450 is missing DataElementName (short name) and can not be saved"
             val actualMessage = exception.message
 
             assertThat(expectedMessage).isEqualTo(actualMessage)
@@ -152,7 +152,7 @@ class VarDokMigrationTest {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(MissingValidDatesException::class.java)
-            val expectedMessage = "Vardok id 100 is missing valid dates and can not be saved"
+            val expectedMessage = "Vardok id 100 is missing Valid (valid dates) and can not be saved"
             val actualMessage = exception.message
 
             assertThat(expectedMessage).isEqualTo(actualMessage)

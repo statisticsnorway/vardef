@@ -122,7 +122,7 @@ class VardokServiceTest : BaseVardokTest() {
             assertThrows(MissingValidDatesException::class.java) {
                 varDokService.createVarDefInputFromVarDokItems(mapVardokResponse)
             }
-        val expectedMessage = "Vardok id 100 is missing valid dates and can not be saved"
+        val expectedMessage = "Vardok id 100 is missing Valid (valid dates) and can not be saved"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
@@ -140,7 +140,7 @@ class VardokServiceTest : BaseVardokTest() {
             assertThrows(MissingDataElementNameException::class.java) {
                 varDokService.createVarDefInputFromVarDokItems(mapVardokResponse)
             }
-        val expectedMessage = "Vardok id 123 is missing data element name (short name) and can not be saved"
+        val expectedMessage = "Vardok id 123 is missing DataElementName (short name) and can not be saved"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)

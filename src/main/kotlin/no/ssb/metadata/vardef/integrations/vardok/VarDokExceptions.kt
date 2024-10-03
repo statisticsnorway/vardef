@@ -3,25 +3,25 @@ package no.ssb.metadata.vardef.integrations.vardok
 open class VardokException(override val message: String, val id: String?) : Exception()
 
 class MissingDataElementNameException(id: String) :
-    VardokException("Vardok id $id is missing data element name (short name) and can not be saved", id = null)
+    VardokException("Vardok id $id is missing DataElementName (short name) and can not be saved", id = null)
 
 class MissingValidDatesException(id: String) :
-    VardokException("Vardok id $id is missing valid dates and can not be saved", id = null)
+    VardokException("Vardok id $id is missing Valid (valid dates) and can not be saved", id = null)
 
 class MissingValidFromException(id: String) : VardokException(
-    "Vardok id $id is missing valid from and can not be saved",
+    "Vardok id $id Valid is missing 'from' date and can not be saved",
     id = null,
 )
 
 class VardokNotFoundException(id: String) : VardokException("Vardok id $id not found", id = null)
 
 class IllegalShortNameException(id: String) : VardokException(
-    "Vardok dataelement name for $id does not conform to vardef short name",
+    "Vardok id $id DataElementName does not conform to short name rules and can not be saved",
     id = null,
 )
 
 class OutdatedUnitTypesException(id: String) : VardokException(
-    "StatisticalUnit for Vardok $id does not conform to vardef unit types",
+    "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
     id = null,
 )
 

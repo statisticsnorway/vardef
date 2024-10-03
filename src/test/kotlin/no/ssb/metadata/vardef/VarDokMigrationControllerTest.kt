@@ -67,7 +67,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Vardok id $id is missing valid dates and can not be saved",
+                    "Vardok id $id is missing Valid (valid dates) and can not be saved",
                 ),
             )
     }
@@ -85,7 +85,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Vardok id 123 is missing data element name (short name) and can not be saved",
+                    "Vardok id 123 is missing DataElementName (short name) and can not be saved",
                 ),
             )
     }
@@ -119,7 +119,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Vardok id $id is missing valid from and can not be saved",
+                    "Vardok id $id Valid is missing 'from' date and can not be saved",
                 ),
             )
     }
@@ -149,7 +149,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "StatisticalUnit for Vardok $id does not conform to vardef unit types",
+                    "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
                 ),
             )
     }
@@ -176,7 +176,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Vardok dataelement name for $id does not conform to vardef short name",
+                    "Vardok id $id DataElementName does not conform to short name rules and can not be saved",
                 ),
             )
     }

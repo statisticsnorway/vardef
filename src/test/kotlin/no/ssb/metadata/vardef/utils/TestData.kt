@@ -30,7 +30,6 @@ val DRAFT_BUS_EXAMPLE =
         variableStatus = VariableStatus.DRAFT,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
-        validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
@@ -103,7 +102,6 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
         variableStatus = VariableStatus.PUBLISHED_INTERNAL,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
-        validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
@@ -263,7 +261,7 @@ val JSON_TEST_INPUT =
             "nb": "Inntektsskatt",
             "nn": "Inntektsskatt"
         },
-        "short_name": "intskatt",
+        "short_name": "my_new_short_name",
         "definition": {
             "en": "C.",
             "nb": "F"
@@ -280,7 +278,6 @@ val JSON_TEST_INPUT =
         "contains_sensitive_personal_information": true,
         "measurement_type": "02.01",
         "valid_from": "2024-06-05",
-        "valid_until": null,
         "external_reference_uri": "https://example.com/",
         "related_variable_definition_uris": [
             "https://example.com/"

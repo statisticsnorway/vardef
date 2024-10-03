@@ -20,7 +20,6 @@ const val DRAFT_EXAMPLE = """{
     "contains_sensitive_personal_information": true,
     "measurement_type": null,
     "valid_from": "2003-01-01",
-    "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
     "comment": {
         "nb": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",

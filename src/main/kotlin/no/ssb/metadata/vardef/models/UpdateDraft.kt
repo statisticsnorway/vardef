@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
+import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
 import java.net.URL
 import java.time.LocalDate
 
@@ -33,22 +34,16 @@ data class UpdateDraft(
     @Nullable
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     val definition: LanguageStringType?,
-    @Nullable
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
-    @Pattern(regexp = KLASS_ID_PATTERN)
+    @Nullable
+    @KlassId
     val classificationReference: String?,
     @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<
-            @KlassCode("702")
-            String,
-            >?,
+    val unitTypes: List<@KlassCode(id = "702") String>?,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<
-            @KlassCode("618")
-            String,
-            >?,
+    val subjectFields: List<@KlassCode(id = "618") String>?,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @Nullable
     val containsSensitivePersonalInformation: Boolean?,
@@ -63,10 +58,6 @@ data class UpdateDraft(
     @Nullable
     @Format("yyyy-MM-dd")
     val validFrom: LocalDate?,
-    @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
-    @Nullable
-    @Format("yyyy-MM-dd")
-    val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,

@@ -1,7 +1,9 @@
 package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.models.ValidityPeriod
-import no.ssb.metadata.vardef.utils.*
+import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
+import no.ssb.metadata.vardef.utils.VALIDITY_PERIOD_TAX_EXAMPLE
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -36,19 +38,16 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                 Arguments.of(
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.now(),
-                        validUntil = null,
                     ),
                 ),
                 Arguments.of(
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2025, 10, 5),
-                        validUntil = null,
                     ),
                 ),
                 Arguments.of(
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2050, 1, 1),
-                        validUntil = null,
                     ),
                 ),
             )
@@ -90,7 +89,6 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             variableDefinitionService.saveNewValidityPeriod(
                 VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                     validFrom = LocalDate.of(1796, 1, 1),
-                    validUntil = null,
                 ),
                 SAVED_TAX_EXAMPLE.definitionId,
             )

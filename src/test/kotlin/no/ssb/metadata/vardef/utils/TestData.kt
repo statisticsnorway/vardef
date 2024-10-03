@@ -70,7 +70,7 @@ val SAVED_DEPRECATED_VARIABLE_DEFINITION =
         externalReferenceUri = URI("https://www.example.com").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(),
-        owner = Owner("", ""),
+        owner = Owner("my-team", listOf("my-team-developers", "other-group")),
         contact =
             Contact(
                 LanguageStringType("", "", ""),
@@ -149,7 +149,7 @@ val SAVED_TAX_EXAMPLE =
             ),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("", ""),
+            Owner("pers-skatt", listOf("pers-skatt-developers", "neighbourhood-dogs")),
         contact =
             Contact(
                 LanguageStringType("", "", ""),
@@ -198,7 +198,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
             ),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("", ""),
+            Owner("skip-stat", listOf("skip-stat-developers")),
         contact =
             Contact(
                 LanguageStringType("", "", ""),

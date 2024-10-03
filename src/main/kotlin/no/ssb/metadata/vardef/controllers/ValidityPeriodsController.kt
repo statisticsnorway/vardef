@@ -43,7 +43,7 @@ class ValidityPeriodsController {
                 examples = [
                     ExampleObject(
                         name = "create_validity_period",
-                        value = FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE,
+                        value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
             ),

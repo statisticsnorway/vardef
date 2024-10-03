@@ -35,16 +35,10 @@ data class ValidityPeriod(
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @Nullable
-    val unitTypes: List<
-            @KlassCode("702")
-            String,
-            >?,
+    val unitTypes: List<@KlassCode(id = "702") String>?,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<
-            @KlassCode("618")
-            String,
-            >?,
+    val subjectFields: List<@KlassCode(id = "618") String>?,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @Nullable
     val containsSensitivePersonalInformation: Boolean?,
@@ -62,10 +56,6 @@ data class ValidityPeriod(
     @Format("yyyy-MM-dd")
     @NotNull
     val validFrom: LocalDate,
-    @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
-    @Nullable
-    @Format("yyyy-MM-dd")
-    val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,
@@ -93,7 +83,6 @@ data class ValidityPeriod(
             variableStatus = variableStatus ?: previousPatch.variableStatus,
             measurementType = measurementType ?: previousPatch.measurementType,
             validFrom = validFrom,
-            validUntil = validUntil,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },

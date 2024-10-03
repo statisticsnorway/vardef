@@ -4,10 +4,10 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
-import no.ssb.metadata.vardef.constants.CONTACT_EXAMPLE
 import no.ssb.metadata.vardef.constants.KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
 import no.ssb.metadata.vardef.constants.OWNER_EXAMPLE
 import no.ssb.metadata.vardef.constants.PERSON_EXAMPLE
+import no.ssb.metadata.vardef.constants.RENDERED_CONTACT_EXAMPLE
 
 @Serdeable
 data class LanguageStringType(
@@ -75,7 +75,7 @@ data class Owner(
     val groups: List<String>,
 )
 
-@Schema(example = CONTACT_EXAMPLE)
+@Schema(example = RENDERED_CONTACT_EXAMPLE)
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class RenderedContact(
     val title: String?,

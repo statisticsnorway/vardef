@@ -221,7 +221,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
-    fun `update variable definition with invalid inputs`(
+    fun `update draft variable definition with invalid inputs`(
         updatedJsonString: String,
         errorMessage: String,
         spec: RequestSpecification,
@@ -230,7 +230,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .`when`()
-            .patch("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(

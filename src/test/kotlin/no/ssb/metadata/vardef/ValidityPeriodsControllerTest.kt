@@ -2,12 +2,15 @@ package no.ssb.metadata.vardef
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.utils.*
+import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.SAVED_DEPRECATED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
+import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class ValidityPeriodsControllerTest : BaseVardefTest() {
@@ -16,9 +19,9 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
      */
     companion object {
         @JvmStatic
-        fun allMandatoryFieldsChanged(): String {
-            val testCase =
-                JSONObject().apply {
+        fun allMandatoryFieldsChanged(): String =
+            JSONObject()
+                .apply {
                     put("valid_from", "2024-01-11")
                     put(
                         "definition",
@@ -29,23 +32,22 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                         },
                     )
                 }.toString()
-            return testCase
-        }
 
         @JvmStatic
         fun noneMandatoryFieldsChanged(): String {
             val testCase =
-                JSONObject().apply {
-                    put("valid_from", "2021-01-01")
-                    put(
-                        "definition",
-                        JSONObject().apply {
-                            put("nb", "Intektsskatt ny definisjon")
-                            put("nn", "Intektsskatt ny definisjon")
-                            put("en", "Income tax new definition")
-                        },
-                    )
-                }.toString()
+                JSONObject()
+                    .apply {
+                        put("valid_from", "2021-01-01")
+                        put(
+                            "definition",
+                            JSONObject().apply {
+                                put("nb", "Intektsskatt ny definisjon")
+                                put("nn", "Intektsskatt ny definisjon")
+                                put("en", "Income tax new definition")
+                            },
+                        )
+                    }.toString()
             return testCase
         }
     }
@@ -67,19 +69,21 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             lastPatch.validUntil,
         ).isNull()
         assertThat(
-            variableDefinitionService.getOnePatchById(
-                lastPatch.definitionId,
-                lastPatch.patchId - 1,
-            ).validUntil,
+            variableDefinitionService
+                .getOnePatchById(
+                    lastPatch.definitionId,
+                    lastPatch.patchId - 1,
+                ).validUntil,
         ).isEqualTo(lastPatch.validFrom.minusDays(1))
     }
 
     @Test
     fun `create new validity period before all validity periods`(spec: RequestSpecification) {
         val newValidityPeriodBeforeAll =
-            JSONObject(allMandatoryFieldsChanged()).apply {
-                put("valid_from", "1923-01-11")
-            }.toString()
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    put("valid_from", "1923-01-11")
+                }.toString()
 
         spec
             .given()
@@ -90,25 +94,27 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
         assertThat(
-            variableDefinitionService.getLatestPatchById(
-                SAVED_TAX_EXAMPLE.definitionId,
-            ).validUntil,
+            variableDefinitionService
+                .getLatestPatchById(
+                    SAVED_TAX_EXAMPLE.definitionId,
+                ).validUntil,
         ).isEqualTo(LocalDate.of(1979, 12, 31))
     }
 
     @Test
     fun `create new validity period missing language`(spec: RequestSpecification) {
         val definitionNotChangedForAll =
-            JSONObject(noneMandatoryFieldsChanged()).apply {
-                put("valid_from", "2040-01-11")
-                put(
-                    "definition",
-                    JSONObject().apply {
-                        put("nb", "Intektsskatt i økonomi")
-                        put("nn", "Intektsskatt i økonomi")
-                    },
-                )
-            }.toString()
+            JSONObject(noneMandatoryFieldsChanged())
+                .apply {
+                    put("valid_from", "2040-01-11")
+                    put(
+                        "definition",
+                        JSONObject().apply {
+                            put("nb", "Intektsskatt i økonomi")
+                            put("nn", "Intektsskatt i økonomi")
+                        },
+                    )
+                }.toString()
 
         spec
             .given()
@@ -123,9 +129,10 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period definition text is not changed`(spec: RequestSpecification) {
         val definitionNotChanged =
-            JSONObject(noneMandatoryFieldsChanged()).apply {
-                put("valid_from", "2040-01-11")
-            }.toString()
+            JSONObject(noneMandatoryFieldsChanged())
+                .apply {
+                    put("valid_from", "2040-01-11")
+                }.toString()
 
         spec
             .given()
@@ -141,9 +148,10 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period invalid valid from`(spec: RequestSpecification) {
         val invalidValidFrom =
-            JSONObject(allMandatoryFieldsChanged()).apply {
-                put("valid_from", "1990-05-11")
-            }.toString()
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    put("valid_from", "1990-05-11")
+                }.toString()
 
         spec
             .given()
@@ -188,9 +196,10 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period no valid from`(spec: RequestSpecification) {
         val validFromIsNull =
-            JSONObject(allMandatoryFieldsChanged()).apply {
-                remove("valid_from")
-            }.toString()
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    remove("valid_from")
+                }.toString()
 
         spec
             .given()
@@ -211,9 +220,10 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period with new short name`(spec: RequestSpecification) {
         val newShortName =
-            JSONObject(allMandatoryFieldsChanged()).apply {
-                put("short_name", "car")
-            }.toString()
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    put("short_name", "car")
+                }.toString()
 
         spec
             .given()
@@ -227,6 +237,30 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 "_embedded.errors[0].message",
                 containsString(
                     "short_name may not be specified here",
+                ),
+            )
+    }
+
+    @Test
+    fun `create new validity period with valid_until`(spec: RequestSpecification) {
+        val newShortName =
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    put("valid_until", "2030-06-30")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(newShortName)
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .then()
+            .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "valid_until may not be specified here",
                 ),
             )
     }

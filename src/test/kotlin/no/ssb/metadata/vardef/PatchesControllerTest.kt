@@ -139,6 +139,26 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `create new patch with valid_until`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                    put("valid_until", "2030-06-30")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .then()
+            .statusCode(201)
+    }
+
+    @Test
     fun `create new patch short name in request`(spec: RequestSpecification) {
         val testCase =
             JSONObject(JSON_TEST_INPUT)

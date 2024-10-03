@@ -1,6 +1,31 @@
 package no.ssb.metadata.vardef.constants
 
 const val ID_EXAMPLE = """wypvb3wd"""
+const val EMPTY_LIST_EXAMPLE = """[]"""
+const val DATE_EXAMPLE = "1970-01-01"
+
+const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
+            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
+            "code": "be07",
+            "title": "Innvandrere"
+        }"""
+
+const val PERSON_EXAMPLE = """{
+        "code": "ano@ssb.no",
+        "name": "Ola Nordmann"
+    }
+"""
+
+const val RENDERED_CONTACT_EXAMPLE = """{
+        "title": "Seksjon for befolkningsstatistikk",
+        "email": "s320@ssb.no"
+    }
+"""
+
+const val OWNER_EXAMPLE = """{
+    "team": "play-obr-b",
+    "groups": ["play-obr-b-developers"]
+}"""
 
 const val DRAFT_EXAMPLE = """{
     "name": {
@@ -20,7 +45,6 @@ const val DRAFT_EXAMPLE = """{
     "contains_sensitive_personal_information": true,
     "measurement_type": null,
     "valid_from": "2003-01-01",
-    "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
     "comment": {
         "nb": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
@@ -41,7 +65,7 @@ const val DRAFT_EXAMPLE = """{
 }
 """
 
-const val FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE = """{
+const val COMPLETE_RESPONSE_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
     "patch_id": 1,
     "name": {
@@ -79,7 +103,11 @@ const val FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE = """{
             "nn": "Seksjon for befolkningsstatistikk"
         },
         "email": "s320@ssb.no"
-    }
+    },
+    "created_at": "2024-06-11T08:15:19.038Z",
+    "created_by": $PERSON_EXAMPLE,
+    "last_updated_at": "2024-06-11T08:15:19.038Z",
+    "last_updated_by": $PERSON_EXAMPLE
 }
 """
 
@@ -158,30 +186,6 @@ const val VALIDITY_PERIOD_EXAMPLE = """
     }
 }
 """
-
-const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
-            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
-            "code": "be07",
-            "title": "Innvandrere"
-        }"""
-
-const val PERSON_EXAMPLE = """{
-        "code": "ano@ssb.no",
-        "name": "Ola Nordmann"
-    }
-"""
-
-const val CONTACT_EXAMPLE = """{
-        "title": "Seksjon for befolkningsstatistikk",
-        "email": "s320@ssb.no"
-    }
-"""
-
-const val OWNER_EXAMPLE = """{
-    "team": "play-obr-b",
-    "groups": ["play-obr-b-developers"]
-}"""
-
 const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
     "name": "Landbakgrunn",
@@ -206,7 +210,7 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
-    "contact": $CONTACT_EXAMPLE,
+    "contact": $RENDERED_CONTACT_EXAMPLE,
     "last_updated_at": "2024-06-12T10:39:41.038Z"
 }
 """
@@ -214,6 +218,3 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
 const val LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE = """[
     $RENDERED_VARIABLE_DEFINITION_EXAMPLE
 ]"""
-const val EMPTY_LIST_EXAMPLE = """[]"""
-
-const val DATE_EXAMPLE = "1970-01-01"

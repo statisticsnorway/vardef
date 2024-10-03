@@ -12,7 +12,6 @@ import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.nullValue
-import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -312,7 +311,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
     fun `post not allowed`(spec: RequestSpecification) {
         val input =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     put("short_name", "nothing")
                 }.toString()

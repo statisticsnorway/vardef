@@ -33,7 +33,7 @@ class VariableDefinitionByIdController {
      *
      * This is rendered in the given language, with the default being Norwegian Bokmål.
      */
-    @Tag(name = VARIABLE_DEFINITIONS)
+    @Tag(name = PUBLIC)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(
         responseCode = "200",

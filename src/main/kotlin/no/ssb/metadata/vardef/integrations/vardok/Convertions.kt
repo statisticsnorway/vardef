@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import no.ssb.metadata.vardef.models.Owner
-
 val unitTypeConverter =
     mapOf(
         "Adresse" to "01",
@@ -48,10 +46,4 @@ fun mapVardokIdentifier(vardokItem: VardokResponse): String {
     val vardokId = vardokItem.id
     val splitId = vardokId.split(":")
     return splitId[splitId.size - 1]
-}
-
-fun mapVardokContactDivisionToOwner(vardokItem: VardokResponse): Owner {
-    val owner = vardokItem.common?.contactDivision
-    val mappedOwner = Owner(owner!!.codeValue, owner.codeText)
-    return mappedOwner
 }

@@ -74,18 +74,13 @@ data class SavedVariableDefinition(
             unitTypes = unitTypes.map { klassService.getCodeItemFor("702", it, language) },
             subjectFields = subjectFields.map { klassService.getCodeItemFor("618", it, language) },
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus,
             measurementType = measurementType?.let { klassService.getCodeItemFor("303", it, language) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
-            owner = owner,
             contact = contact?.let { RenderedContact(contact?.title?.getValidLanguage(language), it.email) },
-            createdAt = createdAt,
-            createdBy = createdBy,
             lastUpdatedAt = lastUpdatedAt,
-            lastUpdatedBy = lastUpdatedBy,
         )
 
     fun toDraft(): Draft =

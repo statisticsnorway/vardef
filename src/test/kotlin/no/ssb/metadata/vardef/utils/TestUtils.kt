@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef.utils
 
-import io.micronaut.http.HttpStatus
+import no.ssb.metadata.vardef.models.VariableStatus
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
@@ -115,70 +115,41 @@ object TestUtils {
         )
 
     @JvmStatic
-    fun variableDefinitionsNonMandatoryFieldsRemoved(): List<String> {
-        val testCases =
-            listOf(
+    fun variableDefinitionsNonMandatoryFieldsRemoved(): Stream<Arguments> =
+        Stream.of("measurement_type", "valid_until", "external_reference_uri", "related_variable_definition_uris").map {
+            argumentSet(
+                "$it removed",
                 jsonTestInput()
                     .apply {
-                        remove("measurement_type")
-                    }.toString(),
-                jsonTestInput()
-                    .apply {
-                        remove("valid_until")
-                    }.toString(),
-                jsonTestInput()
-                    .apply {
-                        remove("external_reference_uri")
-                    }.toString(),
-                jsonTestInput()
-                    .apply {
-                        remove("related_variable_definition_uris")
+                        remove(it)
                     }.toString(),
             )
-        return testCases
-    }
+        }
 
     @JvmStatic
-    fun variableDefinitionsMandatoryFieldsRemoved(): Stream<Arguments> {
-        val testCases =
-            listOf(
-                jsonTestInput().apply {
-                    remove("name")
-                } to "null annotate it with @Nullable",
-                jsonTestInput().apply {
-                    remove("short_name")
-                } to "null annotate it with @Nullable",
-                jsonTestInput().apply {
-                    remove("definition")
-                } to "null annotate it with @Nullable",
-                jsonTestInput().apply {
-                    remove("valid_from")
-                } to "null annotate it with @Nullable",
+    fun variableDefinitionsMandatoryFieldsRemoved(): Stream<Arguments> =
+        Stream.of("name", "short_name", "definition", "valid_from").map {
+            argumentSet(
+                "$it removed",
+                jsonTestInput()
+                    .apply {
+                        remove(it)
+                    }.toString(),
             )
-        return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }
-    }
+        }
 
     @JvmStatic
-    fun variableDefinitionsVariousVariableStatus(): Stream<Arguments> {
-        val testCases =
-            listOf(
-                jsonTestInput().apply {
-                    put("variable_status", "DRAFT")
-                } to HttpStatus.BAD_REQUEST.code,
-                jsonTestInput().apply {
-                    put("variable_status", "PUBLISHED_INTERNAL")
-                } to HttpStatus.BAD_REQUEST.code,
-                jsonTestInput().apply {
-                    put("variable_status", "PUBLISHED_EXTERNAL")
-                } to HttpStatus.BAD_REQUEST.code,
-                jsonTestInput().apply {
-                    put("variable_status", "DEPRECATED")
-                } to HttpStatus.BAD_REQUEST.code,
-                jsonTestInput().apply {
-                    put("variable_status", "Not a status")
-                } to HttpStatus.BAD_REQUEST.code,
-            )
-
-        return testCases.stream().map { (json, message) -> Arguments.of(json.toString(), message) }
-    }
+    fun variableDefinitionsVariousVariableStatus(): Stream<Arguments.ArgumentSet> =
+        VariableStatus.entries
+            .map { it.name }
+            .plus("Not a status")
+            .map {
+                argumentSet(
+                    "'$it' status",
+                    jsonTestInput()
+                        .apply {
+                            put("variable_status", it)
+                        }.toString(),
+                )
+            }.stream()
 }

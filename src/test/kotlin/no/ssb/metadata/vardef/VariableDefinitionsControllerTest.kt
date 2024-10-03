@@ -417,4 +417,44 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 containsString("already exists."),
             )
     }
+
+    @Test
+    fun `all variable definitions has comment field`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .contentType(ContentType.JSON)
+            .header("Accept-Language", "nb")
+            .get("/variable-definitions")
+            .then()
+            .statusCode(200)
+            .body("find { it }", hasKey("comment"))
+            .body("[0].comment", notNullValue())
+    }
+
+    @Test
+    fun `create new variable with comment field in two languages`(spec: RequestSpecification) {
+        val input =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    put(
+                        "comment",
+                        JSONObject().apply {
+                            put("nb", "Denne definisjonen trenger tilleggsforklaring")
+                            put("en", "This definition needs additional explanation")
+                        },
+                    )
+                    put("short_name", "unique")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(201)
+            .body("comment.nb", equalTo("Denne definisjonen trenger tilleggsforklaring"))
+            .body("comment.nn", nullValue())
+    }
 }

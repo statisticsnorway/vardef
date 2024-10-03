@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -215,5 +216,51 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/$id/patches")
             .then()
             .statusCode(405)
+    }
+
+    @Test
+    fun `list of patches has comment field`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .then()
+            .statusCode(200)
+            .body("find { it }", hasKey("comment"))
+    }
+
+    @Test
+    fun `get one patch has comment field`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/3")
+            .then()
+            .statusCode(200)
+            .body("comment.nb", containsString("Ny standard for navn til enhetstypeidentifikatorer."))
+    }
+
+    @Test
+    fun `create new patch with comment`(spec: RequestSpecification) {
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                    put(
+                        "comment",
+                        JSONObject().apply {
+                            put("en", "This is the reason")
+                        },
+                    )
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("comment.en", equalTo("This is the reason"))
     }
 }

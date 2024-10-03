@@ -22,6 +22,11 @@ const val DRAFT_EXAMPLE = """{
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "nb": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+        "nn": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+        "en": "As of 1 January 2003, the definition was changed to also include the grandparents' country of birth."
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
@@ -59,6 +64,11 @@ const val FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE = """{
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "nb": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+        "nn": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+        "en": "As of 1 January 2003, the definition was changed to also include the grandparents' country of birth."
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
@@ -92,6 +102,11 @@ const val PATCH_EXAMPLE = """
     "measurement_type": null,
     "valid_until": "2026-01-01",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "en": "Changes in unit types",
+        "nb": "Endring i enhetstyper.",
+        "nn": "Endring i enhetstyper."
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
@@ -125,6 +140,11 @@ const val VALIDITY_PERIOD_EXAMPLE = """
     "measurement_type": null,
     "valid_from": "2026-01-02",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "en": "Change in legislation triggers change of definition text.",
+        "nb": "Endring i lovgiving utløser endring av definisjonstekst.",
+        "nn": "Endring i lovgiving utløser endring av definisjonstekst."
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
@@ -182,6 +202,7 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
     "related_variable_definition_uris": [
         "https://example.com/"
     ],

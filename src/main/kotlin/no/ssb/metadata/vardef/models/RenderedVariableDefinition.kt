@@ -29,6 +29,7 @@ data class RenderedVariableDefinition(
     val validFrom: LocalDate,
     val validUntil: LocalDate?,
     val externalReferenceUri: URL?,
+    val comment: String?,
     val relatedVariableDefinitionUris: List<URL>?,
     val contact: RenderedContact?,
     val lastUpdatedAt: LocalDateTime,

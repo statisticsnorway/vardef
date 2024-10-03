@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
 import no.ssb.metadata.vardef.constants.CONTACT_EXAMPLE
 import no.ssb.metadata.vardef.constants.KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
+import no.ssb.metadata.vardef.constants.OWNER_EXAMPLE
 import no.ssb.metadata.vardef.constants.PERSON_EXAMPLE
 
 @Serdeable
@@ -61,10 +62,17 @@ data class Person(
     val name: String,
 )
 
+/**
+ * Owner
+ *
+ * @property team The Dapla team with responsibility for this variable definition.
+ * @property groups The groups with permission to modify this variable definition.
+ */
+@Schema(example = OWNER_EXAMPLE)
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Owner(
-    var code: String,
-    val name: String,
+    var team: String,
+    val groups: List<String>,
 )
 
 @Schema(example = CONTACT_EXAMPLE)

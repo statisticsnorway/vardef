@@ -44,7 +44,7 @@ class PatchesController {
                 examples = [
                     io.swagger.v3.oas.annotations.media.ExampleObject(
                         name = "one_patch",
-                        value = """[$FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE]""",
+                        value = """[$COMPLETE_RESPONSE_EXAMPLE]""",
                     ),
                 ],
             ),
@@ -77,7 +77,7 @@ class PatchesController {
                 examples = [
                     io.swagger.v3.oas.annotations.media.ExampleObject(
                         name = "patch_1",
-                        value = FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE,
+                        value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
             ),
@@ -115,7 +115,7 @@ class PatchesController {
                 examples = [
                     io.swagger.v3.oas.annotations.media.ExampleObject(
                         name = "create_patch",
-                        value = FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE,
+                        value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
             ),

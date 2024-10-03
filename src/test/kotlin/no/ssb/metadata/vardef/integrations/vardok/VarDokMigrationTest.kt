@@ -63,16 +63,16 @@ class VarDokMigrationTest {
 
     @Test
     fun `map vardok missing valid date`() {
-        val res = varDokApiService.getVarDokItem("100")
+        val res = varDokApiService.getVarDokItem("134")
 
         val exception: VardokException =
-            assertThrows(MissingValidDatesException::class.java) {
+            assertThrows(MissingValidFromException::class.java) {
                 if (res != null) {
                     getValidDates(res)
                 }
             }
 
-        val expectedMessage = "Vardok id 100 is missing valid dates and can not be saved"
+        val expectedMessage = "Vardok id 134 is missing valid from and can not be saved"
         assertThat(exception.message).isEqualTo(expectedMessage)
     }
 

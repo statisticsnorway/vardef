@@ -8,7 +8,22 @@ class MissingDataElementNameException(id: String) :
 class MissingValidDatesException(id: String) :
     VardokException("Vardok id $id is missing valid dates and can not be saved", id = null)
 
+class MissingValidFromException(id: String) : VardokException(
+    "Vardok id $id is missing valid from and can not be saved",
+    id = null,
+)
+
 class VardokNotFoundException(id: String) : VardokException("Vardok id $id not found", id = null)
+
+class IllegalShortNameException(id: String) : VardokException(
+    "Vardok dataelement name for $id does not conform to vardef short name",
+    id = null,
+)
+
+class OutdatedUnitTypesException(id: String) : VardokException(
+    "StatisticalUnit for Vardok $id does not conform to vardef unit types",
+    id = null,
+)
 
 fun checkVardokForMissingElements(varDokItems: MutableMap<String, VardokResponse>) {
     if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()) {

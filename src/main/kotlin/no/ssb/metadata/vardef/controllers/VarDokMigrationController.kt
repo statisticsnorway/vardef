@@ -2,10 +2,7 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.PathVariable
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Status
+import io.micronaut.http.annotation.*
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
@@ -20,8 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
-import no.ssb.metadata.vardef.integrations.vardok.VarDokService
-import no.ssb.metadata.vardef.integrations.vardok.VardokException
+import no.ssb.metadata.vardef.integrations.vardok.*
 import no.ssb.metadata.vardef.models.Draft
 
 @Tag(name = DATA_MIGRATION)
@@ -70,19 +66,9 @@ class VarDokMigrationController {
                 HttpRequest.POST("/variable-definitions", varDefInput),
                 Draft::class.java,
             )
-        } catch (e: VardokException) {
-            if (e.message == "Vardok is missing valid dates and can not be saved" ||
-                e.message == "Vardok is missing data element name (short name) and can not be saved"
-            ) {
-                throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
-            }
+        } catch (e: VardokNotFoundException) {
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)
         } catch (e: Exception) {
-            if (e is NullPointerException)
-                {
-                    print(e.stackTrace.toString())
-                    throw HttpStatusException(HttpStatus.BAD_REQUEST, "Variabel is missing valid unit types")
-                }
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }

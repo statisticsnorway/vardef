@@ -39,11 +39,20 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     if (firstDate != null) {
         return Pair(firstDate, secondDate)
     }
-    throw MissingValidDatesException(vardokItem.id.substringAfterLast(":"))
+    throw MissingValidFromException(vardokItem.id.substringAfterLast(":"))
 }
 
 fun mapVardokIdentifier(vardokItem: VardokResponse): String {
     val vardokId = vardokItem.id
     val splitId = vardokId.split(":")
     return splitId[splitId.size - 1]
+}
+
+fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String>? {
+    val statisticalUnit = vardokItem.variable?.statisticalUnit
+    if (statisticalUnit != null && unitTypeConverter.contains(statisticalUnit)) {
+        return unitTypeConverter[statisticalUnit]?.let { listOf(it) }
+    }
+
+    throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
 }

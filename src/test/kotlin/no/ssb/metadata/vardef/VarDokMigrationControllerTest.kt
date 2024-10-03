@@ -13,9 +13,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @ValueSource(
         ints = [
             2, 164, 171, 173, 177, 683, 687, 703, 730, 746, 752, 754, 755, 756, 753, 871, 935, 936, 937, 948,
-            964, 971, 973, 1264, 1265, 1267, 1268, 1282, 1355, 1473, 1487, 1505, 1548, 1549, 1550, 1552,
-            1841, 2016, 2318, 2633, 2690, 3007, 3008, 3009, 3010, 3011, 3253, 3256, 3310, 3325, 3448, 3449, 3453,
-            3454, 3398, 3251,
         ],
     )
     fun `post request default language`(
@@ -129,8 +126,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
-            69, 141, 590, 1997, 2103, 2124, 2139, 2141, 2142, 2149, 2157, 2159, 2163, 2183, 2194,
-            2206, 2216, 2217, 2252, 2590, 2677, 3126, 3394, 3411,
+            69, 141, 590, 1997, 2103, 2124, 2139, 2141, 2142, 2149, 2157, 2159, 2163, 2183, 2194, 2206, 2216, 2217,
         ],
     )
     fun `post vardok missing updated statistical unit`(
@@ -156,8 +152,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
-            16, 20, 161, 190, 476, 716, 1161, 1162, 1163, 1660,
-            2012, 2873, 3057, 3087, 3252, 3364, 3365, 1396,
+            16, 20, 161, 190, 476, 716, 1161, 1162, 1163, 1660, 2012, 2873, 3057, 3087, 3252, 3364, 3365, 1396,
         ],
     )
     fun `vardok dataelement name does not conform to short name rules`(

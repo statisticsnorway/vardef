@@ -22,6 +22,21 @@ class SchemaExamplesTest {
         fun schemaExamples(): Stream<Arguments.ArgumentSet> =
             Stream.of(
                 argumentSet(
+                    "KlassReference example validates",
+                    KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE,
+                    listOf(KlassReference::class.java),
+                ),
+                argumentSet(
+                    "Person example validates",
+                    PERSON_EXAMPLE,
+                    listOf(Person::class.java),
+                ),
+                argumentSet(
+                    "Owner example validates",
+                    OWNER_EXAMPLE,
+                    listOf(Owner::class.java),
+                ),
+                argumentSet(
                     "Draft example validates",
                     DRAFT_EXAMPLE,
                     listOf(Draft::class.java, UpdateDraft::class.java),

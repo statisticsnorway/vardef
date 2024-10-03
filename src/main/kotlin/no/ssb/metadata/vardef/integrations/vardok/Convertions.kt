@@ -12,7 +12,7 @@ val unitTypeConverter =
         "Fylke" to "08",
         "Fylke" to "09",
         "Havneanløp" to "10",
-        "Husholdningt" to "11",
+        "Husholdning" to "11",
         "Kjøretøy" to "12",
         "Kommune (forvaltning)" to "13",
         "Kommune" to "14",

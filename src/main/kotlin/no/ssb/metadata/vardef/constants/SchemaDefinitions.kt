@@ -27,7 +27,7 @@ const val MEASURMENT_TYPE_FIELD_DESCRIPTION =
 const val VALID_FROM_FIELD_DESCRIPTION = "The variable definition is valid from this date inclusive"
 const val VALID_UNTIL_FIELD_DESCRIPTION = "The variable definition is valid until this date inclusive"
 const val EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION = "A link (URI) to an external definition/documentation"
-const val COMMENT =
+const val COMMENT_FIELD_DESCRIPTION = "Optional comment to explain the definition or communicate potential changes."
     "Skattefrie overføringer: “Alle mottatte overføringer gjelder i løpet av kalenderåret. " +
         "Engangsstønaden ble innlemmet f.o.m. inntektsåret 1994. Kontantstøtten ble innlemmet fra august 1998. " +
         "Forsørgerfradraget opphørte f.o.m. inntektsåret 2001.Skattefrie overføringer omfatter også samleposten " +

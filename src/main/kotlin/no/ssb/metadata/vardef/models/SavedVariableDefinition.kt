@@ -40,6 +40,8 @@ data class SavedVariableDefinition(
     @Nullable
     var externalReferenceUri: URL?,
     @Nullable
+    var comment: LanguageStringType?,
+    @Nullable
     var relatedVariableDefinitionUris: List<String>?,
     @Nullable
     var owner: Owner?,
@@ -78,6 +80,7 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
+            comment = comment?.getValidLanguage(language),
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact?.let { RenderedContact(contact?.title?.getValidLanguage(language), it.email) },
             lastUpdatedAt = lastUpdatedAt,
@@ -98,6 +101,7 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
+            comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
         )
@@ -114,6 +118,7 @@ data class SavedVariableDefinition(
             measurementType = measurementType,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
+            comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
         )
@@ -134,6 +139,7 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
+            comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             contact = contact,
             lastUpdatedAt = lastUpdatedAt,
@@ -158,6 +164,7 @@ data class SavedVariableDefinition(
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
+            comment = varDefUpdates.comment ?: comment,
             relatedVariableDefinitionUris =
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             contact = varDefUpdates.contact ?: contact,

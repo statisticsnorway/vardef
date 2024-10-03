@@ -5,6 +5,7 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.*
 import java.time.LocalDate
@@ -252,5 +253,34 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(405)
+    }
+
+    @Test
+    fun `create new validity period with comment`(spec: RequestSpecification) {
+        val addComment =
+            JSONObject(allMandatoryFieldsChanged()).apply {
+                put(
+                    "comment",
+                    JSONObject().apply {
+                        put("nb", "Vi endrer etter lovverket")
+                    },
+                )
+            }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(addComment)
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .then()
+            .statusCode(201)
+            .body("$", hasKey("comment"))
+
+        assertThat(
+            variableDefinitionService.getLatestPatchById(
+                SAVED_TAX_EXAMPLE.definitionId,
+            ).comment?.nb,
+        ).isEqualTo("Vi endrer etter lovverket")
     }
 }

@@ -32,6 +32,7 @@ val DRAFT_BUS_EXAMPLE =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
             Contact(
@@ -67,6 +68,7 @@ val SAVED_DEPRECATED_VARIABLE_DEFINITION =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(),
         owner = Owner("my-team", listOf("my-team-developers", "other-group")),
         contact =
@@ -103,6 +105,7 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
             Contact(
@@ -138,6 +141,12 @@ val SAVED_TAX_EXAMPLE =
         validFrom = LocalDate.of(1980, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
+        comment =
+            LanguageStringType(
+                "Variabelen er viktig",
+                null,
+                null,
+            ),
         relatedVariableDefinitionUris = listOf(),
         owner =
             Owner("pers-skatt", listOf("pers-skatt-developers", "neighbourhood-dogs")),
@@ -181,6 +190,12 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
+        comment =
+            LanguageStringType(
+                "Legger til merknad",
+                null,
+                null,
+            ),
         relatedVariableDefinitionUris = listOf(),
         owner =
             Owner("skip-stat", listOf("skip-stat-developers")),
@@ -212,6 +227,7 @@ val RENDERED_VARIABLE_DEFINITION =
         validFrom = LocalDate.of(1960, 1, 1),
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(),
         contact =
             RenderedContact("", "me@example.com"),
@@ -233,6 +249,7 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
+        comment = null,
         relatedVariableDefinitionUris = listOf(),
         contact = null,
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),

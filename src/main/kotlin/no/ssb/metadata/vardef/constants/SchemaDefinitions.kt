@@ -27,6 +27,7 @@ const val MEASURMENT_TYPE_FIELD_DESCRIPTION =
 const val VALID_FROM_FIELD_DESCRIPTION = "The variable definition is valid from this date inclusive"
 const val VALID_UNTIL_FIELD_DESCRIPTION = "The variable definition is valid until this date inclusive"
 const val EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION = "A link (URI) to an external definition/documentation"
+const val COMMENT_FIELD_DESCRIPTION = "Optional comment to explain the definition or communicate potential changes."
 const val RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION =
     "Link(s) to related definitions of variables - " +
         "a list of one or more definitions. For example for a variable after-tax income it could be relevant to " +

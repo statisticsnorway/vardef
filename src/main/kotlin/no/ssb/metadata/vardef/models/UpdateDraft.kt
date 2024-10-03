@@ -70,6 +70,9 @@ data class UpdateDraft(
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,
+    @Schema(description = COMMENT_FIELD_DESCRIPTION)
+    @Nullable
+    val comment: LanguageStringType?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
     val relatedVariableDefinitionUris: List<URL>?,

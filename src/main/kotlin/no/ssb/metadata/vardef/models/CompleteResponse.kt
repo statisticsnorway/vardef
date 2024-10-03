@@ -45,6 +45,8 @@ data class CompleteResponse(
     val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     val externalReferenceUri: URL?,
+    @Schema(description = COMMENT_FIELD_DESCRIPTION)
+    val comment: LanguageStringType?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)

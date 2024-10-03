@@ -64,6 +64,11 @@ const val FULL_RESPONSE_VARIABLE_DEFINITION_EXAMPLE = """{
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "nb": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+        "nn": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+        "en": "As of 1 January 2003, the definition was changed to also include the grandparents' country of birth."
+    },
     "related_variable_definition_uris": [
         "https://example.com/"
     ],

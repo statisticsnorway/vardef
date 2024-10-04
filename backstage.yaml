@@ -21,6 +21,18 @@ spec:
     - klass-api
   dependsOn:
     - resource:metadata-mongodb
+    - component:vardok
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: vardok
+  title: VarDok
+  description: SSB's legacy system for variable definitions. Vardef can migrate definitions from here. Unknown ownership.
+spec:
+  type: service
+  owner: 700_AM-utviklere
+  lifecycle: production
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API

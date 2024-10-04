@@ -12,7 +12,7 @@ val unitTypeConverter =
         "Fylke (geografisk)" to "08",
         "Havneanløp" to "09",
         "Husholdning" to "10",
-        "Juridisk enhe" to "11",
+        "Juridisk enhet" to "11",
         "Foretak" to "12",
         "Bedrift" to "13",
         "Bransjeenhet" to "14",

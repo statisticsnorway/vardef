@@ -29,6 +29,33 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .statusCode(201)
     }
 
+    @Test
+    fun `post duplicate short name`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/vardok-migration/2")
+            .then()
+            .statusCode(201)
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/vardok-migration/2")
+            .then()
+            .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "Short name 'wies' already exists.",
+                ),
+            )
+    }
+
     @ParameterizedTest
     @ValueSource(
         ints = [

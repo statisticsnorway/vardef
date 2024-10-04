@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
 import org.slf4j.LoggerFactory
 
 @Singleton
@@ -19,7 +20,7 @@ open class VarDokService(
             varDokClient.fetchVarDokById(id)
         } catch (e: Exception) {
             logger.warn("$id is not found. Exception message: ${e.message}")
-            throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id not found"))
+            throw VardokNotFoundException(id)
         }
     }
 
@@ -52,7 +53,13 @@ open class VarDokService(
 
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)
+        val vardokId = varDokItems["nb"]?.id?.substringAfterLast(":").toString()
         val varDefInput = toVarDefFromVarDok(varDokItems)
+
+        if (varDefInput.shortName?.matches(VARDEF_SHORT_NAME_PATTERN.toRegex()) == false) {
+            throw IllegalShortNameException(vardokId)
+        }
+
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)
     }

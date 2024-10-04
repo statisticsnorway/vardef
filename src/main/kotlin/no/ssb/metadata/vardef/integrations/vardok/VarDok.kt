@@ -6,7 +6,7 @@ data class VarDok(
     val name: LanguageStringType?,
     val shortName: String?,
     val definition: LanguageStringType?,
-    var validFrom: String?,
+    var validFrom: String,
     val unitTypes: List<String?>,
     val externalReferenceUri: String,
     val containsSensitivePersonalInformation: Boolean,
@@ -28,7 +28,7 @@ fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): VarDok {
                 vardokItem["nn"]?.common?.title,
                 vardokItem["en"]?.common?.title,
             ),
-        shortName = vardokItemNb.variable?.dataElementName!!,
+        shortName = vardokItemNb.variable?.dataElementName!!.lowercase(),
         definition =
             LanguageStringType(
                 vardokItemNb.common?.description,
@@ -36,7 +36,7 @@ fun toVarDefFromVarDok(vardokItem: MutableMap<String, VardokResponse>): VarDok {
                 vardokItem["en"]?.common?.description,
             ),
         validFrom = getValidDates(vardokItemNb).first,
-        unitTypes = listOf(unitTypeConverter[vardokItemNb.variable.statisticalUnit]!!),
+        unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
         externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
         containsSensitivePersonalInformation = false,
         subjectFields = emptyList(),

@@ -50,10 +50,10 @@ fun mapVardokIdentifier(vardokItem: VardokResponse): String {
     return splitId[splitId.size - 1]
 }
 
-fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String>? {
+fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> {
     val statisticalUnit = vardokItem.variable?.statisticalUnit
     if (statisticalUnit != null && unitTypeConverter.contains(statisticalUnit)) {
-        return unitTypeConverter[statisticalUnit]?.let { listOf(it) }
+        return listOf(unitTypeConverter[statisticalUnit])
     }
 
     throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))

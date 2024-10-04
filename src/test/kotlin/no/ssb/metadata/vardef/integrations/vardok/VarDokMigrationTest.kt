@@ -72,8 +72,7 @@ class VarDokMigrationTest {
                 }
             }
 
-        val expectedMessage = "Vardok id 134 Valid is missing 'from' date and can not be saved"
-        assertThat(exception.message).isEqualTo(expectedMessage)
+        assertThat(exception.message).isEqualTo("Vardok id 134 Valid is missing 'from' date and can not be saved")
     }
 
     @Test
@@ -97,6 +96,7 @@ class VarDokMigrationTest {
         }
     }
 
+    // remove?
     @ParameterizedTest
     @ValueSource(
         ints = [

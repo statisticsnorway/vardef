@@ -70,6 +70,8 @@ class VarDokMigrationController {
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)
         } catch (e: Exception) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
+        } catch (e: io.micronaut.http.client.exceptions.HttpClientResponseException) {
+            throw HttpStatusException(e.status, e.message)
         }
     }
 }

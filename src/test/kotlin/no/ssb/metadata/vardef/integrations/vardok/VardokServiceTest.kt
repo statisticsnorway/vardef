@@ -99,12 +99,12 @@ class VardokServiceTest : BaseVardokTest() {
         every {
             varDokMockkClient.fetchVarDokById("1")
         } throws
-            HttpStatusException(HttpStatus.NOT_FOUND, "Id 1 not found")
+            HttpStatusException(HttpStatus.NOT_FOUND, "Vardok id 1 not found")
         val exception: Exception =
-            assertThrows(HttpStatusException::class.java) {
+            assertThrows(VardokNotFoundException::class.java) {
                 varDokService.getVarDokItem("1")
             }
-        val expectedMessage = "Id 1 not found"
+        val expectedMessage = "Vardok id 1 not found"
         val actualMessage = exception.message
 
         assertThat(actualMessage).contains(expectedMessage)
@@ -116,13 +116,13 @@ class VardokServiceTest : BaseVardokTest() {
         every {
             varDokMockkService.createVarDefInputFromVarDokItems(mapVardokResponse)
         } throws
-            MissingValidDatesException()
+            MissingValidDatesException(mapVardokResponse["nb"]?.id.toString())
 
         val exception: VardokException =
             assertThrows(MissingValidDatesException::class.java) {
                 varDokService.createVarDefInputFromVarDokItems(mapVardokResponse)
             }
-        val expectedMessage = "Vardok is missing valid dates and can not be saved"
+        val expectedMessage = "Vardok id 100 is missing Valid (valid dates) and can not be saved"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
@@ -134,13 +134,13 @@ class VardokServiceTest : BaseVardokTest() {
         every {
             varDokMockkService.createVarDefInputFromVarDokItems(mapVardokResponse)
         } throws
-            MissingDataElementNameException()
+            MissingDataElementNameException(mapVardokResponse["nb"]?.id.toString())
 
         val exception: VardokException =
             assertThrows(MissingDataElementNameException::class.java) {
                 varDokService.createVarDefInputFromVarDokItems(mapVardokResponse)
             }
-        val expectedMessage = "Vardok is missing data element name (short name) and can not be saved"
+        val expectedMessage = "Vardok id 123 is missing DataElementName (short name) and can not be saved"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)

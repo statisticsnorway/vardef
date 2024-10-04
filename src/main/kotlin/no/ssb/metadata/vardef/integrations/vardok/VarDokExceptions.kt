@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-open class VardokException(override val message: String, val id: String?) : Exception()
+open class VardokException(override val message: String, val id: String) : Exception()
 
 class MissingDataElementNameException(id: String) :
     VardokException("Vardok id $id is missing DataElementName (short name) and can not be saved", id)

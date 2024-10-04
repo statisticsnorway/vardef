@@ -3,11 +3,11 @@ package no.ssb.metadata.vardef.integrations.vardok
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Requires
-import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
 import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -63,10 +63,16 @@ class VarDokMigrationTest {
 
     @Test
     fun `map vardok missing valid date`() {
-        val res = varDokApiService.getVarDokItem("100")
-        assertThat(res).isNotNull()
-        val mappedFromDate = res?.let { getValidDates(it).first }
-        assertThat(mappedFromDate).isNull()
+        val res = varDokApiService.getVarDokItem("134")
+
+        val exception: VardokException =
+            assertThrows(MissingValidFromException::class.java) {
+                if (res != null) {
+                    getValidDates(res)
+                }
+            }
+
+        assertThat(exception.message).isEqualTo("Vardok id 134 Valid is missing 'from' date and can not be saved")
     }
 
     @Test
@@ -108,11 +114,11 @@ class VarDokMigrationTest {
     @Test
     fun `vardok id not found`() {
         val exception: Exception =
-            assertThrows(HttpStatusException::class.java) {
+            assertThrows(VardokNotFoundException::class.java) {
                 varDokApiService.getVarDokItem("1")
             }
-        assertThat(exception).isInstanceOf(HttpStatusException::class.java)
-        val expectedMessage = "Id 1 not found"
+        assertThat(exception).isInstanceOf(VardokNotFoundException::class.java)
+        val expectedMessage = "Vardok id 1 not found"
         val actualMessage = exception.message
 
         assertThat(actualMessage).contains(expectedMessage)
@@ -128,7 +134,7 @@ class VarDokMigrationTest {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(VardokException::class.java)
-            val expectedMessage = "Vardok is missing data element name (short name) and can not be saved"
+            val expectedMessage = "Vardok id 2450 is missing DataElementName (short name) and can not be saved"
             val actualMessage = exception.message
 
             assertThat(expectedMessage).isEqualTo(actualMessage)
@@ -145,7 +151,7 @@ class VarDokMigrationTest {
                     varDokApiService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(MissingValidDatesException::class.java)
-            val expectedMessage = "Vardok is missing valid dates and can not be saved"
+            val expectedMessage = "Vardok id 100 is missing Valid (valid dates) and can not be saved"
             val actualMessage = exception.message
 
             assertThat(expectedMessage).isEqualTo(actualMessage)
@@ -158,5 +164,19 @@ class VarDokMigrationTest {
         val varDokResponse: VardokResponse = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
         println(varDokResponse)
         assertThat(varDokResponse.xmlLang).isEqualTo("nb")
+    }
+
+    @Test
+    fun `data element name with uppercase`() {
+        val vardok = varDokApiService.getVarDokItem("130")
+        assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
+        val varDefInput =
+            varDokApiService.fetchMultipleVarDokItemsByLanguage("130").let {
+                varDokApiService.createVarDefInputFromVarDokItems(
+                    it,
+                )
+            }
+        val testThing = JSONObject(varDefInput)
+        assertThat(testThing["short_name"]).isEqualTo("ufg")
     }
 }

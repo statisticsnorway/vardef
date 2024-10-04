@@ -10,7 +10,7 @@ class MissingValidDatesException(id: String) :
 
 class MissingValidFromException(id: String) : VardokException(
     "Vardok id $id Valid is missing 'from' date and can not be saved",
-    id = null,
+    id,
 )
 
 class VardokNotFoundException(id: String) : VardokException("Vardok id $id not found", id)

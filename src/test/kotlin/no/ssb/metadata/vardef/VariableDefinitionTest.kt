@@ -1,8 +1,10 @@
 package no.ssb.metadata.vardef
 
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.utils.COMPLETE_RESPONSE
 import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
 import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -18,12 +20,14 @@ class VariableDefinitionTest {
     private lateinit var variableDefinition: SavedVariableDefinition
     private var nanoIdSize by Delegates.notNull<Int>()
     private lateinit var renderedVariableDefinition: RenderedVariableDefinition
+    private lateinit var completeResponseVariableDefinition: CompleteResponse
 
     @BeforeAll
     fun setUp() {
         variableDefinition = SAVED_TAX_EXAMPLE
         nanoIdSize = 8
         renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
+        completeResponseVariableDefinition = COMPLETE_RESPONSE
     }
 
     @ParameterizedTest
@@ -69,5 +73,10 @@ class VariableDefinitionTest {
     fun `rendered variable without contact information`() {
         assertThat(renderedVariableDefinition.contact).isNull()
         assertThat(renderedVariableDefinition.name).isEqualTo("Landbakgrunn")
+    }
+
+    @Test
+    fun `complete response include owner`()  {
+        assertThat(completeResponseVariableDefinition).hasFieldOrProperty("owner")
     }
 }

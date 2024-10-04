@@ -140,6 +140,7 @@ data class SavedVariableDefinition(
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
+            owner = owner,
             contact = contact,
             lastUpdatedAt = lastUpdatedAt,
             lastUpdatedBy = lastUpdatedBy,

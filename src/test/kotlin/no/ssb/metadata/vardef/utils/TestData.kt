@@ -257,17 +257,19 @@ val COMPLETE_RESPONSE =
     CompleteResponse(
         id = "",
         patchId = 1,
-        name = LanguageStringType(
-            nb ="For personer født",
-            nn = null,
-            en= null
-        ),
+        name =
+            LanguageStringType(
+                nb = "For personer født",
+                nn = null,
+                en = null,
+            ),
         shortName = "landbak",
-        definition = LanguageStringType(
-            nb= "For personer født",
-            nn = null,
-            en = null
-        ),
+        definition =
+            LanguageStringType(
+                nb = "For personer født",
+                nn = null,
+                en = null,
+            ),
         classificationReference = "https://www.ssb.no/en/klass/klassifikasjoner/91",
         unitTypes = emptyList(),
         subjectFields = emptyList(),
@@ -279,6 +281,7 @@ val COMPLETE_RESPONSE =
         externalReferenceUri = URI("https://example.com/").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(),
+        owner = null,
         contact = null,
         createdAt = LocalDateTime.now(),
         createdBy = null,

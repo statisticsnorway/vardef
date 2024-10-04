@@ -56,7 +56,7 @@ open class VarDokService(
         val vardokId = varDokItems["nb"]?.id?.substringAfterLast(":").toString()
         val varDefInput = toVarDefFromVarDok(varDokItems)
 
-        if (!varDefInput.shortName.isNullOrEmpty() && !varDefInput.shortName.matches(VARDEF_SHORT_NAME_PATTERN.toRegex())) {
+        if (varDefInput.shortName?.matches(VARDEF_SHORT_NAME_PATTERN.toRegex()) == false) {
             throw IllegalShortNameException(vardokId)
         }
 

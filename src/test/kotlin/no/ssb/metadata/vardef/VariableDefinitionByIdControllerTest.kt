@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef
 
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
+import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.Draft
@@ -10,8 +11,7 @@ import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -357,5 +357,26 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("comment.nb", containsString("Legger til merknad"))
             .body("comment.nn", containsString("Endrer merknad"))
             .body("comment.en", nullValue())
+    }
+
+    @Test
+    fun `changes in draft variable definition return complete response`(spec: RequestSpecification) {
+        val response: ResponseBodyExtractionOptions? =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """
+                    {"short_name": "nothing"}
+                    """.trimIndent(),
+                ).`when`()
+                .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .response()
+
+        val jsonResponse = response?.jsonPath()?.getMap<String, Any>("")
+        assertThat(jsonResponse?.keys?.containsAll(ALL_KEYS))
     }
 }

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-@Requires(env = ["integration-test"])
+//@Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
@@ -170,13 +170,9 @@ class VarDokMigrationTest {
     fun `data element name with uppercase`() {
         val vardok = varDokApiService.getVarDokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
-        val varDefInput =
-            varDokApiService.fetchMultipleVarDokItemsByLanguage("130").let {
-                varDokApiService.createVarDefInputFromVarDokItems(
-                    it,
-                )
-            }
-        val testThing = JSONObject(varDefInput)
-        assertThat(testThing["short_name"]).isEqualTo("ufg")
+        val varDefInput = varDokApiService.fetchMultipleVarDokItemsByLanguage("130")
+        val vardok2 = toVarDefFromVarDok(varDefInput)
+        val afterMigration = JSONObject(vardok2)
+        assertThat(afterMigration["shortName"]).isEqualTo("ufg")
     }
 }

@@ -286,12 +286,22 @@ class PatchesControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new patch return owner information`(spec: RequestSpecification) {
-        /*
-        GIVEN oppdatert variabel definisjon med status DRAFT AND gyldig input
-
-        WHEN PATCH til /variable-definitions/{id]
-
-        THEN 200 AND CompleteResponse AND owner i CompleteResponse
-         */
+        val testCase =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                }.toString()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("$", hasKey("owner"))
+            .body("owner.team", equalTo("pers-skatt"))
+            .body("owner.groups[0]", equalTo("pers-skatt-developers"))
     }
 }

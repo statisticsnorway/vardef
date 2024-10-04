@@ -96,7 +96,6 @@ class VarDokMigrationTest {
         }
     }
 
-    // remove?
     @ParameterizedTest
     @ValueSource(
         ints = [

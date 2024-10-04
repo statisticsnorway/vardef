@@ -283,4 +283,15 @@ class PatchesControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("comment.en", equalTo("This is the reason"))
     }
+
+    @Test
+    fun `create new patch return owner information`(spec: RequestSpecification) {
+        /*
+        GIVEN oppdatert variabel definisjon med status DRAFT AND gyldig input
+
+        WHEN PATCH til /variable-definitions/{id]
+
+        THEN 200 AND CompleteResponse AND owner i CompleteResponse
+         */
+    }
 }

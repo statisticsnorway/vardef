@@ -253,6 +253,39 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
     )
 
+val COMPLETE_RESPONSE =
+    CompleteResponse(
+        id = "",
+        patchId = 1,
+        name = LanguageStringType(
+            nb ="For personer født",
+            nn = null,
+            en= null
+        ),
+        shortName = "landbak",
+        definition = LanguageStringType(
+            nb= "For personer født",
+            nn = null,
+            en = null
+        ),
+        classificationReference = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+        unitTypes = emptyList(),
+        subjectFields = emptyList(),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.DRAFT,
+        measurementType = null,
+        validFrom = LocalDate.of(1960, 1, 1),
+        validUntil = LocalDate.of(2021, 1, 1),
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(),
+        contact = null,
+        createdAt = LocalDateTime.now(),
+        createdBy = null,
+        lastUpdatedAt = LocalDateTime.now(),
+        lastUpdatedBy = null,
+    )
+
 val JSON_TEST_INPUT =
     """
     {

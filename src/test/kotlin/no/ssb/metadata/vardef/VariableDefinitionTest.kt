@@ -76,7 +76,7 @@ class VariableDefinitionTest {
     }
 
     @Test
-    fun `complete response include owner`()  {
+    fun `complete response include owner`() {
         assertThat(completeResponseVariableDefinition).hasFieldOrProperty("owner")
     }
 }

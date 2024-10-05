@@ -170,8 +170,8 @@ class VarDokMigrationTest {
         val vardok = varDokApiService.getVarDokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
         val varDefInput = varDokApiService.fetchMultipleVarDokItemsByLanguage("130")
-        val vardok2 = toVarDefFromVarDok(varDefInput)
-        val afterMigration = JSONObject(vardok2)
+        val vardokTransform = toVarDefFromVarDok(varDefInput)
+        val afterMigration = JSONObject(vardokTransform)
         assertThat(afterMigration["shortName"]).isEqualTo("ufg")
     }
 }

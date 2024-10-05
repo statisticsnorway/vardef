@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef
 
+import io.micronaut.context.annotation.Requires
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.utils.BaseVardefTest
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-// @Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(

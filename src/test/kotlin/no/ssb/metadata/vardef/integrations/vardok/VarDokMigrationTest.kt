@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-// @Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject

@@ -64,9 +64,8 @@ open class VarDokService(
         if (varDefInput.shortName?.matches(VARDEF_SHORT_NAME_PATTERN.toRegex()) == false) {
             throw IllegalShortNameException(vardokId)
         }
-        // TODO(check if we have to wait to be initalized)
         if (varDefInput.shortName?.let { varDefService.checkIfShortNameExists(it) } == true) {
-            throw NotUniqueShortNameException(varDefInput.shortName)
+            throw DuplicateShortNameException(varDefInput.shortName)
         }
 
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)

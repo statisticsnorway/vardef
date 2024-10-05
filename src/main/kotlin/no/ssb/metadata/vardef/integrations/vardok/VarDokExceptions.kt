@@ -22,7 +22,7 @@ class OutdatedUnitTypesException(id: String) : VardokException(
     "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
 )
 
-class NotUniqueShortNameException(shortName: String) : VardokException("Short name '$shortName' already exists.")
+class DuplicateShortNameException(shortName: String) : VardokException("Short name '$shortName' already exists.")
 
 fun checkVardokForMissingElements(varDokItems: MutableMap<String, VardokResponse>) {
     if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()) {

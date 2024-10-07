@@ -5,7 +5,7 @@ import io.restassured.http.ContentType
 import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
-import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -155,7 +155,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val body = jsonMapper.readValue(bodyString, Draft::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
 
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
         assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
@@ -214,7 +214,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val body = jsonMapper.readValue(bodyString, Draft::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
         assertThat(body.shortName).isNotEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.shortName)
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
     }

@@ -78,10 +78,10 @@ class VariableDefinitionService(
         id: String,
         dateOfValidity: LocalDate?,
     ): RenderedVariableDefinition {
-        if (dateOfValidity != null) {
-            return getLatestPatchByDateAndById(id, dateOfValidity).render(language, klassService)
+        return if (dateOfValidity != null) {
+            getLatestPatchByDateAndById(id, dateOfValidity).render(language, klassService)
         } else {
-            return getLatestPatchById(id).render(language, klassService)
+            getLatestPatchById(id).render(language, klassService)
         }
     }
 

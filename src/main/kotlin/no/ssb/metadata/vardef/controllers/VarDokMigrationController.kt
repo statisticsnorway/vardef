@@ -25,7 +25,7 @@ import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokNotFoundException
-import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.models.CompleteResponse
 import org.reactivestreams.Publisher
 
 @Tag(name = DATA_MIGRATION)
@@ -64,7 +64,7 @@ class VarDokMigrationController {
         @Parameter(name = "vardok-id", description = "The ID of the definition in Vardok.", example = "1607")
         @PathVariable("vardok-id")
         id: String,
-    ): Publisher<HttpResponse<Draft>>? {
+    ): Publisher<HttpResponse<CompleteResponse?>>? {
         try {
             val varDefInput =
                 varDokApiService.createVarDefInputFromVarDokItems(
@@ -72,7 +72,7 @@ class VarDokMigrationController {
                 )
             return httpClient.exchange(
                 HttpRequest.POST("/variable-definitions", varDefInput),
-                Argument.of(Draft::class.java),
+                Argument.of(CompleteResponse::class.java),
                 DEFAULT_ERROR_TYPE,
             )
         } catch (e: VardokNotFoundException) {

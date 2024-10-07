@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.nanoid)
+    implementation(libs.json)
     compileOnly(libs.micronaut.openapi.annotations)
     runtimeOnly(libs.logback.classic)
     runtimeOnly(libs.jackson.module.kotlin)
@@ -50,7 +51,6 @@ dependencies {
     testImplementation(libs.micronaut.test.rest.assured)
     testImplementation(libs.mockk)
     testImplementation(libs.junit.jupiter.params)
-    testImplementation(libs.json)
     aotPlugins(platform(libs.micronaut.platform))
 }
 

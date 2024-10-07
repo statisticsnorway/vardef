@@ -9,8 +9,8 @@ import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Status
 import io.micronaut.http.client.HttpClient
-import io.micronaut.http.client.HttpClient.DEFAULT_ERROR_TYPE
 import io.micronaut.http.client.annotation.Client
+import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
@@ -23,10 +23,10 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
+import no.ssb.metadata.vardef.extensions.extractMessageFromJsonError
 import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokNotFoundException
 import no.ssb.metadata.vardef.models.Draft
-import org.reactivestreams.Publisher
 
 @Tag(name = DATA_MIGRATION)
 @Validated
@@ -36,7 +36,7 @@ class VarDokMigrationController {
     @Inject
     lateinit var varDokApiService: VarDokService
 
-    @Client("/")
+    @Client("/", errorType = String::class)
     @Inject
     lateinit var httpClient: HttpClient
 
@@ -64,21 +64,20 @@ class VarDokMigrationController {
         @Parameter(name = "vardok-id", description = "The ID of the definition in Vardok.", example = "1607")
         @PathVariable("vardok-id")
         id: String,
-    ): Publisher<HttpResponse<Draft>>? {
+    ): HttpResponse<*> {
         try {
             val varDefInput =
                 varDokApiService.createVarDefInputFromVarDokItems(
                     varDokApiService.fetchMultipleVarDokItemsByLanguage(id),
                 )
-            return httpClient.exchange(
+            return httpClient.toBlocking().exchange(
                 HttpRequest.POST("/variable-definitions", varDefInput),
                 Argument.of(Draft::class.java),
-                DEFAULT_ERROR_TYPE,
             )
         } catch (e: VardokNotFoundException) {
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)
-        } catch (e: Exception) {
-            throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
+        } catch (e: HttpClientResponseException) {
+            throw HttpStatusException(e.status, e.extractMessageFromJsonError())
         }
     }
 }

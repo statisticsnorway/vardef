@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.ssb.metadata.vardef.constants.*
 
+
 @OpenAPIDefinition(
     info =
         Info(

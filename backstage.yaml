@@ -8,6 +8,7 @@ metadata:
     Variable definitions service at Statistics Norway
   tags:
     - metadata
+    - nais
   annotations:
     github.com/project-slug: statisticsnorway/vardef
 spec:
@@ -29,6 +30,8 @@ metadata:
   name: vardok
   title: VarDok
   description: SSB's legacy system for variable definitions. Vardef can migrate definitions from here. Unknown ownership.
+  tags:
+    - on-prem
 spec:
   type: service
   owner: 700_AM-utviklere
@@ -48,3 +51,5 @@ spec:
   system: metadata
   owner: dapla-metadata-developers
   lifecycle: experimental
+  definition:
+    $text: .

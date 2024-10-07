@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.utils
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.*
 import org.bson.types.ObjectId
+import org.json.JSONObject
 import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -289,8 +290,9 @@ val COMPLETE_RESPONSE =
         lastUpdatedBy = null,
     )
 
-val JSON_TEST_INPUT =
-    """
+fun jsonTestInput() =
+    JSONObject(
+        """
     {
         "name": {
             "en": "Income tax",
@@ -327,4 +329,5 @@ val JSON_TEST_INPUT =
             "email": "user@example.com"
         }
     }
-    """.trimIndent()
+    """,
+    )

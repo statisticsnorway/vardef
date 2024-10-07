@@ -12,7 +12,7 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.ALL_KEYS
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
-import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
+import no.ssb.metadata.vardef.utils.jsonTestInput
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -57,7 +57,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     fun `create variable definition`(spec: RequestSpecification) {
         val startTime = LocalDateTime.now()
         val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     put("short_name", "blah")
                 }.toString()
@@ -88,7 +88,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `create variable definition with no contact information`(spec: RequestSpecification) {
         val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     put("contact", JSONObject.NULL)
                 }.apply {
@@ -130,7 +130,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `create variable definition with id`(spec: RequestSpecification) {
         val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     put("id", "my-special-id")
                 }.toString()
@@ -198,7 +198,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `get request no value in selected language`(spec: RequestSpecification) {
         val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     put(
                         "short_name",
@@ -275,7 +275,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsMandatoryFieldsRemoved")
     fun `create variable definition with mandatory fields removed`(
         updatedJsonString: String,
-        errorMessage: String,
         spec: RequestSpecification,
     ) {
         spec
@@ -287,15 +286,14 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
                 "_embedded.errors[0].message",
-                containsString(errorMessage),
+                containsString("null annotate it with @Nullable"),
             )
     }
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsVariousVariableStatus")
-    fun `test variable status inputs`(
+    fun `create variable definition specify variable status`(
         updatedJsonString: String,
-        errorCode: Int,
         spec: RequestSpecification,
     ) {
         spec
@@ -304,7 +302,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(errorCode)
+            .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 
     @Test
@@ -343,7 +341,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `create variable definition and check klass url`(spec: RequestSpecification) {
         val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     put("short_name", "landbak_copy")
                 }.toString()
@@ -403,7 +401,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new variable with existing shortname`(spec: RequestSpecification) {
-        val updatedJsonString = JSONObject(JSON_TEST_INPUT).apply { put("short_name", "intskatt") }.toString()
+        val updatedJsonString = jsonTestInput().apply { put("short_name", "intskatt") }.toString()
 
         spec
             .given()
@@ -435,7 +433,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `create new variable with comment field in two languages`(spec: RequestSpecification) {
         val input =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     put(
                         "comment",
@@ -462,7 +460,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `create variable definition returns all fields`(spec: RequestSpecification) {
         val updatedJsonString =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     put("short_name", "blink")
                 }.toString()

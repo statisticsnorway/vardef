@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef
 
 import io.restassured.http.ContentType
+import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.VariableStatus
@@ -303,5 +304,31 @@ class PatchesControllerTest : BaseVardefTest() {
             .body("$", hasKey("owner"))
             .body("owner.team", equalTo("pers-skatt"))
             .body("owner.groups[0]", equalTo("pers-skatt-developers"))
+    }
+
+    /*
+        GIVEN variable-definition-id eksisterer
+
+        WHEN GET til /variable-definitions/{variable-definition-id}/patches
+
+        THEN 200 AND liste med CompleteResponse(s) AND owner i CompleteResponse(s)
+
+
+     */
+
+    @Test
+    fun `get saved variable definition patch by id return complete response`(spec: RequestSpecification) {
+        val response: ResponseBodyExtractionOptions? =
+            spec
+                .`when`()
+                .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/1")
+                .then()
+                .statusCode(200)
+                .body("$", hasKey("owner"))
+                .extract()
+                .response()
+
+        val jsonResponse = response?.jsonPath()?.getMap<String, Any>("")
+        assertThat(jsonResponse?.keys).containsExactlyInAnyOrderElementsOf(ALL_KEYS)
     }
 }

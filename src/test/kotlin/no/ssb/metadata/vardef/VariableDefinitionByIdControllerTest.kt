@@ -359,6 +359,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("comment.en", nullValue())
     }
 
+    // false green last part
     @Test
     fun `changes in draft variable definition return complete response`(spec: RequestSpecification) {
         val response: ResponseBodyExtractionOptions? =
@@ -373,6 +374,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
                 .then()
                 .statusCode(200)
+                .body("", hasKey("owner"))
                 .extract()
                 .response()
 

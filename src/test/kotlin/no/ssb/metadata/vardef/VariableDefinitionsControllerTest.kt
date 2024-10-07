@@ -3,11 +3,14 @@ package no.ssb.metadata.vardef
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
+import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
+import no.ssb.metadata.vardef.utils.ALL_KEYS
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.JSON_TEST_INPUT
@@ -455,5 +458,32 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("comment.nb", equalTo("Denne definisjonen trenger tilleggsforklaring"))
             .body("comment.nn", nullValue())
+    }
+
+    // false green
+    @Test
+    fun `created variable definition returns all fields`(spec: RequestSpecification) {
+        val updatedJsonString =
+            JSONObject(JSON_TEST_INPUT)
+                .apply {
+                    put("short_name", "blink")
+                }.toString()
+
+        val response: ResponseBodyExtractionOptions? =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .extract()
+                .response()
+
+        val jsonResponse = response?.jsonPath()?.getMap<String, CompleteResponse>("")
+        assertThat(jsonResponse?.keys?.containsAll(ALL_KEYS))
+        assertThat(jsonResponse?.containsKey("owner"))
+        assertThat(jsonResponse?.containsKey("bedrift"))
     }
 }

@@ -73,7 +73,7 @@ class VarDokMigrationController {
             return httpClient.exchange(
                 HttpRequest.POST("/variable-definitions", varDefInput),
                 Argument.of(Draft::class.java),
-                DEFAULT_ERROR_TYPE
+                DEFAULT_ERROR_TYPE,
             )
         } catch (e: VardokNotFoundException) {
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)

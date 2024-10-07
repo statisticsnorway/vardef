@@ -1,6 +1,8 @@
 package no.ssb.metadata.vardef
 
 import io.restassured.http.ContentType
+import io.restassured.path.json.JsonPath
+import io.restassured.response.Response
 import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
@@ -8,7 +10,6 @@ import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
-import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -306,15 +307,23 @@ class PatchesControllerTest : BaseVardefTest() {
             .body("owner.groups[0]", equalTo("pers-skatt-developers"))
     }
 
-    /*
-        GIVEN variable-definition-id eksisterer
+    @Test
+    fun `get saved variable definition patches return complete response for each`(spec: RequestSpecification) {
+        val responseList: Response =
+            spec
+                .`when`()
+                .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+                .then()
+                .statusCode(200)
+                .body("find { it }", hasKey("owner"))
+                .extract()
+                .response()
 
-        WHEN GET til /variable-definitions/{variable-definition-id}/patches
-
-        THEN 200 AND liste med CompleteResponse(s) AND owner i CompleteResponse(s)
-
-
-     */
+        val jsonResponse = responseList.asString()
+        val jsonAsArrayList: ArrayList<Map<String, *>> = JsonPath.from(jsonResponse).get("")
+        assertThat(jsonAsArrayList)
+            .allSatisfy { assertThat(it.keys).containsExactlyInAnyOrderElementsOf(ALL_KEYS) }
+    }
 
     @Test
     fun `get saved variable definition patch by id return complete response`(spec: RequestSpecification) {

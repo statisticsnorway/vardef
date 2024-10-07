@@ -7,7 +7,6 @@ import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
-import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.ALL_KEYS
@@ -460,7 +459,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body("comment.nn", nullValue())
     }
 
-    // false green
     @Test
     fun `created variable definition returns all fields`(spec: RequestSpecification) {
         val updatedJsonString =
@@ -481,9 +479,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .extract()
                 .response()
 
-        val jsonResponse = response?.jsonPath()?.getMap<String, CompleteResponse>("")
-        assertThat(jsonResponse?.keys?.containsAll(ALL_KEYS))
-        assertThat(jsonResponse?.containsKey("owner"))
-        assertThat(jsonResponse?.containsKey("bedrift"))
+        val jsonResponse = response?.jsonPath()?.getMap<String, Any>("")
+        assertThat(jsonResponse?.keys).containsExactlyInAnyOrderElementsOf(ALL_KEYS)
+        assertThat(jsonResponse?.containsKey("owner")).isTrue()
     }
 }

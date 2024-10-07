@@ -8,7 +8,6 @@ import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo

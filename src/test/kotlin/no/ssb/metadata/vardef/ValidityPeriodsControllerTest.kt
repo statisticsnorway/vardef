@@ -1,11 +1,9 @@
 package no.ssb.metadata.vardef
 
 import io.restassured.http.ContentType
+import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.SAVED_DEPRECATED_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
-import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matchers.hasKey
@@ -316,5 +314,23 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 SAVED_TAX_EXAMPLE.definitionId,
             ).comment?.nb,
         ).isEqualTo("Vi endrer etter lovverket")
+    }
+
+    @Test
+    fun `create new validity period return complete response`(spec: RequestSpecification) {
+        val response: ResponseBodyExtractionOptions? =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(allMandatoryFieldsChanged())
+                .`when`()
+                .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+                .then()
+                .statusCode(201)
+                .extract()
+                .response()
+
+        val jsonResponse = response?.jsonPath()?.getMap<String, Any>("")
+        assertThat(jsonResponse?.keys).containsExactlyInAnyOrderElementsOf(ALL_KEYS)
     }
 }

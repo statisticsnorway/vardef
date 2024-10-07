@@ -460,7 +460,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `created variable definition returns all fields`(spec: RequestSpecification) {
+    fun `create variable definition returns all fields`(spec: RequestSpecification) {
         val updatedJsonString =
             JSONObject(JSON_TEST_INPUT)
                 .apply {

@@ -87,7 +87,7 @@ class PatchesControllerTest : BaseVardefTest() {
     @Test
     fun `create new patch`(spec: RequestSpecification) {
         val testCase =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     remove("short_name")
                     remove("valid_from")
@@ -122,7 +122,7 @@ class PatchesControllerTest : BaseVardefTest() {
     @Test
     fun `create new patch valid from in request`(spec: RequestSpecification) {
         val testCase =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     remove("short_name")
                 }.toString()
@@ -141,7 +141,7 @@ class PatchesControllerTest : BaseVardefTest() {
     @Test
     fun `create new patch with valid_until`(spec: RequestSpecification) {
         val testCase =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     remove("short_name")
                     remove("valid_from")
@@ -161,7 +161,7 @@ class PatchesControllerTest : BaseVardefTest() {
     @Test
     fun `create new patch short name in request`(spec: RequestSpecification) {
         val testCase =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     remove("valid_from")
                 }.toString()
@@ -177,35 +177,6 @@ class PatchesControllerTest : BaseVardefTest() {
             .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
     }
 
-    @Test
-    fun `create new patch valid from and short name in request`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(JSON_TEST_INPUT)
-            .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
-            .then()
-            .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
-
-        val testCase =
-            JSONObject(JSON_TEST_INPUT)
-                .apply {
-                    remove("short_name")
-                }.toString()
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(testCase)
-            .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
-            .then()
-            .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))
-    }
-
     @ParameterizedTest
     @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
     fun `create new patch with invalid status`(
@@ -213,7 +184,7 @@ class PatchesControllerTest : BaseVardefTest() {
         spec: RequestSpecification,
     ) {
         val testCase =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     remove("valid_from")
                     remove("short_name")
@@ -261,7 +232,7 @@ class PatchesControllerTest : BaseVardefTest() {
     @Test
     fun `create new patch with comment`(spec: RequestSpecification) {
         val testCase =
-            JSONObject(JSON_TEST_INPUT)
+            jsonTestInput()
                 .apply {
                     remove("short_name")
                     remove("valid_from")

@@ -31,5 +31,4 @@ val ALL_KEYS =
         "last_updated_by",
         "unit_types",
         "definition",
-        "bedrift"
     )

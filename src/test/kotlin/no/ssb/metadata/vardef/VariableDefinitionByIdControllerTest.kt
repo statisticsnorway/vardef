@@ -8,6 +8,7 @@ import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -359,7 +360,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("comment.en", nullValue())
     }
 
-    // false green last part
     @Test
     fun `changes in draft variable definition return complete response`(spec: RequestSpecification) {
         val response: ResponseBodyExtractionOptions? =
@@ -379,6 +379,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .response()
 
         val jsonResponse = response?.jsonPath()?.getMap<String, Any>("")
-        assertThat(jsonResponse?.keys?.containsAll(ALL_KEYS))
+        assertThat(jsonResponse?.keys).containsExactlyInAnyOrderElementsOf(ALL_KEYS)
     }
 }

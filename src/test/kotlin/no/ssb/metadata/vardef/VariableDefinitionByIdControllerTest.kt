@@ -214,17 +214,17 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         val jsonString1 = jsonTestInput().apply { put("short_name", "short_name_not_in_use") }.toString()
         // create a variable definition with a given short name that is not in use
         val definitionId =
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(jsonString1)
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.CREATED.code)
-            .extract()
-            .body()
-            .path<String>("id")
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString1)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(HttpStatus.CREATED.code)
+                .extract()
+                .body()
+                .path<String>("id")
 
         val jsonString2 = jsonTestInput().apply { put("short_name", shortNameInUse) }.toString()
 
@@ -237,7 +237,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.CREATED.code)
-
 
         // try to update the first variable definition to the same short name of the second variable definition,
         // resulting in conflict

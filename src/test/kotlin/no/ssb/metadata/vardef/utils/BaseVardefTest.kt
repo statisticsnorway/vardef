@@ -8,7 +8,6 @@ import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
 import java.time.LocalDate

@@ -221,9 +221,7 @@ class VariableDefinitionService(
         }
     }
 
-    fun checkIfShortNameExists(shortName: String): Boolean =
-        variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
+    fun checkIfShortNameExists(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
 
-    fun getByShortName(shortName: String): List<SavedVariableDefinition> =
-        variableDefinitionRepository.findByShortName(shortName)
+    fun getByShortName(shortName: String): List<SavedVariableDefinition> = variableDefinitionRepository.findByShortName(shortName)
 }

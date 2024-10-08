@@ -9,6 +9,7 @@ import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Status
 import io.micronaut.http.client.HttpClient
+import io.micronaut.http.client.HttpClient.DEFAULT_ERROR_TYPE
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.exceptions.HttpStatusException
@@ -27,6 +28,7 @@ import no.ssb.metadata.vardef.extensions.extractMicronautErrorMessage
 import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokNotFoundException
 import no.ssb.metadata.vardef.models.Draft
+import org.reactivestreams.Publisher
 
 @Tag(name = DATA_MIGRATION)
 @Validated

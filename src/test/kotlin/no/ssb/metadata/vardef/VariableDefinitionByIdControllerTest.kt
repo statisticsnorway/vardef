@@ -210,15 +210,43 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @Test
     fun `patch variable with another short name that is already in use`(spec: RequestSpecification) {
+        val shortNameInUse = "short_name_in_use"
+        val jsonString1 = jsonTestInput().apply { put("short_name", "short_name_not_in_use") }.toString()
+        // create a variable definition with a given short name that is not in use
+        val definitionId =
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(
-                """
-                    {"short_name":"${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.shortName}"}
-                    """.trimIndent(),
-            ).`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
+            .body(jsonString1)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+            .extract()
+            .body()
+            .path<String>("id")
+
+        val jsonString2 = jsonTestInput().apply { put("short_name", shortNameInUse) }.toString()
+
+        // create a variable definition with a given short name that is also not in use
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonString2)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+
+
+        // try to update the first variable definition to the same short name of the second variable definition,
+        // resulting in conflict
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("""{"short_name":"$shortNameInUse"}""")
+            .`when`()
+            .patch("/variable-definitions/$definitionId")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
             .body(

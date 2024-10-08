@@ -118,8 +118,8 @@ class VariableDefinitionByIdController {
 
         varDefService
             .getByShortName(updateDraft.shortName ?: "")
-            .firstOrNull { savedVariableDefinition ->
-                savedVariableDefinition.definitionId != variable.definitionId && savedVariableDefinition.shortName != ""
+            .firstOrNull { saved: SavedVariableDefinition ->
+                saved.definitionId != variable.definitionId && saved.shortName != ""
             }
             ?.let { firstDuplicate ->
                 throw HttpStatusException(

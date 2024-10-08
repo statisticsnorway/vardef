@@ -408,7 +408,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(400)
+            .statusCode(HttpStatus.CONFLICT.code)
             .body(
                 "_embedded.errors[0].message",
                 containsString("already exists."),

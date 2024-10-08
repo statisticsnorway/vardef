@@ -49,6 +49,27 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .statusCode(404)
     }
 
+    @Test
+    fun `duplicate short name`(spec: RequestSpecification) {
+        val id = 1607
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .post("/vardok-migration/$id")
+        spec
+            .`when`()
+            .contentType(ContentType.JSON)
+            .post("/vardok-migration/$id")
+            .then()
+            .statusCode(400)
+            .body(
+                "_embedded.errors[0].message",
+                containsString(
+                    "already exists",
+                ),
+            )
+    }
+
     @ParameterizedTest
     @ValueSource(ints = [100, 101])
     fun `post request vardok with missing valid date`(

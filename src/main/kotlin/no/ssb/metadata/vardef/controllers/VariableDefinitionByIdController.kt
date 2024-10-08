@@ -37,7 +37,11 @@ class VariableDefinitionByIdController {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(
         responseCode = "200",
-        content = [Content(examples = [ExampleObject(name = "No date specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE)])],
+        content = [Content(
+            examples = [
+                ExampleObject(name = "No date specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE)
+            ]
+        )],
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get()
@@ -53,7 +57,10 @@ class VariableDefinitionByIdController {
         language: SupportedLanguages,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "No date specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
+            examples = [
+                ExampleObject(name = "No date specified", value = ""),
+                ExampleObject(name = "Specific date", value = DATE_EXAMPLE)
+            ],
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
@@ -92,7 +99,14 @@ class VariableDefinitionByIdController {
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "200", description = "Successfully updated")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
-    @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status other than DRAFT.")
+    @ApiResponse(
+        responseCode = "405",
+        description = "Attempt to patch a variable definition with status other than DRAFT."
+    )
+    @ApiResponse(
+        responseCode = "409",
+        description = "Short name is already in use by another variable definition."
+    )
     @Patch
     fun updateVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
@@ -105,6 +119,19 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
         }
+
+        varDefService
+            .getByShortName(updateDraft.shortName ?: "")
+            .firstOrNull { savedVariableDefinition ->
+                savedVariableDefinition.definitionId != variable.definitionId && savedVariableDefinition.shortName != ""
+            }
+            ?.let { firstDuplicate ->
+                throw HttpStatusException(
+                    HttpStatus.CONFLICT,
+                    "The short name '${firstDuplicate.shortName}' is already in use by another variable definition.",
+                )
+            }
+
         return varDefService.update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft)).toDraft()
     }
 }

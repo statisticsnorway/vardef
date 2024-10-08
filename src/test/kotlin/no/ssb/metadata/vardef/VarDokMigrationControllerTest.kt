@@ -49,11 +49,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .statusCode(404)
     }
 
-
     @Test
-    fun `duplicate short name`(
-        spec: RequestSpecification,
-    ) {
+    fun `duplicate short name`(spec: RequestSpecification) {
         val id = 1607
         spec
             .given()

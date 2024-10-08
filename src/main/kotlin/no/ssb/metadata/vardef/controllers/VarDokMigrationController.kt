@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
-import no.ssb.metadata.vardef.extensions.extractMessageFromJsonError
+import no.ssb.metadata.vardef.extensions.extractMicronautErrorMessage
 import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokNotFoundException
 import no.ssb.metadata.vardef.models.Draft
@@ -36,7 +36,7 @@ class VarDokMigrationController {
     @Inject
     lateinit var varDokApiService: VarDokService
 
-    @Client("/", errorType = String::class)
+    @Client("/")
     @Inject
     lateinit var httpClient: HttpClient
 
@@ -75,9 +75,14 @@ class VarDokMigrationController {
                 Argument.of(Draft::class.java),
             )
         } catch (e: VardokNotFoundException) {
+            // We always want to return NOT_FOUND in this case
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)
         } catch (e: HttpClientResponseException) {
-            throw HttpStatusException(e.status, e.extractMessageFromJsonError())
+            // Exceptions coming back from the POST to /variable-definitions
+            throw HttpStatusException(e.status, e.extractMicronautErrorMessage())
+        } catch (e: Exception) {
+            // Other validation exceptions
+            throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }
 }

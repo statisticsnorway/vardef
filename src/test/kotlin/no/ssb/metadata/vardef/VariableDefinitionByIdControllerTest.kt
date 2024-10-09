@@ -359,7 +359,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @Test
     fun `changes in draft variable definition return complete response`(spec: RequestSpecification) {
-        val body  =
+        val body =
             spec
                 .given()
                 .contentType(ContentType.JSON)

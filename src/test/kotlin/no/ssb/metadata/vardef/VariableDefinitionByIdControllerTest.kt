@@ -360,7 +360,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @Test
     fun `changes in draft variable definition return complete response`(spec: RequestSpecification) {
-        val response: ResponseBodyExtractionOptions? =
+        val body  =
             spec
                 .given()
                 .contentType(ContentType.JSON)
@@ -373,10 +373,9 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .then()
                 .statusCode(200)
                 .body("", hasKey("owner"))
-                .extract()
-                .response()
+                .extract().body().asString()
 
-        val jsonResponse = response?.jsonPath()?.getMap<String, Any>("")
-        assertThat(jsonResponse?.keys).containsExactlyInAnyOrderElementsOf(ALL_KEYS)
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
     }
 }

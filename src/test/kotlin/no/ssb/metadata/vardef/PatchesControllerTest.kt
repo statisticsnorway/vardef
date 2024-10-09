@@ -285,7 +285,7 @@ class PatchesControllerTest : BaseVardefTest() {
                 .then()
                 .statusCode(200)
                 .body("find { it }", hasKey("owner"))
-                .extract().body().`as`(List::class.java);
+                .extract().body().`as`(List::class.java)
 
         /*val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull

@@ -218,7 +218,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Vardok id $id DataElementName does not conform to short name rules and can not be saved",
+                    "varDef.shortName: must match \"^[a-z0-9_]{3,}$\"",
                 ),
             )
     }

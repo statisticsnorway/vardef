@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
-import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
-import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.slf4j.LoggerFactory
 
 @Singleton
@@ -15,9 +13,6 @@ open class VarDokService(
     private val varDokClient: VarDokClient,
 ) {
     private val logger = LoggerFactory.getLogger(VarDokService::class.java)
-
-    @Inject
-    lateinit var varDefService: VariableDefinitionService
 
     open fun getVarDokItem(id: String): VardokResponse? {
         return try {
@@ -64,9 +59,6 @@ open class VarDokService(
         if (varDefInput.shortName?.matches(VARDEF_SHORT_NAME_PATTERN.toRegex()) == false) {
             throw IllegalShortNameException(vardokId)
         }
-        //if (varDefInput.shortName?.let { varDefService.checkIfShortNameExists(it) } == true) {
-        //    throw DuplicateShortNameException(varDefInput.shortName)
-        //}
 
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)

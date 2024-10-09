@@ -1,9 +1,7 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
-import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
@@ -56,13 +54,10 @@ class PatchesController {
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
-    ): MutableHttpResponse<List<CompleteResponse>> =
-        HttpResponse
-            .ok(
-                varDefService
-                    .listAllPatchesById(id = variableDefinitionId)
-                    .map { it.toCompleteResponse() },
-            ).contentType(MediaType.APPLICATION_JSON)
+    ): List<CompleteResponse> =
+        varDefService
+            .listAllPatchesById(id = variableDefinitionId)
+            .map { it.toCompleteResponse() }
 
     /**
      * Get one concrete patch for the given variable definition.
@@ -93,13 +88,10 @@ class PatchesController {
         @PathVariable("patch-id")
         @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "patch_1", value = "1")])
         patchId: Int,
-    ): MutableHttpResponse<CompleteResponse> =
-        HttpResponse
-            .ok(
-                varDefService
-                    .getOnePatchById(variableDefinitionId, patchId = patchId)
-                    .toCompleteResponse(),
-            ).contentType(MediaType.APPLICATION_JSON)
+    ): CompleteResponse =
+        varDefService
+            .getOnePatchById(variableDefinitionId, patchId = patchId)
+            .toCompleteResponse()
 
     /**
      * Create a new patch for a variable definition.

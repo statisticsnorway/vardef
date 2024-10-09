@@ -1,15 +1,13 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
-import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Status
-import io.micronaut.http.client.HttpClient
-import io.micronaut.http.client.HttpClient.DEFAULT_ERROR_TYPE
+import io.micronaut.http.client.ProxyHttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
@@ -25,7 +23,6 @@ import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.integrations.vardok.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.VardokNotFoundException
-import no.ssb.metadata.vardef.models.CompleteResponse
 import org.reactivestreams.Publisher
 
 @Tag(name = DATA_MIGRATION)
@@ -38,7 +35,7 @@ class VarDokMigrationController {
 
     @Client("/")
     @Inject
-    lateinit var httpClient: HttpClient
+    lateinit var httpClient: ProxyHttpClient
 
     /**
      * Create a variable definition from a VarDok variable definition.
@@ -64,20 +61,20 @@ class VarDokMigrationController {
         @Parameter(name = "vardok-id", description = "The ID of the definition in Vardok.", example = "1607")
         @PathVariable("vardok-id")
         id: String,
-    ): Publisher<HttpResponse<CompleteResponse?>>? {
+    ): Publisher<MutableHttpResponse<*>>? {
         try {
             val varDefInput =
                 varDokApiService.createVarDefInputFromVarDokItems(
                     varDokApiService.fetchMultipleVarDokItemsByLanguage(id),
                 )
-            return httpClient.exchange(
+            return httpClient.proxy(
                 HttpRequest.POST("/variable-definitions", varDefInput),
-                Argument.of(CompleteResponse::class.java),
-                DEFAULT_ERROR_TYPE,
             )
         } catch (e: VardokNotFoundException) {
+            // We always want to return NOT_FOUND in this case
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)
         } catch (e: Exception) {
+            // Other validation exceptions
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }

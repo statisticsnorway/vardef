@@ -48,7 +48,7 @@ class ValidityPeriodsController {
             ),
         ],
     )
-    @ApiResponse(responseCode = "400", description = "Request .")
+    @ApiResponse(responseCode = "400", description = "Request is missing mandatory fields.")
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     fun createValidityPeriod(
         @PathVariable("variable-definition-id")

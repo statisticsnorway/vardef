@@ -284,8 +284,8 @@ class PatchesControllerTest : BaseVardefTest() {
                     remove("short_name")
                     remove("valid_from")
                 }.toString()
-       val body =
-           spec
+        val body =
+            spec
                 .given()
                 .contentType(ContentType.JSON)
                 .body(testCase)
@@ -298,7 +298,6 @@ class PatchesControllerTest : BaseVardefTest() {
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
     }
-
 
     @Test
     fun `get patches return complete response for each variable definition`(spec: RequestSpecification) {

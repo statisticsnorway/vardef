@@ -185,6 +185,9 @@ class VariableDefinitionService(
         return allDefinitionsChanged
     }
 
+    /**
+     *
+     */
     private fun checkValidityPeriodsInput(
         newPeriod: ValidityPeriod,
         definitionId: String,

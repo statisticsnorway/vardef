@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef
 
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
-import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.CompleteResponse

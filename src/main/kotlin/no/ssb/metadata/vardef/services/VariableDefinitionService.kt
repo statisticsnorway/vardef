@@ -137,7 +137,7 @@ class VariableDefinitionService(
                 .copy(
                     validUntil = endDate,
                 ).toPatch()
-                .toSavedVariableDefinition(latestExistingPatch),
+                .toSavedVariableDefinition(latestExistingPatch.patchId, latestExistingPatch),
         )
     }
 
@@ -224,5 +224,28 @@ class VariableDefinitionService(
     fun checkIfShortNameExists(shortName: String): Boolean {
         variableDefinitionRepository.findByShortName(shortName).ifEmpty { return false }
         return true
+    }
+
+    /**
+     * Get latest patch for validity period.
+     *
+     * Since Validity Periods must have a validFrom, we use this as an identifier.
+     * - If the Valid From date is specified, we get the latest patch for the Matching Validity Period
+     * - If the Valid From date is null, we get the latest patch for the most recent Validity Period
+     * - If the Valid From date doesn't match a Validity Period, we return null
+     *
+     * @param id Variable Definition ID
+     * @param validFrom The Valid From date for the desired validity Period
+     * @return the latest Patch or null
+     */
+    fun getLatestPatchForValidityPeriod(
+        id: String,
+        validFrom: LocalDate?,
+    ): SavedVariableDefinition? {
+        val validityPeriods = listAllPatchesById(id).groupBy { it.validFrom }
+        // Get the validityPeriod matching the given validFrom.
+        // If no validFrom is given, get the latest validityPeriod
+        // Get the latest patch in the given validity period
+        return validityPeriods[validFrom ?: validityPeriods.keys.last()]?.last()
     }
 }

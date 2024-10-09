@@ -37,7 +37,7 @@ data class CompleteResponse(
         description = VARIABLE_STATUS_FIELD_DESCRIPTION,
     )
     var variableStatus: VariableStatus?,
-    @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
+    @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     val validFrom: LocalDate,

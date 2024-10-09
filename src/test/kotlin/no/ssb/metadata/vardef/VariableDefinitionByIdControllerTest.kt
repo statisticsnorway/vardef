@@ -51,7 +51,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -61,7 +61,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @ParameterizedTest
@@ -114,7 +114,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -124,7 +124,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .delete("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -233,7 +233,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(errorMessage),
             )
     }
@@ -255,7 +255,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -275,7 +275,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -297,7 +297,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString("Unknown property [id] encountered during deserialization of type"),
             )
         assertThat(

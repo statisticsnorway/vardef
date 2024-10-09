@@ -15,9 +15,8 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 
 class PatchesControllerTest : BaseVardefTest() {
-
     companion object {
-        val patchBody =
+        fun patchBody(): JSONObject =
             jsonTestInput()
                 .apply {
                     remove("short_name")
@@ -54,7 +53,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/MALFORMED_ID/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -64,7 +63,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${NanoId.generate(8)}/patches")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -74,7 +73,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/8987563")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -100,10 +99,13 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(patchBody.apply {
-                getJSONObject("name").apply {
-                    put("nb", "Bybakgrunn")
-                } }.toString())
+            .body(
+                patchBody().apply {
+                    getJSONObject("name").apply {
+                        put("nb", "Bybakgrunn")
+                    }
+                }.toString(),
+            )
             .`when`()
             .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
@@ -128,12 +130,12 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(patchBody.apply { put("valid_from", "2030-06-30") }.toString())
+            .body(patchBody().apply { put("valid_from", "2030-06-30") }.toString())
             .`when`()
             .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("valid_from may not be specified here"))
     }
 
     @Test
@@ -141,7 +143,7 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(patchBody.apply { put("valid_until", "2030-06-30") }.toString())
+            .body(patchBody().apply { put("valid_until", "2030-06-30") }.toString())
             .`when`()
             .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
@@ -153,12 +155,12 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(patchBody.apply { put("short_name", "vry-shrt-nm") }.toString())
+            .body(patchBody().apply { put("short_name", "vry-shrt-nm") }.toString())
             .`when`()
             .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("short_name may not be specified here"))
     }
 
     @ParameterizedTest
@@ -179,7 +181,7 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(patchBody.toString())
+            .body(patchBody().toString())
             .`when`()
             .post("/variable-definitions/$id/patches")
             .then()
@@ -211,13 +213,16 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(patchBody.apply {
-                put(
-                    "comment",
-                    JSONObject().apply {
-                        put("en", "This is the reason")
-                    },
-                ) }.toString())
+            .body(
+                patchBody().apply {
+                    put(
+                        "comment",
+                        JSONObject().apply {
+                            put("en", "This is the reason")
+                        },
+                    )
+                }.toString(),
+            )
             .`when`()
             .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
             .then()
@@ -227,10 +232,15 @@ class PatchesControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @CsvSource(
-        "1980-01-01, Income tax",
-        "2021-01-01, Income tax new definition",
+        "1980-01-01, Income tax, Ny standard for navn til enhetstypeidentifikatorer.",
+        "2021-01-01, Income tax new definition, Gjelder for færre enhetstyper",
     )
-    fun `patch specific validity period`(validFrom: String, definitionEn: String, spec: RequestSpecification) {
+    fun `patch specific validity period`(
+        validFrom: String,
+        definitionEn: String,
+        commentNb: String,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -242,5 +252,21 @@ class PatchesControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("classification_reference", equalTo("303"))
             .body("definition.en", equalTo(definitionEn))
+            .body("comment.nb", equalTo(commentNb))
+            .body("patch_id", equalTo(7))
+    }
+
+    @Test
+    fun `patch non-existent validity period`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSONObject().apply { put("classification_reference", "303") }.toString())
+            .queryParams("valid_from", "3030-12-31")
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .then()
+            .statusCode(404)
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No validity period with valid_from date"))
     }
 }

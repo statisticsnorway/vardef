@@ -277,6 +277,30 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `create new patch return complete response`(spec: RequestSpecification) {
+        val testCase =
+            jsonTestInput()
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                }.toString()
+       val body =
+           spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(testCase)
+                .`when`()
+                .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+                .then()
+                .statusCode(201)
+                .extract().body().asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
+    }
+
+
+    @Test
     fun `get patches return complete response for each variable definition`(spec: RequestSpecification) {
         val responseList =
             spec

@@ -457,7 +457,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition returns all fields`(spec: RequestSpecification) {
+    fun `create variable definition returns complete response`(spec: RequestSpecification) {
         val shortName = "blink"
         val updatedJsonString =
             jsonTestInput()

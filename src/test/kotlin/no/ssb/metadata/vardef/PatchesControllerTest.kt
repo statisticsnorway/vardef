@@ -311,7 +311,10 @@ class PatchesControllerTest : BaseVardefTest() {
                 .extract().body().asString()
 
         val completeResponseList = jsonMapper.readValue(responseList, Array<CompleteResponse>::class.java)
-        assertThat(completeResponseList).isNotNull
+        completeResponseList.map {
+                completeResponse ->
+            assertThat(completeResponse).isNotNull
+        }
     }
 
     @Test

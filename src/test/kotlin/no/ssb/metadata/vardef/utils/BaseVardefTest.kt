@@ -55,6 +55,12 @@ open class BaseVardefTest {
                 patchId = 4,
                 validUntil = LocalDate.of(2020, 12, 31),
                 unitTypes = listOf("01", "02", "03", "04"),
+                comment =
+                LanguageStringType(
+                    "Ny standard for navn til enhetstypeidentifikatorer.",
+                    null,
+                    null,
+                ),
             ),
         )
 

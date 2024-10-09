@@ -11,6 +11,7 @@ import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 
 class PatchesControllerTest : BaseVardefTest() {
@@ -222,5 +223,24 @@ class PatchesControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
             .body("comment.en", equalTo("This is the reason"))
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "1980-01-01, Income tax",
+        "2021-01-01, Income tax new definition",
+    )
+    fun `patch specific validity period`(validFrom: String, definitionEn: String, spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSONObject().apply { put("classification_reference", "303") }.toString())
+            .queryParams("valid_from", validFrom)
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("classification_reference", equalTo("303"))
+            .body("definition.en", equalTo(definitionEn))
     }
 }

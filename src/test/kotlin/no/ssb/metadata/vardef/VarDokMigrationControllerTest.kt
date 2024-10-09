@@ -61,7 +61,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .post("/vardok-migration/$id")
             .then()
-            .statusCode(400)
+            .statusCode(409)
             .body(
                 "_embedded.errors[0].message",
                 containsString(

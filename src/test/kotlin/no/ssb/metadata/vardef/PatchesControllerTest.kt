@@ -285,14 +285,10 @@ class PatchesControllerTest : BaseVardefTest() {
                 .then()
                 .statusCode(200)
                 .body("find { it }", hasKey("owner"))
-                .extract().body().`as`(List::class.java)
+                .extract().body().asString()
 
-        /*val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
-        val jsonResponse = responseList.asString()
-        val jsonAsArrayList: ArrayList<Map<String, *>> = JsonPath.from(jsonResponse).get("")
-        assertThat(jsonAsArrayList)
-            .allSatisfy { assertThat(it.keys).containsExactlyInAnyOrderElementsOf(ALL_KEYS) }*/
+        val completeResponseList = jsonMapper.readValue(responseList, Array<CompleteResponse>::class.java)
+        assertThat(completeResponseList).isNotNull
     }
 
     @Test

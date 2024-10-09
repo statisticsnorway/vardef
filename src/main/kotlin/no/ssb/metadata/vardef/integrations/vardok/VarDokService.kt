@@ -64,9 +64,9 @@ open class VarDokService(
         if (varDefInput.shortName?.matches(VARDEF_SHORT_NAME_PATTERN.toRegex()) == false) {
             throw IllegalShortNameException(vardokId)
         }
-        if (varDefInput.shortName?.let { varDefService.checkIfShortNameExists(it) } == true) {
-            throw DuplicateShortNameException(varDefInput.shortName)
-        }
+        //if (varDefInput.shortName?.let { varDefService.checkIfShortNameExists(it) } == true) {
+        //    throw DuplicateShortNameException(varDefInput.shortName)
+        //}
 
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)

@@ -47,11 +47,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/2")
             .then()
-            .statusCode(400)
+            .statusCode(409)
             .body(
                 "_embedded.errors[0].message",
                 containsString(
-                    "Short name 'wies' already exists.",
+                    "Short name wies already exists.",
                 ),
             )
     }
@@ -88,7 +88,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .post("/vardok-migration/$id")
             .then()
-            .statusCode(400)
+            .statusCode(409)
             .body(
                 "_embedded.errors[0].message",
                 containsString(

@@ -3,13 +3,12 @@ package no.ssb.metadata.vardef
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
-import io.restassured.response.ResponseBodyExtractionOptions
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.utils.ALL_KEYS
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.jsonTestInput
@@ -459,13 +458,14 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create variable definition returns all fields`(spec: RequestSpecification) {
+        val shortName = "blink"
         val updatedJsonString =
             jsonTestInput()
                 .apply {
-                    put("short_name", "blink")
+                    put("short_name", shortName)
                 }.toString()
 
-        val response: ResponseBodyExtractionOptions? =
+        val body =
             spec
                 .given()
                 .contentType(ContentType.JSON)
@@ -474,11 +474,10 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .post("/variable-definitions")
                 .then()
                 .statusCode(201)
-                .extract()
-                .response()
+                .extract().body().asString()
 
-        val jsonResponse = response?.jsonPath()?.getMap<String, Any>("")
-        assertThat(jsonResponse?.keys).containsExactlyInAnyOrderElementsOf(ALL_KEYS)
-        assertThat(jsonResponse?.containsKey("owner")).isTrue()
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
+        assertThat(completeResponse.shortName).isEqualTo(shortName)
     }
 }

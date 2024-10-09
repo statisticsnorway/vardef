@@ -191,7 +191,7 @@ class VariableDefinitionService(
     private fun checkValidityPeriodsInput(
         newPeriod: ValidityPeriod,
         definitionId: String,
-    ){
+    ) {
         val latestExistingPatch = getLatestPatchById(definitionId)
 
         when {
@@ -225,7 +225,7 @@ class VariableDefinitionService(
     ): SavedVariableDefinition {
         val patches = listAllPatchesById(definitionId)
 
-        checkValidityPeriodsInput(newPeriod,definitionId)
+        checkValidityPeriodsInput(newPeriod, definitionId)
 
         return if (newPeriod.validFrom.isBefore(patches.first().validFrom)) {
             newPeriod

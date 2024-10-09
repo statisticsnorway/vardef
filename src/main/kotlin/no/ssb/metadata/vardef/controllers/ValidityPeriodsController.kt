@@ -66,9 +66,9 @@ class ValidityPeriodsController {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
-        return try{
+        return try {
             varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()
-        } catch (e: ValidityPeriodExceptions){
+        } catch (e: ValidityPeriodExceptions) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }

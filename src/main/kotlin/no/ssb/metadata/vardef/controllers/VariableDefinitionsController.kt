@@ -96,15 +96,15 @@ class VariableDefinitionsController {
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE) @Body @Valid varDef: Draft,
     ): Draft {
-        if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
-        if (varDef.variableStatus != null) {
-            throw HttpStatusException(
+
+        when{
+
+            varDef.id != null -> throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
+            varDef.variableStatus != null -> throw HttpStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Variable status may not be specified on creation.",
             )
-        }
-        if (varDefService.checkIfShortNameExists(varDef.shortName)) {
-            throw HttpStatusException(
+            varDefService.checkIfShortNameExists(varDef.shortName) -> throw HttpStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Short name ${varDef.shortName} already exists.",
             )

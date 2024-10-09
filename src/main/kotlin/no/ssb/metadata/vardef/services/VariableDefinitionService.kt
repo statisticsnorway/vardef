@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
+import no.ssb.metadata.vardef.exceptions.*
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -185,6 +185,21 @@ class VariableDefinitionService(
         return allDefinitionsChanged
     }
 
+    private fun checkValidityPeriodsInput(
+        newPeriod: ValidityPeriod,
+        definitionId: String,
+    ){
+        val latestExistingPatch = getLatestPatchById(definitionId)
+
+        when {
+            !isValidValidFromValue(definitionId, newPeriod.validFrom) ->
+                throw InvalidValidFromException()
+
+            !isNewDefinition(newPeriod, latestExistingPatch) ->
+                throw DefinitionTextUnchangedException()
+        }
+    }
+
     /**
      * Ends the current validity period and saves a new validity period as separate patches.
      *
@@ -206,6 +221,8 @@ class VariableDefinitionService(
         definitionId: String,
     ): SavedVariableDefinition {
         val patches = listAllPatchesById(definitionId)
+
+        checkValidityPeriodsInput(newPeriod,definitionId)
 
         return if (newPeriod.validFrom.isBefore(patches.first().validFrom)) {
             newPeriod

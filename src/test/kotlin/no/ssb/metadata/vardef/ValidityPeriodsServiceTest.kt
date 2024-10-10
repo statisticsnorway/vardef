@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef
 
+import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
@@ -38,16 +39,34 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                 Arguments.of(
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.now(),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
                 Arguments.of(
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2025, 10, 5),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
                 Arguments.of(
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2050, 1, 1),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
             )
@@ -89,6 +108,12 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             variableDefinitionService.saveNewValidityPeriod(
                 VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                     validFrom = LocalDate.of(1796, 1, 1),
+                    definition =
+                        LanguageStringType(
+                            nb = "Ny def",
+                            nn = "Ny def",
+                            en = "New def",
+                        ),
                 ),
                 SAVED_TAX_EXAMPLE.definitionId,
             )

@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
@@ -140,7 +139,7 @@ class PatchesController {
                 ?: throw HttpStatusException(HttpStatus.NOT_FOUND, "No validity period with valid_from date $validFrom")
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
-            throw PublishedVariableAccessException()
+            throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
         return varDefService

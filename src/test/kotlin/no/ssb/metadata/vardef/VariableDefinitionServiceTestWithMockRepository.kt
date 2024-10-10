@@ -11,7 +11,7 @@ import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.utils.INCOME_TAX_PATCH_1
+import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.bson.types.ObjectId
@@ -50,9 +50,9 @@ class VariableDefinitionServiceTestWithMockRepository {
 
     @Test
     fun `save variable definition`() {
-        val variableDefinition = INCOME_TAX_PATCH_1
+        val variableDefinition = INCOME_TAX_VP1_P1
         val savedVariableDefinition =
-            INCOME_TAX_PATCH_1.copy(
+            INCOME_TAX_VP1_P1.copy(
                 definitionId = "8Ah4fbvb",
                 id = ObjectId("00000020f51bb4362eee2a4d"),
             )
@@ -69,7 +69,7 @@ class VariableDefinitionServiceTestWithMockRepository {
 
     @Test
     fun `find variables in selected language`() {
-        val variableDefinition = INCOME_TAX_PATCH_1
+        val variableDefinition = INCOME_TAX_VP1_P1
 
         (
             variableDefinitionService::class.java
@@ -102,7 +102,7 @@ class VariableDefinitionServiceTestWithMockRepository {
 
     @Test
     fun `mongodb id is generated when variable is created`() {
-        val variableDefinition = INCOME_TAX_PATCH_1.copy(id = null)
+        val variableDefinition = INCOME_TAX_VP1_P1.copy(id = null)
 
         val savedVariableDefinition = variableDefinition.copy(id = ObjectId.get())
 
@@ -115,7 +115,7 @@ class VariableDefinitionServiceTestWithMockRepository {
 
     @Test
     fun `varDef id is only created once`() {
-        val variableDefinition = INCOME_TAX_PATCH_1.copy(definitionId = "y7s34rf1")
+        val variableDefinition = INCOME_TAX_VP1_P1.copy(definitionId = "y7s34rf1")
 
         val idBeforeSave = variableDefinition.definitionId
         val shortNameBeforeSave = variableDefinition.shortName

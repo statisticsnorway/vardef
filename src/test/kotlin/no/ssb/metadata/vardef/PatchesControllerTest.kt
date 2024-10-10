@@ -28,7 +28,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get all patches`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(200)
             .body("size()", equalTo(numIncomeTaxPatches))
@@ -38,10 +38,10 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get one patch`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches/3")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/3")
             .then()
             .statusCode(200)
-            .body("id", equalTo(INCOME_TAX_PATCH_1.definitionId))
+            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
             .body("patch_id", equalTo(3))
             .body("short_name", equalTo("intskatt"))
     }
@@ -70,7 +70,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get request unknown patch id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches/8987563")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/8987563")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
@@ -80,7 +80,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `delete request`(spec: RequestSpecification) {
         spec
             .`when`()
-            .delete("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .delete("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(405)
     }
@@ -89,7 +89,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `patch request`(spec: RequestSpecification) {
         spec
             .`when`()
-            .patch("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(405)
     }
@@ -107,16 +107,16 @@ class PatchesControllerTest : BaseVardefTest() {
                         }
                     }.toString(),
             ).`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
-            .body("id", equalTo(INCOME_TAX_PATCH_1.definitionId))
+            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
 
-        val createdPatch = variableDefinitionService.getLatestPatchById(INCOME_TAX_PATCH_1.definitionId)
+        val createdPatch = variableDefinitionService.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId)
         val previousPatch =
             variableDefinitionService.getOnePatchById(
-                INCOME_TAX_PATCH_1.definitionId,
-                createdPatch.patchId - 1,
+                INCOME_TAX_VP2_P6.definitionId,
+                INCOME_TAX_VP2_P6.patchId, // Last patch on latest validity period
             )
 
         assertThat(createdPatch.shortName).isEqualTo(previousPatch.shortName)
@@ -132,7 +132,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("valid_from", "2030-06-30") }.toString())
             .`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(400)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("valid_from may not be specified here"))
@@ -145,7 +145,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("valid_until", "2030-06-30") }.toString())
             .`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
     }
@@ -157,7 +157,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("short_name", "vry-shrt-nm") }.toString())
             .`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(400)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("short_name may not be specified here"))
@@ -192,7 +192,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `list of patches has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(200)
             .body("find { it }", hasKey("comment"))
@@ -202,7 +202,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get one patch has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches/3")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/3")
             .then()
             .statusCode(200)
             .body("comment.nb", containsString("Ny standard for navn til enhetstypeidentifikatorer."))
@@ -224,7 +224,7 @@ class PatchesControllerTest : BaseVardefTest() {
                         )
                     }.toString(),
             ).`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
             .body("comment.en", equalTo("This is the reason"))
@@ -247,7 +247,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .body(JSONObject().apply { put("classification_reference", "303") }.toString())
             .queryParams("valid_from", validFrom)
             .`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
             .body("classification_reference", equalTo("303"))
@@ -264,7 +264,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .body(JSONObject().apply { put("classification_reference", "303") }.toString())
             .queryParams("valid_from", "3030-12-31")
             .`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No validity period with valid_from date"))
@@ -283,7 +283,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(testCase)
             .`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
             .body("$", hasKey("owner"))
@@ -305,7 +305,7 @@ class PatchesControllerTest : BaseVardefTest() {
                 .contentType(ContentType.JSON)
                 .body(testCase)
                 .`when`()
-                .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+                .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
                 .then()
                 .statusCode(201)
                 .extract()
@@ -321,7 +321,7 @@ class PatchesControllerTest : BaseVardefTest() {
         val responseList =
             spec
                 .`when`()
-                .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
+                .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
                 .then()
                 .statusCode(200)
                 .body("find { it }", hasKey("owner"))
@@ -340,7 +340,7 @@ class PatchesControllerTest : BaseVardefTest() {
         val body =
             spec
                 .`when`()
-                .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches/1")
+                .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/1")
                 .then()
                 .statusCode(200)
                 .body("$", hasKey("owner"))

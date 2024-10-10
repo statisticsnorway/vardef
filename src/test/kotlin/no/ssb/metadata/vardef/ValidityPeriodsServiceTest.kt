@@ -2,7 +2,7 @@ package no.ssb.metadata.vardef
 
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INCOME_TAX_PATCH_1
+import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import no.ssb.metadata.vardef.utils.VALIDITY_PERIOD_TAX_EXAMPLE
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,7 +14,7 @@ import java.time.Period
 import java.util.stream.Stream
 
 class ValidityPeriodsServiceTest : BaseVardefTest() {
-    private val savedVariableDefinitionId = INCOME_TAX_PATCH_1.definitionId
+    private val savedVariableDefinitionId = INCOME_TAX_VP1_P1.definitionId
 
     @Test
     fun `end validity period`() {
@@ -90,7 +90,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                 VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                     validFrom = LocalDate.of(1796, 1, 1),
                 ),
-                INCOME_TAX_PATCH_1.definitionId,
+                INCOME_TAX_VP1_P1.definitionId,
             )
         val patchesAfterSave = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
 

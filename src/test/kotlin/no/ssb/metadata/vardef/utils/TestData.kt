@@ -113,7 +113,8 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
             ),
     )
 
-val INCOME_TAX_PATCH_1 =
+// Validity Period 1, Patch 1
+val INCOME_TAX_VP1_P1 =
     SavedVariableDefinition(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
@@ -162,14 +163,16 @@ val INCOME_TAX_PATCH_1 =
             Person("", ""),
     )
 
-val INCOME_TAX_PATCH_2 =
-    INCOME_TAX_PATCH_1.copy(
+// Validity Period 1, Patch 2
+val INCOME_TAX_VP1_P2 =
+    INCOME_TAX_VP1_P1.copy(
         unitTypes = listOf("01", "02", "03"),
         patchId = 2,
     )
 
-val INCOME_TAX_PATCH_3 =
-    INCOME_TAX_PATCH_2.copy(
+// Validity Period 1, Patch 3
+val INCOME_TAX_VP1_P3 =
+    INCOME_TAX_VP1_P2.copy(
         patchId = 3,
         unitTypes = listOf("01", "02", "03", "04"),
         comment =
@@ -180,24 +183,26 @@ val INCOME_TAX_PATCH_3 =
             ),
     )
 
-val INCOME_TAX_PATCH_4 =
-    INCOME_TAX_PATCH_3.copy(
+// Validity Period 1, Patch 4
+val INCOME_TAX_VP1_P4 =
+    INCOME_TAX_VP1_P3.copy(
         patchId = 4,
         // End Validity Period
         validUntil = LocalDate.of(2020, 12, 31),
     )
 
+// Validity Period 1, Patch 7
 // New Patches can be created for 'old' Validity Periods
-val INCOME_TAX_PATCH_7 =
-    INCOME_TAX_PATCH_4.copy(
+val INCOME_TAX_VP1_P7 =
+    INCOME_TAX_VP1_P4.copy(
         patchId = 7,
         unitTypes = listOf("03", "04"),
     )
 
 // New Validity Period
-
-val INCOME_TAX_PATCH_5 =
-    INCOME_TAX_PATCH_4.copy(
+// Validity Period 2, Patch 5
+val INCOME_TAX_VP2_P5 =
+    INCOME_TAX_VP1_P4.copy(
         patchId = 5,
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = null,
@@ -209,8 +214,9 @@ val INCOME_TAX_PATCH_5 =
             ),
     )
 
-val INCOME_TAX_PATCH_6 =
-    INCOME_TAX_PATCH_5.copy(
+// Validity Period 2, Patch 6
+val INCOME_TAX_VP2_P6 =
+    INCOME_TAX_VP2_P5.copy(
         patchId = 6,
         unitTypes = listOf("01", "02"),
         comment =
@@ -223,13 +229,13 @@ val INCOME_TAX_PATCH_6 =
 
 val ALL_INCOME_TAX_PATCHES =
     listOf(
-        INCOME_TAX_PATCH_1,
-        INCOME_TAX_PATCH_2,
-        INCOME_TAX_PATCH_3,
-        INCOME_TAX_PATCH_4,
-        INCOME_TAX_PATCH_5,
-        INCOME_TAX_PATCH_6,
-        INCOME_TAX_PATCH_7,
+        INCOME_TAX_VP1_P1,
+        INCOME_TAX_VP1_P2,
+        INCOME_TAX_VP1_P3,
+        INCOME_TAX_VP1_P4,
+        INCOME_TAX_VP2_P5,
+        INCOME_TAX_VP2_P6,
+        INCOME_TAX_VP1_P7,
     ).sortedBy {
         it.patchId
     }

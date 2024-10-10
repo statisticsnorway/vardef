@@ -20,7 +20,7 @@ import java.util.stream.Stream
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get latest patch`() {
-        assertThat(variableDefinitionService.getLatestPatchById(INCOME_TAX_PATCH_1.definitionId).patchId)
+        assertThat(variableDefinitionService.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId).patchId)
             .isEqualTo(numIncomeTaxPatches)
     }
 
@@ -29,7 +29,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    INCOME_TAX_PATCH_1.definitionId,
+                    INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1990, 1, 1),
                 ).patchId,
         ).isEqualTo(4)
@@ -40,7 +40,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThrows<NoMatchingValidityPeriodFound> {
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    INCOME_TAX_PATCH_1.definitionId,
+                    INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1760, 1, 1),
                 )
         }
@@ -51,7 +51,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    INCOME_TAX_PATCH_1.definitionId,
+                    INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(3000, 1, 1),
                 ).patchId,
         ).isEqualTo(numIncomeTaxPatches)
@@ -82,7 +82,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     ) {
         assertThat(
             variableDefinitionService.isValidValidFromValue(
-                INCOME_TAX_PATCH_1.definitionId,
+                INCOME_TAX_VP1_P1.definitionId,
                 LocalDate.of(year, 1, 1),
             ),
         ).isEqualTo(expected)
@@ -91,7 +91,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get id with only one patch`() {
         val singleSavedTaxExample =
-            INCOME_TAX_PATCH_1.copy(
+            INCOME_TAX_VP1_P1.copy(
                 id = ObjectId(),
                 definitionId = NanoId.generate(8),
             )
@@ -161,7 +161,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         inputObject: ValidityPeriod,
         expected: Boolean,
     ) {
-        val actualResult = variableDefinitionService.isNewDefinition(inputObject, INCOME_TAX_PATCH_1)
+        val actualResult = variableDefinitionService.isNewDefinition(inputObject, INCOME_TAX_VP1_P1)
         assertThat(actualResult).isEqualTo(expected)
     }
 

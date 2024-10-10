@@ -22,18 +22,18 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `get request default language`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(200)
-            .body("id", equalTo(INCOME_TAX_PATCH_1.definitionId))
-            .body("name", equalTo(INCOME_TAX_PATCH_1.name.nb))
-            .body("short_name", equalTo(INCOME_TAX_PATCH_1.shortName))
+            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
+            .body("name", equalTo(INCOME_TAX_VP1_P1.name.nb))
+            .body("short_name", equalTo(INCOME_TAX_VP1_P1.shortName))
             .body(
                 "definition",
                 equalTo(
                     variableDefinitionService
                         .getLatestPatchById(
-                            INCOME_TAX_PATCH_1.definitionId,
+                            INCOME_TAX_VP1_P1.definitionId,
                         ).definition.nb,
                 ),
             ).header(
@@ -84,7 +84,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .given()
             .queryParam("date_of_validity", dateOfValidity)
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(expectedStatusCode)
             .body("valid_from", equalTo(expectedValidFrom))
@@ -95,7 +95,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request`(spec: RequestSpecification) {
         spec
             .`when`()
-            .delete("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}")
+            .delete("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(204)
             .header("Content-Type", nullValue())
@@ -103,7 +103,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             variableDefinitionService
                 .listAll()
                 .map { it.definitionId },
-        ).doesNotContain(INCOME_TAX_PATCH_1.definitionId)
+        ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
     }
 
     @Test
@@ -188,7 +188,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 }}
                 """.trimIndent(),
             ).`when`()
-            .patch("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}")
+            .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
     }
@@ -292,7 +292,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 }}
                 """.trimIndent(),
             ).`when`()
-            .patch("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}")
+            .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(400)
             .body(
@@ -303,8 +303,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             variableDefinitionService
                 .listAll()
                 .map { it.definitionId },
-        ).contains(INCOME_TAX_PATCH_1.definitionId)
-        assertThat(variableDefinitionService.listAll().map { it.name }).contains(INCOME_TAX_PATCH_1.name)
+        ).contains(INCOME_TAX_VP1_P1.definitionId)
+        assertThat(variableDefinitionService.listAll().map { it.name }).contains(INCOME_TAX_VP1_P1.name)
     }
 
     @Test
@@ -320,7 +320,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(input)
             .`when`()
-            .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
     }
@@ -329,7 +329,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `variable definition has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(200)
             .body("comment", not(equalTo(null)))

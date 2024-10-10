@@ -6,6 +6,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
@@ -453,5 +454,30 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("comment.nb", equalTo("Denne definisjonen trenger tilleggsforklaring"))
             .body("comment.nn", nullValue())
+    }
+
+    @Test
+    fun `create variable definition returns complete response`(spec: RequestSpecification) {
+        val shortName = "blink"
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put("short_name", shortName)
+                }.toString()
+
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .extract().body().asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
+        assertThat(completeResponse.shortName).isEqualTo(shortName)
     }
 }

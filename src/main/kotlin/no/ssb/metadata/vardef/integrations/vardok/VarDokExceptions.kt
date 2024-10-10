@@ -14,10 +14,6 @@ class MissingValidFromException(id: String) : VardokException(
 
 class VardokNotFoundException(id: String) : VardokException("Vardok id $id not found")
 
-class IllegalShortNameException(id: String) : VardokException(
-    "Vardok id $id DataElementName does not conform to short name rules and can not be saved",
-)
-
 class OutdatedUnitTypesException(id: String) : VardokException(
     "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
 )

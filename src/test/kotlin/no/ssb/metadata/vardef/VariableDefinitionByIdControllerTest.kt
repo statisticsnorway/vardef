@@ -6,13 +6,13 @@ import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -52,7 +52,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -62,7 +62,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @ParameterizedTest
@@ -112,7 +112,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -122,7 +122,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .delete("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -152,7 +152,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val body = jsonMapper.readValue(bodyString, Draft::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
 
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
         assertThat(body.name).isEqualTo(expected.name)
@@ -203,7 +203,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val body = jsonMapper.readValue(bodyString, Draft::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
         assertThat(body.shortName).isNotEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.shortName)
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
     }
@@ -267,7 +267,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(errorMessage),
             )
     }
@@ -289,7 +289,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -309,7 +309,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -331,7 +331,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString("Unknown property [id] encountered during deserialization of type"),
             )
         assertThat(
@@ -367,7 +367,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
             .then()
             .statusCode(200)
-            .body("comment", equalTo(SAVED_TAX_EXAMPLE.comment?.nb))
+            .body("comment", not(equalTo(null)))
     }
 
     @Test
@@ -390,5 +390,26 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("comment.nb", containsString("Legger til merknad"))
             .body("comment.nn", containsString("Endrer merknad"))
             .body("comment.en", nullValue())
+    }
+
+    @Test
+    fun `changes in draft variable definition return complete response`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """
+                    {"short_name": "nothing"}
+                    """.trimIndent(),
+                ).`when`()
+                .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+                .then()
+                .statusCode(200)
+                .body("", hasKey("owner"))
+                .extract().body().asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
     }
 }

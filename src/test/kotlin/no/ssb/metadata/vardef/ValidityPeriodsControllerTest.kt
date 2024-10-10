@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
@@ -313,5 +314,22 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 SAVED_TAX_EXAMPLE.definitionId,
             ).comment?.nb,
         ).isEqualTo("Vi endrer etter lovverket")
+    }
+
+    @Test
+    fun `create new validity period return complete response`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(allMandatoryFieldsChanged())
+                .`when`()
+                .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+                .then()
+                .statusCode(201)
+                .extract().body().asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
     }
 }

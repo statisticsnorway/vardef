@@ -208,7 +208,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "Failed to convert argument [newPeriod] for value [null]",
                 ),
@@ -232,7 +232,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "short_name may not be specified here",
                 ),
@@ -256,7 +256,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "valid_until may not be specified here",
                 ),

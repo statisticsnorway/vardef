@@ -21,7 +21,7 @@ const val CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION =
         "Ethnicity, Political alignment, Religion, Philosophical beliefs, Union membership, Genetics, " +
         "Biometrics, Health, Sexual relations, Sexual orientation"
 const val VARIABLE_STATUS_FIELD_DESCRIPTION = "Status of the life cycle of the variable"
-const val MEASURMENT_TYPE_FIELD_DESCRIPTION =
+const val MEASUREMENT_TYPE_FIELD_DESCRIPTION =
     "Type of measurement for the variable, e.g. length, volume, currency. " +
         "Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303"
 const val VALID_FROM_FIELD_DESCRIPTION = "The variable definition is valid from this date inclusive"
@@ -43,3 +43,4 @@ const val LAST_UPDATED_BY_FIELD_DESCRIPTION = "The user who last modified this v
 
 const val DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION = "List only variable definitions which are valid on this date."
 const val ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION = "Render the variable definition in the given language."
+const val VALID_FROM_QUERY_PARAMETER_DESCRIPTION = "Valid from date for the specific validity period to be patched."

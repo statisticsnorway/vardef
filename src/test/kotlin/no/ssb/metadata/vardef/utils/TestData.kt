@@ -113,7 +113,7 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
             ),
     )
 
-val SAVED_TAX_EXAMPLE =
+val INCOME_TAX_PATCH_1 =
     SavedVariableDefinition(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
@@ -161,6 +161,61 @@ val SAVED_TAX_EXAMPLE =
         lastUpdatedBy =
             Person("", ""),
     )
+
+val INCOME_TAX_PATCH_2 =
+    INCOME_TAX_PATCH_1.copy(
+        unitTypes = listOf("01", "02", "03"),
+        patchId = 2,
+    )
+
+val INCOME_TAX_PATCH_3 =
+    INCOME_TAX_PATCH_2.copy(
+        patchId = 3,
+        unitTypes = listOf("01", "02", "03", "04"),
+        comment =
+            LanguageStringType(
+                "Ny standard for navn til enhetstypeidentifikatorer.",
+                null,
+                null,
+            ),
+    )
+
+val INCOME_TAX_PATCH_4 =
+    INCOME_TAX_PATCH_3.copy(
+        patchId = 4,
+        // End Validity Period
+        validUntil = LocalDate.of(2020, 12, 31),
+    )
+
+// New Validity Period
+
+val INCOME_TAX_PATCH_5 =
+    INCOME_TAX_PATCH_4.copy(
+        patchId = 5,
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        definition =
+            LanguageStringType(
+                "Intektsskatt ny definisjon",
+                "Intektsskatt ny definisjon",
+                "Income tax new definition",
+            ),
+    )
+
+val INCOME_TAX_PATCH_6 =
+    INCOME_TAX_PATCH_5.copy(
+        patchId = 6,
+        unitTypes = listOf("01", "02"),
+        comment =
+            LanguageStringType(
+                "Gjelder for færre enhetstyper",
+                null,
+                null,
+            ),
+    )
+
+val ALL_INCOME_TAX_PATCHES =
+    listOf(INCOME_TAX_PATCH_1, INCOME_TAX_PATCH_2, INCOME_TAX_PATCH_3, INCOME_TAX_PATCH_4, INCOME_TAX_PATCH_5, INCOME_TAX_PATCH_6).sortedBy { it.patchId }
 
 val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
     SavedVariableDefinition(

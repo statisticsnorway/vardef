@@ -53,13 +53,13 @@ data class Patch(
     )
     @Nullable
     val variableStatus: VariableStatus?,
-    @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
+    @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
     val measurementType: String?,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable
-    @Format("yyyy-MM-dd")
+    @Format(DATE_FORMAT)
     val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
@@ -75,9 +75,12 @@ data class Patch(
     @Nullable
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(previousPatch: SavedVariableDefinition): SavedVariableDefinition =
+    fun toSavedVariableDefinition(
+        highestPatchId: Int,
+        previousPatch: SavedVariableDefinition,
+    ): SavedVariableDefinition =
         previousPatch.copy(
-            patchId = previousPatch.patchId + 1,
+            patchId = highestPatchId + 1,
             name = name ?: previousPatch.name,
             definition = definition ?: previousPatch.definition,
             classificationUri = classificationReference ?: previousPatch.classificationUri,

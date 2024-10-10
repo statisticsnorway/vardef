@@ -4,6 +4,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
@@ -97,7 +98,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "already exists",
                 ),
@@ -119,7 +120,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "Vardok id $id is missing Valid (valid dates) and can not be saved",
                 ),
@@ -137,7 +138,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "Vardok id 123 is missing DataElementName (short name) and can not be saved",
                 ),
@@ -171,7 +172,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "Vardok id $id Valid is missing 'from' date and can not be saved",
                 ),
@@ -197,7 +198,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
                 ),
@@ -223,7 +224,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "varDef.shortName: must match \"^[a-z0-9_]{3,}$\"",
                 ),

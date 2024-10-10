@@ -186,7 +186,11 @@ class VariableDefinitionService(
     }
 
     /**
-     *
+     * Check mandatory input for creating a new validity period
+     * @param newPeriod The input data to check
+     * @param definitionId The id for the variable definition to check
+     * @throws InvalidValidFromException validFrom is invalid
+     * @throws DefinitionTextUnchangedException definition text in all present languages is not changed
      */
     private fun checkValidityPeriodsInput(
         newPeriod: ValidityPeriod,

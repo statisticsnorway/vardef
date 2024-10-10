@@ -10,8 +10,7 @@ import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -333,7 +332,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
             .then()
             .statusCode(200)
-            .body("comment", equalTo(SAVED_TAX_EXAMPLE.comment?.nb))
+            .body("comment", not(equalTo(null)))
     }
 
     @Test

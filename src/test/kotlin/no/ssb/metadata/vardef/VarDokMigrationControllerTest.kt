@@ -2,7 +2,9 @@ package no.ssb.metadata.vardef
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -19,14 +21,19 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         id: Int,
         spec: RequestSpecification,
     ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(201)
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract().body().asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
     }
 
     @Test

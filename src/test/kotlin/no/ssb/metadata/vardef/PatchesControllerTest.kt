@@ -3,11 +3,11 @@ package no.ssb.metadata.vardef
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
-import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -120,7 +120,7 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch valid from in request`(spec: RequestSpecification) {
+    fun `create new patch valid_from in request`(spec: RequestSpecification) {
         val testCase =
             jsonTestInput()
                 .apply {
@@ -159,7 +159,7 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch short name in request`(spec: RequestSpecification) {
+    fun `create new patch short_name in request`(spec: RequestSpecification) {
         val testCase =
             jsonTestInput()
                 .apply {
@@ -253,5 +253,82 @@ class PatchesControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
             .body("comment.en", equalTo("This is the reason"))
+    }
+
+    @Test
+    fun `create new patch return owner information`(spec: RequestSpecification) {
+        val testCase =
+            jsonTestInput()
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                }.toString()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(testCase)
+            .`when`()
+            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("$", hasKey("owner"))
+            .body("owner.team", equalTo("pers-skatt"))
+            .body("owner.groups[0]", equalTo("pers-skatt-developers"))
+    }
+
+    @Test
+    fun `create new patch return complete response`(spec: RequestSpecification) {
+        val testCase =
+            jsonTestInput()
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                }.toString()
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(testCase)
+                .`when`()
+                .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+                .then()
+                .statusCode(201)
+                .extract().body().asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
+    }
+
+    @Test
+    fun `get patches return complete response for each variable definition`(spec: RequestSpecification) {
+        val responseList =
+            spec
+                .`when`()
+                .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+                .then()
+                .statusCode(200)
+                .body("find { it }", hasKey("owner"))
+                .extract().body().asString()
+
+        val completeResponseList = jsonMapper.readValue(responseList, Array<CompleteResponse>::class.java)
+        completeResponseList.map {
+                completeResponse ->
+            assertThat(completeResponse).isNotNull
+        }
+    }
+
+    @Test
+    fun `get patch by id return complete response`(spec: RequestSpecification) {
+        val body =
+            spec
+                .`when`()
+                .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/1")
+                .then()
+                .statusCode(200)
+                .body("$", hasKey("owner"))
+                .extract().body().asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
     }
 }

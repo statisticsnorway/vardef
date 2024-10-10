@@ -97,7 +97,7 @@ class VariableDefinitionByIdController {
     fun updateVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
         @Body @Valid updateDraft: UpdateDraft,
-    ): Draft {
+    ): CompleteResponse {
         val variable = varDefService.getLatestPatchById(id)
         if (variable.variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
@@ -105,6 +105,6 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
         }
-        return varDefService.update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft)).toDraft()
+        return varDefService.update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft)).toCompleteResponse()
     }
 }

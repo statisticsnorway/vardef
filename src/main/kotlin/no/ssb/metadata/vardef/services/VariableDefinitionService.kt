@@ -190,9 +190,9 @@ class VariableDefinitionService(
      * @param newPeriod The input data to check
      * @param definitionId The id for the variable definition to check
      * @throws InvalidValidFromException validFrom is invalid
-     * @throws DefinitionTextUnchangedException definition text in all present languages is not changed
+     * @throws DefinitionTextUnchangedException definition text in all present languages has not changed
      */
-    private fun checkValidityPeriodsInput(
+    private fun checkValidityPeriodInput(
         newPeriod: ValidityPeriod,
         definitionId: String,
     ) {
@@ -229,8 +229,10 @@ class VariableDefinitionService(
     ): SavedVariableDefinition {
         val patches = listAllPatchesById(definitionId)
 
-        checkValidityPeriodsInput(newPeriod, definitionId)
+        checkValidityPeriodInput(newPeriod, definitionId)
 
+        // New validity period before all validity periods is a special case
+        // valid_until is set and one new patch is created
         return if (newPeriod.validFrom.isBefore(patches.first().validFrom)) {
             newPeriod
                 .toSavedVariableDefinition(patches.last())

@@ -187,6 +187,13 @@ val INCOME_TAX_PATCH_4 =
         validUntil = LocalDate.of(2020, 12, 31),
     )
 
+// New Patches can be created for 'old' Validity Periods
+val INCOME_TAX_PATCH_7 =
+    INCOME_TAX_PATCH_4.copy(
+        patchId = 7,
+        unitTypes = listOf("03", "04"),
+    )
+
 // New Validity Period
 
 val INCOME_TAX_PATCH_5 =
@@ -215,7 +222,17 @@ val INCOME_TAX_PATCH_6 =
     )
 
 val ALL_INCOME_TAX_PATCHES =
-    listOf(INCOME_TAX_PATCH_1, INCOME_TAX_PATCH_2, INCOME_TAX_PATCH_3, INCOME_TAX_PATCH_4, INCOME_TAX_PATCH_5, INCOME_TAX_PATCH_6).sortedBy { it.patchId }
+    listOf(
+        INCOME_TAX_PATCH_1,
+        INCOME_TAX_PATCH_2,
+        INCOME_TAX_PATCH_3,
+        INCOME_TAX_PATCH_4,
+        INCOME_TAX_PATCH_5,
+        INCOME_TAX_PATCH_6,
+        INCOME_TAX_PATCH_7,
+    ).sortedBy {
+        it.patchId
+    }
 
 val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
     SavedVariableDefinition(

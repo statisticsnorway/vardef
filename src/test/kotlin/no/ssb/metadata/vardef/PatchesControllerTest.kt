@@ -100,13 +100,13 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                patchBody().apply {
-                    getJSONObject("name").apply {
-                        put("nb", "Bybakgrunn")
-                    }
-                }.toString(),
-            )
-            .`when`()
+                patchBody()
+                    .apply {
+                        getJSONObject("name").apply {
+                            put("nb", "Bybakgrunn")
+                        }
+                    }.toString(),
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -214,16 +214,16 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                patchBody().apply {
-                    put(
-                        "comment",
-                        JSONObject().apply {
-                            put("en", "This is the reason")
-                        },
-                    )
-                }.toString(),
-            )
-            .`when`()
+                patchBody()
+                    .apply {
+                        put(
+                            "comment",
+                            JSONObject().apply {
+                                put("en", "This is the reason")
+                            },
+                        )
+                    }.toString(),
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -253,7 +253,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .body("classification_reference", equalTo("303"))
             .body("definition.en", equalTo(definitionEn))
             .body("comment.nb", equalTo(commentNb))
-            .body("patch_id", equalTo(7))
+            .body("patch_id", equalTo(numIncomeTaxPatches + 1))
     }
 
     @Test
@@ -308,7 +308,9 @@ class PatchesControllerTest : BaseVardefTest() {
                 .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/patches")
                 .then()
                 .statusCode(201)
-                .extract().body().asString()
+                .extract()
+                .body()
+                .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
@@ -323,11 +325,12 @@ class PatchesControllerTest : BaseVardefTest() {
                 .then()
                 .statusCode(200)
                 .body("find { it }", hasKey("owner"))
-                .extract().body().asString()
+                .extract()
+                .body()
+                .asString()
 
         val completeResponseList = jsonMapper.readValue(responseList, Array<CompleteResponse>::class.java)
-        completeResponseList.map {
-                completeResponse ->
+        completeResponseList.map { completeResponse ->
             assertThat(completeResponse).isNotNull
         }
     }
@@ -341,7 +344,9 @@ class PatchesControllerTest : BaseVardefTest() {
                 .then()
                 .statusCode(200)
                 .body("$", hasKey("owner"))
-                .extract().body().asString()
+                .extract()
+                .body()
+                .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull

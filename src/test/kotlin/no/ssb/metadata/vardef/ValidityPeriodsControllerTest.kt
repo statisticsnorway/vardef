@@ -290,14 +290,15 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period with comment`(spec: RequestSpecification) {
         val addComment =
-            JSONObject(allMandatoryFieldsChanged()).apply {
-                put(
-                    "comment",
-                    JSONObject().apply {
-                        put("nb", "Vi endrer etter lovverket")
-                    },
-                )
-            }.toString()
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    put(
+                        "comment",
+                        JSONObject().apply {
+                            put("nb", "Vi endrer etter lovverket")
+                        },
+                    )
+                }.toString()
 
         spec
             .given()
@@ -310,9 +311,11 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .body("$", hasKey("comment"))
 
         assertThat(
-            variableDefinitionService.getLatestPatchById(
-                INCOME_TAX_PATCH_1.definitionId,
-            ).comment?.nb,
+            variableDefinitionService
+                .getLatestPatchById(
+                    INCOME_TAX_PATCH_1.definitionId,
+                ).comment
+                ?.nb,
         ).isEqualTo("Vi endrer etter lovverket")
     }
 
@@ -327,7 +330,9 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 .post("/variable-definitions/${INCOME_TAX_PATCH_1.definitionId}/validity-periods")
                 .then()
                 .statusCode(201)
-                .extract().body().asString()
+                .extract()
+                .body()
+                .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull

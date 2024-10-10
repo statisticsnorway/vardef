@@ -372,7 +372,9 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .then()
                 .statusCode(200)
                 .body("", hasKey("owner"))
-                .extract().body().asString()
+                .extract()
+                .body()
+                .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull

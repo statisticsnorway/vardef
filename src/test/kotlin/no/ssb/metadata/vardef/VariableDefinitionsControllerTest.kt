@@ -165,7 +165,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/variable-definitions?valid_from=2024-01-01")
+            .get("/variable-definitions?date_of_validity=2024-01-01")
             .then()
             .statusCode(200)
             .body("[0].definition", containsString("Intektsskatt ny definisjon"))

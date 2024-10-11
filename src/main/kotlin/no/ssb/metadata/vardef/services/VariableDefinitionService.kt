@@ -208,7 +208,6 @@ class VariableDefinitionService(
         newPeriod: ValidityPeriod,
         definitionId: String,
     ): SavedVariableDefinition {
-        val latestExistingPatchId = getLatestPatchById(definitionId).patchId
         val validityPeriods = listAllPatchesGroupedByValidityPeriods(definitionId)
 
         // Newest patch in the earliest Validity Period
@@ -221,12 +220,12 @@ class VariableDefinitionService(
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
-                .toSavedVariableDefinition(latestExistingPatchId, lastValidityPeriod)
+                .toSavedVariableDefinition(getLatestPatchById(definitionId).patchId, lastValidityPeriod)
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { save(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
-                .let { newPeriod.toSavedVariableDefinition(latestExistingPatchId, it) }
+                .let { newPeriod.toSavedVariableDefinition(getLatestPatchById(definitionId).patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
                 .let { save(it) }

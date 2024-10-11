@@ -34,17 +34,20 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         @JvmStatic
         fun provideNewValidityPeriods(): Stream<Arguments> =
             Stream.of(
-                Arguments.of(
+                Arguments.argumentSet(
+                    "Today's date",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.now(),
                     ),
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "2025-10-05",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2025, 10, 5),
                     ),
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "2025-01-01",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2050, 1, 1),
                     ),

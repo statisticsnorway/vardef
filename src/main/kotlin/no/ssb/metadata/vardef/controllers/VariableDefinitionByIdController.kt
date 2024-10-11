@@ -123,6 +123,8 @@ class VariableDefinitionByIdController {
             )
         }
 
-        return varDefService.update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft)).toDraft()
+        return varDefService
+            .update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft))
+            .toCompleteResponse()
     }
 }

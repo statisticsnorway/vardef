@@ -475,7 +475,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .post("/variable-definitions")
                 .then()
                 .statusCode(201)
-                .extract().body().asString()
+                .extract()
+                .body()
+                .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull

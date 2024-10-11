@@ -161,7 +161,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         inputObject: ValidityPeriod,
         expected: Boolean,
     ) {
-        val actualResult = variableDefinitionService.isNewDefinition(inputObject, INCOME_TAX_VP1_P1)
+        val actualResult = variableDefinitionService.isNewDefinition(INCOME_TAX_VP1_P1.definitionId, inputObject)
         assertThat(actualResult).isEqualTo(expected)
     }
 

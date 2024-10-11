@@ -59,7 +59,7 @@ class PatchesController {
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         varDefService
-            .listAllPatchesById(id = variableDefinitionId)
+            .listAllPatchesById(definitionId = variableDefinitionId)
             .map { it.toCompleteResponse() }
 
     /**

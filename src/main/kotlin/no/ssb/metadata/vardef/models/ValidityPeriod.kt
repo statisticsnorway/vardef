@@ -70,9 +70,12 @@ data class ValidityPeriod(
     @Nullable
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(previousPatch: SavedVariableDefinition): SavedVariableDefinition =
+    fun toSavedVariableDefinition(
+        highestPatchId: Int,
+        previousPatch: SavedVariableDefinition,
+    ): SavedVariableDefinition =
         previousPatch.copy(
-            patchId = previousPatch.patchId + 1,
+            patchId = highestPatchId + 1,
             name = name ?: previousPatch.name,
             definition = definition,
             classificationUri = classificationReference ?: previousPatch.classificationUri,

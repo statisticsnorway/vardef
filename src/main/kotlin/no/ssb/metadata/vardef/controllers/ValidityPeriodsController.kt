@@ -69,7 +69,7 @@ class ValidityPeriodsController {
             !varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom) ->
                 throw InvalidValidFromException()
 
-            !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->
+            !varDefService.isNewDefinition(variableDefinitionId, newPeriod) ->
                 throw DefinitionTextUnchangedException()
         }
         return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()

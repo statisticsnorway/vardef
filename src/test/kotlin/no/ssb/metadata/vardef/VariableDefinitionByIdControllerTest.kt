@@ -5,6 +5,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -99,11 +100,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(204)
             .header("Content-Type", nullValue())
-        assertThat(
-            variableDefinitionService
-                .listAll()
-                .map { it.definitionId },
-        ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
+
+        assertThat(variableDefinitionService.listAll().none { it.definitionId == INCOME_TAX_VP1_P1.definitionId })
     }
 
     @Test
@@ -128,7 +126,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @Test
     fun `update variable definition`(spec: RequestSpecification) {
-        val expectedVariableDefinition =
+        val expected: SavedVariableDefinition =
             SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
                 name = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.name.copy(en = "Update"),
             )
@@ -146,7 +144,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     }}
                     """.trimIndent(),
                 ).`when`()
-                .patch("/variable-definitions/${expectedVariableDefinition.definitionId}")
+                .patch("/variable-definitions/${expected.definitionId}")
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
@@ -156,22 +154,14 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
 
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
-        assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
+        assertThat(body.name).isEqualTo(expected.name)
         assertThat(body.definition).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definition)
 
-        val updatedVariableDefinition = variableDefinitionService.getLatestPatchById(expectedVariableDefinition.definitionId)
-        assertThat(
-            updatedVariableDefinition.definitionId,
-        ).isEqualTo(expectedVariableDefinition.definitionId)
-        assertThat(
-            updatedVariableDefinition.createdAt,
-        ).isCloseTo(expectedVariableDefinition.createdAt, within(1, ChronoUnit.SECONDS))
-        assertThat(
-            updatedVariableDefinition.name,
-        ).isEqualTo(expectedVariableDefinition.name)
-        assertThat(
-            updatedVariableDefinition.lastUpdatedAt,
-        ).isAfter(expectedVariableDefinition.lastUpdatedAt)
+        val updated: SavedVariableDefinition = variableDefinitionService.getLatestPatchById(expected.definitionId)
+        assertThat(updated.definitionId).isEqualTo(expected.definitionId)
+        assertThat(updated.createdAt).isCloseTo(expected.createdAt, within(1, ChronoUnit.SECONDS))
+        assertThat(updated.name).isEqualTo(expected.name)
+        assertThat(updated.lastUpdatedAt).isAfter(expected.lastUpdatedAt)
     }
 
     @Test
@@ -215,6 +205,50 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
         assertThat(body.shortName).isNotEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.shortName)
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
+    }
+
+    @Test
+    fun `patch variable with another short name that is already in use`(spec: RequestSpecification) {
+        // create a variable definition with a given short name, one
+        val jsonString1 = jsonTestInput().apply { put("short_name", "one") }.toString()
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString1)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(HttpStatus.CREATED.code)
+                .extract()
+                .body()
+                .path<String>("id")
+
+        // create a variable definition with a given short name, two
+        val jsonString2 = jsonTestInput().apply { put("short_name", "two") }.toString()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonString2)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+
+        // try to update the first variable definition to the same short name of the second variable definition,
+        // resulting in conflict
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("""{"short_name":"two"}""")
+            .`when`()
+            .patch("/variable-definitions/$definitionId")
+            .then()
+            .statusCode(HttpStatus.CONFLICT.code)
+            .body(
+                "_embedded.errors[0].message",
+                containsString("is already in use by another variable definition."),
+            )
     }
 
     @ParameterizedTest

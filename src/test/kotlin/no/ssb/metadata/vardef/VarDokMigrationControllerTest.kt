@@ -31,7 +31,9 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .post("/vardok-migration/$id")
                 .then()
                 .statusCode(201)
-                .extract().body().asString()
+                .extract()
+                .body()
+                .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
@@ -55,7 +57,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/2")
             .then()
-            .statusCode(400)
+            .statusCode(409)
             .body(
                 "_embedded.errors[0].message",
                 containsString(
@@ -96,7 +98,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .post("/vardok-migration/$id")
             .then()
-            .statusCode(400)
+            .statusCode(409)
             .body(
                 ERROR_MESSAGE_JSON_PATH,
                 containsString(

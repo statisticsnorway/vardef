@@ -34,14 +34,6 @@ object TestUtils {
                     }.toString(),
                 "Unknown property [se]",
             ),
-            // TODO: test case fails on update, will be fixed in DPMETA-498
-//            argumentSet(
-//                "short_name already exists",
-//                JSONObject(
-//                    jsonTestInput(),
-//                ).apply { put("short_name", "intskatt") }.toString(),
-//                "Short name intskatt already exists.",
-//            ),
             argumentSet(
                 "short_name with dashes",
                 jsonTestInput().apply { put("short_name", "dash-not-allowed") }.toString(),

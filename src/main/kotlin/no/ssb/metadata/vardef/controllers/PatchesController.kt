@@ -4,6 +4,7 @@ import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -14,7 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
@@ -138,7 +138,7 @@ class PatchesController {
             varDefService.getLatestPatchForValidityPeriod(variableDefinitionId, validFrom)
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
-            throw PublishedVariableAccessException()
+            throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
         return varDefService

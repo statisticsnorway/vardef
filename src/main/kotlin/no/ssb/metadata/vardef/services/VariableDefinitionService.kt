@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
+import no.ssb.metadata.vardef.exceptions.*
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -192,6 +192,26 @@ class VariableDefinitionService(
     }
 
     /**
+     * Check mandatory input for creating a new validity period
+     * @param newPeriod The input data to check
+     * @param definitionId The id for the variable definition to check
+     * @throws InvalidValidFromException validFrom is invalid
+     * @throws DefinitionTextUnchangedException definition text in all present languages has not changed
+     */
+    private fun checkValidityPeriodInput(
+        newPeriod: ValidityPeriod,
+        definitionId: String,
+    ) {
+        when {
+            !isValidValidFromValue(definitionId, newPeriod.validFrom) ->
+                throw InvalidValidFromException()
+
+            !isNewDefinition(definitionId, newPeriod) ->
+                throw DefinitionTextUnchangedException()
+        }
+    }
+
+    /**
      * Ends the current validity period and saves a new validity period as separate patches.
      *
      * If new valid from is before first validity period, new version valid until is set to the day
@@ -212,6 +232,8 @@ class VariableDefinitionService(
         definitionId: String,
     ): SavedVariableDefinition {
         val validityPeriods = listAllPatchesGroupedByValidityPeriods(definitionId)
+
+        checkValidityPeriodInput(newPeriod, definitionId)
 
         // Newest patch in the earliest Validity Period
         val firstValidityPeriod = validityPeriods.firstEntry().value.last()
@@ -241,10 +263,7 @@ class VariableDefinitionService(
                 it.validFrom
             }.toSortedMap()
 
-    fun checkIfShortNameExists(shortName: String): Boolean {
-        variableDefinitionRepository.findByShortName(shortName).ifEmpty { return false }
-        return true
-    }
+    fun checkIfShortNameExists(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
 
     /**
      * Get latest patch for validity period.

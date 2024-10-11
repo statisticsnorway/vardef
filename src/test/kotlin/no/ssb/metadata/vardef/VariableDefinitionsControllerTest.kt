@@ -414,7 +414,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(400)
+            .statusCode(HttpStatus.CONFLICT.code)
             .body(
                 ERROR_MESSAGE_JSON_PATH,
                 containsString("already exists."),

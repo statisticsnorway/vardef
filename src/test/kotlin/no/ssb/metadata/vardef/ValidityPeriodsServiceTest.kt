@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef
 
+import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
@@ -38,18 +39,36 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                     "Today's date",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.now(),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
                 Arguments.argumentSet(
                     "2025-10-05",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2025, 10, 5),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
                 Arguments.argumentSet(
                     "2025-01-01",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2050, 1, 1),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
             )
@@ -91,6 +110,12 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             variableDefinitionService.saveNewValidityPeriod(
                 VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                     validFrom = LocalDate.of(1796, 1, 1),
+                    definition =
+                        LanguageStringType(
+                            nb = "Ny def",
+                            nn = "Ny def",
+                            en = "New def",
+                        ),
                 ),
                 INCOME_TAX_VP1_P1.definitionId,
             )

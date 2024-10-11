@@ -410,7 +410,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(400)
+            .statusCode(HttpStatus.CONFLICT.code)
             .body(
                 ERROR_MESSAGE_JSON_PATH,
                 containsString("already exists."),
@@ -475,7 +475,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .post("/variable-definitions")
                 .then()
                 .statusCode(201)
-                .extract().body().asString()
+                .extract()
+                .body()
+                .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull

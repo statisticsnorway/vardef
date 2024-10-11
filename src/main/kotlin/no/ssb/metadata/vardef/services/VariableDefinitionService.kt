@@ -247,10 +247,7 @@ class VariableDefinitionService(
         }
     }
 
-    fun checkIfShortNameExists(shortName: String): Boolean {
-        variableDefinitionRepository.findByShortName(shortName).ifEmpty { return false }
-        return true
-    }
+    fun checkIfShortNameExists(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
 
     /**
      * Get latest patch for validity period.

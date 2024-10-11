@@ -94,6 +94,7 @@ class VariableDefinitionsController {
         ],
     )
     @ApiResponse(responseCode = "400", description = "Bad request.")
+    @ApiResponse(responseCode = "409", description = "Conflict.")
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE) @Body @Valid varDef: Draft,
     ): CompleteResponse {
@@ -106,7 +107,7 @@ class VariableDefinitionsController {
         }
         if (varDefService.checkIfShortNameExists(varDef.shortName)) {
             throw HttpStatusException(
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.CONFLICT,
                 "Short name ${varDef.shortName} already exists.",
             )
         }

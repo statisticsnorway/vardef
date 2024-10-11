@@ -32,7 +32,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1990, 1, 1),
                 ).patchId,
-        ).isEqualTo(4)
+        ).isEqualTo(7)
     }
 
     @Test

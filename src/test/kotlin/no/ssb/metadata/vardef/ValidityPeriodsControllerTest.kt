@@ -8,7 +8,7 @@ import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
 import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.Matchers.hasKey
+import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -292,14 +292,15 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period with comment`(spec: RequestSpecification) {
         val addComment =
-            JSONObject(allMandatoryFieldsChanged()).apply {
-                put(
-                    "comment",
-                    JSONObject().apply {
-                        put("nb", "Vi endrer etter lovverket")
-                    },
-                )
-            }.toString()
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    put(
+                        "comment",
+                        JSONObject().apply {
+                            put("nb", "Vi endrer etter lovverket")
+                        },
+                    )
+                }.toString()
 
         spec
             .given()
@@ -312,9 +313,23 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .body("$", hasKey("comment"))
 
         assertThat(
-            variableDefinitionService.getLatestPatchById(
-                SAVED_TAX_EXAMPLE.definitionId,
-            ).comment?.nb,
+            variableDefinitionService
+                .getLatestPatchById(
+                    SAVED_TAX_EXAMPLE.definitionId,
+                ).comment
+                ?.nb,
         ).isEqualTo("Vi endrer etter lovverket")
+    }
+
+    @Test
+    fun `list validity periods`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .then()
+            .statusCode(200)
+            .body("size()", `is`(2))
+            .body("[0].valid_from", equalTo("1980-01-01"))
+            .body("[1].valid_from", equalTo("2021-01-01"))
     }
 }

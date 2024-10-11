@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
@@ -16,9 +17,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
-import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.ValidityPeriod
-import no.ssb.metadata.vardef.models.isPublished
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
@@ -53,7 +52,12 @@ class ValidityPeriodsController {
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     fun createValidityPeriod(
         @PathVariable("variable-definition-id")
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "create_validity_period", value = ID_EXAMPLE),
+            ],
+        )
         @VardefId
         variableDefinitionId: String,
         @Body
@@ -74,4 +78,31 @@ class ValidityPeriodsController {
         }
         return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()
     }
+
+    /**
+     * Get all validity periods
+     *
+     * Returns: List of RenderedVariableDefinition
+     */
+    @Get
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiResponse(
+        responseCode = "200",
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(
+                        name = "???",
+                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
+    fun listValidityPeriods(
+        @PathVariable("variable-definition-id")
+        variableDefinitionId: String,
+        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
+        language: SupportedLanguages,
+    ): List<RenderedVariableDefinition> = varDefService.listAllValidFromById(language, variableDefinitionId)
 }

@@ -61,6 +61,20 @@ class VariableDefinitionService(
             throw EmptyResultException()
         }
 
+    fun listAllValidFromById(
+        language: SupportedLanguages,
+        id: String,
+    ): List<RenderedVariableDefinition> {
+        val a = listAllPatchesById(id)
+        return a
+            .map { it.render(language, klassService) }
+            .groupBy { it.validFrom }
+            .mapValues { entry -> entry.value.maxBy { it.validFrom } }
+            .values
+            .toList()
+            .sortedBy { it.validFrom }
+    }
+
     fun getOnePatchById(
         variableDefinitionId: String,
         patchId: Int,
@@ -77,13 +91,12 @@ class VariableDefinitionService(
         language: SupportedLanguages,
         id: String,
         dateOfValidity: LocalDate?,
-    ): RenderedVariableDefinition {
-        return if (dateOfValidity != null) {
+    ): RenderedVariableDefinition =
+        if (dateOfValidity != null) {
             getLatestPatchByDateAndById(id, dateOfValidity).render(language, klassService)
         } else {
             getLatestPatchById(id).render(language, klassService)
         }
-    }
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 

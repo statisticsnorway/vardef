@@ -4,7 +4,6 @@ import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
-import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -137,7 +136,6 @@ class PatchesController {
     ): CompleteResponse {
         val latestPatchOnValidityPeriod =
             varDefService.getLatestPatchForValidityPeriod(variableDefinitionId, validFrom)
-                ?: throw HttpStatusException(HttpStatus.NOT_FOUND, "No validity period with valid_from date $validFrom")
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
             throw PublishedVariableAccessException()

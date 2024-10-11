@@ -54,7 +54,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(3000, 1, 1),
                 ).patchId,
-        ).isEqualTo(numIncomeTaxPatches)
+        ).isEqualTo(INCOME_TAX_VP2_P6.patchId)
     }
 
     @Test

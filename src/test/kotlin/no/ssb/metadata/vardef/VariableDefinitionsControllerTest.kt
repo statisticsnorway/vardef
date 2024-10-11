@@ -163,9 +163,11 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `get request default language`(spec: RequestSpecification) {
         spec
-            .`when`()
+            .given()
             .contentType(ContentType.JSON)
-            .get("/variable-definitions?date_of_validity=2024-01-01")
+            .queryParam("date_of_validity", "2024-01-01")
+            .`when`()
+            .get("/variable-definitions")
             .then()
             .statusCode(200)
             .body("[0].definition", containsString("Intektsskatt ny definisjon"))
@@ -308,10 +310,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `get request klass codes`(spec: RequestSpecification) {
         spec
-            .`when`()
+            .given()
             .contentType(ContentType.JSON)
             .header("Accept-Language", "nb")
-            .get("/variable-definitions?date_of_validity=2024-01-01")
+            .queryParam("date_of_validity", "2024-01-01")
+            .`when`()
+            .get("/variable-definitions")
             .then()
             .assertThat()
             .statusCode(200)

@@ -82,7 +82,7 @@ class VariableDefinitionService(
         if (dateOfValidity != null) {
             getLatestPatchByDateAndById(definitionId, dateOfValidity).render(language, klassService)
         } else {
-            getLatestPatchById(definitionId).render(language, klassService)
+            getLatestPatchInLastValidityPeriod(definitionId).render(language, klassService)
         }
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
@@ -140,19 +140,22 @@ class VariableDefinitionService(
         )
     }
 
-    private fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
+    fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
         listAllPatchesGroupedByValidityPeriods(definitionId).lastEntry().value.last()
 
     fun getLatestPatchByDateAndById(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): SavedVariableDefinition =
-        variableDefinitionRepository
-            .findByDefinitionIdOrderByPatchId(definitionId)
-            .ifEmpty { throw EmptyResultException() }
+        listAllPatchesGroupedByValidityPeriods(definitionId)
             .filter {
-                dateOfValidity.isEqualOrAfter(it.validFrom)
+                dateOfValidity.isEqualOrAfter(it.key)
             }.ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
+            // Latest Validity Period starting before the given date
+            .entries
+            .last()
+            // Latest patch in that Validity Period
+            .value
             .last()
 
     /**
@@ -249,22 +252,24 @@ class VariableDefinitionService(
      * Since Validity Periods must have a validFrom, we use this as an identifier.
      * - If the Valid From date is specified, we get the latest patch for the Matching Validity Period
      * - If the Valid From date is null, we get the latest patch for the most recent Validity Period
-     * - If the Valid From date doesn't match a Validity Period, we return null
      *
      * @param definitionId Variable Definition ID
      * @param validFrom The Valid From date for the desired validity Period
-     * @return the latest Patch or null
+     * @return the latest Patch
      */
     fun getLatestPatchForValidityPeriod(
         definitionId: String,
         validFrom: LocalDate?,
-    ): SavedVariableDefinition? =
+    ): SavedVariableDefinition =
         listAllPatchesGroupedByValidityPeriods(definitionId)
             .let {
                 // Get the validityPeriod matching the given validFrom.
                 // If no validFrom is given, get the latest validityPeriod
-                // If no validityPeriod is found return null
-                // Get the latest patch in the given validity period
-                it[validFrom ?: it.keys.last()]?.last()
+                it[validFrom ?: it.keys.last()]
             }
+            // If no matching Validity Period is found (null value), throw an exception
+            // Get the latest patch in the matching Validity Period
+            ?.last() ?: run {
+            throw NoMatchingValidityPeriodFound("No Validity Period with valid_from date $validFrom")
+        }
 }

@@ -116,7 +116,7 @@ class PatchesControllerTest : BaseVardefTest() {
         val previousPatch =
             variableDefinitionService.getOnePatchById(
                 INCOME_TAX_VP2_P6.definitionId,
-                INCOME_TAX_VP2_P6.patchId, // Last patch on latest validity period
+                INCOME_TAX_VP2_P6.patchId,
             )
 
         assertThat(createdPatch.shortName).isEqualTo(previousPatch.shortName)
@@ -267,7 +267,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No validity period with valid_from date"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No Validity Period with valid_from date"))
     }
 
     @Test

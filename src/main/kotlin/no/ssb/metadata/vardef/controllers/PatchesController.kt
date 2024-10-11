@@ -58,7 +58,7 @@ class PatchesController {
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         varDefService
-            .listAllPatchesById(id = variableDefinitionId)
+            .listAllPatchesById(definitionId = variableDefinitionId)
             .map { it.toCompleteResponse() }
 
     /**
@@ -136,7 +136,6 @@ class PatchesController {
     ): CompleteResponse {
         val latestPatchOnValidityPeriod =
             varDefService.getLatestPatchForValidityPeriod(variableDefinitionId, validFrom)
-                ?: throw HttpStatusException(HttpStatus.NOT_FOUND, "No validity period with valid_from date $validFrom")
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")

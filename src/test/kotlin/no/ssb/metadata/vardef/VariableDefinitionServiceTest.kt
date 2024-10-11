@@ -20,8 +20,8 @@ import java.util.stream.Stream
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get latest patch`() {
-        assertThat(variableDefinitionService.getLatestPatchById(SAVED_TAX_EXAMPLE.definitionId).patchId)
-            .isEqualTo(NUM_SAVED_TAX_DEFINITIONS)
+        assertThat(variableDefinitionService.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId).patchId)
+            .isEqualTo(numIncomeTaxPatches)
     }
 
     @Test
@@ -29,10 +29,10 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    SAVED_TAX_EXAMPLE.definitionId,
+                    INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1990, 1, 1),
                 ).patchId,
-        ).isEqualTo(4)
+        ).isEqualTo(7)
     }
 
     @Test
@@ -40,7 +40,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThrows<NoMatchingValidityPeriodFound> {
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    SAVED_TAX_EXAMPLE.definitionId,
+                    INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1760, 1, 1),
                 )
         }
@@ -51,10 +51,10 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService
                 .getLatestPatchByDateAndById(
-                    SAVED_TAX_EXAMPLE.definitionId,
+                    INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(3000, 1, 1),
                 ).patchId,
-        ).isEqualTo(NUM_SAVED_TAX_DEFINITIONS)
+        ).isEqualTo(INCOME_TAX_VP2_P6.patchId)
     }
 
     @Test
@@ -82,7 +82,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     ) {
         assertThat(
             variableDefinitionService.isValidValidFromValue(
-                SAVED_TAX_EXAMPLE.definitionId,
+                INCOME_TAX_VP1_P1.definitionId,
                 LocalDate.of(year, 1, 1),
             ),
         ).isEqualTo(expected)
@@ -91,7 +91,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get id with only one patch`() {
         val singleSavedTaxExample =
-            SAVED_TAX_EXAMPLE.copy(
+            INCOME_TAX_VP1_P1.copy(
                 id = ObjectId(),
                 definitionId = NanoId.generate(8),
             )
@@ -108,40 +108,44 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         @JvmStatic
         fun provideTestDataCheckDefinition(): Stream<Arguments> =
             Stream.of(
-                Arguments.of(
+                Arguments.argumentSet(
+                    "No change",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
-                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
-                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
-                                en = "Income tax",
+                                "Intektsskatt ny definisjon",
+                                "Intektsskatt ny definisjon",
+                                "Income tax new definition",
                             ),
                     ),
                     false,
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "All languages appended",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
-                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
-                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
-                                en = "Income tax. small change",
+                                nb = "Intektsskatt ny definisjon. Liten endring",
+                                nn = "Intektsskatt ny definisjon. Liten endring",
+                                en = "Income tax new definition. small change",
                             ),
                     ),
                     true,
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "One language appended",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
-                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
-                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
-                                en = "Income tax",
+                                nb = "Intektsskatt ny definisjon. Liten endring",
+                                nn = "Intektsskatt ny definisjon",
+                                en = "Income tax new definition",
                             ),
                     ),
                     false,
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "All languages completely new text",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
@@ -152,6 +156,30 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     ),
                     true,
                 ),
+                Arguments.argumentSet(
+                    "All languages null",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = null,
+                                nn = null,
+                                en = null,
+                            ),
+                    ),
+                    false,
+                ),
+                Arguments.argumentSet(
+                    "One language null",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Intektsskatt ny definisjon",
+                                nn = null,
+                                en = "Income tex new definition",
+                            ),
+                    ),
+                    false,
+                ),
             )
     }
 
@@ -161,7 +189,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         inputObject: ValidityPeriod,
         expected: Boolean,
     ) {
-        val actualResult = variableDefinitionService.isNewDefinition(inputObject, SAVED_TAX_EXAMPLE)
+        val actualResult = variableDefinitionService.isNewDefinition(INCOME_TAX_VP1_P1.definitionId, inputObject)
         assertThat(actualResult).isEqualTo(expected)
     }
 

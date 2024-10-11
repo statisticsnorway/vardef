@@ -70,7 +70,7 @@ class VariableDefinitionByIdController {
         HttpResponse
             .ok(
                 varDefService.getOneByIdAndDateAndRenderForLanguage(
-                    id = id,
+                    definitionId = id,
                     language = language,
                     dateOfValidity = dateOfValidity,
                 ),

@@ -108,40 +108,44 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         @JvmStatic
         fun provideTestDataCheckDefinition(): Stream<Arguments> =
             Stream.of(
-                Arguments.of(
+                Arguments.argumentSet(
+                    "No change",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
-                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
-                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
-                                en = "Income tax",
+                                "Intektsskatt ny definisjon",
+                                "Intektsskatt ny definisjon",
+                                "Income tax new definition",
                             ),
                     ),
                     false,
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "All languages appended",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
-                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
-                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
-                                en = "Income tax. small change",
+                                nb = "Intektsskatt ny definisjon. Liten endring",
+                                nn = "Intektsskatt ny definisjon. Liten endring",
+                                en = "Income tax new definition. small change",
                             ),
                     ),
                     true,
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "One language appended",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
-                                nb = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt. Liten endring",
-                                nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
-                                en = "Income tax",
+                                nb = "Intektsskatt ny definisjon. Liten endring",
+                                nn = "Intektsskatt ny definisjon",
+                                en = "Income tax new definition",
                             ),
                     ),
                     false,
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "All languages completely new text",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
@@ -151,6 +155,30 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                             ),
                     ),
                     true,
+                ),
+                Arguments.argumentSet(
+                    "All languages null",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = null,
+                                nn = null,
+                                en = null,
+                            ),
+                    ),
+                    false,
+                ),
+                Arguments.argumentSet(
+                    "One language null",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Intektsskatt ny definisjon",
+                                nn = null,
+                                en = "Income tex new definition",
+                            ),
+                    ),
+                    false,
                 ),
             )
     }

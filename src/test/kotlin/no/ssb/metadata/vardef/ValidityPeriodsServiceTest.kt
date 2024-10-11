@@ -10,7 +10,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
-import java.time.Period
 import java.util.stream.Stream
 
 class ValidityPeriodsServiceTest : BaseVardefTest() {
@@ -28,7 +27,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
 
         assertThat(patchEndValidityPeriod.validUntil).isAfter(patchEndValidityPeriod.validFrom)
         assertThat(patchEndValidityPeriod.patchId).isEqualTo(latestPatch.patchId + 1)
-        assertThat(patchEndValidityPeriod.validUntil).isEqualTo(newValidityPeriodValidFrom.minus(Period.ofDays(1)))
+        assertThat(patchEndValidityPeriod.validUntil).isEqualTo(newValidityPeriodValidFrom.minusDays(1))
     }
 
     companion object {
@@ -56,29 +55,29 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("provideNewValidityPeriods")
     fun `save new validity period`(inputData: ValidityPeriod) {
-        val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
-        val saveNewValidityPeriod =
+        val patchesBefore = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
+        val newValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
                 inputData,
                 savedVariableDefinitionId,
             )
-        val patchesAfterSave =
+        val patchesAfter =
             variableDefinitionService.listAllPatchesById(
                 savedVariableDefinitionId,
             )
 
-        val endValidityPeriodPatch =
-            variableDefinitionService.getOnePatchById(
-                savedVariableDefinitionId,
-                saveNewValidityPeriod.patchId - 1,
-            )
+        val lastPatchInSecondToLastValidityPeriod =
+            variableDefinitionService
+                .listAllPatchesGroupedByValidityPeriods(savedVariableDefinitionId)
+                .let { it.values.elementAt(it.values.size - 2) }
+                ?.last()
 
-        assertThat(patchesAfterSave.size).isEqualTo(patches.size + 2)
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(patches.last().patchId + 2)
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(patchesAfterSave.last().patchId)
-        assertThat(saveNewValidityPeriod.validFrom).isEqualTo(inputData.validFrom)
-        assertThat(endValidityPeriodPatch.validUntil).isEqualTo(
-            saveNewValidityPeriod.validFrom.minusDays(1),
+        assertThat(patchesAfter.size).isEqualTo(patchesBefore.size + 2)
+        assertThat(newValidityPeriod.patchId).isEqualTo(patchesBefore.last().patchId + 2)
+        assertThat(newValidityPeriod.patchId).isEqualTo(patchesAfter.last().patchId)
+        assertThat(newValidityPeriod.validFrom).isEqualTo(inputData.validFrom)
+        assertThat(lastPatchInSecondToLastValidityPeriod?.validUntil).isEqualTo(
+            newValidityPeriod.validFrom.minusDays(1),
         )
     }
 

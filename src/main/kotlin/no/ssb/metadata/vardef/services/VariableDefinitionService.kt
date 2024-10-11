@@ -136,7 +136,7 @@ class VariableDefinitionService(
                 .copy(
                     validUntil = newPeriodValidFrom.minusDays(1),
                 ).toPatch()
-                .toSavedVariableDefinition(latestPatchInLastValidityPeriod.patchId, latestPatchInLastValidityPeriod),
+                .toSavedVariableDefinition(getLatestPatchById(definitionId).patchId, latestPatchInLastValidityPeriod),
         )
     }
 

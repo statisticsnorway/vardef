@@ -62,6 +62,16 @@ class VariableDefinitionService(
             throw EmptyResultException()
         }
 
+    fun listValidityPeriodsById(
+        language: SupportedLanguages,
+        id: String,
+    ): List<RenderedVariableDefinition> =
+        listAllPatchesGroupedByValidityPeriods(id)
+            .values
+            .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
+            .map { it.render(language, klassService) }
+            .sortedBy { it.validFrom }
+
     fun getOnePatchById(
         variableDefinitionId: String,
         patchId: Int,

@@ -6,7 +6,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.Matchers.hasKey
+import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -318,6 +318,20 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 ).comment
                 ?.nb,
         ).isEqualTo("Vi endrer etter lovverket")
+    }
+
+    @Test
+    fun `list validity periods`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(200)
+            .body("size()", `is`(2))
+            .body("[0].valid_from", equalTo("1980-01-01"))
+            .body("[0].patch_id", equalTo(7))
+            .body("[1].valid_from", equalTo("2021-01-01"))
+            .body("[1].patch_id", equalTo(6))
     }
 
     @Test

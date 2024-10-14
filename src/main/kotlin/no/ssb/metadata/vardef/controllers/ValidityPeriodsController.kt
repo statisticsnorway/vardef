@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
@@ -15,9 +16,7 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
-import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.ValidityPeriod
-import no.ssb.metadata.vardef.models.isPublished
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
@@ -72,4 +71,32 @@ class ValidityPeriodsController {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
     }
+
+    /**
+     * List all validity periods.
+     *
+     * This is rendered in the given language, with the default being Norwegian Bokmål.
+     */
+    @Get
+    @Produces(MediaType.APPLICATION_JSON)
+    @Tag(name = VALIDITY_PERIODS)
+    @ApiResponse(
+        responseCode = "200",
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(
+                        name = "???",
+                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
+    fun listValidityPeriods(
+        @PathVariable("variable-definition-id")
+        variableDefinitionId: String,
+        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
+        language: SupportedLanguages,
+    ): List<RenderedVariableDefinition> = varDefService.listValidityPeriodsById(language, variableDefinitionId)
 }

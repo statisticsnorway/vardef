@@ -1,3 +1,6 @@
+mongodb:
+# Micronaut needs to know which package is holding the models/entities
+  package-names: no.ssb.metadata.vardef.models
 # Configuration which applies under unit/integration tests (NOT the deployment environment called "test")
 klass:
   classifications:

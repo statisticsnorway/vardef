@@ -291,14 +291,15 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period with comment`(spec: RequestSpecification) {
         val addComment =
-            JSONObject(allMandatoryFieldsChanged()).apply {
-                put(
-                    "comment",
-                    JSONObject().apply {
-                        put("nb", "Vi endrer etter lovverket")
-                    },
-                )
-            }.toString()
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    put(
+                        "comment",
+                        JSONObject().apply {
+                            put("nb", "Vi endrer etter lovverket")
+                        },
+                    )
+                }.toString()
 
         spec
             .given()
@@ -328,7 +329,9 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .statusCode(200)
             .body("size()", `is`(2))
             .body("[0].valid_from", equalTo("1980-01-01"))
+            .body("[0].patch_id", equalTo(7))
             .body("[1].valid_from", equalTo("2021-01-01"))
+            .body("[1].patch_id", equalTo(6))
     }
 
     @Test

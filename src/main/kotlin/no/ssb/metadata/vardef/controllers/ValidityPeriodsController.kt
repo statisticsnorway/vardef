@@ -79,6 +79,7 @@ class ValidityPeriodsController {
      */
     @Get
     @Produces(MediaType.APPLICATION_JSON)
+    @Tag(name = VALIDITY_PERIODS)
     @ApiResponse(
         responseCode = "200",
         content = [
@@ -97,5 +98,5 @@ class ValidityPeriodsController {
         variableDefinitionId: String,
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
-    ): List<RenderedVariableDefinition> = varDefService.listAllValidFromById(language, variableDefinitionId)
+    ): List<RenderedVariableDefinition> = varDefService.listValidityPeriodsById(language, variableDefinitionId)
 }

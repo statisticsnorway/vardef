@@ -62,19 +62,15 @@ class VariableDefinitionService(
             throw EmptyResultException()
         }
 
-    fun listAllValidFromById(
+    fun listValidityPeriodsById(
         language: SupportedLanguages,
         id: String,
-    ): List<RenderedVariableDefinition> {
-        val a = listAllPatchesById(id)
-        return a
-            .map { it.render(language, klassService) }
-            .groupBy { it.validFrom }
-            .mapValues { entry -> entry.value.maxBy { it.validFrom } }
+    ): List<RenderedVariableDefinition> =
+        listAllPatchesGroupedByValidityPeriods(id)
             .values
-            .toList()
+            .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
+            .map { it.render(language, klassService) }
             .sortedBy { it.validFrom }
-    }
 
     fun getOnePatchById(
         variableDefinitionId: String,

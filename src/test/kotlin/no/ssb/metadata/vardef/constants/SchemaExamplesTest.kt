@@ -1,9 +1,8 @@
-package no.ssb.metadata.vardef
+package no.ssb.metadata.vardef.constants
 
 import io.micronaut.json.JsonMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest

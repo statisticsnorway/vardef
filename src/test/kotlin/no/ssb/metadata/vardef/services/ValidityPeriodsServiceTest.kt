@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef
+package no.ssb.metadata.vardef.services
 
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.ValidityPeriod

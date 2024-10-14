@@ -27,7 +27,7 @@ class VardokTestStaticData : BaseVardokTest() {
     @Test
     fun `parse data element name to short name`() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse2)
-        val migrateVardokToVardef = toVarDefFromVarDok(mapVardokResponse)
+        val migrateVardokToVardef = VarDokService.extractVardefInput(mapVardokResponse)
         assertThat(migrateVardokToVardef.shortName).isEqualTo(vardokResponse2.variable?.dataElementName)
     }
 

@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -14,9 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
-import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
-import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
+import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -48,16 +47,11 @@ class ValidityPeriodsController {
             ),
         ],
     )
-    @ApiResponse(responseCode = "400", description = "Bad request.")
+    @ApiResponse(responseCode = "400", description = "The request is missing or has errors in required fields.")
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     fun createValidityPeriod(
         @PathVariable("variable-definition-id")
-        @Parameter(
-            description = ID_FIELD_DESCRIPTION,
-            examples = [
-                ExampleObject(name = "create_validity_period", value = ID_EXAMPLE),
-            ],
-        )
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
         @Body
@@ -66,17 +60,16 @@ class ValidityPeriodsController {
         newPeriod: ValidityPeriod,
     ): CompleteResponse {
         val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
-        when {
-            !latestExistingPatch.variableStatus.isPublished() ->
-                throw PublishedVariableAccessException()
 
-            !varDefService.isValidValidFromValue(variableDefinitionId, newPeriod.validFrom) ->
-                throw InvalidValidFromException()
-
-            !varDefService.isNewDefinition(newPeriod, latestExistingPatch) ->
-                throw DefinitionTextUnchangedException()
+        if (!latestExistingPatch.variableStatus.isPublished()) {
+            throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
-        return varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()
+
+        return try {
+            varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()
+        } catch (e: ValidityPeriodExceptions) {
+            throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
+        }
     }
 
     /**

@@ -2,10 +2,8 @@ package no.ssb.metadata.vardef
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.SAVED_DEPRECATED_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
-import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
+import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matchers.*
@@ -59,21 +57,22 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(201)
 
-        val lastPatch = variableDefinitionService.getLatestPatchById(SAVED_TAX_EXAMPLE.definitionId)
+        val lastPatchInSecondToLastValidityPeriod =
+            variableDefinitionService
+                .listAllPatchesGroupedByValidityPeriods(INCOME_TAX_VP1_P1.definitionId)
+                .let { it.values.elementAt(it.values.size - 2) }
+                ?.last()
+        val lastPatch = variableDefinitionService.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId)
 
         assertThat(
             lastPatch.validUntil,
         ).isNull()
         assertThat(
-            variableDefinitionService
-                .getOnePatchById(
-                    lastPatch.definitionId,
-                    lastPatch.patchId - 1,
-                ).validUntil,
+            lastPatchInSecondToLastValidityPeriod?.validUntil,
         ).isEqualTo(lastPatch.validFrom.minusDays(1))
     }
 
@@ -90,13 +89,13 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(newValidityPeriodBeforeAll)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(201)
         assertThat(
             variableDefinitionService
                 .getLatestPatchById(
-                    SAVED_TAX_EXAMPLE.definitionId,
+                    INCOME_TAX_VP1_P1.definitionId,
                 ).validUntil,
         ).isEqualTo(LocalDate.of(1979, 12, 31))
     }
@@ -121,7 +120,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(definitionNotChangedForAll)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
     }
@@ -139,7 +138,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(definitionNotChanged)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
@@ -158,7 +157,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(invalidValidFrom)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(
@@ -176,7 +175,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(noneMandatoryFieldsChanged())
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
@@ -187,7 +186,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(correctValidFrom)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
@@ -206,11 +205,11 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(validFromIsNull)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "Failed to convert argument [newPeriod] for value [null]",
                 ),
@@ -230,11 +229,11 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(newShortName)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "short_name may not be specified here",
                 ),
@@ -254,11 +253,11 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(newShortName)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(
                     "valid_until may not be specified here",
                 ),
@@ -292,22 +291,21 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     @Test
     fun `create new validity period with comment`(spec: RequestSpecification) {
         val addComment =
-            JSONObject(allMandatoryFieldsChanged())
-                .apply {
-                    put(
-                        "comment",
-                        JSONObject().apply {
-                            put("nb", "Vi endrer etter lovverket")
-                        },
-                    )
-                }.toString()
+            JSONObject(allMandatoryFieldsChanged()).apply {
+                put(
+                    "comment",
+                    JSONObject().apply {
+                        put("nb", "Vi endrer etter lovverket")
+                    },
+                )
+            }.toString()
 
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(addComment)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(201)
             .body("$", hasKey("comment"))
@@ -315,7 +313,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService
                 .getLatestPatchById(
-                    SAVED_TAX_EXAMPLE.definitionId,
+                    INCOME_TAX_VP1_P1.definitionId,
                 ).comment
                 ?.nb,
         ).isEqualTo("Vi endrer etter lovverket")
@@ -325,11 +323,30 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     fun `list validity periods`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/validity-periods")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(200)
             .body("size()", `is`(2))
             .body("[0].valid_from", equalTo("1980-01-01"))
             .body("[1].valid_from", equalTo("2021-01-01"))
+    }
+
+    @Test
+    fun `create new validity period return complete response`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(allMandatoryFieldsChanged())
+                .`when`()
+                .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
     }
 }

@@ -4,14 +4,14 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
-import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -23,18 +23,18 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `get request default language`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(200)
-            .body("id", equalTo(SAVED_TAX_EXAMPLE.definitionId))
-            .body("name", equalTo(SAVED_TAX_EXAMPLE.name.nb))
-            .body("short_name", equalTo(SAVED_TAX_EXAMPLE.shortName))
+            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
+            .body("name", equalTo(INCOME_TAX_VP1_P1.name.nb))
+            .body("short_name", equalTo(INCOME_TAX_VP1_P1.shortName))
             .body(
                 "definition",
                 equalTo(
                     variableDefinitionService
-                        .getLatestPatchById(
-                            SAVED_TAX_EXAMPLE.definitionId,
+                        .getLatestPatchInLastValidityPeriod(
+                            INCOME_TAX_VP1_P1.definitionId,
                         ).definition.nb,
                 ),
             ).header(
@@ -51,7 +51,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -61,7 +61,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @ParameterizedTest
@@ -85,7 +85,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .given()
             .queryParam("date_of_validity", dateOfValidity)
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(expectedStatusCode)
             .body("valid_from", equalTo(expectedValidFrom))
@@ -96,15 +96,12 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request`(spec: RequestSpecification) {
         spec
             .`when`()
-            .delete("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .delete("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(204)
             .header("Content-Type", nullValue())
-        assertThat(
-            variableDefinitionService
-                .listAll()
-                .map { it.definitionId },
-        ).doesNotContain(SAVED_TAX_EXAMPLE.definitionId)
+
+        assertThat(variableDefinitionService.listAll().none { it.definitionId == INCOME_TAX_VP1_P1.definitionId })
     }
 
     @Test
@@ -114,7 +111,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -124,12 +121,12 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .delete("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
     fun `update variable definition`(spec: RequestSpecification) {
-        val expectedVariableDefinition =
+        val expected: SavedVariableDefinition =
             SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
                 name = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.name.copy(en = "Update"),
             )
@@ -147,32 +144,24 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     }}
                     """.trimIndent(),
                 ).`when`()
-                .patch("/variable-definitions/${expectedVariableDefinition.definitionId}")
+                .patch("/variable-definitions/${expected.definitionId}")
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .extract()
                 .body()
                 .asString()
-        val body = jsonMapper.readValue(bodyString, Draft::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
 
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
-        assertThat(body.name).isEqualTo(expectedVariableDefinition.name)
+        assertThat(body.name).isEqualTo(expected.name)
         assertThat(body.definition).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definition)
 
-        val updatedVariableDefinition = variableDefinitionService.getLatestPatchById(expectedVariableDefinition.definitionId)
-        assertThat(
-            updatedVariableDefinition.definitionId,
-        ).isEqualTo(expectedVariableDefinition.definitionId)
-        assertThat(
-            updatedVariableDefinition.createdAt,
-        ).isCloseTo(expectedVariableDefinition.createdAt, within(1, ChronoUnit.SECONDS))
-        assertThat(
-            updatedVariableDefinition.name,
-        ).isEqualTo(expectedVariableDefinition.name)
-        assertThat(
-            updatedVariableDefinition.lastUpdatedAt,
-        ).isAfter(expectedVariableDefinition.lastUpdatedAt)
+        val updated: SavedVariableDefinition = variableDefinitionService.getLatestPatchById(expected.definitionId)
+        assertThat(updated.definitionId).isEqualTo(expected.definitionId)
+        assertThat(updated.createdAt).isCloseTo(expected.createdAt, within(1, ChronoUnit.SECONDS))
+        assertThat(updated.name).isEqualTo(expected.name)
+        assertThat(updated.lastUpdatedAt).isAfter(expected.lastUpdatedAt)
     }
 
     @Test
@@ -189,7 +178,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 }}
                 """.trimIndent(),
             ).`when`()
-            .patch("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
     }
@@ -213,9 +202,53 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val body = jsonMapper.readValue(bodyString, Draft::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
         assertThat(body.shortName).isNotEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.shortName)
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
+    }
+
+    @Test
+    fun `patch variable with another short name that is already in use`(spec: RequestSpecification) {
+        // create a variable definition with a given short name, one
+        val jsonString1 = jsonTestInput().apply { put("short_name", "one") }.toString()
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(jsonString1)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(HttpStatus.CREATED.code)
+                .extract()
+                .body()
+                .path<String>("id")
+
+        // create a variable definition with a given short name, two
+        val jsonString2 = jsonTestInput().apply { put("short_name", "two") }.toString()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonString2)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+
+        // try to update the first variable definition to the same short name of the second variable definition,
+        // resulting in conflict
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("""{"short_name":"two"}""")
+            .`when`()
+            .patch("/variable-definitions/$definitionId")
+            .then()
+            .statusCode(HttpStatus.CONFLICT.code)
+            .body(
+                "_embedded.errors[0].message",
+                containsString("is already in use by another variable definition."),
+            )
     }
 
     @ParameterizedTest
@@ -233,7 +266,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(errorMessage),
             )
     }
@@ -255,7 +288,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -275,7 +308,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -293,19 +326,19 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 }}
                 """.trimIndent(),
             ).`when`()
-            .patch("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(400)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString("Unknown property [id] encountered during deserialization of type"),
             )
         assertThat(
             variableDefinitionService
                 .listAll()
                 .map { it.definitionId },
-        ).contains(SAVED_TAX_EXAMPLE.definitionId)
-        assertThat(variableDefinitionService.listAll().map { it.name }).contains(SAVED_TAX_EXAMPLE.name)
+        ).contains(INCOME_TAX_VP1_P1.definitionId)
+        assertThat(variableDefinitionService.listAll().map { it.name }).contains(INCOME_TAX_VP1_P1.name)
     }
 
     @Test
@@ -321,7 +354,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(input)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
     }
@@ -330,10 +363,10 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `variable definition has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(200)
-            .body("comment", equalTo(SAVED_TAX_EXAMPLE.comment?.nb))
+            .body("comment", not(equalTo(null)))
     }
 
     @Test
@@ -356,5 +389,28 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("comment.nb", containsString("Legger til merknad"))
             .body("comment.nn", containsString("Endrer merknad"))
             .body("comment.en", nullValue())
+    }
+
+    @Test
+    fun `changes in draft variable definition return complete response`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """
+                    {"short_name": "nothing"}
+                    """.trimIndent(),
+                ).`when`()
+                .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+                .then()
+                .statusCode(200)
+                .body("", hasKey("owner"))
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
     }
 }

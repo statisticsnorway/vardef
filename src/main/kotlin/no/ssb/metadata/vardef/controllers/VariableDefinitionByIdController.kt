@@ -37,7 +37,13 @@ class VariableDefinitionByIdController {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(
         responseCode = "200",
-        content = [Content(examples = [ExampleObject(name = "No date specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE)])],
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(name = "No date specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
+                ],
+            ),
+        ],
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get()
@@ -53,7 +59,10 @@ class VariableDefinitionByIdController {
         language: SupportedLanguages,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "No date specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
+            examples = [
+                ExampleObject(name = "No date specified", value = ""),
+                ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
+            ],
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
@@ -61,7 +70,7 @@ class VariableDefinitionByIdController {
         HttpResponse
             .ok(
                 varDefService.getOneByIdAndDateAndRenderForLanguage(
-                    id = id,
+                    definitionId = id,
                     language = language,
                     dateOfValidity = dateOfValidity,
                 ),
@@ -92,12 +101,13 @@ class VariableDefinitionByIdController {
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "200", description = "Successfully updated")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
-    @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status other than DRAFT.")
+    @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status unlike DRAFT.")
+    @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch
     fun updateVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
         @Body @Valid updateDraft: UpdateDraft,
-    ): Draft {
+    ): CompleteResponse {
         val variable = varDefService.getLatestPatchById(id)
         if (variable.variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
@@ -105,6 +115,16 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
         }
-        return varDefService.update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft)).toDraft()
+
+        if (updateDraft.shortName != null && varDefService.checkIfShortNameExists(updateDraft.shortName)) {
+            throw HttpStatusException(
+                HttpStatus.CONFLICT,
+                "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
+            )
+        }
+
+        return varDefService
+            .update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft))
+            .toCompleteResponse()
     }
 }

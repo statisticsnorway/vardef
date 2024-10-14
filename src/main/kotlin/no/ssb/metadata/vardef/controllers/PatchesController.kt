@@ -1,8 +1,10 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -13,12 +15,12 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.exceptions.PublishedVariableAccessException
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
+import java.time.LocalDate
 
 @Tag(name = PATCHES)
 @Validated
@@ -56,7 +58,7 @@ class PatchesController {
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         varDefService
-            .listAllPatchesById(id = variableDefinitionId)
+            .listAllPatchesById(definitionId = variableDefinitionId)
             .map { it.toCompleteResponse() }
 
     /**
@@ -120,20 +122,31 @@ class PatchesController {
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
+        @QueryValue("valid_from")
+        @Parameter(
+            description = VALID_FROM_QUERY_PARAMETER_DESCRIPTION,
+            examples = [ExampleObject(name = "create_patch", value = DATE_EXAMPLE)],
+        )
+        @Format(DATE_FORMAT)
+        validFrom: LocalDate?,
         @Parameter(examples = [ExampleObject(name = "create_patch", value = PATCH_EXAMPLE)])
         @Body
         @Valid
         patch: Patch,
     ): CompleteResponse {
-        val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
+        val latestPatchOnValidityPeriod =
+            varDefService.getLatestPatchForValidityPeriod(variableDefinitionId, validFrom)
 
-        if (!latestExistingPatch.variableStatus.isPublished()) {
-            throw PublishedVariableAccessException()
+        if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
+            throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
         return varDefService
             .save(
-                patch.toSavedVariableDefinition(latestExistingPatch),
+                patch.toSavedVariableDefinition(
+                    varDefService.getLatestPatchById(variableDefinitionId).patchId,
+                    latestPatchOnValidityPeriod,
+                ),
             ).toCompleteResponse()
     }
 }

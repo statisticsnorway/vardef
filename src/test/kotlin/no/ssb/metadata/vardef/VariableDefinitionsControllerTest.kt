@@ -6,10 +6,12 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
+import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
 import no.ssb.metadata.vardef.utils.jsonTestInput
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -140,7 +142,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body("_embedded.errors[0].message", containsString("ID may not be specified on creation."))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("ID may not be specified on creation."))
     }
 
     @Test
@@ -153,7 +155,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 startsWith("Failed to convert argument [language] for value [se]"),
             )
     }
@@ -161,9 +163,11 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `get request default language`(spec: RequestSpecification) {
         spec
-            .`when`()
+            .given()
             .contentType(ContentType.JSON)
-            .get("/variable-definitions?valid_from=2024-01-01")
+            .queryParam("date_of_validity", "2024-01-01")
+            .`when`()
+            .get("/variable-definitions")
             .then()
             .statusCode(200)
             .body("[0].definition", containsString("Intektsskatt ny definisjon"))
@@ -249,7 +253,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString(errorMessage),
             )
     }
@@ -283,7 +287,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString("null annotate it with @Nullable"),
             )
     }
@@ -306,10 +310,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @Test
     fun `get request klass codes`(spec: RequestSpecification) {
         spec
-            .`when`()
+            .given()
             .contentType(ContentType.JSON)
             .header("Accept-Language", "nb")
-            .get("/variable-definitions?date_of_validity=2024-01-01")
+            .queryParam("date_of_validity", "2024-01-01")
+            .`when`()
+            .get("/variable-definitions")
             .then()
             .assertThat()
             .statusCode(200)
@@ -408,9 +414,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(400)
+            .statusCode(HttpStatus.CONFLICT.code)
             .body(
-                "_embedded.errors[0].message",
+                ERROR_MESSAGE_JSON_PATH,
                 containsString("already exists."),
             )
     }
@@ -453,5 +459,32 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("comment.nb", equalTo("Denne definisjonen trenger tilleggsforklaring"))
             .body("comment.nn", nullValue())
+    }
+
+    @Test
+    fun `create variable definition returns complete response`(spec: RequestSpecification) {
+        val shortName = "blink"
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put("short_name", shortName)
+                }.toString()
+
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
+        assertThat(completeResponse.shortName).isEqualTo(shortName)
     }
 }

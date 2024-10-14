@@ -5,6 +5,8 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
 
+const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"
+
 object TestUtils {
     /**
      * Invalid variable definitions.
@@ -32,14 +34,6 @@ object TestUtils {
                     }.toString(),
                 "Unknown property [se]",
             ),
-            // TODO: test case fails on update, will be fixed in DPMETA-498
-//            argumentSet(
-//                "short_name already exists",
-//                JSONObject(
-//                    jsonTestInput(),
-//                ).apply { put("short_name", "intskatt") }.toString(),
-//                "Short name intskatt already exists.",
-//            ),
             argumentSet(
                 "short_name with dashes",
                 jsonTestInput().apply { put("short_name", "dash-not-allowed") }.toString(),

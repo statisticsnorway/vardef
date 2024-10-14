@@ -1,8 +1,9 @@
 package no.ssb.metadata.vardef
 
+import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.SAVED_TAX_EXAMPLE
+import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import no.ssb.metadata.vardef.utils.VALIDITY_PERIOD_TAX_EXAMPLE
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -10,11 +11,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
-import java.time.Period
 import java.util.stream.Stream
 
 class ValidityPeriodsServiceTest : BaseVardefTest() {
-    private val savedVariableDefinitionId = SAVED_TAX_EXAMPLE.definitionId
+    private val savedVariableDefinitionId = INCOME_TAX_VP1_P1.definitionId
 
     @Test
     fun `end validity period`() {
@@ -28,26 +28,47 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
 
         assertThat(patchEndValidityPeriod.validUntil).isAfter(patchEndValidityPeriod.validFrom)
         assertThat(patchEndValidityPeriod.patchId).isEqualTo(latestPatch.patchId + 1)
-        assertThat(patchEndValidityPeriod.validUntil).isEqualTo(newValidityPeriodValidFrom.minus(Period.ofDays(1)))
+        assertThat(patchEndValidityPeriod.validUntil).isEqualTo(newValidityPeriodValidFrom.minusDays(1))
     }
 
     companion object {
         @JvmStatic
         fun provideNewValidityPeriods(): Stream<Arguments> =
             Stream.of(
-                Arguments.of(
+                Arguments.argumentSet(
+                    "Today's date",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.now(),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "2025-10-05",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2025, 10, 5),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
-                Arguments.of(
+                Arguments.argumentSet(
+                    "2025-01-01",
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         validFrom = LocalDate.of(2050, 1, 1),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
                     ),
                 ),
             )
@@ -56,29 +77,29 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("provideNewValidityPeriods")
     fun `save new validity period`(inputData: ValidityPeriod) {
-        val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
-        val saveNewValidityPeriod =
+        val patchesBefore = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
+        val newValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
                 inputData,
                 savedVariableDefinitionId,
             )
-        val patchesAfterSave =
+        val patchesAfter =
             variableDefinitionService.listAllPatchesById(
                 savedVariableDefinitionId,
             )
 
-        val endValidityPeriodPatch =
-            variableDefinitionService.getOnePatchById(
-                savedVariableDefinitionId,
-                saveNewValidityPeriod.patchId - 1,
-            )
+        val lastPatchInSecondToLastValidityPeriod =
+            variableDefinitionService
+                .listAllPatchesGroupedByValidityPeriods(savedVariableDefinitionId)
+                .let { it.values.elementAt(it.values.size - 2) }
+                ?.last()
 
-        assertThat(patchesAfterSave.size).isEqualTo(patches.size + 2)
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(patches.last().patchId + 2)
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(patchesAfterSave.last().patchId)
-        assertThat(saveNewValidityPeriod.validFrom).isEqualTo(inputData.validFrom)
-        assertThat(endValidityPeriodPatch.validUntil).isEqualTo(
-            saveNewValidityPeriod.validFrom.minusDays(1),
+        assertThat(patchesAfter.size).isEqualTo(patchesBefore.size + 2)
+        assertThat(newValidityPeriod.patchId).isEqualTo(patchesBefore.last().patchId + 2)
+        assertThat(newValidityPeriod.patchId).isEqualTo(patchesAfter.last().patchId)
+        assertThat(newValidityPeriod.validFrom).isEqualTo(inputData.validFrom)
+        assertThat(lastPatchInSecondToLastValidityPeriod?.validUntil).isEqualTo(
+            newValidityPeriod.validFrom.minusDays(1),
         )
     }
 
@@ -89,8 +110,14 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             variableDefinitionService.saveNewValidityPeriod(
                 VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                     validFrom = LocalDate.of(1796, 1, 1),
+                    definition =
+                        LanguageStringType(
+                            nb = "Ny def",
+                            nn = "Ny def",
+                            en = "New def",
+                        ),
                 ),
-                SAVED_TAX_EXAMPLE.definitionId,
+                INCOME_TAX_VP1_P1.definitionId,
             )
         val patchesAfterSave = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
 

@@ -3,35 +3,45 @@ package no.ssb.metadata.vardef
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
-import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 
 class PatchesControllerTest : BaseVardefTest() {
+    companion object {
+        fun patchBody(): JSONObject =
+            jsonTestInput()
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                }
+    }
+
     @Test
     fun `get all patches`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(200)
-            .body("size()", equalTo(NUM_SAVED_TAX_DEFINITIONS))
+            .body("size()", equalTo(numIncomeTaxPatches))
     }
 
     @Test
     fun `get one patch`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/3")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/3")
             .then()
             .statusCode(200)
-            .body("id", equalTo(SAVED_TAX_EXAMPLE.definitionId))
+            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
             .body("patch_id", equalTo(3))
             .body("short_name", equalTo("intskatt"))
     }
@@ -43,7 +53,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/MALFORMED_ID/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match \"^[a-zA-Z0-9-_]{8}$\""))
     }
 
     @Test
@@ -53,24 +63,24 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${NanoId.generate(8)}/patches")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
     fun `get request unknown patch id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/8987563")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/8987563")
             .then()
             .statusCode(404)
-            .body("_embedded.errors[0].message", containsString("No such variable definition found"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
     fun `delete request`(spec: RequestSpecification) {
         spec
             .`when`()
-            .delete("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .delete("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(405)
     }
@@ -79,38 +89,34 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `patch request`(spec: RequestSpecification) {
         spec
             .`when`()
-            .patch("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(405)
     }
 
     @Test
     fun `create new patch`(spec: RequestSpecification) {
-        val testCase =
-            jsonTestInput()
-                .apply {
-                    remove("short_name")
-                    remove("valid_from")
-                    getJSONObject("name").apply {
-                        put("nb", "Bybakgrunn")
-                    }
-                }.toString()
-
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(testCase)
-            .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .body(
+                patchBody()
+                    .apply {
+                        getJSONObject("name").apply {
+                            put("nb", "Bybakgrunn")
+                        }
+                    }.toString(),
+            ).`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
-            .body("id", equalTo(SAVED_TAX_EXAMPLE.definitionId))
+            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
 
-        val createdPatch = variableDefinitionService.getLatestPatchById(SAVED_TAX_EXAMPLE.definitionId)
+        val createdPatch = variableDefinitionService.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId)
         val previousPatch =
             variableDefinitionService.getOnePatchById(
-                SAVED_TAX_EXAMPLE.definitionId,
-                createdPatch.patchId - 1,
+                INCOME_TAX_VP2_P6.definitionId,
+                INCOME_TAX_VP2_P6.patchId,
             )
 
         assertThat(createdPatch.shortName).isEqualTo(previousPatch.shortName)
@@ -120,61 +126,41 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch valid from in request`(spec: RequestSpecification) {
-        val testCase =
-            jsonTestInput()
-                .apply {
-                    remove("short_name")
-                }.toString()
-
+    fun `create new patch valid_from in request`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(testCase)
+            .body(patchBody().apply { put("valid_from", "2030-06-30") }.toString())
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("valid_from may not be specified here"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("valid_from may not be specified here"))
     }
 
     @Test
     fun `create new patch with valid_until`(spec: RequestSpecification) {
-        val testCase =
-            jsonTestInput()
-                .apply {
-                    remove("short_name")
-                    remove("valid_from")
-                    put("valid_until", "2030-06-30")
-                }.toString()
-
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(testCase)
+            .body(patchBody().apply { put("valid_until", "2030-06-30") }.toString())
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
     }
 
     @Test
-    fun `create new patch short name in request`(spec: RequestSpecification) {
-        val testCase =
-            jsonTestInput()
-                .apply {
-                    remove("valid_from")
-                }.toString()
-
+    fun `create new patch short_name in request`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(testCase)
+            .body(patchBody().apply { put("short_name", "vry-shrt-nm") }.toString())
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body("_embedded.errors[0].message", containsString("short_name may not be specified here"))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("short_name may not be specified here"))
     }
 
     @ParameterizedTest
@@ -183,13 +169,6 @@ class PatchesControllerTest : BaseVardefTest() {
         variableStatus: VariableStatus,
         spec: RequestSpecification,
     ) {
-        val testCase =
-            jsonTestInput()
-                .apply {
-                    remove("valid_from")
-                    remove("short_name")
-                }.toString()
-
         val id =
             variableDefinitionService
                 .save(
@@ -202,7 +181,7 @@ class PatchesControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(testCase)
+            .body(patchBody().toString())
             .`when`()
             .post("/variable-definitions/$id/patches")
             .then()
@@ -213,7 +192,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `list of patches has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(200)
             .body("find { it }", hasKey("comment"))
@@ -223,7 +202,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get one patch has comment field`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches/3")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/3")
             .then()
             .statusCode(200)
             .body("comment.nb", containsString("Ny standard for navn til enhetstypeidentifikatorer."))
@@ -231,27 +210,145 @@ class PatchesControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new patch with comment`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                patchBody()
+                    .apply {
+                        put(
+                            "comment",
+                            JSONObject().apply {
+                                put("en", "This is the reason")
+                            },
+                        )
+                    }.toString(),
+            ).`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("comment.en", equalTo("This is the reason"))
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "1980-01-01, Income tax, Ny standard for navn til enhetstypeidentifikatorer.",
+        "2021-01-01, Income tax new definition, Gjelder for færre enhetstyper",
+    )
+    fun `patch specific validity period`(
+        validFrom: String,
+        definitionEn: String,
+        commentNb: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSONObject().apply { put("classification_reference", "303") }.toString())
+            .queryParams("valid_from", validFrom)
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("classification_reference", equalTo("303"))
+            .body("definition.en", equalTo(definitionEn))
+            .body("comment.nb", equalTo(commentNb))
+            .body("patch_id", equalTo(numIncomeTaxPatches + 1))
+    }
+
+    @Test
+    fun `patch non-existent validity period`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSONObject().apply { put("classification_reference", "303") }.toString())
+            .queryParams("valid_from", "3030-12-31")
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(404)
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("No Validity Period with valid_from date"))
+    }
+
+    @Test
+    fun `create new patch return owner information`(spec: RequestSpecification) {
         val testCase =
             jsonTestInput()
                 .apply {
                     remove("short_name")
                     remove("valid_from")
-                    put(
-                        "comment",
-                        JSONObject().apply {
-                            put("en", "This is the reason")
-                        },
-                    )
                 }.toString()
-
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(testCase)
             .`when`()
-            .post("/variable-definitions/${SAVED_TAX_EXAMPLE.definitionId}/patches")
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
-            .body("comment.en", equalTo("This is the reason"))
+            .body("$", hasKey("owner"))
+            .body("owner.team", equalTo("pers-skatt"))
+            .body("owner.groups[0]", equalTo("pers-skatt-developers"))
+    }
+
+    @Test
+    fun `create new patch return complete response`(spec: RequestSpecification) {
+        val testCase =
+            jsonTestInput()
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                }.toString()
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(testCase)
+                .`when`()
+                .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
+    }
+
+    @Test
+    fun `get patches return complete response for each variable definition`(spec: RequestSpecification) {
+        val responseList =
+            spec
+                .`when`()
+                .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+                .then()
+                .statusCode(200)
+                .body("find { it }", hasKey("owner"))
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponseList = jsonMapper.readValue(responseList, Array<CompleteResponse>::class.java)
+        completeResponseList.map { completeResponse ->
+            assertThat(completeResponse).isNotNull
+        }
+    }
+
+    @Test
+    fun `get patch by id return complete response`(spec: RequestSpecification) {
+        val body =
+            spec
+                .`when`()
+                .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/1")
+                .then()
+                .statusCode(200)
+                .body("$", hasKey("owner"))
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
     }
 }

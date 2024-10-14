@@ -50,13 +50,13 @@ data class UpdateDraft(
     @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
     @Nullable
     val variableStatus: VariableStatus?,
-    @Schema(description = MEASURMENT_TYPE_FIELD_DESCRIPTION)
+    @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Nullable
-    @Format("yyyy-MM-dd")
+    @Format(DATE_FORMAT)
     val validFrom: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable

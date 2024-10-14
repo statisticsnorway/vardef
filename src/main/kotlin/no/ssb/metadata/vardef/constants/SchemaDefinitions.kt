@@ -21,7 +21,7 @@ const val CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION =
         "Ethnicity, Political alignment, Religion, Philosophical beliefs, Union membership, Genetics, " +
         "Biometrics, Health, Sexual relations, Sexual orientation"
 const val VARIABLE_STATUS_FIELD_DESCRIPTION = "Status of the life cycle of the variable"
-const val MEASURMENT_TYPE_FIELD_DESCRIPTION =
+const val MEASUREMENT_TYPE_FIELD_DESCRIPTION =
     "Type of measurement for the variable, e.g. length, volume, currency. " +
         "Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303"
 const val VALID_FROM_FIELD_DESCRIPTION = "The variable definition is valid from this date inclusive"
@@ -32,6 +32,9 @@ const val RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION =
     "Link(s) to related definitions of variables - " +
         "a list of one or more definitions. For example for a variable after-tax income it could be relevant to " +
         "link to definitions of income from work, property income etc."
+const val OWNER_DESCRIPTION =
+    "Owner of the definition, i.e. responsible Dapla team (statistics team) " +
+        "and information about access management groups."
 const val CONTACT_FIELD_DESCRIPTION = "Contact details"
 const val CREATED_AT_FIELD_DESCRIPTION = "The timestamp at which this variable definition was first created."
 const val CREATED_BY_FIELD_DESCRIPTION = "The user who created this variable definition."
@@ -40,3 +43,4 @@ const val LAST_UPDATED_BY_FIELD_DESCRIPTION = "The user who last modified this v
 
 const val DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION = "List only variable definitions which are valid on this date."
 const val ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION = "Render the variable definition in the given language."
+const val VALID_FROM_QUERY_PARAMETER_DESCRIPTION = "Valid from date for the specific validity period to be patched."

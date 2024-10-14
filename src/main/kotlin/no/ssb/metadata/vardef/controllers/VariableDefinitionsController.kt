@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -59,7 +60,7 @@ class VariableDefinitionsController {
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
-            schema = Schema(format = "YYYY-MM-DD"),
+            schema = Schema(format = DATE_FORMAT),
             examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
         )
         dateOfValidity: LocalDate? = null,
@@ -93,9 +94,10 @@ class VariableDefinitionsController {
         ],
     )
     @ApiResponse(responseCode = "400", description = "Bad request.")
+    @ApiResponse(responseCode = "409", description = "Conflict.")
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE) @Body @Valid varDef: Draft,
-    ): Draft {
+    ): CompleteResponse {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
         if (varDef.variableStatus != null) {
             throw HttpStatusException(
@@ -105,11 +107,11 @@ class VariableDefinitionsController {
         }
         if (varDefService.checkIfShortNameExists(varDef.shortName)) {
             throw HttpStatusException(
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.CONFLICT,
                 "Short name ${varDef.shortName} already exists.",
             )
         }
 
-        return varDefService.save(varDef.toSavedVariableDefinition()).toDraft()
+        return varDefService.save(varDef.toSavedVariableDefinition()).toCompleteResponse()
     }
 }

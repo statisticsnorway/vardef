@@ -113,7 +113,8 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
             ),
     )
 
-val SAVED_TAX_EXAMPLE =
+// Validity Period 1, Patch 1
+val INCOME_TAX_VP1_P1 =
     SavedVariableDefinition(
         id = ObjectId(),
         definitionId = NanoId.generate(8),
@@ -161,6 +162,83 @@ val SAVED_TAX_EXAMPLE =
         lastUpdatedBy =
             Person("", ""),
     )
+
+// Validity Period 1, Patch 2
+val INCOME_TAX_VP1_P2 =
+    INCOME_TAX_VP1_P1.copy(
+        unitTypes = listOf("01", "02", "03"),
+        patchId = 2,
+    )
+
+// Validity Period 1, Patch 3
+val INCOME_TAX_VP1_P3 =
+    INCOME_TAX_VP1_P2.copy(
+        patchId = 3,
+        unitTypes = listOf("01", "02", "03", "04"),
+        comment =
+            LanguageStringType(
+                "Ny standard for navn til enhetstypeidentifikatorer.",
+                null,
+                null,
+            ),
+    )
+
+// Validity Period 1, Patch 4
+val INCOME_TAX_VP1_P4 =
+    INCOME_TAX_VP1_P3.copy(
+        patchId = 4,
+        // End Validity Period
+        validUntil = LocalDate.of(2020, 12, 31),
+    )
+
+// Validity Period 1, Patch 7
+// New Patches can be created for 'old' Validity Periods
+val INCOME_TAX_VP1_P7 =
+    INCOME_TAX_VP1_P4.copy(
+        patchId = 7,
+        unitTypes = listOf("03", "04"),
+    )
+
+// New Validity Period
+// Validity Period 2, Patch 5
+val INCOME_TAX_VP2_P5 =
+    INCOME_TAX_VP1_P4.copy(
+        patchId = 5,
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        definition =
+            LanguageStringType(
+                "Intektsskatt ny definisjon",
+                "Intektsskatt ny definisjon",
+                "Income tax new definition",
+            ),
+    )
+
+// Validity Period 2, Patch 6
+val INCOME_TAX_VP2_P6 =
+    INCOME_TAX_VP2_P5.copy(
+        patchId = 6,
+        unitTypes = listOf("01", "02"),
+        comment =
+            LanguageStringType(
+                "Gjelder for færre enhetstyper",
+                null,
+                null,
+            ),
+    )
+
+val ALL_INCOME_TAX_PATCHES =
+    listOf(
+        INCOME_TAX_VP1_P1,
+        INCOME_TAX_VP1_P2,
+        INCOME_TAX_VP1_P3,
+        INCOME_TAX_VP1_P4,
+        INCOME_TAX_VP2_P5,
+        INCOME_TAX_VP2_P6,
+        INCOME_TAX_VP1_P7,
+    ).sortedBy {
+        it.patchId
+    }
 
 val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
     SavedVariableDefinition(
@@ -252,6 +330,42 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         relatedVariableDefinitionUris = listOf(),
         contact = null,
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+    )
+
+val COMPLETE_RESPONSE =
+    CompleteResponse(
+        id = "",
+        patchId = 1,
+        name =
+            LanguageStringType(
+                nb = "For personer født",
+                nn = null,
+                en = null,
+            ),
+        shortName = "landbak",
+        definition =
+            LanguageStringType(
+                nb = "For personer født",
+                nn = null,
+                en = null,
+            ),
+        classificationReference = "https://www.ssb.no/en/klass/klassifikasjoner/91",
+        unitTypes = emptyList(),
+        subjectFields = emptyList(),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.DRAFT,
+        measurementType = null,
+        validFrom = LocalDate.of(1960, 1, 1),
+        validUntil = LocalDate.of(2021, 1, 1),
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(),
+        owner = null,
+        contact = null,
+        createdAt = LocalDateTime.now(),
+        createdBy = null,
+        lastUpdatedAt = LocalDateTime.now(),
+        lastUpdatedBy = null,
     )
 
 fun jsonTestInput() =

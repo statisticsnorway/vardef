@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef
+package no.ssb.metadata.vardef.services
 
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound

@@ -80,9 +80,9 @@ class ValidityPeriodsController {
     }
 
     /**
-     * Get all validity periods
+     * List all validity periods.
      *
-     * Returns: List of RenderedVariableDefinition
+     * This is rendered in the given language, with the default being Norwegian Bokmål.
      */
     @Get
     @Produces(MediaType.APPLICATION_JSON)

@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef
+package no.ssb.metadata.vardef.controllers
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification

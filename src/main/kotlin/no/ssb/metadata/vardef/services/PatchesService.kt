@@ -9,7 +9,7 @@ import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
-    fun listAllPatchesById(definitionId: String): List<SavedVariableDefinition> =
+    fun list(definitionId: String): List<SavedVariableDefinition> =
         variableDefinitionRepository
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
@@ -25,6 +25,6 @@ class PatchesService(
             )
 
     fun getLatestPatchById(definitionId: String): SavedVariableDefinition =
-        listAllPatchesById(definitionId)
+        list(definitionId)
             .last()
 }

@@ -86,7 +86,7 @@ class VariableDefinitionService(
 
     fun deleteById(id: String): Any =
         patches
-            .listAllPatchesById(id)
+            .list(id)
             .map {
                 variableDefinitionRepository.deleteById(it.id)
             }
@@ -106,7 +106,7 @@ class VariableDefinitionService(
         dateOfValidity: LocalDate,
     ): Boolean =
         patches
-            .listAllPatchesById(definitionId)
+            .list(definitionId)
             .map { it.validFrom }
             .let { dates ->
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
@@ -256,7 +256,7 @@ class VariableDefinitionService(
 
     fun listAllPatchesGroupedByValidityPeriods(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         patches
-            .listAllPatchesById(definitionId)
+            .list(definitionId)
             .groupBy {
                 it.validFrom
             }.toSortedMap()

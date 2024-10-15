@@ -20,6 +20,7 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
     Header(name = ACCEPT, value = "application/json"),
 )
 interface KlassApiClient {
+
     @Get("classifications?size=10000&language=nb&includeCodelists=true")
     @SingleResult
     @Consumes(MediaType.APPLICATION_JSON)
@@ -32,7 +33,8 @@ interface KlassApiClient {
         @PathVariable classificationId: Int,
     ): HttpResponse<Classification>
 
-    @Get("classifications/{classificationId}/codes?from=0000-01-01&to=9999-12-31")
+    // TODO(Add date as property)
+    @Get("classifications/{classificationId}/codesAt?date=2024-08-01")
     @SingleResult
     @Consumes(MediaType.APPLICATION_JSON)
     fun fetchCodeList(

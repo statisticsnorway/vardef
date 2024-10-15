@@ -27,7 +27,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get valid period at date`() {
         assertThat(
-            variableDefinitionService
+            validityPeriods
                 .getLatestPatchByDateAndById(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1990, 1, 1),
@@ -38,7 +38,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get valid period at date before range`() {
         assertThrows<NoMatchingValidityPeriodFound> {
-            variableDefinitionService
+            validityPeriods
                 .getLatestPatchByDateAndById(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1760, 1, 1),
@@ -49,7 +49,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get valid period at date after range`() {
         assertThat(
-            variableDefinitionService
+            validityPeriods
                 .getLatestPatchByDateAndById(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(3000, 1, 1),

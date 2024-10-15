@@ -63,7 +63,7 @@ class VariableDefinitionService(
         dateOfValidity: LocalDate?,
     ): RenderedVariableDefinition =
         if (dateOfValidity != null) {
-            getLatestPatchByDateAndById(definitionId, dateOfValidity).render(language, klassService)
+            validityPeriods.getLatestPatchByDateAndById(definitionId, dateOfValidity).render(language, klassService)
         } else {
             validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).render(language, klassService)
         }
@@ -78,22 +78,6 @@ class VariableDefinitionService(
             .map {
                 variableDefinitionRepository.deleteById(it.id)
             }
-
-    fun getLatestPatchByDateAndById(
-        definitionId: String,
-        dateOfValidity: LocalDate,
-    ): SavedVariableDefinition =
-        validityPeriods
-            .listAllPatchesGroupedByValidityPeriods(definitionId)
-            .filter {
-                dateOfValidity.isEqualOrAfter(it.key)
-            }.ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
-            // Latest Validity Period starting before the given date
-            .entries
-            .last()
-            // Latest patch in that Validity Period
-            .value
-            .last()
 
     /**
      * Check if *definition* is eligible for a new validity period.

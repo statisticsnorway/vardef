@@ -1,6 +1,8 @@
 package no.ssb.metadata.vardef.services
 
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
+import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
@@ -80,4 +82,19 @@ class ValidityPeriodsService(
                 .toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, latestPatchInLastValidityPeriod),
         )
     }
+
+    fun getLatestPatchByDateAndById(
+        definitionId: String,
+        dateOfValidity: LocalDate,
+    ): SavedVariableDefinition =
+        listAllPatchesGroupedByValidityPeriods(definitionId)
+            .filter {
+                dateOfValidity.isEqualOrAfter(it.key)
+            }.ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
+            // Latest Validity Period starting before the given date
+            .entries
+            .last()
+            // Latest patch in that Validity Period
+            .value
+            .last()
 }

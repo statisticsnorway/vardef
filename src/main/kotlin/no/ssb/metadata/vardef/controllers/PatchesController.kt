@@ -18,6 +18,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
+import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
@@ -29,6 +30,9 @@ import java.time.LocalDate
 class PatchesController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
+
+    @Inject
+    lateinit var patches: PatchesService
 
     /**
      * List all patches for the given variable definition.
@@ -57,7 +61,7 @@ class PatchesController {
         @VardefId
         variableDefinitionId: String,
     ): List<CompleteResponse> =
-        varDefService
+        patches
             .listAllPatchesById(definitionId = variableDefinitionId)
             .map { it.toCompleteResponse() }
 
@@ -91,7 +95,7 @@ class PatchesController {
         @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "patch_1", value = "1")])
         patchId: Int,
     ): CompleteResponse =
-        varDefService
+        patches
             .getOnePatchById(variableDefinitionId, patchId = patchId)
             .toCompleteResponse()
 
@@ -144,7 +148,7 @@ class PatchesController {
         return varDefService
             .save(
                 patch.toSavedVariableDefinition(
-                    varDefService.getLatestPatchById(variableDefinitionId).patchId,
+                    patches.getLatestPatchById(variableDefinitionId).patchId,
                     latestPatchOnValidityPeriod,
                 ),
             ).toCompleteResponse()

@@ -66,7 +66,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 .listAllPatchesGroupedByValidityPeriods(INCOME_TAX_VP1_P1.definitionId)
                 .let { it.values.elementAt(it.values.size - 2) }
                 ?.last()
-        val lastPatch = variableDefinitionService.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId)
+        val lastPatch = patches.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId)
 
         assertThat(
             lastPatch.validUntil,
@@ -93,7 +93,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
         assertThat(
-            variableDefinitionService
+            patches
                 .getLatestPatchById(
                     INCOME_TAX_VP1_P1.definitionId,
                 ).validUntil,
@@ -312,7 +312,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .body("$", hasKey("comment"))
 
         assertThat(
-            variableDefinitionService
+            patches
                 .getLatestPatchById(
                     INCOME_TAX_VP1_P1.definitionId,
                 ).comment

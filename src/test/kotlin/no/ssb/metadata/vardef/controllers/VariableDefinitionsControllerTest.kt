@@ -78,7 +78,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .body()
                 .path<String>("id")
 
-        val createdVariableDefinition = variableDefinitionService.getLatestPatchById(definitionId)
+        val createdVariableDefinition = patches.getLatestPatchById(definitionId)
 
         assertThat(createdVariableDefinition.shortName).isEqualTo("blah")
         assertThat(createdVariableDefinition.createdAt).isCloseTo(startTime, within(1, ChronoUnit.MINUTES))
@@ -109,7 +109,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .body()
                 .path<String>("id")
 
-        val createdVariableDefinition = variableDefinitionService.getLatestPatchById(definitionId)
+        val createdVariableDefinition = patches.getLatestPatchById(definitionId)
 
         assertThat(createdVariableDefinition.contact).isNull()
         assertThat(createdVariableDefinition.shortName).isEqualTo("landbak_copy")

@@ -17,6 +17,7 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
@@ -27,6 +28,9 @@ import java.time.LocalDate
 class VariableDefinitionByIdController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
+
+    @Inject
+    lateinit var patches: PatchesService
 
     /**
      * Get one variable definition.
@@ -108,7 +112,7 @@ class VariableDefinitionByIdController {
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
         @Body @Valid updateDraft: UpdateDraft,
     ): CompleteResponse {
-        val variable = varDefService.getLatestPatchById(id)
+        val variable = patches.getLatestPatchById(id)
         if (variable.variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
@@ -124,7 +128,7 @@ class VariableDefinitionByIdController {
         }
 
         return varDefService
-            .update(varDefService.getLatestPatchById(id).copyAndUpdate(updateDraft))
+            .update(patches.getLatestPatchById(id).copyAndUpdate(updateDraft))
             .toCompleteResponse()
     }
 }

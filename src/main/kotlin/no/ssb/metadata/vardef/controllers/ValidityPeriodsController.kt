@@ -17,6 +17,7 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
@@ -27,6 +28,9 @@ import no.ssb.metadata.vardef.validators.VardefId
 class ValidityPeriodsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
+
+    @Inject
+    lateinit var patches: PatchesService
 
     /**
      * Create a new validity period for a variable definition.
@@ -59,7 +63,7 @@ class ValidityPeriodsController {
         @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
         newPeriod: ValidityPeriod,
     ): CompleteResponse {
-        val latestExistingPatch = varDefService.getLatestPatchById(variableDefinitionId)
+        val latestExistingPatch = patches.getLatestPatchById(variableDefinitionId)
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")

@@ -1,9 +1,10 @@
 package no.ssb.metadata.vardef.services
 
-import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.exceptions.*
+import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
+import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
+import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -18,6 +19,7 @@ import java.util.*
 @Singleton
 class VariableDefinitionService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
+    private val patches: PatchesService,
 ) {
     @Inject
     private lateinit var klassService: KlassService
@@ -57,11 +59,6 @@ class VariableDefinitionService(
             .toList()
     }
 
-    fun listAllPatchesById(definitionId: String): List<SavedVariableDefinition> =
-        variableDefinitionRepository.findByDefinitionIdOrderByPatchId(definitionId).ifEmpty {
-            throw EmptyResultException()
-        }
-
     fun listValidityPeriodsById(
         language: SupportedLanguages,
         id: String,
@@ -82,7 +79,7 @@ class VariableDefinitionService(
                 patchId,
             )
 
-    fun getLatestPatchById(definitionId: String): SavedVariableDefinition = listAllPatchesById(definitionId).last()
+    fun getLatestPatchById(definitionId: String): SavedVariableDefinition = patches.listAllPatchesById(definitionId).last()
 
     fun getOneByIdAndDateAndRenderForLanguage(
         language: SupportedLanguages,
@@ -100,7 +97,8 @@ class VariableDefinitionService(
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
 
     fun deleteById(id: String): Any =
-        listAllPatchesById(id)
+        patches
+            .listAllPatchesById(id)
             .map {
                 variableDefinitionRepository.deleteById(it.id)
             }
@@ -119,7 +117,8 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean =
-        listAllPatchesById(definitionId)
+        patches
+            .listAllPatchesById(definitionId)
             .map { it.validFrom }
             .let { dates ->
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
@@ -268,7 +267,8 @@ class VariableDefinitionService(
     }
 
     fun listAllPatchesGroupedByValidityPeriods(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
-        listAllPatchesById(definitionId)
+        patches
+            .listAllPatchesById(definitionId)
             .groupBy {
                 it.validFrom
             }.toSortedMap()

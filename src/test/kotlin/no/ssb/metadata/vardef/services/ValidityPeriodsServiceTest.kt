@@ -77,14 +77,14 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("provideNewValidityPeriods")
     fun `save new validity period`(inputData: ValidityPeriod) {
-        val patchesBefore = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
+        val patchesBefore = patches.listAllPatchesById(savedVariableDefinitionId)
         val newValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
                 inputData,
                 savedVariableDefinitionId,
             )
         val patchesAfter =
-            variableDefinitionService.listAllPatchesById(
+            patches.listAllPatchesById(
                 savedVariableDefinitionId,
             )
 
@@ -105,7 +105,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
 
     @Test
     fun `save new validity period before all valid from`() {
-        val patches = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
+        val allPatches = patches.listAllPatchesById(savedVariableDefinitionId)
         val saveNewValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
                 VALIDITY_PERIOD_TAX_EXAMPLE.copy(
@@ -119,9 +119,9 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                 ),
                 INCOME_TAX_VP1_P1.definitionId,
             )
-        val patchesAfterSave = variableDefinitionService.listAllPatchesById(savedVariableDefinitionId)
+        val patchesAfterSave = patches.listAllPatchesById(savedVariableDefinitionId)
 
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(patches.last().patchId + 1)
+        assertThat(saveNewValidityPeriod.patchId).isEqualTo(allPatches.last().patchId + 1)
         assertThat(saveNewValidityPeriod.validUntil).isEqualTo(
             patchesAfterSave.first().validFrom.minusDays(1),
         )

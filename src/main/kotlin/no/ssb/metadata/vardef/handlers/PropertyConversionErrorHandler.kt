@@ -10,7 +10,6 @@ import io.micronaut.http.annotation.Produces
 import io.micronaut.http.server.exceptions.ExceptionHandler
 import io.micronaut.http.server.exceptions.response.ErrorContext
 import io.micronaut.http.server.exceptions.response.ErrorResponseProcessor
-import io.micronaut.serde.exceptions.SerdeException
 import jakarta.inject.Singleton
 
 /**
@@ -34,29 +33,23 @@ class PropertyConversionErrorHandler(
     override fun handle(
         request: HttpRequest<*>,
         exception: ConversionErrorException,
-    ): HttpResponse<*> {
-        val message = getErrorMessage(exception)
-        return errorResponseProcessor.processResponse(
+    ): HttpResponse<*> =
+        errorResponseProcessor.processResponse(
             ErrorContext
                 .builder(request)
                 .cause(exception)
-                .errorMessage(message)
+                .errorMessage(customiseMessage(exception))
                 .build(),
             HttpResponse.badRequest<Any>(),
         )
-    }
 }
 
-private fun getErrorMessage(exception: ConversionErrorException): String? {
-    val cause = exception.cause
-    return if (cause is SerdeException && cause.message != null) {
-        when {
-            "Unknown property [valid_from]" in cause.message!! -> "valid_from may not be specified here"
-            "Unknown property [valid_until]" in cause.message!! -> "valid_until may not be specified here"
-            "Unknown property [short_name]" in cause.message!! -> "short_name may not be specified here"
-            else -> exception.message
-        }
-    } else {
-        exception.message
+private fun customiseMessage(exception: ConversionErrorException): String? {
+    val message = exception.cause?.message ?: ""
+    return when {
+        "Unknown property [valid_from]" in message -> "valid_from may not be specified here"
+        "Unknown property [valid_until]" in message -> "valid_until may not be specified here"
+        "Unknown property [short_name]" in message -> "short_name may not be specified here"
+        else -> exception.message
     }
 }

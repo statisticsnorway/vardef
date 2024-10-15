@@ -3,7 +3,9 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.exceptions.*
+import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
+import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
+import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -38,10 +40,8 @@ class VariableDefinitionService(
             definitionList =
                 definitionList
                     .filter { dateOfValidity.isEqualOrAfter(it.validFrom) }
-                    .filter { definition ->
-                        definition.validUntil?.let { dateOfValidity.isEqualOrBefore(definition.validUntil!!) }
-                            ?: true
-                    }
+                    // If validUntil is null then this filter predicate should be true, so we just compare the date against itself.
+                    .filter { dateOfValidity.isEqualOrBefore(it.validUntil ?: dateOfValidity) }
         }
         return definitionList
             .map {

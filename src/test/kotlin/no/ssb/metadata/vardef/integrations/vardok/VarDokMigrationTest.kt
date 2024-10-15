@@ -88,7 +88,7 @@ class VarDokMigrationTest {
         val result = varDokApiService.getVarDokItem(vardokId)
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
-            val renderVarDok = toVarDefFromVarDok(mapResult)
+            val renderVarDok = VarDokService.extractVardefInput(mapResult)
             assertThat(renderVarDok).isNotNull
             assertThat(
                 renderVarDok.externalReferenceUri,
@@ -171,7 +171,7 @@ class VarDokMigrationTest {
         val vardok = varDokApiService.getVarDokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
         val varDefInput = varDokApiService.fetchMultipleVarDokItemsByLanguage("130")
-        val vardokTransform = toVarDefFromVarDok(varDefInput)
+        val vardokTransform = VarDokService.extractVardefInput(varDefInput)
         val afterMigration = JSONObject(vardokTransform)
         assertThat(afterMigration["shortName"]).isEqualTo("ufg")
     }

@@ -20,7 +20,7 @@ import java.util.stream.Stream
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get latest patch`() {
-        assertThat(patches.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId).patchId)
+        assertThat(patches.latest(INCOME_TAX_VP1_P1.definitionId).patchId)
             .isEqualTo(numIncomeTaxPatches)
     }
 

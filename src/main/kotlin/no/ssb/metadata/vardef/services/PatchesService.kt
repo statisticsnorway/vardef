@@ -15,16 +15,16 @@ class PatchesService(
             .ifEmpty { throw EmptyResultException() }
 
     fun get(
-        variableDefinitionId: String,
+        definitionId: String,
         patchId: Int,
     ): SavedVariableDefinition =
         variableDefinitionRepository
             .findByDefinitionIdAndPatchId(
-                variableDefinitionId,
+                definitionId,
                 patchId,
             )
 
-    fun getLatestPatchById(definitionId: String): SavedVariableDefinition =
+    fun latest(definitionId: String): SavedVariableDefinition =
         list(definitionId)
             .last()
 }

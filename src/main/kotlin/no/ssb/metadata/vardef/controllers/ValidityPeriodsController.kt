@@ -63,7 +63,7 @@ class ValidityPeriodsController {
         @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
         newPeriod: ValidityPeriod,
     ): CompleteResponse {
-        val latestExistingPatch = patches.getLatestPatchById(variableDefinitionId)
+        val latestExistingPatch = patches.latest(variableDefinitionId)
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")

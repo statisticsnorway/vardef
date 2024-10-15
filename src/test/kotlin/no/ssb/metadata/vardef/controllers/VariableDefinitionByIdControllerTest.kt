@@ -157,7 +157,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         assertThat(body.name).isEqualTo(expected.name)
         assertThat(body.definition).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definition)
 
-        val updated: SavedVariableDefinition = patches.getLatestPatchById(expected.definitionId)
+        val updated: SavedVariableDefinition = patches.latest(expected.definitionId)
         assertThat(updated.definitionId).isEqualTo(expected.definitionId)
         assertThat(updated.createdAt).isCloseTo(expected.createdAt, within(1, ChronoUnit.SECONDS))
         assertThat(updated.name).isEqualTo(expected.name)

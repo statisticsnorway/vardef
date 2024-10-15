@@ -21,7 +21,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         val newValidityPeriodValidFrom = LocalDate.of(2024, 9, 2)
         val latestPatch = patches.latest(savedVariableDefinitionId)
         val patchEndValidityPeriod =
-            variableDefinitionService.endLastValidityPeriod(
+            validityPeriods.endLastValidityPeriod(
                 savedVariableDefinitionId,
                 newValidityPeriodValidFrom,
             )
@@ -79,7 +79,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     fun `save new validity period`(inputData: ValidityPeriod) {
         val patchesBefore = patches.list(savedVariableDefinitionId)
         val newValidityPeriod =
-            variableDefinitionService.saveNewValidityPeriod(
+            validityPeriods.saveNewValidityPeriod(
                 inputData,
                 savedVariableDefinitionId,
             )
@@ -89,7 +89,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             )
 
         val lastPatchInSecondToLastValidityPeriod =
-            variableDefinitionService
+            validityPeriods
                 .listAllPatchesGroupedByValidityPeriods(savedVariableDefinitionId)
                 .let { it.values.elementAt(it.values.size - 2) }
                 ?.last()
@@ -107,7 +107,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     fun `save new validity period before all valid from`() {
         val allPatches = patches.list(savedVariableDefinitionId)
         val saveNewValidityPeriod =
-            variableDefinitionService.saveNewValidityPeriod(
+            validityPeriods.saveNewValidityPeriod(
                 VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                     validFrom = LocalDate.of(1796, 1, 1),
                     definition =

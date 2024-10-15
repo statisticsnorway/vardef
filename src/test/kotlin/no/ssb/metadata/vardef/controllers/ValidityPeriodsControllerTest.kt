@@ -62,7 +62,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .statusCode(201)
 
         val lastPatchInSecondToLastValidityPeriod =
-            variableDefinitionService
+            validityPeriods
                 .listAllPatchesGroupedByValidityPeriods(INCOME_TAX_VP1_P1.definitionId)
                 .let { it.values.elementAt(it.values.size - 2) }
                 ?.last()

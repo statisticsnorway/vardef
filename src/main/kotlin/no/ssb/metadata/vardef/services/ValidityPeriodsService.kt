@@ -28,4 +28,25 @@ class ValidityPeriodsService(
             .listAllPatchesById(definitionId)
             .groupBy { it.validFrom }
             .toSortedMap()
+
+    /**
+     * Check that a given date is not between any existing validity dates for the given variable definition.
+     *
+     * This is important to preserve metadata immutability, such that a consumer specifying a particular date
+     * will not suddenly get a different result because a new period was inserted between existing ones.
+     *
+     * @param definitionId the ID variable definition to run the validation for.
+     * @param dateOfValidity the new date supplied.
+     * @return True if the date is valid, false otherwise.
+     */
+    fun isValidValidFromValue(
+        definitionId: String,
+        dateOfValidity: LocalDate,
+    ): Boolean =
+        patches
+            .listAllPatchesById(definitionId)
+            .map { it.validFrom }
+            .let { dates ->
+                dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
+            }
 }

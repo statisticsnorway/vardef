@@ -81,7 +81,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         expected: Boolean,
     ) {
         assertThat(
-            variableDefinitionService.isValidValidFromValue(
+            validityPeriods.isValidValidFromValue(
                 INCOME_TAX_VP1_P1.definitionId,
                 LocalDate.of(year, 1, 1),
             ),
@@ -97,7 +97,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             )
         variableDefinitionService.save(singleSavedTaxExample)
         assertThat(
-            variableDefinitionService.isValidValidFromValue(
+            validityPeriods.isValidValidFromValue(
                 singleSavedTaxExample.definitionId,
                 LocalDate.of(3000, 1, 1),
             ),

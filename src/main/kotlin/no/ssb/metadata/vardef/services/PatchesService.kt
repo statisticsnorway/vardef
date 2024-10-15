@@ -23,4 +23,8 @@ class PatchesService(
                 variableDefinitionId,
                 patchId,
             )
+
+    fun getLatestPatchById(definitionId: String): SavedVariableDefinition =
+        listAllPatchesById(definitionId)
+            .last()
 }

@@ -148,7 +148,7 @@ class PatchesController {
         return varDefService
             .save(
                 patch.toSavedVariableDefinition(
-                    varDefService.getLatestPatchById(variableDefinitionId).patchId,
+                    patches.getLatestPatchById(variableDefinitionId).patchId,
                     latestPatchOnValidityPeriod,
                 ),
             ).toCompleteResponse()

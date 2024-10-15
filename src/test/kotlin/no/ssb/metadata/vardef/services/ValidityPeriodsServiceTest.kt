@@ -19,7 +19,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @Test
     fun `end validity period`() {
         val newValidityPeriodValidFrom = LocalDate.of(2024, 9, 2)
-        val latestPatch = variableDefinitionService.getLatestPatchById(savedVariableDefinitionId)
+        val latestPatch = patches.getLatestPatchById(savedVariableDefinitionId)
         val patchEndValidityPeriod =
             variableDefinitionService.endLastValidityPeriod(
                 savedVariableDefinitionId,

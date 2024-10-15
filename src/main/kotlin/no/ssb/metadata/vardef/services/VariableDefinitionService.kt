@@ -69,8 +69,6 @@ class VariableDefinitionService(
             .map { it.render(language, klassService) }
             .sortedBy { it.validFrom }
 
-    fun getLatestPatchById(definitionId: String): SavedVariableDefinition = patches.listAllPatchesById(definitionId).last()
-
     fun getOneByIdAndDateAndRenderForLanguage(
         language: SupportedLanguages,
         definitionId: String,
@@ -135,7 +133,7 @@ class VariableDefinitionService(
                 .copy(
                     validUntil = newPeriodValidFrom.minusDays(1),
                 ).toPatch()
-                .toSavedVariableDefinition(getLatestPatchById(definitionId).patchId, latestPatchInLastValidityPeriod),
+                .toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, latestPatchInLastValidityPeriod),
         )
     }
 
@@ -244,12 +242,12 @@ class VariableDefinitionService(
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
-                .toSavedVariableDefinition(getLatestPatchById(definitionId).patchId, lastValidityPeriod)
+                .toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, lastValidityPeriod)
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { save(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
-                .let { newPeriod.toSavedVariableDefinition(getLatestPatchById(definitionId).patchId, it) }
+                .let { newPeriod.toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
                 .let { save(it) }

@@ -89,7 +89,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             )
 
         val lastPatchInSecondToLastValidityPeriod =
-            variableDefinitionService
+            validityPeriods
                 .listAllPatchesGroupedByValidityPeriods(savedVariableDefinitionId)
                 .let { it.values.elementAt(it.values.size - 2) }
                 ?.last()

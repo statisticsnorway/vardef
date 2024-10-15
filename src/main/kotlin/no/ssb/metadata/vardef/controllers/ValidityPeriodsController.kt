@@ -18,6 +18,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.PatchesService
+import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
@@ -28,6 +29,9 @@ import no.ssb.metadata.vardef.validators.VardefId
 class ValidityPeriodsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
+
+    @Inject
+    lateinit var validityPeriods: ValidityPeriodsService
 
     @Inject
     lateinit var patches: PatchesService
@@ -102,5 +106,5 @@ class ValidityPeriodsController {
         variableDefinitionId: String,
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
-    ): List<RenderedVariableDefinition> = varDefService.listValidityPeriodsById(language, variableDefinitionId)
+    ): List<RenderedVariableDefinition> = validityPeriods.listValidityPeriodsById(language, variableDefinitionId)
 }

@@ -25,13 +25,16 @@ class VariableDefinitionServiceTestWithMockRepository {
     private lateinit var variableDefinitionService: VariableDefinitionService
     private lateinit var mockKlassService: KlassService
     private lateinit var mockPatchesService: PatchesService
+    private lateinit var mockValidityPeriodsService: ValidityPeriodsService
 
     @BeforeEach
     fun setUp() {
         variableDefinitionMockRepository = mockk<VariableDefinitionRepository>()
         mockKlassService = mockk<KlassService>()
         mockPatchesService = mockk<PatchesService>()
-        variableDefinitionService = VariableDefinitionService(variableDefinitionMockRepository, mockPatchesService)
+        mockValidityPeriodsService = mockk<ValidityPeriodsService>()
+        variableDefinitionService =
+            VariableDefinitionService(variableDefinitionMockRepository, mockPatchesService, mockValidityPeriodsService)
     }
 
     @AfterEach

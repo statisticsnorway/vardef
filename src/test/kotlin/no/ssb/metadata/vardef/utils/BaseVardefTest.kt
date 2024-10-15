@@ -7,6 +7,7 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.services.PatchesService
+import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
@@ -20,6 +21,9 @@ open class BaseVardefTest {
 
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
+
+    @Inject
+    lateinit var validityPeriods: ValidityPeriodsService
 
     @Inject
     lateinit var patches: PatchesService

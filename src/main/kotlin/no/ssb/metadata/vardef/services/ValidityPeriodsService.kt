@@ -199,4 +199,31 @@ class ValidityPeriodsService(
                 .let { patches.save(it) }
         }
     }
+
+    /**
+     * Get latest patch for validity period.
+     *
+     * Since Validity Periods must have a validFrom, we use this as an identifier.
+     * - If the Valid From date is specified, we get the latest patch for the Matching Validity Period
+     * - If the Valid From date is null, we get the latest patch for the most recent Validity Period
+     *
+     * @param definitionId Variable Definition ID
+     * @param validFrom The Valid From date for the desired validity Period
+     * @return the latest Patch
+     */
+    fun getLatestPatchForValidityPeriod(
+        definitionId: String,
+        validFrom: LocalDate?,
+    ): SavedVariableDefinition =
+        listAllPatchesGroupedByValidityPeriods(definitionId)
+            .let {
+                // Get the validityPeriod matching the given validFrom.
+                // If no validFrom is given, get the latest validityPeriod
+                it[validFrom ?: it.keys.last()]
+            }
+            // If no matching Validity Period is found (null value), throw an exception
+            // Get the latest patch in the matching Validity Period
+            ?.last() ?: run {
+            throw NoMatchingValidityPeriodFound("No Validity Period with valid_from date $validFrom")
+        }
 }

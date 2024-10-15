@@ -14,7 +14,7 @@ class PatchesService(
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
 
-    fun getOnePatchById(
+    fun get(
         variableDefinitionId: String,
         patchId: Int,
     ): SavedVariableDefinition =

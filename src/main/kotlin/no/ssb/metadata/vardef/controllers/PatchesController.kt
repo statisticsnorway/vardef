@@ -96,7 +96,7 @@ class PatchesController {
         patchId: Int,
     ): CompleteResponse =
         patches
-            .getOnePatchById(variableDefinitionId, patchId = patchId)
+            .get(variableDefinitionId, patchId = patchId)
             .toCompleteResponse()
 
     /**

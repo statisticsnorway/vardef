@@ -40,10 +40,8 @@ class VariableDefinitionService(
             definitionList =
                 definitionList
                     .filter { dateOfValidity.isEqualOrAfter(it.validFrom) }
-                    .filter { definition ->
-                        definition.validUntil?.let { dateOfValidity.isEqualOrBefore(definition.validUntil!!) }
-                            ?: true
-                    }
+                    // If validUntil is null then this filter predicate should be true, so we just compare the date against itself.
+                    .filter { dateOfValidity.isEqualOrBefore(it.validUntil ?: dateOfValidity) }
         }
         return definitionList
             .map {

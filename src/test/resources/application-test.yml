@@ -48,22 +48,10 @@ klass:
           name:
             en: ''
             nb: Husholdning
-        - code: '10'
-          name:
-            en: ''
-            nb: Husholdning
         - code: '11'
           name:
             en: ''
             nb: Juridisk enhet
-        - code: '11'
-          name:
-            en: ''
-            nb: Husholdning
-        - code: '12'
-          name:
-            en: ''
-            nb: Kjøretøy
         - code: '12'
           name:
             en: ''

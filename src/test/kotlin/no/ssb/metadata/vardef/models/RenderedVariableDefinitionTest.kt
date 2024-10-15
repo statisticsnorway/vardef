@@ -33,7 +33,6 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
         @JvmStatic
         fun unitTypes(): Stream<Arguments> =
             Stream.of(
-                // Fylke (forvaltning)
                 arguments(
                     "07",
                     "Fylke (forvaltning)"
@@ -51,16 +50,8 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     "Verdipapir"
                 ),
                 arguments(
-
-                ),
-                arguments(
-
-                ),
-                arguments(
-
-                ),
-                arguments(
-
+                    "12",
+                    "Foretak"
                 ),
                 arguments(
                     "20",

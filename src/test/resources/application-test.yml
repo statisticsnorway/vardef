@@ -536,7 +536,7 @@ klass:
         - code: vf
           name:
             en: ''
-            nb: Virksomheter, foretak og regnskap
+            nb: Bedrifter, foretak og regnskap
         - code: vf01
           name:
             en: ''
@@ -556,7 +556,7 @@ klass:
         - code: vf05
           name:
             en: ''
-            nb: Virksomheter og foretak
+            nb: Bedrifter og foretak
         - code: vt
           name:
             en: ''

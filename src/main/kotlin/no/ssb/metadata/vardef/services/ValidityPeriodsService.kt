@@ -29,6 +29,12 @@ class ValidityPeriodsService(
             .groupBy { it.validFrom }
             .toSortedMap()
 
+    fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
+        listAllPatchesGroupedByValidityPeriods(definitionId)
+            .lastEntry()
+            .value
+            .last()
+
     /**
      * Check that a given date is not between any existing validity dates for the given variable definition.
      *
@@ -49,4 +55,29 @@ class ValidityPeriodsService(
             .let { dates ->
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
             }
+
+    /**
+     * End previous *validity period*
+     *
+     * This method set value for field *validUntil* to the day before new validity period.
+     * There is no check for value, if *validUntil* is not null, the value is ignored.
+     * A new patch with the updated value for *validUntil* is created.
+     *
+     * @param definitionId The id of the variable definition
+     * @param newPeriodValidFrom The starting date of the new validity period.
+     *
+     */
+    fun endLastValidityPeriod(
+        definitionId: String,
+        newPeriodValidFrom: LocalDate,
+    ): SavedVariableDefinition {
+        val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
+        return patches.save(
+            latestPatchInLastValidityPeriod
+                .copy(
+                    validUntil = newPeriodValidFrom.minusDays(1),
+                ).toPatch()
+                .toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, latestPatchInLastValidityPeriod),
+        )
+    }
 }

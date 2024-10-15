@@ -9,6 +9,8 @@ import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
+    fun save(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
+
     fun listAllPatchesById(definitionId: String): List<SavedVariableDefinition> =
         variableDefinitionRepository
             .findByDefinitionIdOrderByPatchId(definitionId)

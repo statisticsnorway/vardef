@@ -32,7 +32,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body(
                 "definition",
                 equalTo(
-                    variableDefinitionService
+                    validityPeriods
                         .getLatestPatchInLastValidityPeriod(
                             INCOME_TAX_VP1_P1.definitionId,
                         ).definition.nb,

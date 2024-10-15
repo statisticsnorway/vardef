@@ -65,7 +65,7 @@ class VariableDefinitionService(
         if (dateOfValidity != null) {
             getLatestPatchByDateAndById(definitionId, dateOfValidity).render(language, klassService)
         } else {
-            getLatestPatchInLastValidityPeriod(definitionId).render(language, klassService)
+            validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).render(language, klassService)
         }
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
@@ -78,38 +78,6 @@ class VariableDefinitionService(
             .map {
                 variableDefinitionRepository.deleteById(it.id)
             }
-
-    /**
-     * End previous *validity period*
-     *
-     * This method set value for field *validUntil* to the day before new validity period.
-     * There is no check for value, if *validUntil* is not null, the value is ignored.
-     * A new patch with the updated value for *validUntil* is created.
-     *
-     * @param definitionId The id of the variable definition
-     * @param newPeriodValidFrom The starting date of the new validity period.
-     *
-     */
-    fun endLastValidityPeriod(
-        definitionId: String,
-        newPeriodValidFrom: LocalDate,
-    ): SavedVariableDefinition {
-        val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        return save(
-            latestPatchInLastValidityPeriod
-                .copy(
-                    validUntil = newPeriodValidFrom.minusDays(1),
-                ).toPatch()
-                .toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, latestPatchInLastValidityPeriod),
-        )
-    }
-
-    fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
-        validityPeriods
-            .listAllPatchesGroupedByValidityPeriods(definitionId)
-            .lastEntry()
-            .value
-            .last()
 
     fun getLatestPatchByDateAndById(
         definitionId: String,
@@ -142,7 +110,7 @@ class VariableDefinitionService(
         definitionId: String,
         newDefinition: ValidityPeriod,
     ): Boolean {
-        val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
+        val lastValidityPeriod = validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
         val allLanguagesPresent =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
                 newDefinition.definition.listPresentLanguages().contains(lang)
@@ -200,14 +168,14 @@ class VariableDefinitionService(
         newPeriod: ValidityPeriod,
         definitionId: String,
     ): SavedVariableDefinition {
-        val validityPeriods = validityPeriods.listAllPatchesGroupedByValidityPeriods(definitionId)
+        val validityPeriodsMap = validityPeriods.listAllPatchesGroupedByValidityPeriods(definitionId)
 
         checkValidityPeriodInput(newPeriod, definitionId)
 
         // Newest patch in the earliest Validity Period
-        val firstValidityPeriod = validityPeriods.firstEntry().value.last()
+        val firstValidityPeriod = validityPeriodsMap.firstEntry().value.last()
         // Newest patch in the latest Validity Period
-        val lastValidityPeriod = validityPeriods.lastEntry().value.last()
+        val lastValidityPeriod = validityPeriodsMap.lastEntry().value.last()
 
         return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
             newPeriod
@@ -218,7 +186,8 @@ class VariableDefinitionService(
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { save(it) }
         } else {
-            endLastValidityPeriod(definitionId, newPeriod.validFrom)
+            validityPeriods
+                .endLastValidityPeriod(definitionId, newPeriod.validFrom)
                 .let { newPeriod.toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }

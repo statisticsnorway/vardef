@@ -69,7 +69,7 @@ open class VarDokService(
                         vardokItem["nn"]?.common?.title,
                         vardokItem["en"]?.common?.title,
                     ),
-                shortName = vardokItemNb.variable?.dataElementName!!.lowercase(),
+                shortName = vardokItemNb.variable?.dataElementName?.lowercase(),
                 definition =
                     LanguageStringType(
                         vardokItemNb.common?.description,

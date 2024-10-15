@@ -130,6 +130,11 @@ open class KlassApiService(
         return getClassifications().map { it.id.toString() }
     }
 
+    fun getClassificationIdByName(title: String): String?{
+        val classification: ClassificationItem? = getClassificationItemsById(702).find { it.name == title }
+        return classification?.code
+    }
+
     override fun getCodeItemFor(
         id: String,
         code: String,

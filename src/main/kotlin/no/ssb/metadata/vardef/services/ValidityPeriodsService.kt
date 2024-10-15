@@ -30,7 +30,7 @@ class ValidityPeriodsService(
 
     fun listAllPatchesGroupedByValidityPeriods(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         patches
-            .listAllPatchesById(definitionId)
+            .list(definitionId)
             .groupBy { it.validFrom }
             .toSortedMap()
 
@@ -55,7 +55,7 @@ class ValidityPeriodsService(
         dateOfValidity: LocalDate,
     ): Boolean =
         patches
-            .listAllPatchesById(definitionId)
+            .list(definitionId)
             .map { it.validFrom }
             .let { dates ->
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
@@ -82,7 +82,7 @@ class ValidityPeriodsService(
                 .copy(
                     validUntil = newPeriodValidFrom.minusDays(1),
                 ).toPatch()
-                .toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, latestPatchInLastValidityPeriod),
+                .toSavedVariableDefinition(patches.latest(definitionId).patchId, latestPatchInLastValidityPeriod),
         )
     }
 
@@ -188,12 +188,12 @@ class ValidityPeriodsService(
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
-                .toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, lastValidityPeriod)
+                .toSavedVariableDefinition(patches.latest(definitionId).patchId, lastValidityPeriod)
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { patches.save(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
-                .let { newPeriod.toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, it) }
+                .let { newPeriod.toSavedVariableDefinition(patches.latest(definitionId).patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
                 .let { patches.save(it) }

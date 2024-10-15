@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.ValidityPeriod
 import java.time.LocalDate
 import java.util.*
 
@@ -97,4 +98,37 @@ class ValidityPeriodsService(
             // Latest patch in that Validity Period
             .value
             .last()
+
+    /**
+     * Check if *definition* is eligible for a new validity period.
+     *
+     * To be eligible, all values for all languages present in the previous patch for the variable definition
+     * must be changed in the new definition. The changes are verified by comparing string values, ignoring case.
+     *
+     * @param definitionId The ID of the Variable Definition to check
+     * @param newDefinition The input object containing the proposed variable definition.
+     * @return Returns `true` if all values for all languages are changed compared to the previous patch,
+     * `false` otherwise
+     */
+    fun isNewDefinition(
+        definitionId: String,
+        newDefinition: ValidityPeriod,
+    ): Boolean {
+        val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
+        val allLanguagesPresent =
+            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
+                newDefinition.definition.listPresentLanguages().contains(lang)
+            }
+        if (!allLanguagesPresent) {
+            return false
+        }
+        val allDefinitionsChanged =
+            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
+                !lastValidityPeriod.toDraft().definition.getValidLanguage(lang).equals(
+                    newDefinition.definition.getValidLanguage(lang),
+                    ignoreCase = true,
+                )
+            }
+        return allDefinitionsChanged
+    }
 }

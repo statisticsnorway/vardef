@@ -80,39 +80,6 @@ class VariableDefinitionService(
             }
 
     /**
-     * Check if *definition* is eligible for a new validity period.
-     *
-     * To be eligible, all values for all languages present in the previous patch for the variable definition
-     * must be changed in the new definition. The changes are verified by comparing string values, ignoring case.
-     *
-     * @param definitionId The ID of the Variable Definition to check
-     * @param newDefinition The input object containing the proposed variable definition.
-     * @return Returns `true` if all values for all languages are changed compared to the previous patch,
-     * `false` otherwise
-     */
-    fun isNewDefinition(
-        definitionId: String,
-        newDefinition: ValidityPeriod,
-    ): Boolean {
-        val lastValidityPeriod = validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
-        val allLanguagesPresent =
-            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                newDefinition.definition.listPresentLanguages().contains(lang)
-            }
-        if (!allLanguagesPresent) {
-            return false
-        }
-        val allDefinitionsChanged =
-            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                !lastValidityPeriod.toDraft().definition.getValidLanguage(lang).equals(
-                    newDefinition.definition.getValidLanguage(lang),
-                    ignoreCase = true,
-                )
-            }
-        return allDefinitionsChanged
-    }
-
-    /**
      * Check mandatory input for creating a new validity period
      * @param newPeriod The input data to check
      * @param definitionId The id for the variable definition to check
@@ -127,7 +94,7 @@ class VariableDefinitionService(
             !validityPeriods.isValidValidFromValue(definitionId, newPeriod.validFrom) ->
                 throw InvalidValidFromException()
 
-            !isNewDefinition(definitionId, newPeriod) ->
+            !validityPeriods.isNewDefinition(definitionId, newPeriod) ->
                 throw DefinitionTextUnchangedException()
         }
     }

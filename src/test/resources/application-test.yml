@@ -35,19 +35,27 @@ klass:
         - code: '07'
           name:
             en: ''
-            nb: Foretak
-        - code: 08
-          name:
-            en: ''
             nb: Fylke (forvaltning)
-        - code: 09
+        - code: '08'
           name:
             en: ''
             nb: Fylke (geografisk)
-        - code: '10'
+        - code: '09'
           name:
             en: ''
             nb: Havneanløp
+        - code: '10'
+          name:
+            en: ''
+            nb: Husholdning
+        - code: '10'
+          name:
+            en: ''
+            nb: Husholdning
+        - code: '11'
+          name:
+            en: ''
+            nb: Juridisk enhet
         - code: '11'
           name:
             en: ''
@@ -56,70 +64,74 @@ klass:
           name:
             en: ''
             nb: Kjøretøy
+        - code: '12'
+          name:
+            en: ''
+            nb: Foretak
         - code: '13'
           name:
             en: ''
-            nb: Kommune (forvaltning)
+            nb: Bedrift
         - code: '14'
           name:
             en: ''
-            nb: Kommune (geografisk)
+            nb: Bransjeenhet
         - code: '15'
           name:
             en: ''
-            nb: Kurs
+            nb: Kjøretøy
         - code: '16'
           name:
             en: ''
-            nb: Lovbrudd
+            nb: Kommune (forvaltning)
         - code: '17'
           name:
             en: ''
-            nb: Person
+            nb: Kommune (geografisk)
         - code: '18'
           name:
             en: ''
-            nb: Skip
+            nb: Kurs
         - code: '19'
           name:
             en: ''
-            nb: Statlig virksomhet
+            nb: Lovbrudd
         - code: '20'
           name:
             en: ''
-            nb: Storfe
+            nb: Person
         - code: '21'
           name:
             en: ''
-            nb: Trafikkulykke
+            nb: Skip
         - code: '22'
           name:
             en: ''
-            nb: Transaksjon
+            nb: Statlig virksomhet
         - code: '23'
           name:
             en: ''
-            nb: Valg
+            nb: Storfe
         - code: '24'
           name:
             en: ''
-            nb: Vare/tjeneste
+            nb: Trafikkulykke
         - code: '25'
           name:
             en: ''
-            nb: Verdipapir
+            nb: Transaksjon
         - code: '26'
           name:
             en: ''
-            nb: Bedrift
+            nb: Valg
         - code: '27'
           name:
             en: ''
-            nb: Juridisk enhet
+            nb: Vare/tjeneste
         - code: '28'
           name:
             en: ''
-            nb: Bransjeenhet
+            nb: Verdipapir
     618:
       name:
         en: "dummy"

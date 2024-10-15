@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.models
 
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
+import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import org.assertj.core.api.Assertions.assertThat
@@ -10,7 +11,8 @@ import java.time.LocalDate
 
 class RenderedVariableDefinitionTest : BaseVardefTest() {
     @Inject
-    lateinit var klassService: KlassApiService
+    lateinit var klassService: KlassService
+    //lateinit var klassService: KlassApiService
 
     @Test
     fun `unit type code 20 title is person`()  {

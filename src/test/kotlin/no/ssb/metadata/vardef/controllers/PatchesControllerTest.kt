@@ -114,7 +114,7 @@ class PatchesControllerTest : BaseVardefTest() {
 
         val createdPatch = variableDefinitionService.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId)
         val previousPatch =
-            variableDefinitionService.getOnePatchById(
+            patches.getOnePatchById(
                 INCOME_TAX_VP2_P6.definitionId,
                 INCOME_TAX_VP2_P6.patchId,
             )

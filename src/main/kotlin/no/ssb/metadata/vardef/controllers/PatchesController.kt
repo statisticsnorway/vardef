@@ -95,7 +95,7 @@ class PatchesController {
         @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "patch_1", value = "1")])
         patchId: Int,
     ): CompleteResponse =
-        varDefService
+        patches
             .getOnePatchById(variableDefinitionId, patchId = patchId)
             .toCompleteResponse()
 

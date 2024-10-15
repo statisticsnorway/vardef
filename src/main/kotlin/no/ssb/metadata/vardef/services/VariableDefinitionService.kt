@@ -69,16 +69,6 @@ class VariableDefinitionService(
             .map { it.render(language, klassService) }
             .sortedBy { it.validFrom }
 
-    fun getOnePatchById(
-        variableDefinitionId: String,
-        patchId: Int,
-    ): SavedVariableDefinition =
-        variableDefinitionRepository
-            .findByDefinitionIdAndPatchId(
-                variableDefinitionId,
-                patchId,
-            )
-
     fun getLatestPatchById(definitionId: String): SavedVariableDefinition = patches.listAllPatchesById(definitionId).last()
 
     fun getOneByIdAndDateAndRenderForLanguage(

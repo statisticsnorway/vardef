@@ -19,7 +19,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @Test
     fun `end validity period`() {
         val newValidityPeriodValidFrom = LocalDate.of(2024, 9, 2)
-        val latestPatch = patches.getLatestPatchById(savedVariableDefinitionId)
+        val latestPatch = patches.latest(savedVariableDefinitionId)
         val patchEndValidityPeriod =
             variableDefinitionService.endLastValidityPeriod(
                 savedVariableDefinitionId,
@@ -77,14 +77,14 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("provideNewValidityPeriods")
     fun `save new validity period`(inputData: ValidityPeriod) {
-        val patchesBefore = patches.listAllPatchesById(savedVariableDefinitionId)
+        val patchesBefore = patches.list(savedVariableDefinitionId)
         val newValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
                 inputData,
                 savedVariableDefinitionId,
             )
         val patchesAfter =
-            patches.listAllPatchesById(
+            patches.list(
                 savedVariableDefinitionId,
             )
 
@@ -105,7 +105,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
 
     @Test
     fun `save new validity period before all valid from`() {
-        val allPatches = patches.listAllPatchesById(savedVariableDefinitionId)
+        val allPatches = patches.list(savedVariableDefinitionId)
         val saveNewValidityPeriod =
             variableDefinitionService.saveNewValidityPeriod(
                 VALIDITY_PERIOD_TAX_EXAMPLE.copy(
@@ -119,7 +119,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                 ),
                 INCOME_TAX_VP1_P1.definitionId,
             )
-        val patchesAfterSave = patches.listAllPatchesById(savedVariableDefinitionId)
+        val patchesAfterSave = patches.list(savedVariableDefinitionId)
 
         assertThat(saveNewValidityPeriod.patchId).isEqualTo(allPatches.last().patchId + 1)
         assertThat(saveNewValidityPeriod.validUntil).isEqualTo(

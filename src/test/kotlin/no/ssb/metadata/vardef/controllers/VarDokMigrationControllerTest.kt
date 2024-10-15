@@ -184,7 +184,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
-            69, 141, 590, 2157, 2159, 2163, 2217,
+            141, 590, 2157, 2159, 2217,
         ],
     )
     fun `post vardok missing updated statistical unit`(

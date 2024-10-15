@@ -20,7 +20,6 @@ import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
     Header(name = ACCEPT, value = "application/json"),
 )
 interface KlassApiClient {
-
     @Get("classifications?size=10000&language=nb&includeCodelists=true")
     @SingleResult
     @Consumes(MediaType.APPLICATION_JSON)

@@ -1,6 +1,8 @@
 package no.ssb.metadata.vardef.services
 
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
+import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -130,5 +132,71 @@ class ValidityPeriodsService(
                 )
             }
         return allDefinitionsChanged
+    }
+
+    /**
+     * Check mandatory input for creating a new validity period
+     * @param newPeriod The input data to check
+     * @param definitionId The id for the variable definition to check
+     * @throws InvalidValidFromException validFrom is invalid
+     * @throws DefinitionTextUnchangedException definition text in all present languages has not changed
+     */
+    private fun checkValidityPeriodInput(
+        newPeriod: ValidityPeriod,
+        definitionId: String,
+    ) {
+        when {
+            !isValidValidFromValue(definitionId, newPeriod.validFrom) ->
+                throw InvalidValidFromException()
+
+            !isNewDefinition(definitionId, newPeriod) ->
+                throw DefinitionTextUnchangedException()
+        }
+    }
+
+    /**
+     * Ends the current validity period and saves a new validity period as separate patches.
+     *
+     * If new valid from is before first validity period, new version valid until is set to the day
+     * before first valid from. And only one new patch is created.
+     *
+     * Otherwise, two patches are created:
+     *  1.Ends the current validity period by setting its *validUntil* date to the day before
+     *  the new validity period starts. This action creates a new patch to reflect the end of the
+     *  previous validity period.
+     *  2. Saves the new validity period as a separate new patch with updated validity information.
+     *
+     * @param newPeriod The new variable definition that specifies the start of a new validity period.
+     * @param definitionId The ID of the existing variable definition whose validity period will be updated.
+     * @return The newly saved variable definition with the updated validity period.
+     */
+    fun saveNewValidityPeriod(
+        newPeriod: ValidityPeriod,
+        definitionId: String,
+    ): SavedVariableDefinition {
+        val validityPeriodsMap = listAllPatchesGroupedByValidityPeriods(definitionId)
+
+        checkValidityPeriodInput(newPeriod, definitionId)
+
+        // Newest patch in the earliest Validity Period
+        val firstValidityPeriod = validityPeriodsMap.firstEntry().value.last()
+        // Newest patch in the latest Validity Period
+        val lastValidityPeriod = validityPeriodsMap.lastEntry().value.last()
+
+        return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
+            newPeriod
+                // A Validity Period to be created before all others uses the last one as base.
+                // We know this has the most recent ownership and other info.
+                // The user can Patch any values after creation.
+                .toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, lastValidityPeriod)
+                .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
+                .let { patches.save(it) }
+        } else {
+            endLastValidityPeriod(definitionId, newPeriod.validFrom)
+                .let { newPeriod.toSavedVariableDefinition(patches.getLatestPatchById(definitionId).patchId, it) }
+                // New validity period is always open-ended. A valid_until date may be set via a patch.
+                .apply { validUntil = null }
+                .let { patches.save(it) }
+        }
     }
 }

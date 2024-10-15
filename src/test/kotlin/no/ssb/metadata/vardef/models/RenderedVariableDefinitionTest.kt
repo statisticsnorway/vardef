@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.models
 
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
@@ -17,17 +16,19 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
     @Inject
     lateinit var klassService: KlassService
 
-    //@Inject
-    //lateinit var klassService: KlassApiService
+    // @Inject
+    // lateinit var klassService: KlassApiService
 
-    private val dates = listOf<LocalDate>(
-        LocalDate.of(1910, 6, 13),
-        LocalDate.of(1970, 1, 1),
-        LocalDate.of(1980, 12, 31),
-        LocalDate.of(2015, 1, 31),
-        LocalDate.of(2019, 5, 8),
-        LocalDate.of(2024, 11, 25),
-        LocalDate.of(2060, 3, 2),)
+    private val dates =
+        listOf<LocalDate>(
+            LocalDate.of(1910, 6, 13),
+            LocalDate.of(1970, 1, 1),
+            LocalDate.of(1980, 12, 31),
+            LocalDate.of(2015, 1, 31),
+            LocalDate.of(2019, 5, 8),
+            LocalDate.of(2024, 11, 25),
+            LocalDate.of(2060, 3, 2),
+        )
 
     companion object {
         @JvmStatic
@@ -35,27 +36,27 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
             Stream.of(
                 arguments(
                     "07",
-                    "Fylke (forvaltning)"
+                    "Fylke (forvaltning)",
                 ),
                 arguments(
                     "13",
-                    "Bedrift"
+                    "Bedrift",
                 ),
                 arguments(
                     "25",
-                    "Transaksjon"
+                    "Transaksjon",
                 ),
                 arguments(
                     "28",
-                    "Verdipapir"
+                    "Verdipapir",
                 ),
                 arguments(
                     "12",
-                    "Foretak"
+                    "Foretak",
                 ),
                 arguments(
                     "20",
-                    "person"
+                    "person",
                 ),
             )
 
@@ -64,48 +65,52 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
             Stream.of(
                 arguments(
                     "al04",
-                    "Arbeidsmiljø, sykefravær og arbeidskonflikter"
+                    "Arbeidsmiljø, sykefravær og arbeidskonflikter",
                 ),
                 arguments(
                     "al05",
-                    "Lønn og arbeidskraftkostnader"
+                    "Lønn og arbeidskraftkostnader",
                 ),
                 arguments(
                     "vf",
-                    "Bedrifter, foretak og regnskap"
+                    "Bedrifter, foretak og regnskap",
                 ),
                 arguments(
                     "vf05",
-                    "Bedrifter og foretak"
+                    "Bedrifter og foretak",
                 ),
             )
     }
 
     @ParameterizedTest
     @MethodSource("unitTypes")
-    fun `unit type renders the same title regardless of date`(code: String,title: String)  {
+    fun `unit type renders the same title regardless of date`(
+        code: String,
+        title: String,
+    ) {
         for (date in dates) {
             val savedVariableDefinitionRendered =
                 INCOME_TAX_VP1_P1.copy(
                     unitTypes = listOf(code),
-                    validFrom = date
+                    validFrom = date,
                 ).render(SupportedLanguages.NB, klassService)
             assertThat(savedVariableDefinitionRendered.unitTypes[0]?.title).isEqualToIgnoringCase(title)
         }
-
     }
 
     @ParameterizedTest
     @MethodSource("subjectFields")
-    fun `subject fields renders the same title regardless of date`(code: String, title: String) {
+    fun `subject fields renders the same title regardless of date`(
+        code: String,
+        title: String,
+    ) {
         for (date in dates) {
             val savedVariableDefinitionRendered =
                 INCOME_TAX_VP1_P1.copy(
                     subjectFields = listOf(code),
-                    validFrom = date
+                    validFrom = date,
                 ).render(SupportedLanguages.NB, klassService)
             assertThat(savedVariableDefinitionRendered.subjectFields[0]?.title).isEqualToIgnoringCase(title)
-
         }
     }
 }

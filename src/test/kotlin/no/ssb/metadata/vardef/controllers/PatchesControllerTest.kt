@@ -112,9 +112,9 @@ class PatchesControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
 
-        val createdPatch = patches.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId)
+        val createdPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)
         val previousPatch =
-            patches.getOnePatchById(
+            patches.get(
                 INCOME_TAX_VP2_P6.definitionId,
                 INCOME_TAX_VP2_P6.patchId,
             )

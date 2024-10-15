@@ -70,7 +70,7 @@ class VariableDefinitionService(
 
     fun deleteById(id: String): Any =
         patches
-            .listAllPatchesById(id)
+            .list(id)
             .map {
                 variableDefinitionRepository.deleteById(it.id)
             }

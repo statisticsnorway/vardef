@@ -112,7 +112,7 @@ class VariableDefinitionByIdController {
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
         @Body @Valid updateDraft: UpdateDraft,
     ): CompleteResponse {
-        val variable = patches.getLatestPatchById(id)
+        val variable = patches.latest(id)
         if (variable.variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
@@ -128,7 +128,7 @@ class VariableDefinitionByIdController {
         }
 
         return varDefService
-            .update(patches.getLatestPatchById(id).copyAndUpdate(updateDraft))
+            .update(patches.latest(id).copyAndUpdate(updateDraft))
             .toCompleteResponse()
     }
 }

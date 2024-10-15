@@ -62,7 +62,7 @@ class PatchesController {
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         patches
-            .listAllPatchesById(definitionId = variableDefinitionId)
+            .list(definitionId = variableDefinitionId)
             .map { it.toCompleteResponse() }
 
     /**
@@ -96,7 +96,7 @@ class PatchesController {
         patchId: Int,
     ): CompleteResponse =
         patches
-            .getOnePatchById(variableDefinitionId, patchId = patchId)
+            .get(variableDefinitionId, patchId = patchId)
             .toCompleteResponse()
 
     /**
@@ -148,7 +148,7 @@ class PatchesController {
         return patches
             .save(
                 patch.toSavedVariableDefinition(
-                    patches.getLatestPatchById(variableDefinitionId).patchId,
+                    patches.latest(variableDefinitionId).patchId,
                     latestPatchOnValidityPeriod,
                 ),
             ).toCompleteResponse()

@@ -59,4 +59,15 @@ class PatchesService(
     fun latest(definitionId: String): SavedVariableDefinition =
         list(definitionId)
             .last()
+
+    /**
+     * Delete all *Patches* in a *Variable Definition*
+     *
+     * @param definitionId The ID of the Variable Definition.
+     */
+    fun deleteAllForDefinitionId(definitionId: String) =
+        list(definitionId)
+            .forEach {
+                variableDefinitionRepository.deleteById(it.id)
+            }
 }

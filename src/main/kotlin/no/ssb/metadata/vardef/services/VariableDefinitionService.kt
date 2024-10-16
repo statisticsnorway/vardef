@@ -49,12 +49,5 @@ class VariableDefinitionService(
 
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
 
-    fun deleteById(id: String): Any =
-        patches
-            .list(id)
-            .map {
-                variableDefinitionRepository.deleteById(it.id)
-            }
-
     fun checkIfShortNameExists(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
 }

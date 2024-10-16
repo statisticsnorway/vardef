@@ -26,7 +26,7 @@ import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Validated
-@Controller("/variable-definitions/{id}")
+@Controller("/variable-definitions/{definitionId}")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController {
     @Inject
@@ -57,7 +57,7 @@ class VariableDefinitionByIdController {
     fun getVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
-        id: String,
+        definitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
             examples = [ExampleObject(name = "No date specified", value = DEFAULT_LANGUAGE)],
@@ -78,7 +78,7 @@ class VariableDefinitionByIdController {
         val definition =
             varDefService
                 .getByDateAndRender(
-                    definitionId = id,
+                    definitionId = definitionId,
                     language = language,
                     dateOfValidity = dateOfValidity,
                 )
@@ -103,9 +103,9 @@ class VariableDefinitionByIdController {
     fun deleteVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
         @VardefId
-        id: String,
+        definitionId: String,
     ): MutableHttpResponse<Unit> {
-        varDefService.deleteById(id = id)
+        patches.deleteAllForDefinitionId(definitionId)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
         return HttpResponse.noContent<Unit?>().contentType(null)
     }
@@ -120,10 +120,10 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch
     fun updateVariableDefinitionById(
-        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
+        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId definitionId: String,
         @Body @Valid updateDraft: UpdateDraft,
     ): CompleteResponse {
-        val variable = patches.latest(id)
+        val variable = patches.latest(definitionId)
         if (variable.variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
@@ -139,7 +139,7 @@ class VariableDefinitionByIdController {
         }
 
         return varDefService
-            .update(patches.latest(id).copyAndUpdate(updateDraft))
+            .update(patches.latest(definitionId).copyAndUpdate(updateDraft))
             .toCompleteResponse()
     }
 }

@@ -1,13 +1,14 @@
 package no.ssb.metadata.vardef.services
 
-import io.viascom.nanoid.NanoId
+import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
+import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.models.LanguageStringType
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -20,15 +21,15 @@ import java.util.stream.Stream
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get latest patch`() {
-        assertThat(patches.getLatestPatchById(INCOME_TAX_VP1_P1.definitionId).patchId)
+        assertThat(patches.latest(INCOME_TAX_VP1_P1.definitionId).patchId)
             .isEqualTo(numIncomeTaxPatches)
     }
 
     @Test
     fun `get valid period at date`() {
         assertThat(
-            variableDefinitionService
-                .getLatestPatchByDateAndById(
+            validityPeriods
+                .getForDate(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1990, 1, 1),
                 ).patchId,
@@ -38,8 +39,8 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get valid period at date before range`() {
         assertThrows<NoMatchingValidityPeriodFound> {
-            variableDefinitionService
-                .getLatestPatchByDateAndById(
+            validityPeriods
+                .getForDate(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1760, 1, 1),
                 )
@@ -49,8 +50,8 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `get valid period at date after range`() {
         assertThat(
-            variableDefinitionService
-                .getLatestPatchByDateAndById(
+            validityPeriods
+                .getForDate(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(3000, 1, 1),
                 ).patchId,
@@ -71,126 +72,49 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @CsvSource(
-        "1990,false",
-        "1760,true",
-        "3000,true",
-    )
-    fun `validate valid_from values`(
-        year: Int,
-        expected: Boolean,
+    @MethodSource("validFromTestCases")
+    fun `validate valid_from values in new validity period`(
+        inputObject: ValidityPeriod,
+        expectSuccess: Boolean,
     ) {
-        assertThat(
-            variableDefinitionService.isValidValidFromValue(
-                INCOME_TAX_VP1_P1.definitionId,
-                LocalDate.of(year, 1, 1),
-            ),
-        ).isEqualTo(expected)
-    }
-
-    @Test
-    fun `get id with only one patch`() {
-        val singleSavedTaxExample =
-            INCOME_TAX_VP1_P1.copy(
-                id = ObjectId(),
-                definitionId = NanoId.generate(8),
-            )
-        variableDefinitionService.save(singleSavedTaxExample)
-        assertThat(
-            variableDefinitionService.isValidValidFromValue(
-                singleSavedTaxExample.definitionId,
-                LocalDate.of(3000, 1, 1),
-            ),
-        ).isEqualTo(true)
-    }
-
-    companion object {
-        @JvmStatic
-        fun provideTestDataCheckDefinition(): Stream<Arguments> =
-            Stream.of(
-                Arguments.argumentSet(
-                    "No change",
-                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
-                        definition =
-                            LanguageStringType(
-                                "Intektsskatt ny definisjon",
-                                "Intektsskatt ny definisjon",
-                                "Income tax new definition",
-                            ),
-                    ),
-                    false,
+        if (!expectSuccess) {
+            assertThrows<InvalidValidFromException> {
+                validityPeriods.create(
+                    INCOME_TAX_VP1_P1.definitionId,
+                    inputObject,
+                )
+            }
+        } else {
+            assertThat(
+                validityPeriods.create(
+                    INCOME_TAX_VP1_P1.definitionId,
+                    inputObject,
                 ),
-                Arguments.argumentSet(
-                    "All languages appended",
-                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
-                        definition =
-                            LanguageStringType(
-                                nb = "Intektsskatt ny definisjon. Liten endring",
-                                nn = "Intektsskatt ny definisjon. Liten endring",
-                                en = "Income tax new definition. small change",
-                            ),
-                    ),
-                    true,
-                ),
-                Arguments.argumentSet(
-                    "One language appended",
-                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
-                        definition =
-                            LanguageStringType(
-                                nb = "Intektsskatt ny definisjon. Liten endring",
-                                nn = "Intektsskatt ny definisjon",
-                                en = "Income tax new definition",
-                            ),
-                    ),
-                    false,
-                ),
-                Arguments.argumentSet(
-                    "All languages completely new text",
-                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
-                        definition =
-                            LanguageStringType(
-                                nb = "Endring",
-                                nn = "Endring",
-                                en = "Endring",
-                            ),
-                    ),
-                    true,
-                ),
-                Arguments.argumentSet(
-                    "All languages null",
-                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
-                        definition =
-                            LanguageStringType(
-                                nb = null,
-                                nn = null,
-                                en = null,
-                            ),
-                    ),
-                    false,
-                ),
-                Arguments.argumentSet(
-                    "One language null",
-                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
-                        definition =
-                            LanguageStringType(
-                                nb = "Intektsskatt ny definisjon",
-                                nn = null,
-                                en = "Income tex new definition",
-                            ),
-                    ),
-                    false,
-                ),
-            )
+            ).isInstanceOf(SavedVariableDefinition::class.java)
+        }
     }
 
     @ParameterizedTest
-    @MethodSource("provideTestDataCheckDefinition")
-    fun `check definition texts for all languages`(
+    @MethodSource("definitionTextTestCases")
+    fun `validate updated definition texts in new validity period`(
         inputObject: ValidityPeriod,
-        expected: Boolean,
+        expectSuccess: Boolean,
     ) {
-        val actualResult = variableDefinitionService.isNewDefinition(INCOME_TAX_VP1_P1.definitionId, inputObject)
-        assertThat(actualResult).isEqualTo(expected)
+        if (!expectSuccess) {
+            assertThrows<DefinitionTextUnchangedException> {
+                validityPeriods.create(
+                    INCOME_TAX_VP1_P1.definitionId,
+                    inputObject,
+                )
+            }
+        } else {
+            assertThat(
+                validityPeriods.create(
+                    INCOME_TAX_VP1_P1.definitionId,
+                    inputObject,
+                ),
+            ).isInstanceOf(SavedVariableDefinition::class.java)
+        }
     }
 
     @ParameterizedTest
@@ -203,5 +127,134 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         expectedResult: Boolean,
     ) {
         assertThat(variableDefinitionService.checkIfShortNameExists(shortName)).isEqualTo(expectedResult)
+    }
+
+    companion object {
+        @JvmStatic
+        fun validFromTestCases(): Stream<Arguments> =
+            Stream.of(
+                Arguments.argumentSet(
+                    "Between existing periods",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Endring",
+                                nn = "Endring",
+                                en = "Endring",
+                            ),
+                        validFrom = LocalDate.of(1990, 1, 1),
+                    ),
+                    false,
+                ),
+                Arguments.argumentSet(
+                    "Before existing periods",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Endring",
+                                nn = "Endring",
+                                en = "Endring",
+                            ),
+                        validFrom = LocalDate.of(1760, 1, 1),
+                    ),
+                    true,
+                ),
+                Arguments.argumentSet(
+                    "After existing periods",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Endring",
+                                nn = "Endring",
+                                en = "Endring",
+                            ),
+                        validFrom = LocalDate.of(3000, 1, 1),
+                    ),
+                    true,
+                ),
+            )
+
+        @JvmStatic
+        fun definitionTextTestCases(): Stream<Arguments> =
+            Stream.of(
+                Arguments.argumentSet(
+                    "No change",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                "Intektsskatt ny definisjon",
+                                "Intektsskatt ny definisjon",
+                                "Income tax new definition",
+                            ),
+                        validFrom = LocalDate.of(3000, 1, 1),
+                    ),
+                    false,
+                ),
+                Arguments.argumentSet(
+                    "All languages appended",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Intektsskatt ny definisjon. Liten endring",
+                                nn = "Intektsskatt ny definisjon. Liten endring",
+                                en = "Income tax new definition. small change",
+                            ),
+                        validFrom = LocalDate.of(3000, 1, 1),
+                    ),
+                    true,
+                ),
+                Arguments.argumentSet(
+                    "One language appended",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Intektsskatt ny definisjon. Liten endring",
+                                nn = "Intektsskatt ny definisjon",
+                                en = "Income tax new definition",
+                            ),
+                        validFrom = LocalDate.of(3000, 1, 1),
+                    ),
+                    false,
+                ),
+                Arguments.argumentSet(
+                    "All languages completely new text",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Endring",
+                                nn = "Endring",
+                                en = "Endring",
+                            ),
+                        validFrom = LocalDate.of(3000, 1, 1),
+                    ),
+                    true,
+                ),
+                Arguments.argumentSet(
+                    "All languages null",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = null,
+                                nn = null,
+                                en = null,
+                            ),
+                        validFrom = LocalDate.of(3000, 1, 1),
+                    ),
+                    false,
+                ),
+                Arguments.argumentSet(
+                    "One language null",
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Intektsskatt ny definisjon",
+                                nn = null,
+                                en = "Income tex new definition",
+                            ),
+                        validFrom = LocalDate.of(3000, 1, 1),
+                    ),
+                    false,
+                ),
+            )
     }
 }

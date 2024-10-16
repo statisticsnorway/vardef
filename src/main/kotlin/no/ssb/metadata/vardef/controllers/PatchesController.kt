@@ -19,7 +19,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.PatchesService
-import no.ssb.metadata.vardef.services.VariableDefinitionService
+import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
@@ -29,7 +29,7 @@ import java.time.LocalDate
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController {
     @Inject
-    lateinit var varDefService: VariableDefinitionService
+    lateinit var validityPeriods: ValidityPeriodsService
 
     @Inject
     lateinit var patches: PatchesService
@@ -62,7 +62,7 @@ class PatchesController {
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         patches
-            .listAllPatchesById(definitionId = variableDefinitionId)
+            .list(definitionId = variableDefinitionId)
             .map { it.toCompleteResponse() }
 
     /**
@@ -96,7 +96,7 @@ class PatchesController {
         patchId: Int,
     ): CompleteResponse =
         patches
-            .getOnePatchById(variableDefinitionId, patchId = patchId)
+            .get(variableDefinitionId, patchId = patchId)
             .toCompleteResponse()
 
     /**
@@ -138,17 +138,16 @@ class PatchesController {
         @Valid
         patch: Patch,
     ): CompleteResponse {
-        val latestPatchOnValidityPeriod =
-            varDefService.getLatestPatchForValidityPeriod(variableDefinitionId, validFrom)
+        val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
-        return varDefService
+        return patches
             .save(
                 patch.toSavedVariableDefinition(
-                    patches.getLatestPatchById(variableDefinitionId).patchId,
+                    patches.latest(variableDefinitionId).patchId,
                     latestPatchOnValidityPeriod,
                 ),
             ).toCompleteResponse()

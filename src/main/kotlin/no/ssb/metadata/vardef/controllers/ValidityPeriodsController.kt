@@ -18,6 +18,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.PatchesService
+import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
@@ -28,6 +29,9 @@ import no.ssb.metadata.vardef.validators.VardefId
 class ValidityPeriodsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
+
+    @Inject
+    lateinit var validityPeriods: ValidityPeriodsService
 
     @Inject
     lateinit var patches: PatchesService
@@ -63,14 +67,14 @@ class ValidityPeriodsController {
         @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
         newPeriod: ValidityPeriod,
     ): CompleteResponse {
-        val latestExistingPatch = patches.getLatestPatchById(variableDefinitionId)
+        val latestExistingPatch = patches.latest(variableDefinitionId)
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
         return try {
-            varDefService.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()
+            validityPeriods.create(variableDefinitionId, newPeriod).toCompleteResponse()
         } catch (e: ValidityPeriodExceptions) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
@@ -102,5 +106,5 @@ class ValidityPeriodsController {
         variableDefinitionId: String,
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
-    ): List<RenderedVariableDefinition> = varDefService.listValidityPeriodsById(language, variableDefinitionId)
+    ): List<RenderedVariableDefinition> = validityPeriods.list(language, variableDefinitionId)
 }

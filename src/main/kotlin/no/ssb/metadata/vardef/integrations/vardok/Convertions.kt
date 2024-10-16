@@ -55,7 +55,7 @@ val statisticalUnitNames =
  * @param name: statisticalUnit in Vardok
  * @return A list of codes
  */
-fun convertUnitTypes(name: String): List<String?> {
+fun convertUnitTypes(name: String): List<String?>  {
     val unitTypes = mutableListOf<String?>()
     when (name) {
         "Adresse" -> unitTypes.add("01")

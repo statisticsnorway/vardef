@@ -66,7 +66,7 @@ class VariableDefinitionsController {
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listAllAndRenderForLanguage(language = language, dateOfValidity = dateOfValidity))
+            .ok(varDefService.listForDateAndRender(language = language, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**

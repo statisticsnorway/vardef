@@ -5,6 +5,7 @@ import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
+import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
@@ -80,15 +81,15 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @param dateOfValidity The date at which we are interested in the definition.
      * @return The latest *Patch* for the *Validity Period* valid at the given [dateOfValidity]
-     * @throws NoMatchingValidityPeriodFound when [dateOfValidity] doesn't fall within any *Validity Periods*
      */
     fun getForDate(
         definitionId: String,
         dateOfValidity: LocalDate,
-    ): SavedVariableDefinition =
+    ): SavedVariableDefinition? =
         getAsMap(definitionId)
             .filter { dateOfValidity.isEqualOrAfter(it.key) }
-            .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
+            .filter { dateOfValidity.isEqualOrBefore(it.value.last().validUntil ?: dateOfValidity) }
+            .ifEmpty { return null }
             // Latest Validity Period starting before the given date
             .entries
             .last()

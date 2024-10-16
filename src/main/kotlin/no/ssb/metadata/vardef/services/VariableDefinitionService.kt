@@ -2,8 +2,6 @@ package no.ssb.metadata.vardef.services
 
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.extensions.isEqualOrAfter
-import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
@@ -22,47 +20,32 @@ class VariableDefinitionService(
 
     fun clear() = variableDefinitionRepository.deleteAll()
 
-    fun listAll(): List<SavedVariableDefinition> =
-        variableDefinitionRepository
-            .findAll()
-            .toList()
+    fun list(): List<SavedVariableDefinition> = variableDefinitionRepository.findAll()
 
-    fun listAllAndRenderForLanguage(
+    private fun uniqueDefinitionIds(): Set<String> =
+        list()
+            .map { it.definitionId }
+            .toSet()
+
+    fun listForDateAndRender(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
-    ): List<RenderedVariableDefinition> {
-        var definitionList = listAll()
-        if (dateOfValidity != null) {
-            definitionList =
-                definitionList
-                    .filter { dateOfValidity.isEqualOrAfter(it.validFrom) }
-                    // If validUntil is null then this filter predicate should be true, so we just compare the date against itself.
-                    .filter { dateOfValidity.isEqualOrBefore(it.validUntil ?: dateOfValidity) }
-        }
-        return definitionList
-            .map {
-                it.render(
-                    language,
-                    klassService,
-                )
-            }.groupBy {
-                it.id
-            }.mapValues { entry ->
-                entry.value.maxBy { it.patchId }
-            }.values
-            .toList()
-    }
+    ): List<RenderedVariableDefinition> =
+        uniqueDefinitionIds()
+            .mapNotNull {
+                getByDateAndRender(language, it, dateOfValidity)
+            }
 
-    fun getOneByIdAndDateAndRenderForLanguage(
+    fun getByDateAndRender(
         language: SupportedLanguages,
         definitionId: String,
         dateOfValidity: LocalDate?,
-    ): RenderedVariableDefinition =
-        if (dateOfValidity != null) {
-            validityPeriods.getForDate(definitionId, dateOfValidity).render(language, klassService)
+    ): RenderedVariableDefinition? =
+        if (dateOfValidity == null) {
+            validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
         } else {
-            validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).render(language, klassService)
-        }
+            validityPeriods.getForDate(definitionId, dateOfValidity)
+        }?.render(language, klassService)
 
     fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
 

@@ -47,7 +47,7 @@ class VariableDefinitionServiceTestWithMockRepository {
         every {
             variableDefinitionMockRepository.findAll()
         } returns emptyList()
-        val result = variableDefinitionService.listAll()
+        val result = variableDefinitionService.list()
         assertTrue(result.isEmpty())
         verify(exactly = 1) { variableDefinitionMockRepository.findAll() }
     }
@@ -74,6 +74,7 @@ class VariableDefinitionServiceTestWithMockRepository {
     @Test
     fun `find variables in selected language`() {
         val variableDefinition = INCOME_TAX_VP1_P1
+        val today = LocalDate.now()
 
         (
             variableDefinitionService::class.java
@@ -93,10 +94,12 @@ class VariableDefinitionServiceTestWithMockRepository {
 
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
 
+        every { mockValidityPeriodsService.getForDate(variableDefinition.definitionId, today) } returns variableDefinition
+
         val renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
 
         val result =
-            variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB, LocalDate.now())
+            variableDefinitionService.listForDateAndRender(SupportedLanguages.NB, today)
         assertThat(result.isNotEmpty())
         assertThat(result.size).isEqualTo(1)
         assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })

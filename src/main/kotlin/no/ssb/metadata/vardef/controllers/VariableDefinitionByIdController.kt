@@ -2,8 +2,8 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*
-import io.micronaut.http.annotation.Patch
 import io.micronaut.http.exceptions.HttpStatusException
+import io.micronaut.http.hateoas.JsonError
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -16,7 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.UpdateDraft
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -70,16 +73,24 @@ class VariableDefinitionByIdController {
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
-    ): MutableHttpResponse<RenderedVariableDefinition?>? =
-        HttpResponse
-            .ok(
-                varDefService.getOneByIdAndDateAndRenderForLanguage(
+        request: HttpRequest<*>,
+    ): MutableHttpResponse<out Any>? {
+        val definition =
+            varDefService
+                .getByDateAndRender(
                     definitionId = id,
                     language = language,
                     dateOfValidity = dateOfValidity,
-                ),
-            ).header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+                )
+        if (definition == null) {
+            return HttpResponse.notFound(JsonError("Variable is not valid at date $dateOfValidity"))
+        }
+
+        return HttpResponse
+            .ok(definition)
+            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
             .contentType(MediaType.APPLICATION_JSON)
+    }
 
     /**
      * Delete a variable definition.

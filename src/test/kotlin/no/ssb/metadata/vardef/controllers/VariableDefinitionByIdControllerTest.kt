@@ -101,7 +101,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .statusCode(204)
             .header("Content-Type", nullValue())
 
-        assertThat(variableDefinitionService.listAll().none { it.definitionId == INCOME_TAX_VP1_P1.definitionId })
+        assertThat(variableDefinitionService.list().none { it.definitionId == INCOME_TAX_VP1_P1.definitionId })
     }
 
     @Test
@@ -335,10 +335,10 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             )
         assertThat(
             variableDefinitionService
-                .listAll()
+                .list()
                 .map { it.definitionId },
         ).contains(INCOME_TAX_VP1_P1.definitionId)
-        assertThat(variableDefinitionService.listAll().map { it.name }).contains(INCOME_TAX_VP1_P1.name)
+        assertThat(variableDefinitionService.list().map { it.name }).contains(INCOME_TAX_VP1_P1.name)
     }
 
     @Test

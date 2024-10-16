@@ -3,7 +3,6 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.http.hateoas.JsonError
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.validation.Validated
@@ -83,7 +82,10 @@ class VariableDefinitionByIdController {
                     dateOfValidity = dateOfValidity,
                 )
         if (definition == null) {
-            return HttpResponse.notFound(JsonError("Variable is not valid at date $dateOfValidity"))
+            throw HttpStatusException(
+                HttpStatus.NOT_FOUND,
+                "Variable is not valid at date $dateOfValidity",
+            )
         }
 
         return HttpResponse
@@ -98,6 +100,7 @@ class VariableDefinitionByIdController {
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "204", description = "Successfully deleted")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @ApiResponse(responseCode = "405", description = "Attempt to delete a variable definition with status unlike DRAFT.")
     @Status(HttpStatus.NO_CONTENT)
     @Delete()
     fun deleteVariableDefinitionById(
@@ -105,6 +108,12 @@ class VariableDefinitionByIdController {
         @VardefId
         definitionId: String,
     ): MutableHttpResponse<Unit> {
+        if (patches.latest(definitionId).variableStatus != VariableStatus.DRAFT) {
+            throw HttpStatusException(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "The variable is published or deprecated and cannot be updated with this method",
+            )
+        }
         patches.deleteAllForDefinitionId(definitionId)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
         return HttpResponse.noContent<Unit?>().contentType(null)

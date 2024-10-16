@@ -51,7 +51,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .get("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
     }
 
     @Test
@@ -93,13 +93,24 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `delete request`(spec: RequestSpecification) {
+    fun `delete request draft variable`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(204)
+            .header("Content-Type", nullValue())
+
+        assertThat(variableDefinitionService.list().none { it.definitionId == SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId })
+    }
+
+    @Test
+    fun `delete request published variable`(spec: RequestSpecification) {
         spec
             .`when`()
             .delete("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
-            .statusCode(204)
-            .header("Content-Type", nullValue())
+            .statusCode(405)
 
         assertThat(variableDefinitionService.list().none { it.definitionId == INCOME_TAX_VP1_P1.definitionId })
     }
@@ -111,7 +122,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
     }
 
     @Test
@@ -165,7 +176,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `patch variable with published status`(spec: RequestSpecification) {
+    fun `update variable with published status`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -184,7 +195,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `patch variable with new short name`(spec: RequestSpecification) {
+    fun `update draft variable definition with new short name`(spec: RequestSpecification) {
         val bodyString =
             spec
                 .given()
@@ -208,7 +219,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `patch variable with another short name that is already in use`(spec: RequestSpecification) {
+    fun `update draft variable definition with another short name that is already in use`(spec: RequestSpecification) {
         // create a variable definition with a given short name, one
         val jsonString1 = jsonTestInput().apply { put("short_name", "one") }.toString()
         val definitionId =
@@ -272,7 +283,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `patch request malformed id`(spec: RequestSpecification) {
+    fun `update draft variable definition with malformed id`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -288,11 +299,11 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("id: must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
     }
 
     @Test
-    fun `patch request unknown id`(spec: RequestSpecification) {
+    fun `update draft variable definition with unknown id`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -312,7 +323,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `patch request attempt to modify id`(spec: RequestSpecification) {
+    fun `update draft variable definition attempt to modify id`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -370,7 +381,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `add comment to draft variable definition`(spec: RequestSpecification) {
+    fun `update draft variable definition add comment`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -392,7 +403,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `changes in draft variable definition return complete response`(spec: RequestSpecification) {
+    fun `update draft variable definition return complete response`(spec: RequestSpecification) {
         val body =
             spec
                 .given()

@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.services
 
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
-import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -32,19 +31,19 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 .getForDate(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1990, 1, 1),
-                ).patchId,
+                )?.patchId,
         ).isEqualTo(7)
     }
 
     @Test
     fun `get valid period at date before range`() {
-        assertThrows<NoMatchingValidityPeriodFound> {
+        assertThat(
             validityPeriods
                 .getForDate(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(1760, 1, 1),
-                )
-        }
+                ),
+        ).isNull()
     }
 
     @Test
@@ -54,14 +53,14 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 .getForDate(
                     INCOME_TAX_VP1_P1.definitionId,
                     LocalDate.of(3000, 1, 1),
-                ).patchId,
+                )?.patchId,
         ).isEqualTo(INCOME_TAX_VP2_P6.patchId)
     }
 
     @Test
     fun `list variable definition`() {
         variableDefinitionService
-            .listAllAndRenderForLanguage(
+            .listForDateAndRender(
                 SupportedLanguages.EN,
                 LocalDate.now(),
             ).let { renderedVariableDefinitions ->
@@ -126,7 +125,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         shortName: String,
         expectedResult: Boolean,
     ) {
-        assertThat(variableDefinitionService.checkIfShortNameExists(shortName)).isEqualTo(expectedResult)
+        assertThat(variableDefinitionService.doesShortNameExist(shortName)).isEqualTo(expectedResult)
     }
 
     companion object {

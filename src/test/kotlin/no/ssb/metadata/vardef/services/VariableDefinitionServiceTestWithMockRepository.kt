@@ -13,7 +13,6 @@ import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -53,25 +52,6 @@ class VariableDefinitionServiceTestWithMockRepository {
     }
 
     @Test
-    fun `save variable definition`() {
-        val variableDefinition = INCOME_TAX_VP1_P1
-        val savedVariableDefinition =
-            INCOME_TAX_VP1_P1.copy(
-                definitionId = "8Ah4fbvb",
-                id = ObjectId("00000020f51bb4362eee2a4d"),
-            )
-
-        every {
-            variableDefinitionService.save(variableDefinition)
-        } returns savedVariableDefinition
-        val result = variableDefinitionService.save(variableDefinition)
-        assertThat(result).isEqualTo(savedVariableDefinition)
-        assertThat(result.name).isEqualTo(savedVariableDefinition.name)
-        assertThat(result.id).isEqualTo(savedVariableDefinition.id)
-        assertThat(result.definitionId).isEqualTo(savedVariableDefinition.definitionId)
-    }
-
-    @Test
     fun `find variables in selected language`() {
         val variableDefinition = INCOME_TAX_VP1_P1
         val today = LocalDate.now()
@@ -105,34 +85,5 @@ class VariableDefinitionServiceTestWithMockRepository {
         assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })
         assertThat(result[0].id).isEqualTo(renderedVariableDefinition.id)
         verify { variableDefinitionMockRepository.findAll() }
-    }
-
-    @Test
-    fun `mongodb id is generated when variable is created`() {
-        val variableDefinition = INCOME_TAX_VP1_P1.copy(id = null)
-
-        val savedVariableDefinition = variableDefinition.copy(id = ObjectId.get())
-
-        every { variableDefinitionService.save(variableDefinition) } returns savedVariableDefinition
-        assertThat(variableDefinition.id).isNull()
-
-        val saveVariable = variableDefinitionService.save(variableDefinition)
-        assertThat(saveVariable.id).isNotNull()
-    }
-
-    @Test
-    fun `varDef id is only created once`() {
-        val variableDefinition = INCOME_TAX_VP1_P1.copy(definitionId = "y7s34rf1")
-
-        val idBeforeSave = variableDefinition.definitionId
-        val shortNameBeforeSave = variableDefinition.shortName
-
-        val savedVariableDefinition = variableDefinition.copy(shortName = "food")
-
-        every { variableDefinitionService.save(variableDefinition) } returns savedVariableDefinition
-
-        val result = variableDefinitionService.save(variableDefinition)
-        assertThat(idBeforeSave).isSameAs(result.definitionId)
-        assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
     }
 }

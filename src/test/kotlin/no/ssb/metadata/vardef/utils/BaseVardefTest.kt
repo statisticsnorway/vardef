@@ -35,15 +35,15 @@ open class BaseVardefTest {
     fun setUp() {
         variableDefinitionService.clear()
 
-        ALL_INCOME_TAX_PATCHES.map { variableDefinitionService.save(it) }
+        ALL_INCOME_TAX_PATCHES.forEach { patches.save(it) }
 
         // One variable definition
-        variableDefinitionService.save(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
+        patches.save(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
 
         // One variable definition
-        variableDefinitionService.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
+        patches.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
 
         // One variable definition
-        variableDefinitionService.save(SAVED_DEPRECATED_VARIABLE_DEFINITION)
+        patches.save(SAVED_DEPRECATED_VARIABLE_DEFINITION)
     }
 }

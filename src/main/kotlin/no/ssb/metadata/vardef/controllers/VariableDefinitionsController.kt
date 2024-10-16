@@ -21,6 +21,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
@@ -30,6 +31,9 @@ import java.time.LocalDate
 class VariableDefinitionsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
+
+    @Inject
+    lateinit var patches: PatchesService
 
     /**
      * List all variable definitions.
@@ -112,6 +116,6 @@ class VariableDefinitionsController {
             )
         }
 
-        return varDefService.save(varDef.toSavedVariableDefinition()).toCompleteResponse()
+        return patches.save(varDef.toSavedVariableDefinition()).toCompleteResponse()
     }
 }

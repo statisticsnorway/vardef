@@ -47,8 +47,6 @@ class VariableDefinitionService(
             validityPeriods.getForDate(definitionId, dateOfValidity)
         }?.render(language, klassService)
 
-    fun save(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(varDef)
-
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
 
     fun deleteById(id: String): Any =

@@ -16,9 +16,6 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
     @Inject
     lateinit var klassService: KlassService
 
-    /*@Inject
-    lateinit var klassService: KlassApiService*/
-
     private val dates =
         listOf<LocalDate>(
             LocalDate.of(1910, 6, 13),

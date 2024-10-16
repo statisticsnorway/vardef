@@ -56,7 +56,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                 ),
                 arguments(
                     "20",
-                    "person",
+                    "Person",
                 ),
             )
 
@@ -131,7 +131,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     unitTypes = listOf(code),
                     validFrom = date,
                 ).render(SupportedLanguages.NB, klassService)
-            assertThat(savedVariableDefinitionRendered.unitTypes[0]?.title).isEqualToIgnoringCase(title)
+            assertThat(savedVariableDefinitionRendered.unitTypes[0]?.title).isEqualTo(title)
         }
     }
 
@@ -147,7 +147,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     subjectFields = listOf(code),
                     validFrom = date,
                 ).render(SupportedLanguages.NB, klassService)
-            assertThat(savedVariableDefinitionRendered.subjectFields[0]?.title).isEqualToIgnoringCase(title)
+            assertThat(savedVariableDefinitionRendered.subjectFields[0]?.title).isEqualTo(title)
         }
     }
 
@@ -163,7 +163,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     measurementType = code,
                     validFrom = date,
                 ).render(SupportedLanguages.NB, klassService)
-            assertThat(savedVariableDefinitionRendered.measurementType?.title).isEqualToIgnoringCase(title)
+            assertThat(savedVariableDefinitionRendered.measurementType?.title).isEqualTo(title)
         }
     }
 }

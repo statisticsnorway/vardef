@@ -125,7 +125,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         shortName: String,
         expectedResult: Boolean,
     ) {
-        assertThat(variableDefinitionService.checkIfShortNameExists(shortName)).isEqualTo(expectedResult)
+        assertThat(variableDefinitionService.doesShortNameExist(shortName)).isEqualTo(expectedResult)
     }
 
     companion object {

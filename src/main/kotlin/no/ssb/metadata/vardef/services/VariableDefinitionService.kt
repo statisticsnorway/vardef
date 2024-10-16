@@ -49,5 +49,5 @@ class VariableDefinitionService(
 
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
 
-    fun checkIfShortNameExists(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
+    fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
 }

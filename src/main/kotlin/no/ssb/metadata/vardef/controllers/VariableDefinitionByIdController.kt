@@ -140,7 +140,7 @@ class VariableDefinitionByIdController {
             )
         }
 
-        if (updateDraft.shortName != null && varDefService.checkIfShortNameExists(updateDraft.shortName)) {
+        if (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "The short name '${updateDraft.shortName}' is already in use by another variable definition.",

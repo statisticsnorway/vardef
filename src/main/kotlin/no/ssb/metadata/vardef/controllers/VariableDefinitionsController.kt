@@ -109,7 +109,7 @@ class VariableDefinitionsController {
                 "Variable status may not be specified on creation.",
             )
         }
-        if (varDefService.checkIfShortNameExists(varDef.shortName)) {
+        if (varDefService.doesShortNameExist(varDef.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "Short name ${varDef.shortName} already exists.",

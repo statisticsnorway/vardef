@@ -1,51 +1,52 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 // List of names that can be mapped to unitType codes
-val statisticalUnitNames = listOf(
-    "Adresse",
-    "Arbeidsulykke",
-    "Bolig",
-    "Bygning",
-    "Tinglyst omsetning",
-    "Skogareal",
-    "Landbrukseiendom",
-    "Grunneiendom",
-    "Eiendom",
-    "Familie",
-    "Fylke (forvaltning)",
-    "Fylke (geografisk)",
-    "Havneanløp",
-    "Husholdning",
-    "Juridisk enhet",
-    "Foretak",
-    "Virksomhet",
-    "Bedrift",
-    "Bransjeenhet",
-    "Kjøretøy",
-    "Kommune (forvaltning)",
-    "Kommune (geografisk)",
-    "Kurs",
-    "Lovbrudd",
-    "Arbeidsforhold",
-    "Person",
-    "Fiskefartøy",
-    "Skip",
-    "Offentlig forvaltning",
-    "Statlig Virksomhet",
-    "Storfe",
-    "Ulykke",
-    "Trafikkulykke",
-    "Transaksjon",
-    "Valg",
-    "Repr.vare og -tjeneste",
-    "Internett-abonnement",
-    "Vare/tjeneste",
-    "Verdipapir",
-    "Avfallsanlegg",
-    "Avløpsanlegg",
-    "Luftfartøy",
-    "sak"
-)
+val statisticalUnitNames =
+    listOf(
+        "Adresse",
+        "Arbeidsulykke",
+        "Bolig",
+        "Bygning",
+        "Tinglyst omsetning",
+        "Skogareal",
+        "Landbrukseiendom",
+        "Grunneiendom",
+        "Eiendom",
+        "Familie",
+        "Fylke (forvaltning)",
+        "Fylke (geografisk)",
+        "Havneanløp",
+        "Husholdning",
+        "Juridisk enhet",
+        "Foretak",
+        "Virksomhet",
+        "Bedrift",
+        "Bransjeenhet",
+        "Kjøretøy",
+        "Kommune (forvaltning)",
+        "Kommune (geografisk)",
+        "Kurs",
+        "Lovbrudd",
+        "Arbeidsforhold",
+        "Person",
+        "Fiskefartøy",
+        "Skip",
+        "Offentlig forvaltning",
+        "Statlig Virksomhet",
+        "Storfe",
+        "Ulykke",
+        "Trafikkulykke",
+        "Transaksjon",
+        "Valg",
+        "Repr.vare og -tjeneste",
+        "Internett-abonnement",
+        "Vare/tjeneste",
+        "Verdipapir",
+        "Avfallsanlegg",
+        "Avløpsanlegg",
+        "Luftfartøy",
+        "sak",
+    )
 
 /**
  * This converter map statisticalUnit (title) with unitType codes.
@@ -54,14 +55,14 @@ val statisticalUnitNames = listOf(
  * @param name: statisticalUnit in Vardok
  * @return A list of codes
  */
-fun convertUnitTypes(name: String): List<String?>{
+fun convertUnitTypes(name: String): List<String?>  {
     val unitTypes = mutableListOf<String?>()
-    when(name){
-        "Adresse" -> unitTypes.add( "01")
-        "Arbeidsulykke" ->  unitTypes.add("02")
+    when (name) {
+        "Adresse" -> unitTypes.add("01")
+        "Arbeidsulykke" -> unitTypes.add("02")
         "Bolig" -> unitTypes.add("03")
         "Bygning" -> unitTypes.add("04")
-        in "Tinglyst omsetning","Skogareal", "Landbrukseiendom", "Grunneiendom", "Eiendom" -> unitTypes.add("05")
+        in "Tinglyst omsetning", "Skogareal", "Landbrukseiendom", "Grunneiendom", "Eiendom" -> unitTypes.add("05")
         "Familie" -> unitTypes.add("06")
         "Fylke (forvaltning)" -> unitTypes.add("07")
         "Fylke (geografisk)" -> unitTypes.add("08")
@@ -76,7 +77,7 @@ fun convertUnitTypes(name: String): List<String?>{
         "Kommune (geografisk)" -> unitTypes.add("17")
         "Kurs" -> unitTypes.add("18")
         "Lovbrudd" -> unitTypes.add("19")
-        in "Arbeidsforhold","Person" -> unitTypes.add("20")
+        in "Arbeidsforhold", "Person" -> unitTypes.add("20")
         in "Fiskefartøy", "Skip" -> unitTypes.add("21")
         in "Offentlig forvaltning", "Statlig Virksomhet" -> unitTypes.add("22")
         "Storfe" -> unitTypes.add("23")

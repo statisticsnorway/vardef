@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.models
 
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
@@ -17,8 +16,8 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
     @Inject
     lateinit var klassService: KlassService
 
-    // @Inject
-    // lateinit var klassService: KlassApiService
+    /*@Inject
+    lateinit var klassService: KlassApiService*/
 
     private val dates =
         listOf<LocalDate>(
@@ -104,6 +103,18 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                 arguments(
                     "06",
                     "Spenning",
+                ),
+                arguments(
+                    "13",
+                    "Masse (vekt)",
+                ),
+                arguments(
+                    "17.01",
+                    "antall per km²",
+                ),
+                arguments(
+                    "17.10",
+                    "kr per m³",
                 ),
             )
     }

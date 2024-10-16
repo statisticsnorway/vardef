@@ -37,11 +37,11 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The list of rendered *Validity Periods*
      */
-    fun listValidityPeriods(
+    fun list(
         language: SupportedLanguages,
         definitionId: String,
     ): List<RenderedVariableDefinition> =
-        getValidityPeriodsMap(definitionId)
+        getAsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
             .map { it.render(language, klassService) }
@@ -56,7 +56,7 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The map over *Validity Periods*
      */
-    fun getValidityPeriodsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
+    fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         patches
             .list(definitionId)
             .groupBy { it.validFrom }
@@ -69,7 +69,7 @@ class ValidityPeriodsService(
      * @return The *Patch*
      */
     fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
-        getValidityPeriodsMap(definitionId)
+        getAsMap(definitionId)
             .lastEntry()
             .value
             .last()
@@ -86,7 +86,7 @@ class ValidityPeriodsService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): SavedVariableDefinition =
-        getValidityPeriodsMap(definitionId)
+        getAsMap(definitionId)
             .filter { dateOfValidity.isEqualOrAfter(it.key) }
             .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             // Latest Validity Period starting before the given date
@@ -107,20 +107,15 @@ class ValidityPeriodsService(
      * @param validFrom The Valid From date for the desired validity Period
      * @return the latest Patch
      */
-    fun getLatestPatchForValidityPeriod(
+    fun getMatchingOrLatest(
         definitionId: String,
         validFrom: LocalDate?,
     ): SavedVariableDefinition =
-        getValidityPeriodsMap(definitionId)
-            .let {
-                // Get the validityPeriod matching the given validFrom.
-                // If no validFrom is given, get the latest validityPeriod
-                it[validFrom ?: it.keys.last()]
-            }
-            // If no matching Validity Period is found (null value), throw an exception
-            // Get the latest patch in the matching Validity Period
-            ?.last() ?: run {
-            throw NoMatchingValidityPeriodFound("No Validity Period with valid_from date $validFrom")
+        if (validFrom == null) {
+            getLatestPatchInLastValidityPeriod(definitionId)
+        } else {
+            getAsMap(definitionId)[validFrom]?.last()
+                ?: throw NoMatchingValidityPeriodFound("No Validity Period with valid_from date $validFrom")
         }
 
     /**
@@ -143,7 +138,7 @@ class ValidityPeriodsService(
         definitionId: String,
         newPeriod: ValidityPeriod,
     ): SavedVariableDefinition {
-        val validityPeriodsMap = getValidityPeriodsMap(definitionId)
+        val validityPeriodsMap = getAsMap(definitionId)
 
         checkValidityPeriodInput(definitionId, newPeriod)
 

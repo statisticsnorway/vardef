@@ -90,7 +90,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
 
         val lastPatchInSecondToLastValidityPeriod =
             validityPeriods
-                .getValidityPeriodsMap(savedVariableDefinitionId)
+                .getAsMap(savedVariableDefinitionId)
                 .let { it.values.elementAt(it.values.size - 2) }
                 ?.last()
 

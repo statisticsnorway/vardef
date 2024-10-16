@@ -63,7 +63,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
         val lastPatchInSecondToLastValidityPeriod =
             validityPeriods
-                .getValidityPeriodsMap(INCOME_TAX_VP1_P1.definitionId)
+                .getAsMap(INCOME_TAX_VP1_P1.definitionId)
                 .let { it.values.elementAt(it.values.size - 2) }
                 ?.last()
         val lastPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)

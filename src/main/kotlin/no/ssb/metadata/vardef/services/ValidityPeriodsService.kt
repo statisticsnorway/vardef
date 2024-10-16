@@ -18,11 +18,21 @@ class ValidityPeriodsService(
     private val patches: PatchesService,
     private val klassService: KlassService,
 ) {
-    fun listValidityPeriodsById(
+    /**
+     * List *Validity Periods*.
+     *
+     * A list of the latest *Patch* in each *Validity Period*. These are rendered and
+     * suitable for display in public clients.
+     *
+     * @param language The language in which to render.
+     * @param definitionId The ID of the *Variable Definition* of interest.
+     * @return The list of rendered *Validity Periods*
+     */
+    fun listValidityPeriods(
         language: SupportedLanguages,
-        id: String,
+        definitionId: String,
     ): List<RenderedVariableDefinition> =
-        listAllPatchesGroupedByValidityPeriods(id)
+        listAllPatchesGroupedByValidityPeriods(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
             .map { it.render(language, klassService) }

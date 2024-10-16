@@ -106,5 +106,5 @@ class ValidityPeriodsController {
         variableDefinitionId: String,
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
-    ): List<RenderedVariableDefinition> = validityPeriods.listValidityPeriodsById(language, variableDefinitionId)
+    ): List<RenderedVariableDefinition> = validityPeriods.listValidityPeriods(language, variableDefinitionId)
 }

@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.models
 
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
@@ -80,6 +81,31 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     "Bedrifter og foretak",
                 ),
             )
+
+        @JvmStatic
+        fun measurementTypes(): Stream<Arguments> =
+            Stream.of(
+                arguments(
+                    "10.01",
+                    "Celsius",
+                ),
+                arguments(
+                    "10.4",
+                    null,
+                ),
+                arguments(
+                    "11.03",
+                    "Implisitt utslippsfaktor",
+                ),
+                arguments(
+                    "12.04",
+                    "euro",
+                ),
+                arguments(
+                    "06",
+                    "Spenning",
+                ),
+            )
     }
 
     @ParameterizedTest
@@ -111,6 +137,22 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     validFrom = date,
                 ).render(SupportedLanguages.NB, klassService)
             assertThat(savedVariableDefinitionRendered.subjectFields[0]?.title).isEqualToIgnoringCase(title)
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("measurementTypes")
+    fun `measurement type field renders the same title regardless of date`(
+        code: String,
+        title: String?,
+    ) {
+        for (date in dates) {
+            val savedVariableDefinitionRendered =
+                INCOME_TAX_VP1_P1.copy(
+                    measurementType = code,
+                    validFrom = date,
+                ).render(SupportedLanguages.NB, klassService)
+            assertThat(savedVariableDefinitionRendered.measurementType?.title).isEqualToIgnoringCase(title)
         }
     }
 }

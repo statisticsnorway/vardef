@@ -194,7 +194,7 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
     "unit_types": [{
             "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/702",
-            "code": "17",
+            "code": "20",
             "title": "Person"
         }
     ],

@@ -32,20 +32,29 @@ class ValidityPeriodsService(
         language: SupportedLanguages,
         definitionId: String,
     ): List<RenderedVariableDefinition> =
-        listAllPatchesGroupedByValidityPeriods(definitionId)
+        getValidityPeriodsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
             .map { it.render(language, klassService) }
             .sortedBy { it.validFrom }
 
-    fun listAllPatchesGroupedByValidityPeriods(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
+    /**
+     * Get a map over *Validity Periods*.
+     *
+     * Map keys: The [SavedVariableDefinition.validFrom] date which defines the start of the *Validity Period*
+     * Map values: All the *Patches* within that *Validity Period*, sorted by [SavedVariableDefinition.patchId]
+     *
+     * @param definitionId The ID of the *Variable Definition* of interest.
+     * @return The map over *Validity Periods*
+     */
+    fun getValidityPeriodsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         patches
             .list(definitionId)
             .groupBy { it.validFrom }
             .toSortedMap()
 
     fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
-        listAllPatchesGroupedByValidityPeriods(definitionId)
+        getValidityPeriodsMap(definitionId)
             .lastEntry()
             .value
             .last()
@@ -100,7 +109,7 @@ class ValidityPeriodsService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): SavedVariableDefinition =
-        listAllPatchesGroupedByValidityPeriods(definitionId)
+        getValidityPeriodsMap(definitionId)
             .filter {
                 dateOfValidity.isEqualOrAfter(it.key)
             }.ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
@@ -184,7 +193,7 @@ class ValidityPeriodsService(
         newPeriod: ValidityPeriod,
         definitionId: String,
     ): SavedVariableDefinition {
-        val validityPeriodsMap = listAllPatchesGroupedByValidityPeriods(definitionId)
+        val validityPeriodsMap = getValidityPeriodsMap(definitionId)
 
         checkValidityPeriodInput(newPeriod, definitionId)
 
@@ -225,7 +234,7 @@ class ValidityPeriodsService(
         definitionId: String,
         validFrom: LocalDate?,
     ): SavedVariableDefinition =
-        listAllPatchesGroupedByValidityPeriods(definitionId)
+        getValidityPeriodsMap(definitionId)
             .let {
                 // Get the validityPeriod matching the given validFrom.
                 // If no validFrom is given, get the latest validityPeriod

@@ -145,7 +145,7 @@ class PatchesController {
         }
 
         return patches
-            .save(
+            .create(
                 patch.toSavedVariableDefinition(
                     patches.latest(variableDefinitionId).patchId,
                     latestPatchOnValidityPeriod,

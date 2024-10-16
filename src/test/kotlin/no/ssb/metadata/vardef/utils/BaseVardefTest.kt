@@ -39,15 +39,15 @@ open class BaseVardefTest {
     fun setUp() {
         variableDefinitionRepository.deleteAll()
 
-        ALL_INCOME_TAX_PATCHES.forEach { patches.save(it) }
+        ALL_INCOME_TAX_PATCHES.forEach { patches.create(it) }
 
         // One variable definition
-        patches.save(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
+        patches.create(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
 
         // One variable definition
-        patches.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
+        patches.create(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
 
         // One variable definition
-        patches.save(SAVED_DEPRECATED_VARIABLE_DEFINITION)
+        patches.create(SAVED_DEPRECATED_VARIABLE_DEFINITION)
     }
 }

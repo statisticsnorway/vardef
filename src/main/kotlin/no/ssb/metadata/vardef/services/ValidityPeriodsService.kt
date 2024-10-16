@@ -155,13 +155,13 @@ class ValidityPeriodsService(
                 // The user can Patch any values after creation.
                 .toSavedVariableDefinition(patches.latest(definitionId).patchId, lastValidityPeriod)
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
-                .let { patches.save(it) }
+                .let { patches.create(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
                 .let { newPeriod.toSavedVariableDefinition(patches.latest(definitionId).patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
-                .let { patches.save(it) }
+                .let { patches.create(it) }
         }
     }
 
@@ -255,7 +255,7 @@ class ValidityPeriodsService(
         newPeriodValidFrom: LocalDate,
     ): SavedVariableDefinition {
         val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        return patches.save(
+        return patches.create(
             latestPatchInLastValidityPeriod
                 .copy(validUntil = newPeriodValidFrom.minusDays(1))
                 .toPatch()

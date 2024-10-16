@@ -138,8 +138,7 @@ class PatchesController {
         @Valid
         patch: Patch,
     ): CompleteResponse {
-        val latestPatchOnValidityPeriod =
-            validityPeriods.getLatestPatchForValidityPeriod(variableDefinitionId, validFrom)
+        val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")

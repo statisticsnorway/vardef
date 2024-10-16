@@ -13,87 +13,82 @@ import no.ssb.metadata.vardef.models.ValidityPeriod
 import java.time.LocalDate
 import java.util.*
 
+/**
+ * *Validity Periods* service
+ *
+ * Methods relating to versioning *Variable Definitions* by date
+ *
+ * @property patches The [PatchesService] Bean to be injected
+ * @property klassService The [KlassService] Bean to be injected
+ * @constructor Create empty Validity periods service
+ */
 @Singleton
 class ValidityPeriodsService(
     private val patches: PatchesService,
     private val klassService: KlassService,
 ) {
-    fun listValidityPeriodsById(
+    /**
+     * List *Validity Periods*.
+     *
+     * A list of the latest *Patch* in each *Validity Period*. These are rendered and
+     * suitable for display in public clients.
+     *
+     * @param language The language in which to render.
+     * @param definitionId The ID of the *Variable Definition* of interest.
+     * @return The list of rendered *Validity Periods*
+     */
+    fun list(
         language: SupportedLanguages,
-        id: String,
+        definitionId: String,
     ): List<RenderedVariableDefinition> =
-        listAllPatchesGroupedByValidityPeriods(id)
+        getAsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
             .map { it.render(language, klassService) }
             .sortedBy { it.validFrom }
 
-    fun listAllPatchesGroupedByValidityPeriods(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
+    /**
+     * Get a map over *Validity Periods*.
+     *
+     * Map keys: The [SavedVariableDefinition.validFrom] date which defines the start of the *Validity Period*
+     * Map values: All the *Patches* within that *Validity Period*, sorted by [SavedVariableDefinition.patchId]
+     *
+     * @param definitionId The ID of the *Variable Definition* of interest.
+     * @return The map over *Validity Periods*
+     */
+    fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         patches
             .list(definitionId)
             .groupBy { it.validFrom }
             .toSortedMap()
 
+    /**
+     * Get latest *Patch* in last *Validity Period*
+     *
+     * @param definitionId The ID of the *Variable Definition* of interest.
+     * @return The *Patch*
+     */
     fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
-        listAllPatchesGroupedByValidityPeriods(definitionId)
+        getAsMap(definitionId)
             .lastEntry()
             .value
             .last()
 
     /**
-     * Check that a given date is not between any existing validity dates for the given variable definition.
+     * Get the *Validity Period* which is valid on the given date.
      *
-     * This is important to preserve metadata immutability, such that a consumer specifying a particular date
-     * will not suddenly get a different result because a new period was inserted between existing ones.
-     *
-     * @param definitionId the ID variable definition to run the validation for.
-     * @param dateOfValidity the new date supplied.
-     * @return True if the date is valid, false otherwise.
+     * @param definitionId The ID of the *Variable Definition* of interest.
+     * @param dateOfValidity The date at which we are interested in the definition.
+     * @return The latest *Patch* for the *Validity Period* valid at the given [dateOfValidity]
+     * @throws NoMatchingValidityPeriodFound when [dateOfValidity] doesn't fall within any *Validity Periods*
      */
-    fun isValidValidFromValue(
-        definitionId: String,
-        dateOfValidity: LocalDate,
-    ): Boolean =
-        patches
-            .list(definitionId)
-            .map { it.validFrom }
-            .let { dates ->
-                dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
-            }
-
-    /**
-     * End previous *validity period*
-     *
-     * This method set value for field *validUntil* to the day before new validity period.
-     * There is no check for value, if *validUntil* is not null, the value is ignored.
-     * A new patch with the updated value for *validUntil* is created.
-     *
-     * @param definitionId The id of the variable definition
-     * @param newPeriodValidFrom The starting date of the new validity period.
-     *
-     */
-    fun endLastValidityPeriod(
-        definitionId: String,
-        newPeriodValidFrom: LocalDate,
-    ): SavedVariableDefinition {
-        val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        return patches.save(
-            latestPatchInLastValidityPeriod
-                .copy(
-                    validUntil = newPeriodValidFrom.minusDays(1),
-                ).toPatch()
-                .toSavedVariableDefinition(patches.latest(definitionId).patchId, latestPatchInLastValidityPeriod),
-        )
-    }
-
-    fun getLatestPatchByDateAndById(
+    fun getForDate(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): SavedVariableDefinition =
-        listAllPatchesGroupedByValidityPeriods(definitionId)
-            .filter {
-                dateOfValidity.isEqualOrAfter(it.key)
-            }.ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
+        getAsMap(definitionId)
+            .filter { dateOfValidity.isEqualOrAfter(it.key) }
+            .ifEmpty { throw NoMatchingValidityPeriodFound("Variable is not valid at date $dateOfValidity") }
             // Latest Validity Period starting before the given date
             .entries
             .last()
@@ -102,57 +97,26 @@ class ValidityPeriodsService(
             .last()
 
     /**
-     * Check if *definition* is eligible for a new validity period.
+     * Get latest patch for validity period.
      *
-     * To be eligible, all values for all languages present in the previous patch for the variable definition
-     * must be changed in the new definition. The changes are verified by comparing string values, ignoring case.
+     * Since Validity Periods must have a validFrom, we use this as an identifier.
+     * - If the Valid From date is specified, we get the latest patch for the Matching Validity Period
+     * - If the Valid From date is null, we get the latest patch for the most recent Validity Period
      *
-     * @param definitionId The ID of the Variable Definition to check
-     * @param newDefinition The input object containing the proposed variable definition.
-     * @return Returns `true` if all values for all languages are changed compared to the previous patch,
-     * `false` otherwise
+     * @param definitionId Variable Definition ID
+     * @param validFrom The Valid From date for the desired validity Period
+     * @return the latest Patch
      */
-    fun isNewDefinition(
+    fun getMatchingOrLatest(
         definitionId: String,
-        newDefinition: ValidityPeriod,
-    ): Boolean {
-        val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        val allLanguagesPresent =
-            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                newDefinition.definition.listPresentLanguages().contains(lang)
-            }
-        if (!allLanguagesPresent) {
-            return false
+        validFrom: LocalDate?,
+    ): SavedVariableDefinition =
+        if (validFrom == null) {
+            getLatestPatchInLastValidityPeriod(definitionId)
+        } else {
+            getAsMap(definitionId)[validFrom]?.last()
+                ?: throw NoMatchingValidityPeriodFound("No Validity Period with valid_from date $validFrom")
         }
-        val allDefinitionsChanged =
-            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                !lastValidityPeriod.toDraft().definition.getValidLanguage(lang).equals(
-                    newDefinition.definition.getValidLanguage(lang),
-                    ignoreCase = true,
-                )
-            }
-        return allDefinitionsChanged
-    }
-
-    /**
-     * Check mandatory input for creating a new validity period
-     * @param newPeriod The input data to check
-     * @param definitionId The id for the variable definition to check
-     * @throws InvalidValidFromException validFrom is invalid
-     * @throws DefinitionTextUnchangedException definition text in all present languages has not changed
-     */
-    private fun checkValidityPeriodInput(
-        newPeriod: ValidityPeriod,
-        definitionId: String,
-    ) {
-        when {
-            !isValidValidFromValue(definitionId, newPeriod.validFrom) ->
-                throw InvalidValidFromException()
-
-            !isNewDefinition(definitionId, newPeriod) ->
-                throw DefinitionTextUnchangedException()
-        }
-    }
 
     /**
      * Ends the current validity period and saves a new validity period as separate patches.
@@ -170,13 +134,13 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the existing variable definition whose validity period will be updated.
      * @return The newly saved variable definition with the updated validity period.
      */
-    fun saveNewValidityPeriod(
-        newPeriod: ValidityPeriod,
+    fun create(
         definitionId: String,
+        newPeriod: ValidityPeriod,
     ): SavedVariableDefinition {
-        val validityPeriodsMap = listAllPatchesGroupedByValidityPeriods(definitionId)
+        val validityPeriodsMap = getAsMap(definitionId)
 
-        checkValidityPeriodInput(newPeriod, definitionId)
+        checkValidityPeriodInput(definitionId, newPeriod)
 
         // Newest patch in the earliest Validity Period
         val firstValidityPeriod = validityPeriodsMap.firstEntry().value.last()
@@ -201,29 +165,100 @@ class ValidityPeriodsService(
     }
 
     /**
-     * Get latest patch for validity period.
-     *
-     * Since Validity Periods must have a validFrom, we use this as an identifier.
-     * - If the Valid From date is specified, we get the latest patch for the Matching Validity Period
-     * - If the Valid From date is null, we get the latest patch for the most recent Validity Period
-     *
-     * @param definitionId Variable Definition ID
-     * @param validFrom The Valid From date for the desired validity Period
-     * @return the latest Patch
+     * Check mandatory input for creating a new validity period
+     * @param newPeriod The input data to check
+     * @param definitionId The id for the variable definition to check
+     * @throws InvalidValidFromException validFrom is invalid
+     * @throws DefinitionTextUnchangedException definition text in all present languages has not changed
      */
-    fun getLatestPatchForValidityPeriod(
+    private fun checkValidityPeriodInput(
         definitionId: String,
-        validFrom: LocalDate?,
-    ): SavedVariableDefinition =
-        listAllPatchesGroupedByValidityPeriods(definitionId)
-            .let {
-                // Get the validityPeriod matching the given validFrom.
-                // If no validFrom is given, get the latest validityPeriod
-                it[validFrom ?: it.keys.last()]
-            }
-            // If no matching Validity Period is found (null value), throw an exception
-            // Get the latest patch in the matching Validity Period
-            ?.last() ?: run {
-            throw NoMatchingValidityPeriodFound("No Validity Period with valid_from date $validFrom")
+        newPeriod: ValidityPeriod,
+    ) {
+        when {
+            !isValidValidFromValue(definitionId, newPeriod.validFrom) ->
+                throw InvalidValidFromException()
+
+            !isNewDefinition(definitionId, newPeriod) ->
+                throw DefinitionTextUnchangedException()
         }
+    }
+
+    /**
+     * Check that a given date is not between any existing validity dates for the given variable definition.
+     *
+     * This is important to preserve metadata immutability, such that a consumer specifying a particular date
+     * will not suddenly get a different result because a new period was inserted between existing ones.
+     *
+     * @param definitionId the ID variable definition to run the validation for.
+     * @param dateOfValidity the new date supplied.
+     * @return True if the date is valid, false otherwise.
+     */
+    private fun isValidValidFromValue(
+        definitionId: String,
+        dateOfValidity: LocalDate,
+    ): Boolean =
+        patches
+            .list(definitionId)
+            .map { it.validFrom }
+            .let { dates ->
+                dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
+            }
+
+    /**
+     * Check if *definition* is eligible for a new validity period.
+     *
+     * To be eligible, all values for all languages present in the previous patch for the variable definition
+     * must be changed in the new definition. The changes are verified by comparing string values, ignoring case.
+     *
+     * @param definitionId The ID of the Variable Definition to check
+     * @param newPeriod The input object containing the proposed variable definition.
+     * @return Returns `true` if all values for all languages are changed compared to the previous patch,
+     * `false` otherwise
+     */
+    private fun isNewDefinition(
+        definitionId: String,
+        newPeriod: ValidityPeriod,
+    ): Boolean {
+        val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
+        val allLanguagesPresent =
+            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
+                newPeriod.definition.listPresentLanguages().contains(lang)
+            }
+        if (!allLanguagesPresent) {
+            return false
+        }
+        val allDefinitionsChanged =
+            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
+                !lastValidityPeriod.toDraft().definition.getValidLanguage(lang).equals(
+                    newPeriod.definition.getValidLanguage(lang),
+                    ignoreCase = true,
+                )
+            }
+        return allDefinitionsChanged
+    }
+
+    /**
+     * End previous *Validity Period*
+     *
+     * This method set value for field *validUntil* to the day before new validity period.
+     * There is no check for value, if *validUntil* is not null, the value is ignored.
+     * A new patch with the updated value for *validUntil* is created.
+     *
+     * @param definitionId The id of the variable definition
+     * @param newPeriodValidFrom The starting date of the new *Validity Period*.
+     *
+     */
+    fun endLastValidityPeriod(
+        definitionId: String,
+        newPeriodValidFrom: LocalDate,
+    ): SavedVariableDefinition {
+        val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
+        return patches.save(
+            latestPatchInLastValidityPeriod
+                .copy(validUntil = newPeriodValidFrom.minusDays(1))
+                .toPatch()
+                .toSavedVariableDefinition(patches.latest(definitionId).patchId, latestPatchInLastValidityPeriod),
+        )
+    }
 }

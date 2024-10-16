@@ -74,7 +74,7 @@ class ValidityPeriodsController {
         }
 
         return try {
-            validityPeriods.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()
+            validityPeriods.create(variableDefinitionId, newPeriod).toCompleteResponse()
         } catch (e: ValidityPeriodExceptions) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
@@ -106,5 +106,5 @@ class ValidityPeriodsController {
         variableDefinitionId: String,
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
-    ): List<RenderedVariableDefinition> = validityPeriods.listValidityPeriodsById(language, variableDefinitionId)
+    ): List<RenderedVariableDefinition> = validityPeriods.list(language, variableDefinitionId)
 }

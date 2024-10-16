@@ -97,8 +97,8 @@ class VariableDefinitionsController {
             ),
         ],
     )
-    @ApiResponse(responseCode = "400", description = "Bad request.")
-    @ApiResponse(responseCode = "409", description = "Conflict.")
+    @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
+    @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE) @Body @Valid varDef: Draft,
     ): CompleteResponse {

@@ -74,7 +74,7 @@ class ValidityPeriodsController {
         }
 
         return try {
-            validityPeriods.saveNewValidityPeriod(newPeriod, variableDefinitionId).toCompleteResponse()
+            validityPeriods.create(variableDefinitionId, newPeriod).toCompleteResponse()
         } catch (e: ValidityPeriodExceptions) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }

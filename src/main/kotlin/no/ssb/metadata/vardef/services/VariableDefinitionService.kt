@@ -59,7 +59,7 @@ class VariableDefinitionService(
         dateOfValidity: LocalDate?,
     ): RenderedVariableDefinition =
         if (dateOfValidity != null) {
-            validityPeriods.getLatestPatchByDateAndById(definitionId, dateOfValidity).render(language, klassService)
+            validityPeriods.getForDate(definitionId, dateOfValidity).render(language, klassService)
         } else {
             validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).render(language, klassService)
         }

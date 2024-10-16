@@ -17,6 +17,8 @@ import java.time.LocalDateTime
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
+    @Property(name = "micronaut.http.services.klass.codes-at")
+    private val codesAt: String,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
     private var classificationCacheLastFetched: LocalDateTime = LocalDateTime.now().minusDays(1L)
@@ -89,7 +91,7 @@ open class KlassApiService(
     @CachePut("ClassificationItems", parameters = ["classificationId"])
     open fun fetchClassificationItemsById(classificationId: Int): List<ClassificationItem> {
         logger.info("Klass Api: Fetching classification items")
-        val response = klassApiClient.fetchCodeList(classificationId)
+        val response = klassApiClient.fetchCodeList(classificationId, codesAt)
 
         when (response.status.code) {
             500 -> {

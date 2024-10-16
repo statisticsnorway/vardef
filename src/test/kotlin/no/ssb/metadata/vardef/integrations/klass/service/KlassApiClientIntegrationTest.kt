@@ -24,6 +24,9 @@ class KlassApiClientIntegrationTest {
     @Property(name = "klass.cached-classifications.areas")
     private val areasId: Int = 618
 
+    @Property(name = "micronaut.http.services.klass.codes-at")
+    private val codesAt: String = "2024-08-01"
+
     @Test
     fun `fetch classifications from klass api`() {
         val result = klassApiClient.fetchClassifications()
@@ -40,7 +43,7 @@ class KlassApiClientIntegrationTest {
     fun `fetch code list from klass api`() {
         listOf(unitTypesId, areasId)
             .forEach { id ->
-                val result = klassApiClient.fetchCodeList(id)
+                val result = klassApiClient.fetchCodeList(id, codesAt)
                 assertThat(result).isNotNull
 
                 val classificationList = result.body()?.classificationItems ?: emptyList()

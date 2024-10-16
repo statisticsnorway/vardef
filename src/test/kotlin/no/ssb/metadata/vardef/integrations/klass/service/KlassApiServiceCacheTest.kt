@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
+import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.clearAllMocks
@@ -22,10 +23,13 @@ class KlassApiServiceCacheTest {
     private lateinit var klassApiService: KlassApiService
     private lateinit var klassApiResponse: KlassApiResponse
 
+    @Property(name = "micronaut.http.services.klass.codes-at")
+    private val codesAt: String = ""
+
     @BeforeAll
     fun setUp() {
         klassApiMockkClient = mockk<KlassApiClient>()
-        klassApiService = KlassApiService(klassApiMockkClient)
+        klassApiService = KlassApiService(klassApiMockkClient, codesAt)
         klassApiResponse =
             KlassApiResponse(
                 Classifications(

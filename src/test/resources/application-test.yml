@@ -35,91 +35,91 @@ klass:
         - code: '07'
           name:
             en: ''
-            nb: Foretak
-        - code: 08
-          name:
-            en: ''
             nb: Fylke (forvaltning)
-        - code: 09
+        - code: '08'
           name:
             en: ''
             nb: Fylke (geografisk)
-        - code: '10'
+        - code: '09'
           name:
             en: ''
             nb: Havneanløp
-        - code: '11'
+        - code: '10'
           name:
             en: ''
             nb: Husholdning
-        - code: '12'
-          name:
-            en: ''
-            nb: Kjøretøy
-        - code: '13'
-          name:
-            en: ''
-            nb: Kommune (forvaltning)
-        - code: '14'
-          name:
-            en: ''
-            nb: Kommune (geografisk)
-        - code: '15'
-          name:
-            en: ''
-            nb: Kurs
-        - code: '16'
-          name:
-            en: ''
-            nb: Lovbrudd
-        - code: '17'
-          name:
-            en: ''
-            nb: Person
-        - code: '18'
-          name:
-            en: ''
-            nb: Skip
-        - code: '19'
-          name:
-            en: ''
-            nb: Statlig virksomhet
-        - code: '20'
-          name:
-            en: ''
-            nb: Storfe
-        - code: '21'
-          name:
-            en: ''
-            nb: Trafikkulykke
-        - code: '22'
-          name:
-            en: ''
-            nb: Transaksjon
-        - code: '23'
-          name:
-            en: ''
-            nb: Valg
-        - code: '24'
-          name:
-            en: ''
-            nb: Vare/tjeneste
-        - code: '25'
-          name:
-            en: ''
-            nb: Verdipapir
-        - code: '26'
-          name:
-            en: ''
-            nb: Bedrift
-        - code: '27'
+        - code: '11'
           name:
             en: ''
             nb: Juridisk enhet
-        - code: '28'
+        - code: '12'
+          name:
+            en: ''
+            nb: Foretak
+        - code: '13'
+          name:
+            en: ''
+            nb: Bedrift
+        - code: '14'
           name:
             en: ''
             nb: Bransjeenhet
+        - code: '15'
+          name:
+            en: ''
+            nb: Kjøretøy
+        - code: '16'
+          name:
+            en: ''
+            nb: Kommune (forvaltning)
+        - code: '17'
+          name:
+            en: ''
+            nb: Kommune (geografisk)
+        - code: '18'
+          name:
+            en: ''
+            nb: Kurs
+        - code: '19'
+          name:
+            en: ''
+            nb: Lovbrudd
+        - code: '20'
+          name:
+            en: ''
+            nb: Person
+        - code: '21'
+          name:
+            en: ''
+            nb: Skip
+        - code: '22'
+          name:
+            en: ''
+            nb: Statlig virksomhet
+        - code: '23'
+          name:
+            en: ''
+            nb: Storfe
+        - code: '24'
+          name:
+            en: ''
+            nb: Trafikkulykke
+        - code: '25'
+          name:
+            en: ''
+            nb: Transaksjon
+        - code: '26'
+          name:
+            en: ''
+            nb: Valg
+        - code: '27'
+          name:
+            en: ''
+            nb: Vare/tjeneste
+        - code: '28'
+          name:
+            en: ''
+            nb: Verdipapir
     618:
       name:
         en: "dummy"
@@ -524,7 +524,7 @@ klass:
         - code: vf
           name:
             en: ''
-            nb: Virksomheter, foretak og regnskap
+            nb: Bedrifter, foretak og regnskap
         - code: vf01
           name:
             en: ''
@@ -544,7 +544,7 @@ klass:
         - code: vf05
           name:
             en: ''
-            nb: Virksomheter og foretak
+            nb: Bedrifter og foretak
         - code: vt
           name:
             en: ''
@@ -564,508 +564,508 @@ klass:
       codes:
         - code: '01'
           name:
-            en: Andel
-            nb: andel
+            en:
+            nb: Andel
         - code: '01.01'
           name:
-            en: prosent
-            nb: '%'
+            en:
+            nb: prosent
         - code: '01.02'
           name:
-            en: per 1 000
-            nb: promille
+            en:
+            nb: per 1 000
         - code: '01.03'
           name:
-            en: per 10 000
-            nb: ‱
+            en:
+            nb: per 10 000
         - code: '01.04'
           name:
-            en: per 100 000
+            en:
             nb: per 100 000
         - code: '01.05'
           name:
-            en: prosentpoeng
+            en:
             nb: prosentpoeng
         - code: '02'
           name:
-            en: Antall
-            nb: ant
+            en:
+            nb: Antall
         - code: '02.01'
           name:
-            en: antall
+            en:
             nb: antall
         - code: '02.02'
           name:
-            en: stykk
-            nb: stk
+            en:
+            nb: stykk
         - code: '02.03'
           name:
-            en: par
+            en:
             nb: par
         - code: '03'
           name:
-            en: Areal
-            nb: areal
+            en:
+            nb: Areal
         - code: '03.01'
           name:
-            en: kvadratmeter
-            nb: m²
+            en:
+            nb: kvadratmeter
         - code: '03.02'
           name:
-            en: ar
-            nb: a
+            en:
+            nb: ar
         - code: '03.03'
           name:
-            en: dekar
-            nb: daa
+            en:
+            nb: dekar
         - code: '03.04'
           name:
-            en: hektar
-            nb: ha
+            en:
+            nb: hektar
         - code: '03.05'
           name:
-            en: kvadratkilometer
-            nb: km²
+            en:
+            nb: kvadratkilometer
         - code: '04'
           name:
-            en: Energi
-            nb: energi
+            en:
+            nb: Energi
         - code: '04.01'
           name:
-            en: kilowattimer
-            nb: kWh
+            en:
+            nb: kilowattimer
         - code: '04.02'
           name:
-            en: megawattimer
-            nb: MWh
+            en:
+            nb: megawattimer
         - code: '04.03'
           name:
-            en: gigawattimer
-            nb: GWh
+            en:
+            nb: gigawattimer
         - code: '04.04'
           name:
-            en: terawattimer
-            nb: TWh
+            en:
+            nb: terawattimer
         - code: '04.05'
           name:
-            en: tonn oljeekvivalenter
-            nb: toe
+            en:
+            nb: tonn oljeekvivalenter
         - code: '04.06'
           name:
-            en: Joule
-            nb: J
+            en:
+            nb: Joule
         - code: '04.07'
           name:
-            en: gigajoule
-            nb: GJ
+            en:
+            nb: gigajoule
         - code: '04.08'
           name:
-            en: terajoule
-            nb: TJ
+            en:
+            nb: terajoule
         - code: '04.09'
           name:
-            en: petajoule
-            nb: PJ
+            en:
+            nb: petajoule
         - code: '04.10'
           name:
-            en: wattsekund
-            nb: Ws
+            en:
+            nb: wattsekund
         - code: '04.11'
           name:
-            en: brutto brennverdi (GCV)
-            nb: GCV
+            en:
+            nb: brutto brennverdi (GCV)
         - code: '04.12'
           name:
-            en: netto brennverdi (NCV)
-            nb: NCV
+            en:
+            nb: netto brennverdi (NCV)
         - code: '05'
           name:
-            en: Strømstyrke
-            nb: strømstyrke
+            en:
+            nb: Strømstyrke
         - code: '05.01'
           name:
-            en: Ampere
-            nb: A
+            en:
+            nb: Ampere
         - code: '06'
           name:
-            en: Spenning
-            nb: spenning
+            en:
+            nb: Spenning
         - code: '06.01'
           name:
-            en: volt
-            nb: V
+            en:
+            nb: volt
         - code: '07'
           name:
-            en: Effekt
-            nb: effekt
+            en:
+            nb: Effekt
         - code: '07.01'
           name:
-            en: watt
-            nb: W
+            en:
+            nb: watt
         - code: '07.02'
           name:
-            en: kilowatt
-            nb: kW
+            en:
+            nb: kilowatt
         - code: '07.03'
           name:
-            en: megawatt
-            nb: MW
+            en:
+            nb: megawatt
         - code: '07.04'
           name:
-            en: voltampere
-            nb: VA
+            en:
+            nb: voltampere
         - code: '07.05'
           name:
-            en: megavoltampere
-            nb: MVA
-        - code: 08
+            en:
+            nb: megavoltampere
+        - code: '08'
           name:
-            en: Hastighet
-            nb: fart
+            en:
+            nb: Hastighet
         - code: '08.01'
           name:
-            en: meter per sekund
-            nb: m/s
+            en:
+            nb: meter per sekund
         - code: '08.02'
           name:
-            en: kilometer i timen
-            nb: km/t
+            en:
+            nb: kilometer i timen
         - code: '08.03'
           name:
-            en: kilobits per sekund
-            nb: kbps
+            en:
+            nb: kilobits per sekund
         - code: '08.04'
           name:
-            en: megabits per sekund
-            nb: Mbps
-        - code: 09
+            en:
+            nb: megabits per sekund
+        - code: '09'
           name:
-            en: Lengde
-            nb: lengde
+            en:
+            nb: Lengde
         - code: '09.01'
           name:
-            en: millimeter
-            nb: mm
+            en:
+            nb: millimeter
         - code: '09.02'
           name:
-            en: centimeter
-            nb: cm
+            en:
+            nb: centimeter
         - code: '09.03'
           name:
-            en: meter
-            nb: m
+            en:
+            nb: meter
         - code: '09.04'
           name:
-            en: kilometer
-            nb: km
+            en:
+            nb: kilometer
         - code: '09.05'
           name:
-            en: mil
+            en:
             nb: mil
         - code: '09.06'
           name:
-            en: nautisk mil
-            nb: NM
+            en:
+            nb: nautisk mil
         - code: '10'
           name:
-            en: Temperatur
-            nb: temp
+            en:
+            nb: Temperatur
         - code: '10.01'
           name:
-            en: Celsius
-            nb: C
+            en:
+            nb: Celsius
         - code: '10.02'
           name:
-            en: Fahrenheit
-            nb: F
+            en:
+            nb: Fahrenheit
         - code: '10.03'
           name:
-            en: Kelvin
-            nb: K
+            en:
+            nb: Kelvin
         - code: '11'
           name:
-            en: Utslipp
-            nb: utslipp
+            en:
+            nb: Utslipp
         - code: '11.01'
           name:
-            en: CO2-ekvivalent
-            nb: CO2e
+            en:
+            nb: CO2-ekvivalent
         - code: '11.02'
           name:
-            en: syreekvivalenter
-            nb: SO2-ekv
+            en:
+            nb: syreekvivalenter
         - code: '11.03'
           name:
-            en: Implisitt utslippsfaktor
-            nb: IEF
+            en:
+            nb: Implisitt utslippsfaktor
         - code: '12'
           name:
-            en: Valuta
-            nb: valuta
+            en:
+            nb: Valuta
         - code: '12.01'
           name:
-            en: øre
+            en:
             nb: øre
         - code: '12.02'
           name:
-            en: kroner
-            nb: kr
+            en:
+            nb: kroner
         - code: '12.03'
           name:
-            en: US dollar
-            nb: USD
+            en:
+            nb: US dollar
         - code: '12.04'
           name:
-            en: euro
-            nb: EUR
+            en:
+            nb: euro
         - code: '13'
           name:
-            en: Masse (vekt)
-            nb: masse
+            en:
+            nb: Masse (vekt)
         - code: '13.01'
           name:
-            en: milligram
-            nb: mg
+            en:
+            nb: milligram
         - code: '13.02'
           name:
-            en: gram
-            nb: g
+            en:
+            nb: gram
         - code: '13.03'
           name:
-            en: kilogram
-            nb: kg
+            en:
+            nb: kilogram
         - code: '13.04'
           name:
-            en: tonn
-            nb: t
+            en:
+            nb: tonn
         - code: '13.05'
           name:
-            en: kilotonn
-            nb: kt
+            en:
+            nb: kilotonn
         - code: '13.06'
           name:
-            en: karat
-            nb: ct
+            en:
+            nb: karat
         - code: '13.07'
           name:
-            en: unse
-            nb: oz
+            en:
+            nb: unse
         - code: '14'
           name:
-            en: Varighet/tid
-            nb: tid
+            en:
+            nb: Varighet/tid
         - code: '14.01'
           name:
-            en: sekund
-            nb: s
+            en:
+            nb: sekund
         - code: '14.02'
           name:
-            en: minutt
-            nb: min
+            en:
+            nb: minutt
         - code: '14.03'
           name:
-            en: timer
-            nb: t
+            en:
+            nb: timer
         - code: '14.04'
           name:
-            en: døgn
-            nb: d
+            en:
+            nb: døgn
         - code: '14.05'
           name:
-            en: uker
-            nb: uke
+            en:
+            nb: uker
         - code: '14.06'
           name:
-            en: måneder
-            nb: md
+            en:
+            nb: måneder
         - code: '14.07'
           name:
-            en: terminer
-            nb: termin
+            en:
+            nb: terminer
         - code: '14.08'
           name:
-            en: kvartaler
-            nb: kv
+            en:
+            nb: kvartaler
         - code: '14.09'
           name:
-            en: tertialer
-            nb: tert
+            en:
+            nb: tertialer
         - code: '14.10'
           name:
-            en: år
+            en:
             nb: år
         - code: '15'
           name:
-            en: Volum
-            nb: volum
+            en:
+            nb: Volum
         - code: '15.01'
           name:
-            en: milliliter
-            nb: ml
+            en:
+            nb: milliliter
         - code: '15.02'
           name:
-            en: desiliter
-            nb: dl
+            en:
+            nb: desiliter
         - code: '15.03'
           name:
-            en: centiliter
-            nb: cl
+            en:
+            nb: centiliter
         - code: '15.04'
           name:
-            en: liter
-            nb: l
+            en:
+            nb: liter
         - code: '15.05'
           name:
-            en: hektoliter
-            nb: hl
+            en:
+            nb: hektoliter
         - code: '15.06'
           name:
-            en: kubikkmeter
-            nb: m³
+            en:
+            nb: kubikkmeter
         - code: '15.07'
           name:
-            en: standard kubikkmeter
-            nb: Sm³
+            en:
+            nb: standard kubikkmeter
         - code: '15.08'
           name:
-            en: kilo standard kubikkmeter
-            nb: kSm³
+            en:
+            nb: kilo standard kubikkmeter
         - code: '15.09'
           name:
-            en: bruttotonn
-            nb: BT
+            en:
+            nb: bruttotonn
         - code: '15.10'
           name:
-            en: fat
-            nb: bbl
+            en:
+            nb: fat
         - code: '16'
           name:
-            en: Beregnede størrelser
-            nb: beregnet
+            en:
+            nb: Beregnede størrelser
         - code: '16.01'
           name:
-            en: forholdstall
+            en:
             nb: forholdstall
         - code: '16.02'
           name:
-            en: fruktbarhetstall
+            en:
             nb: fruktbarhetstall
         - code: '16.03'
           name:
-            en: indeks
+            en:
             nb: indeks
         - code: '16.04'
           name:
-            en: indikator
+            en:
             nb: indikator
         - code: '16.05'
           name:
-            en: kapasitet (pe)
-            nb: pe
+            en:
+            nb: kapasitet (pe)
         - code: '16.06'
           name:
-            en: kjøpekraftsstandard
+            en:
             nb: kjøpekraftsstandard
         - code: '16.07'
           name:
-            en: poeng
+            en:
             nb: poeng
         - code: '17'
           name:
-            en: Sammensatte måleenheter
-            nb: sammensatt
+            en:
+            nb: Sammensatte måleenheter
         - code: '17.01'
           name:
-            en: antall per km²
-            nb: antall/km²
+            en:
+            nb: antall per km²
         - code: '17.02'
           name:
-            en: GWh per milliarder kr
-            nb: GWh/mrd. kr
+            en:
+            nb: GWh per milliarder kr
         - code: '17.03'
           name:
-            en: km per innbygger
-            nb: km/innbygger
+            en:
+            nb: km per innbygger
         - code: '17.04'
           name:
-            en: konsultasjoner per 1000 innbyggere
-            nb: konsultasjoner/1 000 innbyggere
+            en:
+            nb: konsultasjoner per 1000 innbyggere
         - code: '17.05'
           name:
-            en: konsultasjoner per innbygger
-            nb: konsultasjoner/innbygger
+            en:
+            nb: konsultasjoner per innbygger
         - code: '17.06'
           name:
-            en: kr per dekar
-            nb: kr/dekar
+            en:
+            nb: kr per dekar
         - code: '17.07'
           name:
-            en: kr per innbygger
-            nb: kr/innbygger
+            en:
+            nb: kr per innbygger
         - code: '17.08'
           name:
-            en: kr per km
-            nb: kr/km
+            en:
+            nb: kr per km
         - code: '17.09'
           name:
-            en: kr per liter
-            nb: kr/liter
+            en:
+            nb: kr per liter
         - code: '17.10'
           name:
-            en: kr per m³
-            nb: kr/m³
+            en:
+            nb: kr per m³
         - code: '17.11'
           name:
-            en: kr per meter
-            nb: kr/meter
+            en:
+            nb: kr per meter
         - code: '17.12'
           name:
-            en: kr per passasjer
-            nb: kr/passasjer
+            en:
+            nb: kr per passasjer
         - code: '17.13'
           name:
-            en: kr per time
-            nb: kr/time
+            en:
+            nb: kr per time
         - code: '17.14'
           name:
-            en: kr per tonn
-            nb: kr/tonn
+            en:
+            nb: kr per tonn
         - code: '17.15'
           name:
-            en: kr per unse
-            nb: kr/unse
+            en:
+            nb: kr per unse
         - code: '17.16'
           name:
-            en: kWh per m²
-            nb: kWh/m²
+            en:
+            nb: kWh per m²
         - code: '17.17'
           name:
-            en: mengde per millioner kr
-            nb: mengde/mill. kr
+            en:
+            nb: mengde per millioner kr
         - code: '17.18'
           name:
-            en: mg per kg tørrstoff
-            nb: mg/kg tørrstoff
+            en:
+            nb: mg per kg tørrstoff
         - code: '17.19'
           name:
-            en: personer per husholdning
-            nb: personer/husholdning
+            en:
+            nb: personer per husholdning
         - code: '17.20'
           name:
-            en: personer per km²
-            nb: personer/km²
+            en:
+            nb: personer per km²
         - code: '17.21'
           name:
-            en: timer per uke
-            nb: timer/uke
+            en:
+            nb: timer per uke
         - code: '17.22'
           name:
-            en: timer og minutter
+            en:
             nb: timer og minutter
         - code: '17.23'
           name:
-            en: øre per kWh
-            nb: øre/kWh
+            en:
+            nb: øre per kWh
     91:
       name:
         en: "dummy"

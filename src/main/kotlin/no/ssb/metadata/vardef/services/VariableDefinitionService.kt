@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.services
 
-import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
@@ -12,17 +11,14 @@ import java.time.LocalDate
 @Singleton
 class VariableDefinitionService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
-    private val patches: PatchesService,
+    private val klassService: KlassService,
     private val validityPeriods: ValidityPeriodsService,
 ) {
-    @Inject
-    private lateinit var klassService: KlassService
-
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
 
-    fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
-
     fun list(): List<SavedVariableDefinition> = variableDefinitionRepository.findAll()
+
+    fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.existsByShortName(shortName)
 
     private fun uniqueDefinitionIds(): Set<String> =
         list()

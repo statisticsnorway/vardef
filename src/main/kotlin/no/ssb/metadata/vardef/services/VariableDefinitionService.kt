@@ -18,7 +18,9 @@ class VariableDefinitionService(
     @Inject
     private lateinit var klassService: KlassService
 
-    fun clear() = variableDefinitionRepository.deleteAll()
+    fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
+
+    fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
 
     fun list(): List<SavedVariableDefinition> = variableDefinitionRepository.findAll()
 
@@ -46,8 +48,4 @@ class VariableDefinitionService(
         } else {
             validityPeriods.getForDate(definitionId, dateOfValidity)
         }?.render(language, klassService)
-
-    fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
-
-    fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.findByShortName(shortName).isNotEmpty()
 }

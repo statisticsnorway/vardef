@@ -6,6 +6,7 @@ import io.restassured.RestAssured
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -18,6 +19,9 @@ open class BaseVardefTest {
     init {
         RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
     }
+
+    @Inject
+    lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
     @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
@@ -33,7 +37,7 @@ open class BaseVardefTest {
 
     @BeforeEach
     fun setUp() {
-        variableDefinitionService.clear()
+        variableDefinitionRepository.deleteAll()
 
         ALL_INCOME_TAX_PATCHES.forEach { patches.save(it) }
 

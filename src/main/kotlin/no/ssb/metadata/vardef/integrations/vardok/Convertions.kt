@@ -2,6 +2,10 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCategoryForValue
 
+/**
+ * Enum of all official titles for unit types.
+ * Set of string values which maps to the title
+ */
 enum class UnitTypes(val values: Set<String>) {
     ADRESSE(setOf("Adresse")),
     ARBEIDSULYKKE(setOf("Arbeidsulykke")),

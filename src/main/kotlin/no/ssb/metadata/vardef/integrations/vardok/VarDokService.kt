@@ -51,7 +51,7 @@ open class VarDokService(
 
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)
-        val varDefInput = Companion.extractVardefInput(varDokItems)
+        val varDefInput = extractVardefInput(varDokItems)
 
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)

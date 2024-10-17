@@ -11,9 +11,13 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.util.stream.Stream
 
-@Requires(env = ["integration-test"])
+// @Requires(env = ["integration-test"])
 @MicronautTest
 class VarDokMigrationTest {
     @Inject
@@ -174,5 +178,56 @@ class VarDokMigrationTest {
         val vardokTransform = VarDokService.extractVardefInput(varDefInput)
         val afterMigration = JSONObject(vardokTransform)
         assertThat(afterMigration["shortName"]).isEqualTo("ufg")
+    }
+
+    companion object {
+        @JvmStatic
+        fun unitTypes(): Stream<Arguments> =
+            Stream.of(
+                arguments(
+                    "Adresse",
+                    listOf("01"),
+                ),
+                arguments(
+                    "Arbeidsulykke",
+                    listOf("02"),
+                ),
+                arguments(
+                    "Tinglyst omsetning",
+                    listOf("05"),
+                ),
+                arguments(
+                    "Skogareal",
+                    listOf("05"),
+                ),
+                arguments(
+                    "Grunneiendom",
+                    listOf("05"),
+                ),
+                arguments(
+                    "Eiendom",
+                    listOf("05"),
+                ),
+                arguments(
+                    "Hubba hubba",
+                    emptyList<String?>(),
+                ),
+            )
+    }
+
+    @ParameterizedTest
+    @MethodSource("unitTypes")
+    fun `map statistical unit to unit types`(name: String, code: List<String?>) {
+        val resultAdresse = convertUnitTypes(name)
+        assertThat(resultAdresse).isNotNull
+        assertThat(resultAdresse).isEqualTo(code)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["130", "69"])
+    fun `map vardokresponse statistical unit to unit type`(vardokId: String) {
+        val vardokresponse = varDokApiService.getVarDokItem(vardokId)
+        val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
+        assertThat(result).isEqualTo(listOf("20"))
     }
 }

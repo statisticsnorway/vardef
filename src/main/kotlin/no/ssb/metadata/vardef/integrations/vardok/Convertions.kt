@@ -1,52 +1,50 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-// List of names that can be mapped to unitType codes
-val statisticalUnitNames =
-    listOf(
-        "Adresse",
-        "Arbeidsulykke",
-        "Bolig",
-        "Bygning",
-        "Tinglyst omsetning",
-        "Skogareal",
-        "Landbrukseiendom",
-        "Grunneiendom",
-        "Eiendom",
-        "Familie",
-        "Fylke (forvaltning)",
-        "Fylke (geografisk)",
-        "Havneanløp",
-        "Husholdning",
-        "Juridisk enhet",
-        "Foretak",
-        "Virksomhet",
-        "Bedrift",
-        "Bransjeenhet",
-        "Kjøretøy",
-        "Kommune (forvaltning)",
-        "Kommune (geografisk)",
-        "Kurs",
-        "Lovbrudd",
-        "Arbeidsforhold",
-        "Person",
-        "Fiskefartøy",
-        "Skip",
-        "Offentlig forvaltning",
-        "Statlig Virksomhet",
-        "Storfe",
-        "Ulykke",
-        "Trafikkulykke",
-        "Transaksjon",
-        "Valg",
-        "Repr.vare og -tjeneste",
-        "Internett-abonnement",
-        "Vare/tjeneste",
-        "Verdipapir",
-        "Avfallsanlegg",
-        "Avløpsanlegg",
-        "Luftfartøy",
-        "sak",
-    )
+import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCategoryForValue
+
+enum class UnitTypes(val values: Set<String>) {
+
+    ADRESSE(setOf("Adresse")),
+    ARBEIDSULYKKE(setOf("Arbeidsulykke")),
+    BEDRIFT(setOf("Bedrift", "Virksomhet")),
+    BOLIG(setOf("Bolig")),
+    BRANSJE_ENHET(setOf("Bransjeenhet")),
+    KJOERETOEY(setOf("Kjøretøy")),
+    BYGNING(setOf("Bygning")),
+    EIENDOM(setOf("Eiendom","Tinglyst omsetning", "Skogareal", "Landbrukseiendom", "Grunneiendom")),
+    FAMILIE(setOf("Familie")),
+    FORETAK(setOf("Foretak")),
+    FYLKE_FORVALTNING(setOf("Fylke (forvaltning)")),
+    FYLKE_GEOGRAFISK(setOf("Fylke (geografisk)")),
+    HAVNEANLOEP(setOf("Havneanløp")),
+    HUSHOLDNING(setOf("Husholdning")),
+    JURIDISK_ENHET(setOf("Juridisk enhet")),
+    KURS(setOf("Kurs")),
+    KOMMUNE_FORVALTNING(setOf("Kommune (forvaltning)")),
+    KOMMUNE_GEOGRAFISK(setOf("Kommune (geografisk)")),
+    LOVBRUDD(setOf("Lovbrudd")),
+    PERSON(setOf("Arbeidsforhold", "Person")),
+    SKIP(setOf("Skip","Fiskefartøy")),
+    STATLIG_VIRKSOMHET(setOf("Statlig virksomhet", "Offentlig forvaltning")),
+    STORFE(setOf("Storfe")),
+    TRAFIKKULYKKE(setOf("Trafikkulykke","Ulykke")),
+    TRANSAKSJON(setOf("Transaksjon")),
+    VALG(setOf("Valg")),
+    VARE_TJENESTE(setOf("Vare/tjeneste", "Repr.vare og -tjeneste", "Internett-abonnement")),
+    VERDIPAPIR(setOf("Verdipapir")),
+    SAK(setOf("Sak")),
+    AVFALL_ANLOEP_LUFTFARTOEY(setOf("Avfallsanlegg", "Avløpsanlegg", "Luftfartøy"));
+
+
+       companion object {
+            // Method to find the category for a given value
+            fun findCategoryForValue(value: String): UnitTypes? {
+                return entries.find { category -> value in category.values }
+            }
+        }
+
+}
+
 
 /**
  * This converter map statisticalUnit (title) with unitType codes.
@@ -55,42 +53,40 @@ val statisticalUnitNames =
  * @param name: statisticalUnit in Vardok
  * @return A list of codes
  */
-fun convertUnitTypes(name: String): List<String?> {
-    val unitTypes = mutableListOf<String?>()
-    when (name) {
-        "Adresse" -> unitTypes.add("01")
-        "Arbeidsulykke" -> unitTypes.add("02")
-        "Bolig" -> unitTypes.add("03")
-        "Bygning" -> unitTypes.add("04")
-        in "Tinglyst omsetning", "Skogareal", "Landbrukseiendom", "Grunneiendom", "Eiendom" -> unitTypes.add("05")
-        "Familie" -> unitTypes.add("06")
-        "Fylke (forvaltning)" -> unitTypes.add("07")
-        "Fylke (geografisk)" -> unitTypes.add("08")
-        "Havneanløp" -> unitTypes.add("09")
-        "Husholdning" -> unitTypes.add("10")
-        "Juridisk enhet" -> unitTypes.add("11")
-        "Foretak" -> unitTypes.add("12")
-        in "Virksomhet", "Bedrift" -> unitTypes.add("13")
-        "Bransjeenhet" -> unitTypes.add("14")
-        "Kjøretøy" -> unitTypes.add("15")
-        "Kommune (forvaltning)" -> unitTypes.add("16")
-        "Kommune (geografisk)" -> unitTypes.add("17")
-        "Kurs" -> unitTypes.add("18")
-        "Lovbrudd" -> unitTypes.add("19")
-        in "Arbeidsforhold", "Person" -> unitTypes.add("20")
-        in "Fiskefartøy", "Skip" -> unitTypes.add("21")
-        in "Offentlig forvaltning", "Statlig Virksomhet" -> unitTypes.add("22")
-        "Storfe" -> unitTypes.add("23")
-        in "Ulykke", "Trafikkulykke" -> unitTypes.add("24")
-        "Transaksjon" -> unitTypes.add("25")
-        "Valg" -> unitTypes.add("26")
-        in "Repr.vare og -tjeneste", "Internett-abonnement", "Vare/tjeneste" -> unitTypes.add("27")
-        "Verdipapir" -> unitTypes.add("28")
-        in "Avfallsanlegg", "Avløpsanlegg", "Luftfartøy" -> unitTypes.addAll(listOf("12", "13"))
-        "sak" -> unitTypes.addAll(listOf("05", "13"))
+fun convertUnitTypes(name: String): List<String?> =
+    when (UnitTypes.findCategoryForValue(name).toString()) {
+        UnitTypes.ADRESSE.name -> listOf("01")
+        UnitTypes.ARBEIDSULYKKE.name -> listOf("02")
+        UnitTypes.BOLIG.name -> listOf("03")
+        UnitTypes.BYGNING.name -> listOf("04")
+        UnitTypes.EIENDOM.name -> listOf("05")
+        UnitTypes.FAMILIE.name -> listOf("06")
+        UnitTypes.FYLKE_FORVALTNING.name -> listOf("07")
+        UnitTypes.FYLKE_GEOGRAFISK.name -> listOf("08")
+        UnitTypes.HAVNEANLOEP.name -> listOf("09")
+        UnitTypes.HUSHOLDNING.name -> listOf("10")
+        UnitTypes.JURIDISK_ENHET.name -> listOf("11")
+        UnitTypes.FORETAK.name -> listOf("12")
+        UnitTypes.BEDRIFT.name -> listOf("13")
+        UnitTypes.BRANSJE_ENHET.name -> listOf("14")
+        UnitTypes.KJOERETOEY.name -> listOf("15")
+        UnitTypes.KOMMUNE_FORVALTNING.name -> listOf("16")
+        UnitTypes.KOMMUNE_GEOGRAFISK.name -> listOf("17")
+        UnitTypes.KURS.name -> listOf("18")
+        UnitTypes.LOVBRUDD.name -> listOf("19")
+        UnitTypes.PERSON.name -> listOf("20")
+        UnitTypes.SKIP.name -> listOf("21")
+        UnitTypes.STATLIG_VIRKSOMHET.name -> listOf("22")
+        UnitTypes.STORFE.name -> listOf("23")
+        UnitTypes.TRAFIKKULYKKE.name -> listOf("24")
+        UnitTypes.TRANSAKSJON.name -> listOf("25")
+        UnitTypes.VALG.name -> listOf("26")
+        UnitTypes.VARE_TJENESTE.name -> listOf("27")
+        UnitTypes.VERDIPAPIR.name -> listOf("28")
+        UnitTypes.SAK.name -> listOf("05", "13")
+        UnitTypes.AVFALL_ANLOEP_LUFTFARTOEY.name -> listOf("12", "13")
+        else -> emptyList()
     }
-    return unitTypes
-}
 
 fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     val dateString = vardokItem.dc?.valid?.split(" - ")
@@ -112,7 +108,7 @@ fun mapVardokIdentifier(vardokItem: VardokResponse): String {
 
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> {
     val statisticalUnit = vardokItem.variable?.statisticalUnit
-    if (statisticalUnit != null && statisticalUnitNames.contains(statisticalUnit)) {
+    if (statisticalUnit != null && findCategoryForValue(statisticalUnit) != null){
         return convertUnitTypes(statisticalUnit)
     }
 

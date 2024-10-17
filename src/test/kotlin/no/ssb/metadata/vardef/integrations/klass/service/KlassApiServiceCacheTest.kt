@@ -8,8 +8,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import no.ssb.metadata.vardef.integrations.klass.models.Classifications
+import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -39,10 +39,10 @@ class KlassApiServiceCacheTest {
                             id = 1,
                             classificationType = "classification",
                             lastModified = "${LocalDateTime.now()}",
-                            classificationItems =
+                            codes =
                                 listOf(
-                                    ClassificationItem(code = "1", name = "Ja"),
-                                    ClassificationItem(code = "2", name = "Nei"),
+                                    Code(code = "1", name = "Ja"),
+                                    Code(code = "2", name = "Nei"),
                                 ),
                         ),
                     ),

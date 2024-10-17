@@ -27,7 +27,7 @@ class KlassApiServiceTest {
     private lateinit var klassApiResponse: KlassApiResponse
     private lateinit var klassApiCodeListResponseMock: KlassApiCodeListResponse
     private lateinit var klassApiCodeListResponse: KlassApiCodeListResponse
-    private lateinit var codeList: List<ClassificationItem>
+    private lateinit var codeList: List<Code>
     private val testClassificationId = 1
     private val nonExistingClassificationId = 0
 
@@ -40,8 +40,8 @@ class KlassApiServiceTest {
         klassApiService = KlassApiService(klassApiMockkClient, codesAt)
         codeList =
             listOf(
-                ClassificationItem(code = "1", name = "Ja"),
-                ClassificationItem(code = "2", name = "Nei"),
+                Code(code = "1", name = "Ja"),
+                Code(code = "2", name = "Nei"),
             )
         klassApiResponse =
             KlassApiResponse(
@@ -59,7 +59,7 @@ class KlassApiServiceTest {
         klassApiCodeListResponseMock = mockk<KlassApiCodeListResponse>()
         klassApiCodeListResponse =
             KlassApiCodeListResponse(
-                classificationItems = codeList,
+                codes = codeList,
             )
     }
 
@@ -141,7 +141,7 @@ class KlassApiServiceTest {
         } returns
             HttpResponse.ok(
                 KlassApiCodeListResponse(
-                    classificationItems = emptyList(),
+                    codes = emptyList(),
                 ),
             )
 
@@ -214,7 +214,7 @@ class KlassApiServiceTest {
         } returns
             HttpResponse.ok(
                 KlassApiCodeListResponse(
-                    classificationItems = emptyList(),
+                    codes = emptyList(),
                 ),
             )
 
@@ -236,7 +236,7 @@ class KlassApiServiceTest {
         } returns
             HttpResponse.ok(
                 KlassApiCodeListResponse(
-                    classificationItems = codeList,
+                    codes = codeList,
                 ),
             )
 
@@ -244,7 +244,7 @@ class KlassApiServiceTest {
         verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
 
         assertThat(result).isInstanceOf(Classification::class.java)
-        assertThat(result.classificationItems).hasSize(2)
+        assertThat(result.codes).hasSize(2)
     }
 
     @Test

@@ -5,8 +5,8 @@ import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
 import no.ssb.metadata.vardef.integrations.klass.models.Classifications
+import no.ssb.metadata.vardef.integrations.klass.models.Code
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -46,8 +46,8 @@ class KlassApiClientIntegrationTest {
                 val result = klassApiClient.fetchCodeList(id, codesAt)
                 assertThat(result).isNotNull
 
-                val classificationList = result.body()?.classificationItems ?: emptyList()
-                assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
+                val classificationList = result.body()?.codes ?: emptyList()
+                assertThat(classificationList[0]).isInstanceOf(Code::class.java)
                 assertThat(classificationList.size > 1)
             }
     }

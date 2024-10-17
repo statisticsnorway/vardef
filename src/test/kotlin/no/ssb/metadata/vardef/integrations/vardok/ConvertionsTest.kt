@@ -54,6 +54,14 @@ class ConvertionsTest : BaseVardokTest() {
                     listOf("21"),
                 ),
                 arguments(
+                    "Internett-abonnement",
+                    listOf("27"),
+                ),
+                arguments(
+                    "Repr.vare og -tjeneste",
+                    listOf("27"),
+                ),
+                arguments(
                     "Hubba hubba",
                     emptyList<String?>(),
                 ),

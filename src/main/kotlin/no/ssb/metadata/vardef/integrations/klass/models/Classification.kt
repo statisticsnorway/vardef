@@ -34,7 +34,7 @@ data class Classification(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
-data class KlassApiCodeListResponse(
+data class Codes(
     @JsonProperty("codes") val codes: List<Code>,
 )
 

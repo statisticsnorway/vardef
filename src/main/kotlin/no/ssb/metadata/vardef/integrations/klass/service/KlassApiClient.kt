@@ -8,7 +8,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import no.ssb.metadata.vardef.integrations.klass.models.KlassApiCodeListResponse
+import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
 
 /**
@@ -38,5 +38,5 @@ interface KlassApiClient {
     fun fetchCodeList(
         @PathVariable classificationId: Int,
         @QueryValue codesAt: String,
-    ): HttpResponse<KlassApiCodeListResponse>
+    ): HttpResponse<Codes>
 }

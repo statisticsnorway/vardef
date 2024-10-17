@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
@@ -16,9 +17,9 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
 
-// @Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
-class VarDokMigrationTest {
+class VardokMigrationTest {
     @Inject
     lateinit var varDokApiService: VarDokService
 
@@ -227,7 +228,7 @@ class VarDokMigrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = ["130", "69"])
-    fun `map vardokresponse statistical unit to unit type`(vardokId: String) {
+    fun `vardokresponse statistical units are values in UnitTypes PERSON`(vardokId: String) {
         val vardokresponse = varDokApiService.getVarDokItem(vardokId)
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))

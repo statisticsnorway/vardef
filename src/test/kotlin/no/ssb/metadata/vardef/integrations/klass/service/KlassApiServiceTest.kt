@@ -24,12 +24,26 @@ import java.time.LocalDateTime
 class KlassApiServiceTest {
     private lateinit var klassApiMockkClient: KlassApiClient
     private lateinit var klassApiService: KlassApiService
-    private lateinit var klassApiResponse: KlassApiResponse
+    private lateinit var listClassificationsResponse: KlassApiResponse
+    private lateinit var getClassificationResponse: HttpResponse<Classification?>
     private lateinit var codesMock: Codes
     private lateinit var codes: Codes
     private lateinit var codeList: List<Code>
     private val testClassificationId = 1
     private val nonExistingClassificationId = 0
+
+    private val classification =
+        Classification(
+            name = "Test",
+            id = testClassificationId,
+            classificationType = "classification",
+            lastModified = "${LocalDateTime.now()}",
+            codes =
+                listOf(
+                    Code(code = "1", name = "Ja"),
+                    Code(code = "2", name = "Nei"),
+                ),
+        )
 
     @Property(name = "micronaut.http.services.klass.codes-at")
     private val codesAt: String = ""
@@ -43,19 +57,15 @@ class KlassApiServiceTest {
                 Code(code = "1", name = "Ja"),
                 Code(code = "2", name = "Nei"),
             )
-        klassApiResponse =
+        listClassificationsResponse =
             KlassApiResponse(
                 Classifications(
                     listOf(
-                        Classification(
-                            name = "Test",
-                            id = testClassificationId,
-                            classificationType = "classification",
-                            lastModified = "${LocalDateTime.now()}",
-                        ),
+                        classification,
                     ),
                 ),
             )
+        getClassificationResponse = HttpResponse.ok(classification)
         codesMock = mockk<Codes>()
         codes =
             Codes(
@@ -80,7 +90,7 @@ class KlassApiServiceTest {
                     ),
                 ),
             )
-        val result = klassApiService.fetchAllClassifications()
+        val result = klassApiService.getClassifications()
         assertThat(result).hasSize(0)
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
@@ -89,8 +99,8 @@ class KlassApiServiceTest {
     fun `fetch all classifications from klass api returns 200 OK`() {
         every {
             klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
-        val result = klassApiService.fetchAllClassifications()
+        } returns HttpResponse.ok(listClassificationsResponse)
+        val result = klassApiService.getClassifications()
         assertEquals(1, result.size)
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
@@ -102,7 +112,7 @@ class KlassApiServiceTest {
         } returns HttpResponse.notFound()
 
         assertThrows<HttpServerException> {
-            klassApiService.fetchAllClassifications()
+            klassApiService.getClassifications()
         }
 
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
@@ -115,29 +125,29 @@ class KlassApiServiceTest {
         } returns HttpResponse.serverError()
 
         assertThrows<HttpServerException> {
-            klassApiService.fetchAllClassifications()
+            klassApiService.getClassifications()
         }
 
         verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
     }
 
     @Test
-    fun `get non-existing classification by id from cache returns exception`() {
+    fun `get non-existing classification returns exception`() {
         every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
+            klassApiMockkClient.fetchClassification(nonExistingClassificationId)
+        } returns HttpResponse.notFound()
 
         assertThrows<NoSuchElementException> {
             klassApiService.getClassification(nonExistingClassificationId)
         }
 
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
+        verify(exactly = 1) { klassApiMockkClient.fetchClassification(nonExistingClassificationId) }
     }
 
     @Test
-    fun `fetch code list from klass api returns 200 OK, but Klass is empty`() {
+    fun `fetch code list no codes returned`() {
         every {
-            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
+            klassApiMockkClient.listCodes(testClassificationId, codesAt)
         } returns
             HttpResponse.ok(
                 Codes(
@@ -146,102 +156,61 @@ class KlassApiServiceTest {
             )
 
         assertThrows<NoSuchElementException> {
-            klassApiService.getClassificationItemsById(testClassificationId)
+            klassApiService.getCodeObjectsFor(testClassificationId)
         }
 
-        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
+        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt) }
     }
 
     @Test
     fun `fetch code list from klass api returns 200 OK`() {
         every {
             klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
+        } returns HttpResponse.ok(listClassificationsResponse)
 
         every {
-            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
+            klassApiMockkClient.listCodes(testClassificationId, codesAt)
         } returns HttpResponse.ok(codes)
 
-        assertEquals(0, klassApiService.classificationItemListCache())
-        val result = klassApiService.getClassificationItemsById(testClassificationId)
-        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
+        val result = klassApiService.getCodeObjectsFor(testClassificationId)
+        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt) }
         assertEquals(2, result.size)
-        assertEquals(1, klassApiService.classificationItemListCache())
     }
 
     @Test
-    fun `fetch code list from klass api returns 404 NOT FOUND`() {
+    fun `fetch classification returns 500 INTERNAL SERVER ERROR`() {
         every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
-
-        every {
-            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
-        } returns HttpResponse.notFound(codes)
-
-        assertThrows<NoSuchElementException> {
-            klassApiService.getClassification(testClassificationId)
-        }
-
-        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
-    }
-
-    @Test
-    fun `fetch code list from klass api returns 500 INTERNAL SERVER ERROR`() {
-        every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
-
-        every {
-            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
+            klassApiMockkClient.fetchClassification(testClassificationId)
         } returns HttpResponse.serverError()
 
-        assertThrows<HttpServerException> {
+        assertThrows<NoSuchElementException> {
             klassApiService.getClassification(testClassificationId)
         }
 
-        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
+        verify(exactly = 1) { klassApiMockkClient.fetchClassification(testClassificationId) }
     }
 
     @Test
-    fun `fetch non-existing code list fra klass api throws exception`() {
+    fun `fetch non-existent classification`() {
         every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
-
-        every {
-            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
-        } returns
-            HttpResponse.ok(
-                Codes(
-                    codes = emptyList(),
-                ),
-            )
+            klassApiMockkClient.fetchClassification(testClassificationId)
+        } returns HttpResponse.notFound()
 
         assertThrows<NoSuchElementException> {
             klassApiService.getClassification(testClassificationId)
         }
 
-        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
+        verify(exactly = 1) { klassApiMockkClient.fetchClassification(testClassificationId) }
     }
 
     @Test
-    fun `get existing classification by id from cache`() {
+    fun `get existing classification by id`() {
         every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
-
-        every {
-            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
-        } returns
-            HttpResponse.ok(
-                Codes(
-                    codes = codeList,
-                ),
-            )
+            klassApiMockkClient.fetchClassification(testClassificationId)
+        } returns getClassificationResponse
 
         val result = klassApiService.getClassification(testClassificationId)
-        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
+        verify(exactly = 1) { klassApiMockkClient.fetchClassification(testClassificationId) }
 
         assertThat(result).isInstanceOf(Classification::class.java)
         assertThat(result.codes).hasSize(2)
@@ -251,14 +220,14 @@ class KlassApiServiceTest {
     fun `get codes for returns a list of just the codes`() {
         every {
             klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(klassApiResponse)
+        } returns HttpResponse.ok(listClassificationsResponse)
 
         every {
-            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
+            klassApiMockkClient.listCodes(testClassificationId, codesAt)
         } returns HttpResponse.ok(codes)
 
         val result = klassApiService.getCodesFor(testClassificationId.toString())
-        verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
+        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt) }
         assertThat(result).containsExactly("1", "2")
     }
 
@@ -266,12 +235,12 @@ class KlassApiServiceTest {
     @EnumSource(SupportedLanguages::class)
     fun `get code item for language`(language: SupportedLanguages) {
         every {
-            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
+            klassApiMockkClient.listCodes(testClassificationId, codesAt)
         } returns HttpResponse.ok(codes)
 
         assertThat(
             klassApiService
-                .getCodeItemFor(
+                .renderCode(
                     testClassificationId.toString(),
                     "1",
                     language,

@@ -30,12 +30,12 @@ interface KlassApiClient {
     @Consumes(MediaType.APPLICATION_JSON)
     fun fetchClassification(
         @PathVariable classificationId: Int,
-    ): HttpResponse<Classification>
+    ): HttpResponse<Classification?>
 
     @Get("classifications/{classificationId}/codesAt?date={codesAt}")
     @SingleResult
     @Consumes(MediaType.APPLICATION_JSON)
-    fun fetchCodeList(
+    fun listCodes(
         @PathVariable classificationId: Int,
         @QueryValue codesAt: String,
     ): HttpResponse<Codes>

@@ -10,9 +10,9 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 interface KlassService {
     fun getCodesFor(id: String): List<String>
 
-    fun getAllIds(): Collection<String>
+    fun doesClassificationExist(id: String): Boolean
 
-    fun getCodeItemFor(
+    fun renderCode(
         id: String,
         code: String,
         language: SupportedLanguages,

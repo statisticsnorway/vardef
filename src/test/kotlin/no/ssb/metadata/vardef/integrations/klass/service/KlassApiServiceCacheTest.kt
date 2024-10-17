@@ -8,11 +8,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import no.ssb.metadata.vardef.integrations.klass.models.Classifications
 import no.ssb.metadata.vardef.integrations.klass.models.Code
-import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
+import no.ssb.metadata.vardef.integrations.klass.models.Codes
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.LocalDateTime
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
@@ -21,7 +20,9 @@ import java.time.LocalDateTime
 class KlassApiServiceCacheTest {
     private lateinit var klassApiMockkClient: KlassApiClient
     private lateinit var klassApiService: KlassApiService
-    private lateinit var klassApiResponse: KlassApiResponse
+    private lateinit var classification: Classification
+    private lateinit var codes: List<Code>
+    private val classificationId = 1
 
     @Property(name = "micronaut.http.services.klass.codes-at")
     private val codesAt: String = ""
@@ -30,25 +31,22 @@ class KlassApiServiceCacheTest {
     fun setUp() {
         klassApiMockkClient = mockk<KlassApiClient>()
         klassApiService = KlassApiService(klassApiMockkClient, codesAt)
-        klassApiResponse =
-            KlassApiResponse(
-                Classifications(
-                    listOf(
-                        Classification(
-                            name = "Test",
-                            id = 1,
-                            classificationType = "classification",
-                            lastModified = "${LocalDateTime.now()}",
-                            codes =
-                                listOf(
-                                    Code(code = "1", name = "Ja"),
-                                    Code(code = "2", name = "Nei"),
-                                ),
-                        ),
-                    ),
-                ),
+        codes =
+            listOf(
+                Code(code = "1", name = "Ja"),
+                Code(code = "2", name = "Nei"),
             )
-        every { klassApiMockkClient.fetchClassifications() } returns HttpResponse.ok(klassApiResponse)
+        classification =
+            Classification(
+                name = "Test",
+                id = classificationId,
+                classificationType = "classification",
+                lastModified = "${LocalDateTime.now()}",
+                codes = codes,
+            )
+
+        every { klassApiMockkClient.fetchClassification(classificationId) } returns HttpResponse.ok(classification)
+        every { klassApiMockkClient.listCodes(classificationId, codesAt) } returns HttpResponse.ok(Codes(codes))
     }
 
     @AfterAll
@@ -56,22 +54,19 @@ class KlassApiServiceCacheTest {
         clearAllMocks()
     }
 
-    @Timeout(2)
     @Test
-    @Order(1)
-    fun `first run cache`() {
-        assertEquals(0, klassApiService.classificationCacheSize())
-        klassApiService.getClassifications()
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
-        assertEquals(1, klassApiService.classificationCacheSize())
+    fun `classifications cache`() {
+        assertThat(klassApiService.getClassification(classificationId)).isEqualTo(classification)
+        verify(exactly = 1) { klassApiMockkClient.fetchClassification(classificationId) }
+        assertThat(klassApiService.getClassification(classificationId)).isEqualTo(classification)
+        verify(exactly = 1) { klassApiMockkClient.fetchClassification(classificationId) }
     }
 
-    @Timeout(4)
     @Test
-    @Order(2)
-    fun `second run cache`() {
-        klassApiService.getClassifications()
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
-        assertEquals(1, klassApiService.classificationCacheSize())
+    fun `codes cache`() {
+        assertThat(klassApiService.getCodeObjectsFor(classificationId)).isEqualTo(codes)
+        verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt) }
+        assertThat(klassApiService.getCodeObjectsFor(classificationId)).isEqualTo(codes)
+        verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt) }
     }
 }

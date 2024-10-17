@@ -51,13 +51,15 @@ class StaticKlassService : KlassService {
             .toList()
     }
 
-    override fun getAllIds(): Collection<String> {
-        val classifications: Collection<StaticClassification> =
-            beanContext.getBeansOfType(StaticClassification::class.java).toList()
-        return classifications.map { it.id }
-    }
+    override fun doesClassificationExist(id: String): Boolean =
+        try {
+            beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
+            true
+        } catch (e: Exception) {
+            false
+        }
 
-    override fun getCodeItemFor(
+    override fun renderCode(
         id: String,
         code: String,
         language: SupportedLanguages,

@@ -43,7 +43,7 @@ class KlassApiClientIntegrationTest {
     fun `fetch code list from klass api`() {
         listOf(unitTypesId, areasId)
             .forEach { id ->
-                val result = klassApiClient.fetchCodeList(id, codesAt)
+                val result = klassApiClient.listCodes(id, codesAt)
                 assertThat(result).isNotNull
 
                 val classificationList = result.body()?.codes ?: emptyList()

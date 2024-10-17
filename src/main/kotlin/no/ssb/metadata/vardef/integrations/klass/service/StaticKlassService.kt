@@ -20,7 +20,7 @@ data class StaticKlassCode(
 
 // Deserializes test data from property in application-test.yaml
 @Serdeable
-@Requires(env = ["test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
+@Requires(env = ["test"], notEnv = ["integration-test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 @EachProperty(KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 class StaticClassification(
     @param:Parameter val id: String,
@@ -30,7 +30,7 @@ class StaticClassification(
 }
 
 @Primary
-@Requires(env = ["test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
+@Requires(env = ["test"], notEnv = ["integration-test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 @Singleton
 class StaticKlassService : KlassService {
     @Inject

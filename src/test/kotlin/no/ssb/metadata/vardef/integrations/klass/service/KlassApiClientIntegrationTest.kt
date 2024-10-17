@@ -7,6 +7,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Classifications
 import no.ssb.metadata.vardef.integrations.klass.models.Code
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -43,7 +44,7 @@ class KlassApiClientIntegrationTest {
     fun `fetch code list from klass api`() {
         listOf(unitTypesId, areasId)
             .forEach { id ->
-                val result = klassApiClient.listCodes(id, codesAt)
+                val result = klassApiClient.listCodes(id, codesAt, language = SupportedLanguages.NB)
                 assertThat(result).isNotNull
 
                 val classificationList = result.body()?.codes ?: emptyList()

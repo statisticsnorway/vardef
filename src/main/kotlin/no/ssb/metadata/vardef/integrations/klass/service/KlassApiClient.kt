@@ -10,6 +10,7 @@ import io.micronaut.http.client.annotation.Client
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.integrations.klass.models.KlassApiResponse
+import no.ssb.metadata.vardef.models.SupportedLanguages
 
 /**
  * A declarative client for the Klass API
@@ -32,11 +33,12 @@ interface KlassApiClient {
         @PathVariable classificationId: Int,
     ): HttpResponse<Classification?>
 
-    @Get("classifications/{classificationId}/codesAt?date={codesAt}")
+    @Get("classifications/{classificationId}/codesAt?date={codesAt}&language={language}")
     @SingleResult
     @Consumes(MediaType.APPLICATION_JSON)
     fun listCodes(
         @PathVariable classificationId: Int,
         @QueryValue codesAt: String,
+        @QueryValue language: SupportedLanguages = SupportedLanguages.NB,
     ): HttpResponse<Codes>
 }

@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.server.exceptions.HttpServerException
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -79,59 +78,6 @@ class KlassApiServiceTest {
     }
 
     @Test
-    fun `fetch all classifications from klass api returns 200 OK, but Klass is empty`() {
-        every {
-            klassApiMockkClient.fetchClassifications()
-        } returns
-            HttpResponse.ok(
-                KlassApiResponse(
-                    Classifications(
-                        emptyList(),
-                    ),
-                ),
-            )
-        val result = klassApiService.getClassifications()
-        assertThat(result).hasSize(0)
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
-    }
-
-    @Test
-    fun `fetch all classifications from klass api returns 200 OK`() {
-        every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(listClassificationsResponse)
-        val result = klassApiService.getClassifications()
-        assertEquals(1, result.size)
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
-    }
-
-    @Test
-    fun `fetch all classifications from klass api returns 404 NOT FOUND`() {
-        every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.notFound()
-
-        assertThrows<HttpServerException> {
-            klassApiService.getClassifications()
-        }
-
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
-    }
-
-    @Test
-    fun `fetch all classifications from klass api returns 500 INTERNAL SERVER ERROR`() {
-        every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.serverError()
-
-        assertThrows<HttpServerException> {
-            klassApiService.getClassifications()
-        }
-
-        verify(exactly = 1) { klassApiMockkClient.fetchClassifications() }
-    }
-
-    @Test
     fun `get non-existing classification returns exception`() {
         every {
             klassApiMockkClient.fetchClassification(nonExistingClassificationId)
@@ -156,7 +102,7 @@ class KlassApiServiceTest {
             )
 
         assertThrows<NoSuchElementException> {
-            klassApiService.getCodeObjectsFor(testClassificationId)
+            klassApiService.getCodeObjectsFor(testClassificationId, SupportedLanguages.NB)
         }
 
         verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt) }
@@ -172,7 +118,7 @@ class KlassApiServiceTest {
             klassApiMockkClient.listCodes(testClassificationId, codesAt)
         } returns HttpResponse.ok(codes)
 
-        val result = klassApiService.getCodeObjectsFor(testClassificationId)
+        val result = klassApiService.getCodeObjectsFor(testClassificationId, SupportedLanguages.NB)
         verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt) }
         assertEquals(2, result.size)
     }

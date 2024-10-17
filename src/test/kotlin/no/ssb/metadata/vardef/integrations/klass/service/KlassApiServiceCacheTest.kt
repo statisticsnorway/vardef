@@ -10,6 +10,7 @@ import io.mockk.verify
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.integrations.klass.models.Codes
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import java.time.LocalDateTime
@@ -64,9 +65,9 @@ class KlassApiServiceCacheTest {
 
     @Test
     fun `codes cache`() {
-        assertThat(klassApiService.getCodeObjectsFor(classificationId)).isEqualTo(codes)
+        assertThat(klassApiService.getCodeObjectsFor(classificationId, SupportedLanguages.NB)).isEqualTo(codes)
         verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt) }
-        assertThat(klassApiService.getCodeObjectsFor(classificationId)).isEqualTo(codes)
+        assertThat(klassApiService.getCodeObjectsFor(classificationId, SupportedLanguages.NB)).isEqualTo(codes)
         verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt) }
     }
 }

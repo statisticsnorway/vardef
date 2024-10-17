@@ -31,34 +31,7 @@ open class KlassApiService(
     private var klassUrlEn: String = ""
 
     private var classifications: MutableMap<Int, Classification> = mutableMapOf()
-    private var codes: MutableMap<Int, List<Code>> = mutableMapOf()
-
-    open fun getClassifications(): List<Classification> {
-        val notFound = "Klass Api: Classifications not found"
-
-        logger.info("Klass Api: Fetching classifications")
-        val response = klassApiClient.fetchClassifications()
-
-        when (response.status.code) {
-            500 -> {
-                logger.error(status500)
-                throw HttpServerException(status500)
-            }
-
-            404 -> {
-                logger.error(notFound)
-                throw HttpServerException(notFound)
-            }
-
-            else -> {
-                logger.info("Klass Api: Classifications fetched")
-                return response
-                    .body()
-                    .embedded
-                    .classifications
-            }
-        }
-    }
+    private var codes: MutableMap<Int, MutableMap<SupportedLanguages, List<Code>>> = mutableMapOf()
 
     @CachePut("classifications", parameters = ["classificationId"])
     open fun getClassification(classificationId: Int): Classification =
@@ -71,10 +44,13 @@ open class KlassApiService(
         }
 
     @CachePut("codes", parameters = ["classificationId"])
-    open fun getCodeObjectsFor(classificationId: Int): List<Code> {
-        return codes[classificationId] ?: run {
+    open fun getCodeObjectsFor(
+        classificationId: Int,
+        language: SupportedLanguages,
+    ): List<Code> {
+        return codes[classificationId]?.get(language) ?: run {
             logger.info("Klass Api: Fetching codes for $classificationId")
-            val response = klassApiClient.listCodes(classificationId, codesAt)
+            val response = klassApiClient.listCodes(classificationId, codesAt, language)
 
             when (response.status.code) {
                 500 -> {
@@ -95,14 +71,18 @@ open class KlassApiService(
                                 "Klass Api: No codes found for $classificationId",
                             )
                         }
-                    codes[classificationId] = freshCodes
+                    if (!codes.containsKey(classificationId)) {
+                        codes[classificationId] = mutableMapOf(language to freshCodes)
+                    } else {
+                        codes[classificationId]?.put(language, freshCodes)
+                    }
                     return freshCodes
                 }
             }
         }
     }
 
-    override fun getCodesFor(id: String): List<String> = getCodeObjectsFor(id.toInt()).map { it.code }
+    override fun getCodesFor(id: String): List<String> = getCodeObjectsFor(id.toInt(), SupportedLanguages.NB).map { it.code }
 
     override fun doesClassificationExist(id: String): Boolean =
         try {
@@ -118,9 +98,9 @@ open class KlassApiService(
         language: SupportedLanguages,
     ): KlassReference? {
         val classificationId = id.toInt()
-        val classification = getCodeObjectsFor(classificationId).find { it.code == code }
+        val classification = getCodeObjectsFor(classificationId, language).find { it.code == code }
         return classification?.let {
-            val name = if (language == SupportedLanguages.NB) it.name else null
+            val name = it.name
             KlassReference(
                 getKlassUrlForIdAndLanguage(id, language),
                 it.code,

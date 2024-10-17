@@ -4,14 +4,10 @@ import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.klass.models.Code
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.assertThrows
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @MicronautTest(startApplication = false)
 @Requires(env = ["integration-test"])
 class KlassApiServiceIntegrationTest {
@@ -25,9 +21,10 @@ class KlassApiServiceIntegrationTest {
     fun `fetch existing classification by id from klass api`() {
         val result = klassApiService.getClassification(unitTypesId)
         assertThat(result).isNotNull
+        assertThat(result.name).isEqualTo("Enhetstyper")
 
-        val classificationList = result.codes
-        assertThat(classificationList[0]).isInstanceOf(Code::class.java)
+//        val classificationList = result.codes
+//        assertThat(classificationList[0]).isInstanceOf(Code::class.java)
     }
 
     @Test

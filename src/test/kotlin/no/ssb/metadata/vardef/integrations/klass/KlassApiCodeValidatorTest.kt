@@ -20,6 +20,10 @@ data class TestCodeObject(
             @KlassCode("618")
             String,
             >? = null,
+    var measurementType: List<
+            @KlassCode("303")
+            String,
+            >? = null,
 )
 
 @Introspected
@@ -36,11 +40,16 @@ class KlassApiCodeValidatorTest(
         assertThat(
             validator.validate(
                 TestCodeObject(
-                    listOf("01", "02", "03"),
+                    listOf("01", "08", "28"),
                     listOf(
                         "al",
-                        "al03",
-                        "al04",
+                        "bb",
+                        "vf",
+                    ),
+                    listOf(
+                        "05",
+                        "17.01",
+                        "06.01",
                     ),
                 ),
             ),

@@ -43,6 +43,7 @@ open class BaseVardefTest {
 
         // One variable definition
         patches.create(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
+        patches.create(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
 
         // One variable definition
         patches.create(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)

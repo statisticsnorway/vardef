@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*
-import io.micronaut.http.annotation.Patch
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
@@ -16,14 +15,17 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.UpdateDraft
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Validated
-@Controller("/variable-definitions/{id}")
+@Controller("/variable-definitions/{definitionId}")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController {
     @Inject
@@ -54,7 +56,7 @@ class VariableDefinitionByIdController {
     fun getVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
-        id: String,
+        definitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
             examples = [ExampleObject(name = "No date specified", value = DEFAULT_LANGUAGE)],
@@ -70,16 +72,27 @@ class VariableDefinitionByIdController {
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
-    ): MutableHttpResponse<RenderedVariableDefinition?>? =
-        HttpResponse
-            .ok(
-                varDefService.getOneByIdAndDateAndRenderForLanguage(
-                    definitionId = id,
+        request: HttpRequest<*>,
+    ): MutableHttpResponse<out Any>? {
+        val definition =
+            varDefService
+                .getByDateAndRender(
+                    definitionId = definitionId,
                     language = language,
                     dateOfValidity = dateOfValidity,
-                ),
-            ).header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+                )
+        if (definition == null) {
+            throw HttpStatusException(
+                HttpStatus.NOT_FOUND,
+                "Variable is not valid at date $dateOfValidity",
+            )
+        }
+
+        return HttpResponse
+            .ok(definition)
+            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
             .contentType(MediaType.APPLICATION_JSON)
+    }
 
     /**
      * Delete a variable definition.
@@ -87,14 +100,21 @@ class VariableDefinitionByIdController {
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "204", description = "Successfully deleted")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @ApiResponse(responseCode = "405", description = "Attempt to delete a variable definition with status unlike DRAFT.")
     @Status(HttpStatus.NO_CONTENT)
     @Delete()
     fun deleteVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
         @VardefId
-        id: String,
+        definitionId: String,
     ): MutableHttpResponse<Unit> {
-        varDefService.deleteById(id = id)
+        if (patches.latest(definitionId).variableStatus != VariableStatus.DRAFT) {
+            throw HttpStatusException(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "The variable is published or deprecated and cannot be updated with this method",
+            )
+        }
+        patches.deleteAllForDefinitionId(definitionId)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
         return HttpResponse.noContent<Unit?>().contentType(null)
     }
@@ -109,10 +129,10 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch
     fun updateVariableDefinitionById(
-        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId id: String,
+        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId definitionId: String,
         @Body @Valid updateDraft: UpdateDraft,
     ): CompleteResponse {
-        val variable = patches.latest(id)
+        val variable = patches.latest(definitionId)
         if (variable.variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
@@ -120,7 +140,7 @@ class VariableDefinitionByIdController {
             )
         }
 
-        if (updateDraft.shortName != null && varDefService.checkIfShortNameExists(updateDraft.shortName)) {
+        if (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
@@ -128,7 +148,7 @@ class VariableDefinitionByIdController {
         }
 
         return varDefService
-            .update(patches.latest(id).copyAndUpdate(updateDraft))
+            .update(patches.latest(definitionId).copyAndUpdate(updateDraft))
             .toCompleteResponse()
     }
 }

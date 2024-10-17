@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
@@ -10,12 +9,6 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 class ConvertionsTest : BaseVardokTest() {
-    @Test
-    fun `convert statistical unit to unit types`() {
-        val statisticalUnit = "Offentlig forvaltning"
-        val convertedValue = convertUnitTypes(statisticalUnit)
-        assertThat(convertedValue).isEqualTo(listOf("22"))
-    }
 
     companion object {
         @JvmStatic
@@ -65,6 +58,10 @@ class ConvertionsTest : BaseVardokTest() {
                     "Hubba hubba",
                     emptyList<String?>(),
                 ),
+                arguments(
+                    "Offentlig forvaltning",
+                    listOf("22"),
+                ),
             )
     }
 
@@ -74,8 +71,6 @@ class ConvertionsTest : BaseVardokTest() {
         name: String,
         code: List<String?>,
     ) {
-        val resultAdresse = convertUnitTypes(name)
-        assertThat(resultAdresse).isNotNull
-        assertThat(resultAdresse).isEqualTo(code)
+        assertThat(convertUnitTypes(name)).isEqualTo(code)
     }
 }

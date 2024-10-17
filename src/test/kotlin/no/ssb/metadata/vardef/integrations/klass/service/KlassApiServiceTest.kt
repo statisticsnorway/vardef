@@ -9,12 +9,15 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
 import no.ssb.metadata.vardef.integrations.klass.models.*
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import java.time.LocalDateTime
 
 @MockK
@@ -257,5 +260,22 @@ class KlassApiServiceTest {
         val result = klassApiService.getCodesFor(testClassificationId.toString())
         verify(exactly = 1) { klassApiMockkClient.fetchCodeList(testClassificationId, codesAt) }
         assertThat(result).containsExactly("1", "2")
+    }
+
+    @ParameterizedTest
+    @EnumSource(SupportedLanguages::class)
+    fun `get code item for language`(language: SupportedLanguages) {
+        every {
+            klassApiMockkClient.fetchCodeList(testClassificationId, codesAt)
+        } returns HttpResponse.ok(klassApiCodeListResponse)
+
+        assertThat(
+            klassApiService
+                .getCodeItemFor(
+                    testClassificationId.toString(),
+                    "1",
+                    language,
+                )?.title,
+        ).isNotNull()
     }
 }

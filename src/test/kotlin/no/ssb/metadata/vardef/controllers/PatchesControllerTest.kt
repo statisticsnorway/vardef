@@ -171,7 +171,7 @@ class PatchesControllerTest : BaseVardefTest() {
     ) {
         val id =
             patches
-                .save(
+                .create(
                     DRAFT_BUS_EXAMPLE
                         .apply {
                             this.variableStatus = variableStatus

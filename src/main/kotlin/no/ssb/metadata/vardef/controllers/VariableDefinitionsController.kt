@@ -116,6 +116,6 @@ class VariableDefinitionsController {
             )
         }
 
-        return patches.save(varDef.toSavedVariableDefinition()).toCompleteResponse()
+        return patches.create(varDef.toSavedVariableDefinition()).toCompleteResponse()
     }
 }

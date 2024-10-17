@@ -105,10 +105,9 @@ fun mapVardokIdentifier(vardokItem: VardokResponse): String {
 
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> {
     val statisticalUnit = vardokItem.variable?.statisticalUnit
-    if (statisticalUnit != null && findCategoryForValue(statisticalUnit) != null)
-        {
-            return convertUnitTypes(statisticalUnit)
-        }
+    if (statisticalUnit != null && findCategoryForValue(statisticalUnit) != null) {
+        return convertUnitTypes(statisticalUnit)
+    }
 
     throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
 }

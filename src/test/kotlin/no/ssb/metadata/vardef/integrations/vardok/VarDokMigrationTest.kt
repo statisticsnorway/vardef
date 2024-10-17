@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
@@ -217,7 +216,10 @@ class VarDokMigrationTest {
 
     @ParameterizedTest
     @MethodSource("unitTypes")
-    fun `map statistical unit to unit types`(name: String, code: List<String?>) {
+    fun `map statistical unit to unit types`(
+        name: String,
+        code: List<String?>,
+    ) {
         val resultAdresse = convertUnitTypes(name)
         assertThat(resultAdresse).isNotNull
         assertThat(resultAdresse).isEqualTo(code)

@@ -3,7 +3,6 @@ package no.ssb.metadata.vardef.integrations.vardok
 import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCategoryForValue
 
 enum class UnitTypes(val values: Set<String>) {
-
     ADRESSE(setOf("Adresse")),
     ARBEIDSULYKKE(setOf("Arbeidsulykke")),
     BEDRIFT(setOf("Bedrift", "Virksomhet")),
@@ -11,7 +10,7 @@ enum class UnitTypes(val values: Set<String>) {
     BRANSJE_ENHET(setOf("Bransjeenhet")),
     KJOERETOEY(setOf("Kjøretøy")),
     BYGNING(setOf("Bygning")),
-    EIENDOM(setOf("Eiendom","Tinglyst omsetning", "Skogareal", "Landbrukseiendom", "Grunneiendom")),
+    EIENDOM(setOf("Eiendom", "Tinglyst omsetning", "Skogareal", "Landbrukseiendom", "Grunneiendom")),
     FAMILIE(setOf("Familie")),
     FORETAK(setOf("Foretak")),
     FYLKE_FORVALTNING(setOf("Fylke (forvaltning)")),
@@ -24,27 +23,25 @@ enum class UnitTypes(val values: Set<String>) {
     KOMMUNE_GEOGRAFISK(setOf("Kommune (geografisk)")),
     LOVBRUDD(setOf("Lovbrudd")),
     PERSON(setOf("Arbeidsforhold", "Person")),
-    SKIP(setOf("Skip","Fiskefartøy")),
+    SKIP(setOf("Skip", "Fiskefartøy")),
     STATLIG_VIRKSOMHET(setOf("Statlig virksomhet", "Offentlig forvaltning")),
     STORFE(setOf("Storfe")),
-    TRAFIKKULYKKE(setOf("Trafikkulykke","Ulykke")),
+    TRAFIKKULYKKE(setOf("Trafikkulykke", "Ulykke")),
     TRANSAKSJON(setOf("Transaksjon")),
     VALG(setOf("Valg")),
     VARE_TJENESTE(setOf("Vare/tjeneste", "Repr.vare og -tjeneste", "Internett-abonnement")),
     VERDIPAPIR(setOf("Verdipapir")),
     SAK(setOf("Sak")),
-    AVFALL_ANLOEP_LUFTFARTOEY(setOf("Avfallsanlegg", "Avløpsanlegg", "Luftfartøy"));
+    AVFALL_ANLOEP_LUFTFARTOEY(setOf("Avfallsanlegg", "Avløpsanlegg", "Luftfartøy")),
+    ;
 
-
-       companion object {
-            // Method to find the category for a given value
-            fun findCategoryForValue(value: String): UnitTypes? {
-                return entries.find { category -> value in category.values }
-            }
+    companion object {
+        // Method to find the category for a given value
+        fun findCategoryForValue(value: String): UnitTypes? {
+            return entries.find { category -> value in category.values }
         }
-
+    }
 }
-
 
 /**
  * This converter map statisticalUnit (title) with unitType codes.
@@ -108,9 +105,10 @@ fun mapVardokIdentifier(vardokItem: VardokResponse): String {
 
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> {
     val statisticalUnit = vardokItem.variable?.statisticalUnit
-    if (statisticalUnit != null && findCategoryForValue(statisticalUnit) != null){
-        return convertUnitTypes(statisticalUnit)
-    }
+    if (statisticalUnit != null && findCategoryForValue(statisticalUnit) != null)
+        {
+            return convertUnitTypes(statisticalUnit)
+        }
 
     throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
 }

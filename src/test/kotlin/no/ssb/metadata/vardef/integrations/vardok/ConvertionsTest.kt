@@ -46,6 +46,14 @@ class ConvertionsTest : BaseVardokTest() {
                     listOf("05"),
                 ),
                 arguments(
+                    "Sak",
+                    listOf("05", "13"),
+                ),
+                arguments(
+                    "Fiskefartøy",
+                    listOf("21"),
+                ),
+                arguments(
                     "Hubba hubba",
                     emptyList<String?>(),
                 ),

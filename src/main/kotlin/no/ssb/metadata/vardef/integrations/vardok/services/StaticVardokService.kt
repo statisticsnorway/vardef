@@ -9,7 +9,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import java.io.File
 
 @Primary
-@Requires(env = ["test"])
+@Requires(env = ["test"], notEnv = ["integration-test"])
 @Singleton
 class StaticVardokService : VardokService {
     val xmlMapper = XmlMapper().registerKotlinModule()

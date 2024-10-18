@@ -1,0 +1,64 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-04" defaultValidFrom="1988-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:5" lastChangedDate="2017-01-18" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for inntekts- og lønnsstatistikk</dc:contributor>
+        <dc:creator>Ingrid Melby</dc:creator>
+        <dcterms:modified>2017-01-18</dcterms:modified>
+        <dcterms:valid>1988-01-01 - </dcterms:valid>
+        <dc:description>Toppskattegrunnlaget omfatter personinntekt fra lønnet arbeid, beregnet personinntekt fra næring og personinntekt fra pensjoner. Grunnlag for toppskatt.</dc:description>
+        <dcterms:abstract> Skattestatistikk for personer SKD - Skattedirektoratet</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:5</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>05.01.30 - Skatt</dc:subject>
+        <dc:title>Toppskattegrunnlag</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Toppskattegrunnlag</Title>
+        <Description>Toppskattegrunnlaget omfatter personinntekt fra lønnet arbeid, beregnet personinntekt fra næring og personinntekt fra pensjoner. Grunnlag for toppskatt.</Description>
+        <ContactPerson>
+            <CodeValue>ime</CodeValue>
+            <CodeText>Ingrid Melby</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>225</CodeValue>
+            <CodeText>Seksjon for inntekts- og lønnsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>05.01.30</CodeValue>
+            <CodeText>Skatt</CodeText>
+        </SubjectArea>
+        <ExternalSource>SKD - Skattedirektoratet</ExternalSource>
+        <InternalSource>Skattestatistikk for personer</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>http://www.ssb.no/emner/05/01/notat_200161/notat_200161.pdf</ExternalDocument>
+        <DataElementName>togrlag</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08878" xlink:title="08878: Oversiktstall fra skatteoppgjøret, foreløpige tall. Antall, mill.kr og gjennomsnitt (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08780" xlink:title="08780: Toppskatt og toppskattegrunnlag, etter kjønn og alder. Mill.kr og antall personer" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08564" xlink:title="08564: Oversiktstall fra skatteligninga for alle personer. Antall, mill. kr og gjennomsnitt (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07094" xlink:title="07094: Hovedposter fra ligninga for bosatte personer 17 år og eldre (F) (kr). Gjennomsnitt (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06792" xlink:title="06792: Toppskattegrunnlag og personinntekt lønn i intervall. Antall bosatte personer 17 år og eldre, etter kjønn og alder (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05918" xlink:title="05918: Hovedposter fra ligninga for lønnstakere og pensjonister og næringsdrivende. Bosatte personer 17 år og eldre. Gjennomsnitt (kr) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05800" xlink:title="05800: Formuesskatt (før nedsettelse), etter størrelse på toppskattegrunnlag. Antall personer og gjennomsnitt, alle personer" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05798" xlink:title="05798: Oversiktstall fra skatteligninga for alle personer. Antall, mill. kr og gjennomsnitt (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05598" xlink:title="05598: Oversiktstall fra skatteoppgjøret, foreløpige tall (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05424" xlink:title="05424: Oversyn over skattelikninga. Statsskattelikninga og utlikning til folketrygda (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04263" xlink:title="04263: Toppskatt og toppskattegrunnlag. Gjennomsnitt og antall for de med beløp (K)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

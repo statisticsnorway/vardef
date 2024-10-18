@@ -1,0 +1,55 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2005-12-06" defaultValidFrom="1984-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1422" lastChangedDate="2014-04-07" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for accounting statistics</dc:contributor>
+        <dc:creator>Janne Therese Utkilen</dc:creator>
+        <dcterms:modified>2014-04-07</dcterms:modified>
+        <dcterms:valid>1984-01-01 - </dcterms:valid>
+        <dc:description>A unit of ownership in a limited company.</dc:description>
+        <dcterms:abstract/>
+        <dcterms:tableOfContents>Enterprise</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:1422</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>11.01 - Shares, bonds, share prices, exchange rates</dc:subject>
+        <dc:title>Share</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Share</Title>
+        <Description>A unit of ownership in a limited company.</Description>
+        <ContactPerson>
+            <CodeValue>jtu</CodeValue>
+            <CodeText>Janne Therese Utkilen</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>970</CodeValue>
+            <CodeText>Division for accounting statistics</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Enterprise</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>11.01</CodeValue>
+            <CodeText>Shares, bonds, share prices, exchange rates</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource/>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName/>
+        <ShortNameWeb>
+            <CodeValue>aksjer</CodeValue>
+            <CodeText>Stock statistics</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

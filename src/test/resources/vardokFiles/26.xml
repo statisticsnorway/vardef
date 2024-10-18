@@ -1,0 +1,52 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-09" defaultValidFrom="1964-10-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:26" lastChangedDate="2009-02-23" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for befolkningsstatistikk</dc:contributor>
+        <dc:creator>Arvid Olav Lysø</dc:creator>
+        <dcterms:modified>2009-02-23</dcterms:modified>
+        <dcterms:valid>1964-10-01 - </dcterms:valid>
+        <dc:description>Variabelen viser fødselsnummer, det vil si fødselsdag, -måned og -år (6 siffer) og personnummer (5 siffer)</dc:description>
+        <dcterms:abstract> System for befolkningsstatistikk (BESYS) SKD - Sentralkontoret for folkeregistrering</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:26</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>02.01 - Befolkningsstruktur</dc:subject>
+        <dc:title>Fødselsnummer</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Fødselsnummer</Title>
+        <Description>Variabelen viser fødselsnummer, det vil si fødselsdag, -måned og -år (6 siffer) og personnummer (5 siffer)</Description>
+        <ContactPerson>
+            <CodeValue>aol</CodeValue>
+            <CodeText>Arvid Olav Lysø</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>320</CodeValue>
+            <CodeText>Seksjon for befolkningsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>02.01</CodeValue>
+            <CodeText>Befolkningsstruktur</CodeText>
+        </SubjectArea>
+        <ExternalSource>SKD - Sentralkontoret for folkeregistrering</ExternalSource>
+        <InternalSource>System for befolkningsstatistikk (BESYS)</InternalSource>
+        <Sensitivity>Fï¿½lsom</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>fnr</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

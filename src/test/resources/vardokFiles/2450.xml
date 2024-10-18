@@ -1,0 +1,60 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2008-02-06" defaultValidFrom="" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:2450" lastChangedDate="2009-06-29" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for finansmarkedsstatistikk</dc:contributor>
+        <dc:creator>Permisjon/Sluttet</dc:creator>
+        <dcterms:modified>2009-06-29</dcterms:modified>
+        <dcterms:valid/>
+        <dc:description>Andre endringer på finansielle fordringer/gjeld er endringer i beholdning som ikke skyldes transaksjoner. Dette kan f.eks være endringer i valutakursen og/eller prisen på finansobjektet. Det kan også skyldes endringer i klassifikasjoner og struktur i finansmarkedet.</dc:description>
+        <dcterms:abstract/>
+        <dcterms:tableOfContents>Foretak</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:2450</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>09.02 - Finansielle sektorbalanser</dc:subject>
+        <dc:title>Andre endringer, finansielle fordringer/gjeld</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Andre endringer, finansielle fordringer/gjeld</Title>
+        <Description>Andre endringer på finansielle fordringer/gjeld er endringer i beholdning som ikke skyldes transaksjoner. Dette kan f.eks være endringer i valutakursen og/eller prisen på finansobjektet. Det kan også skyldes endringer i klassifikasjoner og struktur i finansmarkedet.</Description>
+        <ContactPerson>
+            <CodeValue>cns</CodeValue>
+            <CodeText>Permisjon/Sluttet</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>940</CodeValue>
+            <CodeText>Seksjon for finansmarkedsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Foretak</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>09.02</CodeValue>
+            <CodeText>Finansielle sektorbalanser</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource/>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName/>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10788" xlink:title="10788: Finansielle sektorregnskaper, etter sektor, finanspost og motsektor (mill. kr)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10706" xlink:title="10706: Finansielle sektorregnskaper, etter sektor, finanspost og motsektor (mill. kr)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09673" xlink:title="09673: Finansregnskap (BPM5). Kvartalstall. Løpende priser (mill. kr) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09402" xlink:title="09402: Finansregnskap (BPM5). Årstall. Løpende priser (mill. kr) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07511" xlink:title="07511: Offentlig forvaltnings fordringer og gjeld, etter undersektorer og finansobjekt (mill. kr)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07017" xlink:title="07017: Finansielle sektorregnskaper. Fordringer og gjeld, etter institusjonell sektor og finansobjekt (mill. kr) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07016" xlink:title="07016: Finansielle sektorregnskaper. Kreditorsektor, debitorsektor og finansobjekt (mill. kr) (avslutta serie)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

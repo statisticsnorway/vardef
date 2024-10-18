@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
-import no.ssb.metadata.vardef.integrations.vardok.VarDokService
+import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
 import no.ssb.metadata.vardef.integrations.vardok.VardokNotFoundException
 import org.reactivestreams.Publisher
 
@@ -31,7 +31,7 @@ import org.reactivestreams.Publisher
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
     @Inject
-    lateinit var varDokApiService: VarDokService
+    lateinit var varDokApiService: VarDokApiService
 
     @Client("/")
     @Inject

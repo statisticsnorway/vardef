@@ -1,206 +1,55 @@
-<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2004-10-07" defaultValidFrom="1980-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1116" lastChangedDate="2013-08-28" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2005-12-06" defaultValidFrom="1984-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1422" lastChangedDate="2014-04-07" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
     <DC>
-        <dc:contributor>Seksjon for arbeidsmarkedsstatistikk</dc:contributor>
-        <dc:creator>Inger Håland</dc:creator>
-        <dcterms:modified>2013-08-28</dcterms:modified>
-        <dcterms:valid>1980-01-01 - </dcterms:valid>
-        <dc:description>Personer som utførte inntektsgivende arbeid av minst én times varighet i referanseuka/-dagen, samt personer som har et slikt arbeid, men som var midlertidig fraværende pga. sykdom, ferie, lønnet permisjon e.l. Personer som er inne til førstegangs militærtjeneste regnes som sysselsatte. Sysselsatte er summen av lønnstakere og selvstendig næringsdrivende (eiere). Ufrivillig helt permitterte, med en sammenhengende varighet på inntil 3 måneder, blir regnet som sysselsatte, midlertidig fraværende.</dc:description>
-        <dcterms:abstract> Arbeidskraftundersøkelsen International Labour organization (ILO)</dcterms:abstract>
-        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:contributor>Seksjon for regnskapsstatistikk</dc:contributor>
+        <dc:creator>Janne Therese Utkilen</dc:creator>
+        <dcterms:modified>2014-04-07</dcterms:modified>
+        <dcterms:valid>1984-01-01 - </dcterms:valid>
+        <dc:description>En eierandel i et selskap med avgrenset ansvar.</dc:description>
+        <dcterms:abstract/>
+        <dcterms:tableOfContents>Foretak</dcterms:tableOfContents>
         <dc:format>text/xml</dc:format>
-        <dc:identifier>urn:ssb:conceptvariable:vardok:1116</dc:identifier>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:1422</dc:identifier>
         <dc:language>nb</dc:language>
         <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
         <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
         <dc:source/>
-        <dc:subject>06 - Arbeidsliv, yrkesdeltaking og lønn</dc:subject>
-        <dc:title>Sysselsatte</dc:title>
+        <dc:subject>11.01 - Aksjer, obligasjoner, seritfikater og øvrig kredittmarked</dc:subject>
+        <dc:title>Aksje</dc:title>
         <dc:type>Variabeldefinisjon</dc:type>
     </DC>
     <Common>
-        <Title>Sysselsatte</Title>
-        <Description>Personer som utførte inntektsgivende arbeid av minst én times varighet i referanseuka/-dagen, samt personer som har et slikt arbeid, men som var midlertidig fraværende pga. sykdom, ferie, lønnet permisjon e.l. Personer som er inne til førstegangs militærtjeneste regnes som sysselsatte. Sysselsatte er summen av lønnstakere og selvstendig næringsdrivende (eiere). Ufrivillig helt permitterte, med en sammenhengende varighet på inntil 3 måneder, blir regnet som sysselsatte, midlertidig fraværende.</Description>
+        <Title>Aksje</Title>
+        <Description>En eierandel i et selskap med avgrenset ansvar.</Description>
         <ContactPerson>
-            <CodeValue>iha</CodeValue>
-            <CodeText>Inger Håland</CodeText>
+            <CodeValue>jtu</CodeValue>
+            <CodeText>Janne Therese Utkilen</CodeText>
         </ContactPerson>
         <ContactDivision>
-            <CodeValue>260</CodeValue>
-            <CodeText>Seksjon for arbeidsmarkedsstatistikk</CodeText>
+            <CodeValue>970</CodeValue>
+            <CodeText>Seksjon for regnskapsstatistikk</CodeText>
         </ContactDivision>
-        <Notes>Definisjonen gjelder i prinsippet for alle SSBs statistikker hvis ikke annet er sagt. Imidlertid vil statistikkene kunne ha ulike avgrensinger av den populasjon som definisjonen anvendes på. For eksempel vil næringsstatistikker og nasjonalregnskapet dekke sysselsatte i bedrifter hjemmehørende i Norge, mens personbaserte statistikker som Arbeidskraftsundersøkelsene vil dekke sysselsatte personer som er bosatt i Norge i følge Det sentrale folkeregisteret. Personbaserte statistikker vil også ofte ha en øvre og/eller nedre aldersgrense for populasjonen. Personer som har flere sysselsettingsforhold i en gitt referanseuka vil kunne bli behandlet ulikt i statistikkene. I næringsstatistikker vil man ofte telle antall sysselsatte personer i hver bedrift. Summert over alle bedrifter i næringen, vil derfor personer med flere arbeidsforhold telle med for hvert sitt arbeidsforhold. I personbaserte statistikker er som oftest personen enhet, og når man gir fordelinger etter egenskaper ved arbeidsforholdet anvendes ofte verdiene knyttet til hovedarbeidsforholdet.</Notes>
+        <Notes/>
     </Common>
     <Variable>
         <InternalNotes/>
-        <StatisticalUnit>Person</StatisticalUnit>
+        <StatisticalUnit>Foretak</StatisticalUnit>
         <SubjectArea>
-            <CodeValue>06</CodeValue>
-            <CodeText>Arbeidsliv, yrkesdeltaking og lønn</CodeText>
+            <CodeValue>11.01</CodeValue>
+            <CodeText>Aksjer, obligasjoner, seritfikater og øvrig kredittmarked</CodeText>
         </SubjectArea>
-        <ExternalSource>International Labour organization (ILO)</ExternalSource>
-        <InternalSource>Arbeidskraftundersøkelsen</InternalSource>
+        <ExternalSource/>
+        <InternalSource/>
         <Sensitivity>Ordinï¿½r</Sensitivity>
         <ExternalDocument/>
         <DataElementName/>
-        <ShortNameWeb/>
+        <ShortNameWeb>
+            <CodeValue>aksjer</CodeValue>
+            <CodeText>Aksjestatistikk</CodeText>
+        </ShortNameWeb>
         <Calculation/>
         <InternalDocument/>
         <ExternalComment/>
         <InternalReference/>
     </Variable>
-    <Relations>
-        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/2498" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11188" xlink:title="11188: Sysselsatte i alt, deltidssysselsatte og undersysselsatte, etter kjønn og næring (SN2007) (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11154" xlink:title="11154: Sysselsatte, etter kjønn og næring (SN2007) (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11153" xlink:title="11153: Sysselsatte, etter kjønn og næring (SN2007) (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11144" xlink:title="11144: Lokalisering av samarbeidspartnere for FoU i næringslivet, etter næring (SN 2007), sysselsettingsgruppe" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11142" xlink:title="11142: Samarbeidspartnere for FoU i næringslivet, etter næring (SN 2007) og sysselsettingsgruppe" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11140" xlink:title="11140: Produkt- og prosessrettet FoU i næringslivet. Driftskostnader, etter næring (SN 2007), sysselsettingsgruppe og produkt-/prosessrettet FoU (mill. kr)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11138" xlink:title="11138: Type FoU i næringslivet. Driftskostnader, etter næring (SN 2007) og sysselsettingsgruppe (mill. kr)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11136" xlink:title="11136: Tematiske områder for FoU i næringslivet. Driftskostnader, etter næring (SN 2007) og sysselsettingsgruppe (mill. kr)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11134" xlink:title="11134: Teknologiområder for FoU i næringslivet. Driftskostnader, etter næring (SN 2007) og sysselsettingsgruppe (mill. kr)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11131" xlink:title="11131: Sysselsatte, etter kjønn, næring (sn2007) og yrkesstatus (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10815" xlink:title="10815: Sysselsatte, årsverk og timeverk, etter produsent" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10585" xlink:title="10585: Lønn og sysselsetting, etter næring, utdanning og kjønn" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10439" xlink:title="10439: Sysselsatte, årsverk og timeverk, etter produsent (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10327" xlink:title="10327: Sysselsatte per 4.kvartal, etter kjønn og yrke (4-siffernivå)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10326" xlink:title="10326: Sysselsatte per 4.kvartal, etter bosted, yrke og kjønn (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10252" xlink:title="10252: Sysselsatte, tilganger og avganger i staten, etter departement med underliggende enheter og høyeste fullførte utdanningsnivå" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09938" xlink:title="09938: Standardfeil og variasjonskoeffisienter til nivåtall over sysselsatte og arbeidsledige, etter kjønn, alder og bosted" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09937" xlink:title="09937: Standardfeil og variasjonskoeffisienter til nivå- og endringstall over sysselsatte og arbeidsledige, etter kjønn, alder og bosted" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09837" xlink:title="09837: Sysselsatte i alderen 15-74 år, etter landbakgrunn, kjønn og alder" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09794" xlink:title="09794: Sysselsatte, etter kjønn og yrke. Årsgjennomsnitt (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09793" xlink:title="09793: Sysselsatte, etter kjønn, alder og yrke (2-siffernivå). Årsgjennomsnitt (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09792" xlink:title="09792: Sysselsatte, etter kjønn og yrker med minst 5000 sysselsatte (4-siffernivå) . Årsgjennomsnitt (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09791" xlink:title="09791: Sysselsatte, etter kjønn, yrke og sektor. Årsgjennomsnitt (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09789" xlink:title="09789: Sysselsatte, etter næring (SN2007) og yrke. Årsgjennomsnitt (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09633" xlink:title="09633: Sysselsatte i alderen 15-74 år, etter kjønn, innvandringsbakgrunn, landgruppe og sektor" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09552" xlink:title="09552: Tverrfaglig spesialisert rusbehandling. Årsverk, etter utdanning og helseregion" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09551" xlink:title="09551: Psykisk helsevern for voksne. Årsverk, etter utdanning og helseforetak" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09550" xlink:title="09550: Psykisk helsevern for barn og unge. Årsverk, etter utdanning og helseforetak" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09549" xlink:title="09549: Sykehus og øvrige somatiske institusjoner. Årsverk, etter utdanning og helseforetak" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09548" xlink:title="09548: Spesialisthelsetjenesten. Årsverk, etter tjenesteområde, yrke og helseforetak" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09547" xlink:title="09547: Spesialisthelsetjenesten. Årsverk, etter utdanning, tjenesteområde og helseforetak" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09431" xlink:title="09431: Overlevde foretak, etter vekst i sysselsetting, næring, organisasjonsform og størrelsesgrupper" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09391" xlink:title="09391: Hovedtall fylkesfordelt nasjonalregnskap (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09390" xlink:title="09390: Fylkesfordelt nasjonalregnskap, etter næring (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09315" xlink:title="09315: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, alder og næring (88 grupper, SN2007) (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09313" xlink:title="09313: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, kjønn, næring (88 grupper, SN2007) og avtalt/vanlig arbeidstid pr. uke (F) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09167" xlink:title="09167: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, kjønn og avtalt/vanlig arbeidstid pr. uke (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09106" xlink:title="09106: Gjennomsnittsalder for sysselsatte per 4. kvartal, etter bosted, arbeidssted og kjønn (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09099" xlink:title="09099: Åpnede konkurser, omsetning og sysselsatte i informasjonssektoren" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09031" xlink:title="09031: Sysselsatte, etter kjønn og bostedsfylke (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09030" xlink:title="09030: Sysselsatte, etter kjønn og bostedsfylke (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09016" xlink:title="09016: Bedrifter og sysselsatte i industri, etter næring (SN2007) og sysselsettingsgruppe (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08931" xlink:title="08931: Sysselsetting og arbeidsløyse for personar 15-74 år. Sesongjusterte tal og trend, 3 månaders glidande gjennomsnitt, etter kjønn og alder" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08930" xlink:title="08930: Sysselsetting og arbeidsløyse. Sesongjusterte tal for personar 15-74 år, 3 månaders glidande gjennomsnitt" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08595" xlink:title="08595: Hovedtall for bedrifter, etter næringsområde (SN2007) og sysselsettingsgruppe" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08560" xlink:title="08560: Sysselsatte i alderen 15-74 år, etter kjønn, sysselsettingsstatus, innvandringskategori, landbakgrunn og næring (SN2007)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08435" xlink:title="08435: Sysselsatte, etter bosettingsstatus, næring (SN2007) og landbakgrunn. 4. kvartal" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08434" xlink:title="08434: Sysselsatte, etter bosettingsstatus, arbeidsstedsfylke og landbakgrunn. 4. kvartal (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08420" xlink:title="08420: Sysselsatte etter kjønn, avtalt/vanlig arbeidstid og utdanningsnivå (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08417" xlink:title="08417: Sysselsatte etter kjønn, avtalt/vanlig arbeidstid og utdanningsnivå (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08416" xlink:title="08416: Sysselsatte, etter kjønn, næring (SN2007) og utdanningsnivå (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08415" xlink:title="08415: Sysselsatte, etter kjønn, næring (SN2007) og utdanningsnivå (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08338" xlink:title="08338: Arbeidsstyrken og sysselsatte, etter kjønn, alder og utdanningsnivå (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08337" xlink:title="08337: Arbeidsstyrken og sysselsatte, etter kjønn, alder og utdanningsnivå (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08316" xlink:title="08316: Nyetablerte foretak, etter næring, organisasjonsform, antall sysselsatte, og overlevingsår (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08229" xlink:title="08229: Foretak, unntatt offentlig forvaltning, etter næring (SN2007), organisasjonsform og antall sysselsatte (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08228" xlink:title="08228: Foretak, omsetning og sysselsatte, unntatt offentlig forvaltning, etter næring (SN2007), organisasjonsform og antall sysselsatte (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08086" xlink:title="08086: Utenlandskontrollerte foretak, etter land til ultimate eier" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08085" xlink:title="08085: Utenlandskontrollerte foretak, strukturstatistikk, etter eierkategori, næring (SN2007) og sysselsetting" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08016" xlink:title="08016: Hovedtall for næringshovedområdet (SN2007). Bedrifter (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08011" xlink:title="08011: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2007). Foretak" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08009" xlink:title="08009: Hovedtall, etter region og næringshovedgruppe (SN2007). Bedrifter" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08008" xlink:title="08008: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2007). Bedrifter" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08007" xlink:title="08007: Hovedtall, etter næringsundergruppe (SN2007). Bedrifter" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07987" xlink:title="07987: Bedrifter og sysselsatte i vann, avløp og renovasjon, etter næring (SN2007) (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07984" xlink:title="07984: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, kjønn, alder og næring (17 grupper, SN2007) (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07983" xlink:title="07983: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, inn- og utpendling og næring (17 grupper, SN2007) (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07981" xlink:title="07981: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, næring (17 grupper, SN2007) og avtalt/vanlig arbeidstid pr. uke (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07979" xlink:title="07979: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, næring (8 grupper, SN2007) og sektor (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07977" xlink:title="07977: Hovedtall for foretak, etter næringsområde (SN2007) og sysselsettingsgruppe" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07972" xlink:title="07972: Sysselsatte, etter kjønn, næring (SN2007) og alder (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07971" xlink:title="07971: Sysselsatte, etter kjønn, næring (SN2007) og alder (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07970" xlink:title="07970: Innkjøpte FoU-tjenester i næringslivet, etter næring (SN2007) og sysselsettingsgruppe (mill. kr)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07969" xlink:title="07969: Finansiering av egenutført FoU i næringslivet, etter næring (SN2007) og sysselsettingsgruppe (mill. kr)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07968" xlink:title="07968: FoU-personale og FoU-årsverk i næringslivet, etter næring (SN2007) og sysselsettingsgruppe" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07967" xlink:title="07967: Kostnader til egenutført FoU-aktivitet i næringslivet, etter næring (SN2007) og sysselsettingsgruppe (mill. kr)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07944" xlink:title="07944: Sysselsatte med helse- og sosialfaglig utdanning i helse- og sosialtjenester, etter sektor (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07943" xlink:title="07943: Sysselsatte med helse- og sosialfaglig utdanning, etter næring og ukentlig avtalt arbeidstid i hovedarbeidsforholdet (prosent) (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07942" xlink:title="07942: Sysselsatte med helse- og sosialfaglig utdanning, etter næring og ukentlig avtalt arbeidstid i hoved- og biarbeidsforholdet (prosent) (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07941" xlink:title="07941: Sysselsatte med helse- og sosialfaglig utdanning, etter næring (SN2007)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07940" xlink:title="07940: Sysselsatte i helse- og sosialtjenester, etter næringsområde (SN2007), utdanningsnivå og alder (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07939" xlink:title="07939: Personer med helse- og sosialfaglig utdanning, etter sysselsetting og alder" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07938" xlink:title="07938: Personer med helse- og sosialfaglig utdanning, etter kjønn og alder" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07936" xlink:title="07936: Personer 15-74 år med helse- og sosialfaglig utdanning, etter fagutdanning og sysselsetting. Pendlingsstrømmer (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07935" xlink:title="07935: Lege-, tannlege og optikerspesialister, etter kjønn, alder og spesialitet" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07840" xlink:title="07840: Oljevirksomhet. Hovedtall for utvinning, tjenester og rørtransport, etter næring (SN2007) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07458" xlink:title="07458: Sysselsetting og arbeidsløyse for busette personar, sesongjustert, etter alder" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07438" xlink:title="07438: Informasjon og kommunikasjon. Hovedtall, etter næringshovedgruppe (SN2007). Foreløpige tall. Foretak" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07432" xlink:title="07432: Hovedtall for foretak i vann, avløp og renovasjon, etter næring (SN2007). Foreløpige tall" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07431" xlink:title="07431: Hovedtall for foretak innen vannforsyning, avløps- og renovasjonsvirksomhet, etter næring (SN2002). Foreløpige tall (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07427" xlink:title="07427: Hovedtall for foretak i industri, etter næring (SN2007). Foreløpige tall" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07420" xlink:title="07420: Hovedtall, etter næringshovedgruppe (SN2007). Foretak. Foreløpige tall" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07285" xlink:title="07285: Sysselsatte innvandrere 15-74 år, etter kjønn, bosted og landbakgrunn (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07284" xlink:title="07284: Sysselsatte innvandrere 15-74 år, etter kjønn, landbakgrunn/verdensregion og antall år bosatt i Norge" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07203" xlink:title="07203: Sysselsatte, etter kjønn, næring (SN2007) og avtalt/vanlig arbeidstid per uke (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07202" xlink:title="07202: Sysselsatte, etter kjønn, næring (SN2007) og avtalt/vanlig arbeidstid per uke (1 000 personer)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07164" xlink:title="07164: Åpnede konkurser, etter næring (SN2007), organisasjonsform, omsetning, sysselsetting og etableringsår (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07019" xlink:title="07019: Hovedtall for foretak i industri, etter næring (SN2002). Foretak. Foreløpige tall (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06945" xlink:title="06945: Sysselsetting og arbeidsløyse for personar 16-74 år. Sesongjusterte tal og trend, 3 månaders glidande gjennomsnitt, etter kjønn og alder (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06932" xlink:title="06932: Sysselsatte og avtalte årsverk i Den norske kirke, etter yrke, kjønn, alder og bispedømme" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06820" xlink:title="06820: Sysselsatte personer, etter næring (F) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06778" xlink:title="06778: Utenlandskontrollerte foretak, etter land til ultimate eier (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06705" xlink:title="06705: Foretak unntatt offentlig forvaltning, etter næring (SN2002), organisasjonsform og antall sysselsatte (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06663" xlink:title="06663: Utenlandskontrollerte foretak, strukturstatistikk (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06654" xlink:title="06654: StatRes. Statsforvaltningen. Ressursinnsats. Sysselsatte etter formål (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06480" xlink:title="06480: Sysselsatte førstegenerasjonsinnvandrere 15-74 år, etter kjønn, sysselsettingsstatus, landbakgrunn og næring (SN94) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06479" xlink:title="06479: Sysselsatte førstegenerasjonsinnvandrere 15-74 år, etter kjønn, bosted og landbakgrunn (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06478" xlink:title="06478: Sysselsatte førstegenerasjonsinnvandrere 15-74 år, etter kjønn, landbakgrunn og botid (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06446" xlink:title="06446: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, kjønn, alder og næring (SN2002) (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06445" xlink:title="06445: Andel sysselsatte i befolkningen per 4. kvartal, etter bosted, kjønn og alder (prosent) (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06161" xlink:title="06161: Andel sysselsatte i befolkningen per 4. kvartal, etter bosted, kjønn og ettårig alder (prosent) (F)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06119" xlink:title="06119: Sysselsatte og avtalte årsverk i Den norske kirke, etter kjønn, kirkelig organisasjonsnivå og aktivitet (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05944" xlink:title="05944: Oljevirksomhet. Hovedtall for utvinning, tjenester og rørtransport, etter næring (SN2002) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05847" xlink:title="05847: Lege-, tannlege og optikerspesialister, etter kjønn, alder og spesialitet (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05820" xlink:title="05820: Sysselsatte med helse- og sosialfaglig utdanning, etter næring (SN2002) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05755" xlink:title="05755: Sysselsatte i helse- og sosialtjenester, etter næringsområde, utdanningsnivå og alder (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05740" xlink:title="05740: Personer med helse- og sosialfaglig utdanning, etter kjønn og alder (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05714" xlink:title="05714: Sysselsatte med helse- og sosialfaglig utdanning, etter næring og ukentlig avtalt arbeidstid i hoved- og biarbeidsforholdet (prosent) (F) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05704" xlink:title="05704: Sysselsatte med helse- og sosialfaglig utdanning, etter næring og ukentlig avtalt arbeidstid i hovedarbeidsforholdet (prosent) (F) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05689" xlink:title="05689: Sysselsatte med helse- og sosialfaglig utdanning i helse- og sosialtjenester, etter sektor (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05688" xlink:title="05688: Sysselsatte med helse- og sosialfaglig utdanning i helse- og sosialtjenester, etter fagutdanning og utenlandsk statsborgerskap (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05193" xlink:title="05193: Egenutført FoU i næringslivet, etter næring (SN94) og sysselsettingsgruppe (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04858" xlink:title="04858: Sysselsatte per 4. kvartal, etter kjønn og yrke (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04856" xlink:title="04856: Sysselsatte per 4. kvartal, etter bosted, arbeidssted og yrkesfelt (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04852" xlink:title="04852: Kulturell tjenesteyting. Hovedtall, etter næringsundergruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04784" xlink:title="04784: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04544" xlink:title="04544: Sysselsatte i alt og i arbeid, utførte ukeverk (a 37,5 timer) og faktisk arbeidstid, etter kjønn og yrkesstatus" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04542" xlink:title="04542: Sysselsatte i alt og i arbeid, utførte ukeverk (a 37,5 timer) og faktisk arbeidstid, etter kjønn og yrkesstatus" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04338" xlink:title="04338: Kulturell tjenesteyting. Hovedtall, etter næringshovedgruppe (SN2002). Foreløpige tall. Foretak (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04223" xlink:title="04223: Databehandlingsvirksomhet. Hovedtall, etter næringshovedgruppe (SN94). Foreløpige tall. Foretak (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03931" xlink:title="03931: Hovedtall, etter næringshovedgruppe (SN2002). Foretak. Foreløpige tall (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03923" xlink:title="03923: Sysselsatte per 4. kvartal, etter kjønn og alder (prosent) (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03918" xlink:title="03918: Hovedtall, etter næringsundergruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03917" xlink:title="03917: Hovedtall, etter region og næringshovedgruppe (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03916" xlink:title="03916: Hovedtall for næringshovedområdet. Bedrifter (F) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03915" xlink:title="03915: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03914" xlink:title="03914: Hovedtall, etter næringsundergruppe (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03877" xlink:title="03877: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, kjønn, fagfelt og utdanningsnivå (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03875" xlink:title="03875: Sysselsatte førstegenerasjonsinnvandrere 16-74 år, etter næring (SN94) og landbakgrunn (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03858" xlink:title="03858: Sysselsatte førstegenerasjonsinnvandrere 16-74 år, etter kjønn og vestlig/ikke-vestlig landbakgrunn (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03857" xlink:title="03857: Sysselsatte førstegenerasjonsinnvandrere 16-74 år, etter kjønn og landbakgrunn (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03611" xlink:title="03611: Åpnede konkurser, etter næring (SN94), organisasjonsform, omsetning, sysselsetting og etableringsår (F) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03491" xlink:title="03491: Personer 16-66 år med helse- og sosialfaglig utdanning, etter fagutdanning og sysselsetting. Pendlingsstrømmer (F) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03448" xlink:title="03448: Personer med helse- og sosialfaglig utdanning, etter sysselsetting og alder (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03328" xlink:title="03328: Bedrifter og sysselsatte i industri, etter næring (SN2002) og sysselsettingsgruppe (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03324" xlink:title="03324: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, næring (SN2002) og sektor (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03321" xlink:title="03321: Sysselsatte per 4. kvartal, etter arbeidssteds- og bostedskommune. Pendlingsstrømmer (K)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03311" xlink:title="03311: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, inn- og utpendling og næring (SN2002) (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03257" xlink:title="03257: Sysselsatte per 4. kvartal, etter bosted, arbeidssted, kjønn, alder og næring (SN2002) (K) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03219" xlink:title="03219: Foretak (unntatt offentlig forvaltning), etter næring (SN94), organisasjonsform og antall sysselsatte (F) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03171" xlink:title="03171: Finansiering av egenutført FoU i næringslivet, etter næring (SN94) og sysselsettingsgruppe (mill. kr) (avslutta serie)" xlink:type="simple"/>
-        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03169" xlink:title="03169: Innkjøpte FoU-tjenester i næringslivet, etter næring (SN94) og sysselsettingsgruppe (mill. kr) (avslutta serie)" xlink:type="simple"/>
-    </Relations>
+    <Relations/>
 </FIMD>

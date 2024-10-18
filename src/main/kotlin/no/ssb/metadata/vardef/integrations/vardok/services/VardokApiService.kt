@@ -42,51 +42,9 @@ open class VardokApiService(
         result?.let {
             responseMap["nb"] = it
         }
-
         result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
             getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
         }
-
         return responseMap
-    }
-
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
-        checkVardokForMissingElements(varDokItems)
-        val varDefInput = extractVardefInput(varDokItems)
-
-        val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-        return mapper.writeValueAsString(varDefInput)
-    }
-
-    companion object {
-        fun extractVardefInput(vardokItem: MutableMap<String, VardokResponse>): VardefInput {
-            val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
-            val vardokId = mapVardokIdentifier(vardokItemNb)
-
-            return VardefInput(
-                name =
-                    LanguageStringType(
-                        vardokItemNb.common?.title,
-                        vardokItem["nn"]?.common?.title,
-                        vardokItem["en"]?.common?.title,
-                    ),
-                shortName = vardokItemNb.variable?.dataElementName?.lowercase(),
-                definition =
-                    LanguageStringType(
-                        vardokItemNb.common?.description,
-                        vardokItem["nn"]?.common?.description,
-                        vardokItem["en"]?.common?.description,
-                    ),
-                validFrom = getValidDates(vardokItemNb).first,
-                unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
-                externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
-                containsSensitivePersonalInformation = false,
-                subjectFields = emptyList(),
-                classificationReference = null,
-                contact = null,
-                measurementType = null,
-                relatedVariableDefinitionUris = emptyList(),
-            )
-        }
     }
 }

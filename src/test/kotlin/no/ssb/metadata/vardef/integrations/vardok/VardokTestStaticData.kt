@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.models.mapVardokIdentifier
-import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
@@ -31,7 +31,7 @@ class VardokTestStaticData : BaseVardokTest() {
     @Test
     fun `parse data element name to short name`() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse2)
-        val migrateVardokToVardef = VardokApiService.extractVardefInput(mapVardokResponse)
+        val migrateVardokToVardef = VardokService.extractVardefInput(mapVardokResponse)
         assertThat(migrateVardokToVardef.shortName).isEqualTo(vardokResponse2.variable?.dataElementName)
     }
 

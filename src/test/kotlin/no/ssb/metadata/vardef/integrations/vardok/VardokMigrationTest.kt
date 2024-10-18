@@ -20,9 +20,6 @@ class VardokMigrationTest {
     @Inject
     lateinit var vardokService: VardokService
 
-    @Inject
-    lateinit var vardokApiService: VardokApiService
-
     @Test
     fun `get vardok by id`() {
         val result = vardokService.getVardokItem("901")
@@ -88,10 +85,10 @@ class VardokMigrationTest {
     @ParameterizedTest
     @ValueSource(strings = ["1422", "1919", "2", "5", "123"])
     fun `set link to vardok`(vardokId: String) {
-        val result = vardokApiService.getVardokItem(vardokId)
+        val result = vardokService.getVardokItem(vardokId)
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
-            val renderVarDok = VardokApiService.extractVardefInput(mapResult)
+            val renderVarDok = VardokService.extractVardefInput(mapResult)
             assertThat(renderVarDok).isNotNull
             assertThat(
                 renderVarDok.externalReferenceUri,
@@ -120,7 +117,7 @@ class VardokMigrationTest {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: VardokException =
                 assertThrows(VardokException::class.java) {
-                    vardokApiService.createVarDefInputFromVarDokItems(mapResult)
+                    vardokService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(VardokException::class.java)
             val expectedMessage = "Vardok id 2450 is missing DataElementName (short name) and can not be saved"
@@ -137,7 +134,7 @@ class VardokMigrationTest {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: MissingValidDatesException =
                 assertThrows(MissingValidDatesException::class.java) {
-                    vardokApiService.createVarDefInputFromVarDokItems(mapResult)
+                    vardokService.createVarDefInputFromVarDokItems(mapResult)
                 }
             assertThat(exception).isInstanceOf(MissingValidDatesException::class.java)
             val expectedMessage = "Vardok id 100 is missing Valid (valid dates) and can not be saved"
@@ -160,7 +157,7 @@ class VardokMigrationTest {
         val vardok = vardokService.getVardokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("130")
-        val vardokTransform = VardokApiService.extractVardefInput(varDefInput)
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
         val afterMigration = JSONObject(vardokTransform)
         assertThat(afterMigration["shortName"]).isEqualTo("ufg")
     }

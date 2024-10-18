@@ -1,12 +1,10 @@
 package no.ssb.metadata.vardef.integrations.vardok.services
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
-import no.ssb.metadata.vardef.models.LanguageStringType
 import org.slf4j.LoggerFactory
 
 @Singleton

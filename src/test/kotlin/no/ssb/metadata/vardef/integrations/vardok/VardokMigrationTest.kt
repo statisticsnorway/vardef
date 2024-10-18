@@ -5,7 +5,6 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.models.*
-import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
 import org.assertj.core.api.Assertions.assertThat

@@ -11,8 +11,8 @@ import java.io.File
 @Primary
 @Requires(env = ["test"])
 @Singleton
-class StaticVarDokService : VarDokService {
-    override fun getVarDokItem(id: String): VardokResponse? {
+class StaticVardokService : VardokService {
+    override fun getVardokItem(id: String): VardokResponse? {
         val xmlFile = File("src/test/resources/vardokFiles/$id.xml")
         val xmlMapper = XmlMapper().registerKotlinModule()
         val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)

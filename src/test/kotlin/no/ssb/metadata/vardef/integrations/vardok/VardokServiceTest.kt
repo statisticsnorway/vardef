@@ -7,8 +7,8 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import no.ssb.metadata.vardef.integrations.vardok.models.*
-import no.ssb.metadata.vardef.integrations.vardok.services.VarDokApiService
-import no.ssb.metadata.vardef.integrations.vardok.services.VarDokClient
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -18,16 +18,16 @@ import org.junit.jupiter.api.Test
 
 @MockK
 class VardokServiceTest : BaseVardokTest() {
-    private lateinit var varDokMockkClient: VarDokClient
-    private lateinit var varDokApiService: VarDokApiService
-    private lateinit var varDokMockkService: VarDokApiService
+    private lateinit var varDokMockkClient: VardokClient
+    private lateinit var varDokApiService: VardokApiService
+    private lateinit var varDokMockkService: VardokApiService
 
     @BeforeEach
     override fun setUp() {
         super.setUp()
-        varDokMockkClient = mockk<VarDokClient>(relaxed = true)
-        varDokApiService = VarDokApiService(varDokMockkClient)
-        varDokMockkService = mockk<VarDokApiService>(relaxed = true)
+        varDokMockkClient = mockk<VardokClient>(relaxed = true)
+        varDokApiService = VardokApiService(varDokMockkClient)
+        varDokMockkService = mockk<VardokApiService>(relaxed = true)
     }
 
     @AfterEach
@@ -38,17 +38,17 @@ class VardokServiceTest : BaseVardokTest() {
     @Test
     fun `get vardok with valid and data element name`() {
         every {
-            varDokMockkClient.fetchVarDokById("1466")
+            varDokMockkClient.fetchVardokById("1466")
         } returns
             vardokResponse1
-        val result = varDokApiService.getVarDokItem("1466")
+        val result = varDokApiService.getVardokItem("1466")
         assertThat(result).isEqualTo(vardokResponse1)
     }
 
     @Test
     fun `get vardok by id and language nn language`() {
         every {
-            varDokMockkClient.fetchVarDokByIdAndLanguage("476", "nn")
+            varDokMockkClient.fetchVardokByIdAndLanguage("476", "nn")
         } returns
             vardokResponse3
         val result = varDokApiService.getVardokByIdAndLanguage("476", "nn")
@@ -59,7 +59,7 @@ class VardokServiceTest : BaseVardokTest() {
     @Test
     fun `get vardok by id and language - invalid id`() {
         every {
-            varDokMockkClient.fetchVarDokByIdAndLanguage("2990", "nb")
+            varDokMockkClient.fetchVardokByIdAndLanguage("2990", "nb")
         } throws
             HttpStatusException(HttpStatus.NOT_FOUND, "Id 2990 in language: nb not found")
         val exception: Exception =
@@ -88,10 +88,10 @@ class VardokServiceTest : BaseVardokTest() {
     @Test
     fun `get vardok with valid end date returns VardokResponse`() {
         every {
-            varDokMockkClient.fetchVarDokById("49")
+            varDokMockkClient.fetchVardokById("49")
         } returns
             vardokResponse2
-        val result = varDokApiService.getVarDokItem("49")
+        val result = varDokApiService.getVardokItem("49")
         assertThat(result).isInstanceOf(VardokResponse::class.java)
         assertThat(result).isEqualTo(vardokResponse2)
         assertThat(result?.dc?.valid).hasSizeGreaterThan(13)
@@ -100,12 +100,12 @@ class VardokServiceTest : BaseVardokTest() {
     @Test
     fun `get vardok with invalid id`() {
         every {
-            varDokMockkClient.fetchVarDokById("1")
+            varDokMockkClient.fetchVardokById("1")
         } throws
             HttpStatusException(HttpStatus.NOT_FOUND, "Vardok id 1 not found")
         val exception: Exception =
             assertThrows(VardokNotFoundException::class.java) {
-                varDokApiService.getVarDokItem("1")
+                varDokApiService.getVardokItem("1")
             }
         val expectedMessage = "Vardok id 1 not found"
         val actualMessage = exception.message

@@ -6,8 +6,8 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 
 @Prototype
 @Introspected
-interface VarDokService {
-    fun getVarDokItem(id: String): VardokResponse?
+interface VardokService {
+    fun getVardokItem(id: String): VardokResponse?
 
     fun getVardokByIdAndLanguage(
         id: String,

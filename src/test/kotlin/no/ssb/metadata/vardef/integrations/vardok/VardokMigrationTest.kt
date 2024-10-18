@@ -5,8 +5,8 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.models.*
-import no.ssb.metadata.vardef.integrations.vardok.services.VarDokApiService
-import no.ssb.metadata.vardef.integrations.vardok.services.VarDokService
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
@@ -18,14 +18,14 @@ import org.junit.jupiter.params.provider.ValueSource
 @MicronautTest
 class VardokMigrationTest {
     @Inject
-    lateinit var varDokService: VarDokService
+    lateinit var varDokService: VardokService
 
     @Inject
-    lateinit var varDokApiService: VarDokApiService
+    lateinit var varDokApiService: VardokApiService
 
     @Test
     fun `get vardok by id`() {
-        val result = varDokService.getVarDokItem("901")
+        val result = varDokService.getVardokItem("901")
         assertThat(result).isNotNull()
         assertThat(result?.dc?.contributor).isEqualTo("Seksjon for befolkningsstatistikk")
         assertThat(result?.common?.title).isEqualTo("Oppvarming, har lukket ovn for fast brensel")
@@ -36,7 +36,7 @@ class VardokMigrationTest {
 
     @Test
     fun `get vardok by id and language if other languages`() {
-        val res = varDokService.getVarDokItem("901")
+        val res = varDokService.getVardokItem("901")
         var englishRes: VardokResponse? = null
         if (res?.otherLanguages != "") {
             englishRes = res?.let { varDokService.getVardokByIdAndLanguage("901", it.otherLanguages) }
@@ -47,7 +47,7 @@ class VardokMigrationTest {
 
     @Test
     fun `map vardok date from`() {
-        val res = varDokService.getVarDokItem("901")
+        val res = varDokService.getVardokItem("901")
         assertThat(res?.dc?.valid).isNotNull()
         assertThat(res?.dc?.valid).hasSizeGreaterThan(10)
         val mappedFromDate = res?.let { getValidDates(it).first }
@@ -57,7 +57,7 @@ class VardokMigrationTest {
 
     @Test
     fun `map vardok date until`() {
-        val res = varDokService.getVarDokItem("901")
+        val res = varDokService.getVardokItem("901")
         assertThat(res?.dc?.valid).isNotNull()
         assertThat(res?.dc?.valid).hasSizeGreaterThan(20)
         val mappedUntilDate = res?.let { getValidDates(it).second }
@@ -67,7 +67,7 @@ class VardokMigrationTest {
 
     @Test
     fun `map vardok missing valid date`() {
-        val res = varDokService.getVarDokItem("134")
+        val res = varDokService.getVardokItem("134")
 
         val exception: VardokException =
             assertThrows(MissingValidFromException::class.java) {
@@ -80,7 +80,7 @@ class VardokMigrationTest {
 
     @Test
     fun `map vardok missing valid end date`() {
-        val res = varDokService.getVarDokItem("1422")
+        val res = varDokService.getVardokItem("1422")
         val mappedUntilDate = res?.let { getValidDates(it).second }
         assertThat(mappedUntilDate).isNull()
     }
@@ -88,10 +88,10 @@ class VardokMigrationTest {
     @ParameterizedTest
     @ValueSource(strings = ["1422", "1919", "2", "5", "123"])
     fun `set link to vardok`(vardokId: String) {
-        val result = varDokApiService.getVarDokItem(vardokId)
+        val result = varDokApiService.getVardokItem(vardokId)
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
-            val renderVarDok = VarDokApiService.extractVardefInput(mapResult)
+            val renderVarDok = VardokApiService.extractVardefInput(mapResult)
             assertThat(renderVarDok).isNotNull
             assertThat(
                 renderVarDok.externalReferenceUri,
@@ -106,7 +106,7 @@ class VardokMigrationTest {
         ],
     )
     fun `map owner from vardok`(vardokId: Int) {
-        val result = varDokService.getVarDokItem(vardokId.toString())
+        val result = varDokService.getVardokItem(vardokId.toString())
         assertThat(result).isNotNull
         assertThat(result?.common?.contactDivision).isNotNull
         assertThat(result?.common?.contactDivision?.codeValue).isNotNull()
@@ -115,7 +115,7 @@ class VardokMigrationTest {
 
     @Test
     fun `vardok item has not short name`() {
-        val result = varDokService.getVarDokItem("2450")
+        val result = varDokService.getVardokItem("2450")
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: VardokException =
@@ -132,7 +132,7 @@ class VardokMigrationTest {
 
     @Test
     fun `vardok item has not valid dates`() {
-        val result = varDokService.getVarDokItem("100")
+        val result = varDokService.getVardokItem("100")
         if (result != null) {
             val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
             val exception: MissingValidDatesException =
@@ -157,10 +157,10 @@ class VardokMigrationTest {
 
     @Test
     fun `data element name with uppercase`() {
-        val vardok = varDokService.getVarDokItem("130")
+        val vardok = varDokService.getVardokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
         val varDefInput = varDokApiService.fetchMultipleVarDokItemsByLanguage("130")
-        val vardokTransform = VarDokApiService.extractVardefInput(varDefInput)
+        val vardokTransform = VardokApiService.extractVardefInput(varDefInput)
         val afterMigration = JSONObject(vardokTransform)
         assertThat(afterMigration["shortName"]).isEqualTo("ufg")
     }
@@ -168,7 +168,7 @@ class VardokMigrationTest {
     @ParameterizedTest
     @ValueSource(strings = ["130", "69"])
     fun `vardokresponse statistical units are values in UnitTypes PERSON`(vardokId: String) {
-        val vardokresponse = varDokService.getVarDokItem(vardokId)
+        val vardokresponse = varDokService.getVardokItem(vardokId)
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
     }

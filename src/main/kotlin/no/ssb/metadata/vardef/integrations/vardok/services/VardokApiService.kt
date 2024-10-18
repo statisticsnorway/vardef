@@ -10,15 +10,15 @@ import no.ssb.metadata.vardef.models.LanguageStringType
 import org.slf4j.LoggerFactory
 
 @Singleton
-open class VarDokApiService(
-    private val varDokClient: VarDokClient,
-) : VarDokService {
-    private val logger = LoggerFactory.getLogger(VarDokApiService::class.java)
+open class VardokApiService(
+    private val vardokClient: VardokClient,
+) : VardokService {
+    private val logger = LoggerFactory.getLogger(VardokApiService::class.java)
 
-    override fun getVarDokItem(id: String): VardokResponse? =
+    override fun getVardokItem(id: String): VardokResponse? =
         try {
             logger.info("Retrieving definition by $id from vardok")
-            varDokClient.fetchVarDokById(id)
+            vardokClient.fetchVardokById(id)
         } catch (e: Exception) {
             logger.warn("$id is not found. Exception message: ${e.message}")
             throw VardokNotFoundException(id)
@@ -30,14 +30,14 @@ open class VarDokApiService(
     ): VardokResponse? =
         try {
             logger.info("Retrieving $id by $language")
-            varDokClient.fetchVarDokByIdAndLanguage(id, language)
+            vardokClient.fetchVardokByIdAndLanguage(id, language)
         } catch (e: Exception) {
             logger.warn("Error while fetching vardok by id and language", e)
             throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
         }
 
     fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
-        val result = getVarDokItem(id)
+        val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
         result?.let {
             responseMap["nb"] = it

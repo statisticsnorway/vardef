@@ -1,6 +1,6 @@
-package no.ssb.metadata.vardef.integrations.vardok
+package no.ssb.metadata.vardef.integrations.vardok.models
 
-import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCategoryForValue
+import no.ssb.metadata.vardef.integrations.vardok.models.UnitTypes.Companion.findCategoryForValue
 
 /**
  * Enum of all official titles for unit types.

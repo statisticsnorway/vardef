@@ -1,10 +1,11 @@
-package no.ssb.metadata.vardef.integrations.vardok
+package no.ssb.metadata.vardef.integrations.vardok.services
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.models.LanguageStringType
 import org.slf4j.LoggerFactory
 
@@ -64,18 +65,18 @@ open class VarDokApiService(
 
             return VardefInput(
                 name =
-                LanguageStringType(
-                    vardokItemNb.common?.title,
-                    vardokItem["nn"]?.common?.title,
-                    vardokItem["en"]?.common?.title,
-                ),
+                    LanguageStringType(
+                        vardokItemNb.common?.title,
+                        vardokItem["nn"]?.common?.title,
+                        vardokItem["en"]?.common?.title,
+                    ),
                 shortName = vardokItemNb.variable?.dataElementName?.lowercase(),
                 definition =
-                LanguageStringType(
-                    vardokItemNb.common?.description,
-                    vardokItem["nn"]?.common?.description,
-                    vardokItem["en"]?.common?.description,
-                ),
+                    LanguageStringType(
+                        vardokItemNb.common?.description,
+                        vardokItem["nn"]?.common?.description,
+                        vardokItem["en"]?.common?.description,
+                    ),
                 validFrom = getValidDates(vardokItemNb).first,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
                 externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",

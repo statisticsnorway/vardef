@@ -21,8 +21,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
-import no.ssb.metadata.vardef.integrations.vardok.VarDokApiService
-import no.ssb.metadata.vardef.integrations.vardok.VardokNotFoundException
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
+import no.ssb.metadata.vardef.integrations.vardok.services.VarDokApiService
 import org.reactivestreams.Publisher
 
 @Tag(name = DATA_MIGRATION)

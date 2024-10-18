@@ -6,6 +6,9 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import no.ssb.metadata.vardef.integrations.vardok.models.*
+import no.ssb.metadata.vardef.integrations.vardok.services.VarDokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VarDokClient
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -16,14 +19,14 @@ import org.junit.jupiter.api.Test
 @MockK
 class VardokServiceTest : BaseVardokTest() {
     private lateinit var varDokMockkClient: VarDokClient
-    private lateinit var VarDokApiService: VarDokApiService
+    private lateinit var varDokApiService: VarDokApiService
     private lateinit var varDokMockkService: VarDokApiService
 
     @BeforeEach
     override fun setUp() {
         super.setUp()
         varDokMockkClient = mockk<VarDokClient>(relaxed = true)
-        VarDokApiService = VarDokApiService(varDokMockkClient)
+        varDokApiService = VarDokApiService(varDokMockkClient)
         varDokMockkService = mockk<VarDokApiService>(relaxed = true)
     }
 
@@ -38,7 +41,7 @@ class VardokServiceTest : BaseVardokTest() {
             varDokMockkClient.fetchVarDokById("1466")
         } returns
             vardokResponse1
-        val result = VarDokApiService.getVarDokItem("1466")
+        val result = varDokApiService.getVarDokItem("1466")
         assertThat(result).isEqualTo(vardokResponse1)
     }
 
@@ -48,7 +51,7 @@ class VardokServiceTest : BaseVardokTest() {
             varDokMockkClient.fetchVarDokByIdAndLanguage("476", "nn")
         } returns
             vardokResponse3
-        val result = VarDokApiService.getVardokByIdAndLanguage("476", "nn")
+        val result = varDokApiService.getVardokByIdAndLanguage("476", "nn")
         assertThat(result).isEqualTo(vardokResponse3)
         assertThat(result?.otherLanguages).isEqualTo("nn;en")
     }
@@ -61,7 +64,7 @@ class VardokServiceTest : BaseVardokTest() {
             HttpStatusException(HttpStatus.NOT_FOUND, "Id 2990 in language: nb not found")
         val exception: Exception =
             assertThrows(HttpStatusException::class.java) {
-                VarDokApiService.getVardokByIdAndLanguage("2990", "nb")
+                varDokApiService.getVardokByIdAndLanguage("2990", "nb")
             }
         val expectedMessage = "Id 2990 in language: nb not found"
         val actualMessage = exception.message
@@ -71,14 +74,14 @@ class VardokServiceTest : BaseVardokTest() {
 
     @Test
     fun `get vardok by valid id and not valid nn language returns nb language`() {
-        val resultNNLanguage = VarDokApiService.getVardokByIdAndLanguage("1466", "nn")
-        val resultNBLanguage = VarDokApiService.getVardokByIdAndLanguage("1466", "nb")
+        val resultNNLanguage = varDokApiService.getVardokByIdAndLanguage("1466", "nn")
+        val resultNBLanguage = varDokApiService.getVardokByIdAndLanguage("1466", "nb")
         assertThat(resultNNLanguage?.common?.title).isEqualTo(resultNBLanguage?.common?.title)
     }
 
     @Test
     fun `fetch multiple languages`() {
-        val result = VarDokApiService.fetchMultipleVarDokItemsByLanguage("476")
+        val result = varDokApiService.fetchMultipleVarDokItemsByLanguage("476")
         assertThat(result).isInstanceOf(MutableMap::class.java)
     }
 
@@ -88,7 +91,7 @@ class VardokServiceTest : BaseVardokTest() {
             varDokMockkClient.fetchVarDokById("49")
         } returns
             vardokResponse2
-        val result = VarDokApiService.getVarDokItem("49")
+        val result = varDokApiService.getVarDokItem("49")
         assertThat(result).isInstanceOf(VardokResponse::class.java)
         assertThat(result).isEqualTo(vardokResponse2)
         assertThat(result?.dc?.valid).hasSizeGreaterThan(13)
@@ -102,7 +105,7 @@ class VardokServiceTest : BaseVardokTest() {
             HttpStatusException(HttpStatus.NOT_FOUND, "Vardok id 1 not found")
         val exception: Exception =
             assertThrows(VardokNotFoundException::class.java) {
-                VarDokApiService.getVarDokItem("1")
+                varDokApiService.getVarDokItem("1")
             }
         val expectedMessage = "Vardok id 1 not found"
         val actualMessage = exception.message
@@ -120,7 +123,7 @@ class VardokServiceTest : BaseVardokTest() {
 
         val exception: VardokException =
             assertThrows(MissingValidDatesException::class.java) {
-                VarDokApiService.createVarDefInputFromVarDokItems(mapVardokResponse)
+                varDokApiService.createVarDefInputFromVarDokItems(mapVardokResponse)
             }
         val expectedMessage = "Vardok id 100 is missing Valid (valid dates) and can not be saved"
         val actualMessage = exception.message
@@ -138,19 +141,11 @@ class VardokServiceTest : BaseVardokTest() {
 
         val exception: VardokException =
             assertThrows(MissingDataElementNameException::class.java) {
-                VarDokApiService.createVarDefInputFromVarDokItems(mapVardokResponse)
+                varDokApiService.createVarDefInputFromVarDokItems(mapVardokResponse)
             }
         val expectedMessage = "Vardok id 123 is missing DataElementName (short name) and can not be saved"
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
-    }
-
-    @Test
-    fun `extract vardef input statistical unit to unit types`() {
-        assertThat(vardokResponse7.variable?.statisticalUnit).isEqualTo("Avløpsanlegg")
-        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse7)
-        val vardefInput = VarDokService.extractVardefInput(mapVardokResponse)
-        assertThat(vardefInput.unitTypes).isEqualTo(listOf("12", "13"))
     }
 }

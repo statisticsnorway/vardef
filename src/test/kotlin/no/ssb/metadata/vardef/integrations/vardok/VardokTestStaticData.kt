@@ -1,5 +1,9 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
+import no.ssb.metadata.vardef.integrations.vardok.models.getValidDates
+import no.ssb.metadata.vardef.integrations.vardok.models.mapVardokIdentifier
+import no.ssb.metadata.vardef.integrations.vardok.services.VarDokApiService
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test

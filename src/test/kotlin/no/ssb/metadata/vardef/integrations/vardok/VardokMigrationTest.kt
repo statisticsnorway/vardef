@@ -4,6 +4,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.vardok.models.*
+import no.ssb.metadata.vardef.integrations.vardok.services.VarDokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VarDokService
 import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
@@ -99,7 +102,7 @@ class VardokMigrationTest {
     @ParameterizedTest
     @ValueSource(
         ints = [
-            2, 5, 26, 120
+            2, 5, 26, 120,
         ],
     )
     fun `map owner from vardok`(vardokId: Int) {
@@ -109,7 +112,6 @@ class VardokMigrationTest {
         assertThat(result?.common?.contactDivision?.codeValue).isNotNull()
         assertThat(result?.common?.contactDivision?.codeText).isNotNull()
     }
-
 
     @Test
     fun `vardok item has not short name`() {
@@ -155,7 +157,7 @@ class VardokMigrationTest {
 
     @Test
     fun `data element name with uppercase`() {
-        val vardok = varDokApiService.getVarDokItem("130")
+        val vardok = varDokService.getVarDokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
         val varDefInput = varDokApiService.fetchMultipleVarDokItemsByLanguage("130")
         val vardokTransform = VarDokApiService.extractVardefInput(varDefInput)
@@ -166,7 +168,7 @@ class VardokMigrationTest {
     @ParameterizedTest
     @ValueSource(strings = ["130", "69"])
     fun `vardokresponse statistical units are values in UnitTypes PERSON`(vardokId: String) {
-        val vardokresponse = varDokApiService.getVarDokItem(vardokId)
+        val vardokresponse = varDokService.getVarDokItem(vardokId)
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
     }

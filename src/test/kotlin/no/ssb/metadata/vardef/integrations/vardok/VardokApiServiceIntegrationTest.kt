@@ -3,6 +3,8 @@ package no.ssb.metadata.vardef.integrations.vardok
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
+import no.ssb.metadata.vardef.integrations.vardok.services.VarDokApiService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
@@ -10,7 +12,6 @@ import org.junit.jupiter.api.Test
 @MicronautTest(startApplication = false)
 @Requires(env = ["integration-test"])
 class VardokApiServiceIntegrationTest {
-
     @Inject
     lateinit var varDokApiService: VarDokApiService
 
@@ -26,5 +27,4 @@ class VardokApiServiceIntegrationTest {
 
         assertThat(actualMessage).contains(expectedMessage)
     }
-
 }

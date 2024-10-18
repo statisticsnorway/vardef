@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.vardok
+package no.ssb.metadata.vardef.integrations.vardok.services
 
 import io.micronaut.core.async.annotation.SingleResult
 import io.micronaut.http.HttpHeaders.ACCEPT
@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Produces
 import io.micronaut.http.client.annotation.Client
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 
 @Client(id = "vardok")
 @Produces(MediaType.APPLICATION_XML)

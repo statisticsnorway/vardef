@@ -13,7 +13,6 @@ import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -24,17 +23,15 @@ class VariableDefinitionServiceTestWithMockRepository {
     private lateinit var variableDefinitionMockRepository: VariableDefinitionRepository
     private lateinit var variableDefinitionService: VariableDefinitionService
     private lateinit var mockKlassService: KlassService
-    private lateinit var mockPatchesService: PatchesService
     private lateinit var mockValidityPeriodsService: ValidityPeriodsService
 
     @BeforeEach
     fun setUp() {
         variableDefinitionMockRepository = mockk<VariableDefinitionRepository>()
         mockKlassService = mockk<KlassService>()
-        mockPatchesService = mockk<PatchesService>()
         mockValidityPeriodsService = mockk<ValidityPeriodsService>()
         variableDefinitionService =
-            VariableDefinitionService(variableDefinitionMockRepository, mockPatchesService, mockValidityPeriodsService)
+            VariableDefinitionService(variableDefinitionMockRepository, mockKlassService, mockValidityPeriodsService)
     }
 
     @AfterEach
@@ -47,33 +44,15 @@ class VariableDefinitionServiceTestWithMockRepository {
         every {
             variableDefinitionMockRepository.findAll()
         } returns emptyList()
-        val result = variableDefinitionService.listAll()
+        val result = variableDefinitionService.list()
         assertTrue(result.isEmpty())
         verify(exactly = 1) { variableDefinitionMockRepository.findAll() }
     }
 
     @Test
-    fun `save variable definition`() {
-        val variableDefinition = INCOME_TAX_VP1_P1
-        val savedVariableDefinition =
-            INCOME_TAX_VP1_P1.copy(
-                definitionId = "8Ah4fbvb",
-                id = ObjectId("00000020f51bb4362eee2a4d"),
-            )
-
-        every {
-            variableDefinitionService.save(variableDefinition)
-        } returns savedVariableDefinition
-        val result = variableDefinitionService.save(variableDefinition)
-        assertThat(result).isEqualTo(savedVariableDefinition)
-        assertThat(result.name).isEqualTo(savedVariableDefinition.name)
-        assertThat(result.id).isEqualTo(savedVariableDefinition.id)
-        assertThat(result.definitionId).isEqualTo(savedVariableDefinition.definitionId)
-    }
-
-    @Test
     fun `find variables in selected language`() {
         val variableDefinition = INCOME_TAX_VP1_P1
+        val today = LocalDate.now()
 
         (
             variableDefinitionService::class.java
@@ -93,43 +72,16 @@ class VariableDefinitionServiceTestWithMockRepository {
 
         every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
 
+        every { mockValidityPeriodsService.getForDate(variableDefinition.definitionId, today) } returns variableDefinition
+
         val renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
 
         val result =
-            variableDefinitionService.listAllAndRenderForLanguage(SupportedLanguages.NB, LocalDate.now())
+            variableDefinitionService.listForDateAndRender(SupportedLanguages.NB, today)
         assertThat(result.isNotEmpty())
         assertThat(result.size).isEqualTo(1)
         assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })
         assertThat(result[0].id).isEqualTo(renderedVariableDefinition.id)
         verify { variableDefinitionMockRepository.findAll() }
-    }
-
-    @Test
-    fun `mongodb id is generated when variable is created`() {
-        val variableDefinition = INCOME_TAX_VP1_P1.copy(id = null)
-
-        val savedVariableDefinition = variableDefinition.copy(id = ObjectId.get())
-
-        every { variableDefinitionService.save(variableDefinition) } returns savedVariableDefinition
-        assertThat(variableDefinition.id).isNull()
-
-        val saveVariable = variableDefinitionService.save(variableDefinition)
-        assertThat(saveVariable.id).isNotNull()
-    }
-
-    @Test
-    fun `varDef id is only created once`() {
-        val variableDefinition = INCOME_TAX_VP1_P1.copy(definitionId = "y7s34rf1")
-
-        val idBeforeSave = variableDefinition.definitionId
-        val shortNameBeforeSave = variableDefinition.shortName
-
-        val savedVariableDefinition = variableDefinition.copy(shortName = "food")
-
-        every { variableDefinitionService.save(variableDefinition) } returns savedVariableDefinition
-
-        val result = variableDefinitionService.save(variableDefinition)
-        assertThat(idBeforeSave).isSameAs(result.definitionId)
-        assertThat(shortNameBeforeSave).isNotSameAs(result.shortName)
     }
 }

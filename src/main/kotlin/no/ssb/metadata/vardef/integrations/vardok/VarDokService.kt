@@ -10,4 +10,5 @@ interface VarDokService {
     fun getVarDokItem(id: String): VardokResponse?
 
     fun getVardokByIdAndLanguage(id: String, language: String ): VardokResponse?
+
 }

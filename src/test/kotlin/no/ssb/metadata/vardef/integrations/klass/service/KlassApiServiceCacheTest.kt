@@ -23,7 +23,7 @@ class KlassApiServiceCacheTest {
     private lateinit var klassApiService: KlassApiService
     private lateinit var klassApiResponse: KlassApiResponse
 
-    @Property(name = "micronaut.http.services.klass.codes-at")
+    @Property(name = "klass.codes-at")
     private val codesAt: String = ""
 
     @BeforeAll

@@ -145,4 +145,12 @@ class VardokServiceTest : BaseVardokTest() {
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
     }
+
+    @Test
+    fun `extract vardef input statistical unit to unit types`() {
+        assertThat(vardokResponse7.variable?.statisticalUnit).isEqualTo("Avløpsanlegg")
+        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse7)
+        val vardefInput = VarDokService.extractVardefInput(mapVardokResponse)
+        assertThat(vardefInput.unitTypes).isEqualTo(listOf("12", "13"))
+    }
 }

@@ -18,7 +18,13 @@ import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
-    fun save(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
+    /**
+     * Create a new *Patch*
+     *
+     * @param patch The *Patch* to create, with updated values.
+     * @return The created *Patch*
+     */
+    fun create(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
 
     /**
      * List all Patches for a specific Variable Definition.
@@ -59,4 +65,15 @@ class PatchesService(
     fun latest(definitionId: String): SavedVariableDefinition =
         list(definitionId)
             .last()
+
+    /**
+     * Delete all *Patches* in a *Variable Definition*
+     *
+     * @param definitionId The ID of the Variable Definition.
+     */
+    fun deleteAllForDefinitionId(definitionId: String) =
+        list(definitionId)
+            .forEach {
+                variableDefinitionRepository.deleteById(it.id)
+            }
 }

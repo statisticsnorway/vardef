@@ -28,7 +28,7 @@ class KlassApiServiceTest {
     private val testClassificationId = 1
     private val nonExistingClassificationId = 0
 
-    @Property(name = "micronaut.http.services.klass.codes-at")
+    @Property(name = "klass.codes-at")
     private val codesAt: String = ""
 
     @BeforeEach

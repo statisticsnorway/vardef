@@ -21,6 +21,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
@@ -30,6 +31,9 @@ import java.time.LocalDate
 class VariableDefinitionsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
+
+    @Inject
+    lateinit var patches: PatchesService
 
     /**
      * List all variable definitions.
@@ -66,7 +70,7 @@ class VariableDefinitionsController {
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listAllAndRenderForLanguage(language = language, dateOfValidity = dateOfValidity))
+            .ok(varDefService.listForDateAndRender(language = language, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**
@@ -93,8 +97,8 @@ class VariableDefinitionsController {
             ),
         ],
     )
-    @ApiResponse(responseCode = "400", description = "Bad request.")
-    @ApiResponse(responseCode = "409", description = "Conflict.")
+    @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
+    @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE) @Body @Valid varDef: Draft,
     ): CompleteResponse {
@@ -105,13 +109,13 @@ class VariableDefinitionsController {
                 "Variable status may not be specified on creation.",
             )
         }
-        if (varDefService.checkIfShortNameExists(varDef.shortName)) {
+        if (varDefService.doesShortNameExist(varDef.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "Short name ${varDef.shortName} already exists.",
             )
         }
 
-        return varDefService.save(varDef.toSavedVariableDefinition()).toCompleteResponse()
+        return patches.create(varDef.toSavedVariableDefinition()).toCompleteResponse()
     }
 }

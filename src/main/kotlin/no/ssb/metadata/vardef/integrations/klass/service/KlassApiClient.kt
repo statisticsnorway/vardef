@@ -39,6 +39,6 @@ interface KlassApiClient {
     fun listCodes(
         @PathVariable classificationId: Int,
         @QueryValue codesAt: String,
-        @QueryValue language: SupportedLanguages = SupportedLanguages.NB,
+        @QueryValue language: SupportedLanguages,
     ): HttpResponse<Codes>
 }

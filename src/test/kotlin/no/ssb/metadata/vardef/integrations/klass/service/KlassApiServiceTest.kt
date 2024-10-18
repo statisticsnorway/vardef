@@ -30,6 +30,7 @@ class KlassApiServiceTest {
     private lateinit var codeList: List<Code>
     private val testClassificationId = 1
     private val nonExistingClassificationId = 0
+    private val language = SupportedLanguages.NB
 
     private val classification =
         Classification(
@@ -93,7 +94,7 @@ class KlassApiServiceTest {
     @Test
     fun `fetch code list no codes returned`() {
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt)
+            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
         } returns
             HttpResponse.ok(
                 Codes(
@@ -105,7 +106,7 @@ class KlassApiServiceTest {
             klassApiService.getCodeObjectsFor(testClassificationId, SupportedLanguages.NB)
         }
 
-        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt) }
+        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
     }
 
     @Test
@@ -115,11 +116,11 @@ class KlassApiServiceTest {
         } returns HttpResponse.ok(listClassificationsResponse)
 
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt)
+            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
         } returns HttpResponse.ok(codes)
 
         val result = klassApiService.getCodeObjectsFor(testClassificationId, SupportedLanguages.NB)
-        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt) }
+        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
         assertEquals(2, result.size)
     }
 
@@ -169,11 +170,11 @@ class KlassApiServiceTest {
         } returns HttpResponse.ok(listClassificationsResponse)
 
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt)
+            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
         } returns HttpResponse.ok(codes)
 
         val result = klassApiService.getCodesFor(testClassificationId.toString())
-        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt) }
+        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
         assertThat(result).containsExactly("1", "2")
     }
 
@@ -181,7 +182,7 @@ class KlassApiServiceTest {
     @EnumSource(SupportedLanguages::class)
     fun `get code item for language`(language: SupportedLanguages) {
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt)
+            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
         } returns HttpResponse.ok(codes)
 
         assertThat(

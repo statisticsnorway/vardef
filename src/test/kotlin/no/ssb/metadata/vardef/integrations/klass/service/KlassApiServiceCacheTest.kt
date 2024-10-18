@@ -1,58 +1,56 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
+import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
+import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-@MicronautTest(startApplication = false)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@MicronautTest
 class KlassApiServiceCacheTest {
+    @Inject
+    lateinit var klassApiService: KlassApiService
+
+    @Inject
     private lateinit var klassApiMockkClient: KlassApiClient
-    private lateinit var klassApiService: KlassApiService
-    private lateinit var classification: Classification
-    private lateinit var codes: List<Code>
-    private val classificationId = 1
 
     @Property(name = "micronaut.http.services.klass.codes-at")
-    private val codesAt: String = ""
+    private lateinit var codesAt: String
 
-    @BeforeAll
-    fun setUp() {
-        klassApiMockkClient = mockk<KlassApiClient>()
-        klassApiService = KlassApiService(klassApiMockkClient, codesAt)
-        codes =
-            listOf(
-                Code(code = "1", name = "Ja"),
-                Code(code = "2", name = "Nei"),
-            )
-        classification =
-            Classification(
-                name = "Test",
-                id = classificationId,
-                classificationType = "classification",
-                lastModified = "${LocalDateTime.now()}",
-                codes = codes,
-            )
+    private val classificationId = 1
+    private val language = SupportedLanguages.NB
+    private val codes =
+        listOf(
+            Code(code = "1", name = "Ja"),
+            Code(code = "2", name = "Nei"),
+        )
+    private val classification =
+        Classification(
+            name = "Test",
+            id = classificationId,
+            classificationType = "classification",
+            lastModified = "${LocalDateTime.now()}",
+            codes = codes,
+        )
 
+    @Primary
+    @MockBean(KlassApiClient::class)
+    fun mockKlassApiClient(): KlassApiClient {
+        val klassApiMockkClient = mockk<KlassApiClient>()
         every { klassApiMockkClient.fetchClassification(classificationId) } returns HttpResponse.ok(classification)
-        every { klassApiMockkClient.listCodes(classificationId, codesAt) } returns HttpResponse.ok(Codes(codes))
-    }
-
-    @AfterAll
-    internal fun tearDown() {
-        clearAllMocks()
+        every { klassApiMockkClient.listCodes(classificationId, codesAt, language) } returns HttpResponse.ok(Codes(codes))
+        return klassApiMockkClient
     }
 
     @Test
@@ -65,9 +63,9 @@ class KlassApiServiceCacheTest {
 
     @Test
     fun `codes cache`() {
-        assertThat(klassApiService.getCodeObjectsFor(classificationId, SupportedLanguages.NB)).isEqualTo(codes)
-        verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt) }
-        assertThat(klassApiService.getCodeObjectsFor(classificationId, SupportedLanguages.NB)).isEqualTo(codes)
-        verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt) }
+        assertThat(klassApiService.getCodeObjectsFor(classificationId, language)).isEqualTo(codes)
+        verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt, language) }
+        assertThat(klassApiService.getCodeObjectsFor(classificationId, language)).isEqualTo(codes)
+        verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt, language) }
     }
 }

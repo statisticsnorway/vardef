@@ -1075,7 +1075,6 @@ klass:
           name:
             en: ''
             nb: Arbeid og lønn
-#logger:
-#  levels:
-#    root: INFO
-#    org.mongodb.driver: DEBUG
+logger:
+  levels:
+    "io.micronaut.cache": DEBUG

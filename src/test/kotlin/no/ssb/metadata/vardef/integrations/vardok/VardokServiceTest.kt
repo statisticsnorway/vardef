@@ -10,7 +10,9 @@ import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.json.JSONObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
@@ -130,6 +132,8 @@ class VardokServiceTest : BaseVardokTest() {
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
     }
+
+
 
     @Test
     fun `get vardok with missing data element name`() {

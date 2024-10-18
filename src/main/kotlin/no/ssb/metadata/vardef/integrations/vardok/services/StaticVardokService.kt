@@ -11,10 +11,12 @@ import java.io.File
 @Primary
 @Requires(env = ["test"])
 @Singleton
+
 class StaticVardokService : VardokService {
+    val xmlMapper = XmlMapper().registerKotlinModule()
+
     override fun getVardokItem(id: String): VardokResponse? {
         val xmlFile = File("src/test/resources/vardokFiles/$id.xml")
-        val xmlMapper = XmlMapper().registerKotlinModule()
         val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
         return varDokResponse
     }
@@ -24,8 +26,25 @@ class StaticVardokService : VardokService {
         language: String,
     ): VardokResponse? {
         val xmlFile = File("src/test/resources/vardokFiles/${id}$language.xml")
-        val xmlMapper = XmlMapper().registerKotlinModule()
         val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
         return varDokResponse
     }
+
+    override fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
+        val xmlFile = File("src/test/resources/vardokFiles/${id}.xml")
+        val result: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
+
+        val responseMap = mutableMapOf<String, VardokResponse>()
+        result.let {
+            responseMap["nb"] = it
+        }
+        result.otherLanguages.split(";").filter { it.isNotEmpty() }.forEach { l ->
+            getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
+        }
+
+        return responseMap
+
+    }
+
+
 }

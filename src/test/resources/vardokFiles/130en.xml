@@ -1,0 +1,52 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-20" defaultValidFrom="1992-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:130" lastChangedDate="2011-11-14" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for social welfare statistics</dc:contributor>
+        <dc:creator>Øyvind Sivertstøl</dc:creator>
+        <dcterms:modified>2011-11-14</dcterms:modified>
+        <dcterms:valid>1992-01-01 - </dcterms:valid>
+        <dc:description>This variable shows the degree of disability of disability pensioners (per cent). Shows how much the earnings capacity has been reduced.</dc:description>
+        <dcterms:abstract> FD-Trygd</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:130</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>03.04.30 - Social security, social assistance and crime</dc:subject>
+        <dc:title>Degree of disability of disability pensioner</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Degree of disability of disability pensioner</Title>
+        <Description>This variable shows the degree of disability of disability pensioners (per cent). Shows how much the earnings capacity has been reduced.</Description>
+        <ContactPerson>
+            <CodeValue>sid</CodeValue>
+            <CodeText>Øyvind Sivertstøl</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>350</CodeValue>
+            <CodeText>Division for social welfare statistics</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>03.04.30</CodeValue>
+            <CodeText>Social security, social assistance and crime</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>FD-Trygd</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>Ufg</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

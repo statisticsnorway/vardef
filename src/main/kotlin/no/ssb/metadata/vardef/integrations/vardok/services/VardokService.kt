@@ -13,4 +13,7 @@ interface VardokService {
         id: String,
         language: String,
     ): VardokResponse?
+
+    fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
+
 }

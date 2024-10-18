@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.integrations.vardok.utils.vardokId1466validFromDateAndOtherLanguages
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.AssertionsForClassTypes
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
@@ -168,4 +169,5 @@ class VardokMigrationTest {
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
     }
+    
 }

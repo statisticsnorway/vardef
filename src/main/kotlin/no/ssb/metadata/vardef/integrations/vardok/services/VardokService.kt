@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import no.ssb.metadata.vardef.integrations.vardok.models.*
+import no.ssb.metadata.vardef.integrations.vardok.getValidDates
+import no.ssb.metadata.vardef.integrations.vardok.mapVardokIdentifier
+import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
 import no.ssb.metadata.vardef.models.LanguageStringType
 
 @Prototype

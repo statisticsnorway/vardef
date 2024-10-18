@@ -8,7 +8,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
-import no.ssb.metadata.vardef.integrations.vardok.services.VardokClient
+import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach

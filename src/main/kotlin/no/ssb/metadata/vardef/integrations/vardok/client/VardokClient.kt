@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.vardok.services
+package no.ssb.metadata.vardef.integrations.vardok.client
 
 import io.micronaut.core.async.annotation.SingleResult
 import io.micronaut.http.HttpHeaders.ACCEPT

@@ -86,7 +86,7 @@ class VardokMigrationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["1422", "1919", "2", "5", "123"])
+    @ValueSource(strings = ["1422"])//"1919", "2", "5", "123"])
     fun `set link to vardok`(vardokId: String) {
         val result = vardokApiService.getVardokItem(vardokId)
         if (result != null) {

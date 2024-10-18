@@ -1,9 +1,9 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCategoryForValue
 import no.ssb.metadata.vardef.integrations.vardok.models.MissingValidFromException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
-import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCategoryForValue
 
 /**
  * Enum of all official titles for unit types.

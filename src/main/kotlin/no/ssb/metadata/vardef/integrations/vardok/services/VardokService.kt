@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
-import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokIdentifier
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
+import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.models.LanguageStringType
 
 @Prototype
@@ -37,18 +37,18 @@ interface VardokService {
 
             return VardefInput(
                 name =
-                LanguageStringType(
-                    vardokItemNb.common?.title,
-                    vardokItem["nn"]?.common?.title,
-                    vardokItem["en"]?.common?.title,
-                ),
+                    LanguageStringType(
+                        vardokItemNb.common?.title,
+                        vardokItem["nn"]?.common?.title,
+                        vardokItem["en"]?.common?.title,
+                    ),
                 shortName = vardokItemNb.variable?.dataElementName?.lowercase(),
                 definition =
-                LanguageStringType(
-                    vardokItemNb.common?.description,
-                    vardokItem["nn"]?.common?.description,
-                    vardokItem["en"]?.common?.description,
-                ),
+                    LanguageStringType(
+                        vardokItemNb.common?.description,
+                        vardokItem["nn"]?.common?.description,
+                        vardokItem["en"]?.common?.description,
+                    ),
                 validFrom = getValidDates(vardokItemNb).first,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
                 externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",

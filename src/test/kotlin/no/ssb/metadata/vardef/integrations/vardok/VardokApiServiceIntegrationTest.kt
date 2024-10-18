@@ -13,13 +13,13 @@ import org.junit.jupiter.api.Test
 @Requires(env = ["integration-test"])
 class VardokApiServiceIntegrationTest {
     @Inject
-    lateinit var varDokApiService: VardokApiService
+    lateinit var vardokApiService: VardokApiService
 
     @Test
     fun `vardok id not found`() {
         val exception: Exception =
             assertThrows(VardokNotFoundException::class.java) {
-                varDokApiService.getVardokItem("1")
+                vardokApiService.getVardokItem("1")
             }
         assertThat(exception).isInstanceOf(VardokNotFoundException::class.java)
         val expectedMessage = "Vardok id 1 not found"

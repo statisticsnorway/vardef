@@ -11,7 +11,6 @@ import java.io.File
 @Primary
 @Requires(env = ["test"])
 @Singleton
-
 class StaticVardokService : VardokService {
     val xmlMapper = XmlMapper().registerKotlinModule()
 
@@ -31,7 +30,7 @@ class StaticVardokService : VardokService {
     }
 
     override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
-        val xmlFile = File("src/test/resources/vardokFiles/${id}.xml")
+        val xmlFile = File("src/test/resources/vardokFiles/$id.xml")
         val result: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
 
         val responseMap = mutableMapOf<String, VardokResponse>()
@@ -43,8 +42,5 @@ class StaticVardokService : VardokService {
         }
 
         return responseMap
-
     }
-
-
 }

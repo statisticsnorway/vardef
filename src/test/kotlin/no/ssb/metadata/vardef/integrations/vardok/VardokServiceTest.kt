@@ -83,7 +83,7 @@ class VardokServiceTest : BaseVardokTest() {
 
     @Test
     fun `fetch multiple languages`() {
-        val result = varDokApiService.fetchMultipleVarDokItemsByLanguage("476")
+        val result = varDokApiService.fetchMultipleVardokItemsByLanguage("476")
         assertThat(result).isInstanceOf(MutableMap::class.java)
     }
 

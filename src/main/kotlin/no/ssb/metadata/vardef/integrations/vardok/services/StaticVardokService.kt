@@ -30,7 +30,7 @@ class StaticVardokService : VardokService {
         return varDokResponse
     }
 
-    override fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
+    override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val xmlFile = File("src/test/resources/vardokFiles/${id}.xml")
         val result: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
 

@@ -36,7 +36,7 @@ open class VardokApiService(
             throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
         }
 
-    override fun fetchMultipleVarDokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
+    override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
         result?.let {

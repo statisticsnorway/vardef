@@ -65,7 +65,7 @@ class VarDokMigrationController {
         try {
             val varDefInput =
                 varDokApiService.createVarDefInputFromVarDokItems(
-                    varDokApiService.fetchMultipleVarDokItemsByLanguage(id),
+                    varDokApiService.fetchMultipleVardokItemsByLanguage(id),
                 )
             return httpClient.proxy(
                 HttpRequest.POST("/variable-definitions", varDefInput),

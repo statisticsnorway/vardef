@@ -160,7 +160,7 @@ class VardokMigrationTest {
     fun `data element name with uppercase`() {
         val vardok = vardokService.getVardokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
-        val varDefInput = vardokApiService.fetchMultipleVarDokItemsByLanguage("130")
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("130")
         val vardokTransform = VardokApiService.extractVardefInput(varDefInput)
         val afterMigration = JSONObject(vardokTransform)
         assertThat(afterMigration["shortName"]).isEqualTo("ufg")

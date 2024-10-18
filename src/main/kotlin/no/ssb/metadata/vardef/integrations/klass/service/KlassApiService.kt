@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
-    @Property(name = "micronaut.http.services.klass.codes-at")
+    @Property(name = "klass.codes-at")
     private val codesAt: String,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)

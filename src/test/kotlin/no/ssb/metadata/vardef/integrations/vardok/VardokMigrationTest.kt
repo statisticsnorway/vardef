@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource
 
 @Requires(env = ["integration-test"])
 @MicronautTest
-class VarDokMigrationTest {
+class VardokMigrationTest {
     @Inject
     lateinit var varDokApiService: VarDokService
 
@@ -174,5 +174,13 @@ class VarDokMigrationTest {
         val vardokTransform = VarDokService.extractVardefInput(varDefInput)
         val afterMigration = JSONObject(vardokTransform)
         assertThat(afterMigration["shortName"]).isEqualTo("ufg")
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["130", "69"])
+    fun `vardokresponse statistical units are values in UnitTypes PERSON`(vardokId: String) {
+        val vardokresponse = varDokApiService.getVarDokItem(vardokId)
+        val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
+        assertThat(result).isEqualTo(listOf("20"))
     }
 }

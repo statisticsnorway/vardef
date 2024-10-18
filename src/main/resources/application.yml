@@ -64,6 +64,7 @@ klass:
     unit-types: 702
     areas: 618
   cache-retry-timeout-seconds: 1800
+  codes-at: 2024-08-01
 
 jackson:
   xml:

@@ -1,0 +1,67 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2016-09-06" defaultValidFrom="1993-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:3365" lastChangedDate="2016-09-06" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for inntekts- og lønnsstatistikk</dc:contributor>
+        <dc:creator>Elisabeth Løyland Omholt</dc:creator>
+        <dcterms:modified>2016-09-06</dcterms:modified>
+        <dcterms:valid>1993-01-01 - </dcterms:valid>
+        <dc:description>Årlig lavinntektsgrense settes lik 50 eller 60 prosent av median inntekt etter skatt per forbruksenhet. Ved beregning av vedvarende lavinntekt over en periode på tre år, settes lavinntektsgrensen lik 50 eller 60 prosent av mediangjennomsnittet i treårsperioden. Ved beregning av vedvarende lavinntekt over en fireårsperiode, ansees personer under den årlige lavinntektsgrensen og som var under lavinntektsgrensen i minst to av de tre foregående årene som personer med vedvarende lavinntekt. Inntekt etter skatt per forbruksenhet er lik summen av husholdningens skattepliktige og skattefrie inntekter, fratrukket skatt, fordelt på antall forbruksenheter i husholdningen. Antall forbruksenheter er beregnet ved bruk av EUs ekvivalensskala, der første voksne får vekt lik 1, neste voksne vekt lik 0,5, mens hvert barn får vekt lik 0,3. En husholdning på to voksne og to barn har dermed 2,1 forbruksenheter i følge EU-skalaen.</dc:description>
+        <dcterms:abstract/>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:3365</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>05.01.10 - Inntekt</dc:subject>
+        <dc:title>Lavinntekt, EU-ekvivalensskala</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Lavinntekt, EU-ekvivalensskala</Title>
+        <Description>Årlig lavinntektsgrense settes lik 50 eller 60 prosent av median inntekt etter skatt per forbruksenhet. Ved beregning av vedvarende lavinntekt over en periode på tre år, settes lavinntektsgrensen lik 50 eller 60 prosent av mediangjennomsnittet i treårsperioden. Ved beregning av vedvarende lavinntekt over en fireårsperiode, ansees personer under den årlige lavinntektsgrensen og som var under lavinntektsgrensen i minst to av de tre foregående årene som personer med vedvarende lavinntekt. Inntekt etter skatt per forbruksenhet er lik summen av husholdningens skattepliktige og skattefrie inntekter, fratrukket skatt, fordelt på antall forbruksenheter i husholdningen. Antall forbruksenheter er beregnet ved bruk av EUs ekvivalensskala, der første voksne får vekt lik 1, neste voksne vekt lik 0,5, mens hvert barn får vekt lik 0,3. En husholdning på to voksne og to barn har dermed 2,1 forbruksenheter i følge EU-skalaen.</Description>
+        <ContactPerson>
+            <CodeValue>oel</CodeValue>
+            <CodeText>Elisabeth Løyland Omholt</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>225</CodeValue>
+            <CodeText>Seksjon for inntekts- og lønnsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>05.01.10</CodeValue>
+            <CodeText>Inntekt</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource/>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>Lavinntekt EU</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/2" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10503" xlink:title="10503: Personer i husholdninger med årlig inntekt etter skatt per forbruksenhet, etter populasjon og kjennemerke" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10498" xlink:title="10498: Utviklingen i vedvarende lavinntekt, etter alder. Treårsperiode (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10459" xlink:title="10459: Utviklingen i vedvarende lavinntekt. Fireårsperiode. Personer, etter alder" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09679" xlink:title="09679: Personer med lavinntekt. Hele befolkningen, innvandrere og norskfødte med innvandrerforeldre, etter alder" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09572" xlink:title="09572: Utviklingen i vedvarende lavinntekt. Treårsperiode. Barn som er innvandrere eller er norskfødte med innvandrerforeldre, etter landbakgrunn (prosent)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09571" xlink:title="09571: Utviklingen i vedvarende lavinntekt. Treårsperiode. Barn under 18 år, etter aldersgruppe og fylke (prosent) (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09570" xlink:title="09570: Utviklingen i vedvarende lavinntekt. Treårsperiode. Personer 18-66 år, etter utdanningsnivå (prosent)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09008" xlink:title="09008: Utviklingen i vedvarende lavinntekt. Treårsperiode. Personer etter ulike kjennemerker (prosent)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08764" xlink:title="08764: Personer under 18 år i privathusholdninger med årlig inntekt etter skatt per forbruksenhet, under ulike avstander til medianinntekten. EU- og OECD-skala (F), (K) (B)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07208" xlink:title="07208: Utviklingen i vedvarende lavinntekt. Fireårsperiode" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06947" xlink:title="06947: Personer i privathusholdninger med årlig inntekt etter skatt per forbruksenhet, under ulike avstander til medianinntekten. EU- og OECD-skala (K) (B)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06801" xlink:title="06801: Andel personer i husholdninger med årlig inntekt etter skatt per forbruksenhet under ulike avstander til medianinntekten. OECD- og EU-skala" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04204" xlink:title="04204: Utviklingen i vedvarende lavinntekt. Treårsperiode (prosent)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

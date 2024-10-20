@@ -144,14 +144,6 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `test mapper`() {
-        val xmlMapper = XmlMapper().registerKotlinModule()
-        val varDokResponse: VardokResponse = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
-        println(varDokResponse)
-        assertThat(varDokResponse.xmlLang).isEqualTo("nb")
-    }
-
-    @Test
     fun `data element name with uppercase`() {
         val vardok = vardokService.getVardokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")

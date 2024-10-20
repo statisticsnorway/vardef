@@ -22,7 +22,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
-import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.reactivestreams.Publisher
 
 @Tag(name = DATA_MIGRATION)
@@ -31,7 +31,7 @@ import org.reactivestreams.Publisher
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
     @Inject
-    lateinit var varDokApiService: VardokApiService
+    lateinit var vardokService: VardokService
 
     @Client("/")
     @Inject
@@ -64,8 +64,8 @@ class VarDokMigrationController {
     ): Publisher<MutableHttpResponse<*>>? {
         try {
             val varDefInput =
-                varDokApiService.createVarDefInputFromVarDokItems(
-                    varDokApiService.fetchMultipleVardokItemsByLanguage(id),
+                vardokService.createVarDefInputFromVarDokItems(
+                    vardokService.fetchMultipleVardokItemsByLanguage(id),
                 )
             return httpClient.proxy(
                 HttpRequest.POST("/variable-definitions", varDefInput),

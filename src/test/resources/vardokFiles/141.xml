@@ -1,0 +1,61 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-23" defaultValidFrom="2002-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:141" lastChangedDate="2020-02-26" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for befolkningsstatistikk</dc:contributor>
+        <dc:creator>Permisjon/Sluttet</dc:creator>
+        <dcterms:modified>2020-02-26</dcterms:modified>
+        <dcterms:valid>2002-01-01 - </dcterms:valid>
+        <dc:description>En hussamling skal registreres som tettsted dersom det bor minst 200 personer der. Avstanden mellom husene skal normalt ikke overstige 50 meter, men for noen arealkrevende bygningstyper ¿ som boligblokker, industribygg, kontor/forretningsbygg, skoler, sykehus osv. ¿ kan avstanden økes til 200 meter. Tilgrensende bebygde og opparbeidede områder, som parker, idrettsanlegg og industriområder, skal være del av tettstedet. Husklynger med minst 5 næringsbygninger eller 5 boligbygninger tas med inntil en avstand på 400 meter fra tettstedskjernen.ter. Det er tillatt med et skjønnsmessig avvik ut over 50 meter mellom husene i områder som ikke skal eller kan bebygges. Dette kan f.eks. være parker, idrettsanlegg, industriområder eller naturlige hindringer som elver eller dyrkbare områder. Husklynger som naturlig hører med til tettstedet tas med inntil en avstand på 400 meter fra tettstedskjernen.</dc:description>
+        <dcterms:abstract> Regionale inndelinger</dcterms:abstract>
+        <dcterms:tableOfContents>Region</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:141</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>00.00.20 - Regionale</dc:subject>
+        <dc:title>Tettsted</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Tettsted</Title>
+        <Description>En hussamling skal registreres som tettsted dersom det bor minst 200 personer der. Avstanden mellom husene skal normalt ikke overstige 50 meter, men for noen arealkrevende bygningstyper ¿ som boligblokker, industribygg, kontor/forretningsbygg, skoler, sykehus osv. ¿ kan avstanden økes til 200 meter. Tilgrensende bebygde og opparbeidede områder, som parker, idrettsanlegg og industriområder, skal være del av tettstedet. Husklynger med minst 5 næringsbygninger eller 5 boligbygninger tas med inntil en avstand på 400 meter fra tettstedskjernen.ter. Det er tillatt med et skjønnsmessig avvik ut over 50 meter mellom husene i områder som ikke skal eller kan bebygges. Dette kan f.eks. være parker, idrettsanlegg, industriområder eller naturlige hindringer som elver eller dyrkbare områder. Husklynger som naturlig hører med til tettstedet tas med inntil en avstand på 400 meter fra tettstedskjernen.</Description>
+        <ContactPerson>
+            <CodeValue>hhe</CodeValue>
+            <CodeText>Permisjon/Sluttet</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>320</CodeValue>
+            <CodeText>Seksjon for befolkningsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes>Tilo og med 2012 ble følgende ordlyd brukt: En hussamling skal registreres som et tettsted dersom det 1. Bor minst 200 personer der og 2. Avstanden mellom husene skal normalt ikke overstige 50 meter. Det er tillatt med et skjønnsmessig avvik ut over 50 meter mellom husene i områder som ikke skal eller kan bebygges. Dette kan f.eks. være parker, idrettsanlegg, industriområder eller naturlige hindringer som elver eller dyrkbare områder. Husklynger som naturlig hører med til tettstedet tas med inntil en avstand på 400 meter fra tettstedskjernen. Nåværende definisjon er den samme, men ordlyden er presisert.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Region</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>00.00.20</CodeValue>
+            <CodeText>Regionale</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Regionale inndelinger</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>http://www.ssb.no/emner/02/01/10/beftett/om.html</ExternalDocument>
+        <DataElementName>tettsted</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ClassificationRelation xlink:href="http://www.ssb.no/classification/klass/110" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10810" xlink:title="10810: Areal, etter arealklasse (km²) (T)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09914" xlink:title="09914: Inntekt, formue, gjeld og skatt for bosatte personer i tettsteder med minst 10 000 innbyggere (T) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09736" xlink:title="09736: Hovedklasser av arealbruk og arealressurser (km²) (T) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09580" xlink:title="09580: Andel bosatte i tettsteder med trygg tilgang til rekreasjonsareal og nærturterreng, etter alder (prosent) (T)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05805" xlink:title="05805: Folkemengde i tettbygd/spredtbygd strøk (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05277" xlink:title="05277: Folkemengde, etter alder og kjønn (T)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04859" xlink:title="04859: Areal og befolkning i tettsteder (T)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

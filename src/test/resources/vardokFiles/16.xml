@@ -1,0 +1,100 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-04" defaultValidFrom="1993-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:16" lastChangedDate="2017-01-18" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for inntekts- og lønnsstatistikk</dc:contributor>
+        <dc:creator>Permisjon/Sluttet</dc:creator>
+        <dcterms:modified>2017-01-18</dcterms:modified>
+        <dcterms:valid>1993-01-01 - </dcterms:valid>
+        <dc:description>Omfatter lønnsinntekter, næringsinntekter, pensjoner og kapitalinntekter.</dc:description>
+        <dcterms:abstract> Skattestatistikk for personer</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:16</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>05.01 - Inntekt, formue, skatt</dc:subject>
+        <dc:title>Bruttoinntekt</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Bruttoinntekt</Title>
+        <Description>Omfatter lønnsinntekter, næringsinntekter, pensjoner og kapitalinntekter.</Description>
+        <ContactPerson>
+            <CodeValue>gsp</CodeValue>
+            <CodeText>Permisjon/Sluttet</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>225</CodeValue>
+            <CodeText>Seksjon for inntekts- og lønnsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>05.01</CodeValue>
+            <CodeText>Inntekt, formue, skatt</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Skattestatistikk for personer</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>brutto / bel_1_1</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>selvangivelse</CodeValue>
+            <CodeText>Skattestatistikk for personer</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10943" xlink:title="10943: Hovedposter fra ligningen for bosatte personer, etter alder (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10942" xlink:title="10942: Hovedposter fra ligningen for bosatte personer 17 år og over, etter ti-årig aldersgrupper" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10941" xlink:title="10941: Hovedposter fra ligningen for bosatte personer 17 år og over, etter alder og skattepliktig nettoformue" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10924" xlink:title="10924: Hovedposter fra ligningen for bosatte personer 17 år og over, etter alder og bruttoinntekt" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10565" xlink:title="10565: Skattefradrag for boligsparing for ungdom, etter størrelsen på bruttoinntekt og alder" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10280" xlink:title="10280: Inntekter og fradrag for personlig næringsdrivende, etter hovedinntektens art" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10264" xlink:title="10264: Inntekter og fradrag for personlig næringsdrivende i enkeltpersonforetak med hovedinntekt fra næringsvirksomhet, etter næring (SN2007)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09935" xlink:title="09935: Bruttoinntekt og formue for bosatte personer 17 år og eldre, etter desilfordelt bruttoinntekt" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09916" xlink:title="09916: Bruttoinntekt og formue for bosatte personer 17 år og eldre, etter desilfordelt bruttoformue" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09914" xlink:title="09914: Inntekt, formue, gjeld og skatt for bosatte personer i tettsteder med minst 10 000 innbyggere (T) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09834" xlink:title="09834: Næringsinntekt fra jordbruk for brukere, etter driftsform" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08978" xlink:title="08978: Inntekter, gjeld, skattepliktig bruttoformue og utlignet skatt for personlige skogeiere med minst 25 dekar produktivt skogareal, etter eiendommens størrelse" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08975" xlink:title="08975: Gjennomsnittlige inntekter, gjeld, skattepliktig bruttoformue og utlignet skatt for personlige skogeiere med positiv næringsinntekt i skogbruk, etter eiendommens størrelse" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08603" xlink:title="08603: Skattepliktige inntekter og formue. Antall, gjennomsnitt og mill. kr (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08411" xlink:title="08411: Inntektsintervall, etter kjønn. Antall bosatte personer 17 år og eldre" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08409" xlink:title="08409: Inntektsintervall. Antall bosatte personer 17 år og eldre (K)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07762" xlink:title="07762: Inntekter og fradrag for personlig næringsdrivende i enkeltpersonforetak, etter næring (SN2007) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07390" xlink:title="07390: Hovedposter fra ligninga for personer 17 år og eldre på Svalbard. Gjennomsnitt for de med beløp og gjennomsnitt for alle (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07094" xlink:title="07094: Hovedposter fra ligninga for bosatte personer 17 år og eldre (F) (kr). Gjennomsnitt (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07006" xlink:title="07006: Hovedposter fra ligninga, etter størrelsen på bruttoinntekt. Bosatte personer 17 år og eldre. Gjennomsnitt (kr)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06655" xlink:title="06655: Bruttoinntektsintervall, etter alder og kjønn. Antall bosatte personer 17 år og eldre, og sum bruttoinntekt" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06626" xlink:title="06626: Personer 62 år og eldre, etter hovedposter fra ligninga og aldersgrupper. Antall og gjennomsnitt (K)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06508" xlink:title="06508: Inntekter, gjeld, skattepliktig bruttoformue og utlignet skatt for personlige skogeiere med minst 25 dekar produktivt skogareal (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06502" xlink:title="06502: Gjennomsnittlige inntekter, gjeld, skattepliktig bruttoformue og utlignet skatt for personlige skogeiere med positiv næringsinntekt i skogbruk (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06501" xlink:title="06501: Inntekter, gjeld, skattepliktig bruttoformue og utlignet skatt for personlige skogeiere og deres ektefeller, samboere og partnere (1 000 kr) (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06074" xlink:title="06074: Inntekter og fradrag for personlig næringsdrivende med hovedinntekt fra annen næringsvirksomhet, etter næring (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06073" xlink:title="06073: Inntekter og fradrag for personlig næringsdrivende, etter hovedinntektens art (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06055" xlink:title="06055: Skattefradrag for boligparing for ungdom, etter størrelsen på bruttoinntekt. Antall bosatte personer 17 år og eldre og gjennomsnittlig skattefradrag (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05956" xlink:title="05956: Hovedposter fra ligninga, etter pensjonsstatus. Bosatte personer 17 år og eldre. Gjennomsnitt for de med beløp (kr) (F) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05954" xlink:title="05954: Hovedposter fra ligninga, etter pensjonsstatus. Bosatte personar 17 år og eldre. Antall personer og gjennomsnitt i kr for de med beløp (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05946" xlink:title="05946: Hovedposter fra ligninga, etter størrelsen på skattepliktig nettoformue. Bosatte personer 17 år og eldre. Gjennomsnitt (kr) (K)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05918" xlink:title="05918: Hovedposter fra ligninga for lønnstakere og pensjonister og næringsdrivende. Bosatte personer 17 år og eldre. Gjennomsnitt (kr) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05854" xlink:title="05854: Hovedposter fra ligninga for bosatte personer 17 år og eldre, etter alder. Gjennomsnitt og median (kr) (K) (B)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05838" xlink:title="05838: Bruttoinntektsintervall, etter mottatt aksjeutbytte. Antall bosatte personer 17 år og eldre" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05757" xlink:title="05757: Bruttoinntektsintervall. Talet på busette personar 17 år og eldre (K) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05744" xlink:title="05744: Skattepliktige inntekter og inntektsfrådrag for lønnsmottakarar og pensjonistar (kr) (F) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05743" xlink:title="05743: Skattepliktige inntekter og inntektsfrådrag for lønnsmottakarar og pensjonistar, etter alder (kr) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05671" xlink:title="05671: Hovedposter fra ligninga for bosatte personer 17 år og eldre. Median (kr) (K)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05661" xlink:title="05661: Inntekter og fradrag fra selvangivelsen for bosatte personer 17 år og eldre, etter kjønn. Gjennomsnitt (kr) (F) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05584" xlink:title="05584: Bruttoinntektsintervall, etter kjønn. Talet på busette personar 17 år og eldre (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05051" xlink:title="05051: Median bruttoinntekt for busette personar 17 år og over, i faste prisar (1993=100) (F) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05050" xlink:title="05050: Median bruttoinntekt for busette personar 17 år og over, i faste prisar (2002-kr) (K) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04750" xlink:title="04750: Talet på personar, bruttoinntekt, inntekt etter skatt, formue ved likning og gjeld pr. hushald, etter hushaldstype. Gjennomsnitt (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03068" xlink:title="03068: Hovedposter fra ligninga for bosatte personer 17 år og eldre, etter kjønn. Gjennomsnitt for alle (kr) (K)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

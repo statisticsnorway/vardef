@@ -1,0 +1,100 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-04" defaultValidFrom="1993-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:16" lastChangedDate="2017-01-18" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for income and wage statistics</dc:contributor>
+        <dc:creator>Leave of absence/Working conditions terminated</dc:creator>
+        <dcterms:modified>2017-01-18</dcterms:modified>
+        <dcterms:valid>1993-01-01 - </dcterms:valid>
+        <dc:description>Comprises wages, entrepreneurial income, pensions and capital income.</dc:description>
+        <dcterms:abstract> Skattestatistikk for personer</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:16</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>05.01 - Income, property, taxes</dc:subject>
+        <dc:title>Gross income</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Gross income</Title>
+        <Description>Comprises wages, entrepreneurial income, pensions and capital income.</Description>
+        <ContactPerson>
+            <CodeValue>gsp</CodeValue>
+            <CodeText>Leave of absence/Working conditions terminated</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>225</CodeValue>
+            <CodeText>Division for income and wage statistics</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>05.01</CodeValue>
+            <CodeText>Income, property, taxes</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Skattestatistikk for personer</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>brutto / bel_1_1</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>selvangivelse</CodeValue>
+            <CodeText>Tax statistics for personal taxpayers</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10943" xlink:title="10943: Main entries from the tax assessment for residents, by age (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10942" xlink:title="10942: Main entries from the tax assessment for residents 17 years and older, by ten-year age groups" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10941" xlink:title="10941: Main entries from the tax assessment for residents 17 years and older, by age and net wealth" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10924" xlink:title="10924: Main entries from the tax assessment for residents 17 years and older, by age and gross income" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10565" xlink:title="10565: Deduction for home investment savings for young people, by size of gross income and age" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10280" xlink:title="10280: Income and deductions for self-employed, by main income" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10264" xlink:title="10264: Income and deduction for self-employed with main income from independent occupations group with main income from industry, by industry (SIC2007)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09935" xlink:title="09935: Gross income and wealth for residents 17 years and older, by different groups of gross income" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09916" xlink:title="09916: Gross income and wealth for residents 17 years and older, by different groups of gross wealth" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09914" xlink:title="09914: Income, wealth, debt and taxes for residents in urban settlements with at least 10 000 inhabitants (US) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09834" xlink:title="09834: Entrepreneurial income from agriculture, by type of farming" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/08978" xlink:title="08978: Gross income, debt, taxable gross wealth and assessed taxes for personal forest owners with at least 25 decares productive forest area, by size of property" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/08975" xlink:title="08975: Average incomes, debt, taxable gross wealth and assessed taxes for personal forest owners with entrepreneurial incomes in forestry, by size of property" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/08603" xlink:title="08603: Taxable income and property (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/08411" xlink:title="08411: Income intervals, by sex. Number of residents 17 years and older" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/08409" xlink:title="08409: Income intervals. Number of residents 17 years and older (M)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07762" xlink:title="07762: Income and deduction for self-employed with main income from independent occupations group, by industry (SIC2007) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07390" xlink:title="07390: Main entries from the tax assessment for persons 17 years and older in Svalbard. Average (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07094" xlink:title="07094: Main entries from the tax assessment, residents 17 years and older (C) (NOK) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07006" xlink:title="07006: Main entries from the tax assessment, by size of gross income. Residents 17 years and older" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06655" xlink:title="06655: Gross income intervals, by age and sex. Number of residents 17 years and older, and total gross income" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06626" xlink:title="06626: Main entries from the tax assessment for persons 62 years and older, by age (M)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06508" xlink:title="06508: Gross income, debt, taxable gross wealth and assessed taxes for personal forest owners with at least 25 decares productive forest area (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06502" xlink:title="06502: Average incomes, debt, taxable gross wealth and assessed taxes for personal forest owners with entrepreneurial incomes in forestry (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06501" xlink:title="06501: Incomes, debt, taxable gross wealth and assessed taxes for personal forest owners and their cohabitants and spouses (NOK 1 000) (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06074" xlink:title="06074: Income and deduction for self-employed with main income from other entreprenurial activity, by industry (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06073" xlink:title="06073: Income and deductions for self-employed, by main income (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06055" xlink:title="06055: Deduction for home investment savings for young people, by size of gross income. Residents 17 years and older and average deduction (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05956" xlink:title="05956: Main entries from the tax assessment, by pension status. Residents 17 years and older. Average for persons that have amount on the different codes (NOK) (C) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05954" xlink:title="05954: Main entries from the tax assessment, by pension status. Residents aged 17 years and older. Number of persons and average in NOK for persons with amounts different from zero (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05946" xlink:title="05946: Main entries from the tax assessment, by the size of net wealth. Residents 17 years and older. Average (NOK) (M)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05918" xlink:title="05918: Main entries from the tax assessment for employees and pensioners and also self-employed. Residents 17 years and older. Average (NOK) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05854" xlink:title="05854: Main entries from the tax assessment for residents 17 years and older, by age. Average and median (NOK) (M) (UD)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05838" xlink:title="05838: Gross income intervals, by share dividends received. Number of residents 17 years and older" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05757" xlink:title="05757: Gross income intervals. Number of residents 17 years and older (M) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05744" xlink:title="05744: Taxable income and deductions for employees and pensioners (NOK) (C) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05743" xlink:title="05743: Taxable income and deductions for employees and pensioners, by age (NOK) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05671" xlink:title="05671: Main entries from the tax assessment for residents 17 years and older. Median (NOK) (M)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05661" xlink:title="05661: Income and deductions from the tax return for residents 17 years and older, by sex. Average (NOK) (C) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05584" xlink:title="05584: Gross income intervals, by sex. Number of residents 17 years and older (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05051" xlink:title="05051: Median gross income for residents 17 years and older, in fixed prices (1993=100) (C) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05050" xlink:title="05050: Median gross income for residents 17 years and older, in fixed prices (in fixed 2002-NOK) (M) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04750" xlink:title="04750: Number of persons, gross income, after tax income, assessed property and liabilities for households, by type of household. Average (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/03068" xlink:title="03068: Main entries from the tax assessment for residents 17 years and older, by sex (NOK) (M)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

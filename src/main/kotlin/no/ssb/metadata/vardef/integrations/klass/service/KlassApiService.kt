@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
+import io.micronaut.cache.annotation.CacheInvalidate
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
@@ -10,6 +11,9 @@ import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
+
+const val CODES_CACHE = "codes"
+const val CLASSIFICATIONS_CACHE = "classifications"
 
 @Singleton
 open class KlassApiService(
@@ -25,7 +29,10 @@ open class KlassApiService(
     @Property(name = "micronaut.klass-web.url.en")
     private lateinit var klassUrlEn: String
 
-    @Cacheable("classifications")
+    @CacheInvalidate(value = [CODES_CACHE, CLASSIFICATIONS_CACHE], all = true)
+    open fun invalidateCaches() = Unit
+
+    @Cacheable(CLASSIFICATIONS_CACHE)
     open fun getClassification(classificationId: Int): Classification {
         val response = klassApiClient.fetchClassification(classificationId)
         handleErrorCodes(classificationId, response)
@@ -33,7 +40,7 @@ open class KlassApiService(
             ?: throw NoSuchElementException("No content for Classification with ID $classificationId")
     }
 
-    @Cacheable("codes")
+    @Cacheable(CODES_CACHE)
     open fun getCodeObjectsFor(
         classificationId: Int,
         language: SupportedLanguages,

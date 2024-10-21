@@ -16,12 +16,14 @@ open class KlassApiService(
     private val klassApiClient: KlassApiClient,
     @Property(name = "klass.codes-at")
     private val codesAt: String,
-    @Property(name = "micronaut.klass-web.url.nb")
-    private var klassUrlNb: String,
-    @Property(name = "micronaut.klass-web.url.en")
-    private var klassUrlEn: String,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
+
+    @Property(name = "micronaut.klass-web.url.nb")
+    private lateinit var klassUrlNb: String
+
+    @Property(name = "micronaut.klass-web.url.en")
+    private lateinit var klassUrlEn: String
 
     @Cacheable("classifications")
     open fun getClassification(classificationId: Int): Classification {

@@ -26,7 +26,7 @@ class KlassApiServiceCacheTest {
     private lateinit var klassApiMockkClient: KlassApiClient
 
     @Property(name = "klass.codes-at")
-    private val codesAt: String = ""
+    private lateinit var codesAt: String
 
     private val classificationId = 1
     private val language = SupportedLanguages.NB

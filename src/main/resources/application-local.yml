@@ -3,15 +3,6 @@ micronaut:
   server:
     port: 8081
 
-  http:
-    client:
-      log-level: DEBUG
-    services:
-      klass:
-        log-level: DEBUG
-      vardok:
-        log-level: DEBUG
 logger:
   levels:
-    "io.micronaut.http.client.netty.DefaultHttpClient": DEBUG
-    "io.micronaut.cache": DEBUG
+    root: DEBUG

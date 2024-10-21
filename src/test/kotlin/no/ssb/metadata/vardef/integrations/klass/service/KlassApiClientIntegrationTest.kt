@@ -4,8 +4,6 @@ import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import no.ssb.metadata.vardef.integrations.klass.models.Classifications
 import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
@@ -27,18 +25,6 @@ class KlassApiClientIntegrationTest {
 
     @Property(name = "klass.codes-at")
     private val codesAt: String = "2024-08-01"
-
-    @Test
-    fun `fetch classifications from klass api`() {
-        val result = klassApiClient.fetchClassifications()
-        assertThat(result).isNotNull
-        assertThat(result.body()?.embedded).isNotNull
-        assertThat(result.body()?.embedded).isInstanceOf(Classifications::class.java)
-        assertThat(result.body()?.embedded?.classifications).isNotNull
-
-        val classificationList = result.body()?.embedded?.classifications
-        assertThat(classificationList?.get(0) ?: emptyList<Classification>()).isInstanceOf(Classification::class.java)
-    }
 
     @Test
     fun `fetch code list from klass api`() {

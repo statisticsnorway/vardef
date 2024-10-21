@@ -3,12 +3,16 @@ package no.ssb.metadata.vardef.integrations.klass.service
 import io.micronaut.context.BeanContext
 import io.micronaut.context.annotation.*
 import io.micronaut.inject.qualifiers.Qualifiers
+import io.micronaut.json.JsonMapper
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.integrations.klass.models.Classification
+import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import java.nio.file.Path
 
 const val KLASS_CLASSIFICATIONS_PROPERTY_NAME = "klass.classifications"
 
@@ -24,9 +28,24 @@ data class StaticKlassCode(
 @EachProperty(KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 class StaticClassification(
     @param:Parameter val id: String,
+    @Property(name = "klass.static-data-path")
+    private val path: Path,
+    jsonMapper: JsonMapper,
 ) {
     var name: LanguageStringType? = null
-    var codes: List<StaticKlassCode>? = null
+    var codes: List<Code>? = null
+
+    init {
+        val resourcePath = path.resolve("$id.json").toString()
+        val resource = Thread.currentThread().getContextClassLoader().getResource(resourcePath)
+        if (resource == null) {
+            throw RuntimeException("Resource not found: $resourcePath")
+        } else {
+            val classification = jsonMapper.readValue(resource.readText(), Classification::class.java)
+            name = LanguageStringType(nb = classification.name, en = null, nn = null)
+            codes = classification.codes
+        }
+    }
 }
 
 @Primary
@@ -69,7 +88,7 @@ class StaticKlassService : KlassService {
 
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
-            val name = if (language == SupportedLanguages.NB) it.name.nb else null
+            val name = if (language == SupportedLanguages.NB) it.name else null
             KlassReference(getKlassUrlForIdAndLanguage(classificationId, language), it.code, name)
         }
     }

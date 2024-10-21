@@ -1,34 +1,44 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
+import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.server.exceptions.HttpServerException
-import io.mockk.clearAllMocks
+import io.micronaut.test.annotation.MockBean
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
-import no.ssb.metadata.vardef.integrations.klass.models.*
+import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.klass.models.Classification
+import no.ssb.metadata.vardef.integrations.klass.models.Code
+import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import java.time.LocalDateTime
 
-@MockK
+@MicronautTest
 class KlassApiServiceTest {
+    @Inject
+    lateinit var klassApiService: KlassApiService
+
+    @Inject
     private lateinit var klassApiMockkClient: KlassApiClient
-    private lateinit var klassApiService: KlassApiService
-    private lateinit var listClassificationsResponse: KlassApiResponse
-    private lateinit var getClassificationResponse: HttpResponse<Classification?>
-    private lateinit var codesMock: Codes
-    private lateinit var codes: Codes
-    private lateinit var codeList: List<Code>
+
+    private val codeList =
+        listOf(
+            Code(code = "1", name = "Ja"),
+            Code(code = "2", name = "Nei"),
+        )
+    private val codes =
+        Codes(
+            codes = codeList,
+        )
     private val testClassificationId = 1
     private val nonExistingClassificationId = 0
     private val language = SupportedLanguages.NB
@@ -46,38 +56,14 @@ class KlassApiServiceTest {
                 ),
         )
 
+    private val getClassificationResponse: HttpResponse<Classification?> = HttpResponse.ok(classification)
+
+    @Primary
+    @MockBean(KlassApiClient::class)
+    fun mockKlassApiClient(): KlassApiClient = mockk<KlassApiClient>(relaxed = true)
+
     @Property(name = "klass.codes-at")
     private val codesAt: String = ""
-
-    @BeforeEach
-    fun setUp() {
-        klassApiMockkClient = mockk<KlassApiClient>(relaxed = true)
-        klassApiService = KlassApiService(klassApiMockkClient, codesAt)
-        codeList =
-            listOf(
-                Code(code = "1", name = "Ja"),
-                Code(code = "2", name = "Nei"),
-            )
-        listClassificationsResponse =
-            KlassApiResponse(
-                Classifications(
-                    listOf(
-                        classification,
-                    ),
-                ),
-            )
-        getClassificationResponse = HttpResponse.ok(classification)
-        codesMock = mockk<Codes>()
-        codes =
-            Codes(
-                codes = codeList,
-            )
-    }
-
-    @AfterEach
-    internal fun tearDown() {
-        clearAllMocks()
-    }
 
     @Test
     fun `get non-existing classification returns exception`() {
@@ -112,10 +98,6 @@ class KlassApiServiceTest {
 
     @Test
     fun `fetch code list from klass api returns 200 OK`() {
-        every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(listClassificationsResponse)
-
         every {
             klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
         } returns HttpResponse.ok(codes)
@@ -166,10 +148,6 @@ class KlassApiServiceTest {
 
     @Test
     fun `get codes for returns a list of just the codes`() {
-        every {
-            klassApiMockkClient.fetchClassifications()
-        } returns HttpResponse.ok(listClassificationsResponse)
-
         every {
             klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
         } returns HttpResponse.ok(codes)

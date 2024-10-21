@@ -13,13 +13,13 @@ interface KlassService {
     fun doesClassificationExist(id: String): Boolean
 
     fun renderCode(
-        id: String,
+        classificationId: String,
         code: String,
         language: SupportedLanguages,
     ): KlassReference?
 
     fun getKlassUrlForIdAndLanguage(
-        id: String,
+        classificationId: String,
         language: SupportedLanguages,
     ): String
 }

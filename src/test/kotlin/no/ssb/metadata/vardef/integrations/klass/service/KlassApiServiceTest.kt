@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.server.exceptions.HttpServerException
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -130,7 +131,7 @@ class KlassApiServiceTest {
             klassApiMockkClient.fetchClassification(testClassificationId)
         } returns HttpResponse.serverError()
 
-        assertThrows<NoSuchElementException> {
+        assertThrows<HttpServerException> {
             klassApiService.getClassification(testClassificationId)
         }
 

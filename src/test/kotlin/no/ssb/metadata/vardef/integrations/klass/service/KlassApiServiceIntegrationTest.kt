@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
-import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -14,17 +13,11 @@ class KlassApiServiceIntegrationTest {
     @Inject
     lateinit var klassApiService: KlassApiService
 
-    @Property(name = "klass.cached-classifications.unit-types")
-    private var unitTypesId: Int = 0
-
     @Test
     fun `fetch existing classification by id from klass api`() {
-        val result = klassApiService.getClassification(unitTypesId)
+        val result = klassApiService.getClassification(702)
         assertThat(result).isNotNull
-        assertThat(result.name).isEqualTo("Enhetstyper")
-
-//        val classificationList = result.codes
-//        assertThat(classificationList[0]).isInstanceOf(Code::class.java)
+        assertThat(result.name).isEqualTo("Kodeliste for enhetstyper")
     }
 
     @Test

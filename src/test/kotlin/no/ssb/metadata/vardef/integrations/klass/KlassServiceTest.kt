@@ -30,6 +30,14 @@ class KlassServiceTest {
             }
 
         klassService
+            .renderCode("702", "17", SupportedLanguages.EN)
+            ?.let { klassItem ->
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/en/klass/klassifikasjoner/702")
+                assertThat(klassItem.code).isEqualTo("17")
+                assertThat(klassItem.title).isEqualTo(null)
+            }
+
+        klassService
             .renderCode("702", "41", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem).isEqualTo(null)

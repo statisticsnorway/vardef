@@ -1075,6 +1075,3 @@ klass:
           name:
             en: ''
             nb: Arbeid og lønn
-logger:
-  levels:
-    "io.micronaut.cache": DEBUG

@@ -60,22 +60,22 @@ class StaticKlassService : KlassService {
         }
 
     override fun renderCode(
-        id: String,
+        classificationId: String,
         code: String,
         language: SupportedLanguages,
     ): KlassReference? {
         val classification: StaticClassification =
-            beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
+            beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(classificationId))
 
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
             val name = if (language == SupportedLanguages.NB) it.name.nb else null
-            KlassReference(getKlassUrlForIdAndLanguage(id, language), it.code, name)
+            KlassReference(getKlassUrlForIdAndLanguage(classificationId, language), it.code, name)
         }
     }
 
     override fun getKlassUrlForIdAndLanguage(
-        id: String,
+        classificationId: String,
         language: SupportedLanguages,
     ): String {
         val baseUrl =
@@ -84,6 +84,6 @@ class StaticKlassService : KlassService {
                 SupportedLanguages.NN -> klassUrlNb
                 else -> klassUrlEn
             }
-        return "$baseUrl/klassifikasjoner/$id"
+        return "$baseUrl/klassifikasjoner/$classificationId"
     }
 }

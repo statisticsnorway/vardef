@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.context.annotation.Property
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.server.exceptions.HttpServerException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
@@ -19,7 +20,7 @@ open class KlassApiService(
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
 
-    private val status500 = "Klass Api: Service is not available"
+    private val status500 = "Service is not available"
 
     @Property(name = "micronaut.klass-web.url.nb")
     private var klassUrlNb: String = ""
@@ -28,18 +29,32 @@ open class KlassApiService(
     private var klassUrlEn: String = ""
 
     @Cacheable("classifications")
-    open fun getClassification(classificationId: Int): Classification =
-        klassApiClient.fetchClassification(classificationId).body()
-            ?: throw NoSuchElementException("Klass API: Classification with ID $classificationId not found")
+    open fun getClassification(classificationId: Int): Classification {
+        val response = klassApiClient.fetchClassification(classificationId)
+        handleErrorCodes(classificationId, response)
+        return response.body()
+            ?: throw NoSuchElementException("No content for Classification with ID $classificationId")
+    }
 
     @Cacheable("codes")
     open fun getCodeObjectsFor(
         classificationId: Int,
         language: SupportedLanguages,
     ): List<Code> {
-        logger.info("Klass Api: Fetching codes for $classificationId")
+        logger.info("Fetching codes for $classificationId")
         val response = klassApiClient.listCodes(classificationId, codesAt, language)
+        handleErrorCodes(classificationId, response)
+        return response.body().codes.ifEmpty {
+            throw NoSuchElementException(
+                "No codes found for $classificationId",
+            )
+        }
+    }
 
+    private fun <T : Any?> handleErrorCodes(
+        classificationId: Int,
+        response: HttpResponse<T>,
+    ): HttpResponse<T> {
         when (response.status.code) {
             500 -> {
                 logger.error(status500)
@@ -47,17 +62,13 @@ open class KlassApiService(
             }
 
             404 -> {
-                logger.info("Klass Api: Classification items not found")
-                throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
+                logger.info("Classification $classificationId not found")
+                throw NoSuchElementException("Classification $classificationId not found")
             }
 
             else -> {
-                logger.info("Klass Api: Classifications fetched")
-                return response.body().codes.ifEmpty {
-                    throw NoSuchElementException(
-                        "Klass Api: No codes found for $classificationId",
-                    )
-                }
+                logger.info("Classification fetched")
+                return response
             }
         }
     }
@@ -73,24 +84,31 @@ open class KlassApiService(
         }
 
     override fun renderCode(
-        id: String,
+        classificationId: String,
         code: String,
         language: SupportedLanguages,
     ): KlassReference? {
-        val classificationId = id.toInt()
-        val classification = getCodeObjectsFor(classificationId, language).find { it.code == code }
-        return classification?.let {
-            val name = it.name
-            KlassReference(
-                getKlassUrlForIdAndLanguage(id, language),
-                it.code,
-                name,
-            )
+        var codeObject: Code?
+        try {
+            codeObject =
+                getCodeObjectsFor(classificationId.toInt(), language)
+                    .firstOrNull { it.code == code }
+            // In this case the code doesn't exist in the code list
+            if (codeObject == null) return null
+        } catch (e: NoSuchElementException) {
+            logger.warn("Classification $classificationId no available for language $language")
+            codeObject = null
         }
+
+        return KlassReference(
+            getKlassUrlForIdAndLanguage(classificationId, language),
+            codeObject?.code ?: code,
+            codeObject?.name,
+        )
     }
 
     override fun getKlassUrlForIdAndLanguage(
-        id: String,
+        classificationId: String,
         language: SupportedLanguages,
     ): String {
         val baseUrl =
@@ -98,6 +116,6 @@ open class KlassApiService(
                 SupportedLanguages.NB, SupportedLanguages.NN -> klassUrlNb
                 SupportedLanguages.EN -> klassUrlEn
             }
-        return "$baseUrl/klassifikasjoner/$id"
+        return "$baseUrl/klassifikasjoner/$classificationId"
     }
 }

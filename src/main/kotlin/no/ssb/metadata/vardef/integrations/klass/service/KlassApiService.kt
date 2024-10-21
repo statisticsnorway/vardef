@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
-    @Property(name = "micronaut.http.services.klass.codes-at")
+    @Property(name = "klass.codes-at")
     private val codesAt: String,
     @Property(name = "micronaut.klass-web.url.nb")
     private var klassUrlNb: String,

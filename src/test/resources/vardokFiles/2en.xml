@@ -1,0 +1,90 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-07-12" defaultValidFrom="1993-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:2" lastChangedDate="2009-01-14" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for income and wage statistics</dc:contributor>
+        <dc:creator>Vidar Pedersen</dc:creator>
+        <dcterms:modified>2009-01-14</dcterms:modified>
+        <dcterms:valid>1993-01-01 - </dcterms:valid>
+        <dc:description>After-tax income is calculated as the sum of wages and salaries, income from self-employment, property income and transfers received minus total assessed taxes and negative transfers.</dc:description>
+        <dcterms:abstract> Inntektsstatistikk for husholdninger</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:2</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>05.01 - Income, property, taxes</dc:subject>
+        <dc:title>After-tax income</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>After-tax income</Title>
+        <Description>After-tax income is calculated as the sum of wages and salaries, income from self-employment, property income and transfers received minus total assessed taxes and negative transfers.</Description>
+        <ContactPerson>
+            <CodeValue>vip</CodeValue>
+            <CodeText>Vidar Pedersen</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>225</CodeValue>
+            <CodeText>Division for income and wage statistics</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>05.01</CodeValue>
+            <CodeText>Income, property, taxes</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Inntektsstatistikk for husholdninger</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>wies</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>ifhus</CodeValue>
+            <CodeText>Income statistics for households. Different households</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/571" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/49" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/10" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/12" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/11" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10707" xlink:title="10707: Households, by type of household and size of after-tax income (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10678" xlink:title="10678: Average income account for households, by type of household (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10222" xlink:title="10222: Incomes for resident disability pensioners, by source of income, age and sex (current NOK)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09903" xlink:title="09903: Households' income after tax and total income, by the main income earner's sex and age (NOK) (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09607" xlink:title="09607: Incomes for resident old-age pensioners, by source of income, age and sex (current NOK)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09606" xlink:title="09606: Total income for residents 60 years and older, by the person's main activity, age, sex and before/after tax (current NOK) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09605" xlink:title="09605: Incomes for resident persons 60 years and older, by economical activity, source of income, age and sex (current NOK)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09604" xlink:title="09604: Incomes for resident pensioners within the contractual scheme for voluntary early retirement (AFP), by source of income, age and sex (current NOK) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09603" xlink:title="09603: Incomes for resident disability pensioners, by source of income, age and sex (current NOK) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09343" xlink:title="09343: Total income and after-tax income for residents 60-90 years, by year of birth and sex. Average and median (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09342" xlink:title="09342: Total income and after-tax income for residents 60 years and older, by age and sex. Average and median (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07780" xlink:title="07780: Income account for households, by type of household. Average for all households" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07778" xlink:title="07778: Registered incomes for resident persons (mill. NOK)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07751" xlink:title="07751: Composition of total household income and equivalent after-tax income, by decile (EU-scale) (per cent)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07183" xlink:title="07183: Households, by size of total income (M)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07182" xlink:title="07182: Households, by size of after tax income (M)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/07137" xlink:title="07137: Households, by size of after tax income (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06946" xlink:title="06946: Median after-tax income, by type of households. Number of households and median (C)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06944" xlink:title="06944: Income after taxes, by type of household. Number of households and median (M) (UD)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06467" xlink:title="06467: Income account for households, by type of household (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/06120" xlink:title="06120: Main entries from the income account for resident disability pensioners (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04751" xlink:title="04751: After tax income for households, by type of household. Median income in constant NOK and index in constant prices (1990=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04750" xlink:title="04750: Number of persons, gross income, after tax income, assessed property and liabilities for households, by type of household. Average (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04619" xlink:title="04619: Income account for residents (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04460" xlink:title="04460: After-tax income for couples with children in one-family households, by number of children (0-17 years) (NOK) (M) (UD) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04459" xlink:title="04459: After-tax income in private households, persons living alone and couples without children, by age (NOK) (M) (UD) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04458" xlink:title="04458: Private households, by after-tax income (K) (UD) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04455" xlink:title="04455: Income after tax in private households, by size of household (NOK) (M) (UD) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04452" xlink:title="04452: After-tax income in private households, by type of household (NOK) (M) (UD) (closed series)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

@@ -1,0 +1,58 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2006-10-17" defaultValidFrom="2003-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1919" lastChangedDate="2009-02-18" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for befolkningsstatistikk</dc:contributor>
+        <dc:creator>Kåre Vassenden</dc:creator>
+        <dcterms:modified>2009-02-18</dcterms:modified>
+        <dcterms:valid>2003-01-01 - </dcterms:valid>
+        <dc:description>For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.</dc:description>
+        <dcterms:abstract> System for befolkningsstatistikk (BESYS) SKD - Sentralkontoret for folkeregistrering</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:1919</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>02.01.10 - Folkemengde</dc:subject>
+        <dc:title>Landbakgrunn</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Landbakgrunn</Title>
+        <Description>For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.</Description>
+        <ContactPerson>
+            <CodeValue>kva</CodeValue>
+            <CodeText>Kåre Vassenden</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>320</CodeValue>
+            <CodeText>Seksjon for befolkningsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes>Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>02.01.10</CodeValue>
+            <CodeText>Folkemengde</CodeText>
+        </SubjectArea>
+        <ExternalSource>SKD - Sentralkontoret for folkeregistrering</ExternalSource>
+        <InternalSource>System for befolkningsstatistikk (BESYS)</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>http://www.ssb.no/emner/02/01/10/innvbef/om.html</ExternalDocument>
+        <DataElementName>landbak</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>innvbef</CodeValue>
+            <CodeText>Innvandrere og norskfødte med innvandrerforeldre</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ClassificationRelation xlink:href="http://www.ssb.no/classification/klass/91" xlink:type="simple"/>
+        <ConceptVariableVersion xlink:href="http://www.ssb.no/conceptvariable/vardok/123" xlink:type="simple"/>
+    </Relations>
+</FIMD>

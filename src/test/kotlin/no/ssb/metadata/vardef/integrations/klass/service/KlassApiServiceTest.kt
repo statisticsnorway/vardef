@@ -46,7 +46,7 @@ class KlassApiServiceTest {
                 ),
         )
 
-    @Property(name = "micronaut.http.services.klass.codes-at")
+    @Property(name = "klass.codes-at")
     private val codesAt: String = ""
 
     @BeforeEach

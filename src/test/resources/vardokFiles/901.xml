@@ -1,0 +1,55 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2004-07-06" defaultValidFrom="2001-01-01" defaultValidTo="2001-12-31" id="urn:ssb:conceptvariable:vardok:901" lastChangedDate="2017-03-17" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for befolkningsstatistikk</dc:contributor>
+        <dc:creator>Espen Andersen</dc:creator>
+        <dcterms:modified>2017-03-17</dcterms:modified>
+        <dcterms:valid>2001-01-01 - 2001-12-31</dcterms:valid>
+        <dc:description>Variabelen viser om boligen har lukket peis eller andre ovner for ved, kull eller annen type fast brensel, uavhengig av om disse systemene faktisk er i bruk til oppvarming.</dc:description>
+        <dcterms:abstract> Folke- og boligtellingen 3. november 2001</dcterms:abstract>
+        <dcterms:tableOfContents>Bolig</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:901</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>02.01 - Befolkningsstruktur</dc:subject>
+        <dc:title>Oppvarming, har lukket ovn for fast brensel</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Oppvarming, har lukket ovn for fast brensel</Title>
+        <Description>Variabelen viser om boligen har lukket peis eller andre ovner for ved, kull eller annen type fast brensel, uavhengig av om disse systemene faktisk er i bruk til oppvarming.</Description>
+        <ContactPerson>
+            <CodeValue>esa</CodeValue>
+            <CodeText>Espen Andersen</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>320</CodeValue>
+            <CodeText>Seksjon for befolkningsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes>Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Bolig</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>02.01</CodeValue>
+            <CodeText>Befolkningsstruktur</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Folke- og boligtellingen 3. november 2001</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>http://www.ssb.no/emner/02/01/fobhusinnt/om.html</ExternalDocument>
+        <DataElementName>sp21_4</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>fob2001</CodeValue>
+            <CodeText>Folke- og boligtellingen</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

@@ -25,8 +25,8 @@ class KlassApiServiceCacheTest {
     @Inject
     private lateinit var klassApiMockkClient: KlassApiClient
 
-    @Property(name = "micronaut.http.services.klass.codes-at")
-    private lateinit var codesAt: String
+    @Property(name = "klass.codes-at")
+    private val codesAt: String = ""
 
     private val classificationId = 1
     private val language = SupportedLanguages.NB

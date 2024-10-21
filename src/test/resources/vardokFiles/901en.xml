@@ -1,0 +1,55 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2004-07-06" defaultValidFrom="2001-01-01" defaultValidTo="2001-12-31" id="urn:ssb:conceptvariable:vardok:901" lastChangedDate="2017-03-17" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for population statistics</dc:contributor>
+        <dc:creator>Espen Andersen</dc:creator>
+        <dcterms:modified>2017-03-17</dcterms:modified>
+        <dcterms:valid>2001-01-01 - 2001-12-31</dcterms:valid>
+        <dc:description>The variable shows if the dwelling has closed fireplace or other stoves for wood, coal or other types of solid fuel, irrespective of whether these are actually in use.</dc:description>
+        <dcterms:abstract> Folke- og boligtellingen 3. november 2001</dcterms:abstract>
+        <dcterms:tableOfContents>Dwelling</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:901</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>02.01 - Population structure</dc:subject>
+        <dc:title>System for heating, has closed stoves for solid fuel</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>System for heating, has closed stoves for solid fuel</Title>
+        <Description>The variable shows if the dwelling has closed fireplace or other stoves for wood, coal or other types of solid fuel, irrespective of whether these are actually in use.</Description>
+        <ContactPerson>
+            <CodeValue>esa</CodeValue>
+            <CodeText>Espen Andersen</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>320</CodeValue>
+            <CodeText>Division for population statistics</CodeText>
+        </ContactDivision>
+        <Notes>The information is collected from the Housing form in Census 2001, question 21.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Dwelling</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>02.01</CodeValue>
+            <CodeText>Population structure</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Folke- og boligtellingen 3. november 2001</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>sp21_4</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>fob2001</CodeValue>
+            <CodeText>Population and Housing Census</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

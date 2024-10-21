@@ -9,7 +9,6 @@ import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
@@ -35,9 +34,6 @@ import java.time.temporal.ChronoUnit
 class VariableDefinitionsControllerEmptyDatabaseTest {
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
-
-    @Inject
-    lateinit var variableDefinitionService: VariableDefinitionService
 
     @BeforeEach
     fun setUp() {

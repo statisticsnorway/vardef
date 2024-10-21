@@ -587,3 +587,65 @@ val vardokId123NoDataElementName =
     </Relations>
     </FIMD>
     """.trimIndent()
+
+val vardokId2677UnitTypeList =
+"""
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2008-08-07" defaultValidFrom="2004-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:2677" lastChangedDate="2009-02-18" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+<DC>
+<dc:contributor>Seksjon for miljøstatistikk</dc:contributor>
+<dc:creator>Gisle Berge</dc:creator>
+<dcterms:modified>2009-02-18</dcterms:modified>
+<dcterms:valid>2004-01-01 - </dcterms:valid>
+<dc:description>Kapasitet utgjør avløpsanleggets dimensjonerende kapasitet, dvs. den fysiske størrelsen anlegget er bygget for ("BOF-størrelsen på anlegget"). Kapasitet måles i personekvivalenter (pe) som er definert i henhold til forurensningsforskriftens kapittel 11, §11-3: En personekvivalent (pe) er den mengde organisk stoff som brytes ned biologisk med et biokjemisk oksygenforbruk (BOF5) på 60 g oksygen per døgn over fem døgn.</dc:description>
+<dcterms:abstract> Klima- og forurensingsdirektoratet</dcterms:abstract>
+<dcterms:tableOfContents>Avløpsanlegg</dcterms:tableOfContents>
+<dc:format>text/xml</dc:format>
+<dc:identifier>urn:ssb:conceptvariable:vardok:2677</dc:identifier>
+<dc:language>nb</dc:language>
+<dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+<dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+<dc:source/>
+<dc:subject>01.04.20 - Vann</dc:subject>
+<dc:title>Kapasitet</dc:title>
+<dc:type>Variabeldefinisjon</dc:type>
+</DC>
+<Common>
+<Title>Kapasitet</Title>
+<Description>Kapasitet utgjør avløpsanleggets dimensjonerende kapasitet, dvs. den fysiske størrelsen anlegget er bygget for ("BOF-størrelsen på anlegget"). Kapasitet måles i personekvivalenter (pe) som er definert i henhold til forurensningsforskriftens kapittel 11, §11-3: En personekvivalent (pe) er den mengde organisk stoff som brytes ned biologisk med et biokjemisk oksygenforbruk (BOF5) på 60 g oksygen per døgn over fem døgn.</Description>
+<ContactPerson>
+<CodeValue>gib</CodeValue>
+<CodeText>Gisle Berge</CodeText>
+</ContactPerson>
+<ContactDivision>
+<CodeValue>220</CodeValue>
+<CodeText>Seksjon for miljøstatistikk</CodeText>
+</ContactDivision>
+<Notes>FOR 2004-06-01 nr. 931: Forskrift om begrensning av forurensning (forurensningsforskriften)</Notes>
+</Common>
+<Variable>
+<InternalNotes/>
+<StatisticalUnit>Avløpsanlegg</StatisticalUnit>
+<SubjectArea>
+<CodeValue>01.04.20</CodeValue>
+<CodeText>Vann</CodeText>
+</SubjectArea>
+<ExternalSource>Klima- og forurensingsdirektoratet</ExternalSource>
+<InternalSource/>
+<Sensitivity>Ordinï¿½r</Sensitivity>
+<ExternalDocument>http://www.ssb.no/avlut/</ExternalDocument>
+<DataElementName>Kapasitet (pe)</DataElementName>
+<ShortNameWeb>
+<CodeValue>avlut</CodeValue>
+<CodeText>Avløp, kommunalt, utslipp og rensing</CodeText>
+</ShortNameWeb>
+<Calculation/>
+<InternalDocument/>
+<ExternalComment/>
+<InternalReference/>
+</Variable>
+<Relations>
+<StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05315" xlink:title="05315: Renseprinsipper for avløpsanlegg i tettbebyggelser med 1 500 innbyggere eller mer (avslutta serie)" xlink:type="simple"/>
+<StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05275" xlink:title="05275: Kapasitet for kommunale avløpsanlegg 50 pe eller mer, etter renseprinsipp (F)" xlink:type="simple"/>
+</Relations>
+</FIMD>
+""".trimIndent()

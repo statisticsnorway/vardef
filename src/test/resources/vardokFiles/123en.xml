@@ -1,0 +1,58 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-20" defaultValidFrom="1994-01-01" defaultValidTo="2002-12-31" id="urn:ssb:conceptvariable:vardok:123" lastChangedDate="2009-02-18" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for population statistics</dc:contributor>
+        <dc:creator>Kåre Vassenden</dc:creator>
+        <dcterms:modified>2009-02-18</dcterms:modified>
+        <dcterms:valid>1994-01-01 - 2002-12-31</dcterms:valid>
+        <dc:description>Country background is the person's own, the mother's or possibly the father's country of birth. Persons without an immigrant background always have Norway as country background. In cases where the parents have different countries of birth the mother's country of birth is chosen.</dc:description>
+        <dcterms:abstract> System for befolkningsstatistikk (BESYS) SKD - Sentralkontoret for folkeregistrering</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:123</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>02.01.10 - Population</dc:subject>
+        <dc:title>Country background</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Country background</Title>
+        <Description>Country background is the person's own, the mother's or possibly the father's country of birth. Persons without an immigrant background always have Norway as country background. In cases where the parents have different countries of birth the mother's country of birth is chosen.</Description>
+        <ContactPerson>
+            <CodeValue>kva</CodeValue>
+            <CodeText>Kåre Vassenden</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>320</CodeValue>
+            <CodeText>Division for population statistics</CodeText>
+        </ContactDivision>
+        <Notes>From 1 January 2003 the definition was changed by also including the country of birth of the grandparents</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>02.01.10</CodeValue>
+            <CodeText>Population</CodeText>
+        </SubjectArea>
+        <ExternalSource>SKD - Sentralkontoret for folkeregistrering</ExternalSource>
+        <InternalSource>System for befolkningsstatistikk (BESYS)</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName/>
+        <ShortNameWeb>
+            <CodeValue>innvbef</CodeValue>
+            <CodeText>Immigrants and Norwegian-born to immigrant parents</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ClassificationRelation xlink:href="http://www.ssb.no/classification/klass/91" xlink:type="simple"/>
+        <ConceptVariableVersion xlink:href="http://www.ssb.no/conceptvariable/vardok/1919" xlink:type="simple"/>
+    </Relations>
+</FIMD>

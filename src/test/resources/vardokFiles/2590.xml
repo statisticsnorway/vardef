@@ -1,0 +1,58 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2008-05-19" defaultValidFrom="2004-06-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:2590" lastChangedDate="2012-02-21" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for miljøstatistikk</dc:contributor>
+        <dc:creator>Kari Benterud Mellem</dc:creator>
+        <dcterms:modified>2012-02-21</dcterms:modified>
+        <dcterms:valid>2004-06-01 - </dcterms:valid>
+        <dc:description>En samling hus der avstanden mellom husene ikke er mer enn 50 meter. For større bygninger, herunder blokker, kontorer, lager, industribygg og idrettsanlegg, kan avstanden være opptil 200 meter til ett av husene i hussamlingen. Hussamlinger med minst fem bygninger, som ligger mindre enn 400 meter utenfor avgrensningen i første og andre punktum, skal inngå i tettbebyggelsen. Avgrensningen av tettbebyggelse er uavhengig av kommune- og fylkesgrenser. Dersom avløpsvann fra to eller flere tettbebyggelser, som nevnt i første ledd, samles opp og føres til ett felles renseanlegg eller utslippssted, regnes tettbebyggelsene som én tettbebyggelse.</dc:description>
+        <dcterms:abstract> Klima- og forurensingsdirektoratet</dcterms:abstract>
+        <dcterms:tableOfContents>Region</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:2590</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>01.04.20 - Vann</dc:subject>
+        <dc:title>Tettbebyggelse</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Tettbebyggelse</Title>
+        <Description>En samling hus der avstanden mellom husene ikke er mer enn 50 meter. For større bygninger, herunder blokker, kontorer, lager, industribygg og idrettsanlegg, kan avstanden være opptil 200 meter til ett av husene i hussamlingen. Hussamlinger med minst fem bygninger, som ligger mindre enn 400 meter utenfor avgrensningen i første og andre punktum, skal inngå i tettbebyggelsen. Avgrensningen av tettbebyggelse er uavhengig av kommune- og fylkesgrenser. Dersom avløpsvann fra to eller flere tettbebyggelser, som nevnt i første ledd, samles opp og føres til ett felles renseanlegg eller utslippssted, regnes tettbebyggelsene som én tettbebyggelse.</Description>
+        <ContactPerson>
+            <CodeValue>kbm</CodeValue>
+            <CodeText>Kari Benterud Mellem</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>220</CodeValue>
+            <CodeText>Seksjon for miljøstatistikk</CodeText>
+        </ContactDivision>
+        <Notes>FOR 2004-06-01 nr. 931: Forskrift om begrensning av forurensning (forurensningsforskriften)</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Region</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>01.04.20</CodeValue>
+            <CodeText>Vann</CodeText>
+        </SubjectArea>
+        <ExternalSource>Klima- og forurensingsdirektoratet</ExternalSource>
+        <InternalSource/>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>http://lovdata.no/for/sf/md/td-20040601-0931-040.html</ExternalDocument>
+        <DataElementName>Tettbebyggelse</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>avlut</CodeValue>
+            <CodeText>Avløp, kommunalt, utslipp og rensing</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05323" xlink:title="05323: Tettbebyggelser med 1 500 innbyggere eller mer og belastning, etter type resipient (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05318" xlink:title="05318: Belastning i tettbebyggelser med 1 500 innbyggere eller mer, etter klasse av tettbebyggelse (avslutta serie)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

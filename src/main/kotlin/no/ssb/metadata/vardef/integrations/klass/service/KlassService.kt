@@ -10,16 +10,16 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 interface KlassService {
     fun getCodesFor(id: String): List<String>
 
-    fun getAllIds(): Collection<String>
+    fun doesClassificationExist(id: String): Boolean
 
-    fun getCodeItemFor(
-        id: String,
+    fun renderCode(
+        classificationId: String,
         code: String,
         language: SupportedLanguages,
     ): KlassReference?
 
     fun getKlassUrlForIdAndLanguage(
-        id: String,
+        classificationId: String,
         language: SupportedLanguages,
     ): String
 }

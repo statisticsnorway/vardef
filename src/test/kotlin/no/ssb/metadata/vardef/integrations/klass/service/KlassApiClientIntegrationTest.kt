@@ -4,9 +4,8 @@ import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
-import no.ssb.metadata.vardef.integrations.klass.models.Classifications
+import no.ssb.metadata.vardef.integrations.klass.models.Code
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -28,26 +27,14 @@ class KlassApiClientIntegrationTest {
     private val codesAt: String = "2024-08-01"
 
     @Test
-    fun `fetch classifications from klass api`() {
-        val result = klassApiClient.fetchClassifications()
-        assertThat(result).isNotNull
-        assertThat(result.body()?.embedded).isNotNull
-        assertThat(result.body()?.embedded).isInstanceOf(Classifications::class.java)
-        assertThat(result.body()?.embedded?.classifications).isNotNull
-
-        val classificationList = result.body()?.embedded?.classifications
-        assertThat(classificationList?.get(0) ?: emptyList<Classification>()).isInstanceOf(Classification::class.java)
-    }
-
-    @Test
     fun `fetch code list from klass api`() {
         listOf(unitTypesId, areasId)
             .forEach { id ->
-                val result = klassApiClient.fetchCodeList(id, codesAt)
+                val result = klassApiClient.listCodes(id, codesAt, language = SupportedLanguages.NB)
                 assertThat(result).isNotNull
 
-                val classificationList = result.body()?.classificationItems ?: emptyList()
-                assertThat(classificationList[0]).isInstanceOf(ClassificationItem::class.java)
+                val classificationList = result.body()?.codes ?: emptyList()
+                assertThat(classificationList[0]).isInstanceOf(Code::class.java)
                 assertThat(classificationList.size > 1)
             }
     }

@@ -28,19 +28,19 @@ data class Classification(
     val id: Int = 0,
     val classificationType: String = "",
     val lastModified: String = "",
-    val classificationItems: List<ClassificationItem> = emptyList(),
+    val codes: List<Code> = emptyList(),
     val lastFetched: LocalDateTime = LocalDateTime.now(),
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
-data class KlassApiCodeListResponse(
-    @JsonProperty("codes") val classificationItems: List<ClassificationItem>,
+data class Codes(
+    @JsonProperty("codes") val codes: List<Code>,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
-data class ClassificationItem(
+data class Code(
     val code: String = "",
     val name: String = "",
     val validFrom: LocalDate? = null,

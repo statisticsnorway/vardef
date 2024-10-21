@@ -15,7 +15,7 @@ class KlassServiceTest {
     @Test
     fun `get klass code item for unit types test`() {
         klassService
-            .getCodeItemFor("702", "01", SupportedLanguages.NB)
+            .renderCode("702", "01", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/702")
                 assertThat(klassItem.code).isEqualTo("01")
@@ -23,20 +23,28 @@ class KlassServiceTest {
             }
 
         klassService
-            .getCodeItemFor("702", "17", SupportedLanguages.NB)
+            .renderCode("702", "17", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("17")
                 assertThat(klassItem.title).isEqualTo("Kommune (geografisk)")
             }
 
         klassService
-            .getCodeItemFor("702", "41", SupportedLanguages.NB)
+            .renderCode("702", "17", SupportedLanguages.EN)
+            ?.let { klassItem ->
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/en/klass/klassifikasjoner/702")
+                assertThat(klassItem.code).isEqualTo("17")
+                assertThat(klassItem.title).isEqualTo(null)
+            }
+
+        klassService
+            .renderCode("702", "41", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem).isEqualTo(null)
             }
 
         klassService
-            .getCodeItemFor("702", "01", SupportedLanguages.NN)
+            .renderCode("702", "01", SupportedLanguages.NN)
             ?.let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/702")
                 assertThat(klassItem.code).isEqualTo("01")
@@ -47,7 +55,7 @@ class KlassServiceTest {
     @Test
     fun `get klass code item for subject fields test`() {
         klassService
-            .getCodeItemFor("618", "vf", SupportedLanguages.NB)
+            .renderCode("618", "vf", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/618")
                 assertThat(klassItem.code).isEqualTo("vf")
@@ -55,14 +63,14 @@ class KlassServiceTest {
             }
 
         klassService
-            .getCodeItemFor("618", "al", SupportedLanguages.NB)
+            .renderCode("618", "al", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("al")
                 assertThat(klassItem.title).isEqualTo("Arbeid og lønn")
             }
 
         klassService
-            .getCodeItemFor("618", "vgh", SupportedLanguages.NB)
+            .renderCode("618", "vgh", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem).isEqualTo(null)
             }
@@ -71,7 +79,7 @@ class KlassServiceTest {
     @Test
     fun `get klass code item for measurement type test`() {
         klassService
-            .getCodeItemFor("303", "02", SupportedLanguages.NB)
+            .renderCode("303", "02", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/303")
                 assertThat(klassItem.code).isEqualTo("02")
@@ -79,14 +87,14 @@ class KlassServiceTest {
             }
 
         klassService
-            .getCodeItemFor("303", "17.23", SupportedLanguages.NB)
+            .renderCode("303", "17.23", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("17.23")
                 assertThat(klassItem.title).isEqualTo("øre per kWh")
             }
 
         klassService
-            .getCodeItemFor("303", "156.3", SupportedLanguages.NB)
+            .renderCode("303", "156.3", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.code).isEqualTo(null)
             }

@@ -1,8 +1,0 @@
-# Config for running vardef in local dev environments
-micronaut:
-  server:
-    port: 8081
-
-#logger:
-#  levels:
-#    io.micronaut.data: DEBUG

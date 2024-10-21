@@ -1,19 +1,20 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
-import io.micronaut.cache.annotation.CacheConfig
-import io.micronaut.cache.annotation.CachePut
+import io.micronaut.cache.annotation.CacheInvalidate
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.context.annotation.Property
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.server.exceptions.HttpServerException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
-import no.ssb.metadata.vardef.integrations.klass.models.ClassificationItem
+import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 
-@CacheConfig("classifications")
+const val CODES_CACHE = "codes"
+const val CLASSIFICATIONS_CACHE = "classifications"
+
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
@@ -21,136 +22,97 @@ open class KlassApiService(
     private val codesAt: String,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
-    private var classificationCacheLastFetched: LocalDateTime = LocalDateTime.now().minusDays(1L)
-    private var classificationCache: MutableMap<Int, Classification> = mutableMapOf()
-    private val classificationItemListCache = mutableMapOf<Int, List<ClassificationItem>>()
-
-    @Property(name = "klass.cache-retry-timeout-seconds")
-    private val timeout: Long = 360
-    private val status500 = "Klass Api: Service is not available"
 
     @Property(name = "micronaut.klass-web.url.nb")
-    private var klassUrlNb: String = ""
+    private lateinit var klassUrlNb: String
 
     @Property(name = "micronaut.klass-web.url.en")
-    private var klassUrlEn: String = ""
+    private lateinit var klassUrlEn: String
 
-    @Cacheable("classifications")
-    open fun fetchAllClassifications(): List<Classification> {
-        val notFound = "Klass Api: Classifications not found"
+    @CacheInvalidate(value = [CODES_CACHE, CLASSIFICATIONS_CACHE], all = true)
+    open fun invalidateCaches() = Unit
 
-        logger.info("Klass Api: Fetching classifications")
-        val response = klassApiClient.fetchClassifications()
-
-        when (response.status.code) {
-            500 -> {
-                logger.error(status500)
-                throw HttpServerException(status500)
-            }
-
-            404 -> {
-                logger.error(notFound)
-                throw HttpServerException(notFound)
-            }
-
-            else -> {
-                logger.info("Klass Api: Classifications fetched")
-                return response
-                    .body()
-                    .embedded
-                    .classifications
-            }
-        }
-    }
-
-    @Cacheable("classifications")
-    open fun getClassifications(): List<Classification> {
-        if (cacheHasExpired()) {
-            classificationCache = fetchAllClassifications().associateBy { it.id }.toMutableMap()
-            classificationCacheLastFetched = LocalDateTime.now()
-        }
-
-        logger.info("Klass Api Service Cache: Getting all classifications")
-
-        return classificationCache.values.toList()
-    }
-
-    @CachePut("classification", parameters = ["classificationId"])
+    @Cacheable(CLASSIFICATIONS_CACHE)
     open fun getClassification(classificationId: Int): Classification {
-        if (cacheHasExpired()) {
-            getClassifications()
-        }
-
-        logger.info("Klass Api Service Cache: Getting classification with id $classificationId")
-
-        return classificationCache[classificationId]
-            ?.copy(classificationItems = getClassificationItemsById(classificationId))
-            ?: throw NoSuchElementException("Klass Api Service Cache: No such classification with id $classificationId")
+        val response = klassApiClient.fetchClassification(classificationId)
+        handleErrorCodes(classificationId, response)
+        return response.body()
+            ?: throw NoSuchElementException("No content for Classification with ID $classificationId")
     }
 
-    @CachePut("ClassificationItems", parameters = ["classificationId"])
-    open fun fetchClassificationItemsById(classificationId: Int): List<ClassificationItem> {
-        logger.info("Klass Api: Fetching classification items")
-        val response = klassApiClient.fetchCodeList(classificationId, codesAt)
+    @Cacheable(CODES_CACHE)
+    open fun getCodeObjectsFor(
+        classificationId: Int,
+        language: SupportedLanguages,
+    ): List<Code> {
+        logger.info("Fetching codes for $classificationId")
+        val response = klassApiClient.listCodes(classificationId, codesAt, language)
+        handleErrorCodes(classificationId, response)
+        return response.body().codes.ifEmpty {
+            throw NoSuchElementException(
+                "No codes found for $classificationId",
+            )
+        }
+    }
 
+    private fun <T : Any?> handleErrorCodes(
+        classificationId: Int,
+        response: HttpResponse<T>,
+    ): HttpResponse<T> {
         when (response.status.code) {
             500 -> {
-                logger.error(status500)
-                throw HttpServerException(status500)
+                logger.error(Companion.STATUS_500_MESSAGE)
+                throw HttpServerException(Companion.STATUS_500_MESSAGE)
             }
 
             404 -> {
-                logger.info("Klass Api: Classification items not found")
-                throw NoSuchElementException("Klass Api: No such classification items with id $classificationId")
+                logger.info("Classification $classificationId not found")
+                throw NoSuchElementException("Classification $classificationId not found")
             }
 
             else -> {
-                logger.info("Klass Api: Classifications fetched")
-                return response.body().classificationItems
+                logger.info("Classification fetched")
+                return response
             }
         }
     }
 
-    @CachePut("ClassificationItems", parameters = ["classificationId"])
-    open fun getClassificationItemsById(classificationId: Int): List<ClassificationItem> {
-        if (!classificationItemListCache.containsKey(classificationId)) {
-            val classificationItems = fetchClassificationItemsById(classificationId)
-            if (classificationItems.isNotEmpty()) {
-                classificationItemListCache[classificationId] = classificationItems
-            }
+    override fun getCodesFor(id: String): List<String> = getCodeObjectsFor(id.toInt(), SupportedLanguages.NB).map { it.code }
+
+    override fun doesClassificationExist(id: String): Boolean =
+        try {
+            getClassification(id.toInt())
+            true
+        } catch (e: Exception) {
+            false
         }
 
-        return classificationItemListCache[classificationId]
-            ?: throw NoSuchElementException(
-                "Klass Api Service Cache: No such classification items with id $classificationId",
-            )
-    }
-
-    override fun getCodesFor(id: String): List<String> = getClassificationItemsById(id.toInt()).map { it.code }
-
-    override fun getAllIds(): Collection<String> {
-        return getClassifications().map { it.id.toString() }
-    }
-
-    override fun getCodeItemFor(
-        id: String,
+    override fun renderCode(
+        classificationId: String,
         code: String,
         language: SupportedLanguages,
     ): KlassReference? {
-        val classificationId = id.toInt()
-        val classification = getClassificationItemsById(classificationId).find { it.code == code }
-        return classification?.let {
-            val name = if (language == SupportedLanguages.NB) it.name else null
-            KlassReference(
-                getKlassUrlForIdAndLanguage(id, language),
-                it.code,
-                name,
-            )
+        var codeObject: Code?
+        try {
+            codeObject =
+                getCodeObjectsFor(classificationId.toInt(), language)
+                    .firstOrNull { it.code == code }
+            // In this case the code doesn't exist in the code list
+            if (codeObject == null) return null
+        } catch (e: NoSuchElementException) {
+            logger.warn("Classification $classificationId no available for language $language")
+            codeObject = null
         }
+
+        return KlassReference(
+            getKlassUrlForIdAndLanguage(classificationId, language),
+            codeObject?.code ?: code,
+            codeObject?.name,
+        )
     }
 
     override fun getKlassUrlForIdAndLanguage(
-        id: String,
+        classificationId: String,
         language: SupportedLanguages,
     ): String {
         val baseUrl =
@@ -158,14 +120,10 @@ open class KlassApiService(
                 SupportedLanguages.NB, SupportedLanguages.NN -> klassUrlNb
                 SupportedLanguages.EN -> klassUrlEn
             }
-        return "$baseUrl/klassifikasjoner/$id"
+        return "$baseUrl/klassifikasjoner/$classificationId"
     }
 
-    fun classificationCacheSize(): Int = classificationCache.size
-
-    fun classificationItemListCache(): Int = classificationItemListCache.size
-
-    private fun cacheHasExpired(): Boolean =
-        classificationCache.isEmpty() ||
-            LocalDateTime.now().plusSeconds(timeout) < classificationCacheLastFetched
+    companion object {
+        private const val STATUS_500_MESSAGE = "Service is not available"
+    }
 }

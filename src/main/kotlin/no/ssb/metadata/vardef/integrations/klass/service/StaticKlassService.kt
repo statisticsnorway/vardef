@@ -3,12 +3,16 @@ package no.ssb.metadata.vardef.integrations.klass.service
 import io.micronaut.context.BeanContext
 import io.micronaut.context.annotation.*
 import io.micronaut.inject.qualifiers.Qualifiers
+import io.micronaut.json.JsonMapper
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.integrations.klass.models.Classification
+import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import java.nio.file.Path
 
 const val KLASS_CLASSIFICATIONS_PROPERTY_NAME = "klass.classifications"
 
@@ -20,17 +24,32 @@ data class StaticKlassCode(
 
 // Deserializes test data from property in application-test.yaml
 @Serdeable
-@Requires(env = ["test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
+@Requires(env = ["test"], notEnv = ["integration-test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 @EachProperty(KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 class StaticClassification(
     @param:Parameter val id: String,
+    @Property(name = "klass.static-data-path")
+    private val path: Path,
+    jsonMapper: JsonMapper,
 ) {
     var name: LanguageStringType? = null
-    var codes: List<StaticKlassCode>? = null
+    var codes: List<Code>? = null
+
+    init {
+        val resourcePath = path.resolve("$id.json").toString()
+        val resource = Thread.currentThread().getContextClassLoader().getResource(resourcePath)
+        if (resource == null) {
+            throw RuntimeException("Resource not found: $resourcePath")
+        } else {
+            val classification = jsonMapper.readValue(resource.readText(), Classification::class.java)
+            name = LanguageStringType(nb = classification.name, en = null, nn = null)
+            codes = classification.codes
+        }
+    }
 }
 
 @Primary
-@Requires(env = ["test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
+@Requires(env = ["test"], notEnv = ["integration-test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 @Singleton
 class StaticKlassService : KlassService {
     @Inject
@@ -51,29 +70,31 @@ class StaticKlassService : KlassService {
             .toList()
     }
 
-    override fun getAllIds(): Collection<String> {
-        val classifications: Collection<StaticClassification> =
-            beanContext.getBeansOfType(StaticClassification::class.java).toList()
-        return classifications.map { it.id }
-    }
+    override fun doesClassificationExist(id: String): Boolean =
+        try {
+            beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
+            true
+        } catch (e: Exception) {
+            false
+        }
 
-    override fun getCodeItemFor(
-        id: String,
+    override fun renderCode(
+        classificationId: String,
         code: String,
         language: SupportedLanguages,
     ): KlassReference? {
         val classification: StaticClassification =
-            beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
+            beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(classificationId))
 
         val klassCode = classification.codes?.find { it.code == code }
         return klassCode?.let {
-            val name = if (language == SupportedLanguages.NB) it.name.nb else null
-            KlassReference(getKlassUrlForIdAndLanguage(id, language), it.code, name)
+            val name = if (language == SupportedLanguages.NB) it.name else null
+            KlassReference(getKlassUrlForIdAndLanguage(classificationId, language), it.code, name)
         }
     }
 
     override fun getKlassUrlForIdAndLanguage(
-        id: String,
+        classificationId: String,
         language: SupportedLanguages,
     ): String {
         val baseUrl =
@@ -82,6 +103,6 @@ class StaticKlassService : KlassService {
                 SupportedLanguages.NN -> klassUrlNb
                 else -> klassUrlEn
             }
-        return "$baseUrl/klassifikasjoner/$id"
+        return "$baseUrl/klassifikasjoner/$classificationId"
     }
 }

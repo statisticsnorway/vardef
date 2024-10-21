@@ -62,7 +62,7 @@ class VariableDefinitionServiceTestWithMockRepository {
         )
 
         every {
-            mockKlassService.getCodeItemFor(any(), any(), any())
+            mockKlassService.renderCode(any(), any(), any())
         } returns
             KlassReference("https://www.ssb.no/en/klass/klassifikasjoner/91", "01", "Adresse")
 

@@ -11,22 +11,17 @@ import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
 
-// @CacheConfig(cacheNames = ["classifications", "codes"])
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
     @Property(name = "micronaut.http.services.klass.codes-at")
     private val codesAt: String,
+    @Property(name = "micronaut.klass-web.url.nb")
+    private var klassUrlNb: String,
+    @Property(name = "micronaut.klass-web.url.en")
+    private var klassUrlEn: String,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
-
-    private val status500 = "Service is not available"
-
-    @Property(name = "micronaut.klass-web.url.nb")
-    private var klassUrlNb: String = ""
-
-    @Property(name = "micronaut.klass-web.url.en")
-    private var klassUrlEn: String = ""
 
     @Cacheable("classifications")
     open fun getClassification(classificationId: Int): Classification {
@@ -57,8 +52,8 @@ open class KlassApiService(
     ): HttpResponse<T> {
         when (response.status.code) {
             500 -> {
-                logger.error(status500)
-                throw HttpServerException(status500)
+                logger.error(Companion.STATUS_500_MESSAGE)
+                throw HttpServerException(Companion.STATUS_500_MESSAGE)
             }
 
             404 -> {
@@ -117,5 +112,9 @@ open class KlassApiService(
                 SupportedLanguages.EN -> klassUrlEn
             }
         return "$baseUrl/klassifikasjoner/$classificationId"
+    }
+
+    companion object {
+        private const val STATUS_500_MESSAGE = "Service is not available"
     }
 }

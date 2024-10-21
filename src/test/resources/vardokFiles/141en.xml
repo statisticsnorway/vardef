@@ -1,0 +1,61 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-23" defaultValidFrom="2002-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:141" lastChangedDate="2020-02-26" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for population statistics</dc:contributor>
+        <dc:creator>Leave of absence/Working conditions terminated</dc:creator>
+        <dcterms:modified>2020-02-26</dcterms:modified>
+        <dcterms:valid>2002-01-01 - </dcterms:valid>
+        <dc:description>1. A hub of buildings shall be registered as an urban settlement if it is inhabited by at least 200 persons 2. The distance between the buildings shall normally not exceed 50 meters. Deviations are allowed for areas that cannot/are not to be occupied, for example parks, sports facilities, industrial areas or natural barriers such as rivers or arable land. Also included are agglomerations that naturally belong to the urban settlement with up to a distance of 400 meters from the center of the urban settlement.</dc:description>
+        <dcterms:abstract> Regionale inndelinger</dcterms:abstract>
+        <dcterms:tableOfContents>Region</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:141</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>00.00.20 - Regional</dc:subject>
+        <dc:title>Urban settlement</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Urban settlement</Title>
+        <Description>1. A hub of buildings shall be registered as an urban settlement if it is inhabited by at least 200 persons 2. The distance between the buildings shall normally not exceed 50 meters. Deviations are allowed for areas that cannot/are not to be occupied, for example parks, sports facilities, industrial areas or natural barriers such as rivers or arable land. Also included are agglomerations that naturally belong to the urban settlement with up to a distance of 400 meters from the center of the urban settlement.</Description>
+        <ContactPerson>
+            <CodeValue>hhe</CodeValue>
+            <CodeText>Leave of absence/Working conditions terminated</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>320</CodeValue>
+            <CodeText>Division for population statistics</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Region</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>00.00.20</CodeValue>
+            <CodeText>Regional</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Regionale inndelinger</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument>http://www.ssb.no/en/befolkning/statistikker/beftett</ExternalDocument>
+        <DataElementName>tettsted</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ClassificationRelation xlink:href="http://www.ssb.no/classification/klass/110" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/10810" xlink:title="10810: Area, by area classification (km²) (US)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09914" xlink:title="09914: Income, wealth, debt and taxes for residents in urban settlements with at least 10 000 inhabitants (US) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09736" xlink:title="09736: Main classes of land use and land cover (km²) (US) (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/09580" xlink:title="09580: Proportion of residents in urban settlements with access to recreational area and area for recreational walking, by age (per cent) (US)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05805" xlink:title="05805: Population (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05277" xlink:title="05277: Population, by age and sex (US)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/04859" xlink:title="04859: Area and population of urban settlements (US)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

@@ -1,0 +1,58 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2008-05-19" defaultValidFrom="2004-06-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:2590" lastChangedDate="2012-02-21" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for environmental statistics</dc:contributor>
+        <dc:creator>Kari Benterud Mellem</dc:creator>
+        <dcterms:modified>2012-02-21</dcterms:modified>
+        <dcterms:valid>2004-06-01 - </dcterms:valid>
+        <dc:description>A collection of houses where the distance between each house does not exceed 50 metres. For large buildings, including blocks of flats, offices, warehouses, industrial buildings and sports grounds, the distance can be up to 200 metres to one of the houses in the collection. A collection of houses with at least five buildings, which is located less than 400 metres outside the demarcation described between first and second dot, must be included in the agglomeration. The demarcation of an agglomeration is independent of municipality and county boundaries. If waste water from two or more agglomerations, as mentioned in the first paragraph, is collected and sent to a common waste water treatment plant or discharge site, the agglomerations are regarded as one agglomeration.</dc:description>
+        <dcterms:abstract> Klima- og forurensingsdirektoratet</dcterms:abstract>
+        <dcterms:tableOfContents>Region</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:2590</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>01.04.20 - Water</dc:subject>
+        <dc:title>Agglomeration</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Agglomeration</Title>
+        <Description>A collection of houses where the distance between each house does not exceed 50 metres. For large buildings, including blocks of flats, offices, warehouses, industrial buildings and sports grounds, the distance can be up to 200 metres to one of the houses in the collection. A collection of houses with at least five buildings, which is located less than 400 metres outside the demarcation described between first and second dot, must be included in the agglomeration. The demarcation of an agglomeration is independent of municipality and county boundaries. If waste water from two or more agglomerations, as mentioned in the first paragraph, is collected and sent to a common waste water treatment plant or discharge site, the agglomerations are regarded as one agglomeration.</Description>
+        <ContactPerson>
+            <CodeValue>kbm</CodeValue>
+            <CodeText>Kari Benterud Mellem</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>220</CodeValue>
+            <CodeText>Division for environmental statistics</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Region</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>01.04.20</CodeValue>
+            <CodeText>Water</CodeText>
+        </SubjectArea>
+        <ExternalSource>Klima- og forurensingsdirektoratet</ExternalSource>
+        <InternalSource/>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument>http://lovdata.no/for/sf/md/td-20040601-0931-040.html</ExternalDocument>
+        <DataElementName>Tettbebyggelse</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>avlut</CodeValue>
+            <CodeText>Municipal waste water</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05323" xlink:title="05323: Densely built-up areas with 1 500 inhabitants or more and load, by receiving waters (closed series)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05318" xlink:title="05318: Hydraulic load in densely built-up areas with 1 500 inhabitants or more, by category of densely built-up areas (closed series)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

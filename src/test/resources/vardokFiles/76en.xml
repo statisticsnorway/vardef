@@ -1,0 +1,54 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-12" defaultValidFrom="" defaultValidTo="2003-12-31" id="urn:ssb:conceptvariable:vardok:76" lastChangedDate="2011-01-12" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for labour market statistics</dc:contributor>
+        <dc:creator>Christoffer Berge</dc:creator>
+        <dcterms:modified>2011-01-12</dcterms:modified>
+        <dcterms:valid> - 2003-12-31</dcterms:valid>
+        <dc:description>A rough classification of job applicant status into eight categories. The classification is done by Statistics Norway on the basis of the job applicant statuses found in the Norwegian Labour and Welfare Administration's job applicant files.</dc:description>
+        <dcterms:abstract> Reg. basert arb.mark.stat. NAV</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:76</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>06 - Labour market, wages</dc:subject>
+        <dc:title>Initiative code, aggregated job applicant status</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Initiative code, aggregated job applicant status</Title>
+        <Description>A rough classification of job applicant status into eight categories. The classification is done by Statistics Norway on the basis of the job applicant statuses found in the Norwegian Labour and Welfare Administration's job applicant files.</Description>
+        <ContactPerson>
+            <CodeValue>chb</CodeValue>
+            <CodeText>Christoffer Berge</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>260</CodeValue>
+            <CodeText>Division for labour market statistics</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>06</CodeValue>
+            <CodeText>Labour market, wages</CodeText>
+        </SubjectArea>
+        <ExternalSource>NAV</ExternalSource>
+        <InternalSource>Reg. basert arb.mark.stat.</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>tiltkode</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/75" xlink:type="simple"/>
+    </Relations>
+</FIMD>

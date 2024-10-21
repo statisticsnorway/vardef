@@ -15,7 +15,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
-            2, 164, 171, 687, 703, 871, 948,
+            2, 948,
         ],
     )
     fun `post request default language`(
@@ -64,26 +64,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     "Short name wies already exists.",
                 ),
             )
-    }
-
-    @ParameterizedTest
-    @ValueSource(
-        ints = [
-            1, 4, 14, 23, 218,
-        ],
-    )
-    fun `post request id not found`(
-        id: Int,
-        spec: RequestSpecification,
-    ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(404)
     }
 
     @Test
@@ -184,8 +164,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
-            141, 590, 1997, 2124, 2139, 2141, 2142, 2149, 2157, 2159, 2183, 2194,
-            2206, 2216, 2217, 2590,
+            141, 2590,
         ],
     )
     fun `post vardok missing updated statistical unit`(
@@ -211,7 +190,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
-            16, 20, 161, 190, 476, 716, 1396, 1660, 2012, 3364, 3365,
+            16, 3365,
         ],
     )
     fun `vardok dataelement name does not conform to short name rules`(

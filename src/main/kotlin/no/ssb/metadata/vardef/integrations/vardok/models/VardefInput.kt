@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.vardok
+package no.ssb.metadata.vardef.integrations.vardok.models
 
 import no.ssb.metadata.vardef.models.LanguageStringType
 

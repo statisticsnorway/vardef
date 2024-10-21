@@ -1,0 +1,90 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-07-12" defaultValidFrom="1993-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:2" lastChangedDate="2009-01-14" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for inntekts- og lønnsstatistikk</dc:contributor>
+        <dc:creator>Vidar Pedersen</dc:creator>
+        <dcterms:modified>2009-01-14</dcterms:modified>
+        <dcterms:valid>1993-01-01 - </dcterms:valid>
+        <dc:description>Yrkesinntekter, kapitalinntekter, skattepliktige og skattefrie overføringer, i løpet av kalenderåret. Utlignet skatt og negative overføringer er trukket i fra.</dc:description>
+        <dcterms:abstract> Inntektsstatistikk for husholdninger</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:2</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>05.01 - Inntekt, formue, skatt</dc:subject>
+        <dc:title>Inntekt etter skatt</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Inntekt etter skatt</Title>
+        <Description>Yrkesinntekter, kapitalinntekter, skattepliktige og skattefrie overføringer, i løpet av kalenderåret. Utlignet skatt og negative overføringer er trukket i fra.</Description>
+        <ContactPerson>
+            <CodeValue>vip</CodeValue>
+            <CodeText>Vidar Pedersen</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>225</CodeValue>
+            <CodeText>Seksjon for inntekts- og lønnsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>05.01</CodeValue>
+            <CodeText>Inntekt, formue, skatt</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Inntektsstatistikk for husholdninger</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>http://www.ssb.no/emner/05/90/notat_200372/notat_200372.pdf</ExternalDocument>
+        <DataElementName>wies</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>ifhus</CodeValue>
+            <CodeText>Inntektsstatistikk for husholdninger. Husholdningstyper</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/571" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/49" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/10" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/12" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/11" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10707" xlink:title="10707: Husholdninger, etter hushaldstype og størrelse på inntekt etter skatt (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10678" xlink:title="10678: Registrerte inntekter (gjennomsnitt) for hushald, etter hushaldstype (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10222" xlink:title="10222: Inntekter for bosatte uførepensjonister, etter inntektskilde, alder og kjønn (nominelle kroner)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09903" xlink:title="09903: Husholdningers inntekt etter skatt og samlet inntekt, etter hovedinntektstakers kjønn og alder (kr) (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09607" xlink:title="09607: Inntekter for bosatte alderspensjonister, etter inntektskilde, alder og kjønn (nominelle kroner)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09606" xlink:title="09606: Samlet inntekter for bosatte personer 60 år og eldre, etter hovedaktivitet, alder, kjønn og før/etter skatt (nominelle kroner) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09605" xlink:title="09605: Inntekter for bosatte personer 60 år og eldre, etter grad av yrkestilknytning, inntektskilde, alder og kjønn (nominelle kroner)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09604" xlink:title="09604: Inntekter for bosatte AFP-pensjonister, etter inntektskilde, alder og kjønn (nominelle kroner) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09603" xlink:title="09603: Inntekter for bosatte uførepensjonister, etter inntektskilde, alder og kjønn (nominelle kroner) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09343" xlink:title="09343: Samlet inntekt og inntekt etter skatt for bosatte personer 60-90 år, etter fødselsår og kjønn. Gjennomsnitt og median (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09342" xlink:title="09342: Samlet inntekt og inntekt etter skatt for bosatte personer 60 år og eldre, etter alder og kjønn. Gjennomsnitt og median (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07780" xlink:title="07780: Registrerte inntekter for hushald, etter hushaldstype. Gjennomsnitt for alle" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07778" xlink:title="07778: Registrerte inntekter for busette personar (mill. kr)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07751" xlink:title="07751: Sammensetning av samlet husholdningsinntekt, desilfordelt inntekt etter skatt per forbruksenhet (EU-skala) (prosent)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07183" xlink:title="07183: Husholdninger, etter størrelse på samlet inntekt (K)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07182" xlink:title="07182: Husholdninger, etter størrelse på inntekt etter skatt (K)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07137" xlink:title="07137: Husholdninger, etter størrelse på inntekt etter skatt (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06946" xlink:title="06946: Inntekt etter skatt, etter husholdningstype. Antall husholdninger og median (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06944" xlink:title="06944: Inntekt etter skatt, etter husholdningstype. Antall husholdninger og median (K) (B)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06467" xlink:title="06467: Inntektsrekneskap for hushald, etter hushaldstype (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06120" xlink:title="06120: Hovedposter i inntektsregnskapet for bosatte uførepensjonister (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04751" xlink:title="04751: Inntekt etter skatt for hushald, etter hushaldstype. Median i faste kroner og indeks for faste prisar (1990=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04750" xlink:title="04750: Talet på personar, bruttoinntekt, inntekt etter skatt, formue ved likning og gjeld pr. hushald, etter hushaldstype. Gjennomsnitt (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04619" xlink:title="04619: Inntektsregnskap for bosatte personer (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04460" xlink:title="04460: Inntekt etter skatt for par med barn i enfamiliehusholdninger, etter antall barn (0-17 år) (kr) (K) (B) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04459" xlink:title="04459: Inntekt etter skatt i privathusholdninger, aleneboende og par uten barn, etter alder (kr) (K) (B) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04458" xlink:title="04458: Privatusholdninger, etter inntekt og skatt, gruppert (K) (B) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04455" xlink:title="04455: Inntekt etter skatt i privathusholdninger, etter husholdningsstørrelse (kr) (K) (B) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04452" xlink:title="04452: Inntekt etter skatt i privathusholdninger, etter husholdningstype (kr) (K) (B) (avslutta serie)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

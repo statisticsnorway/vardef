@@ -6,7 +6,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.vardok.*
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import org.junit.jupiter.api.BeforeEach
 
 @MicronautTest

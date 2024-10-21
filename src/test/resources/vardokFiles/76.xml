@@ -1,0 +1,54 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-12" defaultValidFrom="" defaultValidTo="2003-12-31" id="urn:ssb:conceptvariable:vardok:76" lastChangedDate="2011-01-12" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for arbeidsmarkedsstatistikk</dc:contributor>
+        <dc:creator>Christoffer Berge</dc:creator>
+        <dcterms:modified>2011-01-12</dcterms:modified>
+        <dcterms:valid> - 2003-12-31</dcterms:valid>
+        <dc:description>Grovinndeling av arbeidssøkerstatus i 8 hovedkategorier. Inndelingen blir gjort av SSB på bakgrunn av arbeidssøkerstatusene som finnes i NAVs arbeidssøkerfiler.</dc:description>
+        <dcterms:abstract> Reg. basert arb.mark.stat. NAV</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:76</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>06 - Arbeidsliv, yrkesdeltaking og lønn</dc:subject>
+        <dc:title>Tiltakskode, aggregert arbeidssøkerstatus</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Tiltakskode, aggregert arbeidssøkerstatus</Title>
+        <Description>Grovinndeling av arbeidssøkerstatus i 8 hovedkategorier. Inndelingen blir gjort av SSB på bakgrunn av arbeidssøkerstatusene som finnes i NAVs arbeidssøkerfiler.</Description>
+        <ContactPerson>
+            <CodeValue>chb</CodeValue>
+            <CodeText>Christoffer Berge</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>260</CodeValue>
+            <CodeText>Seksjon for arbeidsmarkedsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>06</CodeValue>
+            <CodeText>Arbeidsliv, yrkesdeltaking og lønn</CodeText>
+        </SubjectArea>
+        <ExternalSource>NAV</ExternalSource>
+        <InternalSource>Reg. basert arb.mark.stat.</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>tiltkode</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/75" xlink:type="simple"/>
+    </Relations>
+</FIMD>

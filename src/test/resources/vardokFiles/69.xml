@@ -1,0 +1,55 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2002-09-12" defaultValidFrom="1972-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:69" lastChangedDate="2010-05-11" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for arbeidsmarkedsstatistikk</dc:contributor>
+        <dc:creator>Inger Håland</dc:creator>
+        <dcterms:modified>2010-05-11</dcterms:modified>
+        <dcterms:valid>1972-01-01 - </dcterms:valid>
+        <dc:description>Avtalt arbeidstid er det antall arbeidstimer som den ansatte ifølge arbeidskontrakten skal være på arbeid. Eventuelt fravær fra arbeidet pga. sykdom, ferie e.l. skal ikke trekkes fra i avtalt arbeidstid, og overtid skal ikke medregnes. I noen statistikker, f.eks. lønnstatistikk, ber man oppgavegiverne oppgi avtalt arbeidstid eksklusive spisepauser.</dc:description>
+        <dcterms:abstract> Arbeidskraftundersøkelsen</dcterms:abstract>
+        <dcterms:tableOfContents>Arbeidsforhold</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:69</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>06.01 - Yrkesdeltaking</dc:subject>
+        <dc:title>Avtalt arbeidstid</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Avtalt arbeidstid</Title>
+        <Description>Avtalt arbeidstid er det antall arbeidstimer som den ansatte ifølge arbeidskontrakten skal være på arbeid. Eventuelt fravær fra arbeidet pga. sykdom, ferie e.l. skal ikke trekkes fra i avtalt arbeidstid, og overtid skal ikke medregnes. I noen statistikker, f.eks. lønnstatistikk, ber man oppgavegiverne oppgi avtalt arbeidstid eksklusive spisepauser.</Description>
+        <ContactPerson>
+            <CodeValue>iha</CodeValue>
+            <CodeText>Inger Håland</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>260</CodeValue>
+            <CodeText>Seksjon for arbeidsmarkedsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes>For ansatte med avtale om arbeidstid hvor det avtalte timetallet varierer fra uke til uke, f.eks. som en følge av skift- eller turnusordning, kan gjennomsnitt av avtalt arbeidstid benyttes for å vise normalsituasjonen. For ansatte som ikke har noen arbeidstidsavtale, samt for selvstendige og familiearbeidere, benyttes deres gjennomsnittlige arbeidstid per uke, normalt de fire siste ukene (ser bort fra ferie, sykdom, o.l.), som en parallell til avtalt arbeidstid. Dette kalles ofte vanlig arbeidstid. I noen undersøkelser spør man kun om vanlig arbeidstid. Den statistiske enheten er i utgangspunktet arbeidsforhold (jobber), men for sysselsatte med flere arbeidsforhold (jobber) har man også summert opp på personnivå.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Arbeidsforhold</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>06.01</CodeValue>
+            <CodeText>Yrkesdeltaking</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Arbeidskraftundersøkelsen</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>arbtid</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>aku</CodeValue>
+            <CodeText>Arbeidskraftundersøkelsen. Tilleggsundersøkelser</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 import java.util.*
 
-class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, HttpRequest<R>> {
+class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, R> {
     private val logger = LoggerFactory.getLogger(VardefTokenValidator::class.java)
 
     @Inject
@@ -23,7 +23,7 @@ class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, HttpRequest<R
 
     override fun validateToken(
         token: String?,
-        request: HttpRequest<R>,
+        request: R,
     ): Publisher<Authentication> =
         Mono
             .from(validate(token!!, request))
@@ -33,7 +33,7 @@ class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, HttpRequest<R
 
     override fun validate(
         token: String?,
-        request: HttpRequest<R>,
+        request: R,
     ): Publisher<JWT> {
         logger.info("Validating for token for $request")
         return Mono.just(jsonWebTokenParser.parse(token).get())

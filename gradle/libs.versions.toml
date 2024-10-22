@@ -27,6 +27,7 @@ micronautSerde = "2.11.0"
 micronautTest = "4.5.0"
 mockk = "1.13.12"
 nanoid = "1.0.1"
+reactor = "3.6.8"
 shadow = "8.1.1"
 snakeyaml = "2.3"
 
@@ -59,6 +60,7 @@ micronaut-validation-processor = { module = "io.micronaut.validation:micronaut-v
 micronaut-jackson-xml = {module = "io.micronaut.xml:micronaut-jackson-xml", version.ref = "jackson"}
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 nanoid = { module = "io.viascom.nanoid:nanoid", version.ref = "nanoid" }
+reactor = { module = "io.projectreactor:reactor-core", version.ref = "reactor" }
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 
 [plugins]

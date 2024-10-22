@@ -7,6 +7,8 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -99,6 +101,7 @@ class VariableDefinitionsController {
     )
     @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE) @Body @Valid varDef: Draft,
     ): CompleteResponse {

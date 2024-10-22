@@ -9,10 +9,7 @@ import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
-import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
-import no.ssb.metadata.vardef.utils.jsonTestInput
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -65,6 +62,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         val definitionId =
             spec
                 .given()
+                .auth()
+                .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
                 .`when`()

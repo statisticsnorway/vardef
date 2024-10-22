@@ -486,4 +486,17 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         assertThat(completeResponse).isNotNull
         assertThat(completeResponse.shortName).isEqualTo(shortName)
     }
+
+    @Test
+    fun `create variable definition unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonTestInput())
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(401)
+
+    }
 }

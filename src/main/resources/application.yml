@@ -2,7 +2,11 @@ micronaut:
   application:
     name: vardef
   security:
-    enabled: false
+    intercept-url-map:
+      # Allow access to everything until we have specific
+      - pattern: /**
+        access:
+          - isAnonymous()
   router:
     static-resources:
       swagger:

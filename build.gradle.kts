@@ -45,6 +45,7 @@ dependencies {
     runtimeOnly(libs.logback.classic)
     runtimeOnly(libs.jackson.module.kotlin)
     runtimeOnly(libs.snakeyaml)
+    runtimeOnly(libs.micronaut.security.jwt)
     testImplementation(libs.micronaut.http.client)
     testImplementation(libs.assertj.core)
     testImplementation(libs.micronaut.test.rest.assured)

@@ -25,7 +25,13 @@ class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, R> {
     ): Publisher<Authentication> =
         Mono
             .from(validate(token!!, request))
-            .map { Authentication.build("", listOf("VARIABLE_OWNER"), it.jwtClaimsSet.claims) }
+            .map {
+                if ("onyxia-api" in it.jwtClaimsSet.getStringListClaim("aud")) {
+                    return@map "VARIABLE_OWNER"
+                } else {
+                    "VARIABLE_CONSUMER"
+                }
+            }.map { Authentication.build("", listOf(it), mapOf()) }
 
     override fun validate(
         token: String?,

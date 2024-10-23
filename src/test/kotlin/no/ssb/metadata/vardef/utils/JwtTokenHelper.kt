@@ -10,12 +10,18 @@ import com.nimbusds.jwt.SignedJWT
  */
 class JwtTokenHelper {
     companion object {
-        fun jwtTokenSigned() =
-            SignedJWT(
-                header.toBase64URL(),
-                claims().toPayload().toBase64URL(),
-                signature,
-            )
+        fun jwtTokenSigned(
+            audienceClaim: List<String> =
+                listOf(
+                    "onyxia-api",
+                    "broker",
+                    "account",
+                ),
+        ) = SignedJWT(
+            header.toBase64URL(),
+            claims(audienceClaim).toPayload().toBase64URL(),
+            signature,
+        )
 
         private val signature =
             Base64URL(
@@ -36,7 +42,7 @@ class JwtTokenHelper {
                 """.trimIndent(),
             )
 
-        private fun claims() =
+        private fun claims(audienceClaim: List<String>) =
             JWTClaimsSet.parse(
                 """
                 {
@@ -45,11 +51,7 @@ class JwtTokenHelper {
                 "auth_time": 1726556500,
                 "jti": "dc6c5c13-a3ff-42e1-b11c-d93233725ace",
                 "iss": "https://auth.ssb.no/realms/ssb",
-                "aud": [
-                  "onyxia-api",
-                  "broker",
-                  "account"
-                ],
+                "aud": $audienceClaim,
                 "sub": "d7532b1f-d5aa-43c1-acd1-ed12d4020455",
                 "typ": "Bearer",
                 "azp": "onyxia-api",

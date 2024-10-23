@@ -1,7 +1,9 @@
 package no.ssb.metadata.vardef.security
 
 import com.nimbusds.jwt.JWT
+import io.micronaut.context.annotation.Property
 import io.micronaut.security.authentication.Authentication
+import io.micronaut.security.token.Claims
 import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
 import io.micronaut.security.token.jwt.validator.JwtAuthenticationFactory
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
@@ -12,6 +14,9 @@ import reactor.core.publisher.Mono
 
 class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, R> {
     private val logger = LoggerFactory.getLogger(VardefTokenValidator::class.java)
+
+    @Property(name = "dapla.lab.security.audience")
+    private lateinit var daplaLabAudience: String
 
     @Inject
     lateinit var jwtAuthenticationFactory: JwtAuthenticationFactory
@@ -26,10 +31,10 @@ class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, R> {
         Mono
             .from(validate(token!!, request))
             .map {
-                if ("onyxia-api" in it.jwtClaimsSet.getStringListClaim("aud")) {
-                    return@map "VARIABLE_OWNER"
+                if (daplaLabAudience in it.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)) {
+                    return@map Roles.VARIABLE_OWNER.name
                 } else {
-                    "VARIABLE_CONSUMER"
+                    Roles.VARIABLE_CONSUMER.name
                 }
             }.map { Authentication.build("", listOf(it), mapOf()) }
 

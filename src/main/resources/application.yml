@@ -68,6 +68,11 @@ micronaut:
 klass:
   codes-at: 2024-08-01
 
+dapla:
+  lab:
+    security:
+      audience: "onyxia-api"
+
 jackson:
   xml:
     enabled: true

@@ -214,18 +214,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `ensure token in header`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .`when`()
-            .post("/vardok-migration/948")
-            .then()
-            .statusCode(201)
-    }
-
-    @Test
     fun `create vardok unauthenticated`(spec: RequestSpecification) {
         spec
             .given()

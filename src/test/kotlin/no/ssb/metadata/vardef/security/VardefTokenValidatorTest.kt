@@ -4,6 +4,7 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.MutableHttpRequest
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.utils.JwtTokenHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -22,7 +23,7 @@ class VardefTokenValidatorTest {
                 .from(
                     vardefTokenValidator.validateToken(
                         JwtTokenHelper.jwtTokenSigned().parsedString,
-                        HttpRequest.POST("/vardef?active_group=play-enhjoern-a-developers", ""),
+                        HttpRequest.POST("/variable-definitions?active_group=play-enhjoern-a-developers", ""),
                     ),
                 ).block()
         assertThat(auth?.roles).containsExactly(VARIABLE_OWNER)
@@ -35,7 +36,7 @@ class VardefTokenValidatorTest {
                 .from(
                     vardefTokenValidator.validateToken(
                         JwtTokenHelper.jwtTokenSigned(listOf("blah")).parsedString,
-                        HttpRequest.POST("/vardef", ""),
+                        HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
         assertThat(auth?.roles).doesNotContain(VARIABLE_OWNER)
@@ -44,12 +45,12 @@ class VardefTokenValidatorTest {
 
     @Test
     fun `active group not present in token`() {
-        assertThrows<RuntimeException> {
+        assertThrows<InvalidActiveGroupException> {
             Mono
                 .from(
                     vardefTokenValidator.validateToken(
                         JwtTokenHelper.jwtTokenSigned().parsedString,
-                        HttpRequest.POST("/vardef?active_group=unknown-developers", ""),
+                        HttpRequest.POST("/variable-definitions?active_group=unknown-developers", ""),
                     ),
                 ).block()
         }

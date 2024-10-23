@@ -525,7 +525,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(403)
+            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 
     @Test
@@ -538,6 +538,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(401)
+            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 }

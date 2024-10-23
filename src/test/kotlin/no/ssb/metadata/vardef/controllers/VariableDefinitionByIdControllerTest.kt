@@ -220,40 +220,12 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @Test
     fun `update draft variable definition with another short name that is already in use`(spec: RequestSpecification) {
-        // create a variable definition with a given short name, one
-        val jsonString1 = jsonTestInput().apply { put("short_name", "one") }.toString()
-        val definitionId =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(jsonString1)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(HttpStatus.CREATED.code)
-                .extract()
-                .body()
-                .path<String>("id")
-
-        // create a variable definition with a given short name, two
-        val jsonString2 = jsonTestInput().apply { put("short_name", "two") }.toString()
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(jsonString2)
+            .body("""{"short_name": "${INCOME_TAX_VP1_P1.shortName}"}""")
             .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.CREATED.code)
-
-        // try to update the first variable definition to the same short name of the second variable definition,
-        // resulting in conflict
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("""{"short_name":"two"}""")
-            .`when`()
-            .patch("/variable-definitions/$definitionId")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
             .body(

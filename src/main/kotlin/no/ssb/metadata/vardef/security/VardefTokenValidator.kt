@@ -8,6 +8,7 @@ import io.micronaut.security.token.Claims
 import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -21,6 +22,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     @Inject
     private lateinit var jsonWebTokenParser: JsonWebTokenParser<JWT>
 
+    @Suppress("UNCHECKED_CAST")
     private fun getDaplaGroups(token: JWT) =
         token.jwtClaimsSet.getJSONObjectClaim("dapla")["groups"] as? List<String>
             ?: emptyList()
@@ -33,7 +35,9 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             if (
                 request.parameters.get("active_group") !in getDaplaGroups(token)
             ) {
-                throw RuntimeException("The active group is not present in the token")
+                // In this case the user is trying to act on behalf of a group they are not a member
+                // of ,so we don't want to continue processing this request.
+                throw InvalidActiveGroupException("The specified active_group is not present in the token")
             }
 
             if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)
@@ -42,6 +46,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             }
         }
 
+        // Default role for authenticated principals
         return VARIABLE_CONSUMER
     }
 

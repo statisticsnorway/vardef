@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.utils
 import io.micronaut.json.JsonMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.RestAssured
+import io.restassured.RestAssured.oauth2
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.TestInstance
 open class BaseVardefTest {
     init {
         RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
+        RestAssured.authentication = oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
     }
 
     @Inject

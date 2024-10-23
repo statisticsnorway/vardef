@@ -25,7 +25,7 @@ class VardefTokenValidatorTest {
                         HttpRequest.POST("/vardef?active_group=play-enhjoern-a-developers", ""),
                     ),
                 ).block()
-        assertThat(auth?.roles).containsExactly(Roles.VARIABLE_OWNER.name)
+        assertThat(auth?.roles).containsExactly(VARIABLE_OWNER)
     }
 
     @Test
@@ -38,8 +38,8 @@ class VardefTokenValidatorTest {
                         HttpRequest.POST("/vardef", ""),
                     ),
                 ).block()
-        assertThat(auth?.roles).doesNotContain(Roles.VARIABLE_OWNER.name)
-        assertThat(auth?.roles).contains(Roles.VARIABLE_CONSUMER.name)
+        assertThat(auth?.roles).doesNotContain(VARIABLE_OWNER)
+        assertThat(auth?.roles).contains(VARIABLE_CONSUMER)
     }
 
     @Test

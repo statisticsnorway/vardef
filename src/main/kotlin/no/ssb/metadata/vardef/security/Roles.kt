@@ -1,6 +1,4 @@
 package no.ssb.metadata.vardef.security
 
-enum class Roles {
-    VARIABLE_OWNER,
-    VARIABLE_CONSUMER,
-}
+const val VARIABLE_OWNER = "VARIABLE_OWNER"
+const val VARIABLE_CONSUMER = "VARIABLE_CONSUMER"

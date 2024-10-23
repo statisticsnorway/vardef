@@ -67,6 +67,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam("active_group", "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -100,6 +101,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam("active_group", "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -121,6 +123,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(DRAFT_EXAMPLE)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -138,6 +141,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -218,6 +222,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam("active_group", "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -248,6 +253,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -267,6 +273,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -282,6 +289,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -301,6 +309,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -354,6 +363,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam("active_group", "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -411,6 +421,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -453,6 +464,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(input)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -475,6 +487,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam("active_group", "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -495,7 +508,33 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .auth()
             .none()
             .contentType(ContentType.JSON)
+            .queryParam("active_group", "play-enhjoern-a-developers")
             .body(jsonTestInput())
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(401)
+    }
+
+    @Test
+    fun `create variable definition no active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonTestInput())
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(403)
+    }
+
+    @Test
+    fun `create variable definition invalid active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonTestInput())
+            .queryParam("active_group", "invalid-group")
             .`when`()
             .post("/variable-definitions")
             .then()

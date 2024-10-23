@@ -6,7 +6,6 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.token.Claims
 import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
-import io.micronaut.security.token.jwt.validator.JwtAuthenticationFactory
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
 import org.reactivestreams.Publisher
@@ -20,37 +19,30 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     private lateinit var daplaLabAudience: String
 
     @Inject
-    lateinit var jwtAuthenticationFactory: JwtAuthenticationFactory
-
-    @Inject
     private lateinit var jsonWebTokenParser: JsonWebTokenParser<JWT>
+
+    private fun getDaplaGroups(token: JWT) =
+        token.jwtClaimsSet.getJSONObjectClaim("dapla")["groups"] as? List<String>
+            ?: emptyList()
 
     private fun assignRoles(
         token: JWT,
         request: R,
-    ): Roles {
+    ): String {
         if ("active_group" in request.parameters) {
             if (
-                request.parameters.get("active_group") !in
-                (
-                    token.jwtClaimsSet.getJSONObjectClaim("dapla")["groups"] as? List<String>
-                        ?: emptyList()
-                )
+                request.parameters.get("active_group") !in getDaplaGroups(token)
             ) {
                 throw RuntimeException("The active group is not present in the token")
             }
 
-            if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE) &&
-                request.parameters.get("active_group") in (
-                    token.jwtClaimsSet.getJSONObjectClaim("dapla")["groups"] as? List<String>
-                        ?: emptyList()
-                )
+            if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)
             ) {
-                return Roles.VARIABLE_OWNER
+                return VARIABLE_OWNER
             }
         }
 
-        return Roles.VARIABLE_CONSUMER
+        return VARIABLE_CONSUMER
     }
 
     override fun validateToken(
@@ -62,7 +54,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .map {
                 Authentication.build(
                     it.jwtClaimsSet.getStringClaim("preferred_username"),
-                    listOf(assignRoles(it, request).name),
+                    listOf(assignRoles(it, request)),
                     it.jwtClaimsSet.claims,
                 )
             }

@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.security
 
 import com.nimbusds.jwt.JWT
 import io.micronaut.context.annotation.Property
+import io.micronaut.http.HttpRequest
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.token.Claims
 import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
@@ -12,7 +13,7 @@ import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 
-class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, R> {
+class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JWT, R> {
     private val logger = LoggerFactory.getLogger(VardefTokenValidator::class.java)
 
     @Property(name = "dapla.lab.security.audience")
@@ -27,12 +28,30 @@ class VardefTokenValidator<R> : ReactiveJsonWebTokenValidator<JWT, R> {
     private fun assignRoles(
         token: JWT,
         request: R,
-    ): Roles =
-        if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)) {
-            Roles.VARIABLE_OWNER
-        } else {
-            Roles.VARIABLE_CONSUMER
+    ): Roles {
+        if ("active_group" in request.parameters) {
+            if (
+                request.parameters.get("active_group") !in
+                (
+                    token.jwtClaimsSet.getJSONObjectClaim("dapla")["groups"] as? List<String>
+                        ?: emptyList()
+                )
+            ) {
+                throw RuntimeException("The active group is not present in the token")
+            }
+
+            if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE) &&
+                request.parameters.get("active_group") in (
+                    token.jwtClaimsSet.getJSONObjectClaim("dapla")["groups"] as? List<String>
+                        ?: emptyList()
+                )
+            ) {
+                return Roles.VARIABLE_OWNER
+            }
         }
+
+        return Roles.VARIABLE_CONSUMER
+    }
 
     override fun validateToken(
         token: String?,

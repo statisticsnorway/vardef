@@ -492,6 +492,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     fun `create variable definition unauthenticated`(spec: RequestSpecification) {
         spec
             .given()
+            .auth()
+            .none()
             .contentType(ContentType.JSON)
             .body(jsonTestInput())
             .`when`()

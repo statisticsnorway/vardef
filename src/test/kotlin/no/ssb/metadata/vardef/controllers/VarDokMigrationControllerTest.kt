@@ -214,7 +214,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `ensure token in header`(spec: RequestSpecification)  {
+    fun `ensure token in header`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)

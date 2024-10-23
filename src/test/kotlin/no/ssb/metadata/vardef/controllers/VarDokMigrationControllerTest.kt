@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.controllers
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import jakarta.inject.Inject
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
@@ -211,5 +212,31 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     "varDef.shortName: must match \"^[a-z0-9_]{3,}$\"",
                 ),
             )
+    }
+
+    @Test
+    fun `ensure token in header`(spec: RequestSpecification)  {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/vardok-migration/948")
+            .then()
+            .statusCode(201)
+    }
+
+    @Test
+    fun `create vardok unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/vardok-migration/948")
+            .then()
+            .statusCode(401)
     }
 }

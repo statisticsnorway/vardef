@@ -29,7 +29,6 @@ import org.reactivestreams.Publisher
 @Controller("/vardok-migration/{vardok-id}")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
-
     @Inject
     lateinit var vardokService: VardokService
 

@@ -2,7 +2,21 @@ micronaut:
   application:
     name: vardef
   security:
-    enabled: false
+    token:
+      jwt:
+        claims:
+          keys:
+            dapla: dapla
+            dapla-groups: groups
+            dapla-teams: teams
+            username: preferred_username
+          values:
+            dapla-lab-audience: onyxia-api
+    intercept-url-map:
+      # TODO Allow access to everything until we have specific rules on endpoints
+      - pattern: /**
+        access:
+          - isAnonymous()
   router:
     static-resources:
       swagger:

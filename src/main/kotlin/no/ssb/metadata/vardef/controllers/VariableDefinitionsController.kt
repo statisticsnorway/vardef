@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -21,6 +22,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
@@ -99,8 +101,13 @@ class VariableDefinitionsController {
     )
     @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
+    @Secured(VARIABLE_OWNER)
     fun createVariableDefinition(
-        @Parameter(example = DRAFT_EXAMPLE) @Body @Valid varDef: Draft,
+        @Parameter(example = DRAFT_EXAMPLE)
+        @Body
+        @Valid varDef: Draft,
+        @QueryValue(ACTIVE_GROUP)
+        activeGroup: String,
     ): CompleteResponse {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
         if (varDef.variableStatus != null) {

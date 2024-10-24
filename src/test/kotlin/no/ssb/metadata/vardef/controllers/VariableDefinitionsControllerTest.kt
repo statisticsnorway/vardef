@@ -5,6 +5,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -67,6 +68,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -100,6 +102,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -121,6 +124,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(DRAFT_EXAMPLE)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -138,6 +142,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -218,6 +223,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -248,6 +254,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -267,6 +274,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -282,6 +290,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -301,6 +310,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -354,6 +364,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -411,6 +422,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -453,6 +465,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(input)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -475,6 +488,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -486,5 +500,45 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
         assertThat(completeResponse.shortName).isEqualTo(shortName)
+    }
+
+    @Test
+    fun `create variable definition unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .contentType(ContentType.JSON)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .body(jsonTestInput())
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(401)
+    }
+
+    @Test
+    fun `create variable definition no active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonTestInput())
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @Test
+    fun `create variable definition invalid active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(jsonTestInput())
+            .queryParam(ACTIVE_GROUP, "invalid-group")
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 }

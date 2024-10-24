@@ -41,6 +41,8 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.nanoid)
+    implementation(libs.micronaut.security.jwt)
+    implementation(libs.reactor)
     compileOnly(libs.micronaut.openapi.annotations)
     runtimeOnly(libs.logback.classic)
     runtimeOnly(libs.jackson.module.kotlin)

@@ -22,10 +22,12 @@ micronautManagement = "4.6.6"
 micronautMicrometer = "5.8.0"
 micronautMongoDb = "5.4.0"
 micronautOpenapi = "6.12.3"
+micronautSecurity = "4.10.2"
 micronautSerde = "2.11.0"
 micronautTest = "4.5.0"
 mockk = "1.13.12"
 nanoid = "1.0.1"
+reactor = "3.6.8"
 shadow = "8.1.1"
 snakeyaml = "2.3"
 
@@ -50,7 +52,7 @@ micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi", version
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronautOpenapi" }
 micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronaut" }
 micronaut-security-annotations = { module = "io.micronaut.security:micronaut-security-annotations", version.ref = "micronaut" }
-micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt", version.ref = "micronaut" }
+micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt", version.ref = "micronautSecurity" }
 micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson", version.ref = "micronautSerde" }
 micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor", version.ref = "micronautSerde" }
 micronaut-test-rest-assured = { module = "io.micronaut.test:micronaut-test-rest-assured", version.ref = "micronautTest"}
@@ -58,6 +60,7 @@ micronaut-validation-processor = { module = "io.micronaut.validation:micronaut-v
 micronaut-jackson-xml = {module = "io.micronaut.xml:micronaut-jackson-xml", version.ref = "jackson"}
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 nanoid = { module = "io.viascom.nanoid:nanoid", version.ref = "nanoid" }
+reactor = { module = "io.projectreactor:reactor-core", version.ref = "reactor" }
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 
 [plugins]

@@ -1,12 +1,11 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.http.HttpHeaders.AUTHORIZATION
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.MutableHttpHeaders
 import io.micronaut.http.MutableHttpResponse
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.PathVariable
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Status
+import io.micronaut.http.annotation.*
 import io.micronaut.http.client.ProxyHttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
@@ -19,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
@@ -61,14 +61,26 @@ class VarDokMigrationController {
         @Parameter(name = "vardok-id", description = "The ID of the definition in Vardok.", example = "1607")
         @PathVariable("vardok-id")
         id: String,
+        httpRequest: HttpRequest<*>,
     ): Publisher<MutableHttpResponse<*>>? {
         try {
             val varDefInput =
                 vardokService.createVarDefInputFromVarDokItems(
                     vardokService.fetchMultipleVardokItemsByLanguage(id),
                 )
+
+            // Get token from header
+            val authHeader = httpRequest.headers.get(AUTHORIZATION)
+
+            val selectedGroup = httpRequest.parameters.get(ACTIVE_GROUP)
+
             return httpClient.proxy(
-                HttpRequest.POST("/variable-definitions", varDefInput),
+                HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$selectedGroup", varDefInput).headers { entries: MutableHttpHeaders ->
+                    authHeader?.let {
+                        // Set authorization header for post to /variable-definitions
+                        entries.set(AUTHORIZATION, it)
+                    }
+                },
             )
         } catch (e: VardokNotFoundException) {
             // We always want to return NOT_FOUND in this case

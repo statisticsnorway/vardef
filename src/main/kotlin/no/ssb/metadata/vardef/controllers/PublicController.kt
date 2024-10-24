@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
@@ -25,6 +26,7 @@ import java.time.LocalDate
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PublicController(
     private val varDefService: VariableDefinitionService,
+    private val validityPeriods: ValidityPeriodsService,
 ) {
     /**
      * List all variable definitions.
@@ -122,4 +124,36 @@ class PublicController(
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
             .contentType(MediaType.APPLICATION_JSON)
     }
+
+    /**
+     * List all validity periods.
+     *
+     * These are rendered in the given language, with the default being Norwegian Bokmål.
+     */
+    @Get("/variable-definitions/{variable-definition-id}/validity-periods")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Tag(name = VALIDITY_PERIODS)
+    @ApiResponse(
+        responseCode = "200",
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(
+                        name = "???",
+                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
+    fun listValidityPeriods(
+        @PathVariable("variable-definition-id")
+        variableDefinitionId: String,
+        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
+        language: SupportedLanguages,
+    ): MutableHttpResponse<List<RenderedVariableDefinition>>? =
+        HttpResponse
+            .ok(validityPeriods.list(language, variableDefinitionId))
+            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+            .contentType(MediaType.APPLICATION_JSON)
 }

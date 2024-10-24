@@ -13,6 +13,7 @@ import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -155,15 +156,38 @@ class PublicControllerTest : BaseVardefTest() {
 
     @Test
     fun `get variable definition no value in selected language`(spec: RequestSpecification) {
+        val language = SupportedLanguages.EN.toString()
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", "en")
+            .header("Accept-Language", language)
             .get("$publicVariableDefinitionsPath/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .assertThat()
             .statusCode(200)
             .body("", hasKey("comment"))
             .body("comment", equalTo(null))
+            .header(
+                "Content-Language",
+                language,
+            )
+    }
+
+    @Test
+    fun `list validity periods`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("$publicVariableDefinitionsPath/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(200)
+            .body("size()", `is`(2))
+            .body("[0].valid_from", Matchers.equalTo("1980-01-01"))
+            .body("[0].patch_id", Matchers.equalTo(7))
+            .body("[1].valid_from", Matchers.equalTo("2021-01-01"))
+            .body("[1].patch_id", Matchers.equalTo(6))
+            .header(
+                "Content-Language",
+                SupportedLanguages.NB.toString(),
+            )
     }
 }

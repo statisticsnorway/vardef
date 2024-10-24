@@ -13,7 +13,7 @@ micronaut:
           values:
             dapla-lab-audience: onyxia-api
     intercept-url-map:
-      # Allow access to everything until we have specific
+      # TODO Allow access to everything until we have specific rules on endpoints
       - pattern: /**
         access:
           - isAnonymous()

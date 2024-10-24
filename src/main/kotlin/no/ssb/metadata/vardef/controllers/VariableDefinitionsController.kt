@@ -23,6 +23,7 @@ import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
+import no.ssb.metadata.vardef.services.DaplaTeamService
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
@@ -109,7 +110,7 @@ class VariableDefinitionsController {
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {
-        if (!activeGroup.endsWith("developers")) {
+        if (!DaplaTeamService.isDevelopers(activeGroup)) {
             throw HttpStatusException(
                 HttpStatus.FORBIDDEN,
                 "Only dapla team developers may create variable definitions.",

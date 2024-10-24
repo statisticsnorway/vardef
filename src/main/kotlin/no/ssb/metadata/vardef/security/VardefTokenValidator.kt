@@ -88,9 +88,12 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     override fun validateToken(
         token: String?,
         request: R,
-    ): Publisher<Authentication> =
-        Mono
-            .from(validate(token!!, request))
+    ): Publisher<Authentication> {
+        if (token == null) {
+            return Mono.empty()
+        }
+        return Mono
+            .from(validate(token, request))
             .map {
                 Authentication.build(
                     it.jwtClaimsSet.getStringClaim(usernameClaim),
@@ -98,6 +101,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                     it.jwtClaimsSet.claims,
                 )
             }
+    }
 
     /**
      *  Parse the JWT token

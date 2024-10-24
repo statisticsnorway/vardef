@@ -56,4 +56,18 @@ class VardefTokenValidatorTest {
                 ).block()
         }
     }
+
+    @Test
+    fun `token is null`() {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        null,
+                        HttpRequest.POST("/variable-definitions", ""),
+                    ),
+                ).block()
+
+        assertThat(auth).isNull()
+    }
 }

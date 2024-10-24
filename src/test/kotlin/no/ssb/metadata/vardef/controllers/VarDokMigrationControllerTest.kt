@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.controllers
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
@@ -27,6 +28,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -45,6 +47,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/2")
             .then()
@@ -54,6 +57,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/2")
             .then()
@@ -72,10 +76,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .post("/vardok-migration/$id")
         spec
             .`when`()
             .contentType(ContentType.JSON)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .post("/vardok-migration/$id")
             .then()
             .statusCode(409)
@@ -97,6 +103,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/$id")
             .then()
@@ -115,6 +122,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/123")
             .then()
@@ -133,6 +141,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/130")
             .then()
@@ -149,6 +158,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/$id")
             .then()
@@ -175,6 +185,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/$id")
             .then()
@@ -201,6 +212,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/$id")
             .then()
@@ -221,9 +233,22 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .none()
             .contentType(ContentType.JSON)
             .body("")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/vardok-migration/948")
             .then()
             .statusCode(401)
+    }
+
+    @Test
+    fun `create vardok authenticated without active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/vardok-migration/948")
+            .then()
+            .statusCode(403)
     }
 }

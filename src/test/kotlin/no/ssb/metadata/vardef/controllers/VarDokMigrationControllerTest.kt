@@ -212,4 +212,18 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 ),
             )
     }
+
+    @Test
+    fun `create vardok unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .contentType(ContentType.JSON)
+            .body("")
+            .`when`()
+            .post("/vardok-migration/948")
+            .then()
+            .statusCode(401)
+    }
 }

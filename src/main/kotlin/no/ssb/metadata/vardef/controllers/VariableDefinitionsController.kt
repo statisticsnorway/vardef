@@ -109,6 +109,12 @@ class VariableDefinitionsController {
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {
+        if (!activeGroup.endsWith("developers")) {
+            throw HttpStatusException(
+                HttpStatus.FORBIDDEN,
+                "Only dapla team developers may create variable definitions.",
+            )
+        }
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
         if (varDef.variableStatus != null) {
             throw HttpStatusException(

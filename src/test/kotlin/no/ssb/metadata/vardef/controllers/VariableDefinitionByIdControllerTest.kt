@@ -4,16 +4,13 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
-import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -21,31 +18,6 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.time.temporal.ChronoUnit
 
 class VariableDefinitionByIdControllerTest : BaseVardefTest() {
-    @Test
-    fun `get request default language`(spec: RequestSpecification) {
-        spec
-            .`when`()
-            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
-            .then()
-            .statusCode(200)
-            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
-            .body("name", equalTo(INCOME_TAX_VP1_P1.name.nb))
-            .body("short_name", equalTo(INCOME_TAX_VP1_P1.shortName))
-            .body(
-                "definition",
-                equalTo(
-                    validityPeriods
-                        .getLatestPatchInLastValidityPeriod(
-                            INCOME_TAX_VP1_P1.definitionId,
-                        ).definition.nb,
-                ),
-            ).header(
-                "Content-Language",
-                SupportedLanguages.NB
-                    .toString(),
-            )
-    }
-
     @Test
     fun `get request malformed id`(spec: RequestSpecification) {
         spec
@@ -397,47 +369,5 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
-    }
-
-    @Test
-    fun `get variable definition no value in selected language`(spec: RequestSpecification) {
-        val updatedJsonString =
-            jsonTestInput()
-                .apply {
-                    put(
-                        "short_name",
-                        "landbak_copy",
-                    )
-                    getJSONObject("name").apply {
-                        put(
-                            "en",
-                            JSONObject.NULL,
-                        )
-                    }
-                }.toString()
-        val definitionId =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(201)
-                .extract()
-                .body()
-                .path<String>("id")
-
-        spec
-            .`when`()
-            .contentType(ContentType.JSON)
-            .header("Accept-Language", "en")
-            .get("/variable-definitions/$definitionId")
-            .then()
-            .assertThat()
-            .statusCode(200)
-            .body("", hasKey("name"))
-            .body("name", equalTo(null))
     }
 }

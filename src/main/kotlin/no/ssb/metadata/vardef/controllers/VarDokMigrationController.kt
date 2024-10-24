@@ -23,14 +23,12 @@ import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.reactivestreams.Publisher
-import org.slf4j.LoggerFactory
 
 @Tag(name = DATA_MIGRATION)
 @Validated
 @Controller("/vardok-migration/{vardok-id}")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
-    private val logger = LoggerFactory.getLogger(VarDokMigrationController::class.java)
 
     @Inject
     lateinit var vardokService: VardokService
@@ -70,11 +68,9 @@ class VarDokMigrationController {
                 vardokService.createVarDefInputFromVarDokItems(
                     vardokService.fetchMultipleVardokItemsByLanguage(id),
                 )
-            logger.info("Request: $httpRequest")
 
             // Get token from header
             val authHeader = httpRequest.headers.get(AUTHORIZATION)
-            logger.info("AuthHeader: $authHeader")
 
             return httpClient.proxy(
                 HttpRequest.POST("/variable-definitions", varDefInput).headers { entries: MutableHttpHeaders ->

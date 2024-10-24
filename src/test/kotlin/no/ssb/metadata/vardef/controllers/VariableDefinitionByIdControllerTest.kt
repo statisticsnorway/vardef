@@ -4,6 +4,7 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -96,6 +97,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request draft variable`(spec: RequestSpecification) {
         spec
             .`when`()
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(204)
@@ -108,6 +110,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request published variable`(spec: RequestSpecification) {
         spec
             .`when`()
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .delete("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
@@ -119,6 +122,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request malformed id`(spec: RequestSpecification) {
         spec
             .`when`()
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
@@ -129,10 +133,30 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request unknown id`(spec: RequestSpecification) {
         spec
             .`when`()
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .delete("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+    }
+
+    @Test
+    fun `delete request draft variable without active group`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(403)
+    }
+
+    @Test
+    fun `delete request draft variable invalid active group`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .queryParam(ACTIVE_GROUP, "invalid group")
+            .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(403)
     }
 
     @Test
@@ -154,7 +178,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                         "en": "Update"
                     }}
                     """.trimIndent(),
-                ).`when`()
+                ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                .`when`()
                 .patch("/variable-definitions/${expected.definitionId}")
                 .then()
                 .statusCode(200)
@@ -188,7 +213,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).`when`()
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
             .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
@@ -204,7 +230,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     """
                     {"short_name":"hoppebek"}
                     """.trimIndent(),
-                ).`when`()
+                ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                .`when`()
                 .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
                 .then()
                 .statusCode(200)
@@ -224,6 +251,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("""{"short_name": "${INCOME_TAX_VP1_P1.shortName}"}""")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
             .then()
@@ -244,6 +272,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
             .then()
@@ -267,7 +296,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).`when`()
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
@@ -287,7 +317,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).`when`()
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
             .patch("/variable-definitions/${NanoId.generate(8)}")
             .then()
             .statusCode(404)
@@ -308,7 +339,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).`when`()
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
             .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(400)
@@ -365,7 +397,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": null
                 }}
                 """.trimIndent(),
-            ).`when`()
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(200)
@@ -384,7 +417,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     """
                     {"short_name": "nothing"}
                     """.trimIndent(),
-                ).`when`()
+                ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                .`when`()
                 .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
                 .then()
                 .statusCode(200)
@@ -395,5 +429,53 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
+    }
+
+    @Test
+    fun `update variable definition invalid active group`(spec: RequestSpecification) {
+        val expected: SavedVariableDefinition =
+            SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
+                name = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.name.copy(en = "Update"),
+            )
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Dødvekt",
+                    "nn": "Dødvekt",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, "invalid-group")
+            .`when`()
+            .patch("/variable-definitions/${expected.definitionId}")
+            .then()
+            .statusCode(403)
+    }
+
+    @Test
+    fun `update variable definition no active group`(spec: RequestSpecification) {
+        val expected: SavedVariableDefinition =
+            SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
+                name = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.name.copy(en = "Update"),
+            )
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Dødvekt",
+                    "nn": "Dødvekt",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${expected.definitionId}")
+            .then()
+            .statusCode(403)
     }
 }

@@ -123,6 +123,6 @@ class VariableDefinitionsController {
             )
         }
 
-        return patches.create(varDef.toSavedVariableDefinition()).toCompleteResponse()
+        return patches.create(varDef.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
     }
 }

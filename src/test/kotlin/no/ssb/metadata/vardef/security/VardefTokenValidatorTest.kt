@@ -4,6 +4,7 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.MutableHttpRequest
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.utils.JwtTokenHelper
 import org.assertj.core.api.Assertions.assertThat
@@ -23,7 +24,7 @@ class VardefTokenValidatorTest {
                 .from(
                     vardefTokenValidator.validateToken(
                         JwtTokenHelper.jwtTokenSigned().parsedString,
-                        HttpRequest.POST("/variable-definitions?active_group=play-enhjoern-a-developers", ""),
+                        HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=play-enhjoern-a-developers", ""),
                     ),
                 ).block()
         assertThat(auth?.roles).containsExactly(VARIABLE_OWNER)
@@ -50,7 +51,7 @@ class VardefTokenValidatorTest {
                 .from(
                     vardefTokenValidator.validateToken(
                         JwtTokenHelper.jwtTokenSigned().parsedString,
-                        HttpRequest.POST("/variable-definitions?active_group=unknown-developers", ""),
+                        HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=unknown-developers", ""),
                     ),
                 ).block()
         }

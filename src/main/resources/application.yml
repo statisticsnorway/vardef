@@ -2,6 +2,16 @@ micronaut:
   application:
     name: vardef
   security:
+    token:
+      jwt:
+        claims:
+          keys:
+            dapla: dapla
+            dapla-groups: groups
+            dapla-teams: teams
+            username: preferred_username
+          values:
+            dapla-lab-audience: onyxia-api
     intercept-url-map:
       # Allow access to everything until we have specific
       - pattern: /**
@@ -67,11 +77,6 @@ micronaut:
 
 klass:
   codes-at: 2024-08-01
-
-dapla:
-  lab:
-    security:
-      audience: "onyxia-api"
 
 jackson:
   xml:

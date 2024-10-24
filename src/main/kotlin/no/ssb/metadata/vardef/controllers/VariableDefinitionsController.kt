@@ -106,7 +106,7 @@ class VariableDefinitionsController {
         @Parameter(example = DRAFT_EXAMPLE)
         @Body
         @Valid varDef: Draft,
-        @QueryValue("active_group")
+        @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {
         if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")

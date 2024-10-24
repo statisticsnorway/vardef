@@ -173,6 +173,7 @@ class PatchesControllerTest : BaseVardefTest() {
             patches
                 .create(
                     DRAFT_BUS_EXAMPLE
+                        .copy()
                         .apply {
                             this.variableStatus = variableStatus
                         }.toSavedVariableDefinition(),

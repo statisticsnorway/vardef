@@ -55,11 +55,12 @@ class VariableDefinitionService(
     /**
      * List *Variable Definitions* which are valid on the given date.
      *
-     * If no date is given, list all variable definitions.
+     * If no date is given, list all variable definitions. The Variable Definitions
+     * are rendered in the given language and are suitable for public use.
      *
      * @param language The language to render in.
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
-     * @return List of *Variable Definitions* valid at the date.
+     * @return [List<RenderedVariableDefinition>] valid at the date.
      */
     fun listRenderedForDate(
         language: SupportedLanguages,
@@ -73,11 +74,11 @@ class VariableDefinitionService(
     /**
      * List *Variable Definitions* which are valid on the given date.
      *
-     * If no date is given, list all variable definitions.
+     * If no date is given, list all variable definitions. These are the
+     * [CompleteResponse] and are suitable for internal use.
      *
-     * @param language The language to render in.
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
-     * @return List of *Variable Definitions* valid at the date.
+     * @return [List<CompleteResponse>] valid at the date.
      */
     fun listCompleteForDate(dateOfValidity: LocalDate?): List<CompleteResponse> =
         uniqueDefinitionIds()
@@ -94,17 +95,13 @@ class VariableDefinitionService(
      * @param language The language to render in.
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
-     * @return The *Variable Definition* or `null`
+     * @return The [RenderedVariableDefinition] or `null`
      */
     fun getRenderedByDate(
         language: SupportedLanguages,
         definitionId: String,
         dateOfValidity: LocalDate?,
     ): RenderedVariableDefinition? = getByDate(definitionId, dateOfValidity)?.render(language, klassService)
-
-    fun listForDate(dateOfValidity: LocalDate?): List<CompleteResponse> {
-        TODO("Not yet implemented")
-    }
 
     private fun getByDate(
         definitionId: String,
@@ -116,6 +113,12 @@ class VariableDefinitionService(
             validityPeriods.getForDate(definitionId, dateOfValidity)
         }
 
+    /**
+     * Get a *Variable Definition*, valid on the given date.
+     *
+     * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
+     * @return [CompleteResponse] suitable for internal use.
+     */
     fun getCompleteByDate(
         definitionId: String,
         dateOfValidity: LocalDate?,

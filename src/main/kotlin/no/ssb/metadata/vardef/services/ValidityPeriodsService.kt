@@ -32,7 +32,7 @@ class ValidityPeriodsService(
             .sortedBy { it.validFrom }
 
     /**
-     * List *Validity Periods*.
+     * List rendered *Validity Periods*.
      *
      * A list of the latest *Patch* in each *Validity Period*. These are rendered and
      * suitable for display in public clients.
@@ -49,7 +49,7 @@ class ValidityPeriodsService(
             .map { it.render(language, klassService) }
 
     /**
-     * List *Validity Periods*.
+     * List complete *Validity Periods*.
      *
      * A list of the latest *Patch* in each *Validity Period*. These are the [CompleteResponse] and suitable
      * for internal use.

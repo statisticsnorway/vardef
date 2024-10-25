@@ -187,7 +187,7 @@ class PatchesControllerTest : BaseVardefTest() {
                         .copy()
                         .apply {
                             this.variableStatus = variableStatus
-                        }.toSavedVariableDefinition("play-enhjoern-a","play-enhjoern-a-developers"),
+                        }.toSavedVariableDefinition("play-enhjoern-a", "play-enhjoern-a-developers"),
                 ).definitionId
 
         spec

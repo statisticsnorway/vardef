@@ -118,7 +118,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         }
         return Mono
             .from(validate(token, request))
-            .handle{ it, sink ->
+            .handle { it, sink ->
                 val roles = assignRoles(it, request)
                 // Check if `roles` contains VARIABLE_OWNER
                 if (roles.contains(VARIABLE_OWNER)) {
@@ -126,14 +126,13 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                     if (!isValidTeam(request, it)) {
                         sink.error(InvalidActiveTeamException("The specified team is not present in the token"))
                         return@handle
-                    }
-                    else {
+                    } else {
                         sink.next(
                             Authentication.build(
                                 it.jwtClaimsSet.getStringClaim(usernameClaim),
                                 listOf(roles),
                                 it.jwtClaimsSet.claims,
-                            )
+                            ),
                         )
                     }
                 } else {
@@ -143,7 +142,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                             it.jwtClaimsSet.getStringClaim(usernameClaim),
                             listOf(roles),
                             it.jwtClaimsSet.claims,
-                        )
+                        ),
                     )
                 }
             }

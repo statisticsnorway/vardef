@@ -82,7 +82,7 @@ class VardefTokenValidatorTest {
                         JwtTokenHelper.jwtTokenSigned().parsedString,
                         HttpRequest.POST(
                             "/variable-definitions?$ACTIVE_GROUP=play-enhjoern-a-developers&$ACTIVE_TEAM=unknown",
-                            ""
+                            "",
                         ),
                     ),
                 ).block()

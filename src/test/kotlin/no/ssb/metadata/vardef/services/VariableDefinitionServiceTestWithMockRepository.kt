@@ -9,6 +9,7 @@ import io.mockk.verify
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION
@@ -70,18 +71,27 @@ class VariableDefinitionServiceTestWithMockRepository {
             mockKlassService.getKlassUrlForIdAndLanguage(any(), any())
         } returns "https://www.ssb.no/en/klass/klassifikasjoner/91"
 
-        every { variableDefinitionMockRepository.findAll() } returns listOf(variableDefinition)
+        every {
+            variableDefinitionMockRepository.findDistinctDefinitionIdByVariableStatusInList(
+                listOf(VariableStatus.PUBLISHED_EXTERNAL),
+            )
+        } returns
+            setOf(variableDefinition.definitionId)
 
         every { mockValidityPeriodsService.getForDate(variableDefinition.definitionId, today) } returns variableDefinition
 
         val renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
 
         val result =
-            variableDefinitionService.listRenderedForDate(SupportedLanguages.NB, today)
+            variableDefinitionService.listPublicForDate(SupportedLanguages.NB, today)
         assertThat(result.isNotEmpty())
         assertThat(result.size).isEqualTo(1)
         assertThat(listOf(renderedVariableDefinition).map { it.id }).isEqualTo(result.map { it.id })
         assertThat(result[0].id).isEqualTo(renderedVariableDefinition.id)
-        verify { variableDefinitionMockRepository.findAll() }
+        verify(exactly = 1) {
+            variableDefinitionMockRepository.findDistinctDefinitionIdByVariableStatusInList(
+                listOf(VariableStatus.PUBLISHED_EXTERNAL),
+            )
+        }
     }
 }

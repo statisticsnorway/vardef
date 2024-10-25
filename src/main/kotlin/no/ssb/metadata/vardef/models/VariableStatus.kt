@@ -14,3 +14,5 @@ enum class VariableStatus {
 }
 
 fun VariableStatus.isPublished(): Boolean = this in listOf(VariableStatus.PUBLISHED_EXTERNAL, VariableStatus.PUBLISHED_INTERNAL)
+
+fun VariableStatus.isPublic(): Boolean = this == VariableStatus.PUBLISHED_EXTERNAL

@@ -5,6 +5,8 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -23,6 +25,7 @@ import java.time.LocalDate
 @Tag(name = PUBLIC)
 @Validated
 @Controller("/public")
+@Secured(SecurityRule.IS_ANONYMOUS)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PublicController(
     private val varDefService: VariableDefinitionService,
@@ -52,7 +55,7 @@ class PublicController(
     @Get("/variable-definitions")
     fun listPublicVariableDefinitions(
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
-        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
+        @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
         @QueryValue("date_of_validity")
         @Parameter(
@@ -63,7 +66,7 @@ class PublicController(
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listRenderedForDate(language = language, dateOfValidity = dateOfValidity))
+            .ok(varDefService.listPublicForDate(language = language, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**
@@ -93,7 +96,7 @@ class PublicController(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
             examples = [ExampleObject(name = "No date specified", value = DEFAULT_LANGUAGE)],
         )
-        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
+        @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -104,26 +107,24 @@ class PublicController(
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
-    ): MutableHttpResponse<RenderedVariableDefinition> {
-        val definition =
-            varDefService
-                .getRenderedByDate(
-                    definitionId = definitionId,
-                    language = language,
-                    dateOfValidity = dateOfValidity,
-                )
-        if (definition == null) {
+    ): MutableHttpResponse<RenderedVariableDefinition> =
+        if (!varDefService.isPublic(definitionId)) {
             throw HttpStatusException(
                 HttpStatus.NOT_FOUND,
-                "Variable is not valid at date $dateOfValidity",
+                "Variable not found",
             )
+        } else {
+            HttpResponse
+                .ok(
+                    varDefService
+                        .getPublicByDate(
+                            definitionId = definitionId,
+                            language = language,
+                            dateOfValidity = dateOfValidity,
+                        ),
+                ).header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+                .contentType(MediaType.APPLICATION_JSON)
         }
-
-        return HttpResponse
-            .ok(definition)
-            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
-            .contentType(MediaType.APPLICATION_JSON)
-    }
 
     /**
      * List all validity periods.
@@ -139,7 +140,7 @@ class PublicController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "???",
+                        name = "one_validity_period",
                         value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
                     ),
                 ],
@@ -148,12 +149,25 @@ class PublicController(
     )
     fun listPublicValidityPeriods(
         @PathVariable("variable-definition-id")
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
+        @VardefId
         variableDefinitionId: String,
-        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
+        @Parameter(
+            description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
+            examples = [ExampleObject(name = "one_validity_period", value = DEFAULT_LANGUAGE)],
+        )
+        @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
     ): MutableHttpResponse<List<RenderedVariableDefinition>>? =
-        HttpResponse
-            .ok(validityPeriods.listRendered(language, variableDefinitionId))
-            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
-            .contentType(MediaType.APPLICATION_JSON)
+        if (!varDefService.isPublic(variableDefinitionId)) {
+            throw HttpStatusException(
+                HttpStatus.NOT_FOUND,
+                "Variable not found",
+            )
+        } else {
+            HttpResponse
+                .ok(validityPeriods.listPublic(language, variableDefinitionId))
+                .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+        }
 }

@@ -5,4 +5,6 @@ package no.ssb.metadata.vardef.utils
  */
 val numIncomeTaxPatches = ALL_INCOME_TAX_PATCHES.size
 
-const val NUM_ALL_VARIABLE_DEFINITIONS = 4
+const val NUM_ALL_VARIABLE_DEFINITIONS = 5
+const val NUM_PUBLISHED_EXTERNAL_VARIABLE_DEFINITIONS = 1
+const val TEST_DEVELOPERS_GROUP = "play-enhjoern-a-developers"

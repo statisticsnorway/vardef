@@ -8,9 +8,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
-import no.ssb.metadata.vardef.utils.jsonTestInput
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -23,6 +21,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.ValueSource
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -425,6 +424,26 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(jsonTestInput())
             .queryParam(ACTIVE_GROUP, "invalid-group")
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["managers", "data-admins"])
+    fun `create variable definition active group not developers`(
+        groupSuffix: String,
+        spec: RequestSpecification,
+    ) {
+        val group = "play-enhjoern-a-$groupSuffix"
+        spec
+            .given()
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf("play-enhjoern-a"), daplaGroups = listOf(group)).parsedString)
+            .contentType(ContentType.JSON)
+            .body(jsonTestInput().toString())
+            .queryParam(ACTIVE_GROUP, group)
             .`when`()
             .post("/variable-definitions")
             .then()

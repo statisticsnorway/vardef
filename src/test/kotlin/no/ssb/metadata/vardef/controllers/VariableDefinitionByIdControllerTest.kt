@@ -87,7 +87,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, "play-enhjoern-a")
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(204)

@@ -6,8 +6,8 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
@@ -120,7 +120,7 @@ class PublicControllerTest : BaseVardefTest() {
     fun `get request unknown id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("$publicVariableDefinitionsPath/${NanoId.generate(8)}")
+            .get("$publicVariableDefinitionsPath/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
@@ -189,5 +189,40 @@ class PublicControllerTest : BaseVardefTest() {
                 "Content-Language",
                 SupportedLanguages.NB.toString(),
             )
+    }
+
+    @Test
+    fun `get request klass codes`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .header("Accept-Language", "nb")
+            .queryParam("date_of_validity", "2024-01-01")
+            .`when`()
+            .get(publicVariableDefinitionsPath)
+            .then()
+            .assertThat()
+            .statusCode(200)
+            .body(
+                "[0].measurement_type.reference_uri",
+                equalTo(
+                    "https://www.ssb.no/klass/klassifikasjoner/303",
+                ),
+            ).body("[0].measurement_type.code", equalTo("02.01"))
+            .body("[0].measurement_type.title", equalTo("antall"))
+            .body(
+                "[0].unit_types[0].reference_uri",
+                equalTo(
+                    "https://www.ssb.no/klass/klassifikasjoner/702",
+                ),
+            ).body("[0].unit_types[0].code", equalTo("01"))
+            .body("[0].unit_types[0].title", equalTo("Adresse"))
+            .body(
+                "[0].subject_fields[0].reference_uri",
+                equalTo(
+                    "https://www.ssb.no/klass/klassifikasjoner/618",
+                ),
+            ).body("[0].subject_fields[0].code", equalTo("he04"))
+            .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
     }
 }

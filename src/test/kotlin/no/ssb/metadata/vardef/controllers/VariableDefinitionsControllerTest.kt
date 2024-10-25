@@ -206,41 +206,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `get request klass codes`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .header("Accept-Language", "nb")
-            .queryParam("date_of_validity", "2024-01-01")
-            .`when`()
-            .get("/variable-definitions")
-            .then()
-            .assertThat()
-            .statusCode(200)
-            .body(
-                "[0].measurement_type.reference_uri",
-                equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/303",
-                ),
-            ).body("[0].measurement_type.code", equalTo("02.01"))
-            .body("[0].measurement_type.title", equalTo("antall"))
-            .body(
-                "[0].unit_types[0].reference_uri",
-                equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/702",
-                ),
-            ).body("[0].unit_types[0].code", equalTo("01"))
-            .body("[0].unit_types[0].title", equalTo("Adresse"))
-            .body(
-                "[0].subject_fields[0].reference_uri",
-                equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/618",
-                ),
-            ).body("[0].subject_fields[0].code", equalTo("he04"))
-            .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
-    }
-
-    @Test
     fun `create variable definition and check klass url`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
@@ -264,7 +229,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .given()
             .`when`()
-            .get("/variable-definitions/$definitionId")
+            .get("/public/variable-definitions/$definitionId")
             .then()
             .body(
                 "classification_uri",
@@ -326,7 +291,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", "nb")
             .get("/variable-definitions")
             .then()
             .statusCode(200)
@@ -448,5 +412,19 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @Test
+    fun `list variable definitions return type`(spec: RequestSpecification) {
+        val body =
+            spec
+                .`when`()
+                .get("/variable-definitions")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+        assertThat(jsonMapper.readValue(body, Array<CompleteResponse>::class.java)).isNotNull
     }
 }

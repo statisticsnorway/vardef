@@ -1,6 +1,9 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.http.*
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
+import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
@@ -17,7 +20,6 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
@@ -38,8 +40,6 @@ class VariableDefinitionByIdController {
 
     /**
      * Get one variable definition.
-     *
-     * This is rendered in the given language, with the default being Norwegian Bokmål.
      */
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(
@@ -59,12 +59,6 @@ class VariableDefinitionByIdController {
         @VardefId
         definitionId: String,
         @Parameter(
-            description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "No date specified", value = DEFAULT_LANGUAGE)],
-        )
-        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
-        language: SupportedLanguages,
-        @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(name = "No date specified", value = ""),
@@ -73,27 +67,16 @@ class VariableDefinitionByIdController {
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
-        request: HttpRequest<*>,
-    ): MutableHttpResponse<out Any>? {
-        val definition =
-            varDefService
-                .getByDateAndRender(
-                    definitionId = definitionId,
-                    language = language,
-                    dateOfValidity = dateOfValidity,
-                )
-        if (definition == null) {
-            throw HttpStatusException(
-                HttpStatus.NOT_FOUND,
-                "Variable is not valid at date $dateOfValidity",
+    ): CompleteResponse =
+        varDefService
+            .getCompleteByDate(
+                definitionId = definitionId,
+                dateOfValidity = dateOfValidity,
             )
-        }
-
-        return HttpResponse
-            .ok(definition)
-            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
-            .contentType(MediaType.APPLICATION_JSON)
-    }
+            ?: throw HttpStatusException(
+                HttpStatus.NOT_FOUND,
+                "Variable with ID $definitionId not found${if (dateOfValidity == null) "" else " for date $dateOfValidity"}",
+            )
 
     /**
      * Delete a variable definition.

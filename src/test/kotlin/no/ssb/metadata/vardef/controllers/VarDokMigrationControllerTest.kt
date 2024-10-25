@@ -270,18 +270,32 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `post request return owner`(spec: RequestSpecification) {
+    fun `create vardok authenticated with invalid team`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body("")
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, TEST_TEAM)
+            .queryParam(ACTIVE_TEAM, "my-oh-my-team")
+            .`when`()
+            .post("/vardok-migration/948")
+            .then()
+            .statusCode(401)
+    }
+
+    @Test
+    fun `create vardok return owner`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .queryParam(ACTIVE_TEAM, "play-foeniks-a")
             .`when`()
             .post("/vardok-migration/948")
             .then()
             .statusCode(201)
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
-            .body("owner.team", equalTo(TEST_TEAM))
+            .body("owner.team", equalTo("play-foeniks-a"))
     }
 }

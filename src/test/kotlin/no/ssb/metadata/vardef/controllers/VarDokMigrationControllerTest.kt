@@ -275,10 +275,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body("")
             .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_TEAM, "play-enhjoern-a")
             .`when`()
             .post("/vardok-migration/948")
             .then()
             .statusCode(201)
             .body("owner.groups[0]", equalTo("play-enhjoern-a-developers"))
+            .body("owner.team", equalTo("play-enhjoern-a"))
     }
 }

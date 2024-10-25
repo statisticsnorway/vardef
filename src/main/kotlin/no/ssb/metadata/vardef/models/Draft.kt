@@ -71,7 +71,7 @@ data class Draft(
     @Valid
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(activeTeam: String, ownerGroup: String): SavedVariableDefinition =
+    fun toSavedVariableDefinition(ownerTeam: String, ownerGroup: String): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: VariableDefinitionService.generateId(),
             patchId = 1,
@@ -89,7 +89,7 @@ data class Draft(
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            owner = Owner(activeTeam, listOf(ownerGroup)),
+            owner = Owner(ownerTeam, listOf(ownerGroup)),
             contact = contact,
             // Provide a placeholder value, actual value set by data layer
             createdAt = LocalDateTime.now(),

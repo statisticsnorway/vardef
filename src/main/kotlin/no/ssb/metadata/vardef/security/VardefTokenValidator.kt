@@ -124,7 +124,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                 if (roles.contains(VARIABLE_OWNER)) {
                     // If role is VARIABLE_OWNER, check isValidTeam
                     if (!isValidTeam(request, it)) {
-                        sink.error(InvalidActiveTeamException("The specified active_group is not present in the token"))
+                        sink.error(InvalidActiveTeamException("The specified team is not present in the token"))
                         return@handle
                     }
                     else {

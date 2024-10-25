@@ -423,6 +423,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_TEAM, "play-enhjoern-a")
             .`when`()
             .post("/variable-definitions")
             .then()

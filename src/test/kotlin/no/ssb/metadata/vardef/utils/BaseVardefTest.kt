@@ -42,14 +42,9 @@ open class BaseVardefTest {
         variableDefinitionRepository.deleteAll()
 
         ALL_INCOME_TAX_PATCHES.forEach { patches.create(it) }
-
-        // One variable definition
         patches.create(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
-
-        // One variable definition
         patches.create(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
-
-        // One variable definition
         patches.create(SAVED_DEPRECATED_VARIABLE_DEFINITION)
+        patches.create(SAVED_INTERNAL_VARIABLE_DEFINITION)
     }
 }

@@ -3,10 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
 
@@ -48,9 +45,12 @@ class VariableDefinitionService(
     fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.existsByShortName(shortName)
 
     private fun uniqueDefinitionIds(): Set<String> =
-        list()
-            .map { it.definitionId }
-            .toSet()
+        variableDefinitionRepository
+            .findDistinctDefinitionIdByVariableStatusInList(VariableStatus.entries.toList())
+
+    private fun uniqueDefinitionIdsByStatus(variableStatus: VariableStatus): Set<String> =
+        variableDefinitionRepository
+            .findDistinctDefinitionIdByVariableStatusInList(listOf(variableStatus))
 
     /**
      * List *Variable Definitions* which are valid on the given date.
@@ -60,15 +60,15 @@ class VariableDefinitionService(
      *
      * @param language The language to render in.
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
-     * @return [List<RenderedVariableDefinition>] valid at the date.
+     * @return [List<RenderedVariableDefinition>] with status [VariableStatus.PUBLISHED_EXTERNAL] valid at the date.
      */
-    fun listRenderedForDate(
+    fun listPublicForDate(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
     ): List<RenderedVariableDefinition> =
-        uniqueDefinitionIds()
+        uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
             .mapNotNull {
-                getRenderedByDate(language, it, dateOfValidity)
+                getPublicByDate(language, it, dateOfValidity)
             }
 
     /**
@@ -97,20 +97,26 @@ class VariableDefinitionService(
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
      * @return The [RenderedVariableDefinition] or `null`
      */
-    fun getRenderedByDate(
+    fun getPublicByDate(
         language: SupportedLanguages,
         definitionId: String,
         dateOfValidity: LocalDate?,
-    ): RenderedVariableDefinition? = getByDate(definitionId, dateOfValidity)?.render(language, klassService)
+    ): RenderedVariableDefinition? =
+        getByDateAndStatus(definitionId, dateOfValidity, VariableStatus.PUBLISHED_EXTERNAL)
+            ?.render(language, klassService)
 
-    private fun getByDate(
+    private fun getByDateAndStatus(
         definitionId: String,
-        dateOfValidity: LocalDate?,
+        dateOfValidity: LocalDate? = null,
+        variableStatus: VariableStatus? = null,
     ): SavedVariableDefinition? =
         if (dateOfValidity == null) {
             validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
         } else {
             validityPeriods.getForDate(definitionId, dateOfValidity)
+        }.takeIf {
+            variableStatus == null ||
+                it?.variableStatus == variableStatus
         }
 
     /**
@@ -121,8 +127,9 @@ class VariableDefinitionService(
      */
     fun getCompleteByDate(
         definitionId: String,
-        dateOfValidity: LocalDate?,
-    ): CompleteResponse? = getByDate(definitionId, dateOfValidity)?.toCompleteResponse()
+        dateOfValidity: LocalDate? = null,
+        variableStatus: VariableStatus? = null,
+    ): CompleteResponse? = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
 
     companion object {
         fun generateId(): String = NanoId.generate(8)

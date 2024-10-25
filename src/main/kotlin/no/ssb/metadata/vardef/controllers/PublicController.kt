@@ -63,7 +63,7 @@ class PublicController(
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listRenderedForDate(language = language, dateOfValidity = dateOfValidity))
+            .ok(varDefService.listPublicForDate(language = language, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**
@@ -107,7 +107,7 @@ class PublicController(
     ): MutableHttpResponse<RenderedVariableDefinition> {
         val definition =
             varDefService
-                .getRenderedByDate(
+                .getPublicByDate(
                     definitionId = definitionId,
                     language = language,
                     dateOfValidity = dateOfValidity,
@@ -115,7 +115,7 @@ class PublicController(
         if (definition == null) {
             throw HttpStatusException(
                 HttpStatus.NOT_FOUND,
-                "Variable is not valid at date $dateOfValidity",
+                "Variable not found",
             )
         }
 

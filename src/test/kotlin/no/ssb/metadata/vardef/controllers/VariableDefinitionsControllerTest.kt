@@ -423,7 +423,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf("play-foeniks-a", TEST_TEAM), daplaGroups = listOf(group)).parsedString)
+            .oauth2(
+                JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf("play-foeniks-a", TEST_TEAM), daplaGroups = listOf(group)).parsedString,
+            )
             .contentType(ContentType.JSON)
             .body(jsonTestInput().toString())
             .queryParam(ACTIVE_GROUP, group)

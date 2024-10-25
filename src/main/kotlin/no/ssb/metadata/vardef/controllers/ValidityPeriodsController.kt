@@ -19,7 +19,6 @@ import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
-import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
 
 @Tag(name = VALIDITY_PERIODS)
@@ -27,9 +26,6 @@ import no.ssb.metadata.vardef.validators.VardefId
 @Controller("/variable-definitions/{variable-definition-id}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class ValidityPeriodsController {
-    @Inject
-    lateinit var varDefService: VariableDefinitionService
-
     @Inject
     lateinit var validityPeriods: ValidityPeriodsService
 

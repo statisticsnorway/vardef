@@ -58,7 +58,6 @@ class VariableDefinitionsController {
             ),
         ],
     )
-    @Tag(name = PUBLIC)
     @Get()
     fun listVariableDefinitions(
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)

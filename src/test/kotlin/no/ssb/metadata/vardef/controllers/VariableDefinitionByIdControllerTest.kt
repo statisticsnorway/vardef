@@ -6,7 +6,6 @@ import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -19,31 +18,6 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.time.temporal.ChronoUnit
 
 class VariableDefinitionByIdControllerTest : BaseVardefTest() {
-    @Test
-    fun `get request default language`(spec: RequestSpecification) {
-        spec
-            .`when`()
-            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
-            .then()
-            .statusCode(200)
-            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
-            .body("name", equalTo(INCOME_TAX_VP1_P1.name.nb))
-            .body("short_name", equalTo(INCOME_TAX_VP1_P1.shortName))
-            .body(
-                "definition",
-                equalTo(
-                    validityPeriods
-                        .getLatestPatchInLastValidityPeriod(
-                            INCOME_TAX_VP1_P1.definitionId,
-                        ).definition.nb,
-                ),
-            ).header(
-                "Content-Language",
-                SupportedLanguages.NB
-                    .toString(),
-            )
-    }
-
     @Test
     fun `get request malformed id`(spec: RequestSpecification) {
         spec

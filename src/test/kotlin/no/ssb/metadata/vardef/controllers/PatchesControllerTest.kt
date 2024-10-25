@@ -401,4 +401,23 @@ class PatchesControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
     }
+
+    @Test
+    fun `create new patch incorrect active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                patchBody()
+                    .apply {
+                        getJSONObject("name").apply {
+                            put("nb", "Bybakgrunn")
+                        }
+                    }.toString(),
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+    }
 }

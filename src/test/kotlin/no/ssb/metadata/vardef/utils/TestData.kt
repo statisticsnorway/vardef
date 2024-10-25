@@ -149,7 +149,7 @@ val INCOME_TAX_VP1_P1 =
             ),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("pers-skatt", listOf("pers-skatt-developers", "neighbourhood-dogs")),
+            Owner("pers-skatt", listOf("pers-skatt-developers", "play-enhjoern-a-developers", "neighbourhood-dogs")),
         contact =
             Contact(
                 LanguageStringType("", "", ""),

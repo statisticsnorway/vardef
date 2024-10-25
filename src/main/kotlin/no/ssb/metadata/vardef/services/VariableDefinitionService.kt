@@ -103,7 +103,8 @@ class VariableDefinitionService(
      * @param language The language to render in.
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
-     * @return The [RenderedVariableDefinition] or `null`
+     * @return The [RenderedVariableDefinition]
+     * @throws [EmptyResultException] If nothing is found
      */
     fun getPublicByDate(
         language: SupportedLanguages,

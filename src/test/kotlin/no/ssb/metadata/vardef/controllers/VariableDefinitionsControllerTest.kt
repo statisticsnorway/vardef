@@ -402,7 +402,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_TEAM, "play-enhjoern-a")
+            .queryParam(ACTIVE_TEAM, TEST_TEAM)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
@@ -410,7 +410,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
             .body("owner.groups[1]", nullValue())
-            .body("owner.team", equalTo("play-enhjoern-a"))
+            .body("owner.team", equalTo(TEST_TEAM))
     }
 
     @ParameterizedTest
@@ -423,7 +423,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf("play-enhjoern-a"), daplaGroups = listOf(group)).parsedString)
+            .oauth2(JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf("play-foeniks-a", TEST_TEAM), daplaGroups = listOf(group)).parsedString)
             .contentType(ContentType.JSON)
             .body(jsonTestInput().toString())
             .queryParam(ACTIVE_GROUP, group)

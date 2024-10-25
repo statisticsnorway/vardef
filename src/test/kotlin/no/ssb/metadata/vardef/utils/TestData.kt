@@ -403,8 +403,8 @@ val COMPLETE_RESPONSE =
         relatedVariableDefinitionUris = listOf(),
         owner =
             Owner(
-                team = "play-enhjoern-a",
-                groups = listOf("play-enhjoern-a-developers"),
+                team = TEST_TEAM,
+                groups = listOf(TEST_DEVELOPERS_GROUP),
             ),
         contact = null,
         createdAt = LocalDateTime.now(),

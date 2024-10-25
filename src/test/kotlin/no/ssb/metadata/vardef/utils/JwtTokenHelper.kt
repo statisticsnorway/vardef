@@ -20,7 +20,7 @@ class JwtTokenHelper {
             daplaTeams: List<String> =
                 listOf(
                     "play-foeniks-a",
-                    "play-enhjoern-a",
+                    TEST_TEAM,
                 ),
             daplaGroups: List<String> =
                 listOf(

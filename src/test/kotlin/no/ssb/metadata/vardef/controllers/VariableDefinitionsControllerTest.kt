@@ -63,7 +63,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -97,7 +97,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -124,7 +124,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -142,7 +142,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -162,7 +162,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -178,7 +178,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -198,7 +198,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -206,30 +206,11 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition and check klass url`(spec: RequestSpecification) {
-        val updatedJsonString =
-            jsonTestInput()
-                .apply {
-                    put("short_name", "landbak_copy")
-                }.toString()
-        val definitionId =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(201)
-                .extract()
-                .body()
-                .path<String>("id")
-
+    fun `klass url renders correctly`(spec: RequestSpecification) {
         spec
             .given()
             .`when`()
-            .get("/public/variable-definitions/$definitionId")
+            .get("/public/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .body(
                 "classification_uri",
@@ -246,11 +227,11 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         // Specific definitions are valid on these dates
         "2021-01-01, 4",
         "2020-01-01, 1",
+        "2024-06-05, 5",
         // Definitions without a validUntil date defined
-        "2024-06-05, 4",
         "3000-12-31, 4",
         // All definitions
-        "null, 4",
+        "null, 5",
     )
     fun `filter variable definitions by date`(
         dateOfValidity: String,
@@ -275,7 +256,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -287,7 +268,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `all variable definitions has comment field`(spec: RequestSpecification) {
+    fun `all variable definitions have comment field`(spec: RequestSpecification) {
         spec
             .`when`()
             .contentType(ContentType.JSON)
@@ -295,7 +276,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("find { it }", hasKey("comment"))
-            .body("[0].comment", notNullValue())
+            .body("find { it.short_name == 'intskatt' }.comment", notNullValue())
     }
 
     @Test
@@ -317,7 +298,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(input)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -340,7 +321,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/variable-definitions")
                 .then()
@@ -361,7 +342,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .auth()
             .none()
             .contentType(ContentType.JSON)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .body(jsonTestInput())
             .`when`()
             .post("/variable-definitions")
@@ -406,12 +387,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
             .statusCode(201)
-            .body("owner.groups[0]", equalTo("play-enhjoern-a-developers"))
+            .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
             .body("owner.groups[1]", nullValue())
     }
 

@@ -82,6 +82,47 @@ val SAVED_DEPRECATED_VARIABLE_DEFINITION =
         lastUpdatedBy = Person("", ""),
     )
 
+val SAVED_INTERNAL_VARIABLE_DEFINITION =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        patchId = 1,
+        name =
+            LanguageStringType(
+                nb = "Intern",
+                nn = "Intern",
+                en = "Internal",
+            ),
+        shortName = "intern-def",
+        definition =
+            LanguageStringType(
+                nb = "En variabeldefinisjon som er publisert for intern bruk",
+                nn = "En variabeldefinisjon som er publisert for intern bruk",
+                en = "A variable definition published for internal use",
+            ),
+        classificationUri = "91",
+        unitTypes = listOf("", ""),
+        subjectFields = listOf("", ""),
+        containsSensitivePersonalInformation = false,
+        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
+        measurementType = "",
+        validFrom = LocalDate.of(2024, 1, 1),
+        validUntil = LocalDate.of(2030, 1, 1),
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(),
+        owner = Owner("my-team", listOf("my-team-developers", "other-group")),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "me@example.com",
+            ),
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = Person("", ""),
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = Person("", ""),
+    )
+
 val VALIDITY_PERIOD_TAX_EXAMPLE =
     ValidityPeriod(
         name =
@@ -363,7 +404,7 @@ val COMPLETE_RESPONSE =
         owner =
             Owner(
                 team = "",
-                groups = listOf("play-enhjoern-a-developers"),
+                groups = listOf(TEST_DEVELOPERS_GROUP),
             ),
         contact = null,
         createdAt = LocalDateTime.now(),

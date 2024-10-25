@@ -24,7 +24,7 @@ class JwtTokenHelper {
                 ),
             daplaGroups: List<String> =
                 listOf(
-                    "play-enhjoern-a-developers",
+                    TEST_DEVELOPERS_GROUP,
                     "play-foeniks-a-developers",
                 ),
         ) = SignedJWT(

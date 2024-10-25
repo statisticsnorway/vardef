@@ -1,24 +1,26 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.restassured.RestAssured
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
-import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
-import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.*
+import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
-import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.*
+import org.junit.jupiter.params.provider.Arguments.argumentSet
+import java.util.stream.Stream
 
 class PublicControllerTest : BaseVardefTest() {
     init {
@@ -34,7 +36,7 @@ class PublicControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", "se")
+            .header(HttpHeaders.ACCEPT_LANGUAGE, "se")
             .get(publicVariableDefinitionsPath)
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
@@ -46,21 +48,29 @@ class PublicControllerTest : BaseVardefTest() {
 
     @Test
     fun `list variable definitions default language`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .queryParam("date_of_validity", "2024-01-01")
-            .`when`()
-            .get(publicVariableDefinitionsPath)
-            .then()
-            .statusCode(200)
-            .body("[0].definition", containsString("Intektsskatt ny definisjon"))
-            .body("[0].id", notNullValue())
-            .header(
-                "Content-Language",
-                SupportedLanguages.NB
-                    .toString(),
-            )
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .queryParam("date_of_validity", "2024-01-01")
+                .`when`()
+                .get(publicVariableDefinitionsPath)
+                .then()
+                .statusCode(200)
+                .body("[0].definition", containsString("Intektsskatt ny definisjon"))
+                .body("[0].id", notNullValue())
+                .header(
+                    "Content-Language",
+                    SupportedLanguages.NB
+                        .toString(),
+                ).extract()
+                .body()
+                .asString()
+
+        jsonMapper.readValue(body, Array<RenderedVariableDefinition>::class.java).forEach {
+            assertThat(validityPeriods.getLatestPatchInLastValidityPeriod(it.id).variableStatus)
+                .isEqualTo(VariableStatus.PUBLISHED_EXTERNAL)
+        }
     }
 
     @ParameterizedTest
@@ -72,17 +82,17 @@ class PublicControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", language.toString())
+            .header(HttpHeaders.ACCEPT_LANGUAGE, language.toString())
             .get(publicVariableDefinitionsPath)
             .then()
             .statusCode(200)
             .body("[0].id", notNullValue())
-            .body("find { it.short_name == 'bus' }.name", equalTo(DRAFT_BUS_EXAMPLE.name.getValidLanguage(language)))
+            .body("find { it.short_name == 'intskatt' }.name", equalTo(INCOME_TAX_VP2_P6.name.getValidLanguage(language)))
             .header("Content-Language", language.toString())
     }
 
     @Test
-    fun `get request default language`(spec: RequestSpecification) {
+    fun `get variable definition default language`(spec: RequestSpecification) {
         spec
             .`when`()
             .get("$publicVariableDefinitionsPath/${INCOME_TAX_VP1_P1.definitionId}")
@@ -104,6 +114,19 @@ class PublicControllerTest : BaseVardefTest() {
                 SupportedLanguages.NB
                     .toString(),
             )
+    }
+
+    @ParameterizedTest
+    @MethodSource("internalDefinitionIds")
+    fun `get unpublished variable definition`(
+        definitionId: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("$publicVariableDefinitionsPath/$definitionId")
+            .then()
+            .statusCode(404)
     }
 
     @Test
@@ -160,7 +183,7 @@ class PublicControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", language)
+            .header(HttpHeaders.ACCEPT_LANGUAGE, language)
             .get("$publicVariableDefinitionsPath/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .assertThat()
@@ -191,12 +214,25 @@ class PublicControllerTest : BaseVardefTest() {
             )
     }
 
+    @ParameterizedTest
+    @MethodSource("internalDefinitionIds")
+    fun `list validity periods unpublished variable definition`(
+        definitionId: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("$publicVariableDefinitionsPath/$definitionId/validity-periods")
+            .then()
+            .statusCode(404)
+    }
+
     @Test
     fun `get request klass codes`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", "nb")
+            .header(HttpHeaders.ACCEPT_LANGUAGE, "nb")
             .queryParam("date_of_validity", "2024-01-01")
             .`when`()
             .get(publicVariableDefinitionsPath)
@@ -224,5 +260,15 @@ class PublicControllerTest : BaseVardefTest() {
                 ),
             ).body("[0].subject_fields[0].code", equalTo("he04"))
             .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
+    }
+
+    companion object {
+        @JvmStatic
+        fun internalDefinitionIds(): Stream<Arguments> =
+            Stream.of(
+                argumentSet("PUBLISHED_INTERNAL", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId),
+                argumentSet("DEPRECATED", SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId),
+                argumentSet("DRAFT", DRAFT_BUS_EXAMPLE.id),
+            )
     }
 }

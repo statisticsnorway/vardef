@@ -44,7 +44,7 @@ open class BaseVardefTest {
         ALL_INCOME_TAX_PATCHES.forEach { patches.create(it) }
 
         // One variable definition
-        patches.create(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition())
+        patches.create(DRAFT_BUS_EXAMPLE.toSavedVariableDefinition("play-enhjoern-a-developers"))
 
         // One variable definition
         patches.create(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)

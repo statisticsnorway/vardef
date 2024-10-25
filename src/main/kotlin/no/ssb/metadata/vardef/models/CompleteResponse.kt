@@ -50,7 +50,7 @@ data class CompleteResponse(
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = OWNER_DESCRIPTION)
-    val owner: Owner?,
+    val owner: Owner,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     val contact: Contact?,
     @Schema(description = CREATED_AT_FIELD_DESCRIPTION)

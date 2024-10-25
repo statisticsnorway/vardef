@@ -96,6 +96,10 @@ const val COMPLETE_RESPONSE_EXAMPLE = """{
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
+    "owner": {
+        "team": "team-a",
+        "groups": ["team-a-developers"]
+    },
     "contact": {
         "title": {
             "en": "Division for population statistics",

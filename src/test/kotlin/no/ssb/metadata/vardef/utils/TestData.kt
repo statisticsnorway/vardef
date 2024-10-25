@@ -360,7 +360,11 @@ val COMPLETE_RESPONSE =
         externalReferenceUri = URI("https://example.com/").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(),
-        owner = null,
+        owner =
+            Owner(
+                team = "",
+                groups = listOf("play-enhjoern-a-developers"),
+            ),
         contact = null,
         createdAt = LocalDateTime.now(),
         createdBy = null,

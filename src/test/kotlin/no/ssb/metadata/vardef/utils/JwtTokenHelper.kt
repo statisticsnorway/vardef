@@ -17,9 +17,19 @@ class JwtTokenHelper {
                     "broker",
                     "account",
                 ),
+            daplaTeams: List<String> =
+                listOf(
+                    "play-foeniks-a",
+                    "play-enhjoern-a",
+                ),
+            daplaGroups: List<String> =
+                listOf(
+                    "play-enhjoern-a-developers",
+                    "play-foeniks-a-developers",
+                ),
         ) = SignedJWT(
             header.toBase64URL(),
-            claims(audienceClaim).toPayload().toBase64URL(),
+            claims(audienceClaim, daplaTeams, daplaGroups).toPayload().toBase64URL(),
             signature,
         )
 
@@ -42,66 +52,63 @@ class JwtTokenHelper {
                 """.trimIndent(),
             )
 
-        private fun claims(audienceClaim: List<String>) =
-            JWTClaimsSet.parse(
-                """
-                {
-                "exp": 1726609866,
-                "iat": 1726573866,
-                "auth_time": 1726556500,
-                "jti": "dc6c5c13-a3ff-42e1-b11c-d93233725ace",
-                "iss": "https://auth.ssb.no/realms/ssb",
-                "aud": $audienceClaim,
-                "sub": "d7532b1f-d5aa-43c1-acd1-ed12d4020455",
-                "typ": "Bearer",
-                "azp": "onyxia-api",
-                "session_state": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
-                "acr": "0",
-                "allowed-origins": [
-                  "https://lab.dapla.ssb.no"
-                ],
-                "realm_access": {
-                  "roles": [
-                    "offline_access",
-                    "uma_authorization",
-                    "default-roles-ssb"
-                  ]
-                },
-                "resource_access": {
-                  "broker": {
-                    "roles": [
-                      "read-token"
-                    ]
-                  },
-                  "account": {
-                    "roles": [
-                      "manage-account",
-                      "manage-account-links",
-                      "view-profile"
-                    ]
+        private fun claims(
+            audienceClaim: List<String>,
+            daplaTeams: List<String>,
+            daplaGroups: List<String>,
+        ) = JWTClaimsSet.parse(
+            """
+            {
+            "exp": 1726609866,
+            "iat": 1726573866,
+            "auth_time": 1726556500,
+            "jti": "dc6c5c13-a3ff-42e1-b11c-d93233725ace",
+            "iss": "https://auth.ssb.no/realms/ssb",
+            "aud": $audienceClaim,
+            "sub": "d7532b1f-d5aa-43c1-acd1-ed12d4020455",
+            "typ": "Bearer",
+            "azp": "onyxia-api",
+            "session_state": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
+            "acr": "0",
+            "allowed-origins": [
+              "https://lab.dapla.ssb.no"
+            ],
+            "realm_access": {
+              "roles": [
+                "offline_access",
+                "uma_authorization",
+                "default-roles-ssb"
+              ]
+            },
+            "resource_access": {
+              "broker": {
+                "roles": [
+                  "read-token"
+                ]
+              },
+              "account": {
+                "roles": [
+                  "manage-account",
+                  "manage-account-links",
+                  "view-profile"
+                ]
+              }
+            },
+            "scope": "openid profile email",
+            "sid": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
+            "email_verified": true,
+            "dapla": {
+              "teams": $daplaTeams,
+              "groups": $daplaGroups
+            },
+            "name": "Ola Nordmann",
+            "short_username": "ssb-ano",
+            "preferred_username": "ano@ssb.no",
+            "given_name": "Ola",
+            "family_name": "Nordmann",
+            "email": "ano@ssb.no"
                   }
-                },
-                "scope": "openid profile email",
-                "sid": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
-                "email_verified": true,
-                "dapla": {
-                  "teams": [
-                    "play-foeniks-a",
-                    "play-enhjoern-a"
-                  ],
-                  "groups": [
-                    "play-enhjoern-a-developers",
-                    "play-foeniks-a-developers",
-                  ]
-                },
-                "name": "Ola Nordmann",
-                "short_username": "ssb-ano",
-                "preferred_username": "ano@ssb.no",
-                "given_name": "Ola",
-                "family_name": "Nordmann",
-                "email": "ano@ssb.no"
-                      }
-                """.trimIndent(),
-            )
+            """.trimIndent(),
+        )
     }
 }

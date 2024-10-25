@@ -362,7 +362,7 @@ val COMPLETE_RESPONSE =
         relatedVariableDefinitionUris = listOf(),
         owner =
             Owner(
-                team = "",
+                team = "play-enhjoern-a",
                 groups = listOf("play-enhjoern-a-developers"),
             ),
         contact = null,

@@ -1,8 +1,10 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.viascom.nanoid.NanoId
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
@@ -106,7 +108,8 @@ class PatchesControllerTest : BaseVardefTest() {
                             put("nb", "Bybakgrunn")
                         }
                     }.toString(),
-            ).`when`()
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -131,6 +134,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("valid_from", "2030-06-30") }.toString())
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -144,6 +148,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("valid_until", "2030-06-30") }.toString())
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -156,6 +161,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("short_name", "vry-shrt-nm") }.toString())
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -183,6 +189,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().toString())
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/$id/patches")
             .then()
@@ -224,7 +231,8 @@ class PatchesControllerTest : BaseVardefTest() {
                             },
                         )
                     }.toString(),
-            ).`when`()
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -247,6 +255,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(JSONObject().apply { put("classification_reference", "303") }.toString())
             .queryParams("valid_from", validFrom)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -264,6 +273,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(JSONObject().apply { put("classification_reference", "303") }.toString())
             .queryParams("valid_from", "3030-12-31")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -283,6 +293,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(testCase)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -305,6 +316,7 @@ class PatchesControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(testCase)
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
                 .then()
@@ -351,5 +363,42 @@ class PatchesControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
+    }
+
+    @Test
+    fun `create new patch no active group `(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                patchBody()
+                    .apply {
+                        getJSONObject("name").apply {
+                            put("nb", "Bybakgrunn")
+                        }
+                    }.toString(),
+            ).`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @Test
+    fun `create new patch invalid active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                patchBody()
+                    .apply {
+                        getJSONObject("name").apply {
+                            put("nb", "Bybakgrunn")
+                        }
+                    }.toString(),
+            ).queryParam(ACTIVE_GROUP, "invalid-group")
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 }

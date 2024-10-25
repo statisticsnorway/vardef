@@ -117,7 +117,7 @@ class PublicControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("unpublishedDefinitionIds")
+    @MethodSource("internalDefinitionIds")
     fun `get unpublished variable definition`(
         definitionId: String,
         spec: RequestSpecification,
@@ -215,7 +215,7 @@ class PublicControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("unpublishedDefinitionIds")
+    @MethodSource("internalDefinitionIds")
     fun `list validity periods unpublished variable definition`(
         definitionId: String,
         spec: RequestSpecification,
@@ -264,7 +264,7 @@ class PublicControllerTest : BaseVardefTest() {
 
     companion object {
         @JvmStatic
-        fun unpublishedDefinitionIds(): Stream<Arguments> =
+        fun internalDefinitionIds(): Stream<Arguments> =
             Stream.of(
                 argumentSet("PUBLISHED_INTERNAL", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId),
                 argumentSet("DEPRECATED", SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId),

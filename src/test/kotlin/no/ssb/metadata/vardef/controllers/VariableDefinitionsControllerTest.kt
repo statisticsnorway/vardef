@@ -431,7 +431,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition save active group in owner groups`(spec: RequestSpecification) {
+    fun `create variable definition save active group`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
                 .apply {

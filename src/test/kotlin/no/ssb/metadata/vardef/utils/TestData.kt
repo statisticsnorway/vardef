@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef.utils
 
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.bson.types.ObjectId
 import org.json.JSONObject
 import java.net.URI
@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 val DRAFT_BUS_EXAMPLE =
     Draft(
-        id = NanoId.generate(8),
+        id = VariableDefinitionService.generateId(),
         name =
             LanguageStringType(
                 nb = "Buss",
@@ -44,7 +44,7 @@ val DRAFT_BUS_EXAMPLE =
 val SAVED_DEPRECATED_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),
-        definitionId = NanoId.generate(8),
+        definitionId = VariableDefinitionService.generateId(),
         patchId = 5,
         name =
             LanguageStringType(
@@ -117,7 +117,7 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
 val INCOME_TAX_VP1_P1 =
     SavedVariableDefinition(
         id = ObjectId(),
-        definitionId = NanoId.generate(8),
+        definitionId = VariableDefinitionService.generateId(),
         patchId = 1,
         name =
             LanguageStringType(
@@ -243,7 +243,7 @@ val ALL_INCOME_TAX_PATCHES =
 val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
     SavedVariableDefinition(
         id = ObjectId(),
-        definitionId = NanoId.generate(8),
+        definitionId = VariableDefinitionService.generateId(),
         patchId = 1,
         name =
             LanguageStringType(

@@ -5,13 +5,13 @@ import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
-import io.viascom.nanoid.NanoId
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
 import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -73,7 +73,7 @@ data class Draft(
 ) {
     fun toSavedVariableDefinition(activeTeam: String): SavedVariableDefinition =
         SavedVariableDefinition(
-            definitionId = id ?: NanoId.generate(8),
+            definitionId = id ?: VariableDefinitionService.generateId(),
             patchId = 1,
             name = name,
             shortName = shortName,

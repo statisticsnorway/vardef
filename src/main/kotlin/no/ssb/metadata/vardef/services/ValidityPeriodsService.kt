@@ -7,10 +7,7 @@ import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.SupportedLanguages
-import no.ssb.metadata.vardef.models.ValidityPeriod
+import no.ssb.metadata.vardef.models.*
 import java.time.LocalDate
 import java.util.*
 
@@ -28,8 +25,14 @@ class ValidityPeriodsService(
     private val patches: PatchesService,
     private val klassService: KlassService,
 ) {
+    private fun list(definitionId: String): List<SavedVariableDefinition> =
+        getAsMap(definitionId)
+            .values
+            .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
+            .sortedBy { it.validFrom }
+
     /**
-     * List *Validity Periods*.
+     * List rendered *Validity Periods*.
      *
      * A list of the latest *Patch* in each *Validity Period*. These are rendered and
      * suitable for display in public clients.
@@ -38,15 +41,25 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The list of rendered *Validity Periods*
      */
-    fun list(
+    fun listRendered(
         language: SupportedLanguages,
         definitionId: String,
     ): List<RenderedVariableDefinition> =
-        getAsMap(definitionId)
-            .values
-            .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
+        list(definitionId)
             .map { it.render(language, klassService) }
-            .sortedBy { it.validFrom }
+
+    /**
+     * List complete *Validity Periods*.
+     *
+     * A list of the latest *Patch* in each *Validity Period*. These are the [CompleteResponse] and suitable
+     * for internal use.
+     *
+     * @param definitionId The ID of the *Variable Definition* of interest.
+     * @return The list of *Validity Periods*
+     */
+    fun listComplete(definitionId: String): List<CompleteResponse> =
+        list(definitionId)
+            .map { it.toCompleteResponse() }
 
     /**
      * Get a map over *Validity Periods*.

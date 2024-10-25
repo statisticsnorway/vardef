@@ -3,10 +3,10 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -33,7 +33,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `get request unknown id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${NanoId.generate(8)}")
+            .get("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
@@ -65,6 +65,20 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .statusCode(expectedStatusCode)
             .body("valid_from", equalTo(expectedValidFrom))
             .body("valid_until", equalTo(expectedValidUntil))
+    }
+
+    @Test
+    fun `get request return type`(spec: RequestSpecification) {
+        val body =
+            spec
+                .`when`()
+                .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+        assertThat(jsonMapper.readValue(body, CompleteResponse::class.java)).isNotNull
     }
 
     @Test
@@ -106,9 +120,10 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
     fun `delete request unknown id`(spec: RequestSpecification) {
         spec
-            .`when`()
+            .given()
             .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
-            .delete("/variable-definitions/${NanoId.generate(8)}")
+            .`when`()
+            .delete("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
@@ -293,7 +308,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
-            .patch("/variable-definitions/${NanoId.generate(8)}")
+            .patch("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
@@ -306,7 +321,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 """
-                {"id":  "${NanoId.generate(8)}",
+                {"id":  "${VariableDefinitionService.generateId()}",
                 "name": {
                     "nb": "Landbakgrunn",
                     "nn": "Landbakgrunn",

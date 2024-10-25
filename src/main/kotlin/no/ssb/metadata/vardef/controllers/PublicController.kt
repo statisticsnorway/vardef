@@ -50,7 +50,7 @@ class PublicController(
     )
     @Tag(name = VARIABLE_DEFINITIONS)
     @Get("/variable-definitions")
-    fun listVariableDefinitions(
+    fun listPublicVariableDefinitions(
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
@@ -63,7 +63,7 @@ class PublicController(
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listForDateAndRender(language = language, dateOfValidity = dateOfValidity))
+            .ok(varDefService.listRenderedForDate(language = language, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**
@@ -85,7 +85,7 @@ class PublicController(
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/variable-definitions/{definitionId}")
-    fun getVariableDefinitionById(
+    fun getPublicVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
         definitionId: String,
@@ -107,7 +107,7 @@ class PublicController(
     ): MutableHttpResponse<RenderedVariableDefinition> {
         val definition =
             varDefService
-                .getByDateAndRender(
+                .getRenderedByDate(
                     definitionId = definitionId,
                     language = language,
                     dateOfValidity = dateOfValidity,
@@ -146,14 +146,14 @@ class PublicController(
             ),
         ],
     )
-    fun listValidityPeriods(
+    fun listPublicValidityPeriods(
         @PathVariable("variable-definition-id")
         variableDefinitionId: String,
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
     ): MutableHttpResponse<List<RenderedVariableDefinition>>? =
         HttpResponse
-            .ok(validityPeriods.list(language, variableDefinitionId))
+            .ok(validityPeriods.listRendered(language, variableDefinitionId))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
             .contentType(MediaType.APPLICATION_JSON)
 }

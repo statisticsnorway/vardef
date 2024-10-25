@@ -1,7 +1,9 @@
 package no.ssb.metadata.vardef.services
 
+import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -53,19 +55,35 @@ class VariableDefinitionService(
     /**
      * List *Variable Definitions* which are valid on the given date.
      *
-     * If no date is given, list all variable definitions.
+     * If no date is given, list all variable definitions. The Variable Definitions
+     * are rendered in the given language and are suitable for public use.
      *
      * @param language The language to render in.
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
-     * @return List of *Variable Definitions* valid at the date.
+     * @return [List<RenderedVariableDefinition>] valid at the date.
      */
-    fun listForDateAndRender(
+    fun listRenderedForDate(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
     ): List<RenderedVariableDefinition> =
         uniqueDefinitionIds()
             .mapNotNull {
-                getByDateAndRender(language, it, dateOfValidity)
+                getRenderedByDate(language, it, dateOfValidity)
+            }
+
+    /**
+     * List *Variable Definitions* which are valid on the given date.
+     *
+     * If no date is given, list all variable definitions. These are the
+     * [CompleteResponse] and are suitable for internal use.
+     *
+     * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
+     * @return [List<CompleteResponse>] valid at the date.
+     */
+    fun listCompleteForDate(dateOfValidity: LocalDate?): List<CompleteResponse> =
+        uniqueDefinitionIds()
+            .mapNotNull {
+                getCompleteByDate(it, dateOfValidity)
             }
 
     /**
@@ -77,16 +95,36 @@ class VariableDefinitionService(
      * @param language The language to render in.
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
-     * @return The *Variable Definition* or `null`
+     * @return The [RenderedVariableDefinition] or `null`
      */
-    fun getByDateAndRender(
+    fun getRenderedByDate(
         language: SupportedLanguages,
         definitionId: String,
         dateOfValidity: LocalDate?,
-    ): RenderedVariableDefinition? =
+    ): RenderedVariableDefinition? = getByDate(definitionId, dateOfValidity)?.render(language, klassService)
+
+    private fun getByDate(
+        definitionId: String,
+        dateOfValidity: LocalDate?,
+    ): SavedVariableDefinition? =
         if (dateOfValidity == null) {
             validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
         } else {
             validityPeriods.getForDate(definitionId, dateOfValidity)
-        }?.render(language, klassService)
+        }
+
+    /**
+     * Get a *Variable Definition*, valid on the given date.
+     *
+     * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
+     * @return [CompleteResponse] suitable for internal use.
+     */
+    fun getCompleteByDate(
+        definitionId: String,
+        dateOfValidity: LocalDate?,
+    ): CompleteResponse? = getByDate(definitionId, dateOfValidity)?.toCompleteResponse()
+
+    companion object {
+        fun generateId(): String = NanoId.generate(8)
+    }
 }

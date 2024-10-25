@@ -99,7 +99,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Draft matching",
                     DRAFT_BUS_EXAMPLE.id,
                     VariableStatus.DRAFT,
-                    DRAFT_BUS_EXAMPLE.toSavedVariableDefinition().toCompleteResponse(),
+                    DRAFT_BUS_EXAMPLE.toSavedVariableDefinition(TEST_DEVELOPERS_GROUP).toCompleteResponse(),
                 ),
                 argumentSet(
                     "Deprecated matching",

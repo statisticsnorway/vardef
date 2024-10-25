@@ -8,10 +8,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
-import no.ssb.metadata.vardef.utils.JwtTokenHelper
-import no.ssb.metadata.vardef.utils.jsonTestInput
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -294,7 +291,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", "nb")
             .get("/variable-definitions")
             .then()
             .statusCode(200)
@@ -416,5 +412,19 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @Test
+    fun `list variable definitions return type`(spec: RequestSpecification) {
+        val body =
+            spec
+                .`when`()
+                .get("/variable-definitions")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+        assertThat(jsonMapper.readValue(body, Array<CompleteResponse>::class.java)).isNotNull
     }
 }

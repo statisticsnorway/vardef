@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
@@ -16,7 +15,9 @@ import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
-import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.ValidityPeriod
+import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -63,7 +64,7 @@ class ValidityPeriodsController {
         @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
         newPeriod: ValidityPeriod,
     ): CompleteResponse {
-        val latestExistingPatch = patches.latest(variableDefinitionId)
+        val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
@@ -78,20 +79,16 @@ class ValidityPeriodsController {
 
     /**
      * List all validity periods.
-     *
-     * This is rendered in the given language, with the default being Norwegian Bokmål.
      */
     @Get
-    @Produces(MediaType.APPLICATION_JSON)
-    @Tag(name = VALIDITY_PERIODS)
     @ApiResponse(
         responseCode = "200",
         content = [
             Content(
                 examples = [
                     ExampleObject(
-                        name = "???",
-                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                        name = "one_validity_period",
+                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
             ),
@@ -99,8 +96,8 @@ class ValidityPeriodsController {
     )
     fun listValidityPeriods(
         @PathVariable("variable-definition-id")
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
+        @VardefId
         variableDefinitionId: String,
-        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
-        language: SupportedLanguages,
-    ): List<RenderedVariableDefinition> = validityPeriods.list(language, variableDefinitionId)
+    ): List<CompleteResponse> = validityPeriods.listComplete(variableDefinitionId)
 }

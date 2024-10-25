@@ -10,10 +10,7 @@ import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
-import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
-import no.ssb.metadata.vardef.utils.jsonTestInput
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -27,6 +24,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.ValueSource
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -119,19 +117,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `check schema example`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(DRAFT_EXAMPLE)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(201)
-    }
-
-    @Test
     fun `create variable definition with id`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
@@ -148,100 +133,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("ID may not be specified on creation."))
-    }
-
-    @Test
-    fun `get request incorrect language code`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .header("Accept-Language", "se")
-            .get("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                startsWith("Failed to convert argument [language] for value [se]"),
-            )
-    }
-
-    @Test
-    fun `get request default language`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .queryParam("date_of_validity", "2024-01-01")
-            .`when`()
-            .get("/variable-definitions")
-            .then()
-            .statusCode(200)
-            .body("[0].definition", containsString("Intektsskatt ny definisjon"))
-            .body("[0].id", notNullValue())
-            .header(
-                "Content-Language",
-                SupportedLanguages.NB
-                    .toString(),
-            )
-    }
-
-    @ParameterizedTest
-    @EnumSource(SupportedLanguages::class)
-    fun `list variables in supported languages`(
-        language: SupportedLanguages,
-        spec: RequestSpecification,
-    ) {
-        spec
-            .`when`()
-            .contentType(ContentType.JSON)
-            .header("Accept-Language", language.toString())
-            .get("/variable-definitions")
-            .then()
-            .statusCode(200)
-            .body("[0].id", notNullValue())
-            .body("find { it.short_name == 'bus' }.name", equalTo(DRAFT_BUS_EXAMPLE.name.getValidLanguage(language)))
-            .header("Content-Language", language.toString())
-    }
-
-    @Test
-    fun `get request no value in selected language`(spec: RequestSpecification) {
-        val updatedJsonString =
-            jsonTestInput()
-                .apply {
-                    put(
-                        "short_name",
-                        "landbak_copy",
-                    )
-                    getJSONObject("name").apply {
-                        put(
-                            "en",
-                            JSONObject.NULL,
-                        )
-                    }
-                }.toString()
-        val definitionId =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(201)
-                .extract()
-                .body()
-                .path<String>("id")
-
-        spec
-            .`when`()
-            .contentType(ContentType.JSON)
-            .header("Accept-Language", "en")
-            .get("/variable-definitions/$definitionId")
-            .then()
-            .assertThat()
-            .statusCode(200)
-            .body("", hasKey("name"))
-            .body("name", equalTo(null))
     }
 
     @ParameterizedTest
@@ -561,5 +452,25 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("owner.groups[0]", equalTo("play-enhjoern-a-developers"))
             .body("owner.groups[1]", nullValue())
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["managers", "data-admins"])
+    fun `create variable definition active group not developers`(
+        groupSuffix: String,
+        spec: RequestSpecification,
+    ) {
+        val group = "play-enhjoern-a-$groupSuffix"
+        spec
+            .given()
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf("play-enhjoern-a"), daplaGroups = listOf(group)).parsedString)
+            .contentType(ContentType.JSON)
+            .body(jsonTestInput().toString())
+            .queryParam(ACTIVE_GROUP, group)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 }

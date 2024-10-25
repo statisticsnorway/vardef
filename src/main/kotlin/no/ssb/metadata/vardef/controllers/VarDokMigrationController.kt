@@ -78,7 +78,8 @@ class VarDokMigrationController {
             val selectedTeam = httpRequest.parameters.get(ACTIVE_TEAM)
 
             return httpClient.proxy(
-                HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$selectedGroup&$ACTIVE_TEAM=$selectedTeam", varDefInput).headers { entries: MutableHttpHeaders ->
+                HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$selectedGroup&$ACTIVE_TEAM=$selectedTeam", varDefInput).headers {
+                        entries: MutableHttpHeaders ->
                     authHeader?.let {
                         // Set authorization header for post to /variable-definitions
                         entries.set(AUTHORIZATION, it)

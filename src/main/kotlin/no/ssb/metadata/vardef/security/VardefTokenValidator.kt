@@ -47,7 +47,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         token
             .jwtClaimsSet
             .getJSONObjectClaim(daplaClaim)[daplaTeamsClaim]
-                as? List<String> ?: emptyList()
+            as? List<String> ?: emptyList()
 
     /**
      * Assign roles

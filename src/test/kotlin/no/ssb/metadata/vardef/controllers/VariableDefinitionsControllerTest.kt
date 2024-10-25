@@ -465,14 +465,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition send in active team as owner team`(
-        spec: RequestSpecification,
-    ) {
+    fun `create variable definition send in active team as owner team`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(jsonTestInput().toString())
-            .queryParam(ACTIVE_GROUP,"play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .queryParam(ACTIVE_TEAM, "play-enhjoern-a")
             .`when`()
             .post("/variable-definitions")

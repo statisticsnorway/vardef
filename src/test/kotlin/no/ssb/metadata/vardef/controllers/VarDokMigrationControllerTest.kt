@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -250,5 +251,21 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/vardok-migration/948")
             .then()
             .statusCode(403)
+    }
+
+    @Test
+    fun `post request return owner`(
+        spec: RequestSpecification,
+    ) {
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                .`when`()
+                .post("/vardok-migration/948")
+                .then()
+                .statusCode(201)
+                .body("owner.groups[0]", equalTo("play-enhjoern-a-developers"))
     }
 }

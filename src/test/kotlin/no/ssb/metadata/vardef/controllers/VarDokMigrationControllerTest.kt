@@ -282,6 +282,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
-            .body("owner.team", equalTo("play-enhjoern-a"))
+            .body("owner.team", equalTo(TEST_DEVELOPERS_TEAM))
     }
 }

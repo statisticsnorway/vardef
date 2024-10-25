@@ -7,6 +7,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.ACTIVE_TEAM
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
+import no.ssb.metadata.vardef.exceptions.InvalidActiveTeamException
 import no.ssb.metadata.vardef.utils.JwtTokenHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -72,29 +73,19 @@ class VardefTokenValidatorTest {
         assertThat(auth).isNull()
     }
 
-    /*@Test
-    fun `active team is not in token`() {
-        val result =
-            vardefTokenValidator.isValidTeam(
-                HttpRequest.POST(
-                    "/variable-definitions?$ACTIVE_TEAM=team-a",
-                    "",
-                ),
-                JwtTokenHelper.jwtTokenSigned(),
-            )
-        assertThat(result).isFalse
-    }
-
     @Test
-    fun `active team is in token`() {
-        val result =
-            vardefTokenValidator.isValidTeam(
-                HttpRequest.POST(
-                    "/variable-definitions?$ACTIVE_TEAM=play-foeniks-a",
-                    "",
-                ),
-                JwtTokenHelper.jwtTokenSigned(),
-            )
-        assertThat(result).isTrue
-    }*/
+    fun `active team not present in token`() {
+        assertThrows<InvalidActiveTeamException> {
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        JwtTokenHelper.jwtTokenSigned().parsedString,
+                        HttpRequest.POST(
+                            "/variable-definitions?$ACTIVE_GROUP=play-enhjoern-a-developers&$ACTIVE_TEAM=unknown",
+                            ""
+                        ),
+                    ),
+                ).block()
+        }
+    }
 }

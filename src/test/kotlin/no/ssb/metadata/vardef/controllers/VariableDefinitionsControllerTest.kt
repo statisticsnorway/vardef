@@ -42,6 +42,7 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
         spec
             .`when`()
             .contentType(ContentType.JSON)
+            .queryParam(ACTIVE_TEAM, "play-enhjoern-a")
             .get("/variable-definitions")
             .then()
             .statusCode(200)
@@ -442,6 +443,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(201)
+            .body("owner.team", equalTo("play-enhjoern-a"))
     }
 
     @Test

@@ -11,6 +11,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.ACTIVE_TEAM
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
+import no.ssb.metadata.vardef.exceptions.InvalidActiveTeamException
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -117,13 +118,34 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         }
         return Mono
             .from(validate(token, request))
-            .filter { jwt -> isValidTeam(request, jwt) }
-            .map {
-                Authentication.build(
-                    it.jwtClaimsSet.getStringClaim(usernameClaim),
-                    listOf(assignRoles(it, request)),
-                    it.jwtClaimsSet.claims,
-                )
+            .handle{ it, sink ->
+                val roles = assignRoles(it, request)
+                // Check if `roles` contains VARIABLE_OWNER
+                if (roles.contains(VARIABLE_OWNER)) {
+                    // If role is VARIABLE_OWNER, check isValidTeam
+                    if (!isValidTeam(request, it)) {
+                        sink.error(InvalidActiveTeamException("The specified active_group is not present in the token"))
+                        return@handle
+                    }
+                    else {
+                        sink.next(
+                            Authentication.build(
+                                it.jwtClaimsSet.getStringClaim(usernameClaim),
+                                listOf(roles),
+                                it.jwtClaimsSet.claims,
+                            )
+                        )
+                    }
+                } else {
+                    // No need to check isValidTeam if role is not VARIABLE_OWNER
+                    sink.next(
+                        Authentication.build(
+                            it.jwtClaimsSet.getStringClaim(usernameClaim),
+                            listOf(roles),
+                            it.jwtClaimsSet.claims,
+                        )
+                    )
+                }
             }
     }
 

@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.restassured.RestAssured
 import io.restassured.filter.log.RequestLoggingFilter
@@ -35,7 +36,7 @@ class PublicControllerTest : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", "se")
+            .header(HttpHeaders.ACCEPT_LANGUAGE, "se")
             .get(publicVariableDefinitionsPath)
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
@@ -81,7 +82,7 @@ class PublicControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", language.toString())
+            .header(HttpHeaders.ACCEPT_LANGUAGE, language.toString())
             .get(publicVariableDefinitionsPath)
             .then()
             .statusCode(200)
@@ -182,7 +183,7 @@ class PublicControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", language)
+            .header(HttpHeaders.ACCEPT_LANGUAGE, language)
             .get("$publicVariableDefinitionsPath/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .assertThat()
@@ -213,12 +214,25 @@ class PublicControllerTest : BaseVardefTest() {
             )
     }
 
+    @ParameterizedTest
+    @MethodSource("unpublishedDefinitionIds")
+    fun `list validity periods unpublished variable definition`(
+        definitionId: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("$publicVariableDefinitionsPath/$definitionId/validity-periods")
+            .then()
+            .statusCode(404)
+    }
+
     @Test
     fun `get request klass codes`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .header("Accept-Language", "nb")
+            .header(HttpHeaders.ACCEPT_LANGUAGE, "nb")
             .queryParam("date_of_validity", "2024-01-01")
             .`when`()
             .get(publicVariableDefinitionsPath)

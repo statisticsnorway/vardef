@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.services
 
+import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -44,6 +45,13 @@ class VariableDefinitionService(
      */
     fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.existsByShortName(shortName)
 
+    /**
+     * Is the *Variable Definition* publicly available?
+     *
+     * @param definitionId The ID of the *Variable Definition* of interest.
+     */
+    fun isPublic(definitionId: String): Boolean = validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).variableStatus.isPublic()
+
     private fun uniqueDefinitionIds(): Set<String> =
         variableDefinitionRepository
             .findDistinctDefinitionIdByVariableStatusInList(VariableStatus.entries.toList())
@@ -67,7 +75,7 @@ class VariableDefinitionService(
         dateOfValidity: LocalDate?,
     ): List<RenderedVariableDefinition> =
         uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
-            .mapNotNull {
+            .map {
                 getPublicByDate(language, it, dateOfValidity)
             }
 
@@ -101,27 +109,36 @@ class VariableDefinitionService(
         language: SupportedLanguages,
         definitionId: String,
         dateOfValidity: LocalDate?,
-    ): RenderedVariableDefinition? =
+    ): RenderedVariableDefinition =
         getByDateAndStatus(definitionId, dateOfValidity, VariableStatus.PUBLISHED_EXTERNAL)
             ?.render(language, klassService)
+            ?: throw EmptyResultException()
 
     private fun getByDateAndStatus(
         definitionId: String,
         dateOfValidity: LocalDate? = null,
         variableStatus: VariableStatus? = null,
     ): SavedVariableDefinition? =
+        getByDate(definitionId, dateOfValidity)
+            .takeIf {
+                variableStatus == null ||
+                    it?.variableStatus == variableStatus
+            }
+
+    private fun getByDate(
+        definitionId: String,
+        dateOfValidity: LocalDate? = null,
+    ): SavedVariableDefinition? =
         if (dateOfValidity == null) {
             validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
         } else {
             validityPeriods.getForDate(definitionId, dateOfValidity)
-        }.takeIf {
-            variableStatus == null ||
-                it?.variableStatus == variableStatus
         }
 
     /**
      * Get a *Variable Definition*, valid on the given date.
      *
+     * @param definitionId The ID of the *Variable Definition* of interest.
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
      * @return [CompleteResponse] suitable for internal use.
      */

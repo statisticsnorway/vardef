@@ -110,7 +110,7 @@ class PatchesControllerTest : BaseVardefTest() {
                         }
                     }.toString(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -136,7 +136,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("valid_from", "2030-06-30") }.toString())
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
@@ -151,7 +151,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("valid_until", "2030-06-30") }.toString())
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
@@ -165,7 +165,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("short_name", "vry-shrt-nm") }.toString())
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
@@ -187,7 +187,7 @@ class PatchesControllerTest : BaseVardefTest() {
                         .copy()
                         .apply {
                             this.variableStatus = variableStatus
-                        }.toSavedVariableDefinition("play-enhjoern-a",TEST_DEVELOPERS_GROUP),
+                        }.toSavedVariableDefinition("play-enhjoern-a", TEST_DEVELOPERS_GROUP),
                 ).definitionId
 
         spec
@@ -195,7 +195,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(patchBody().toString())
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .`when`()
             .post("/variable-definitions/$id/patches")
             .then()
@@ -238,7 +238,7 @@ class PatchesControllerTest : BaseVardefTest() {
                         )
                     }.toString(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -263,7 +263,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .body(JSONObject().apply { put("classification_reference", "303") }.toString())
             .queryParams("valid_from", validFrom)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -282,7 +282,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .body(JSONObject().apply { put("classification_reference", "303") }.toString())
             .queryParams("valid_from", "3030-12-31")
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -303,7 +303,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(testCase)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -389,7 +389,7 @@ class PatchesControllerTest : BaseVardefTest() {
                         }
                     }.toString(),
             ).`when`()
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
@@ -408,7 +408,7 @@ class PatchesControllerTest : BaseVardefTest() {
                         }
                     }.toString(),
             ).queryParam(ACTIVE_GROUP, "invalid-group")
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM )
+            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()

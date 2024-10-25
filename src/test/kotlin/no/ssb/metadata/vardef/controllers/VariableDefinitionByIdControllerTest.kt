@@ -3,9 +3,9 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -32,7 +32,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `get request unknown id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${NanoId.generate(8)}")
+            .get("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
@@ -103,7 +103,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request unknown id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .delete("/variable-definitions/${NanoId.generate(8)}")
+            .delete("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
@@ -262,7 +262,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 }}
                 """.trimIndent(),
             ).`when`()
-            .patch("/variable-definitions/${NanoId.generate(8)}")
+            .patch("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
@@ -275,7 +275,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 """
-                {"id":  "${NanoId.generate(8)}",
+                {"id":  "${VariableDefinitionService.generateId()}",
                 "name": {
                     "nb": "Landbakgrunn",
                     "nn": "Landbakgrunn",

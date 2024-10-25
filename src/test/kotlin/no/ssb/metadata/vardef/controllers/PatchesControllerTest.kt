@@ -2,9 +2,9 @@ package no.ssb.metadata.vardef.controllers
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
@@ -60,7 +60,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `get request unknown id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("/variable-definitions/${NanoId.generate(8)}/patches")
+            .get("/variable-definitions/${VariableDefinitionService.generateId()}/patches")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))

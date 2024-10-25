@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.services
 
+import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -119,4 +120,8 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfValidity: LocalDate?,
     ): CompleteResponse? = getByDate(definitionId, dateOfValidity)?.toCompleteResponse()
+
+    companion object {
+        fun generateId(): String = NanoId.generate(8)
+    }
 }

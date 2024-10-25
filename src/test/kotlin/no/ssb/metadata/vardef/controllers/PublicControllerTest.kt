@@ -6,8 +6,8 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
@@ -120,7 +120,7 @@ class PublicControllerTest : BaseVardefTest() {
     fun `get request unknown id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .get("$publicVariableDefinitionsPath/${NanoId.generate(8)}")
+            .get("$publicVariableDefinitionsPath/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
             .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))

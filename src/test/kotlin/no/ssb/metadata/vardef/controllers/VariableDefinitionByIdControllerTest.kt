@@ -456,6 +456,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 }}
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, "invalid-group")
+            .queryParam(ACTIVE_TEAM, "play-enhjoern-a")
             .`when`()
             .patch("/variable-definitions/${expected.definitionId}")
             .then()
@@ -479,7 +480,8 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).`when`()
+            ).queryParam(ACTIVE_TEAM, "play-enhjoern-a")
+            .`when`()
             .patch("/variable-definitions/${expected.definitionId}")
             .then()
             .statusCode(403)

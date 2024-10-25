@@ -13,7 +13,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `list variable definition`() {
         variableDefinitionService
-            .listForDateAndRender(
+            .listRenderedForDate(
                 SupportedLanguages.EN,
                 LocalDate.now(),
             ).let { renderedVariableDefinitions ->

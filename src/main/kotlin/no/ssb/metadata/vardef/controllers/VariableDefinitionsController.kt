@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.http.HttpHeaders
-import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
@@ -20,8 +18,6 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
-import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.DaplaTeamService
 import no.ssb.metadata.vardef.services.PatchesService
@@ -40,8 +36,6 @@ class VariableDefinitionsController {
 
     /**
      * List all variable definitions.
-     *
-     * These are rendered in the given language, with the default being Norwegian Bokmål.
      */
     @ApiResponse(
         content = [
@@ -49,7 +43,7 @@ class VariableDefinitionsController {
                 examples = [
                     ExampleObject(
                         name = "List of one variable definition",
-                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ), ExampleObject(
                         name = "Empty list",
                         value = EMPTY_LIST_EXAMPLE,
@@ -60,9 +54,6 @@ class VariableDefinitionsController {
     )
     @Get()
     fun listVariableDefinitions(
-        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
-        @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
-        language: SupportedLanguages,
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -70,10 +61,7 @@ class VariableDefinitionsController {
             examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
         )
         dateOfValidity: LocalDate? = null,
-    ): HttpResponse<List<RenderedVariableDefinition>> =
-        HttpResponse
-            .ok(varDefService.listForDateAndRender(language = language, dateOfValidity = dateOfValidity))
-            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+    ): List<CompleteResponse> = varDefService.listCompleteForDate(dateOfValidity = dateOfValidity)
 
     /**
      * Create a variable definition.

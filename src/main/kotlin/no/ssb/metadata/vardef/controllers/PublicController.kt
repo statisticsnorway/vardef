@@ -63,7 +63,7 @@ class PublicController(
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
         HttpResponse
-            .ok(varDefService.listForDateAndRender(language = language, dateOfValidity = dateOfValidity))
+            .ok(varDefService.listRenderedForDate(language = language, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**
@@ -107,7 +107,7 @@ class PublicController(
     ): MutableHttpResponse<RenderedVariableDefinition> {
         val definition =
             varDefService
-                .getByDateAndRender(
+                .getRenderedByDate(
                     definitionId = definitionId,
                     language = language,
                     dateOfValidity = dateOfValidity,

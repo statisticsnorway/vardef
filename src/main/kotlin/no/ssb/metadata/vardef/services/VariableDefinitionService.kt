@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.services
 
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -59,13 +60,28 @@ class VariableDefinitionService(
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
      * @return List of *Variable Definitions* valid at the date.
      */
-    fun listForDateAndRender(
+    fun listRenderedForDate(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
     ): List<RenderedVariableDefinition> =
         uniqueDefinitionIds()
             .mapNotNull {
-                getByDateAndRender(language, it, dateOfValidity)
+                getRenderedByDate(language, it, dateOfValidity)
+            }
+
+    /**
+     * List *Variable Definitions* which are valid on the given date.
+     *
+     * If no date is given, list all variable definitions.
+     *
+     * @param language The language to render in.
+     * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
+     * @return List of *Variable Definitions* valid at the date.
+     */
+    fun listCompleteForDate(dateOfValidity: LocalDate?): List<CompleteResponse> =
+        uniqueDefinitionIds()
+            .mapNotNull {
+                getCompleteByDate(it, dateOfValidity)
             }
 
     /**
@@ -79,14 +95,28 @@ class VariableDefinitionService(
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
      * @return The *Variable Definition* or `null`
      */
-    fun getByDateAndRender(
+    fun getRenderedByDate(
         language: SupportedLanguages,
         definitionId: String,
         dateOfValidity: LocalDate?,
-    ): RenderedVariableDefinition? =
+    ): RenderedVariableDefinition? = getByDate(definitionId, dateOfValidity)?.render(language, klassService)
+
+    fun listForDate(dateOfValidity: LocalDate?): List<CompleteResponse> {
+        TODO("Not yet implemented")
+    }
+
+    private fun getByDate(
+        definitionId: String,
+        dateOfValidity: LocalDate?,
+    ): SavedVariableDefinition? =
         if (dateOfValidity == null) {
             validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
         } else {
             validityPeriods.getForDate(definitionId, dateOfValidity)
-        }?.render(language, klassService)
+        }
+
+    fun getCompleteByDate(
+        definitionId: String,
+        dateOfValidity: LocalDate?,
+    ): CompleteResponse? = getByDate(definitionId, dateOfValidity)?.toCompleteResponse()
 }

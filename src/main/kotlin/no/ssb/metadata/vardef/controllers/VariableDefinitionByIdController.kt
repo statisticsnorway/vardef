@@ -75,7 +75,7 @@ class VariableDefinitionByIdController {
     ): MutableHttpResponse<out Any>? {
         val definition =
             varDefService
-                .getByDateAndRender(
+                .getRenderedByDate(
                     definitionId = definitionId,
                     language = language,
                     dateOfValidity = dateOfValidity,

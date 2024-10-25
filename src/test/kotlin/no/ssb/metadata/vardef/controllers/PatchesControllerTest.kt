@@ -404,20 +404,37 @@ class PatchesControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new patch incorrect active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                patchBody()
-                    .apply {
-                        getJSONObject("name").apply {
-                            put("nb", "Bybakgrunn")
-                        }
-                    }.toString(),
-            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
-            .`when`()
-            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
-            .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    patchBody()
+                        .apply {
+                            getJSONObject("name").apply {
+                                put("nb", "Bybakgrunn")
+                            }
+                        }.toString(),
+                ).auth()
+                .oauth2(
+                    JwtTokenHelper
+                        .jwtTokenSigned(
+                            daplaTeams = listOf("play-enhjoern-b"),
+                            daplaGroups = listOf("play-enhjoern-b-developers"),
+                        ).parsedString,
+                ).log()
+                .everything()
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
+                .`when`()
+                .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.code)
+                .extract()
+                .body()
+                .asString()
+
+        val jsonResponse = JSONObject(body)
+        val message = jsonResponse.getString("message")
+        assertThat(message).contains("The selected group")
     }
 }

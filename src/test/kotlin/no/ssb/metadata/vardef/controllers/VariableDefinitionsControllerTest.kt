@@ -411,7 +411,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition save active group`(spec: RequestSpecification) {
+    fun `create variable definition save owner`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
                 .apply {
@@ -430,6 +430,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("owner.groups[0]", equalTo("play-enhjoern-a-developers"))
             .body("owner.groups[1]", nullValue())
+            .body("owner.team", equalTo("play-enhjoern-a"))
     }
 
     @ParameterizedTest
@@ -451,21 +452,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
-    }
-
-    @Test
-    fun `create variable definition send in active team as owner team`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(jsonTestInput().toString())
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
-            .queryParam(ACTIVE_TEAM, "play-enhjoern-a")
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(201)
-            .body("owner.team", equalTo("play-enhjoern-a"))
     }
 
     @Test

@@ -453,7 +453,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .`when`()
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, TEST_DEVELOPERS_TEAM)
+            .queryParam(ACTIVE_TEAM, "fix-team")
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)

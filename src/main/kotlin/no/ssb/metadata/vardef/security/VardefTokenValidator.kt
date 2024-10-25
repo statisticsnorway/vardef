@@ -107,7 +107,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
      * @param token
      * @param request
      * @return an [Authentication] containing the principals username and the assigned roles
-     * if selected team from request is valid
+     * @throws InvalidActiveTeamException if selected team from request is not in token
      */
     override fun validateToken(
         token: String?,
@@ -120,23 +120,10 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .from(validate(token, request))
             .handle { it, sink ->
                 val roles = assignRoles(it, request)
-                // Check if `roles` contains VARIABLE_OWNER
-                if (roles.contains(VARIABLE_OWNER)) {
-                    // If role is VARIABLE_OWNER, check isValidTeam
-                    if (!isValidTeam(request, it)) {
-                        sink.error(InvalidActiveTeamException("The specified team is not present in the token"))
-                        return@handle
-                    } else {
-                        sink.next(
-                            Authentication.build(
-                                it.jwtClaimsSet.getStringClaim(usernameClaim),
-                                listOf(roles),
-                                it.jwtClaimsSet.claims,
-                            ),
-                        )
-                    }
+                if (roles.contains(VARIABLE_OWNER) && !isValidTeam(request, it)) {
+                    sink.error(InvalidActiveTeamException("The specified team is not present in the token"))
+                    return@handle
                 } else {
-                    // No need to check isValidTeam if role is not VARIABLE_OWNER
                     sink.next(
                         Authentication.build(
                             it.jwtClaimsSet.getStringClaim(usernameClaim),

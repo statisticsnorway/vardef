@@ -470,18 +470,16 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create variable definition invalid team`(spec: RequestSpecification) {
-
-            spec
-                .`when`()
-                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
-                .queryParam(ACTIVE_TEAM, "play-rugby-a")
-                .post("/variable-definitions")
-                .then()
-                .statusCode(HttpStatus.UNAUTHORIZED.code)
-                .body(
-                    ERROR_MESSAGE_JSON_PATH,
-                    containsString("team is not present in the token"),
-                )
-
+        spec
+            .`when`()
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_TEAM, "play-rugby-a")
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                containsString("team is not present in the token"),
+            )
     }
 }

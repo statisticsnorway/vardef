@@ -119,6 +119,6 @@ class VariableDefinitionsController {
             )
         }
 
-        return patches.create(varDef.toSavedVariableDefinition(ACTIVE_TEAM)).toCompleteResponse()
+        return patches.create(varDef.toSavedVariableDefinition(activeTeam, activeGroup)).toCompleteResponse()
     }
 }

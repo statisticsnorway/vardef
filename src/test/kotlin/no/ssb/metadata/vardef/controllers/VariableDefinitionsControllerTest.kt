@@ -410,6 +410,27 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(HttpStatus.FORBIDDEN.code)
     }
 
+    @Test
+    fun `create variable definition save active group`(spec: RequestSpecification) {
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put("short_name", "ohlala")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(201)
+            .body("owner.groups[0]", equalTo("play-enhjoern-a-developers"))
+            .body("owner.groups[1]", nullValue())
+    }
+
     @ParameterizedTest
     @ValueSource(strings = ["managers", "data-admins"])
     fun `create variable definition active group not developers`(

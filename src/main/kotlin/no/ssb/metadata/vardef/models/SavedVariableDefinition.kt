@@ -43,8 +43,7 @@ data class SavedVariableDefinition(
     var comment: LanguageStringType?,
     @Nullable
     var relatedVariableDefinitionUris: List<String>?,
-    @Nullable
-    var owner: Owner?,
+    var owner: Owner,
     var contact: Contact?,
     @DateCreated
     var createdAt: LocalDateTime,

@@ -404,7 +404,7 @@ val COMPLETE_RESPONSE =
         owner =
             Owner(
                 team = "",
-                groups = listOf("play-enhjoern-a-developers"),
+                groups = listOf(TEST_DEVELOPERS_GROUP),
             ),
         contact = null,
         createdAt = LocalDateTime.now(),

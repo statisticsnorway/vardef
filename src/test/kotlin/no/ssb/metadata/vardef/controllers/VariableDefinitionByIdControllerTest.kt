@@ -85,7 +85,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request draft variable`(spec: RequestSpecification) {
         spec
             .`when`()
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(204)
@@ -98,7 +98,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request published variable`(spec: RequestSpecification) {
         spec
             .`when`()
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
@@ -110,7 +110,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request malformed id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(400)
@@ -121,7 +121,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     fun `delete request unknown id`(spec: RequestSpecification) {
         spec
             .given()
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .delete("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
@@ -167,7 +167,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                         "en": "Update"
                     }}
                     """.trimIndent(),
-                ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .patch("/variable-definitions/${expected.definitionId}")
                 .then()
@@ -202,7 +202,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
@@ -219,7 +219,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     """
                     {"short_name":"hoppebek"}
                     """.trimIndent(),
-                ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
                 .then()
@@ -240,7 +240,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("""{"short_name": "${INCOME_TAX_VP1_P1.shortName}"}""")
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
             .then()
@@ -261,7 +261,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
             .then()
@@ -285,7 +285,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
@@ -306,7 +306,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
@@ -328,7 +328,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
@@ -386,7 +386,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": null
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
@@ -406,7 +406,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     """
                     {"short_name": "nothing"}
                     """.trimIndent(),
-                ).queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
+                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
                 .then()

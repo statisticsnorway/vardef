@@ -142,6 +142,8 @@ class PatchesController {
         patch: Patch,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        @QueryValue(ACTIVE_TEAM)
+        activeTeam: String,
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
 

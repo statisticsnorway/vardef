@@ -9,7 +9,9 @@ import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
+import no.ssb.metadata.vardef.constants.ACTIVE_TEAM
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
+import no.ssb.metadata.vardef.exceptions.InvalidActiveTeamException
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -43,11 +45,22 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             as? List<String> ?: emptyList()
 
     @Suppress("UNCHECKED_CAST")
-    fun getDaplaTeams(token: JWT) =
+    private fun getDaplaTeams(token: JWT) =
         token
             .jwtClaimsSet
             .getJSONObjectClaim(daplaClaim)[daplaTeamsClaim]
             as? List<String> ?: emptyList()
+
+    /**
+     * Is selected team in token
+     * @param request
+     * @param token
+     * @return true if active team from request is in token
+     */
+    private fun isValidTeam(
+        request: R,
+        token: JWT,
+    ): Boolean = request.parameters.get(ACTIVE_TEAM) in getDaplaTeams(token)
 
     /**
      * Assign roles
@@ -93,7 +106,8 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
      *
      * @param token
      * @param request
-     * @return an [Authentication] containing the principals username and the assigned roles.
+     * @return an [Authentication] containing the principals username and the assigned roles
+     * if selected team from request is valid
      */
     override fun validateToken(
         token: String?,
@@ -104,6 +118,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         }
         return Mono
             .from(validate(token, request))
+            .filter { jwt -> isValidTeam(request, jwt) }
             .map {
                 Authentication.build(
                     it.jwtClaimsSet.getStringClaim(usernameClaim),

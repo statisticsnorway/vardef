@@ -1,5 +1,9 @@
 package no.ssb.metadata.vardef.services
 
+import io.micronaut.http.MutableHttpRequest
+import jakarta.inject.Inject
+import no.ssb.metadata.vardef.security.VardefTokenValidator
+
 /**
  * Dapla team service
  *

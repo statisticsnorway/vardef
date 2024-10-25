@@ -68,6 +68,8 @@ class ValidityPeriodsController {
         newPeriod: ValidityPeriod,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        @QueryValue(ACTIVE_TEAM)
+        activeTeam: String,
     ): CompleteResponse {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)
 

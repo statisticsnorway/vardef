@@ -8,7 +8,10 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.utils.*
+import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
+import no.ssb.metadata.vardef.utils.JwtTokenHelper
+import no.ssb.metadata.vardef.utils.jsonTestInput
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
@@ -229,7 +232,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .given()
             .`when`()
-            .get("/variable-definitions/$definitionId")
+            .get("/public/variable-definitions/$definitionId")
             .then()
             .body(
                 "classification_uri",

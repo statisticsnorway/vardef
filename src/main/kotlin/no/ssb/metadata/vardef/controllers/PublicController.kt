@@ -50,7 +50,7 @@ class PublicController(
     )
     @Tag(name = VARIABLE_DEFINITIONS)
     @Get("/variable-definitions")
-    fun listVariableDefinitions(
+    fun listPublicVariableDefinitions(
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
@@ -85,7 +85,7 @@ class PublicController(
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/variable-definitions/{definitionId}")
-    fun getVariableDefinitionById(
+    fun getPublicVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
         definitionId: String,
@@ -146,7 +146,7 @@ class PublicController(
             ),
         ],
     )
-    fun listValidityPeriods(
+    fun listPublicValidityPeriods(
         @PathVariable("variable-definition-id")
         variableDefinitionId: String,
         @Header("Accept-Language", defaultValue = DEFAULT_LANGUAGE)

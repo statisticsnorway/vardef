@@ -71,7 +71,7 @@ data class Draft(
     @Valid
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(): SavedVariableDefinition =
+    fun toSavedVariableDefinition(activeTeam: String): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: NanoId.generate(8),
             patchId = 1,
@@ -90,7 +90,7 @@ data class Draft(
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             // TODO depends on authentication to make user information available
-            owner = null,
+            owner = Owner(activeTeam, listOf("")),
             contact = contact,
             // Provide a placeholder value, actual value set by data layer
             createdAt = LocalDateTime.now(),

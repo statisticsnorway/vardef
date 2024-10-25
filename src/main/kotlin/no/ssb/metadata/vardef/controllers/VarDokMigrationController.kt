@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
+import no.ssb.metadata.vardef.constants.ACTIVE_TEAM
 import no.ssb.metadata.vardef.constants.DATA_MIGRATION
 import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
@@ -74,8 +75,10 @@ class VarDokMigrationController {
 
             val selectedGroup = httpRequest.parameters.get(ACTIVE_GROUP)
 
+            val selectedTeam = httpRequest.parameters.get(ACTIVE_TEAM)
+
             return httpClient.proxy(
-                HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$selectedGroup", varDefInput).headers { entries: MutableHttpHeaders ->
+                HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$selectedGroup&$ACTIVE_TEAM=$selectedTeam", varDefInput).headers { entries: MutableHttpHeaders ->
                     authHeader?.let {
                         // Set authorization header for post to /variable-definitions
                         entries.set(AUTHORIZATION, it)

@@ -70,4 +70,11 @@ class VardefTokenValidatorTest {
 
         assertThat(auth).isNull()
     }
+
+    @Test
+    fun `get teams from claim`() {
+        val result = vardefTokenValidator.getDaplaTeams(JwtTokenHelper.jwtTokenSigned())
+
+        assertThat(result).isEqualTo(listOf("play-foeniks-a", "play-enhjoern-a"))
+    }
 }

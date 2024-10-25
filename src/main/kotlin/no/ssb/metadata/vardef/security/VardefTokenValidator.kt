@@ -26,6 +26,9 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     @Property(name = "micronaut.security.token.jwt.claims.keys.dapla-groups")
     private lateinit var daplaGroupsClaim: String
 
+    @Property(name = "micronaut.security.token.jwt.claims.keys.dapla-teams")
+    private lateinit var daplaTeamsClaim: String
+
     @Property(name = "micronaut.security.token.jwt.claims.keys.username")
     private lateinit var usernameClaim: String
 
@@ -38,6 +41,13 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .jwtClaimsSet
             .getJSONObjectClaim(daplaClaim)[daplaGroupsClaim]
             as? List<String> ?: emptyList()
+
+    @Suppress("UNCHECKED_CAST")
+    fun getDaplaTeams(token: JWT) =
+        token
+            .jwtClaimsSet
+            .getJSONObjectClaim(daplaClaim)[daplaTeamsClaim]
+                as? List<String> ?: emptyList()
 
     /**
      * Assign roles

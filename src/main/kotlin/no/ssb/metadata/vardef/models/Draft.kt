@@ -71,7 +71,7 @@ data class Draft(
     @Valid
     val contact: Contact?,
 ) {
-    fun toSavedVariableDefinition(): SavedVariableDefinition =
+    fun toSavedVariableDefinition(ownerGroup: String): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: VariableDefinitionService.generateId(),
             patchId = 1,
@@ -89,8 +89,7 @@ data class Draft(
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            // TODO depends on authentication to make user information available
-            owner = null,
+            owner = Owner("", listOf(ownerGroup)),
             contact = contact,
             // Provide a placeholder value, actual value set by data layer
             createdAt = LocalDateTime.now(),

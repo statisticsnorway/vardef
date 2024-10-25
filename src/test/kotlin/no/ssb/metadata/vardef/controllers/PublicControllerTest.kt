@@ -6,6 +6,7 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest

@@ -8,6 +8,7 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -21,6 +22,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -85,10 +87,13 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "405", description = "Attempt to delete a variable definition with status unlike DRAFT.")
     @Status(HttpStatus.NO_CONTENT)
     @Delete()
+    @Secured(VARIABLE_OWNER)
     fun deleteVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
         @VardefId
         definitionId: String,
+        @QueryValue(ACTIVE_GROUP)
+        activeGroup: String,
     ): MutableHttpResponse<Unit> {
         if (patches.latest(definitionId).variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
@@ -110,9 +115,12 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status unlike DRAFT.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch
+    @Secured(VARIABLE_OWNER)
     fun updateVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId definitionId: String,
         @Body @Valid updateDraft: UpdateDraft,
+        @QueryValue(ACTIVE_GROUP)
+        activeGroup: String,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
         if (variable.variableStatus != VariableStatus.DRAFT) {

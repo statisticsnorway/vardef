@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -57,6 +58,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -89,6 +91,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(newValidityPeriodBeforeAll)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -120,6 +123,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(definitionNotChangedForAll)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -138,6 +142,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(definitionNotChanged)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -157,6 +162,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(invalidValidFrom)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -175,6 +181,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(noneMandatoryFieldsChanged())
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -186,6 +193,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(correctValidFrom)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -205,6 +213,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(validFromIsNull)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -229,6 +238,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(newShortName)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -253,6 +263,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(newShortName)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -271,6 +282,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}/validity-periods")
             .then()
@@ -283,6 +295,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
@@ -306,6 +319,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(addComment)
+            .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -356,6 +370,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(allMandatoryFieldsChanged())
+                .queryParam(ACTIVE_GROUP, "play-enhjoern-a-developers")
                 .`when`()
                 .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
                 .then()
@@ -366,5 +381,30 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
+    }
+
+    @Test
+    fun `create new validity period invalid active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(allMandatoryFieldsChanged())
+            .queryParam(ACTIVE_GROUP, "invalid-developers")
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(403)
+    }
+
+    @Test
+    fun `create new validity period no active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(allMandatoryFieldsChanged())
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(403)
     }
 }

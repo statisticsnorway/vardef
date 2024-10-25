@@ -5,6 +5,7 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -18,6 +19,7 @@ import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
+import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.validators.VardefId
@@ -54,6 +56,7 @@ class ValidityPeriodsController {
     )
     @ApiResponse(responseCode = "400", description = "The request is missing or has errors in required fields.")
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
+    @Secured(VARIABLE_OWNER)
     fun createValidityPeriod(
         @PathVariable("variable-definition-id")
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])
@@ -63,6 +66,8 @@ class ValidityPeriodsController {
         @Valid
         @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
         newPeriod: ValidityPeriod,
+        @QueryValue(ACTIVE_GROUP)
+        activeGroup: String,
     ): CompleteResponse {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)
 

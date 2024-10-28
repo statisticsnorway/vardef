@@ -62,7 +62,8 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         token: JWT,
     ): Boolean {
         val group: String = request.parameters.get(ACTIVE_GROUP)
-        return if (group.endsWith("-admins")) {
+        // Special rule if group name ends with "data-admins"
+        return if (group.endsWith("data-admins")) {
             group.substringBeforeLast("-").substringBeforeLast("-") in getDaplaTeams(token)
         } else {
             group.substringBeforeLast("-") in getDaplaTeams(token)

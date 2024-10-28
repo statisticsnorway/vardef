@@ -71,6 +71,17 @@ data class Draft(
     @Valid
     val contact: Contact?,
 ) {
+    /**
+     *
+     */
+    private fun setOwnerTeam(ownerGroup: String): String {
+        return if (ownerGroup.endsWith("data-admins")) {
+            ownerGroup.substringBeforeLast("-").substringBeforeLast("-")
+        } else {
+            ownerGroup.substringBeforeLast("-")
+        }
+    }
+
     fun toSavedVariableDefinition(ownerGroup: String): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = id ?: VariableDefinitionService.generateId(),
@@ -89,8 +100,7 @@ data class Draft(
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            // Team is a substring of group
-            owner = Owner(ownerGroup.substringBeforeLast("-"), listOf(ownerGroup)),
+            owner = Owner(setOwnerTeam(ownerGroup), listOf(ownerGroup)),
             contact = contact,
             // Provide a placeholder value, actual value set by data layer
             createdAt = LocalDateTime.now(),

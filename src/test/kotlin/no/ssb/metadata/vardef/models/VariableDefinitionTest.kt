@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.math.exp
 import kotlin.properties.Delegates
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -81,7 +80,10 @@ class VariableDefinitionTest {
         "play-fix-data-admins, play-fix",
         "null, null",
     )
-    fun `owner team is set correctly`(group:String, expectedteam: String){
+    fun `owner team is set correctly`(
+        group: String,
+        expectedteam: String,
+    )  {
         val savedVariableDefinition = DRAFT_BUS_EXAMPLE.toSavedVariableDefinition(group)
         assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
     }

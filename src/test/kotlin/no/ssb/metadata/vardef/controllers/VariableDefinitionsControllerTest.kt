@@ -424,12 +424,11 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf("play-foeniks-a", TEST_TEAM), daplaGroups = listOf(group)).parsedString,
+                JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf(TEST_TEAM), daplaGroups = listOf(group)).parsedString,
             )
             .contentType(ContentType.JSON)
             .body(jsonTestInput().toString())
             .queryParam(ACTIVE_GROUP, group)
-            .queryParam(ACTIVE_TEAM, TEST_TEAM)
             .`when`()
             .post("/variable-definitions")
             .then()
@@ -454,8 +453,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     fun `create variable definition invalid team`(spec: RequestSpecification) {
         spec
             .`when`()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .queryParam(ACTIVE_TEAM, "fix-team")
+            .queryParam(ACTIVE_GROUP, "play-test-b-developers")
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)

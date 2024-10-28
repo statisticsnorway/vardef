@@ -62,7 +62,11 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         token: JWT,
     ): Boolean {
         val group: String = request.parameters.get(ACTIVE_GROUP)
-        return group.substringBeforeLast("-") in getDaplaTeams(token)
+        return if (group.endsWith("-admins")) {
+            group.substringBeforeLast("-").substringBeforeLast("-") in getDaplaTeams(token)
+        } else {
+            group.substringBeforeLast("-") in getDaplaTeams(token)
+        }
     }
 
     /**
@@ -95,7 +99,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                 throw InvalidActiveGroupException("The specified active_group is not present in the token")
             }
             if (!isValidTeam(request, token)) {
-                // Group has no valid team in token and the request is not valid
+                // Group has no valid team in token and the authentication is incorrect
                 throw InvalidActiveTeamException("The specified team is not present in the token")
             }
 

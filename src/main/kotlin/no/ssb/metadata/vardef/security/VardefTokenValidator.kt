@@ -52,10 +52,10 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
 
     /**
      * Is selected team in token
-     * Team is a substring from group
+     * Team is a substring of group
      * @param request
      * @param token
-     * @return true if active team from request is in token
+     * @return true if team is in token
      */
     private fun isValidTeam(
         request: R,
@@ -80,6 +80,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
      * @param request the [HttpRequest]
      * @return the applicable role.
      * @throws InvalidActiveGroupException
+     * @throws InvalidActiveTeamException
      */
     private fun assignRoles(
         token: JWT,
@@ -94,7 +95,8 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                 throw InvalidActiveGroupException("The specified active_group is not present in the token")
             }
             if (!isValidTeam(request, token)) {
-                throw InvalidActiveTeamException("The specified active_team is not present in the token")
+                // Group has no valid team in token and the request is not valid
+                throw InvalidActiveTeamException("The specified team is not present in the token")
             }
 
             if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)
@@ -112,8 +114,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
      *
      * @param token
      * @param request
-     * @return an [Authentication] containing the principals username and the assigned roles
-     * @throws InvalidActiveTeamException if selected team from request is not in token
+     * @return an [Authentication] containing the principals username and the assigned roles.
      */
     override fun validateToken(
         token: String?,

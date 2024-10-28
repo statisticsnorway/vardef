@@ -89,6 +89,7 @@ data class Draft(
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
+            // Team is a substring of group
             owner = Owner(ownerGroup.substringBeforeLast("-"), listOf(ownerGroup)),
             contact = contact,
             // Provide a placeholder value, actual value set by data layer

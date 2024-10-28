@@ -434,7 +434,13 @@ class PatchesControllerTest : BaseVardefTest() {
                 .asString()
 
         val jsonResponse = JSONObject(body)
-        val message = jsonResponse.getString("message")
-        assertThat(message).contains("The selected group")
+        val embeddedMessage =
+            jsonResponse
+                .getJSONObject("_embedded")
+                .getJSONArray("errors")
+                .getJSONObject(0)
+                .getString("message")
+
+        assertThat(embeddedMessage).isEqualTo("The selected group 'play-enhjoern-b-developers' is not allowed to edit this variable")
     }
 }

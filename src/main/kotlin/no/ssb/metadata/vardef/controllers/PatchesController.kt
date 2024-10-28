@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
@@ -146,9 +145,7 @@ class PatchesController {
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
 
-        if (activeGroup !in latestPatchOnValidityPeriod.owner.groups) {
-            throw InvalidActiveGroupException("The selected group '$activeGroup' is not allowed edit this variable")
-        }
+        patches.validateActiveGroup(activeGroup, latestPatchOnValidityPeriod.owner.groups)
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")

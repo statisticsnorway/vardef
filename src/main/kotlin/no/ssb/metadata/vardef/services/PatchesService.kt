@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 
@@ -76,4 +77,13 @@ class PatchesService(
             .forEach {
                 variableDefinitionRepository.deleteById(it.id)
             }
+
+    fun validateActiveGroup(
+        activeGroup: String,
+        groups: List<String>,
+    ) {
+        if (activeGroup !in groups) {
+            throw InvalidActiveGroupException("The selected group '$activeGroup' is not allowed to edit this variable")
+        }
+    }
 }

@@ -71,6 +71,8 @@ class ValidityPeriodsController {
     ): CompleteResponse {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)
 
+        patches.validateActiveGroup(activeGroup, latestExistingPatch.owner.groups)
+
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }

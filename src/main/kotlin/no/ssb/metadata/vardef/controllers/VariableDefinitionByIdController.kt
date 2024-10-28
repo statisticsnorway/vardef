@@ -101,6 +101,8 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
         }
+        patches.validateActiveGroup(activeGroup, patches.latest(definitionId).owner.groups)
+
         patches.deleteAllForDefinitionId(definitionId)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
         return HttpResponse.noContent<Unit?>().contentType(null)
@@ -129,6 +131,7 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
         }
+        patches.validateActiveGroup(activeGroup, patches.latest(definitionId).owner.groups)
 
         if (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) {
             throw HttpStatusException(

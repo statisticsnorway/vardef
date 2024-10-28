@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -194,8 +195,6 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(correctValidFrom)
             .`when`()
-            .log()
-            .everything()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
@@ -411,35 +410,27 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @Test
     fun `create new patch incorrect active group`(spec: RequestSpecification) {
-        val body =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(allMandatoryFieldsChanged())
-                .auth()
-                .oauth2(
-                    JwtTokenHelper
-                        .jwtTokenSigned(
-                            daplaTeams = listOf("play-enhjoern-b"),
-                            daplaGroups = listOf("play-enhjoern-b-developers"),
-                        ).parsedString,
-                ).queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
-                .`when`()
-                .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
-                .then()
-                .statusCode(HttpStatus.FORBIDDEN.code)
-                .extract()
-                .body()
-                .asString()
-
-        val jsonResponse = JSONObject(body)
-        val embeddedMessage =
-            jsonResponse
-                .getJSONObject("_embedded")
-                .getJSONArray("errors")
-                .getJSONObject(0)
-                .getString("message")
-
-        assertThat(embeddedMessage).isEqualTo("The selected group 'play-enhjoern-b-developers' is not allowed to edit this variable")
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(allMandatoryFieldsChanged())
+            .auth()
+            .oauth2(
+                JwtTokenHelper
+                    .jwtTokenSigned(
+                        daplaTeams = listOf("play-enhjoern-b"),
+                        daplaGroups = listOf("play-enhjoern-b-developers"),
+                    ).parsedString,
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                Matchers.containsString(
+                    "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, neighbourhood-dogs] are allowed to edit this variable",
+                ),
+            )
     }
 }

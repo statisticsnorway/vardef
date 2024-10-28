@@ -101,7 +101,14 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
         }
-        patches.validateActiveGroup(activeGroup, patches.latest(definitionId).owner.groups)
+
+        val savedGroup = patches.latest(definitionId).owner
+        if (!patches.isValidGroup(activeGroup, savedGroup)) {
+            throw HttpStatusException(
+                HttpStatus.FORBIDDEN,
+                "Only members of the groups ${savedGroup.groups} are allowed to edit this variable",
+            )
+        }
 
         patches.deleteAllForDefinitionId(definitionId)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
@@ -131,7 +138,14 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
         }
-        patches.validateActiveGroup(activeGroup, patches.latest(definitionId).owner.groups)
+
+        val savedGroup = patches.latest(definitionId).owner
+        if (!patches.isValidGroup(activeGroup, savedGroup)) {
+            throw HttpStatusException(
+                HttpStatus.FORBIDDEN,
+                "Only members of the groups ${savedGroup.groups} are allowed to edit this variable",
+            )
+        }
 
         if (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) {
             throw HttpStatusException(

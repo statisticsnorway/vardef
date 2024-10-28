@@ -145,7 +145,13 @@ class PatchesController {
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
 
-        patches.validateActiveGroup(activeGroup, latestPatchOnValidityPeriod.owner.groups)
+        val savedGroup = latestPatchOnValidityPeriod.owner
+        if (!patches.isValidGroup(activeGroup, savedGroup)) {
+            throw HttpStatusException(
+                HttpStatus.FORBIDDEN,
+                "Only members of the groups ${savedGroup.groups} are allowed to edit this variable",
+            )
+        }
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")

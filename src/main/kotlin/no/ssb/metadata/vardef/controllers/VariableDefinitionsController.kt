@@ -96,8 +96,6 @@ class VariableDefinitionsController {
         @Valid varDef: Draft,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
-        @QueryValue(ACTIVE_TEAM)
-        activeTeam: String,
     ): CompleteResponse {
         if (!DaplaTeamService.isDevelopers(activeGroup)) {
             throw HttpStatusException(
@@ -119,6 +117,6 @@ class VariableDefinitionsController {
             )
         }
 
-        return patches.create(varDef.toSavedVariableDefinition(activeTeam, activeGroup)).toCompleteResponse()
+        return patches.create(varDef.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
     }
 }

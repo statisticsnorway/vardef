@@ -80,7 +80,7 @@ class VariableDefinitionTest {
         "play-fix-data-admins, play-fix",
         "null, null",
     )
-    fun `owner team is set correctly`(
+    fun `owner team is substring of group name`(
         group: String,
         expectedteam: String,
     )  {

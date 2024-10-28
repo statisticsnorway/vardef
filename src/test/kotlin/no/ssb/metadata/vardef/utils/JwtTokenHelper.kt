@@ -20,12 +20,14 @@ class JwtTokenHelper {
             daplaTeams: List<String> =
                 listOf(
                     "play-foeniks-a",
-                    TEST_TEAM,
+                    "play-enhjoern-a",
                 ),
             daplaGroups: List<String> =
                 listOf(
                     TEST_DEVELOPERS_GROUP,
                     "play-foeniks-a-developers",
+                    // For testing exception where team is not in token
+                    "play-test-b-developers",
                 ),
         ) = SignedJWT(
             header.toBase64URL(),

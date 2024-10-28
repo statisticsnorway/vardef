@@ -9,7 +9,6 @@ import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
-import no.ssb.metadata.vardef.constants.ACTIVE_TEAM
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.exceptions.InvalidActiveTeamException
 import org.reactivestreams.Publisher
@@ -53,6 +52,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
 
     /**
      * Is selected team in token
+     * Team is a substring from group
      * @param request
      * @param token
      * @return true if active team from request is in token
@@ -60,7 +60,10 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     private fun isValidTeam(
         request: R,
         token: JWT,
-    ): Boolean = request.parameters.get(ACTIVE_TEAM) in getDaplaTeams(token)
+    ): Boolean {
+        val group: String = request.parameters.get(ACTIVE_GROUP)
+        return group.substringBeforeLast("-") in getDaplaTeams(token)
+    }
 
     /**
      * Assign roles
@@ -90,6 +93,9 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                 // of ,so we don't want to continue processing this request.
                 throw InvalidActiveGroupException("The specified active_group is not present in the token")
             }
+            if (!isValidTeam(request, token)) {
+                throw InvalidActiveTeamException("The specified active_team is not present in the token")
+            }
 
             if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)
             ) {
@@ -118,20 +124,12 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         }
         return Mono
             .from(validate(token, request))
-            .handle { it, sink ->
-                val roles = assignRoles(it, request)
-                if (roles.contains(VARIABLE_OWNER) && !isValidTeam(request, it)) {
-                    sink.error(InvalidActiveTeamException("The specified team is not present in the token"))
-                    return@handle
-                } else {
-                    sink.next(
-                        Authentication.build(
-                            it.jwtClaimsSet.getStringClaim(usernameClaim),
-                            listOf(roles),
-                            it.jwtClaimsSet.claims,
-                        ),
-                    )
-                }
+            .map {
+                Authentication.build(
+                    it.jwtClaimsSet.getStringClaim(usernameClaim),
+                    listOf(assignRoles(it, request)),
+                    it.jwtClaimsSet.claims,
+                )
             }
     }
 

@@ -38,7 +38,7 @@ class VardefTokenValidatorTest {
                 .from(
                     vardefTokenValidator.validateToken(
                         JwtTokenHelper.jwtTokenSigned(listOf("blah")).parsedString,
-                        HttpRequest.POST("/variable-definitions ", ""),
+                        HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
         assertThat(auth?.roles).doesNotContain(VARIABLE_OWNER)

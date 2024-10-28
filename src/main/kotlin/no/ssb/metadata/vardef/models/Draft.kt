@@ -74,7 +74,7 @@ data class Draft(
     /**
      *
      */
-    private fun setOwnerTeam(ownerGroup: String): String {
+    private fun parseTeamName(ownerGroup: String): String {
         return if (ownerGroup.endsWith("data-admins")) {
             ownerGroup.substringBeforeLast("-").substringBeforeLast("-")
         } else {
@@ -100,7 +100,7 @@ data class Draft(
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            owner = Owner(setOwnerTeam(ownerGroup), listOf(ownerGroup)),
+            owner = Owner(parseTeamName(ownerGroup), listOf(ownerGroup)),
             contact = contact,
             // Provide a placeholder value, actual value set by data layer
             createdAt = LocalDateTime.now(),

@@ -316,7 +316,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
             ),
         relatedVariableDefinitionUris = listOf(),
         owner =
-            Owner("play-foeniks-a", listOf("skip-stat-developers")),
+            Owner("skip-stat", listOf("skip-stat-developers")),
         contact =
             Contact(
                 LanguageStringType("", "", ""),

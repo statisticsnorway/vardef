@@ -429,7 +429,8 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .body(
                 ERROR_MESSAGE_JSON_PATH,
                 Matchers.containsString(
-                    "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, neighbourhood-dogs] are allowed to edit this variable",
+                    "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, " +
+                        "neighbourhood-dogs] are allowed to edit this variable",
                 ),
             )
     }

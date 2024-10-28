@@ -83,7 +83,7 @@ class VariableDefinitionTest {
     fun `owner team is substring of group name`(
         group: String,
         expectedteam: String,
-    )  {
+    ) {
         val savedVariableDefinition = DRAFT_BUS_EXAMPLE.toSavedVariableDefinition(group)
         assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
     }

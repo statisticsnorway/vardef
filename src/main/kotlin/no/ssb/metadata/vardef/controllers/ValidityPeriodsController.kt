@@ -26,7 +26,7 @@ import no.ssb.metadata.vardef.validators.VardefId
 
 @Tag(name = VALIDITY_PERIODS)
 @Validated
-@Controller("/variable-definitions/{variable-definition-id}/validity-periods")
+@Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class ValidityPeriodsController {
     @Inject
@@ -58,7 +58,7 @@ class ValidityPeriodsController {
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     @Secured(VARIABLE_OWNER)
     fun createValidityPeriod(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
@@ -108,7 +108,7 @@ class ValidityPeriodsController {
         ],
     )
     fun listValidityPeriods(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,

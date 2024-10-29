@@ -27,7 +27,7 @@ import java.time.LocalDate
 
 @Tag(name = PATCHES)
 @Validated
-@Controller("/variable-definitions/{variable-definition-id}/patches")
+@Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController {
     @Inject
@@ -58,7 +58,7 @@ class PatchesController {
     )
     @Get
     fun getAllPatches(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
@@ -89,7 +89,7 @@ class PatchesController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/{patch-id}")
     fun getOnePatch(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,
@@ -125,7 +125,7 @@ class PatchesController {
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     @Secured(VARIABLE_OWNER)
     fun createPatch(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
         @VardefId
         variableDefinitionId: String,

@@ -29,7 +29,7 @@ import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Validated
-@Controller("/variable-definitions/{definitionId}")
+@Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController {
     @Inject
@@ -55,6 +55,7 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get()
     fun getVariableDefinitionById(
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
         definitionId: String,
@@ -89,6 +90,7 @@ class VariableDefinitionByIdController {
     @Delete()
     @Secured(VARIABLE_OWNER)
     fun deleteVariableDefinitionById(
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
         @VardefId
         definitionId: String,
@@ -126,10 +128,13 @@ class VariableDefinitionByIdController {
     @Patch
     @Secured(VARIABLE_OWNER)
     fun updateVariableDefinitionById(
-        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId definitionId: String,
-        @Body @Valid updateDraft: UpdateDraft,
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
+        @Schema(description = ID_FIELD_DESCRIPTION)
+        @VardefId
+        definitionId: String,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        @Body @Valid updateDraft: UpdateDraft,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
         if (variable.variableStatus != VariableStatus.DRAFT) {

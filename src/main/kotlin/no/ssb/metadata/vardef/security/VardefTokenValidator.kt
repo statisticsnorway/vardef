@@ -10,6 +10,7 @@ import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
+import no.ssb.metadata.vardef.services.DaplaTeamService
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -58,24 +59,22 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     private fun assignRoles(
         token: JWT,
         request: R,
-    ): String {
+    ): Set<String> {
+        // If we arrive here the principal is authenticated. Give all principals a default role.
+        val roles = mutableSetOf(VARIABLE_CONSUMER)
+        val claimsSet = token.jwtClaimsSet
         if (ACTIVE_GROUP in request.parameters && daplaClaim in token.jwtClaimsSet.claims) {
-            if (
-                request.parameters.get(ACTIVE_GROUP) !in getDaplaGroups(token)
-            ) {
+            val activeGroup = request.parameters.get(ACTIVE_GROUP)
+            if (activeGroup !in getDaplaGroups(token)) {
                 // In this case the user is trying to act on behalf of a group they are not a member
                 // of ,so we don't want to continue processing this request.
                 throw InvalidActiveGroupException("The specified active_group is not present in the token")
             }
-
-            if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)
-            ) {
-                return VARIABLE_OWNER
-            }
+            if (daplaLabAudience in claimsSet.getStringListClaim(Claims.AUDIENCE)) roles.add(VARIABLE_OWNER)
+            if (VARIABLE_OWNER in roles && DaplaTeamService.isDevelopers(activeGroup)) roles.add(VARIABLE_CREATOR)
         }
 
-        // Default role for authenticated principals
-        return VARIABLE_CONSUMER
+        return roles.toSet()
     }
 
     /**
@@ -97,7 +96,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .map {
                 Authentication.build(
                     it.jwtClaimsSet.getStringClaim(usernameClaim),
-                    listOf(assignRoles(it, request)),
+                    assignRoles(it, request),
                     it.jwtClaimsSet.claims,
                 )
             }

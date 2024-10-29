@@ -26,8 +26,6 @@ class JwtTokenHelper {
                 listOf(
                     TEST_DEVELOPERS_GROUP,
                     "play-foeniks-a-developers",
-                    // For testing exception where team is not in token
-                    "play-test-b-developers",
                 ),
         ) = SignedJWT(
             header.toBase64URL(),

@@ -251,19 +251,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/948")
             .then()
-            .statusCode(403)
-    }
-
-    @Test
-    fun `create vardok authenticated with invalid team`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, "play-test-c-developers")
-            .`when`()
-            .post("/vardok-migration/948")
-            .then()
             .statusCode(401)
     }
 

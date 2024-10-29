@@ -25,9 +25,6 @@ import java.time.LocalDateTime
     example = DRAFT_EXAMPLE,
 )
 data class Draft(
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    @Nullable
-    var id: String?,
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
@@ -46,11 +43,6 @@ data class Draft(
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     val containsSensitivePersonalInformation: Boolean,
-    @Schema(
-        description = VARIABLE_STATUS_FIELD_DESCRIPTION,
-        accessMode = Schema.AccessMode.READ_ONLY,
-    )
-    var variableStatus: VariableStatus?,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
@@ -85,7 +77,7 @@ data class Draft(
 
     fun toSavedVariableDefinition(ownerGroup: String): SavedVariableDefinition =
         SavedVariableDefinition(
-            definitionId = id ?: VariableDefinitionService.generateId(),
+            definitionId = VariableDefinitionService.generateId(),
             patchId = 1,
             name = name,
             shortName = shortName,
@@ -94,7 +86,7 @@ data class Draft(
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus ?: VariableStatus.DRAFT,
+            variableStatus = VariableStatus.DRAFT,
             measurementType = measurementType,
             validFrom = validFrom,
             validUntil = null,

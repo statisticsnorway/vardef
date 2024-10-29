@@ -242,7 +242,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("""{"short_name": "${INCOME_TAX_VP1_P1.shortName}"}""")
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
             .body(
@@ -263,7 +263,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body(updatedJsonString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(

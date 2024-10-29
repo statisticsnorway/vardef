@@ -79,7 +79,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
                 argumentSet(
                     "Published External on Draft",
-                    DRAFT_BUS_EXAMPLE.id,
+                    DRAFT_BUS_EXAMPLE.definitionId,
                     VariableStatus.PUBLISHED_EXTERNAL,
                     null,
                 ),
@@ -97,9 +97,9 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
                 argumentSet(
                     "Draft matching",
-                    DRAFT_BUS_EXAMPLE.id,
+                    DRAFT_BUS_EXAMPLE.definitionId,
                     VariableStatus.DRAFT,
-                    DRAFT_BUS_EXAMPLE.toSavedVariableDefinition(TEST_DEVELOPERS_GROUP).toCompleteResponse(),
+                    DRAFT_BUS_EXAMPLE.toCompleteResponse(),
                 ),
                 argumentSet(
                     "Deprecated matching",

@@ -85,25 +85,6 @@ data class SavedVariableDefinition(
             lastUpdatedAt = lastUpdatedAt,
         )
 
-    fun toDraft(): Draft =
-        Draft(
-            id = definitionId,
-            name = name,
-            shortName = shortName,
-            definition = definition,
-            classificationReference = classificationUri?.split("/")?.lastOrNull(),
-            unitTypes = unitTypes,
-            subjectFields = subjectFields,
-            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus,
-            measurementType = measurementType,
-            validFrom = validFrom,
-            externalReferenceUri = externalReferenceUri,
-            comment = comment,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
-            contact = contact,
-        )
-
     fun toPatch(): Patch =
         Patch(
             name = name,

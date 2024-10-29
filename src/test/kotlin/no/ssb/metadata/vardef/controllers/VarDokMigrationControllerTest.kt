@@ -223,7 +223,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 ERROR_MESSAGE_JSON_PATH,
                 containsString(
-                    "varDef.shortName: must match \"^[a-z0-9_]{3,}$\"",
+                    "shortName: must match",
                 ),
             )
     }

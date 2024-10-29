@@ -22,7 +22,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -434,7 +433,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list all variables is authenticated`(spec: RequestSpecification){
+    fun `list all variables unauthenticated`(spec: RequestSpecification)  {
         spec
             .given()
             .auth()
@@ -443,6 +442,23 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .get("/variable-definitions")
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)
-
     }
+
+    @Test
+    fun `list all variables authenticated as variable consumer`(spec: RequestSpecification)  {
+        val response =
+            spec
+                .`when`()
+                .get("/variable-definitions")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+        assertThat(response).isNull()
+    }
+
+    // draft
+    // published internal
+    // published external
+    // variable owner, variable creator (?)
 }

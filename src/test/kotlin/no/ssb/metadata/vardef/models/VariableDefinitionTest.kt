@@ -18,35 +18,36 @@ class VariableDefinitionTest {
     private lateinit var renderedVariableDefinition: RenderedVariableDefinition
     private lateinit var completeResponseVariableDefinition: CompleteResponse
 
-    private val draftExample = Draft(
-        name =
-        LanguageStringType(
-            nb = "Fly",
-            nn = null,
-            en = "Airplane",
-        ),
-        shortName = "fly",
-        definition =
-        LanguageStringType(
-            nb = "Et transportmiddel med vinger.",
-            nn = null,
-            en = "A means of transportation with wings",
-        ),
-        classificationReference = "91",
-        unitTypes = listOf("", ""),
-        subjectFields = listOf("", ""),
-        containsSensitivePersonalInformation = false,
-        measurementType = "",
-        validFrom = LocalDate.of(1988, 5, 17),
-        externalReferenceUri = URI("https://www.example.com").toURL(),
-        comment = null,
-        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
-        contact =
-        Contact(
-            LanguageStringType("", "", ""),
-            "",
-        ),
-    )
+    private val draftExample =
+        Draft(
+            name =
+                LanguageStringType(
+                    nb = "Fly",
+                    nn = null,
+                    en = "Airplane",
+                ),
+            shortName = "fly",
+            definition =
+                LanguageStringType(
+                    nb = "Et transportmiddel med vinger.",
+                    nn = null,
+                    en = "A means of transportation with wings",
+                ),
+            classificationReference = "91",
+            unitTypes = listOf("", ""),
+            subjectFields = listOf("", ""),
+            containsSensitivePersonalInformation = false,
+            measurementType = "",
+            validFrom = LocalDate.of(1988, 5, 17),
+            externalReferenceUri = URI("https://www.example.com").toURL(),
+            comment = null,
+            relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+            contact =
+                Contact(
+                    LanguageStringType("", "", ""),
+                    "",
+                ),
+        )
 
     @BeforeAll
     fun setUp() {

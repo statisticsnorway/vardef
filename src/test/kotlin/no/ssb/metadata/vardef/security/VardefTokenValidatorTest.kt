@@ -7,6 +7,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.utils.JwtTokenHelper
+import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -24,7 +25,7 @@ class VardefTokenValidatorTest {
                 .from(
                     vardefTokenValidator.validateToken(
                         JwtTokenHelper.jwtTokenSigned().parsedString,
-                        HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=play-enhjoern-a-developers", ""),
+                        HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$TEST_DEVELOPERS_GROUP", ""),
                     ),
                 ).block()
         assertThat(auth?.roles).containsExactly(VARIABLE_OWNER)

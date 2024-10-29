@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -193,7 +194,6 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(correctValidFrom)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -406,5 +406,32 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(403)
+    }
+
+    @Test
+    fun `create new patch incorrect active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(allMandatoryFieldsChanged())
+            .auth()
+            .oauth2(
+                JwtTokenHelper
+                    .jwtTokenSigned(
+                        daplaTeams = listOf("play-enhjoern-b"),
+                        daplaGroups = listOf("play-enhjoern-b-developers"),
+                    ).parsedString,
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                Matchers.containsString(
+                    "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, " +
+                        "neighbourhood-dogs] are allowed to edit this variable",
+                ),
+            )
     }
 }

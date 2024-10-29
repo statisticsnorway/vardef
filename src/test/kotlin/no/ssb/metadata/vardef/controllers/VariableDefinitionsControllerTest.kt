@@ -22,6 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -431,5 +432,18 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
         assertThat(jsonMapper.readValue(body, Array<CompleteResponse>::class.java)).isNotNull
+    }
+
+    @Test
+    fun `list all variables is authenticated`(spec: RequestSpecification){
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+
     }
 }

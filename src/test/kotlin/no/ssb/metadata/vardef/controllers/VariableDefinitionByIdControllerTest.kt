@@ -145,7 +145,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .queryParam(ACTIVE_GROUP, "invalid group")
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
-            .statusCode(403)
+            .statusCode(401)
     }
 
     @Test
@@ -442,7 +442,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .`when`()
             .patch("/variable-definitions/${expected.definitionId}")
             .then()
-            .statusCode(403)
+            .statusCode(401)
     }
 
     @Test

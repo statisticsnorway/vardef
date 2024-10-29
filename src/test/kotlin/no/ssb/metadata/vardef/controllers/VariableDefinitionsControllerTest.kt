@@ -372,7 +372,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     @Test

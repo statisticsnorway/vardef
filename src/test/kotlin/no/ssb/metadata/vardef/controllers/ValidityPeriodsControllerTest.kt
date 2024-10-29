@@ -393,7 +393,7 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
-            .statusCode(403)
+            .statusCode(401)
     }
 
     @Test

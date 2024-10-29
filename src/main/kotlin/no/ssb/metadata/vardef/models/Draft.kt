@@ -63,6 +63,18 @@ data class Draft(
     @Valid
     val contact: Contact?,
 ) {
+    /**
+     * Team name is a substring of group name
+     */
+    private fun parseTeamName(ownerGroup: String): String {
+        // When group name ends with 'data-admins' it is a special case
+        return if (ownerGroup.endsWith("data-admins")) {
+            ownerGroup.substringBeforeLast("-").substringBeforeLast("-")
+        } else {
+            ownerGroup.substringBeforeLast("-")
+        }
+    }
+
     fun toSavedVariableDefinition(ownerGroup: String): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = VariableDefinitionService.generateId(),
@@ -81,7 +93,7 @@ data class Draft(
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            owner = Owner("", listOf(ownerGroup)),
+            owner = Owner(parseTeamName(ownerGroup), listOf(ownerGroup)),
             contact = contact,
             // Provide a placeholder value, actual value set by data layer
             createdAt = LocalDateTime.now(),

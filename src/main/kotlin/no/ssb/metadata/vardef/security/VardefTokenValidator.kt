@@ -26,9 +26,6 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     @Property(name = "micronaut.security.token.jwt.claims.keys.dapla-groups")
     private lateinit var daplaGroupsClaim: String
 
-    @Property(name = "micronaut.security.token.jwt.claims.keys.dapla-teams")
-    private lateinit var daplaTeamsClaim: String
-
     @Property(name = "micronaut.security.token.jwt.claims.keys.username")
     private lateinit var usernameClaim: String
 
@@ -41,19 +38,6 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .jwtClaimsSet
             .getJSONObjectClaim(daplaClaim)[daplaGroupsClaim]
             as? List<String> ?: emptyList()
-
-    /**
-     * Is selected group in token
-     * @param request
-     * @param token
-     * @return true if group is in token
-     */
-    private fun isValidGroup(
-        request: R,
-        token: JWT,
-    ): Boolean {
-        return request.parameters.get(ACTIVE_GROUP) in getDaplaGroups(token)
-    }
 
     /**
      * Assign roles
@@ -77,7 +61,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     ): String {
         if (ACTIVE_GROUP in request.parameters && daplaClaim in token.jwtClaimsSet.claims) {
             if (
-                !isValidGroup(request, token)
+                request.parameters.get(ACTIVE_GROUP) !in getDaplaGroups(token)
             ) {
                 // In this case the user is trying to act on behalf of a group they are not a member
                 // of ,so we don't want to continue processing this request.

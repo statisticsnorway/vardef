@@ -72,7 +72,7 @@ data class Draft(
     val contact: Contact?,
 ) {
     /**
-     *
+     * Team name is a substring of group name
      */
     private fun parseTeamName(ownerGroup: String): String {
         return if (ownerGroup.endsWith("data-admins")) {

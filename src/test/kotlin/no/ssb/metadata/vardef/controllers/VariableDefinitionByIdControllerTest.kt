@@ -468,4 +468,24 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(403)
     }
+
+    @Test
+    fun `update variable definition active group is valid but not owner`(spec: RequestSpecification) {
+        val expected: SavedVariableDefinition =
+            SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
+                name = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.name.copy(en = "Update"),
+            )
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"short_name":"toppebek"}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, "play-foeniks-a-developers")
+            .`when`()
+            .patch("/variable-definitions/${expected.definitionId}")
+            .then()
+            .statusCode(403)
+    }
 }

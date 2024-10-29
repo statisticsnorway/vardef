@@ -129,7 +129,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("ID may not be specified on creation."))
     }
 
     @ParameterizedTest

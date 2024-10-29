@@ -93,7 +93,7 @@ class VariableDefinitionsController {
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE)
         @Body
-        @Valid varDef: Draft,
+        @Valid draft: Draft,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {
@@ -103,20 +103,13 @@ class VariableDefinitionsController {
                 "Only dapla team developers may create variable definitions.",
             )
         }
-        if (varDef.id != null) throw HttpStatusException(HttpStatus.BAD_REQUEST, "ID may not be specified on creation.")
-        if (varDef.variableStatus != null) {
-            throw HttpStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Variable status may not be specified on creation.",
-            )
-        }
-        if (varDefService.doesShortNameExist(varDef.shortName)) {
+        if (varDefService.doesShortNameExist(draft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
-                "Short name ${varDef.shortName} already exists.",
+                "Short name ${draft.shortName} already exists.",
             )
         }
 
-        return patches.create(varDef.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
+        return patches.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
     }
 }

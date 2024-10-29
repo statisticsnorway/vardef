@@ -10,7 +10,6 @@ import java.time.LocalDateTime
 
 val DRAFT_BUS_EXAMPLE =
     Draft(
-        id = VariableDefinitionService.generateId(),
         name =
             LanguageStringType(
                 nb = "Buss",
@@ -28,7 +27,6 @@ val DRAFT_BUS_EXAMPLE =
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
         containsSensitivePersonalInformation = false,
-        variableStatus = VariableStatus.DRAFT,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://www.example.com").toURL(),
@@ -39,7 +37,7 @@ val DRAFT_BUS_EXAMPLE =
                 LanguageStringType("", "", ""),
                 "",
             ),
-    )
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP)
 
 val SAVED_DEPRECATED_VARIABLE_DEFINITION =
     SavedVariableDefinition(

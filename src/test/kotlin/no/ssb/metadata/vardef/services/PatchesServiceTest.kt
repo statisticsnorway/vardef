@@ -58,7 +58,7 @@ class PatchesServiceTest : BaseVardefTest() {
             Stream.of(
                 Arguments.argumentSet(
                     "First patch draft",
-                    DRAFT_BUS_EXAMPLE.id,
+                    DRAFT_BUS_EXAMPLE.definitionId,
                     1,
                     true,
                 ),
@@ -76,13 +76,13 @@ class PatchesServiceTest : BaseVardefTest() {
                 ),
                 Arguments.argumentSet(
                     "Unknown patch id",
-                    DRAFT_BUS_EXAMPLE.id,
+                    DRAFT_BUS_EXAMPLE.definitionId,
                     78452,
                     false,
                 ),
                 Arguments.argumentSet(
                     "Patch id 0",
-                    DRAFT_BUS_EXAMPLE.id,
+                    DRAFT_BUS_EXAMPLE.definitionId,
                     0,
                     false,
                 ),

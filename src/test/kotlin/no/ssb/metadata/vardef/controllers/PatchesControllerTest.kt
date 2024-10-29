@@ -9,6 +9,7 @@ import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -400,5 +401,39 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @Test
+    fun `create new patch incorrect active group`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    patchBody()
+                        .apply {
+                            getJSONObject("name").apply {
+                                put("nb", "Bybakgrunn")
+                            }
+                        }.toString(),
+                ).auth()
+                .oauth2(
+                    JwtTokenHelper
+                        .jwtTokenSigned(
+                            daplaTeams = listOf("play-enhjoern-b"),
+                            daplaGroups = listOf("play-enhjoern-b-developers"),
+                        ).parsedString,
+                ).queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
+                .`when`()
+                .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.code)
+                .body(
+                    ERROR_MESSAGE_JSON_PATH,
+                    Matchers.containsString(
+                        "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, " +
+                            "neighbourhood-dogs] are allowed to edit this variable",
+                    ),
+                )
     }
 }

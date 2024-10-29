@@ -1,8 +1,6 @@
 package no.ssb.metadata.vardef.models
 
-import no.ssb.metadata.vardef.utils.COMPLETE_RESPONSE
-import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
-import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -74,5 +72,19 @@ class VariableDefinitionTest {
     @Test
     fun `complete response include owner`() {
         assertThat(completeResponseVariableDefinition).hasFieldOrProperty("owner")
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "play-enhjoern-a-developers, play-enhjoern-a",
+        "play-fix-data-admins, play-fix",
+        "skips-data-managers, skips-data",
+    )
+    fun `owner team is substring of group name`(
+        group: String,
+        expectedteam: String,
+    ) {
+        val savedVariableDefinition = DRAFT_BUS_EXAMPLE.toSavedVariableDefinition(group)
+        assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
     }
 }

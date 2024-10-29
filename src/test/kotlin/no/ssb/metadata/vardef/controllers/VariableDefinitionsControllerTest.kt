@@ -372,11 +372,11 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     @Test
-    fun `create variable definition save active group`(spec: RequestSpecification) {
+    fun `create variable definition save owner`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
                 .apply {
@@ -394,6 +394,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .statusCode(201)
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
             .body("owner.groups[1]", nullValue())
+            .body("owner.team", equalTo(TEST_TEAM))
     }
 
     @ParameterizedTest
@@ -406,7 +407,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf("play-enhjoern-a"), daplaGroups = listOf(group)).parsedString)
+            .oauth2(
+                JwtTokenHelper.jwtTokenSigned(daplaGroups = listOf(group)).parsedString,
+            )
             .contentType(ContentType.JSON)
             .body(jsonTestInput().toString())
             .queryParam(ACTIVE_GROUP, group)

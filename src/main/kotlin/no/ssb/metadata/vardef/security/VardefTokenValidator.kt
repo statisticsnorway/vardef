@@ -67,7 +67,6 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                 // of ,so we don't want to continue processing this request.
                 throw InvalidActiveGroupException("The specified active_group is not present in the token")
             }
-
             if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)
             ) {
                 return VARIABLE_OWNER

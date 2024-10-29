@@ -403,7 +403,7 @@ val COMPLETE_RESPONSE =
         relatedVariableDefinitionUris = listOf(),
         owner =
             Owner(
-                team = "",
+                team = TEST_TEAM,
                 groups = listOf(TEST_DEVELOPERS_GROUP),
             ),
         contact = null,

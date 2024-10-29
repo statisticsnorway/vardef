@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -433,7 +434,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list all variables unauthenticated`(spec: RequestSpecification)  {
+    fun `list all variables unauthenticated`(spec: RequestSpecification) {
         spec
             .given()
             .auth()
@@ -445,8 +446,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list all variables authenticated as variable consumer`(spec: RequestSpecification)  {
-        val response =
+    fun `list all variables with all status authenticated`(spec: RequestSpecification) {
+        val body =
             spec
                 .`when`()
                 .get("/variable-definitions")
@@ -454,11 +455,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .statusCode(HttpStatus.OK.code)
                 .extract()
                 .body()
-        assertThat(response).isNull()
-    }
+                .asString()
 
-    // draft
-    // published internal
-    // published external
-    // variable owner, variable creator (?)
+        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
+        assertThat(variableDefinitions.any { it.variableStatus == VariableStatus.DRAFT })
+        assertThat(variableDefinitions.any { it.variableStatus == VariableStatus.PUBLISHED_INTERNAL })
+        assertThat(variableDefinitions.any { it.variableStatus == VariableStatus.PUBLISHED_EXTERNAL })
+        assertThat(variableDefinitions.any { it.variableStatus == VariableStatus.DEPRECATED })
+    }
 }

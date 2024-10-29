@@ -446,7 +446,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list all variables with all status authenticated`(spec: RequestSpecification) {
+    fun `list all variables with all statuses authenticated`(spec: RequestSpecification) {
         val body =
             spec
                 .`when`()

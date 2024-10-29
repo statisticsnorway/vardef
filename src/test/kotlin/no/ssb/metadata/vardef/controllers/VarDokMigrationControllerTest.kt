@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
 import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
+import no.ssb.metadata.vardef.utils.TEST_TEAM
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
@@ -266,6 +267,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
-            .body("owner.team", equalTo("play-enhjoern-a"))
+            .body("owner.team", equalTo(TEST_TEAM))
     }
 }

@@ -78,7 +78,7 @@ class VariableDefinitionTest {
     @CsvSource(
         "play-enhjoern-a-developers, play-enhjoern-a",
         "play-fix-data-admins, play-fix",
-        "null, null",
+        "skips-data-managers, skips-data",
     )
     fun `owner team is substring of group name`(
         group: String,

@@ -73,8 +73,10 @@ data class Draft(
 ) {
     /**
      * Team name is a substring of group name
+     * Expecting team name before last hyphen
      */
     private fun parseTeamName(ownerGroup: String): String {
+        // When group name ends with 'data-admins' it is a special case
         return if (ownerGroup.endsWith("data-admins")) {
             ownerGroup.substringBeforeLast("-").substringBeforeLast("-")
         } else {

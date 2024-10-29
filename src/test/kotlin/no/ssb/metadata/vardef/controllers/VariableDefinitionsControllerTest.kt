@@ -408,7 +408,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                JwtTokenHelper.jwtTokenSigned(daplaTeams = listOf(TEST_TEAM), daplaGroups = listOf(group)).parsedString,
+                JwtTokenHelper.jwtTokenSigned(daplaGroups = listOf(group)).parsedString,
             )
             .contentType(ContentType.JSON)
             .body(jsonTestInput().toString())

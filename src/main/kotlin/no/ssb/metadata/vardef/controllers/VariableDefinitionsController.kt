@@ -19,6 +19,7 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -53,7 +54,7 @@ class VariableDefinitionsController {
         ],
     )
     @Get
-    @Secured(SecurityRule.IS_AUTHENTICATED)
+    @Secured(VARIABLE_CONSUMER)
     fun listVariableDefinitions(
         @QueryValue("date_of_validity")
         @Parameter(

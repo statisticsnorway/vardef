@@ -43,13 +43,13 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .getJSONObjectClaim(daplaClaim)[daplaGroupsClaim]
             as? List<String> ?: emptyList()
 
-    @Suppress("UNCHECKED_CAST")
+    /*@Suppress("UNCHECKED_CAST")
     private fun getDaplaTeams(token: JWT) =
         token
             .jwtClaimsSet
             .getJSONObjectClaim(daplaClaim)[daplaTeamsClaim]
             as? List<String> ?: emptyList()
-
+*/
     /**
      * Is selected team in token
      * Team is a substring of group
@@ -61,13 +61,14 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         request: R,
         token: JWT,
     ): Boolean {
-        val group: String = request.parameters.get(ACTIVE_GROUP)
+        return  request.parameters.get(ACTIVE_GROUP) in getDaplaGroups(token)
+       //  val group: String = request.parameters.get(ACTIVE_GROUP)
         // Special rule if group name ends with "data-admins"
-        return if (group.endsWith("data-admins")) {
+       /* return if (group.endsWith("data-admins")) {
             group.substringBeforeLast("-").substringBeforeLast("-") in getDaplaTeams(token)
         } else {
             group.substringBeforeLast("-") in getDaplaTeams(token)
-        }
+        }*/
     }
 
     /**
@@ -93,16 +94,19 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     ): String {
         if (ACTIVE_GROUP in request.parameters && daplaClaim in token.jwtClaimsSet.claims) {
             if (
-                request.parameters.get(ACTIVE_GROUP) !in getDaplaGroups(token)
+                !isValidTeam(request, token)
             ) {
+            /*if (
+                request.parameters.get(ACTIVE_GROUP) !in getDaplaGroups(token)
+            ) {*/
                 // In this case the user is trying to act on behalf of a group they are not a member
                 // of ,so we don't want to continue processing this request.
                 throw InvalidActiveGroupException("The specified active_group is not present in the token")
             }
-            if (!isValidTeam(request, token)) {
+            // if (!isValidTeam(request, token)) {
                 // Group has no valid team in token and the authentication is incorrect
-                throw InvalidActiveTeamException("The specified team is not present in the token")
-            }
+              //  throw InvalidActiveTeamException("The specified team is not present in the token")
+           // }
 
             if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)
             ) {

@@ -260,7 +260,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
-            .queryParam(ACTIVE_GROUP, "play-test-b-developers")
+            .queryParam(ACTIVE_GROUP, "play-test-c-developers")
             .`when`()
             .post("/vardok-migration/948")
             .then()

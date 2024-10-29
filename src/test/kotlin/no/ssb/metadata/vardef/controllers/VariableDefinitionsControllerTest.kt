@@ -434,7 +434,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list all variables unauthenticated`(spec: RequestSpecification) {
+    fun `list variables definitions unauthenticated`(spec: RequestSpecification) {
         spec
             .given()
             .auth()
@@ -446,7 +446,15 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list all variables with all statuses authenticated`(spec: RequestSpecification) {
+    fun `list variables definitions authenticated`(spec: RequestSpecification) {
+        val expectedStatuses =
+            setOf(
+                VariableStatus.DRAFT,
+                VariableStatus.PUBLISHED_INTERNAL,
+                VariableStatus.PUBLISHED_EXTERNAL,
+                VariableStatus.DEPRECATED,
+            )
+
         val body =
             spec
                 .`when`()
@@ -458,9 +466,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .asString()
 
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
-        assertThat(variableDefinitions.any { it.variableStatus == VariableStatus.DRAFT })
-        assertThat(variableDefinitions.any { it.variableStatus == VariableStatus.PUBLISHED_INTERNAL })
-        assertThat(variableDefinitions.any { it.variableStatus == VariableStatus.PUBLISHED_EXTERNAL })
-        assertThat(variableDefinitions.any { it.variableStatus == VariableStatus.DEPRECATED })
+        val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
+        assertThat(actualStatuses).containsAll(expectedStatuses)
     }
 }

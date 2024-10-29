@@ -71,4 +71,32 @@ class VardefTokenValidatorTest {
 
         assertThat(auth).isNull()
     }
+
+    @Test
+    fun `token does not contain dapla groups`() {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        JwtTokenHelper.jwtTokenSigned(daplaGroups = null).parsedString,
+                        HttpRequest.POST("/variable-definitions", ""),
+                    ),
+                ).block()
+
+        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+    }
+
+    @Test
+    fun `no dapla structure in token`() {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        JwtTokenHelper.jwtTokenSigned(includeDaplaStructure = false).parsedString,
+                        HttpRequest.POST("/variable-definitions", ""),
+                    ),
+                ).block()
+
+        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+    }
 }

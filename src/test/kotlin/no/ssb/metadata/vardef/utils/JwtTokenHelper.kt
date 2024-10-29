@@ -22,14 +22,15 @@ class JwtTokenHelper {
                     "play-foeniks-a",
                     "play-enhjoern-a",
                 ),
-            daplaGroups: List<String> =
+            daplaGroups: List<String>? =
                 listOf(
                     TEST_DEVELOPERS_GROUP,
                     "play-foeniks-a-developers",
                 ),
+            includeDaplaStructure: Boolean = true,
         ) = SignedJWT(
             header.toBase64URL(),
-            claims(audienceClaim, daplaTeams, daplaGroups).toPayload().toBase64URL(),
+            claims(audienceClaim, daplaTeams, daplaGroups, includeDaplaStructure).toPayload().toBase64URL(),
             signature,
         )
 
@@ -55,7 +56,8 @@ class JwtTokenHelper {
         private fun claims(
             audienceClaim: List<String>,
             daplaTeams: List<String>,
-            daplaGroups: List<String>,
+            daplaGroups: List<String>?,
+            includeDaplaStructure: Boolean,
         ) = JWTClaimsSet.parse(
             """
             {
@@ -97,10 +99,15 @@ class JwtTokenHelper {
             "scope": "openid profile email",
             "sid": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
             "email_verified": true,
-            "dapla": {
-              "teams": $daplaTeams,
-              "groups": $daplaGroups
-            },
+            ${ if (includeDaplaStructure) {
+                """"dapla": {
+                    "teams": $daplaTeams,
+                    "groups": $daplaGroups
+                },"""
+            } else {
+                ""
+            }
+            }
             "name": "Ola Nordmann",
             "short_username": "ssb-ano",
             "preferred_username": "ano@ssb.no",

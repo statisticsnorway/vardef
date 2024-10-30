@@ -244,7 +244,7 @@ class ValidityPeriodsService(
         }
         val allDefinitionsChanged =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                !lastValidityPeriod.toDraft().definition.getValidLanguage(lang).equals(
+                !lastValidityPeriod.definition.getValidLanguage(lang).equals(
                     newPeriod.definition.getValidLanguage(lang),
                     ignoreCase = true,
                 )

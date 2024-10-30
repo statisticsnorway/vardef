@@ -30,6 +30,6 @@ class InvalidActiveGroupExceptionHandler(
                 .cause(exception)
                 .errorMessage(exception.message)
                 .build(),
-            HttpResponse.status<Any>(HttpStatus.FORBIDDEN),
+            HttpResponse.status<Any>(HttpStatus.UNAUTHORIZED),
         )
 }

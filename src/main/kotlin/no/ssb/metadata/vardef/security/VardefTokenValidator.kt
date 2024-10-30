@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.security
 
 import com.nimbusds.jwt.JWT
+import com.nimbusds.jwt.JWTClaimsSet
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpRequest
 import io.micronaut.security.authentication.Authentication
@@ -10,6 +11,7 @@ import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
+import no.ssb.metadata.vardef.services.DaplaTeamService
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -40,6 +42,38 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             as? List<String> ?: emptyList()
 
     /**
+     * @return `true` if the principal has specified a group which is not present in their token.
+     */
+    private fun activeGroupSpoofed(
+        activeGroup: String,
+        token: JWT,
+    ): Boolean = activeGroup !in getDaplaGroups(token)
+
+    /**
+     * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.
+     */
+    private fun isVariableOwner(claimsSet: JWTClaimsSet): Boolean = daplaLabAudience in claimsSet.getStringListClaim(Claims.AUDIENCE)
+
+    /**
+     * @return `true` if the principal can be assigned the [VARIABLE_CREATOR] role.
+     */
+    private fun isVariableCreator(
+        activeGroup: String,
+        claimsSet: JWTClaimsSet,
+    ): Boolean = isVariableOwner(claimsSet) && DaplaTeamService.isDevelopers(activeGroup)
+
+    /**
+     * @return `true` the token and request contain the fields necessary to assign roles.
+     */
+    private fun tokenAndRequestContainExpectedFields(
+        token: JWT,
+        request: R,
+    ): Boolean =
+        ACTIVE_GROUP in request.parameters &&
+            daplaClaim in token.jwtClaimsSet.claims &&
+            getDaplaGroups(token).isNotEmpty()
+
+    /**
      * Assign roles
      *
      * The roles are assigned based on claims in the token and the `active_group` query parameter.
@@ -48,34 +82,30 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
      * `nested_teams` config set to `true`. Ref <https://github.com/statisticsnorway/keycloak-iac/blob/4fb230adb60412e7a546612fec9e5b9903400825/pkl/GenericClient.pkl#L160>
      *
      * By default, authenticated users receive the [VARIABLE_CONSUMER] role. If they fulfill the
-     * requirements then they receive the [VARIABLE_OWNER] role.
+     * requirements then they receive other roles in addition.
      *
      * @param token the parsed JWT token
      * @param request the [HttpRequest]
-     * @return the applicable role.
+     * @return the set of applicable roles.
      * @throws InvalidActiveGroupException
      */
     private fun assignRoles(
         token: JWT,
         request: R,
-    ): String {
-        if (ACTIVE_GROUP in request.parameters && daplaClaim in token.jwtClaimsSet.claims) {
-            if (
-                request.parameters.get(ACTIVE_GROUP) !in getDaplaGroups(token)
-            ) {
-                // In this case the user is trying to act on behalf of a group they are not a member
-                // of ,so we don't want to continue processing this request.
+    ): Set<String> {
+        // If we arrive here the principal is authenticated. Give all principals a default role.
+        val roles = mutableSetOf(VARIABLE_CONSUMER)
+        val claimsSet = token.jwtClaimsSet
+        if (tokenAndRequestContainExpectedFields(token, request)) {
+            val activeGroup = request.parameters.get(ACTIVE_GROUP)
+            if (activeGroupSpoofed(activeGroup, token)) {
                 throw InvalidActiveGroupException("The specified active_group is not present in the token")
             }
-
-            if (daplaLabAudience in token.jwtClaimsSet.getStringListClaim(Claims.AUDIENCE)
-            ) {
-                return VARIABLE_OWNER
-            }
+            if (isVariableOwner(claimsSet)) roles.add(VARIABLE_OWNER)
+            if (isVariableCreator(activeGroup, claimsSet)) roles.add(VARIABLE_CREATOR)
         }
 
-        // Default role for authenticated principals
-        return VARIABLE_CONSUMER
+        return roles.toSet()
     }
 
     /**
@@ -97,7 +127,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .map {
                 Authentication.build(
                     it.jwtClaimsSet.getStringClaim(usernameClaim),
-                    listOf(assignRoles(it, request)),
+                    assignRoles(it, request),
                     it.jwtClaimsSet.claims,
                 )
             }

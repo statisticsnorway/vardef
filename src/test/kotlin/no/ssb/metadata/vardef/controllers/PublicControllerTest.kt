@@ -268,7 +268,7 @@ class PublicControllerTest : BaseVardefTest() {
             Stream.of(
                 argumentSet("PUBLISHED_INTERNAL", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId),
                 argumentSet("DEPRECATED", SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId),
-                argumentSet("DRAFT", DRAFT_BUS_EXAMPLE.id),
+                argumentSet("DRAFT", DRAFT_BUS_EXAMPLE.definitionId),
             )
     }
 }

@@ -145,7 +145,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .queryParam(ACTIVE_GROUP, "invalid group")
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
-            .statusCode(403)
+            .statusCode(401)
     }
 
     @Test
@@ -242,7 +242,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("""{"short_name": "${INCOME_TAX_VP1_P1.shortName}"}""")
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
             .body(
@@ -263,7 +263,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body(updatedJsonString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
@@ -442,7 +442,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .`when`()
             .patch("/variable-definitions/${expected.definitionId}")
             .then()
-            .statusCode(403)
+            .statusCode(401)
     }
 
     @Test
@@ -462,8 +462,25 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).`when`()
+            )
+            .`when`()
             .patch("/variable-definitions/${expected.definitionId}")
+            .then()
+            .statusCode(403)
+    }
+
+    @Test
+    fun `update variable definition active group is valid but not owner`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"short_name":"toppebek"}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, "play-foeniks-a-developers")
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(403)
     }

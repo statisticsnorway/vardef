@@ -25,9 +25,6 @@ import java.time.LocalDateTime
     example = DRAFT_EXAMPLE,
 )
 data class Draft(
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    @Nullable
-    var id: String?,
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
@@ -46,11 +43,6 @@ data class Draft(
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @NotNull
     val containsSensitivePersonalInformation: Boolean,
-    @Schema(
-        description = VARIABLE_STATUS_FIELD_DESCRIPTION,
-        accessMode = Schema.AccessMode.READ_ONLY,
-    )
-    var variableStatus: VariableStatus?,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
@@ -71,9 +63,21 @@ data class Draft(
     @Valid
     val contact: Contact?,
 ) {
+    /**
+     * Team name is a substring of group name
+     */
+    private fun parseTeamName(ownerGroup: String): String {
+        // When group name ends with 'data-admins' it is a special case
+        return if (ownerGroup.endsWith("data-admins")) {
+            ownerGroup.substringBeforeLast("-").substringBeforeLast("-")
+        } else {
+            ownerGroup.substringBeforeLast("-")
+        }
+    }
+
     fun toSavedVariableDefinition(ownerGroup: String): SavedVariableDefinition =
         SavedVariableDefinition(
-            definitionId = id ?: VariableDefinitionService.generateId(),
+            definitionId = VariableDefinitionService.generateId(),
             patchId = 1,
             name = name,
             shortName = shortName,
@@ -82,14 +86,14 @@ data class Draft(
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
-            variableStatus = variableStatus ?: VariableStatus.DRAFT,
+            variableStatus = VariableStatus.DRAFT,
             measurementType = measurementType,
             validFrom = validFrom,
             validUntil = null,
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            owner = Owner("", listOf(ownerGroup)),
+            owner = Owner(parseTeamName(ownerGroup), listOf(ownerGroup)),
             contact = contact,
             // Provide a placeholder value, actual value set by data layer
             createdAt = LocalDateTime.now(),

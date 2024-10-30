@@ -62,6 +62,7 @@ class VarDokMigrationController {
     )
     @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
     @Secured(VARIABLE_CREATOR)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",

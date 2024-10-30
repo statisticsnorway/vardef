@@ -5,6 +5,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
@@ -32,7 +33,7 @@ class PatchesControllerTest : BaseVardefTest() {
                 .map {
                     argumentSet(
                         "'$it' patch id",
-                        it.definitionId,
+                        it,
                     )
                 }.stream()
     }
@@ -488,12 +489,12 @@ class PatchesControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("patches")
     fun `get one patch authenticated`(
-        patchId: Int,
+        patch: SavedVariableDefinition,
         spec: RequestSpecification,
     ) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/$patchId")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/${patch.definitionId}")
             .then()
             .statusCode(HttpStatus.OK.code)
     }

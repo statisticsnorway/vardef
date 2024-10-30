@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.MethodSource
 
 class PatchesControllerTest : BaseVardefTest() {
     companion object {
@@ -445,5 +446,20 @@ class PatchesControllerTest : BaseVardefTest() {
             .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#definitionIdsAllStatuses")
+    fun `get patches authenticated`(
+        definitionId: String,
+        expectedStatus: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("/variable-definitions/$definitionId/patches")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("[0].variable_status", equalTo(expectedStatus))
     }
 }

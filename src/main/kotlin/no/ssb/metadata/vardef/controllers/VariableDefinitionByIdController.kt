@@ -94,6 +94,16 @@ class VariableDefinitionByIdController {
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
         @VardefId
         definitionId: String,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "delete",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): MutableHttpResponse<Unit> {
@@ -129,8 +139,20 @@ class VariableDefinitionByIdController {
     @Secured(VARIABLE_OWNER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun updateVariableDefinitionById(
-        @Schema(description = ID_FIELD_DESCRIPTION) @VardefId definitionId: String,
-        @Body @Valid updateDraft: UpdateDraft,
+        @Schema(description = ID_FIELD_DESCRIPTION)
+        @VardefId
+        definitionId: String,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
+        @Body
+        @Valid updateDraft: UpdateDraft,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {

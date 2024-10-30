@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -430,5 +431,42 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
         assertThat(jsonMapper.readValue(body, Array<CompleteResponse>::class.java)).isNotNull
+    }
+
+    @Test
+    fun `list variables definitions unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @Test
+    fun `list variables definitions authenticated`(spec: RequestSpecification) {
+        val expectedStatuses =
+            setOf(
+                VariableStatus.DRAFT,
+                VariableStatus.PUBLISHED_INTERNAL,
+                VariableStatus.PUBLISHED_EXTERNAL,
+                VariableStatus.DEPRECATED,
+            )
+
+        val body =
+            spec
+                .`when`()
+                .get("/variable-definitions")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
+        val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
+        assertThat(actualStatuses).containsAll(expectedStatuses)
     }
 }

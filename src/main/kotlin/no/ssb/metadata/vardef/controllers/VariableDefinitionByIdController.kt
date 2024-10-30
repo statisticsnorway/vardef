@@ -54,7 +54,7 @@ class VariableDefinitionByIdController {
         ],
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
-    @Get()
+    @Get
     fun getVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId
@@ -87,7 +87,7 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @ApiResponse(responseCode = "405", description = "Attempt to delete a variable definition with status unlike DRAFT.")
     @Status(HttpStatus.NO_CONTENT)
-    @Delete()
+    @Delete
     @Secured(VARIABLE_OWNER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun deleteVariableDefinitionById(

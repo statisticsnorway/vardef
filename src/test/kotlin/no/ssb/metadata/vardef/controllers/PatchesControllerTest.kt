@@ -485,7 +485,7 @@ class PatchesControllerTest : BaseVardefTest() {
     ) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/${patch.definitionId}")
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/${patch.patchId}")
             .then()
             .statusCode(HttpStatus.OK.code)
     }

@@ -68,6 +68,16 @@ class ValidityPeriodsController {
         @Valid
         @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
         newPeriod: ValidityPeriod,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "create_validity_period",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {

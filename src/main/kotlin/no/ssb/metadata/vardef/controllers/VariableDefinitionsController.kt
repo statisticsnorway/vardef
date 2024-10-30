@@ -83,7 +83,7 @@ class VariableDefinitionsController {
             Content(
                 examples = [
                     ExampleObject(
-                        name = "Created variable definition",
+                        name = "create_draft",
                         value = DRAFT_EXAMPLE,
                     ),
                 ],
@@ -98,6 +98,16 @@ class VariableDefinitionsController {
         @Parameter(example = DRAFT_EXAMPLE)
         @Body
         @Valid draft: Draft,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "create_draft",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {

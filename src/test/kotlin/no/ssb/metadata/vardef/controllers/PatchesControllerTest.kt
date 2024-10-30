@@ -13,10 +13,9 @@ import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
-import org.junit.jupiter.params.provider.EnumSource
-import org.junit.jupiter.params.provider.MethodSource
-import org.junit.jupiter.params.provider.ValueSource
+import org.junit.jupiter.params.provider.*
+import org.junit.jupiter.params.provider.Arguments.argumentSet
+import java.util.stream.Stream
 
 class PatchesControllerTest : BaseVardefTest() {
     companion object {
@@ -26,6 +25,16 @@ class PatchesControllerTest : BaseVardefTest() {
                     remove("short_name")
                     remove("valid_from")
                 }
+
+        @JvmStatic
+        fun patches(): Stream<Arguments.ArgumentSet> =
+            ALL_INCOME_TAX_PATCHES
+                .map {
+                    argumentSet(
+                        "'$it' patch id",
+                       it.definitionId
+                    )
+                }.stream()
     }
 
     @Test
@@ -477,7 +486,7 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = [1, 2, 3, 4, 5, 6, 7])
+    @MethodSource("patches")
     fun `get one patch authenticated`(
         patchId: Int,
         spec: RequestSpecification,
@@ -488,4 +497,5 @@ class PatchesControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.OK.code)
     }
+
 }

@@ -434,4 +434,16 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                 ),
             )
     }
+
+    @Test
+    fun `list validity periods unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
 }

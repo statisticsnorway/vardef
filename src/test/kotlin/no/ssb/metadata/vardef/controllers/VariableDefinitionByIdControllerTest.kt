@@ -496,4 +496,14 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
+
+    @Test
+    fun `get variable definition authenticated`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("variable_status", equalTo("PUBLISHED_EXTERNAL"))
+    }
 }

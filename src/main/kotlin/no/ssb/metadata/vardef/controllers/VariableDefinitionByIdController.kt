@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
@@ -88,6 +89,7 @@ class VariableDefinitionByIdController {
     @Status(HttpStatus.NO_CONTENT)
     @Delete()
     @Secured(VARIABLE_OWNER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun deleteVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
         @VardefId
@@ -125,6 +127,7 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch
     @Secured(VARIABLE_OWNER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun updateVariableDefinitionById(
         @Schema(description = ID_FIELD_DESCRIPTION) @VardefId definitionId: String,
         @Body @Valid updateDraft: UpdateDraft,

@@ -14,9 +14,12 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.temporal.ChronoUnit
+import java.util.stream.Stream
 
 class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
@@ -497,13 +500,29 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
-    @Test
-    fun `get variable definition authenticated`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("definitionIdsAllStatuses")
+    fun `get variable definition authenticated`(
+        definitionId:String,
+        expectedStatus: String,
+        spec: RequestSpecification
+    ) {
         spec
             .`when`()
-            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
+            .get("/variable-definitions/$definitionId")
             .then()
             .statusCode(HttpStatus.OK.code)
-            .body("variable_status", equalTo("PUBLISHED_EXTERNAL"))
+            .body("variable_status", equalTo(expectedStatus))
+    }
+
+    companion object {
+        @JvmStatic
+        fun definitionIdsAllStatuses(): Stream<Arguments> =
+            Stream.of(
+                argumentSet("Published external", INCOME_TAX_VP1_P1.definitionId, "PUBLISHED_EXTERNAL"),
+                argumentSet("Published internal", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, "PUBLISHED_INTERNAL"),
+                argumentSet("Deprecated", SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId, "DEPRECATED"),
+                argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
+            )
     }
 }

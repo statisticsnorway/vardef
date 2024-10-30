@@ -190,6 +190,94 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `update draft variable without active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @Test
+    fun `update draft variable invalid active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .queryParam(ACTIVE_GROUP, "invalid group")
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @Test
+    fun `update draft variable unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @Test
+    fun `update draft variable principal not the owner`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .oauth2(
+                JwtTokenHelper
+                    .jwtTokenSigned(
+                        daplaTeams = listOf("some-other-team"),
+                        daplaGroups = listOf("some-other-team-developers"),
+                    ).parsedString,
+            ).contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .queryParam(ACTIVE_GROUP, "some-other-team-developers")
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @Test
     fun `update variable with published status`(spec: RequestSpecification) {
         spec
             .given()

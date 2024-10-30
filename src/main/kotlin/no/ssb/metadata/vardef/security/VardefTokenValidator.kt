@@ -109,8 +109,5 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     override fun validate(
         token: String?,
         request: R,
-    ): Publisher<JWT> {
-        logger.info("Validating for token for $request")
-        return Mono.just(jsonWebTokenParser.parse(token).get())
-    }
+    ): Publisher<JWT> = Mono.just(jsonWebTokenParser.parse(token).get())
 }

@@ -451,7 +451,11 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#definitionIdsAllStatuses")
-    fun `list validity periods authenticated`(definitionId: String, expectedStatus: String, spec: RequestSpecification) {
+    fun `list validity periods authenticated`(
+        definitionId: String,
+        expectedStatus: String,
+        spec: RequestSpecification,
+    ) {
         spec
             .`when`()
             .get("/variable-definitions/$definitionId/validity-periods")

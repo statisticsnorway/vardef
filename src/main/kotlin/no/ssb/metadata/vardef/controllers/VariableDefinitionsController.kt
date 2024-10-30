@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
@@ -90,6 +91,7 @@ class VariableDefinitionsController {
     )
     @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @Secured(VARIABLE_CREATOR)
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE)

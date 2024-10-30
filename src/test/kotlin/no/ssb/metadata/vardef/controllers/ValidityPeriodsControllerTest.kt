@@ -409,6 +409,26 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `create new validity period principal not owner`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .auth()
+            .oauth2(
+                JwtTokenHelper
+                    .jwtTokenSigned(
+                        daplaTeams = listOf("some-other-team"),
+                        daplaGroups = listOf("some-other-team-developers"),
+                    ).parsedString,
+            ).queryParam(ACTIVE_GROUP, "some-other-team-developers")
+            .body(allMandatoryFieldsChanged())
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(403)
+    }
+
+    @Test
     fun `create new patch incorrect active group`(spec: RequestSpecification) {
         spec
             .given()

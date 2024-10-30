@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.security
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.http.HttpAttributes
 import io.micronaut.http.HttpRequest
+import io.micronaut.http.uri.UriMatchInfo
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.rules.AbstractSecurityRule
@@ -42,16 +43,10 @@ class VariableOwnerSecurityRule(
             if (securedAnnotation != null) {
                 val optionalValue = routeMatch.getValue(Secured::class.java, Array<String>::class.java)
                 if (optionalValue.isPresent) {
-                    val values: List<String> = optionalValue.get().toList()
-                    if (!values.contains(VARIABLE_OWNER)) {
-                        // There's nothing for us to do here, allow other rules to run.
-                        return Mono.just(SecurityRuleResult.UNKNOWN)
-                    }
-                    if (VARIABLE_DEFINITION_ID_PATH_VARIABLE in routeMatch.argumentNames) {
-                        logger.info("Authenticating route ${routeMatch.routeInfo}")
-//                        val matchInfo = routeMatch as UriMatchInfo
-                        val definitionId = routeMatch.variableValues[VARIABLE_DEFINITION_ID_PATH_VARIABLE] as String
-                        logger.info("Definition ID: $definitionId")
+                    val roles: List<String> = optionalValue.get().toList()
+                    val variables = (routeMatch as UriMatchInfo).variableValues
+                    if (roles.contains(VARIABLE_OWNER) && VARIABLE_DEFINITION_ID_PATH_VARIABLE in variables.keys) {
+                        val definitionId = variables[VARIABLE_DEFINITION_ID_PATH_VARIABLE] as String
                         val patch = validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
                         return if (routeMatch.variableValues[ACTIVE_GROUP] in patch.owner.groups) {
                             Mono.just(SecurityRuleResult.ALLOWED)

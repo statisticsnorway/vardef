@@ -15,8 +15,6 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.*
-import org.junit.jupiter.params.provider.Arguments.argumentSet
-import java.util.stream.Stream
 
 class PatchesControllerTest : BaseVardefTest() {
     companion object {
@@ -28,14 +26,7 @@ class PatchesControllerTest : BaseVardefTest() {
                 }
 
         @JvmStatic
-        fun patches(): Stream<Arguments.ArgumentSet> =
-            ALL_INCOME_TAX_PATCHES
-                .map {
-                    argumentSet(
-                        "'$it' patch id",
-                        it,
-                    )
-                }.stream()
+        fun patches(): List<SavedVariableDefinition> = ALL_INCOME_TAX_PATCHES
     }
 
     @Test

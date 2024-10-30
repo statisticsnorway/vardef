@@ -477,7 +477,7 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = [1,2,3,4,5,6,7])
+    @ValueSource(ints = [1, 2, 3, 4, 5, 6, 7])
     fun `get one patch authenticated`(
         patchId: Int,
         spec: RequestSpecification,

@@ -55,6 +55,7 @@ class VariableDefinitionsController {
     )
     @Get
     @Secured(VARIABLE_CONSUMER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun listVariableDefinitions(
         @QueryValue("date_of_validity")
         @Parameter(
@@ -73,7 +74,7 @@ class VariableDefinitionsController {
      * Attempts to specify id or variable_status in a request will receive 400 BAD REQUEST responses.
      */
     @Tag(name = DRAFT)
-    @Post()
+    @Post
     @Status(HttpStatus.CREATED)
     @ApiResponse(
         responseCode = "201",

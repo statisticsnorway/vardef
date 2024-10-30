@@ -12,6 +12,8 @@ import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 
 class ValidityPeriodsControllerTest : BaseVardefTest() {
@@ -433,5 +435,32 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
                         "neighbourhood-dogs] are allowed to edit this variable",
                 ),
             )
+    }
+
+    @Test
+    fun `list validity periods unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#definitionIdsAllStatuses")
+    fun `list validity periods authenticated`(
+        definitionId: String,
+        expectedStatus: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("/variable-definitions/$definitionId/validity-periods")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("[0].variable_status", equalTo(expectedStatus))
     }
 }

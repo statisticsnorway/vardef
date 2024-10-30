@@ -14,12 +14,9 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.temporal.ChronoUnit
-import java.util.stream.Stream
 
 class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
@@ -501,7 +498,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("definitionIdsAllStatuses")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#definitionIdsAllStatuses")
     fun `get variable definition authenticated`(
         definitionId: String,
         expectedStatus: String,
@@ -513,16 +510,5 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.OK.code)
             .body("variable_status", equalTo(expectedStatus))
-    }
-
-    companion object {
-        @JvmStatic
-        fun definitionIdsAllStatuses(): Stream<Arguments> =
-            Stream.of(
-                argumentSet("Published external", INCOME_TAX_VP1_P1.definitionId, "PUBLISHED_EXTERNAL"),
-                argumentSet("Published internal", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, "PUBLISHED_INTERNAL"),
-                argumentSet("Deprecated", SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId, "DEPRECATED"),
-                argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
-            )
     }
 }

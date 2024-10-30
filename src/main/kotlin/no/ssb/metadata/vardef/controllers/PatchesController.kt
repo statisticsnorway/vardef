@@ -20,6 +20,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
+import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
@@ -58,6 +59,8 @@ class PatchesController {
         ],
     )
     @Get
+    @Secured(VARIABLE_CONSUMER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun getAllPatches(
         @PathVariable("variable-definition-id")
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])

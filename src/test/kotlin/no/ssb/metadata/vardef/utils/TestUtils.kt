@@ -9,6 +9,17 @@ const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"
 
 object TestUtils {
     /**
+     * Definition ids for variables with all variable statuses and variable status value
+     */
+    @JvmStatic
+    fun definitionIdsAllStatuses(): Stream<Arguments> =
+        Stream.of(
+            argumentSet("Published external", INCOME_TAX_VP1_P1.definitionId, "PUBLISHED_EXTERNAL"),
+            argumentSet("Published internal", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, "PUBLISHED_INTERNAL"),
+            argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
+        )
+
+    /**
      * Invalid variable definitions.
      *
      * Some fields are not included in these test cases because they're covered by other tests. They include:

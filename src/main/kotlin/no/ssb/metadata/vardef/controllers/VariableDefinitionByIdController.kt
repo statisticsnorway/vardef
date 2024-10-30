@@ -151,10 +151,10 @@ class VariableDefinitionByIdController {
                 ),
             ],
         )
-        @Body
-        @Valid updateDraft: UpdateDraft,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        @Body
+        @Valid updateDraft: UpdateDraft,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
         if (variable.variableStatus != VariableStatus.DRAFT) {

@@ -28,7 +28,7 @@ class VardefTokenValidatorTest {
                         HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$TEST_DEVELOPERS_GROUP", ""),
                     ),
                 ).block()
-        assertThat(auth?.roles).containsExactly(VARIABLE_OWNER)
+        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER, VARIABLE_OWNER, VARIABLE_CREATOR)
     }
 
     @Test
@@ -42,7 +42,7 @@ class VardefTokenValidatorTest {
                     ),
                 ).block()
         assertThat(auth?.roles).doesNotContain(VARIABLE_OWNER)
-        assertThat(auth?.roles).contains(VARIABLE_CONSUMER)
+        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
     }
 
     @Test
@@ -70,5 +70,33 @@ class VardefTokenValidatorTest {
                 ).block()
 
         assertThat(auth).isNull()
+    }
+
+    @Test
+    fun `token does not contain dapla groups`() {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        JwtTokenHelper.jwtTokenSigned(daplaGroups = null).parsedString,
+                        HttpRequest.POST("/variable-definitions", ""),
+                    ),
+                ).block()
+
+        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+    }
+
+    @Test
+    fun `no dapla structure in token`() {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        JwtTokenHelper.jwtTokenSigned(includeDaplaStructure = false).parsedString,
+                        HttpRequest.POST("/variable-definitions", ""),
+                    ),
+                ).block()
+
+        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
     }
 }

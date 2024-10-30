@@ -9,13 +9,13 @@ import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.MethodSource
 
 class PatchesControllerTest : BaseVardefTest() {
     companion object {
@@ -183,7 +183,7 @@ class PatchesControllerTest : BaseVardefTest() {
                         .copy()
                         .apply {
                             this.variableStatus = variableStatus
-                        }.toSavedVariableDefinition(TEST_DEVELOPERS_GROUP),
+                        },
                 ).definitionId
 
         spec
@@ -400,40 +400,66 @@ class PatchesControllerTest : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     @Test
     fun `create new patch incorrect active group`(spec: RequestSpecification) {
-        val body =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(
-                    patchBody()
-                        .apply {
-                            getJSONObject("name").apply {
-                                put("nb", "Bybakgrunn")
-                            }
-                        }.toString(),
-                ).auth()
-                .oauth2(
-                    JwtTokenHelper
-                        .jwtTokenSigned(
-                            daplaTeams = listOf("play-enhjoern-b"),
-                            daplaGroups = listOf("play-enhjoern-b-developers"),
-                        ).parsedString,
-                ).queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
-                .`when`()
-                .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
-                .then()
-                .statusCode(HttpStatus.FORBIDDEN.code)
-                .body(
-                    ERROR_MESSAGE_JSON_PATH,
-                    Matchers.containsString(
-                        "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, " +
-                            "neighbourhood-dogs] are allowed to edit this variable",
-                    ),
-                )
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                patchBody()
+                    .apply {
+                        getJSONObject("name").apply {
+                            put("nb", "Bybakgrunn")
+                        }
+                    }.toString(),
+            ).auth()
+            .oauth2(
+                JwtTokenHelper
+                    .jwtTokenSigned(
+                        daplaTeams = listOf("play-enhjoern-b"),
+                        daplaGroups = listOf("play-enhjoern-b-developers"),
+                    ).parsedString,
+            ).queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                containsString(
+                    "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, " +
+                        "neighbourhood-dogs] are allowed to edit this variable",
+                ),
+            )
+    }
+
+    @Test
+    fun `get patches unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#definitionIdsAllStatuses")
+    fun `get patches authenticated`(
+        definitionId: String,
+        expectedStatus: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("/variable-definitions/$definitionId/patches")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("[0].variable_status", equalTo(expectedStatus))
     }
 }

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
@@ -57,6 +58,7 @@ class ValidityPeriodsController {
     @ApiResponse(responseCode = "400", description = "The request is missing or has errors in required fields.")
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     @Secured(VARIABLE_OWNER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun createValidityPeriod(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])

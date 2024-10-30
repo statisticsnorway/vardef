@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import jakarta.validation.Valid
@@ -22,6 +23,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -53,7 +55,9 @@ class VariableDefinitionByIdController {
         ],
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
-    @Get()
+    @Get
+    @Secured(VARIABLE_CONSUMER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
@@ -87,8 +91,9 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @ApiResponse(responseCode = "405", description = "Attempt to delete a variable definition with status unlike DRAFT.")
     @Status(HttpStatus.NO_CONTENT)
-    @Delete()
+    @Delete
     @Secured(VARIABLE_OWNER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun deleteVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
@@ -127,6 +132,7 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch
     @Secured(VARIABLE_OWNER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun updateVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Schema(description = ID_FIELD_DESCRIPTION)

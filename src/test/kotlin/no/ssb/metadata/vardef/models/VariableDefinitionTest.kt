@@ -1,14 +1,14 @@
 package no.ssb.metadata.vardef.models
 
-import no.ssb.metadata.vardef.utils.COMPLETE_RESPONSE
-import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
-import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.net.URI
+import java.time.LocalDate
 import kotlin.properties.Delegates
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -17,6 +17,37 @@ class VariableDefinitionTest {
     private var nanoIdSize by Delegates.notNull<Int>()
     private lateinit var renderedVariableDefinition: RenderedVariableDefinition
     private lateinit var completeResponseVariableDefinition: CompleteResponse
+
+    private val draftExample =
+        Draft(
+            name =
+                LanguageStringType(
+                    nb = "Fly",
+                    nn = null,
+                    en = "Airplane",
+                ),
+            shortName = "fly",
+            definition =
+                LanguageStringType(
+                    nb = "Et transportmiddel med vinger.",
+                    nn = null,
+                    en = "A means of transportation with wings",
+                ),
+            classificationReference = "91",
+            unitTypes = listOf("", ""),
+            subjectFields = listOf("", ""),
+            containsSensitivePersonalInformation = false,
+            measurementType = "",
+            validFrom = LocalDate.of(1988, 5, 17),
+            externalReferenceUri = URI("https://www.example.com").toURL(),
+            comment = null,
+            relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+            contact =
+                Contact(
+                    LanguageStringType("", "", ""),
+                    "",
+                ),
+        )
 
     @BeforeAll
     fun setUp() {
@@ -74,5 +105,19 @@ class VariableDefinitionTest {
     @Test
     fun `complete response include owner`() {
         assertThat(completeResponseVariableDefinition).hasFieldOrProperty("owner")
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "play-enhjoern-a-developers, play-enhjoern-a",
+        "play-fix-data-admins, play-fix",
+        "skips-data-managers, skips-data",
+    )
+    fun `owner team is substring of group name`(
+        group: String,
+        expectedteam: String,
+    ) {
+        val savedVariableDefinition = draftExample.toSavedVariableDefinition(group)
+        assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
     }
 }

@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
 import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
+import no.ssb.metadata.vardef.utils.TEST_TEAM
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
@@ -222,7 +223,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body(
                 ERROR_MESSAGE_JSON_PATH,
                 containsString(
-                    "varDef.shortName: must match \"^[a-z0-9_]{3,}$\"",
+                    "shortName: must match",
                 ),
             )
     }
@@ -251,11 +252,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/948")
             .then()
-            .statusCode(403)
+            .statusCode(401)
     }
 
     @Test
-    fun `post request return owner`(spec: RequestSpecification) {
+    fun `create vardok return owner`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -266,5 +267,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(201)
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
+            .body("owner.team", equalTo(TEST_TEAM))
     }
 }

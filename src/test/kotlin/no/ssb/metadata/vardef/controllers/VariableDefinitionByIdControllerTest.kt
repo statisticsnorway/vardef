@@ -145,7 +145,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .queryParam(ACTIVE_GROUP, "invalid group")
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
-            .statusCode(403)
+            .statusCode(401)
     }
 
     @Test
@@ -330,7 +330,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("""{"short_name": "${INCOME_TAX_VP1_P1.shortName}"}""")
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
             .body(
@@ -351,7 +351,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body(updatedJsonString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.id}")
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
@@ -530,7 +530,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .`when`()
             .patch("/variable-definitions/${expected.definitionId}")
             .then()
-            .statusCode(403)
+            .statusCode(401)
     }
 
     @Test
@@ -550,9 +550,53 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).`when`()
+            )
+            .`when`()
             .patch("/variable-definitions/${expected.definitionId}")
             .then()
             .statusCode(403)
+    }
+
+    @Test
+    fun `update variable definition active group is valid but not owner`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"short_name":"toppebek"}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, "play-foeniks-a-developers")
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(403)
+    }
+
+    @Test
+    fun `get variable definition unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#definitionIdsAllStatuses")
+    fun `get variable definition authenticated`(
+        definitionId: String,
+        expectedStatus: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("/variable-definitions/$definitionId")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("variable_status", equalTo(expectedStatus))
     }
 }

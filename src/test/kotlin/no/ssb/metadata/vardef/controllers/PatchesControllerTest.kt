@@ -32,7 +32,7 @@ class PatchesControllerTest : BaseVardefTest() {
                 .map {
                     argumentSet(
                         "'$it' patch id",
-                       it.definitionId
+                        it.definitionId,
                     )
                 }.stream()
     }
@@ -497,5 +497,4 @@ class PatchesControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.OK.code)
     }
-
 }

@@ -503,9 +503,9 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("definitionIdsAllStatuses")
     fun `get variable definition authenticated`(
-        definitionId:String,
+        definitionId: String,
         expectedStatus: String,
-        spec: RequestSpecification
+        spec: RequestSpecification,
     ) {
         spec
             .`when`()

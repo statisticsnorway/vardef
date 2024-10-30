@@ -434,4 +434,16 @@ class PatchesControllerTest : BaseVardefTest() {
                 ),
             )
     }
+
+    @Test
+    fun `get patches unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
 }

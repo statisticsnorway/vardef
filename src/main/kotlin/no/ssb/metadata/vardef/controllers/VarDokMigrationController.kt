@@ -11,18 +11,21 @@ import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
-import no.ssb.metadata.vardef.constants.DATA_MIGRATION
-import no.ssb.metadata.vardef.constants.DRAFT_EXAMPLE
+import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
+import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import org.reactivestreams.Publisher
 
 @Tag(name = DATA_MIGRATION)
@@ -48,19 +51,44 @@ class VarDokMigrationController {
         content =
             [
                 Content(
+                    schema = Schema(implementation = CompleteResponse::class),
                     examples = [
                         ExampleObject(
-                            DRAFT_EXAMPLE,
+                            name = "migrate_1607",
+                            value = COMPLETE_RESPONSE_EXAMPLE,
                         ),
                     ],
                 ),
             ],
     )
     @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
+    @Secured(VARIABLE_CREATOR)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun createVariableDefinitionFromVarDok(
-        @Parameter(name = "vardok-id", description = "The ID of the definition in Vardok.", example = "1607")
+        @Parameter(
+            name = "vardok-id",
+            description = "The ID of the definition in Vardok.",
+            examples = [
+                ExampleObject(
+                    name = "migrate_1607",
+                    value = "1607",
+                ),
+            ],
+        )
         @PathVariable("vardok-id")
         id: String,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "migrate_1607",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
+        @QueryValue(ACTIVE_GROUP)
+        activeGroup: String,
         httpRequest: HttpRequest<*>,
     ): Publisher<MutableHttpResponse<*>>? {
         try {
@@ -69,19 +97,12 @@ class VarDokMigrationController {
                     vardokService.fetchMultipleVardokItemsByLanguage(id),
                 )
 
-            // Get token from header
-            val authHeader = httpRequest.headers.get(AUTHORIZATION)
-
-            val selectedGroup = httpRequest.parameters.get(ACTIVE_GROUP)
-
             return httpClient.proxy(
-                HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$selectedGroup", varDefInput).headers {
-                        entries: MutableHttpHeaders ->
-                    authHeader?.let {
-                        // Set authorization header for post to /variable-definitions
-                        entries.set(AUTHORIZATION, it)
-                    }
-                },
+                HttpRequest
+                    .POST("/variable-definitions?$ACTIVE_GROUP=$activeGroup", varDefInput)
+                    .headers { entries: MutableHttpHeaders ->
+                        entries.set(AUTHORIZATION, httpRequest.headers.get(AUTHORIZATION))
+                    },
             )
         } catch (e: VardokNotFoundException) {
             // We always want to return NOT_FOUND in this case

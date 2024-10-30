@@ -44,3 +44,4 @@ const val LAST_UPDATED_BY_FIELD_DESCRIPTION = "The user who last modified this v
 const val DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION = "List only variable definitions which are valid on this date."
 const val ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION = "Render the variable definition in the given language."
 const val VALID_FROM_QUERY_PARAMETER_DESCRIPTION = "Valid from date for the specific validity period to be patched."
+const val ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION = "The group which the user currently represents."

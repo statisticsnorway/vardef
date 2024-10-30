@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
@@ -57,10 +58,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .statusCode(201)
 
         spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/vardok-migration/2")
             .then()
@@ -69,29 +66,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 "_embedded.errors[0].message",
                 containsString(
                     "Short name wies already exists.",
-                ),
-            )
-    }
-
-    @Test
-    fun `duplicate short name`(spec: RequestSpecification) {
-        val id = 1607
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .post("/vardok-migration/$id")
-        spec
-            .`when`()
-            .contentType(ContentType.JSON)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(409)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(
-                    "already exists",
                 ),
             )
     }
@@ -252,7 +226,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/948")
             .then()
-            .statusCode(401)
+            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 
     @Test

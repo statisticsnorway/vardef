@@ -57,6 +57,7 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get
     @Secured(VARIABLE_CONSUMER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun getVariableDefinitionById(
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         @VardefId

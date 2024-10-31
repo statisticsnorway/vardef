@@ -17,6 +17,8 @@ import io.micronaut.web.router.RouteMatch
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.VARIABLE_DEFINITION_ID_PATH_VARIABLE
+import no.ssb.metadata.vardef.models.Owner
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
@@ -24,7 +26,18 @@ import reactor.core.publisher.Mono
 import java.util.*
 
 /**
- * Variable owner security rule
+ * Variable Owner security rule
+ *
+ * The [VARIABLE_OWNER] role is required on operations where a principal _modifies_ an existing resource. Due to our
+ * authentication architecture, the bearer token does not contain information about which concrete resources the
+ * principal has access to.
+ *
+ * Instead, the token lists which _groups_ the principal is a member of. In this class we make use of the [ACTIVE_GROUP]
+ * query parameter. This can be trusted because it has already been verified in [VardefTokenValidator] which provides
+ * the [Authentication] and the roles contained within.
+ *
+ * The primary check that class performs is whether the provided `active_group` is present in the list of groups
+ * defined in the [Owner] structure in the [SavedVariableDefinition].
  *
  * @property variableDefinitionService
  * @constructor
@@ -39,10 +52,12 @@ class VariableOwnerSecurityRule(
 ) : AbstractSecurityRule<HttpRequest<*>>(rolesFinder) {
     private val logger = LoggerFactory.getLogger(VariableOwnerSecurityRule::class.java)
 
-    // Run BEFORE the standard SecuredAnnotationRule
-    private val order = SecuredAnnotationRule.ORDER - 50
-
-    override fun getOrder(): Int = order
+    /**
+     * Get order
+     *
+     * For correct behaviour, this Rule must run BEFORE [SecuredAnnotationRule]
+     */
+    override fun getOrder(): Int = SecuredAnnotationRule.ORDER - 50
 
     /**
      * Does the operation require the [VARIABLE_OWNER] role.
@@ -83,6 +98,13 @@ class VariableOwnerSecurityRule(
     private fun getDefinitionId(routeMatch: RouteMatch<*>): String =
         routeMatch.variableValues[VARIABLE_DEFINITION_ID_PATH_VARIABLE] as String
 
+    /**
+     * Check whether the principal is allowed access to the resource.
+     *
+     * @param request [HttpRequest]
+     * @param authentication [Authentication]
+     * @return a [SecurityRuleResult]
+     */
     override fun check(
         request: HttpRequest<*>?,
         authentication: Authentication?,
@@ -91,13 +113,14 @@ class VariableOwnerSecurityRule(
             request
                 ?.getAttribute(HttpAttributes.ROUTE_MATCH, RouteMatch::class.java)
                 ?.orElse(null)
+
+        // Do we have the information necessary to authorize the principal?
         if (routeMatch != null &&
-            authentication != null &&
             doesOperationRequireVariableOwnerRole(routeMatch) &&
             VARIABLE_DEFINITION_ID_PATH_VARIABLE in routeMatch.variableValues &&
             ACTIVE_GROUP in request.parameters
         ) {
-            if (VARIABLE_OWNER !in authentication.roles) {
+            if (authentication == null || VARIABLE_OWNER !in authentication.roles) {
                 logger.info("Rejected access. Principal does not have necessary role. Request: $request")
                 return Mono.just(SecurityRuleResult.REJECTED)
             }

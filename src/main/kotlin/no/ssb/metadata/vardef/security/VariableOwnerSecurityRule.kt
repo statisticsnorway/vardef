@@ -3,13 +3,15 @@ package no.ssb.metadata.vardef.security
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.http.HttpAttributes
 import io.micronaut.http.HttpRequest
-import io.micronaut.http.uri.UriMatchInfo
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.rules.AbstractSecurityRule
 import io.micronaut.security.rules.SecuredAnnotationRule
 import io.micronaut.security.rules.SecurityRuleResult
 import io.micronaut.security.token.RolesFinder
+import io.micronaut.validation.validator.Validator
 import io.micronaut.web.router.MethodBasedRouteMatch
 import io.micronaut.web.router.RouteMatch
 import jakarta.inject.Singleton
@@ -22,9 +24,11 @@ import reactor.core.publisher.Mono
 import java.util.*
 
 @Singleton
+@ExecuteOn(TaskExecutors.BLOCKING)
 class VariableOwnerSecurityRule(
     rolesFinder: RolesFinder,
     private val validityPeriods: ValidityPeriodsService,
+    private val validator: Validator,
 ) : AbstractSecurityRule<HttpRequest<*>>(rolesFinder) {
     private val logger = LoggerFactory.getLogger(VariableOwnerSecurityRule::class.java)
 
@@ -44,11 +48,16 @@ class VariableOwnerSecurityRule(
                 val optionalValue = routeMatch.getValue(Secured::class.java, Array<String>::class.java)
                 if (optionalValue.isPresent) {
                     val roles: List<String> = optionalValue.get().toList()
-                    val variables = (routeMatch as UriMatchInfo).variableValues
-                    if (roles.contains(VARIABLE_OWNER) && VARIABLE_DEFINITION_ID_PATH_VARIABLE in variables.keys) {
+                    val variables = routeMatch.variableValues
+                    if (roles.contains(VARIABLE_OWNER) &&
+                        VARIABLE_DEFINITION_ID_PATH_VARIABLE in variables.keys &&
+                        ACTIVE_GROUP in request.parameters
+                    ) {
                         val definitionId = variables[VARIABLE_DEFINITION_ID_PATH_VARIABLE] as String
                         val patch = validityPeriods.getLatestPatchInLastValidityPeriod(definitionId)
-                        return if (routeMatch.variableValues[ACTIVE_GROUP] in patch.owner.groups) {
+                        val activeGroup = request.parameters.get(ACTIVE_GROUP) as String
+                        val ownerGroups = patch.owner.groups
+                        return if (activeGroup in ownerGroups) {
                             Mono.just(SecurityRuleResult.ALLOWED)
                         } else {
                             Mono.just(SecurityRuleResult.REJECTED)

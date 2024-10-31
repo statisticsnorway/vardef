@@ -225,7 +225,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     @Test
@@ -550,8 +550,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            )
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${expected.definitionId}")
             .then()
             .statusCode(403)

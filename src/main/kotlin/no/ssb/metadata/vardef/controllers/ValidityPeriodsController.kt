@@ -23,7 +23,6 @@ import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
-import no.ssb.metadata.vardef.validators.VardefId
 
 @Tag(name = VALIDITY_PERIODS)
 @Validated
@@ -62,7 +61,6 @@ class ValidityPeriodsController {
     fun createValidityPeriod(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
         @Body
         @Valid
@@ -104,7 +102,6 @@ class ValidityPeriodsController {
     fun listValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
     ): List<CompleteResponse> = validityPeriods.listComplete(variableDefinitionId)
 }

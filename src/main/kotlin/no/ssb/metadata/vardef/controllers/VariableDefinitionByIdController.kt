@@ -27,7 +27,6 @@ import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Validated
@@ -61,7 +60,6 @@ class VariableDefinitionByIdController {
     fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
-        @VardefId
         definitionId: String,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -97,7 +95,6 @@ class VariableDefinitionByIdController {
     fun deleteVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
-        @VardefId
         definitionId: String,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
@@ -128,7 +125,6 @@ class VariableDefinitionByIdController {
     fun updateVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Schema(description = ID_FIELD_DESCRIPTION)
-        @VardefId
         definitionId: String,
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,

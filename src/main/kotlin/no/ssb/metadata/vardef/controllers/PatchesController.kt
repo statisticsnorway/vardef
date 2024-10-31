@@ -24,7 +24,6 @@ import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
-import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Tag(name = PATCHES)
@@ -64,7 +63,6 @@ class PatchesController {
     fun getAllPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         patches
@@ -95,7 +93,6 @@ class PatchesController {
     fun getOnePatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
         @PathVariable("patch-id")
         @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "patch_1", value = "1")])
@@ -132,7 +129,6 @@ class PatchesController {
     fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
         @QueryValue("valid_from")
         @Parameter(

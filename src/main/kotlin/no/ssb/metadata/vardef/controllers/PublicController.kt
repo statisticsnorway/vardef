@@ -19,7 +19,6 @@ import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Tag(name = PUBLIC)
@@ -91,7 +90,6 @@ class PublicController(
     fun getPublicVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
-        @VardefId
         definitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
@@ -151,7 +149,6 @@ class PublicController(
     fun listPublicValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,

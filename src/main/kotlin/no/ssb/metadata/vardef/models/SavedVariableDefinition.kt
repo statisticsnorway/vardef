@@ -146,6 +146,7 @@ data class SavedVariableDefinition(
             comment = varDefUpdates.comment ?: comment,
             relatedVariableDefinitionUris =
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
+            owner = varDefUpdates.owner?: owner,
             contact = varDefUpdates.contact ?: contact,
         )
 }

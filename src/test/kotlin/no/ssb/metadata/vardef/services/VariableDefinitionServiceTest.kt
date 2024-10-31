@@ -1,8 +1,6 @@
 package no.ssb.metadata.vardef.services
 
-import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.SupportedLanguages
-import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
@@ -65,6 +63,15 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         expectedResult: Boolean,
     ) {
         assertThat(variableDefinitionService.doesShortNameExist(shortName)).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `update owner team`(){
+        val existingOwnerTeam = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team
+        val input = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.apply { owner.team = "my-last-team" }
+        val updatedDraft = variableDefinitionService.update(input)
+        assertThat(updatedDraft.owner.team).isNotEqualTo(existingOwnerTeam)
+
     }
 
     companion object {

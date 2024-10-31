@@ -13,10 +13,11 @@ micronaut:
           values:
             dapla-lab-audience: onyxia-api
     intercept-url-map:
+      - pattern: /**
+        access: isAuthenticated()
       - pattern: /docs/**
         http-method: GET
-        access:
-          - isAnonymous()
+        access: isAnonymous()
   router:
     static-resources:
       swagger:

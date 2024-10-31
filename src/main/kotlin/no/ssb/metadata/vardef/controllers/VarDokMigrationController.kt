@@ -12,6 +12,7 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -31,6 +32,7 @@ import org.reactivestreams.Publisher
 @Tag(name = DATA_MIGRATION)
 @Validated
 @Controller("/vardok-migration/{vardok-id}")
+@Secured(SecurityRule.IS_AUTHENTICATED)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
     @Inject

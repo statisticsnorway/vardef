@@ -6,6 +6,7 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -30,6 +31,7 @@ import no.ssb.metadata.vardef.validators.VardefId
 @Validated
 @Controller("/variable-definitions/{variable-definition-id}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
+@Secured(SecurityRule.IS_AUTHENTICATED)
 class ValidityPeriodsController {
     @Inject
     lateinit var validityPeriods: ValidityPeriodsService

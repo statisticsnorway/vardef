@@ -122,7 +122,6 @@ class ValidityPeriodsController {
             ),
         ],
     )
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun listValidityPeriods(
         @PathVariable("variable-definition-id")

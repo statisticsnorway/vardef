@@ -61,7 +61,6 @@ class PatchesController {
         ],
     )
     @Get
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun getAllPatches(
         @PathVariable("variable-definition-id")

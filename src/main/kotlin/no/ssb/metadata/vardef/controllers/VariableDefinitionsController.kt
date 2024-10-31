@@ -56,7 +56,6 @@ class VariableDefinitionsController {
         ],
     )
     @Get
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun listVariableDefinitions(
         @QueryValue("date_of_validity")

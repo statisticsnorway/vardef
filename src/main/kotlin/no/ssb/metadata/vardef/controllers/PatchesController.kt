@@ -30,6 +30,7 @@ import java.time.LocalDate
 @Tag(name = PATCHES)
 @Validated
 @Controller("/variable-definitions/{variable-definition-id}/patches")
+@Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController {
     @Inject
@@ -59,7 +60,6 @@ class PatchesController {
         ],
     )
     @Get
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun getAllPatches(
         @PathVariable("variable-definition-id")

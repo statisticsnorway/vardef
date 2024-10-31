@@ -30,6 +30,7 @@ import no.ssb.metadata.vardef.validators.VardefId
 @Validated
 @Controller("/variable-definitions/{variable-definition-id}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
+@Secured(VARIABLE_CONSUMER)
 class ValidityPeriodsController {
     @Inject
     lateinit var validityPeriods: ValidityPeriodsService
@@ -120,7 +121,6 @@ class ValidityPeriodsController {
             ),
         ],
     )
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun listValidityPeriods(
         @PathVariable("variable-definition-id")

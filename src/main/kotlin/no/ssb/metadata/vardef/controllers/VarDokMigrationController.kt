@@ -31,6 +31,7 @@ import org.reactivestreams.Publisher
 @Tag(name = DATA_MIGRATION)
 @Validated
 @Controller("/vardok-migration/{vardok-id}")
+@Secured(VARIABLE_CREATOR)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
     @Inject
@@ -62,7 +63,6 @@ class VarDokMigrationController {
             ],
     )
     @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
-    @Secured(VARIABLE_CREATOR)
     @SecurityRequirement(name = "Bearer Authentication")
     fun createVariableDefinitionFromVarDok(
         @Parameter(

@@ -27,6 +27,7 @@ import java.time.LocalDate
 
 @Validated
 @Controller("/variable-definitions")
+@Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionsController {
     @Inject
@@ -54,7 +55,6 @@ class VariableDefinitionsController {
         ],
     )
     @Get
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun listVariableDefinitions(
         @QueryValue("date_of_validity")

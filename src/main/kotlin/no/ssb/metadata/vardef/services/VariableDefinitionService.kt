@@ -46,6 +46,14 @@ class VariableDefinitionService(
     fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.existsByShortName(shortName)
 
     /**
+     * @return `true` if [group] is an owner of the *Variable Definition*
+     */
+    fun groupIsOwner(
+        group: String,
+        definitionId: String,
+    ) = group in validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).owner.groups
+
+    /**
      * Is the *Variable Definition* publicly available?
      *
      * @param definitionId The ID of the *Variable Definition* of interest.

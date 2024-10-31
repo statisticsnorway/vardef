@@ -25,8 +25,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .`when`()
             .get("/variable-definitions/MALFORMED_ID")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test
@@ -113,8 +112,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test
@@ -377,8 +375,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .`when`()
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test

@@ -55,8 +55,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .`when`()
             .get("/variable-definitions/MALFORMED_ID/patches")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test

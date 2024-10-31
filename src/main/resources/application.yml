@@ -12,11 +12,6 @@ micronaut:
             username: preferred_username
           values:
             dapla-lab-audience: onyxia-api
-    intercept-url-map:
-      # TODO Allow access to everything until we have specific rules on endpoints
-      - pattern: /**
-        access:
-          - isAnonymous()
   router:
     static-resources:
       swagger:

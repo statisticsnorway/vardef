@@ -49,7 +49,9 @@ class VariableOwnerSecurityRule(
                 if (optionalValue.isPresent) {
                     val roles: List<String> = optionalValue.get().toList()
                     val variables = routeMatch.variableValues
-                    if (roles.contains(VARIABLE_OWNER) &&
+                    if (VARIABLE_OWNER in roles &&
+                        authentication != null &&
+                        VARIABLE_OWNER in authentication.roles &&
                         VARIABLE_DEFINITION_ID_PATH_VARIABLE in variables.keys &&
                         ACTIVE_GROUP in request.parameters
                     ) {
@@ -58,8 +60,14 @@ class VariableOwnerSecurityRule(
                         val activeGroup = request.parameters.get(ACTIVE_GROUP) as String
                         val ownerGroups = patch.owner.groups
                         return if (activeGroup in ownerGroups) {
+                            logger.info(
+                                "Allowed access for:\nURI ${request.uri}\nHeaders ${request.headers.toList()}\nGroup $activeGroup\nID $definitionId",
+                            )
                             Mono.just(SecurityRuleResult.ALLOWED)
                         } else {
+                            logger.info(
+                                "Rejected access for:\nURI ${request.uri}\nHeaders ${request.headers}\nGroup $activeGroup\nID $definitionId",
+                            )
                             Mono.just(SecurityRuleResult.REJECTED)
                         }
                     }

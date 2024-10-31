@@ -28,7 +28,7 @@ import java.time.LocalDate
 
 @Validated
 @Controller("/variable-definitions")
-@Secured(SecurityRule.IS_AUTHENTICATED)
+@Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionsController {
     @Inject

@@ -31,7 +31,7 @@ import java.time.LocalDate
 @Tag(name = PATCHES)
 @Validated
 @Controller("/variable-definitions/{variable-definition-id}/patches")
-@Secured(SecurityRule.IS_AUTHENTICATED)
+@Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController {
     @Inject

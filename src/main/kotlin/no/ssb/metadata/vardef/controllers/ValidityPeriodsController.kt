@@ -31,7 +31,7 @@ import no.ssb.metadata.vardef.validators.VardefId
 @Validated
 @Controller("/variable-definitions/{variable-definition-id}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
-@Secured(SecurityRule.IS_AUTHENTICATED)
+@Secured(VARIABLE_CONSUMER)
 class ValidityPeriodsController {
     @Inject
     lateinit var validityPeriods: ValidityPeriodsService

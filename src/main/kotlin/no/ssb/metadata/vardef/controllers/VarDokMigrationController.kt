@@ -26,13 +26,14 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import org.reactivestreams.Publisher
 
 @Tag(name = DATA_MIGRATION)
 @Validated
 @Controller("/vardok-migration/{vardok-id}")
-@Secured(SecurityRule.IS_AUTHENTICATED)
+@Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
     @Inject

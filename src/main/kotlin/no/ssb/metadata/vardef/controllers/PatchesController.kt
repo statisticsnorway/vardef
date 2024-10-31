@@ -29,6 +29,7 @@ import java.time.LocalDate
 @Tag(name = PATCHES)
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
+@Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController {
     @Inject
@@ -58,7 +59,6 @@ class PatchesController {
         ],
     )
     @Get
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun getAllPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
@@ -90,6 +90,8 @@ class PatchesController {
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/{patch-id}")
+    @Secured(VARIABLE_CONSUMER)
+    @SecurityRequirement(name = "Bearer Authentication")
     fun getOnePatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
@@ -141,6 +143,16 @@ class PatchesController {
         @Body
         @Valid
         patch: Patch,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "create_patch",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {

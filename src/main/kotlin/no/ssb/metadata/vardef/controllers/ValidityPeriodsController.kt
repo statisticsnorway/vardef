@@ -20,6 +20,7 @@ import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
+import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
@@ -28,6 +29,7 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
+@Secured(VARIABLE_CONSUMER)
 class ValidityPeriodsController {
     @Inject
     lateinit var validityPeriods: ValidityPeriodsService
@@ -66,6 +68,16 @@ class ValidityPeriodsController {
         @Valid
         @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
         newPeriod: ValidityPeriod,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "create_validity_period",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {
@@ -99,6 +111,7 @@ class ValidityPeriodsController {
             ),
         ],
     )
+    @SecurityRequirement(name = "Bearer Authentication")
     fun listValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])

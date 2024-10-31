@@ -31,6 +31,7 @@ import java.time.LocalDate
 
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
+@Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController {
     @Inject
@@ -55,7 +56,6 @@ class VariableDefinitionByIdController {
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
@@ -96,6 +96,16 @@ class VariableDefinitionByIdController {
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
         definitionId: String,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "delete",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): MutableHttpResponse<Unit> {
@@ -126,9 +136,20 @@ class VariableDefinitionByIdController {
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Schema(description = ID_FIELD_DESCRIPTION)
         definitionId: String,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
-        @Body @Valid updateDraft: UpdateDraft,
+        @Body
+        @Valid
+        updateDraft: UpdateDraft,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
         if (variable.variableStatus != VariableStatus.DRAFT) {

@@ -5,6 +5,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
@@ -13,9 +14,7 @@ import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
-import org.junit.jupiter.params.provider.EnumSource
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.*
 
 class PatchesControllerTest : BaseVardefTest() {
     companion object {
@@ -25,6 +24,9 @@ class PatchesControllerTest : BaseVardefTest() {
                     remove("short_name")
                     remove("valid_from")
                 }
+
+        @JvmStatic
+        fun patches(): List<SavedVariableDefinition> = ALL_INCOME_TAX_PATCHES
     }
 
     @Test
@@ -453,5 +455,30 @@ class PatchesControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.OK.code)
             .body("[0].variable_status", equalTo(expectedStatus))
+    }
+
+    @Test
+    fun `get one patch unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/1")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("patches")
+    fun `get one patch authenticated`(
+        patch: SavedVariableDefinition,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/${patch.patchId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
     }
 }

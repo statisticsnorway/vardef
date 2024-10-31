@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.constants
 const val ID_EXAMPLE = """wypvb3wd"""
 const val EMPTY_LIST_EXAMPLE = """[]"""
 const val DATE_EXAMPLE = "1970-01-01"
+const val ACTIVE_GROUP_EXAMPLE = "dapla-felles-developers"
 
 const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
             "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",

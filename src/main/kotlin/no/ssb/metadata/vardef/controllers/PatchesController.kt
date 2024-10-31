@@ -27,8 +27,6 @@ import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
-import kotlin.Int
-import kotlin.String
 
 @Tag(name = PATCHES)
 @Validated

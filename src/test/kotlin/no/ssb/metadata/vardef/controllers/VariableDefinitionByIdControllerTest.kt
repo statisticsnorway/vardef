@@ -603,15 +603,16 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         valueBeforeUpdate: String,
         jsonInput: String,
         pathVariable: String,
-        spec: RequestSpecification) {
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-              jsonInput
+                jsonInput,
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${definitionId}")
+            .patch("/variable-definitions/$definitionId")
             .then()
             .statusCode(HttpStatus.OK.code)
             .body(pathVariable, not(equalTo(valueBeforeUpdate)))
@@ -625,15 +626,16 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         jsonInput: String,
         errorMessage: String,
         property: String,
-        spec: RequestSpecification) {
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-                jsonInput
+                jsonInput,
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${definitionId}")
+            .patch("/variable-definitions/$definitionId")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
@@ -643,15 +645,19 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
         assertThat(
             variableDefinitionService.getCompleteByDate(
-              definitionId
+                definitionId,
             )?.owner?.team,
         )
             .isNotBlank()
-        assertThat(variableDefinitionService.getCompleteByDate(
-            definitionId
-        )?.owner?.groups?.all { it.isNotBlank()})
-        assertThat(variableDefinitionService.getCompleteByDate(
-            definitionId
-        )?.owner?.groups?.isNotEmpty())
+        assertThat(
+            variableDefinitionService.getCompleteByDate(
+                definitionId,
+            )?.owner?.groups?.all { it.isNotBlank() },
+        )
+        assertThat(
+            variableDefinitionService.getCompleteByDate(
+                definitionId,
+            )?.owner?.groups?.isNotEmpty(),
+        )
     }
 }

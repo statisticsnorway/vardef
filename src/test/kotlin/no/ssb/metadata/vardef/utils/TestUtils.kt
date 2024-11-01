@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef.utils
 
-import io.micronaut.http.HttpStatus
-import no.ssb.metadata.vardef.models.Owner
 import no.ssb.metadata.vardef.models.VariableStatus
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
@@ -25,7 +23,8 @@ object TestUtils {
     @JvmStatic
     fun updateOwnerOk(): Stream<Arguments> =
         Stream.of(
-            argumentSet("New team name",
+            argumentSet(
+                "New team name",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
                 JSONObject()
@@ -34,19 +33,20 @@ object TestUtils {
                             "owner",
                             JSONObject().apply {
                                 put("team", "my-oh-my-team")
-                                put("groups",
+                                put(
+                                    "groups",
                                     listOf(
                                         "skip-stat-developers",
-                                         "play-enhjoern-a-developers"
-                                    )
+                                        "play-enhjoern-a-developers",
+                                    ),
                                 )
-                            }
+                            },
                         )
-
-                }.toString(),
-                "owner.team"
+                    }.toString(),
+                "owner.team",
             ),
-            argumentSet("New group name",
+            argumentSet(
+                "New group name",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[1],
                 JSONObject()
@@ -55,19 +55,20 @@ object TestUtils {
                             "owner",
                             JSONObject().apply {
                                 put("team", "my-team")
-                                put("groups",
+                                put(
+                                    "groups",
                                     listOf(
                                         "skip-stat-developers",
-                                        "play-foeniks-a-developers"
-                                    )
+                                        "play-foeniks-a-developers",
+                                    ),
                                 )
-                            }
+                            },
                         )
-
                     }.toString(),
-                "owner.groups[1]"
+                "owner.groups[1]",
             ),
-            argumentSet("Add group name",
+            argumentSet(
+                "Add group name",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups.last(),
                 JSONObject()
@@ -76,26 +77,26 @@ object TestUtils {
                             "owner",
                             JSONObject().apply {
                                 put("team", "my-team")
-                                put("groups",
+                                put(
+                                    "groups",
                                     listOf(
                                         "skip-stat-developers",
                                         "play-enhjoern-a-developers",
-                                        "play-foeniks-a-developers"
-                                    )
+                                        "play-foeniks-a-developers",
+                                    ),
                                 )
-                            }
+                            },
                         )
-
                     }.toString(),
-                "owner.groups[2]"
+                "owner.groups[2]",
             ),
         )
-
 
     @JvmStatic
     fun updateOwnerBadRequest(): Stream<Arguments> =
         Stream.of(
-            argumentSet("Team name empty string",
+            argumentSet(
+                "Team name empty string",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
                 JSONObject()
@@ -104,16 +105,21 @@ object TestUtils {
                             "owner",
                             JSONObject().apply {
                                 put("team", "")
-                                put("groups", listOf("skip-stat-developers",
-                                    "play-enhjoern-a-developers"))
-                            }
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-enhjoern-a-developers",
+                                    ),
+                                )
+                            },
                         )
-
                     }.toString(),
                 "can not be empty",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
             ),
-            argumentSet("Team name null",
+            argumentSet(
+                "Team name null",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
                 JSONObject()
@@ -121,16 +127,21 @@ object TestUtils {
                         put(
                             "owner",
                             JSONObject().apply {
-                                put("groups", listOf("skip-stat-developers",
-                                    "play-enhjoern-a-developers"))
-                            }
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-enhjoern-a-developers",
+                                    ),
+                                )
+                            },
                         )
-
                     }.toString(),
                 "can not be null",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
             ),
-            argumentSet("Groups empty list",
+            argumentSet(
+                "Groups empty list",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[0],
                 JSONObject()
@@ -139,14 +150,14 @@ object TestUtils {
                             "owner",
                             JSONObject().apply {
                                 put("team", "my-team")
-                            }
+                            },
                         )
-
                     }.toString(),
                 "can not be empty",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[0],
             ),
-            argumentSet("Groups empty values in list",
+            argumentSet(
+                "Groups empty values in list",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[0],
                 JSONObject()
@@ -155,19 +166,21 @@ object TestUtils {
                             "owner",
                             JSONObject().apply {
                                 put("team", "my-team")
-                                put("groups", listOf(
-                                    "",
-                                    "")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "",
+                                        "",
+                                    ),
                                 )
-                            }
+                            },
                         )
-
                     }.toString(),
                 "can not be empty",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[0],
             ),
+        )
 
-            )
     /**
      * Invalid variable definitions.
      *

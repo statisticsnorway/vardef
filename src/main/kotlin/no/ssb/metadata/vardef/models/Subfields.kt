@@ -4,7 +4,7 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import no.ssb.metadata.vardef.constants.KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
 import no.ssb.metadata.vardef.constants.OWNER_EXAMPLE
 import no.ssb.metadata.vardef.constants.PERSON_EXAMPLE
@@ -72,11 +72,13 @@ data class Person(
 @Schema(example = OWNER_EXAMPLE)
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Owner(
+    @NotNull
     var team: String,
+    @NotNull
     val groups: List<String>,
 ){
     init {
-        require(team.isNotBlank()) { "team name cannot be blank or null" }
+        require(team.isNotBlank()) { "Team name cannot be blank or null" }
     }
 
 }

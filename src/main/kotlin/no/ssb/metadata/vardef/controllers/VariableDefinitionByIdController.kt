@@ -35,7 +35,6 @@ import java.time.LocalDate
 @Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController {
-
     @Inject
     lateinit var varDefService: VariableDefinitionService
 

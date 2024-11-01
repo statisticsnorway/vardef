@@ -618,7 +618,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("owner.groups[1]", not(equalTo(ownerGroupBeforeUpdate)))
     }
 
-
     @Test
     fun `update owner add group`(spec: RequestSpecification) {
         spec
@@ -662,7 +661,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 ERROR_MESSAGE_JSON_PATH,
                 containsString("can not be empty"),
             )
-
 
         assertThat(
             variableDefinitionService.getCompleteByDate(

@@ -52,7 +52,7 @@ private fun customiseMessage(exception: ConversionErrorException): String? {
         "Unknown property [short_name]" in message -> "short_name may not be specified here"
         "Error deserializing type: Owner owner" in message -> "owner team and groups can not be empty"
         "Unable to deserialize type [class no.ssb.metadata.vardef.models.Owner]" in message ->
-           "owner team and groups can not be null"
+            "owner team and groups can not be null"
         else -> exception.message
     }
 }

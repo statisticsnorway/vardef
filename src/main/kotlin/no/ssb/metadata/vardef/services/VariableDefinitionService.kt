@@ -152,6 +152,4 @@ class VariableDefinitionService(
     companion object {
         fun generateId(): String = NanoId.generate(8)
     }
-
-
 }

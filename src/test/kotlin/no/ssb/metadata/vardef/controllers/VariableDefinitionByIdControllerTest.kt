@@ -12,11 +12,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.temporal.ChronoUnit
+import java.util.stream.Stream
 
 class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @Test
@@ -597,7 +601,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#validOwnerUpdates")
+    @MethodSource("validOwnerUpdates")
     fun `update owner`(
         valueBeforeUpdate: String,
         jsonInput: String,
@@ -646,5 +650,76 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         assertThat(savedVariableDefinition?.owner?.team).isNotBlank()
         assertThat(savedVariableDefinition?.owner?.groups?.all { it.isNotBlank() })
         assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())
+    }
+
+    companion object {
+        @JvmStatic
+        fun validOwnerUpdates(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "New team name",
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-oh-my-team")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "owner.team",
+                ),
+                argumentSet(
+                    "New group name",
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[1],
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "skip-stat")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-foeniks-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "owner.groups[1]",
+                ),
+                argumentSet(
+                    "Add group name",
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups.last(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "skip-stat")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                            "play-foeniks-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "owner.groups[2]",
+                ),
+            )
     }
 }

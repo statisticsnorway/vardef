@@ -558,7 +558,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .statusCode(400)
             .body(
                 ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be null"),
+                containsString("can not be empty"),
             )
 
         assertThat(
@@ -567,6 +567,31 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             )?.owner?.team,
         )
             .isNotBlank()
+    }
+
+    @Test
+    fun `update owner team null value`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"owner": {
+                    "groups": [
+                         "skip-stat-developers", 
+                          "play-enhjoern-a-developers"
+                    ]
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(400)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                containsString("can not be null"),
+            )
     }
 
     @Test
@@ -591,5 +616,34 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("owner.groups[1]", not(equalTo(ownerGroupBeforeUpdate)))
+    }
+
+    @Test
+    fun `update owner groups empty list`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"owner": {
+                    "team":"skip-stat"
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(400)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                containsString("can not be empty"),
+            )
+
+        assertThat(
+            variableDefinitionService.getCompleteByDate(
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+            )?.owner?.groups,
+        )
+            .isNotEmpty()
     }
 }

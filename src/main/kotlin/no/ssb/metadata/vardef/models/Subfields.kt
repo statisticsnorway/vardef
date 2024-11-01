@@ -79,6 +79,7 @@ data class Owner(
 ) {
     init {
         require(team.isNotBlank()) { "Team name cannot be blank or null" }
+        require(groups.isNotEmpty()) { "Groups cannot be blank or null" }
     }
 }
 

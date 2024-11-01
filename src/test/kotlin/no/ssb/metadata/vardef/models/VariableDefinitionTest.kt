@@ -124,7 +124,7 @@ class VariableDefinitionTest {
     }
 
     @Test
-    fun `owner team can not be null or blank`()  {
+    fun `owner team can not be null or blank`() {
         val exception =
             assertThrows<IllegalArgumentException> {
                 Owner(team = "", groups = listOf("group1"))
@@ -133,7 +133,7 @@ class VariableDefinitionTest {
     }
 
     @Test
-    fun `owner groups can not be null or blank`()  {
+    fun `owner groups can not be null or blank`() {
         val exception =
             assertThrows<IllegalArgumentException> {
                 Owner(team = "hey-team", groups = listOf(""))

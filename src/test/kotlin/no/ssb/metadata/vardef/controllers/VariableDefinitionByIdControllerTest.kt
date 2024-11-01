@@ -590,7 +590,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .statusCode(400)
             .body(
                 ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be null"),
+                containsString("Null argument"),
             )
     }
 

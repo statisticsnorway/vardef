@@ -1,14 +1,23 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.context.annotation.Property
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.utils.BaseVardefTest
 import org.junit.jupiter.api.Test
 
-class ManagementEndpointsTest : BaseVardefTest() {
+@MicronautTest
+class ManagementEndpointsTest {
+    @Property(name = "endpoints.all.port")
+    private var endpointsPort: Int = 0
+
     @Test
     fun `health endpoint`(spec: RequestSpecification) {
         spec
+            .given()
+            .port(endpointsPort)
+            .auth()
+            .none()
             .`when`()
             .contentType(ContentType.JSON)
             .get("/health")
@@ -19,6 +28,10 @@ class ManagementEndpointsTest : BaseVardefTest() {
     @Test
     fun `metrics endpoint`(spec: RequestSpecification) {
         spec
+            .given()
+            .port(endpointsPort)
+            .auth()
+            .none()
             .`when`()
             .contentType(ContentType.JSON)
             .get("/metrics")
@@ -29,6 +42,9 @@ class ManagementEndpointsTest : BaseVardefTest() {
     @Test
     fun `swagger docs`(spec: RequestSpecification) {
         spec
+            .given()
+            .auth()
+            .none()
             .`when`()
             .contentType(ContentType.JSON)
             .get("/docs/swagger")
@@ -39,6 +55,9 @@ class ManagementEndpointsTest : BaseVardefTest() {
     @Test
     fun `redoc docs`(spec: RequestSpecification) {
         spec
+            .given()
+            .auth()
+            .none()
             .`when`()
             .contentType(ContentType.JSON)
             .get("/docs/redoc")

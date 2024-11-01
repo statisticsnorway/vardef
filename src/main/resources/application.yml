@@ -13,11 +13,17 @@ micronaut:
           values:
             dapla-lab-audience: onyxia-api
     intercept-url-map:
-      - pattern: /**
-        access: isAuthenticated()
+      - pattern: /health/**
+        http-method: GET
+        access: isAnonymous()
+      - pattern: /metrics/**
+        http-method: GET
+        access: isAnonymous()
       - pattern: /docs/**
         http-method: GET
         access: isAnonymous()
+      - pattern: /**
+        access: isAuthenticated()
   router:
     static-resources:
       swagger:
@@ -75,6 +81,15 @@ micronaut:
     url:
       en: https://www.ssb.no/en/klass
       nb: https://www.ssb.no/klass
+
+# Allow unauthenticated access
+endpoints:
+  all:
+    port: 8090
+  health:
+    sensitive: false
+  metrics:
+    sensitive: false
 
 klass:
   codes-at: 2024-08-01

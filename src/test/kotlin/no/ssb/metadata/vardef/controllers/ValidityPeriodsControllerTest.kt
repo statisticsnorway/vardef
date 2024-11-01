@@ -8,7 +8,6 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -411,6 +410,26 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `create new validity period principal not owner`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .auth()
+            .oauth2(
+                JwtTokenHelper
+                    .jwtTokenSigned(
+                        daplaTeams = listOf("some-other-team"),
+                        daplaGroups = listOf("some-other-team-developers"),
+                    ).parsedString,
+            ).queryParam(ACTIVE_GROUP, "some-other-team-developers")
+            .body(allMandatoryFieldsChanged())
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(403)
+    }
+
+    @Test
     fun `create new patch incorrect active group`(spec: RequestSpecification) {
         spec
             .given()
@@ -428,13 +447,6 @@ class ValidityPeriodsControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                Matchers.containsString(
-                    "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, " +
-                        "neighbourhood-dogs] are allowed to edit this variable",
-                ),
-            )
     }
 
     @Test

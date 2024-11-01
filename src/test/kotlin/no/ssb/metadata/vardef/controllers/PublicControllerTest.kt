@@ -135,8 +135,7 @@ class PublicControllerTest : BaseVardefTest() {
             .`when`()
             .get("$publicVariableDefinitionsPath/MALFORMED_ID")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test

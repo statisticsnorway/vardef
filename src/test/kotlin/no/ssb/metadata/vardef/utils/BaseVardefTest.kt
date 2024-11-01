@@ -18,7 +18,9 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 open class BaseVardefTest {
     init {
-        RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
+        if (RestAssured.filters() == null) {
+            RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
+        }
         RestAssured.authentication = oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
     }
 

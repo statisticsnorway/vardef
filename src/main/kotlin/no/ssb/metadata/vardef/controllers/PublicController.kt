@@ -19,7 +19,6 @@ import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Tag(name = PUBLIC)
@@ -87,10 +86,10 @@ class PublicController(
         ],
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
-    @Get("/variable-definitions/{definitionId}")
+    @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
     fun getPublicVariableDefinitionById(
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
-        @VardefId
         definitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
@@ -131,7 +130,7 @@ class PublicController(
      *
      * These are rendered in the given language, with the default being Norwegian Bokmål.
      */
-    @Get("/variable-definitions/{variable-definition-id}/validity-periods")
+    @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
     @Produces(MediaType.APPLICATION_JSON)
     @Tag(name = VALIDITY_PERIODS)
     @ApiResponse(
@@ -148,9 +147,8 @@ class PublicController(
         ],
     )
     fun listPublicValidityPeriods(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,

@@ -1,0 +1,137 @@
+package no.ssb.metadata.vardef.security
+
+import io.micronaut.core.annotation.AnnotationValue
+import io.micronaut.http.HttpAttributes
+import io.micronaut.http.HttpRequest
+import io.micronaut.http.annotation.PathVariable
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.authentication.Authentication
+import io.micronaut.security.rules.AbstractSecurityRule
+import io.micronaut.security.rules.SecuredAnnotationRule
+import io.micronaut.security.rules.SecurityRuleResult
+import io.micronaut.security.token.RolesFinder
+import io.micronaut.web.router.MethodBasedRouteMatch
+import io.micronaut.web.router.RouteMatch
+import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
+import no.ssb.metadata.vardef.constants.VARIABLE_DEFINITION_ID_PATH_VARIABLE
+import no.ssb.metadata.vardef.models.Owner
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.services.VariableDefinitionService
+import org.reactivestreams.Publisher
+import org.slf4j.LoggerFactory
+import reactor.core.publisher.Mono
+import java.util.*
+
+/**
+ * Variable Owner security rule
+ *
+ * The [VARIABLE_OWNER] role is required on operations where a principal _modifies_ an existing resource. Due to our
+ * authentication architecture, the bearer token does not contain information about which concrete resources the
+ * principal has access to.
+ *
+ * Instead, the token lists which _groups_ the principal is a member of. In this class we make use of the [ACTIVE_GROUP]
+ * query parameter. This can be trusted because it has already been verified in [VardefTokenValidator] which provides
+ * the [Authentication] and the roles contained within.
+ *
+ * The primary check that class performs is whether the provided `active_group` is present in the list of groups
+ * defined in the [Owner] structure in the [SavedVariableDefinition].
+ *
+ * @property variableDefinitionService
+ * @constructor
+ *
+ * @param rolesFinder
+ */
+@Singleton
+@ExecuteOn(TaskExecutors.BLOCKING)
+class VariableOwnerSecurityRule(
+    rolesFinder: RolesFinder,
+    private val variableDefinitionService: VariableDefinitionService,
+) : AbstractSecurityRule<HttpRequest<*>>(rolesFinder) {
+    private val logger = LoggerFactory.getLogger(VariableOwnerSecurityRule::class.java)
+
+    /**
+     * Get order
+     *
+     * For correct behaviour, this Rule must run BEFORE [SecuredAnnotationRule]
+     */
+    override fun getOrder(): Int = SecuredAnnotationRule.ORDER - 50
+
+    /**
+     * Does the operation require the [VARIABLE_OWNER] role.
+     *
+     * Here we're checking whether the operation is annotated with the [Secured] annotation, with [VARIABLE_OWNER]
+     * supplied as one of the values.
+     *
+     * @param routeMatch the [RouteMatch] from Micronaut.
+     * @return `true` if the role is required for this operation.
+     */
+    private fun doesOperationRequireVariableOwnerRole(routeMatch: RouteMatch<*>): Boolean {
+        if (routeMatch is MethodBasedRouteMatch<*, *>) {
+            val securedAnnotation: AnnotationValue<Secured>? = routeMatch.getAnnotation(Secured::class.java)
+            if (securedAnnotation != null) {
+                val optionalValue = routeMatch.getValue(Secured::class.java, Array<String>::class.java)
+                if (optionalValue.isPresent) {
+                    val requiredRoles: List<String> = optionalValue.get().toList()
+                    return VARIABLE_OWNER in requiredRoles
+                }
+            }
+        }
+        return false
+    }
+
+    /**
+     * Extract the definition ID.
+     *
+     * This is found in operations with paths defined in the form "/variable-definitions/{variable-definition-id}".
+     * If the path uses another format for the [PathVariable] then we won't be able to extract the definition ID.
+     * It's recommended to use the constant [VARIABLE_DEFINITION_ID_PATH_VARIABLE] when defining paths for consistency.
+     *
+     * This method could throw a [NullPointerException] if the variable is not present. Use of this method should be
+     * guarded by checking for the variable's presence.
+     *
+     * @param routeMatch the [RouteMatch] from Micronaut.
+     * @return the requested definition ID
+     */
+    private fun getDefinitionId(routeMatch: RouteMatch<*>): String =
+        routeMatch.variableValues[VARIABLE_DEFINITION_ID_PATH_VARIABLE] as String
+
+    /**
+     * Check whether the principal is allowed access to the resource.
+     *
+     * @param request [HttpRequest]
+     * @param authentication [Authentication]
+     * @return a [SecurityRuleResult]
+     */
+    override fun check(
+        request: HttpRequest<*>?,
+        authentication: Authentication?,
+    ): Publisher<SecurityRuleResult> {
+        if (request == null || authentication == null) return Mono.empty()
+        return Mono
+            .justOrEmpty<RouteMatch<*>?>(
+                request
+                    .getAttribute(HttpAttributes.ROUTE_MATCH, RouteMatch::class.java)
+                    ?.orElse(null),
+            ).filter {
+                doesOperationRequireVariableOwnerRole(it) &&
+                    VARIABLE_DEFINITION_ID_PATH_VARIABLE in it.variableValues &&
+                    ACTIVE_GROUP in request.parameters
+            }.filter {
+                VARIABLE_OWNER in authentication.roles
+            }.handle { routeMatch, sink ->
+                val activeGroup = request.parameters.get(ACTIVE_GROUP) as String
+                val definitionId = getDefinitionId(routeMatch)
+                if (variableDefinitionService.groupIsOwner(activeGroup, definitionId)
+                ) {
+                    logger.info("Allowed access for: $request")
+                    sink.next(SecurityRuleResult.ALLOWED)
+                } else {
+                    logger.info("Rejected access. Principal does not own the requested resource. Request: $request")
+                    sink.next(SecurityRuleResult.REJECTED)
+                }
+            }.onErrorReturn(SecurityRuleResult.UNKNOWN)
+    }
+}

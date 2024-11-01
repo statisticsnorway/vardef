@@ -503,9 +503,9 @@ class PatchesControllerTest : BaseVardefTest() {
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}")
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
-            .statusCode(200)
+            .statusCode(201)
             .body("owner.team", not(CoreMatchers.equalTo(ownerTeamBeforeUpdate)))
     }
 
@@ -519,14 +519,15 @@ class PatchesControllerTest : BaseVardefTest() {
                 {"owner": {
                     "team":"",
                     "groups": [
-                         "skip-stat-developers", 
-                          "play-enhjoern-a-developers"
+                          "my-team-developers", 
+                         "other-group",
+                         "play-enhjoern-a-develeopers"
                     ]
                 }}
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}")
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
             .body(
@@ -551,14 +552,15 @@ class PatchesControllerTest : BaseVardefTest() {
                 """
                 {"owner": {
                     "groups": [
-                         "skip-stat-developers", 
-                          "play-enhjoern-a-developers"
+                          "my-team-developers", 
+                         "other-group",
+                         "play-enhjoern-a-develeopers"
                     ]
                 }}
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}")
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
             .body(
@@ -569,7 +571,7 @@ class PatchesControllerTest : BaseVardefTest() {
 
     @Test
     fun `update owner group`(spec: RequestSpecification) {
-        val ownerGroupBeforeUpdate = SAVED_INTERNAL_VARIABLE_DEFINITION.owner.groups[1]
+        val ownerGroupsBeforeUpdate = SAVED_INTERNAL_VARIABLE_DEFINITION.owner.groups
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -578,40 +580,41 @@ class PatchesControllerTest : BaseVardefTest() {
                 {"owner": {
                     "team":"skip-stat",
                     "groups": [
-                         "skip-stat-developers", 
-                          "play-foeniks-a-developers"
+                          "my-team-developers",
+                         "play-enhjoern-a-develeopers"
                     ]
                 }}
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}")
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
-            .statusCode(200)
-            .body("owner.groups[1]", not(CoreMatchers.equalTo(ownerGroupBeforeUpdate)))
+            .statusCode(201)
+            .body("owner.groups", not(equalTo(ownerGroupsBeforeUpdate)))
     }
 
     @Test
-    fun `update owner add group`(spec: RequestSpecification) {
+    fun `update owner remove group`(spec: RequestSpecification) {
+        val ownerGroupToRemove = SAVED_INTERNAL_VARIABLE_DEFINITION.owner.groups[1]
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
                 """
                 {"owner": {
-                    "team":"skip-stat",
+                    "team":"my-team",
                     "groups": [
-                         "skip-stat-developers", 
-                          "play-enhjoern-a-developers",
-                          "play-foeniks-a-developers"
+                         "my-team-developers",
+                         "play-enhjoern-a-develeopers"
                     ]
                 }}
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}")
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
-            .statusCode(200)
+            .statusCode(201)
+            .body("owner.groups[1]", not(equalTo(ownerGroupToRemove)))
     }
 
     @Test
@@ -622,12 +625,12 @@ class PatchesControllerTest : BaseVardefTest() {
             .body(
                 """
                 {"owner": {
-                    "team":"skip-stat"
+                    "team":"my-team"
                 }}
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}")
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(400)
             .body(
@@ -651,7 +654,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .body(
                 """
                 {"owner": {
-                    "team":"skip-stat",
+                    "team":"my-team",
                     "groups": ["",""]
                 }}
                 """.trimIndent(),

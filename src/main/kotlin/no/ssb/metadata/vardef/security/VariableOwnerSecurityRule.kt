@@ -109,30 +109,29 @@ class VariableOwnerSecurityRule(
         request: HttpRequest<*>?,
         authentication: Authentication?,
     ): Publisher<SecurityRuleResult> {
-        val routeMatch =
-            request
-                ?.getAttribute(HttpAttributes.ROUTE_MATCH, RouteMatch::class.java)
-                ?.orElse(null)
-
-        // Do we have the information necessary to authorize the principal?
-        if (routeMatch != null &&
-            doesOperationRequireVariableOwnerRole(routeMatch) &&
-            VARIABLE_DEFINITION_ID_PATH_VARIABLE in routeMatch.variableValues &&
-            ACTIVE_GROUP in request.parameters
-        ) {
-            if (authentication == null || VARIABLE_OWNER !in authentication.roles) {
-                logger.info("Rejected access. Principal does not have necessary role. Request: $request")
-                return Mono.just(SecurityRuleResult.REJECTED)
-            }
-            val activeGroup = request.parameters.get(ACTIVE_GROUP) as String
-            return if (variableDefinitionService.groupIsOwner(activeGroup, getDefinitionId(routeMatch))) {
-                logger.info("Allowed access for: $request")
-                Mono.just(SecurityRuleResult.ALLOWED)
-            } else {
-                logger.info("Rejected access. Principal does not own the requested resource. Request: $request")
-                Mono.just(SecurityRuleResult.REJECTED)
-            }
-        }
-        return Mono.just(SecurityRuleResult.UNKNOWN)
+        if (request == null || authentication == null) return Mono.empty()
+        return Mono
+            .justOrEmpty<RouteMatch<*>?>(
+                request
+                    .getAttribute(HttpAttributes.ROUTE_MATCH, RouteMatch::class.java)
+                    ?.orElse(null),
+            ).filter {
+                doesOperationRequireVariableOwnerRole(it) &&
+                    VARIABLE_DEFINITION_ID_PATH_VARIABLE in it.variableValues &&
+                    ACTIVE_GROUP in request.parameters
+            }.filter {
+                VARIABLE_OWNER in authentication.roles
+            }.handle { routeMatch, sink ->
+                val activeGroup = request.parameters.get(ACTIVE_GROUP) as String
+                val definitionId = getDefinitionId(routeMatch)
+                if (variableDefinitionService.groupIsOwner(activeGroup, definitionId)
+                ) {
+                    logger.info("Allowed access for: $request")
+                    sink.next(SecurityRuleResult.ALLOWED)
+                } else {
+                    logger.info("Rejected access. Principal does not own the requested resource. Request: $request")
+                    sink.next(SecurityRuleResult.REJECTED)
+                }
+            }.onErrorReturn(SecurityRuleResult.UNKNOWN)
     }
 }

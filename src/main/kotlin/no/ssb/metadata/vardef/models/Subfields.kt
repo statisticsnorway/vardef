@@ -68,6 +68,11 @@ data class Person(
  *
  * @property team The Dapla team with responsibility for this variable definition.
  * @property groups The groups with permission to modify this variable definition.
+ *
+ * @constructor Creates an instance of Owner.
+ * Ensures that [team] is non-blank and [groups] is non-empty and does not contain any blank values.
+ *
+ * @throws IllegalArgumentException if [team] is blank, [groups] is empty, or any element in [groups] is blank.
  */
 @Schema(example = OWNER_EXAMPLE)
 @Serdeable(naming = SnakeCaseStrategy::class)
@@ -80,6 +85,7 @@ data class Owner(
     init {
         require(team.isNotBlank()) { "Team name cannot be blank or null" }
         require(groups.isNotEmpty()) { "Groups cannot be blank or null" }
+        require(groups.all { it.isNotBlank() }) { "Groups cannot contain blank values" }
     }
 }
 

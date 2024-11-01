@@ -590,7 +590,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .statusCode(400)
             .body(
                 ERROR_MESSAGE_JSON_PATH,
-                containsString("Null argument"),
+                containsString("can not be null"),
             )
     }
 
@@ -645,5 +645,28 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             )?.owner?.groups,
         )
             .isNotEmpty()
+    }
+
+    @Test
+    fun `update owner groups empty values`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"owner": {
+                    "team":"skip-stat",
+                    "groups": ["",""]
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(400)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                containsString("can not be empty"),
+            )
     }
 }

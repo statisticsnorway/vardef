@@ -2,9 +2,12 @@ package no.ssb.metadata.vardef.models
 
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.net.URI
@@ -119,5 +122,21 @@ class VariableDefinitionTest {
     ) {
         val savedVariableDefinition = draftExample.toSavedVariableDefinition(group)
         assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
+    }
+
+    @Test
+    fun `owner team can not be null or blank`(){
+        val exception = assertThrows<IllegalArgumentException> {
+            Owner(team = "", groups = listOf("group1"))
+        }
+        assertEquals("Team name cannot be blank or null", exception.message)
+    }
+
+    @Test
+    fun `owner groups can not be null or blank`(){
+        val exception = assertThrows<IllegalArgumentException> {
+            Owner(team = "hey-team", groups = listOf(""))
+        }
+        assertEquals("Groups cannot contain blank values", exception.message)
     }
 }

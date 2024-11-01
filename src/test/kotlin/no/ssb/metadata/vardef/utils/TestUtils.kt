@@ -20,9 +20,6 @@ object TestUtils {
             argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
         )
 
-    /**
-     *
-     */
     @JvmStatic
     fun validOwnerUpdates(): Stream<Arguments> =
         Stream.of(

@@ -21,6 +21,75 @@ object TestUtils {
         )
 
     @JvmStatic
+    fun validOwnerUpdates(): Stream<Arguments> =
+        Stream.of(
+            argumentSet(
+                "New team name",
+                "skip-stat",
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "my-oh-my-team")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-enhjoern-a-developers",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "owner.team",
+            ),
+            argumentSet(
+                "New group name",
+                "play-enhjoern-a-developers",
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "my-team")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-foeniks-a-developers",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "owner.groups[1]",
+            ),
+            argumentSet(
+                "Add group name",
+                "play-enhjoern-a-developers",
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "my-team")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-enhjoern-a-developers",
+                                        "play-foeniks-a-developers",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "owner.groups[2]",
+            ),
+        )
+
+    @JvmStatic
     fun invalidOwnerUpdates(): Stream<Arguments> =
         Stream.of(
             argumentSet(
@@ -69,7 +138,7 @@ object TestUtils {
                         put(
                             "owner",
                             JSONObject().apply {
-                                put("team", "skip-stat")
+                                put("team", "my-team")
                             },
                         )
                     }.toString(),
@@ -82,7 +151,7 @@ object TestUtils {
                         put(
                             "owner",
                             JSONObject().apply {
-                                put("team", "skip-stat")
+                                put("team", "my-team")
                                 put(
                                     "groups",
                                     listOf(

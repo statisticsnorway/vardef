@@ -9,3 +9,4 @@ const val NUM_ALL_VARIABLE_DEFINITIONS = 5
 const val NUM_PUBLISHED_EXTERNAL_VARIABLE_DEFINITIONS = 1
 const val TEST_DEVELOPERS_GROUP = "play-enhjoern-a-developers"
 const val TEST_TEAM = "play-enhjoern-a"
+const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"

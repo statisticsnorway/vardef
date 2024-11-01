@@ -5,8 +5,6 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
 
-const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"
-
 object TestUtils {
     /**
      * Definition ids for variables with all variable statuses and variable status value

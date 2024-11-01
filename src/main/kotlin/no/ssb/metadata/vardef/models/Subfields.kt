@@ -76,11 +76,10 @@ data class Owner(
     var team: String,
     @NotNull
     val groups: List<String>,
-){
+) {
     init {
         require(team.isNotBlank()) { "Team name cannot be blank or null" }
     }
-
 }
 
 @Schema(example = RENDERED_CONTACT_EXAMPLE)

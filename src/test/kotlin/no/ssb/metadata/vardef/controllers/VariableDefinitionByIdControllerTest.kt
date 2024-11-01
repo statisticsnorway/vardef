@@ -561,10 +561,12 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 containsString("can not be null"),
             )
 
-
-        assertThat(variableDefinitionService.getCompleteByDate(
-            SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)?.owner?.team).
-        isNotBlank()
+        assertThat(
+            variableDefinitionService.getCompleteByDate(
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+            )?.owner?.team,
+        )
+            .isNotBlank()
     }
 
     @Test

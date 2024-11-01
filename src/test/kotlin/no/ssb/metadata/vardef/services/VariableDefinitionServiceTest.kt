@@ -66,12 +66,11 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `update owner team`(){
+    fun `update owner team`()  {
         val existingOwnerTeam = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team
         val input = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.apply { owner.team = "my-last-team" }
         val updatedDraft = variableDefinitionService.update(input)
         assertThat(updatedDraft.owner.team).isNotEqualTo(existingOwnerTeam)
-
     }
 
     companion object {

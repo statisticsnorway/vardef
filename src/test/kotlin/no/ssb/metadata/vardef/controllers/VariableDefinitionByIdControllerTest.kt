@@ -595,7 +595,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `update owner groups`(spec: RequestSpecification) {
+    fun `update owner group`(spec: RequestSpecification) {
         val ownerGroupBeforeUpdate = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[1]
         spec
             .given()
@@ -618,6 +618,30 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("owner.groups[1]", not(equalTo(ownerGroupBeforeUpdate)))
     }
 
+
+    @Test
+    fun `update owner add group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"owner": {
+                    "team":"skip-stat",
+                    "groups": [
+                         "skip-stat-developers", 
+                          "play-enhjoern-a-developers",
+                          "play-foeniks-a-developers"
+                    ]
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(200)
+    }
+
     @Test
     fun `update owner groups empty list`(spec: RequestSpecification) {
         spec
@@ -638,6 +662,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 ERROR_MESSAGE_JSON_PATH,
                 containsString("can not be empty"),
             )
+
 
         assertThat(
             variableDefinitionService.getCompleteByDate(

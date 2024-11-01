@@ -35,6 +35,7 @@ import java.time.LocalDate
 @Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController {
+
     @Inject
     lateinit var varDefService: VariableDefinitionService
 
@@ -135,6 +136,7 @@ class VariableDefinitionByIdController {
      */
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "200", description = "Successfully updated")
+    @ApiResponse(responseCode = "400", description = "Attempt to update owner with blank values")
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status unlike DRAFT.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
@@ -160,26 +162,23 @@ class VariableDefinitionByIdController {
         @Valid updateDraft: UpdateDraft,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
-        if (variable.variableStatus != VariableStatus.DRAFT) {
-            throw HttpStatusException(
+
+        when {
+            variable.variableStatus != VariableStatus.DRAFT -> throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "The variable is published or deprecated and cannot be updated with this method",
             )
-        }
 
-        val savedGroup = patches.latest(definitionId).owner
-        if (!patches.isValidGroup(activeGroup, savedGroup)) {
-            throw HttpStatusException(
+            !patches.isValidGroup(activeGroup, variable.owner) -> throw HttpStatusException(
                 HttpStatus.FORBIDDEN,
-                "Only members of the groups ${savedGroup.groups} are allowed to edit this variable",
+                "Only members of the groups ${variable.owner.groups} are allowed to edit this variable",
             )
-        }
 
-        if (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) {
-            throw HttpStatusException(
-                HttpStatus.CONFLICT,
-                "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
-            )
+            (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) ->
+                throw HttpStatusException(
+                    HttpStatus.CONFLICT,
+                    "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
+                )
         }
 
         return varDefService

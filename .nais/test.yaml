@@ -40,12 +40,17 @@ spec:
   envFrom:
     - secret: metadata-vardef-test
 
+  prometheus:
+    enabled: true
+    path: /metrics
+    port: "8090"
+
   liveness:
     path: /health
-    port: 8080
+    port: 8090
   readiness:
     path: /health
-    port: 8080
+    port: 8090
   startup:
     path: /health
-    port: 8080
+    port: 8090

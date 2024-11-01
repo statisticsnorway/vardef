@@ -511,4 +511,27 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .statusCode(HttpStatus.OK.code)
             .body("variable_status", equalTo(expectedStatus))
     }
+
+    @Test
+    fun `update team name`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"owner": {
+                    "team":"my-oh-my-team",
+                    "groups": [
+                         "skip-stat-developers", 
+                          "play-enhjoern-a-developers"
+                    ]
+                        
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, "play-foeniks-a-developers")
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(403)
+    }
 }

@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.utils
 
 import no.ssb.metadata.vardef.models.VariableStatus
+import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
@@ -17,6 +18,162 @@ object TestUtils {
             argumentSet("Published external", INCOME_TAX_VP1_P1.definitionId, "PUBLISHED_EXTERNAL"),
             argumentSet("Published internal", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, "PUBLISHED_INTERNAL"),
             argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
+        )
+
+    /**
+     *
+     */
+    @JvmStatic
+    fun validOwnerUpdates(): Stream<Arguments> =
+        Stream.of(
+            argumentSet(
+                "New team name",
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "my-oh-my-team")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-enhjoern-a-developers",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "owner.team",
+            ),
+            argumentSet(
+                "New group name",
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[1],
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "my-team")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-foeniks-a-developers",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "owner.groups[1]",
+            ),
+            argumentSet(
+                "Add group name",
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups.last(),
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "my-team")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-enhjoern-a-developers",
+                                        "play-foeniks-a-developers",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "owner.groups[2]",
+            ),
+        )
+
+    @JvmStatic
+    fun invalidOwnerUpdates(): Stream<Arguments> =
+        Stream.of(
+            argumentSet(
+                "Team name empty string",
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-enhjoern-a-developers",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "can not be empty",
+            ),
+            argumentSet(
+                "Team name null",
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "skip-stat-developers",
+                                        "play-enhjoern-a-developers",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "can not be null",
+            ),
+            argumentSet(
+                "Groups empty list",
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "my-team")
+                            },
+                        )
+                    }.toString(),
+                "can not be empty",
+            ),
+            argumentSet(
+                "Groups empty values in list",
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                JSONObject()
+                    .apply {
+                        put(
+                            "owner",
+                            JSONObject().apply {
+                                put("team", "my-team")
+                                put(
+                                    "groups",
+                                    listOf(
+                                        "",
+                                        "",
+                                    ),
+                                )
+                            },
+                        )
+                    }.toString(),
+                "can not be empty",
+            ),
         )
 
     /**

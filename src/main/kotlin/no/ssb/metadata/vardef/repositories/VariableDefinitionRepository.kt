@@ -2,10 +2,12 @@ package no.ssb.metadata.vardef.repositories
 
 import io.micronaut.data.mongodb.annotation.MongoRepository
 import io.micronaut.data.repository.CrudRepository
+import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.VariableStatus
 import org.bson.types.ObjectId
 
+@Singleton
 @MongoRepository(databaseName = "vardef")
 interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition, ObjectId> {
     fun findByDefinitionIdOrderByPatchId(definitionId: String): List<SavedVariableDefinition>

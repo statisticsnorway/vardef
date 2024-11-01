@@ -101,7 +101,6 @@ object TestUtils {
             argumentSet(
                 "Team name empty string",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
                 JSONObject()
                     .apply {
                         put(
@@ -123,7 +122,6 @@ object TestUtils {
             argumentSet(
                 "Team name null",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
                 JSONObject()
                     .apply {
                         put(
@@ -144,7 +142,6 @@ object TestUtils {
             argumentSet(
                 "Groups empty list",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[0],
                 JSONObject()
                     .apply {
                         put(
@@ -159,7 +156,6 @@ object TestUtils {
             argumentSet(
                 "Groups empty values in list",
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[0],
                 JSONObject()
                     .apply {
                         put(

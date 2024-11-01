@@ -622,7 +622,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidOwnerUpdates")
     fun `update owner bad request`(
         definitionId: String,
-        valueBeforeUpdate: String,
         jsonInput: String,
         errorMessage: String,
         spec: RequestSpecification,

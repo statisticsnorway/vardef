@@ -642,21 +642,9 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 containsString(errorMessage),
             )
 
-        assertThat(
-            variableDefinitionService.getCompleteByDate(
-                definitionId,
-            )?.owner?.team,
-        )
-            .isNotBlank()
-        assertThat(
-            variableDefinitionService.getCompleteByDate(
-                definitionId,
-            )?.owner?.groups?.all { it.isNotBlank() },
-        )
-        assertThat(
-            variableDefinitionService.getCompleteByDate(
-                definitionId,
-            )?.owner?.groups?.isNotEmpty(),
-        )
+        val savedVariableDefinition = variableDefinitionService.getCompleteByDate(definitionId)
+        assertThat(savedVariableDefinition?.owner?.team).isNotBlank()
+        assertThat(savedVariableDefinition?.owner?.groups?.all { it.isNotBlank() })
+        assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())
     }
 }

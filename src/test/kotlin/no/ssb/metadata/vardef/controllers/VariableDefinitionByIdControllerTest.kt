@@ -12,6 +12,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -596,184 +597,62 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .body("variable_status", equalTo(expectedStatus))
     }
 
-    @Test
-    fun `update owner team`(spec: RequestSpecification) {
-        val ownerTeamBeforeUpdate = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#updateOwnerOk")
+    fun `update owner`(
+        definitionId: String,
+        valueBeforeUpdate: String,
+        jsonInput: String,
+        pathVariable: String,
+        spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-                """
-                {"owner": {
-                    "team":"my-oh-my-team",
-                    "groups": [
-                         "skip-stat-developers", 
-                          "play-enhjoern-a-developers"
-                    ]
-                }}
-                """.trimIndent(),
+              jsonInput
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .patch("/variable-definitions/${definitionId}")
             .then()
-            .statusCode(200)
-            .body("owner.team", not(equalTo(ownerTeamBeforeUpdate)))
+            .statusCode(HttpStatus.OK.code)
+            .body(pathVariable, not(equalTo(valueBeforeUpdate)))
     }
 
-    @Test
-    fun `update owner team blank value`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#updateOwnerBadRequest")
+    fun `update owner bad request`(
+        definitionId: String,
+        valueBeforeUpdate: String,
+        jsonInput: String,
+        errorMessage: String,
+        property: String,
+        spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-                """
-                {"owner": {
-                    "team":"",
-                    "groups": [
-                         "skip-stat-developers", 
-                          "play-enhjoern-a-developers"
-                    ]
-                }}
-                """.trimIndent(),
+                jsonInput
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .patch("/variable-definitions/${definitionId}")
             .then()
-            .statusCode(400)
+            .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
                 ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be empty"),
+                containsString(errorMessage),
             )
 
         assertThat(
             variableDefinitionService.getCompleteByDate(
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+              definitionId
             )?.owner?.team,
         )
             .isNotBlank()
-    }
-
-    @Test
-    fun `update owner team null value`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "groups": [
-                         "skip-stat-developers", 
-                          "play-enhjoern-a-developers"
-                    ]
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be null"),
-            )
-    }
-
-    @Test
-    fun `update owner group`(spec: RequestSpecification) {
-        val ownerGroupBeforeUpdate = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[1]
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "team":"skip-stat",
-                    "groups": [
-                         "skip-stat-developers", 
-                          "play-foeniks-a-developers"
-                    ]
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(200)
-            .body("owner.groups[1]", not(equalTo(ownerGroupBeforeUpdate)))
-    }
-
-    @Test
-    fun `update owner add group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "team":"skip-stat",
-                    "groups": [
-                         "skip-stat-developers", 
-                          "play-enhjoern-a-developers",
-                          "play-foeniks-a-developers"
-                    ]
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(200)
-    }
-
-    @Test
-    fun `update owner groups empty list`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "team":"skip-stat"
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be empty"),
-            )
-
-        assertThat(
-            variableDefinitionService.getCompleteByDate(
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-            )?.owner?.groups,
-        )
-            .isNotEmpty()
-    }
-
-    @Test
-    fun `update owner groups empty values`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "team":"skip-stat",
-                    "groups": ["",""]
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be empty"),
-            )
+        assertThat(variableDefinitionService.getCompleteByDate(
+            definitionId
+        )?.owner?.groups?.all { it.isNotBlank()})
+        assertThat(variableDefinitionService.getCompleteByDate(
+            definitionId
+        )?.owner?.groups?.isNotEmpty())
     }
 }

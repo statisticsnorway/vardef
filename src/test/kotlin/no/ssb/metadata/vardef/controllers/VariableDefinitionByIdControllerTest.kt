@@ -597,7 +597,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#updateOwnerOk")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#validOwnerUpdates")
     fun `update owner`(
         definitionId: String,
         valueBeforeUpdate: String,
@@ -619,13 +619,12 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#updateOwnerBadRequest")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidOwnerUpdates")
     fun `update owner bad request`(
         definitionId: String,
         valueBeforeUpdate: String,
         jsonInput: String,
         errorMessage: String,
-        property: String,
         spec: RequestSpecification,
     ) {
         spec

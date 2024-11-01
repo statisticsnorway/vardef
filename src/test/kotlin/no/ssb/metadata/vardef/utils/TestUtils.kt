@@ -20,8 +20,11 @@ object TestUtils {
             argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
         )
 
+    /**
+     *
+     */
     @JvmStatic
-    fun updateOwnerOk(): Stream<Arguments> =
+    fun validOwnerUpdates(): Stream<Arguments> =
         Stream.of(
             argumentSet(
                 "New team name",
@@ -93,7 +96,7 @@ object TestUtils {
         )
 
     @JvmStatic
-    fun updateOwnerBadRequest(): Stream<Arguments> =
+    fun invalidOwnerUpdates(): Stream<Arguments> =
         Stream.of(
             argumentSet(
                 "Team name empty string",
@@ -116,7 +119,6 @@ object TestUtils {
                         )
                     }.toString(),
                 "can not be empty",
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
             ),
             argumentSet(
                 "Team name null",
@@ -138,7 +140,6 @@ object TestUtils {
                         )
                     }.toString(),
                 "can not be null",
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
             ),
             argumentSet(
                 "Groups empty list",
@@ -154,7 +155,6 @@ object TestUtils {
                         )
                     }.toString(),
                 "can not be empty",
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[0],
             ),
             argumentSet(
                 "Groups empty values in list",
@@ -177,7 +177,6 @@ object TestUtils {
                         )
                     }.toString(),
                 "can not be empty",
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[0],
             ),
         )
 

@@ -603,7 +603,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("validOwnerUpdates")
     fun `update owner`(
-        definitionId: String,
         valueBeforeUpdate: String,
         jsonInput: String,
         pathVariable: String,
@@ -616,16 +615,15 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 jsonInput,
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/$definitionId")
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.OK.code)
             .body(pathVariable, not(equalTo(valueBeforeUpdate)))
     }
 
     @ParameterizedTest
-    @MethodSource("invalidOwnerUpdates")
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidOwnerUpdates")
     fun `update owner bad request`(
-        definitionId: String,
         jsonInput: String,
         errorMessage: String,
         spec: RequestSpecification,
@@ -637,7 +635,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 jsonInput,
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/$definitionId")
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
@@ -645,7 +643,10 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 containsString(errorMessage),
             )
 
-        val savedVariableDefinition = variableDefinitionService.getCompleteByDate(definitionId)
+        val savedVariableDefinition =
+            variableDefinitionService.getCompleteByDate(
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+            )
         assertThat(savedVariableDefinition?.owner?.team).isNotBlank()
         assertThat(savedVariableDefinition?.owner?.groups?.all { it.isNotBlank() })
         assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())
@@ -657,7 +658,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             Stream.of(
                 argumentSet(
                     "New team name",
-                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team,
                     JSONObject()
                         .apply {
@@ -679,14 +679,13 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 ),
                 argumentSet(
                     "New group name",
-                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups[1],
                     JSONObject()
                         .apply {
                             put(
                                 "owner",
                                 JSONObject().apply {
-                                    put("team", "my-team")
+                                    put("team", "skip-stat")
                                     put(
                                         "groups",
                                         listOf(
@@ -701,14 +700,13 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                 ),
                 argumentSet(
                     "Add group name",
-                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.groups.last(),
                     JSONObject()
                         .apply {
                             put(
                                 "owner",
                                 JSONObject().apply {
-                                    put("team", "my-team")
+                                    put("team", "skip-stat")
                                     put(
                                         "groups",
                                         listOf(
@@ -723,87 +721,5 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "owner.groups[2]",
                 ),
             )
-
-        @JvmStatic
-        fun invalidOwnerUpdates(): Stream<Arguments> =
-            Stream.of(
-                argumentSet(
-                    "Team name empty string",
-                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-                    JSONObject()
-                        .apply {
-                            put(
-                                "owner",
-                                JSONObject().apply {
-                                    put("team", "")
-                                    put(
-                                        "groups",
-                                        listOf(
-                                            "skip-stat-developers",
-                                            "play-enhjoern-a-developers",
-                                        ),
-                                    )
-                                },
-                            )
-                        }.toString(),
-                    "can not be empty",
-                ),
-                argumentSet(
-                    "Team name null",
-                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-                    JSONObject()
-                        .apply {
-                            put(
-                                "owner",
-                                JSONObject().apply {
-                                    put(
-                                        "groups",
-                                        listOf(
-                                            "skip-stat-developers",
-                                            "play-enhjoern-a-developers",
-                                        ),
-                                    )
-                                },
-                            )
-                        }.toString(),
-                    "can not be null",
-                ),
-                argumentSet(
-                    "Groups empty list",
-                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-                    JSONObject()
-                        .apply {
-                            put(
-                                "owner",
-                                JSONObject().apply {
-                                    put("team", "my-team")
-                                },
-                            )
-                        }.toString(),
-                    "can not be empty",
-                ),
-                argumentSet(
-                    "Groups empty values in list",
-                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-                    JSONObject()
-                        .apply {
-                            put(
-                                "owner",
-                                JSONObject().apply {
-                                    put("team", "my-team")
-                                    put(
-                                        "groups",
-                                        listOf(
-                                            "",
-                                            "",
-                                        ),
-                                    )
-                                },
-                            )
-                        }.toString(),
-                    "can not be empty",
-                ),
-            )
-
     }
 }

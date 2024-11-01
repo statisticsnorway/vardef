@@ -16,20 +16,10 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.*
+import org.junit.jupiter.params.provider.Arguments.argumentSet
+import java.util.stream.Stream
 
 class PatchesControllerTest : BaseVardefTest() {
-    companion object {
-        fun patchBody(): JSONObject =
-            jsonTestInput()
-                .apply {
-                    remove("short_name")
-                    remove("valid_from")
-                }
-
-        @JvmStatic
-        fun patches(): List<SavedVariableDefinition> = ALL_INCOME_TAX_PATCHES
-    }
-
     @Test
     fun `get all patches`(spec: RequestSpecification) {
         spec
@@ -483,189 +473,136 @@ class PatchesControllerTest : BaseVardefTest() {
             .statusCode(HttpStatus.OK.code)
     }
 
-    // owner = Owner("my-team", listOf("my-team-developers", "other-group")),
-    @Test
-    fun `update owner team`(spec: RequestSpecification) {
-        val ownerTeamBeforeUpdate = SAVED_INTERNAL_VARIABLE_DEFINITION.owner.team
+    @ParameterizedTest
+    @MethodSource("validOwnerUpdates")
+    fun `update owner`(
+        valueBeforeUpdate: String,
+        jsonInput: String,
+        pathVariable: String,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-                """
-                {"owner": {
-                    "team":"my-oh-my-team",
-                    "groups": [
-                         "my-team-developers", 
-                         "other-group",
-                         "play-enhjoern-a-develeopers"
-                    ]
-                }}
-                """.trimIndent(),
+                jsonInput,
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(201)
-            .body("owner.team", not(CoreMatchers.equalTo(ownerTeamBeforeUpdate)))
+            .body(pathVariable, not(CoreMatchers.equalTo(valueBeforeUpdate)))
     }
 
-    @Test
-    fun `update owner team blank value`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidOwnerUpdates")
+    fun `update owner bad request`(
+        jsonInput: String,
+        errorMessage: String,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-                """
-                {"owner": {
-                    "team":"",
-                    "groups": [
-                          "my-team-developers", 
-                         "other-group",
-                         "play-enhjoern-a-develeopers"
-                    ]
-                }}
-                """.trimIndent(),
+                jsonInput,
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
-            .statusCode(400)
+            .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
                 ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be empty"),
+                containsString(errorMessage),
             )
 
-        assertThat(
+        val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
                 SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-            )?.owner?.team,
-        )
-            .isNotBlank()
-    }
-
-    @Test
-    fun `update owner team null value`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "groups": [
-                          "my-team-developers", 
-                         "other-group",
-                         "play-enhjoern-a-develeopers"
-                    ]
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
-            .then()
-            .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be null"),
             )
+        assertThat(savedVariableDefinition?.owner?.team).isNotBlank()
+        assertThat(savedVariableDefinition?.owner?.groups?.all { it.isNotBlank() })
+        assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())
     }
 
-    @Test
-    fun `update owner group`(spec: RequestSpecification) {
-        val ownerGroupsBeforeUpdate = SAVED_INTERNAL_VARIABLE_DEFINITION.owner.groups
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "team":"skip-stat",
-                    "groups": [
-                          "my-team-developers",
-                         "play-enhjoern-a-develeopers"
-                    ]
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
-            .then()
-            .statusCode(201)
-            .body("owner.groups", not(equalTo(ownerGroupsBeforeUpdate)))
-    }
+    companion object {
+        fun patchBody(): JSONObject =
+            jsonTestInput()
+                .apply {
+                    remove("short_name")
+                    remove("valid_from")
+                }
 
-    @Test
-    fun `update owner remove group`(spec: RequestSpecification) {
-        val ownerGroupToRemove = SAVED_INTERNAL_VARIABLE_DEFINITION.owner.groups[1]
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "team":"my-team",
-                    "groups": [
-                         "my-team-developers",
-                         "play-enhjoern-a-develeopers"
-                    ]
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
-            .then()
-            .statusCode(201)
-            .body("owner.groups[1]", not(equalTo(ownerGroupToRemove)))
-    }
+        @JvmStatic
+        fun patches(): List<SavedVariableDefinition> = ALL_INCOME_TAX_PATCHES
 
-    @Test
-    fun `update owner groups empty list`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "team":"my-team"
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
-            .then()
-            .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be empty"),
-            )
-
-        assertThat(
-            variableDefinitionService.getCompleteByDate(
-                SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-            )?.owner?.groups,
-        )
-            .isNotEmpty()
-    }
-
-    @Test
-    fun `update owner groups empty values`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"owner": {
-                    "team":"my-team",
-                    "groups": ["",""]
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}")
-            .then()
-            .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("can not be empty"),
+        @JvmStatic
+        fun validOwnerUpdates(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "New team name",
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.owner.team,
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-oh-my-team")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "owner.team",
+                ),
+                argumentSet(
+                    "New group name",
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.owner.groups[1],
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-team")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-foeniks-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "owner.groups[1]",
+                ),
+                argumentSet(
+                    "Add group name",
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.owner.groups.last(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-team")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                            "play-foeniks-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "owner.groups[2]",
+                ),
             )
     }
 }

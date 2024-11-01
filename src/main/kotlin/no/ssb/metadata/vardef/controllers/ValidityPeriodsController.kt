@@ -24,11 +24,10 @@ import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
-import no.ssb.metadata.vardef.validators.VardefId
 
 @Tag(name = VALIDITY_PERIODS)
 @Validated
-@Controller("/variable-definitions/{variable-definition-id}/validity-periods")
+@Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(VARIABLE_CONSUMER)
 class ValidityPeriodsController {
@@ -62,9 +61,8 @@ class ValidityPeriodsController {
     @Secured(VARIABLE_OWNER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun createValidityPeriod(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
         @Body
         @Valid
@@ -84,14 +82,6 @@ class ValidityPeriodsController {
         activeGroup: String,
     ): CompleteResponse {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)
-
-        val savedGroup = latestExistingPatch.owner
-        if (!patches.isValidGroup(activeGroup, savedGroup)) {
-            throw HttpStatusException(
-                HttpStatus.FORBIDDEN,
-                "Only members of the groups ${savedGroup.groups} are allowed to edit this variable",
-            )
-        }
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
@@ -123,9 +113,8 @@ class ValidityPeriodsController {
     )
     @SecurityRequirement(name = "Bearer Authentication")
     fun listValidityPeriods(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
     ): List<CompleteResponse> = validityPeriods.listComplete(variableDefinitionId)
 }

@@ -25,8 +25,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .`when`()
             .get("/variable-definitions/MALFORMED_ID")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test
@@ -113,8 +112,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test
@@ -187,6 +185,94 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         assertThat(updated.createdAt).isCloseTo(expected.createdAt, within(1, ChronoUnit.SECONDS))
         assertThat(updated.name).isEqualTo(expected.name)
         assertThat(updated.lastUpdatedAt).isAfter(expected.lastUpdatedAt)
+    }
+
+    @Test
+    fun `update draft variable without active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @Test
+    fun `update draft variable invalid active group`(spec: RequestSpecification) {
+        spec
+            .given()
+            .queryParam(ACTIVE_GROUP, "invalid group")
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @Test
+    fun `update draft variable unauthenticated`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .none()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @Test
+    fun `update draft variable principal not the owner`(spec: RequestSpecification) {
+        spec
+            .given()
+            .auth()
+            .oauth2(
+                JwtTokenHelper
+                    .jwtTokenSigned(
+                        daplaTeams = listOf("some-other-team"),
+                        daplaGroups = listOf("some-other-team-developers"),
+                    ).parsedString,
+            ).contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Landbakgrunn",
+                    "nn": "Landbakgrunn",
+                    "en": "Update"
+                }}
+                """.trimIndent(),
+            ).`when`()
+            .queryParam(ACTIVE_GROUP, "some-other-team-developers")
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 
     @Test
@@ -289,8 +375,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .`when`()
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match"))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test
@@ -462,8 +547,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            )
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${expected.definitionId}")
             .then()
             .statusCode(403)

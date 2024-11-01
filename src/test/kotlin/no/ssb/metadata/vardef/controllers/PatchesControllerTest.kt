@@ -57,8 +57,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .`when`()
             .get("/variable-definitions/MALFORMED_ID/patches")
             .then()
-            .statusCode(400)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("must match \"^[a-zA-Z0-9-_]{8}$\""))
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test
@@ -429,13 +428,6 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(
-                    "Only members of the groups [pers-skatt-developers, play-enhjoern-a-developers, " +
-                        "neighbourhood-dogs] are allowed to edit this variable",
-                ),
-            )
     }
 
     @Test

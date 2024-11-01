@@ -27,11 +27,10 @@ import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
-import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Validated
-@Controller("/variable-definitions/{definitionId}")
+@Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
 @Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController {
@@ -59,8 +58,8 @@ class VariableDefinitionByIdController {
     @Get
     @SecurityRequirement(name = "Bearer Authentication")
     fun getVariableDefinitionById(
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
-        @VardefId
         definitionId: String,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -94,8 +93,8 @@ class VariableDefinitionByIdController {
     @Secured(VARIABLE_OWNER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun deleteVariableDefinitionById(
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
-        @VardefId
         definitionId: String,
         @Parameter(
             name = ACTIVE_GROUP,
@@ -117,14 +116,6 @@ class VariableDefinitionByIdController {
             )
         }
 
-        val savedGroup = patches.latest(definitionId).owner
-        if (!patches.isValidGroup(activeGroup, savedGroup)) {
-            throw HttpStatusException(
-                HttpStatus.FORBIDDEN,
-                "Only members of the groups ${savedGroup.groups} are allowed to edit this variable",
-            )
-        }
-
         patches.deleteAllForDefinitionId(definitionId)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
         return HttpResponse.noContent<Unit?>().contentType(null)
@@ -143,8 +134,8 @@ class VariableDefinitionByIdController {
     @Secured(VARIABLE_OWNER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun updateVariableDefinitionById(
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Schema(description = ID_FIELD_DESCRIPTION)
-        @VardefId
         definitionId: String,
         @Parameter(
             name = ACTIVE_GROUP,
@@ -158,7 +149,8 @@ class VariableDefinitionByIdController {
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
         @Body
-        @Valid updateDraft: UpdateDraft,
+        @Valid
+        updateDraft: UpdateDraft,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
 
@@ -166,11 +158,6 @@ class VariableDefinitionByIdController {
             variable.variableStatus != VariableStatus.DRAFT -> throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "The variable is published or deprecated and cannot be updated with this method",
-            )
-
-            !patches.isValidGroup(activeGroup, variable.owner) -> throw HttpStatusException(
-                HttpStatus.FORBIDDEN,
-                "Only members of the groups ${variable.owner.groups} are allowed to edit this variable",
             )
 
             (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) ->

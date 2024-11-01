@@ -24,12 +24,11 @@ import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
-import no.ssb.metadata.vardef.validators.VardefId
 import java.time.LocalDate
 
 @Tag(name = PATCHES)
 @Validated
-@Controller("/variable-definitions/{variable-definition-id}/patches")
+@Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
 @Secured(VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController {
@@ -62,9 +61,8 @@ class PatchesController {
     @Get
     @SecurityRequirement(name = "Bearer Authentication")
     fun getAllPatches(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         patches
@@ -95,9 +93,8 @@ class PatchesController {
     @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun getOnePatch(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
         @PathVariable("patch-id")
         @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "patch_1", value = "1")])
@@ -132,9 +129,8 @@ class PatchesController {
     @Secured(VARIABLE_OWNER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun createPatch(
-        @PathVariable("variable-definition-id")
+        @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
-        @VardefId
         variableDefinitionId: String,
         @QueryValue("valid_from")
         @Parameter(
@@ -161,14 +157,6 @@ class PatchesController {
         activeGroup: String,
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
-
-        val savedGroup = latestPatchOnValidityPeriod.owner
-        if (!patches.isValidGroup(activeGroup, savedGroup)) {
-            throw HttpStatusException(
-                HttpStatus.FORBIDDEN,
-                "Only members of the groups ${savedGroup.groups} are allowed to edit this variable",
-            )
-        }
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")

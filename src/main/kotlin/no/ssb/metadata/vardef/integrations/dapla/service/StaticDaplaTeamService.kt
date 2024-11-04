@@ -1,11 +1,12 @@
 package no.ssb.metadata.vardef.integrations.dapla.service
 
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.integrations.dapla.models.Team
 import org.slf4j.LoggerFactory
 
 @Singleton
-class DaplaTeamApiStaticService : DaplaTeamApiService {
-    private val logger = LoggerFactory.getLogger(DaplaTeamApiStaticService::class.java)
+class StaticDaplaTeamService : DaplaTeamService {
+    private val logger = LoggerFactory.getLogger(StaticDaplaTeamService::class.java)
 
     private val teams =
         listOf(
@@ -15,7 +16,12 @@ class DaplaTeamApiStaticService : DaplaTeamApiService {
             "pers-skatt",
             "skip-stat",
             "play-foeniks-a",
+            "my-oh-my-team",
         )
+
+    override fun getTeam(teamName: String): Team? {
+        TODO("Not yet implemented")
+    }
 
     override fun isValidTeam(team: String): Boolean {
         logger.info("Checking if team $team is valid")

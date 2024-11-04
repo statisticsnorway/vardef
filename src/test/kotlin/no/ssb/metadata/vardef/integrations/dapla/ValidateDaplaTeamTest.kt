@@ -5,7 +5,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
 import jakarta.inject.Inject
 import jakarta.validation.ConstraintViolation
-import no.ssb.metadata.vardef.integrations.dapla.service.DaplaTeamApiStaticService
+import no.ssb.metadata.vardef.integrations.dapla.service.StaticDaplaTeamService
 import no.ssb.metadata.vardef.integrations.dapla.validators.DaplaTeam
 import no.ssb.metadata.vardef.models.Owner
 import org.assertj.core.api.Assertions.assertThat
@@ -23,7 +23,7 @@ data class TestOwnerObject(
 @MicronautTest
 class ValidateDaplaTeamTest(private val validator: Validator) {
     @Inject
-    lateinit var daplaTeamApiStaticService: DaplaTeamApiStaticService
+    lateinit var daplaTeamApiStaticService: StaticDaplaTeamService
 
     @Test
     fun`validate team name`()  {

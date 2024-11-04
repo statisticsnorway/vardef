@@ -591,7 +591,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "can not be empty",
+                    "must not be empty",
                 ),
                 argumentSet(
                     "Team name null",
@@ -623,7 +623,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "can not be empty",
+                    "must not be empty",
                 ),
                 argumentSet(
                     "Groups empty values in list",
@@ -643,7 +643,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "can not be empty",
+                    "must not be empty",
                 ),
             )
     }

@@ -9,6 +9,7 @@ import no.ssb.metadata.vardef.constants.KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
 import no.ssb.metadata.vardef.constants.OWNER_EXAMPLE
 import no.ssb.metadata.vardef.constants.PERSON_EXAMPLE
 import no.ssb.metadata.vardef.constants.RENDERED_CONTACT_EXAMPLE
+import no.ssb.metadata.vardef.integrations.dapla.validators.DaplaTeam
 
 @Serdeable
 data class LanguageStringType(
@@ -75,6 +76,7 @@ data class Person(
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Owner(
     @NotNull
+    @DaplaTeam
     var team: String,
     @NotNull
     val groups: List<String>,

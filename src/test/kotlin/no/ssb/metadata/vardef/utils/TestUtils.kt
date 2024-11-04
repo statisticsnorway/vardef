@@ -93,7 +93,7 @@ object TestUtils {
             argumentSet(
                 "external_reference_uri invalid",
                 jsonTestInput().apply { put("external_reference_uri", "Not url") }.toString(),
-                "Error deserializing type",
+                "Failed to convert argument",
             ),
             argumentSet(
                 "external_reference_uri malformed uri",
@@ -104,7 +104,7 @@ object TestUtils {
                             listOf("not a url"),
                         )
                     }.toString(),
-                "Error deserializing type",
+                "Failed to convert argument",
             ),
             argumentSet(
                 "contact malformed email",

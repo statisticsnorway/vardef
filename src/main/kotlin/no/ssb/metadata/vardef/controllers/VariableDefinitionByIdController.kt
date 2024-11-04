@@ -126,7 +126,22 @@ class VariableDefinitionByIdController {
      */
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "200", description = "Successfully updated")
-    @ApiResponse(responseCode = "400", description = "Bad request")
+    @ApiResponse(
+        responseCode = "400",
+        description = "Bad request",
+        content = [
+            Content(
+                mediaType = "application/json",
+                schema =
+                    Schema(
+                        example = """{
+                        "error": "owner team and groups can not be empty",
+                        "details": "Attempt to update owner with blank values"
+                    }""",
+                    ),
+            ),
+        ],
+    )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status unlike DRAFT.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")

@@ -69,7 +69,6 @@ data class Person(
  * @property team The Dapla team with responsibility for this variable definition.
  * @property groups The groups with permission to modify this variable definition.
  *
- * @throws IllegalArgumentException if [team] is blank, [groups] is empty, or any element in [groups] is blank.
  */
 @Schema(example = OWNER_EXAMPLE)
 @Serdeable(naming = SnakeCaseStrategy::class)

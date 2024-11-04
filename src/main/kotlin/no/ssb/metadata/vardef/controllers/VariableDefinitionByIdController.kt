@@ -132,13 +132,18 @@ class VariableDefinitionByIdController {
         content = [
             Content(
                 mediaType = "application/json",
-                schema =
-                    Schema(
-                        example = """{
-                        "error": "owner team and groups can not be empty",
-                        "details": "Attempt to update owner with blank values"
-                    }""",
+                examples = [
+                    ExampleObject(
+                        name = "missing_team_or_groups",
+                        summary = "Owner object with empty team or groups",
+                        value = """
+                            {
+                                "message": "owner team and groups can not be empty",
+                                "status": 400
+                            }
+                        """,
                     ),
+                ],
             ),
         ],
     )

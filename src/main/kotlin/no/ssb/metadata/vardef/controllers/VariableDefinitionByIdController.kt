@@ -126,6 +126,15 @@ class VariableDefinitionByIdController {
      */
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "200", description = "Successfully updated")
+    @ApiResponse(
+        responseCode = "400",
+        description =
+            "Bad request. " +
+                "Examples of these are:\n" +
+                "- Reference to a Klass classification which doesn't exist.\n" +
+                "- Owner information missing.\n" +
+                "- Malformed email addresses.",
+    )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status unlike DRAFT.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
@@ -152,18 +161,18 @@ class VariableDefinitionByIdController {
         updateDraft: UpdateDraft,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
-        if (variable.variableStatus != VariableStatus.DRAFT) {
-            throw HttpStatusException(
+
+        when {
+            variable.variableStatus != VariableStatus.DRAFT -> throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "The variable is published or deprecated and cannot be updated with this method",
             )
-        }
 
-        if (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) {
-            throw HttpStatusException(
-                HttpStatus.CONFLICT,
-                "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
-            )
+            (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) ->
+                throw HttpStatusException(
+                    HttpStatus.CONFLICT,
+                    "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
+                )
         }
 
         return varDefService

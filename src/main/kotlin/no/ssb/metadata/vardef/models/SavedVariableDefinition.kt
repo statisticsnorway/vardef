@@ -4,6 +4,7 @@ import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.*
 import io.micronaut.data.model.naming.NamingStrategies
 import io.micronaut.serde.annotation.Serdeable
+import jakarta.validation.constraints.NotNull
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.bson.types.ObjectId
 import java.net.URI
@@ -43,6 +44,7 @@ data class SavedVariableDefinition(
     var comment: LanguageStringType?,
     @Nullable
     var relatedVariableDefinitionUris: List<String>?,
+    @NotNull
     var owner: Owner,
     var contact: Contact?,
     @DateCreated
@@ -146,6 +148,7 @@ data class SavedVariableDefinition(
             comment = varDefUpdates.comment ?: comment,
             relatedVariableDefinitionUris =
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
+            owner = varDefUpdates.owner ?: owner,
             contact = varDefUpdates.contact ?: contact,
         )
 }

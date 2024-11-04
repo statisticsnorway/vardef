@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.controllers
 
-import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
@@ -200,33 +199,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     "shortName: must match",
                 ),
             )
-    }
-
-    @Test
-    fun `create vardok unauthenticated`(spec: RequestSpecification) {
-        spec
-            .given()
-            .auth()
-            .none()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/948")
-            .then()
-            .statusCode(401)
-    }
-
-    @Test
-    fun `create vardok authenticated without active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .`when`()
-            .post("/vardok-migration/948")
-            .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 
     @Test

@@ -622,7 +622,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidOwnerUpdates")
+    @MethodSource("invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
         errorMessage: String,
@@ -719,6 +719,83 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                             )
                         }.toString(),
                     "owner.groups[2]",
+                ),
+            )
+
+        @JvmStatic
+        fun invalidOwnerUpdates(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Team name empty string",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "can not be empty",
+                ),
+                argumentSet(
+                    "Team name null",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "can not be null",
+                ),
+                argumentSet(
+                    "Groups empty list",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "skip-stat")
+                                },
+                            )
+                        }.toString(),
+                    "can not be empty",
+                ),
+                argumentSet(
+                    "Groups empty values in list",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "skip-stat")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "",
+                                            "",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "can not be empty",
                 ),
             )
     }

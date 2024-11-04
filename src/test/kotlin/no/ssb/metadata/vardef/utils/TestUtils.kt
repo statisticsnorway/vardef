@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.utils
 
 import no.ssb.metadata.vardef.models.VariableStatus
-import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
@@ -18,83 +17,6 @@ object TestUtils {
             argumentSet("Published external", INCOME_TAX_VP1_P1.definitionId, "PUBLISHED_EXTERNAL"),
             argumentSet("Published internal", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, "PUBLISHED_INTERNAL"),
             argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
-        )
-
-    @JvmStatic
-    fun invalidOwnerUpdates(): Stream<Arguments> =
-        Stream.of(
-            argumentSet(
-                "Team name empty string",
-                JSONObject()
-                    .apply {
-                        put(
-                            "owner",
-                            JSONObject().apply {
-                                put("team", "")
-                                put(
-                                    "groups",
-                                    listOf(
-                                        "skip-stat-developers",
-                                        "play-enhjoern-a-developers",
-                                    ),
-                                )
-                            },
-                        )
-                    }.toString(),
-                "can not be empty",
-            ),
-            argumentSet(
-                "Team name null",
-                JSONObject()
-                    .apply {
-                        put(
-                            "owner",
-                            JSONObject().apply {
-                                put(
-                                    "groups",
-                                    listOf(
-                                        "skip-stat-developers",
-                                        "play-enhjoern-a-developers",
-                                    ),
-                                )
-                            },
-                        )
-                    }.toString(),
-                "can not be null",
-            ),
-            argumentSet(
-                "Groups empty list",
-                JSONObject()
-                    .apply {
-                        put(
-                            "owner",
-                            JSONObject().apply {
-                                put("team", "skip-stat")
-                            },
-                        )
-                    }.toString(),
-                "can not be empty",
-            ),
-            argumentSet(
-                "Groups empty values in list",
-                JSONObject()
-                    .apply {
-                        put(
-                            "owner",
-                            JSONObject().apply {
-                                put("team", "skip-stat")
-                                put(
-                                    "groups",
-                                    listOf(
-                                        "",
-                                        "",
-                                    ),
-                                )
-                            },
-                        )
-                    }.toString(),
-                "can not be empty",
-            ),
         )
 
     /**

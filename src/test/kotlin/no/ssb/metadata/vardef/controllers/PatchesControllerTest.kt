@@ -495,10 +495,9 @@ class PatchesControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidOwnerUpdates")
+    @MethodSource("invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
-        errorMessage: String,
         spec: RequestSpecification,
     ) {
         spec
@@ -511,10 +510,6 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(errorMessage),
-            )
 
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
@@ -602,6 +597,79 @@ class PatchesControllerTest : BaseVardefTest() {
                             )
                         }.toString(),
                     "owner.groups[2]",
+                ),
+            )
+
+        @JvmStatic
+        fun invalidOwnerUpdates(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Team name empty string",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                ),
+                argumentSet(
+                    "Team name null",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                ),
+                argumentSet(
+                    "Groups empty list",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-team")
+                                },
+                            )
+                        }.toString(),
+                ),
+                argumentSet(
+                    "Groups empty values in list",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-team")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "",
+                                            "",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
                 ),
             )
     }

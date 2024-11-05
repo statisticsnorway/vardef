@@ -126,7 +126,15 @@ class VariableDefinitionByIdController {
      */
     @Tag(name = DRAFT)
     @ApiResponse(responseCode = "200", description = "Successfully updated")
-    @ApiResponse(responseCode = "400", description = "Attempt to update owner with blank values")
+    @ApiResponse(
+        responseCode = "400",
+        description =
+            "Bad request. " +
+                "Examples of these are:\n" +
+                "- Reference to a Klass classification which doesn't exist.\n" +
+                "- Owner information missing.\n" +
+                "- Malformed email addresses.",
+    )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status unlike DRAFT.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")

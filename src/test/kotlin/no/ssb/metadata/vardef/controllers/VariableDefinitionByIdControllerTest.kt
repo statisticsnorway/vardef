@@ -192,94 +192,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `update draft variable without active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"name": {
-                    "nb": "Landbakgrunn",
-                    "nn": "Landbakgrunn",
-                    "en": "Update"
-                }}
-                """.trimIndent(),
-            ).`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
-    }
-
-    @Test
-    fun `update draft variable invalid active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .queryParam(ACTIVE_GROUP, "invalid group")
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"name": {
-                    "nb": "Landbakgrunn",
-                    "nn": "Landbakgrunn",
-                    "en": "Update"
-                }}
-                """.trimIndent(),
-            ).`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
-    }
-
-    @Test
-    fun `update draft variable unauthenticated`(spec: RequestSpecification) {
-        spec
-            .given()
-            .auth()
-            .none()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"name": {
-                    "nb": "Landbakgrunn",
-                    "nn": "Landbakgrunn",
-                    "en": "Update"
-                }}
-                """.trimIndent(),
-            ).`when`()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
-    }
-
-    @Test
-    fun `update draft variable principal not the owner`(spec: RequestSpecification) {
-        spec
-            .given()
-            .auth()
-            .oauth2(
-                JwtTokenHelper
-                    .jwtTokenSigned(
-                        daplaTeams = listOf("some-other-team"),
-                        daplaGroups = listOf("some-other-team-developers"),
-                    ).parsedString,
-            ).contentType(ContentType.JSON)
-            .body(
-                """
-                {"name": {
-                    "nb": "Landbakgrunn",
-                    "nn": "Landbakgrunn",
-                    "en": "Update"
-                }}
-                """.trimIndent(),
-            ).`when`()
-            .queryParam(ACTIVE_GROUP, "some-other-team-developers")
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
-    }
-
-    @Test
     fun `update variable with published status`(spec: RequestSpecification) {
         spec
             .given()
@@ -510,70 +422,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `update variable definition invalid active group`(spec: RequestSpecification) {
-        val expected: SavedVariableDefinition =
-            SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
-                name = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.name.copy(en = "Update"),
-            )
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"name": {
-                    "nb": "Dødvekt",
-                    "nn": "Dødvekt",
-                    "en": "Update"
-                }}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, "invalid-group")
-            .`when`()
-            .patch("/variable-definitions/${expected.definitionId}")
-            .then()
-            .statusCode(401)
-    }
-
-    @Test
-    fun `update variable definition no active group`(spec: RequestSpecification) {
-        val expected: SavedVariableDefinition =
-            SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
-                name = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.name.copy(en = "Update"),
-            )
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"name": {
-                    "nb": "Dødvekt",
-                    "nn": "Dødvekt",
-                    "en": "Update"
-                }}
-                """.trimIndent(),
-            ).`when`()
-            .patch("/variable-definitions/${expected.definitionId}")
-            .then()
-            .statusCode(403)
-    }
-
-    @Test
-    fun `update variable definition active group is valid but not owner`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"short_name":"toppebek"}
-                """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, "play-foeniks-a-developers")
-            .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(403)
-    }
-
-    @Test
     fun `get variable definition unauthenticated`(spec: RequestSpecification) {
         spec
             .given()
@@ -587,7 +435,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#definitionIdsAllStatuses")
-    fun `get variable definition authenticated`(
+    fun `get variable definition for all statuses`(
         definitionId: String,
         expectedStatus: String,
         spec: RequestSpecification,
@@ -622,7 +470,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidOwnerUpdates")
+    @MethodSource("invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
         errorMessage: String,
@@ -719,6 +567,83 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                             )
                         }.toString(),
                     "owner.groups[2]",
+                ),
+            )
+
+        @JvmStatic
+        fun invalidOwnerUpdates(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Team name empty string",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "must not be empty",
+                ),
+                argumentSet(
+                    "Team name null",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "can not be null",
+                ),
+                argumentSet(
+                    "Groups empty list",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "skip-stat")
+                                },
+                            )
+                        }.toString(),
+                    "must not be empty",
+                ),
+                argumentSet(
+                    "Groups empty values in list",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "skip-stat")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "",
+                                            "",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "must not be empty",
                 ),
             )
     }

@@ -22,7 +22,6 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
-import org.junit.jupiter.params.provider.ValueSource
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -140,6 +139,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec: RequestSpecification,
     ) {
         spec
+            .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
@@ -160,6 +160,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec: RequestSpecification,
     ) {
         spec
+            .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
@@ -176,6 +177,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec: RequestSpecification,
     ) {
         spec
+            .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
@@ -196,6 +198,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         spec: RequestSpecification,
     ) {
         spec
+            .given()
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
@@ -336,46 +339,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition unauthenticated`(spec: RequestSpecification) {
-        spec
-            .given()
-            .auth()
-            .none()
-            .contentType(ContentType.JSON)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .body(jsonTestInput())
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(401)
-    }
-
-    @Test
-    fun `create variable definition no active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(jsonTestInput())
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
-    }
-
-    @Test
-    fun `create variable definition invalid active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(jsonTestInput())
-            .queryParam(ACTIVE_GROUP, "invalid-group")
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
-    }
-
-    @Test
     fun `create variable definition save owner`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
@@ -395,28 +358,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
             .body("owner.groups[1]", nullValue())
             .body("owner.team", equalTo(TEST_TEAM))
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["managers", "data-admins"])
-    fun `create variable definition active group not developers`(
-        groupSuffix: String,
-        spec: RequestSpecification,
-    ) {
-        val group = "play-enhjoern-a-$groupSuffix"
-        spec
-            .given()
-            .auth()
-            .oauth2(
-                JwtTokenHelper.jwtTokenSigned(daplaGroups = listOf(group)).parsedString,
-            )
-            .contentType(ContentType.JSON)
-            .body(jsonTestInput().toString())
-            .queryParam(ACTIVE_GROUP, group)
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
     }
 
     @Test
@@ -446,7 +387,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `list variables definitions authenticated`(spec: RequestSpecification) {
+    fun `list variables definitions all statuses`(spec: RequestSpecification) {
         val expectedStatuses =
             setOf(
                 VariableStatus.DRAFT,

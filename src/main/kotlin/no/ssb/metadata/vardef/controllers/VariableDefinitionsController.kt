@@ -40,6 +40,7 @@ class VariableDefinitionsController {
     /**
      * List all variable definitions.
      */
+    @Tag(name = VARIABLE_DEFINITIONS)
     @ApiResponse(
         content = [
             Content(

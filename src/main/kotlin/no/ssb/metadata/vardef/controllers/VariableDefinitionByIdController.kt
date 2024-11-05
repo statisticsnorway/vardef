@@ -44,6 +44,7 @@ class VariableDefinitionByIdController {
     /**
      * Get one variable definition.
      */
+    @Tag(name = VARIABLE_DEFINITIONS)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(
         responseCode = "200",

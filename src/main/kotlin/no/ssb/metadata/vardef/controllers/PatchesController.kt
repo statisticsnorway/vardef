@@ -90,7 +90,6 @@ class PatchesController {
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/{patch-id}")
-    @Secured(VARIABLE_CONSUMER)
     @SecurityRequirement(name = "Bearer Authentication")
     fun getOnePatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)

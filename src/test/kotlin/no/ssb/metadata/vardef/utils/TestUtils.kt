@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.utils
 
 import no.ssb.metadata.vardef.models.VariableStatus
-import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
@@ -19,8 +18,6 @@ object TestUtils {
             argumentSet("Published internal", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, "PUBLISHED_INTERNAL"),
             argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
         )
-
-
 
     /**
      * Invalid variable definitions.

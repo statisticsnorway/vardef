@@ -37,7 +37,7 @@ class PatchesService(
             .toSortedMap()
 
     /**
-     * Private helper method for listing patches 
+     * Private helper method for listing patches
      */
     private fun listPeriods(definitionId: String): List<SavedVariableDefinition> =
         getAsMap(definitionId)

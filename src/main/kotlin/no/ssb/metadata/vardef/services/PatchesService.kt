@@ -2,10 +2,13 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.integrations.klass.service.KlassApiService
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
+import kotlin.math.log
 
 /**
  * Patches service
@@ -20,6 +23,7 @@ import java.util.*
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
+    private val logger = LoggerFactory.getLogger(PatchesService::class.java)
     /**
      * Create a new *Patch*
      *
@@ -28,29 +32,52 @@ class PatchesService(
      */
     fun create(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
 
+    /**
+     * Private helper method for grouping patches by valid_from
+     */
     private fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         list(definitionId)
             .groupBy { it.validFrom }
             .toSortedMap()
 
+    /**
+     * Helper method
+     */
     private fun listPeriods(definitionId: String): List<SavedVariableDefinition> =
         getAsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
             .sortedBy { it.validFrom }
 
+    /**
+     * Create a new *Patch*
+     *
+     * If owner field is updated a new patch for each validity period is created
+     *
+     * @param patch The *Patch* to create, with updated values.
+     * @return The created *Patch*
+     */
     fun createPatch(
-        definitionId: String,
         patch: SavedVariableDefinition,
+        validityPeriod: SavedVariableDefinition
     ): SavedVariableDefinition {
-        val validityPeriods = listPeriods(definitionId)
+        val validityPeriods = listPeriods(patch.definitionId)
         if (patch.toPatch().owner != null) {
-            validityPeriods.map {
-                create(patch).toCompleteResponse()
+            validityPeriods
+            //.filter { it.validFrom != validityPeriod }
+            .forEach { period ->
+                // Only save owner update for each validity period
+                val patchWithOwner = period.copy(owner = patch.owner).toPatch()
+                logger.info("Input is $patchWithOwner")
+                logger.info("latest patch id is ${latest(patch.definitionId).patchId}")
+                create(patchWithOwner.toSavedVariableDefinition(latest(patch.definitionId).patchId, period))
             }
-            return latest(definitionId)
+            // Process and return the specified validityPeriod last
+            // Save as normal patch
+          // return create(patch)
         }
-        return create(patch)
+        // If no update on owner
+        return create(patch.toPatch().toSavedVariableDefinition(latest(patch.definitionId).patchId, validityPeriod))
     }
 
     /**

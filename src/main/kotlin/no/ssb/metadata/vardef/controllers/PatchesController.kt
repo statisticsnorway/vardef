@@ -162,11 +162,11 @@ class PatchesController {
         }
         return patches
             .createPatch(
-                variableDefinitionId,
                 patch.toSavedVariableDefinition(
                     patches.latest(variableDefinitionId).patchId,
                     latestPatchOnValidityPeriod,
                 ),
+                latestPatchOnValidityPeriod
             ).toCompleteResponse()
     }
 }

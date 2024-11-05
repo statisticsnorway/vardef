@@ -1,10 +1,9 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
-import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
-import no.ssb.metadata.vardef.utils.numIncomeTaxPatches
+import no.ssb.metadata.vardef.models.LanguageStringType
+import no.ssb.metadata.vardef.models.Owner
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -50,6 +49,29 @@ class PatchesServiceTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService.list().map { it.definitionId },
         ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
+    }
+
+    @Test
+    fun `create patch update owner team`(){
+        val latestPatches = validityPeriods.listComplete(INCOME_TAX_VP1_P1.definitionId)
+        val patch =
+            INCOME_TAX_VP2_P6.copy(
+                owner =
+                Owner(
+                    "dapla-felles",
+                    listOf("pers-skatt-developers", TEST_DEVELOPERS_GROUP, "neighbourhood-dogs"
+                    )),
+            ).toPatch()
+        val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(
+            INCOME_TAX_VP1_P1.definitionId, validFrom = null)
+        patches.createPatch(patch.toSavedVariableDefinition(
+            latestPatchOnValidityPeriod.patchId, latestPatchOnValidityPeriod),
+            latestPatchOnValidityPeriod)
+        val latestPatchesAfter = validityPeriods.listComplete(INCOME_TAX_VP1_P1.definitionId)
+        assertThat(latestPatches).isNotEqualTo(latestPatchesAfter)
+        assertThat(latestPatches[0].patchId).isEqualTo(latestPatchesAfter[0].patchId-1)
+        assertThat(latestPatches[0].owner.team).isNotEqualTo(latestPatchesAfter[0].owner.team)
+        assertThat(validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)).isNull()
     }
 
     companion object {

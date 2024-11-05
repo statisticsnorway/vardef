@@ -80,13 +80,13 @@ data class Owner(
     var team: String,
     @NotNull
     val groups: List<String>,
-) /*{
+) {
     init {
         require(team.isNotBlank()) { "Team name cannot be blank or null" }
         require(groups.isNotEmpty()) { "Groups cannot be blank or null" }
         require(groups.all { it.isNotBlank() }) { "Groups cannot contain blank values" }
     }
-}*/
+}
 
 @Schema(example = RENDERED_CONTACT_EXAMPLE)
 @Serdeable(naming = SnakeCaseStrategy::class)

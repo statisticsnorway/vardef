@@ -26,14 +26,14 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
     lateinit var daplaTeamApiStaticService: StaticDaplaTeamService
 
     @Test
-    fun`validate team name`()  {
+    fun`validate team name`() {
         assertThat(daplaTeamApiStaticService.isValidTeam("bon")).isFalse()
         assertThat(daplaTeamApiStaticService.isValidTeam("dapla-felles")).isTrue()
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["bon", "babaam"])
-    fun `test invalid team name`(team: String)  {
+    fun `test invalid team name`(team: String) {
         assertThat(
             validator.validate(
                 TestOwnerObject(
@@ -46,7 +46,7 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
 
     @ParameterizedTest
     @ValueSource(strings = ["dapla-felles", "play-enhjoern-a"])
-    fun `test valid team name`(team: String)  {
+    fun `test valid team name`(team: String) {
         assertThat(
             validator.validate(
                 TestOwnerObject(
@@ -58,7 +58,7 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
     }
 
     @Test
-    fun `test owner`()  {
+    fun `test owner`() {
         assertThat(validator.validate(Owner("bon", listOf("dapla")))).isNotEmpty()
         val violations: Set<ConstraintViolation<Owner>> = validator.validate(Owner("bon", listOf("dapla")))
         val teamViolation = violations.first { it.propertyPath.toString() == "team" }

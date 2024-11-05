@@ -14,11 +14,12 @@ import no.ssb.metadata.vardef.integrations.dapla.models.Team
 @Headers(
     Header(name = USER_AGENT, value = "VarDef API"),
     Header(name = ACCEPT, value = "application/json"),
-    Header(name = AUTHORIZATION)
+    Header(name = AUTHORIZATION),
 )
 interface DaplaTeamApiClient {
-   @Get("/teams/{teamName}")
-   @SingleResult
-   fun fetchTeam(
-       @PathVariable teamName: String): HttpResponse<Team?>
+    @Get("/teams/{teamName}")
+    @SingleResult
+    fun fetchTeam(
+        @PathVariable teamName: String,
+    ): HttpResponse<Team?>
 }

@@ -166,7 +166,7 @@ class PatchesController {
                     patches.latest(variableDefinitionId).patchId,
                     latestPatchOnValidityPeriod,
                 ),
-                latestPatchOnValidityPeriod
-            ).toCompleteResponse()
+                latestPatchOnValidityPeriod,
+            )!!.toCompleteResponse()
     }
 }

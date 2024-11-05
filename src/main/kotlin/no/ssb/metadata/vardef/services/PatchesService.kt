@@ -49,8 +49,11 @@ class PatchesService(
      * Create a new *Patch*
      *
      * If owner field is updated a new patch for each validity period is created
+     * Only owner is updated in patches except for choosen validity period, there all
+     * changes from patch is saved
      *
      * @param patch The *Patch* to create, with updated values.
+     * @param validityPeriod (?
      * @return The created *Patch*
      */
     fun createPatch(

@@ -2,9 +2,10 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import java.time.LocalDate
+import java.util.*
 
 /**
  * Patches service
@@ -26,6 +27,31 @@ class PatchesService(
      * @return The created *Patch*
      */
     fun create(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
+
+    private fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
+        list(definitionId)
+            .groupBy { it.validFrom }
+            .toSortedMap()
+
+    private fun listPeriods(definitionId: String): List<SavedVariableDefinition> =
+        getAsMap(definitionId)
+            .values
+            .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
+            .sortedBy { it.validFrom }
+
+    fun createPatch(
+        definitionId: String,
+        patch: SavedVariableDefinition,
+    ): SavedVariableDefinition {
+        val validityPeriods = listPeriods(definitionId)
+        if (patch.toPatch().owner != null) {
+            validityPeriods.map {
+                create(patch).toCompleteResponse()
+            }
+            return latest(definitionId)
+        }
+        return create(patch)
+    }
 
     /**
      * List all Patches for a specific Variable Definition.
@@ -77,5 +103,4 @@ class PatchesService(
             .forEach {
                 variableDefinitionRepository.deleteById(it.id)
             }
-
 }

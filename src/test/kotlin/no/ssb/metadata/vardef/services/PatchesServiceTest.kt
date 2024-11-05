@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1

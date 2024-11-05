@@ -25,7 +25,7 @@ class ValidityPeriodsService(
     private val patches: PatchesService,
     private val klassService: KlassService,
 ) {
-    private fun list(definitionId: String): List<SavedVariableDefinition> =
+    fun list(definitionId: String): List<SavedVariableDefinition> =
         getAsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }

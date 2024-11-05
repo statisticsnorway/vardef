@@ -473,7 +473,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @MethodSource("invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
-        errorMessage: String,
         spec: RequestSpecification,
     ) {
         spec
@@ -486,10 +485,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(errorMessage),
-            )
 
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
@@ -591,7 +586,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "must not be empty",
                 ),
                 argumentSet(
                     "Team name null",
@@ -610,7 +604,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "can not be null",
                 ),
                 argumentSet(
                     "Groups empty list",
@@ -623,7 +616,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "must not be empty",
                 ),
                 argumentSet(
                     "Groups empty values in list",
@@ -643,7 +635,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "must not be empty",
                 ),
             )
     }

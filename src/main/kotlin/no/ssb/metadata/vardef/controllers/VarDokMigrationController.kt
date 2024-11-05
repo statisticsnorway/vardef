@@ -1,11 +1,7 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.http.*
 import io.micronaut.http.HttpHeaders.AUTHORIZATION
-import io.micronaut.http.HttpRequest
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.MediaType
-import io.micronaut.http.MutableHttpHeaders
-import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.ProxyHttpClient
 import io.micronaut.http.client.annotation.Client
@@ -33,6 +29,7 @@ import org.reactivestreams.Publisher
 @Validated
 @Controller("/vardok-migration/{vardok-id}")
 @Secured(VARIABLE_CREATOR)
+@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController {
     @Inject
@@ -65,7 +62,6 @@ class VarDokMigrationController {
             ],
     )
     @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
-    @SecurityRequirement(name = "Bearer Authentication")
     fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",

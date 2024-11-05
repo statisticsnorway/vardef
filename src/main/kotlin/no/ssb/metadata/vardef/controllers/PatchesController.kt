@@ -30,6 +30,7 @@ import java.time.LocalDate
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
 @Secured(VARIABLE_CONSUMER)
+@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController {
     @Inject
@@ -59,7 +60,6 @@ class PatchesController {
         ],
     )
     @Get
-    @SecurityRequirement(name = "Bearer Authentication")
     fun getAllPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
@@ -90,7 +90,6 @@ class PatchesController {
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/{patch-id}")
-    @SecurityRequirement(name = "Bearer Authentication")
     fun getOnePatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
@@ -126,7 +125,6 @@ class PatchesController {
     @ApiResponse(responseCode = "400", description = "Bad request.")
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     @Secured(VARIABLE_OWNER)
-    @SecurityRequirement(name = "Bearer Authentication")
     fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])

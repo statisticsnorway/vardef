@@ -62,7 +62,10 @@ import no.ssb.metadata.vardef.constants.*
     ],
 )
 @SecurityScheme(
-    name = "Bearer Authentication",
+    name = KEYCLOAK_TOKEN_SCHEME,
+    description =
+        "A token granted by Statistics Norway's Keycloak instance. May be obtained " +
+            "from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service.",
     type = SecuritySchemeType.HTTP,
     bearerFormat = "JWT",
     scheme = "bearer",

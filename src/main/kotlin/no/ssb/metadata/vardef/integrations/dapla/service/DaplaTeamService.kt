@@ -10,4 +10,8 @@ interface DaplaTeamService {
     fun getTeam(teamName: String): Team?
 
     fun isValidTeam(team: String): Boolean
+
+    fun isValidGroup(group: String): Boolean
+
+    fun getGroup(groupName: String): Group?
 }

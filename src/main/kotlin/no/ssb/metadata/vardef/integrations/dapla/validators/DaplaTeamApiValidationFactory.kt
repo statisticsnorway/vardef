@@ -20,4 +20,14 @@ class DaplaTeamApiValidationFactory {
             ->
             value == null || daplaTeamApiService.isValidTeam(value)
         }
+
+    @Singleton
+    fun daplaGroupValidator(): ConstraintValidator<DaplaGroup, String> =
+        ConstraintValidator {
+                value,
+                _,
+                _,
+            ->
+            value == null || daplaTeamApiService.isValidGroup(value)
+        }
 }

@@ -7,11 +7,10 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Headers
 import io.micronaut.http.annotation.PathVariable
-import io.micronaut.http.client.annotation.Client
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
 
-@Client(id = "dapla-team-api")
+// @Client(id = "dapla-team-api")
 @Headers(
     Header(name = USER_AGENT, value = "VarDef API"),
     Header(name = ACCEPT, value = "application/json"),

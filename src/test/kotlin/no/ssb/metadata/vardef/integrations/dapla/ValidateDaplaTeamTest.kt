@@ -1,24 +1,14 @@
 package no.ssb.metadata.vardef.integrations.dapla
 
-import io.micronaut.core.annotation.Introspected
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
 import jakarta.inject.Inject
-import jakarta.validation.ConstraintViolation
 import no.ssb.metadata.vardef.integrations.dapla.service.StaticDaplaTeamService
-import no.ssb.metadata.vardef.integrations.dapla.validators.DaplaTeam
 import no.ssb.metadata.vardef.models.Owner
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-
-@Introspected
-data class TestOwnerObject(
-    @DaplaTeam
-    var team: String,
-    var groups: List<String>,
-)
 
 @MicronautTest
 class ValidateDaplaTeamTest(private val validator: Validator) {
@@ -31,12 +21,18 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
         assertThat(daplaTeamApiStaticService.isValidTeam("dapla-felles")).isTrue()
     }
 
+    @Test
+    fun`validate group name`() {
+        assertThat(daplaTeamApiStaticService.isValidGroup("bon")).isFalse()
+        assertThat(daplaTeamApiStaticService.isValidGroup("dapla-felles-developers")).isTrue()
+    }
+
     @ParameterizedTest
     @ValueSource(strings = ["bon", "babaam"])
     fun `test invalid team name`(team: String) {
         assertThat(
             validator.validate(
-                TestOwnerObject(
+                Owner(
                     team,
                     listOf("dapla-felles-developers"),
                 ),
@@ -49,7 +45,7 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
     fun `test valid team name`(team: String) {
         assertThat(
             validator.validate(
-                TestOwnerObject(
+                Owner(
                     team,
                     listOf("dapla-felles-developers"),
                 ),
@@ -57,12 +53,35 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
         ).isEmpty()
     }
 
-    @Test
-    fun `test owner`() {
-        assertThat(validator.validate(Owner("bon", listOf("dapla")))).isNotEmpty()
-        val violations: Set<ConstraintViolation<Owner>> = validator.validate(Owner("bon", listOf("dapla")))
-        val teamViolation = violations.first { it.propertyPath.toString() == "team" }
-        assertThat(teamViolation.message).isEqualTo("Invalid Dapla team")
-        assertThat(validator.validate(Owner("dapla-felles", listOf("dapla")))).isEmpty()
+    @ParameterizedTest
+    @ValueSource(strings = [
+        "dapla-felles-developers",
+        "play-enhjoern-a-developers",
+        "pers-skatt-developers",
+        "skip-stat-developers"
+        ]
+    )
+    fun `test valid group name`(group: String) {
+        assertThat(
+            validator.validate(
+                Owner(
+                    "play-enhjoern-a",
+                    listOf(group),
+                ),
+            ),
+        ).isEmpty()
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["play-b-dev", "root-manager"])
+    fun `test invalid group name`(group: String) {
+        assertThat(
+            validator.validate(
+                Owner(
+                    "play-enhjoern-a",
+                    listOf(group),
+                ),
+            ),
+        ).isNotEmpty()
     }
 }

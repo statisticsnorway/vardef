@@ -24,6 +24,13 @@ class StaticDaplaTeamService : DaplaTeamService {
         listOf(
             "play-enhjoern-a-developers",
             "play-foeniks-a-developers",
+            "neighbourhood-dogs",
+            "my-team-developers",
+            "other-group",
+            "my-team-developers",
+            "pers-skatt-developers",
+            "skip-stat-developers",
+            "dapla-felles-developers"
         )
 
     override fun getTeam(teamName: String): Team? {
@@ -32,11 +39,12 @@ class StaticDaplaTeamService : DaplaTeamService {
 
     override fun isValidTeam(team: String): Boolean {
         logger.info("Checking if team $team is valid")
-        return teams.any { it.equals(team, true) }
+        return teams.any { it == team }
     }
 
     override fun isValidGroup(group: String): Boolean {
-        TODO("Not yet implemented")
+        logger.info("Checking if team $group is valid")
+        return groups.any { it == group }
     }
 
     override fun getGroup(groupName: String): Group? {

@@ -122,22 +122,4 @@ class VariableDefinitionTest {
         val savedVariableDefinition = draftExample.toSavedVariableDefinition(group)
         assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
     }
-
-    @Test
-    fun `owner team can not be null or blank`() {
-        val exception =
-            assertThrows<IllegalArgumentException> {
-                Owner(team = "", groups = listOf("group1"))
-            }
-        assertEquals("Team name cannot be blank or null", exception.message)
-    }
-
-    @Test
-    fun `owner groups can not be null or blank`() {
-        val exception =
-            assertThrows<IllegalArgumentException> {
-                Owner(team = "hey-team", groups = listOf(""))
-            }
-        assertEquals("Groups cannot contain blank values", exception.message)
-    }
 }

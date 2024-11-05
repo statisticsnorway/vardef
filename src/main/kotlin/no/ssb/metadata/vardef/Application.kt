@@ -9,8 +9,8 @@ import io.swagger.v3.oas.annotations.extensions.ExtensionProperty
 import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.security.SecurityScheme
+import io.swagger.v3.oas.annotations.servers.Server
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.ssb.metadata.vardef.constants.*
 
@@ -32,7 +32,7 @@ import no.ssb.metadata.vardef.constants.*
                     ),
                 ),
         ),
-    security = [SecurityRequirement(name = "Keycloak token")],
+    servers = [Server(url = "https://metadata.intern.test.ssb.no", description = "Internal test server")],
     tags = [
         Tag(
             name = PUBLIC,

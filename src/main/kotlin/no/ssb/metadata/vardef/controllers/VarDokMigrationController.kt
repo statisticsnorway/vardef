@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpHeaders.AUTHORIZATION
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
 import io.micronaut.http.MutableHttpHeaders
 import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
@@ -53,6 +54,7 @@ class VarDokMigrationController {
             [
                 Content(
                     schema = Schema(implementation = CompleteResponse::class),
+                    mediaType = MediaType.APPLICATION_JSON,
                     examples = [
                         ExampleObject(
                             name = "migrate_1607",

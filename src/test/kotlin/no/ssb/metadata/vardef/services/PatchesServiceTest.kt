@@ -65,31 +65,31 @@ class PatchesServiceTest : BaseVardefTest() {
         // Create patch
         patches.createPatch(patch, INCOME_TAX_VP1_P1.definitionId, latestPatch)
 
-        // Get latest patch in all validity periods
+        // Get latest patch from all validity periods
         val validityPeriodList = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
 
         validityPeriodList.forEach { period ->
-            //
+            // Property values for present, latest in selected period and latest in other periods
             val periodValue = getPropertyByName(period, fieldName)
             val latestPatchValue = getPropertyByName(latestPatch, fieldName)
             val previousPatchValue = getPropertyByName(previousPatch, fieldName)
 
-            // Only owner is updated - owner values in all validity periods
+            // Owner is updated - all periods updates value
             if (fieldName.isBlank()) {
                 assertThat(period.owner).isNotEqualTo(latestPatch.owner)
                 assertThat(period.owner).isNotEqualTo(previousPatch.owner)
             }
 
-            // Only other value is updated - one patch is created in selected period
+            // Other value is updated - one patch is created in selected period
             if (fieldName.isNotBlank() && numPatchesCreated == 1 && period.validFrom == latestPatch.validFrom) {
                 assertThat(periodValue).isNotEqualTo(latestPatchValue)
             }
-            // Selected validity period and owner and other value than owner updated
+            // Owner and other value is updated - selected validity period
             if (fieldName.isNotBlank() && period.validFrom == latestPatch.validFrom && numPatchesCreated > 1) {
                 assertThat(periodValue).isNotEqualTo(latestPatchValue)
                 assertThat(period.owner).isNotEqualTo(latestPatch.owner)
             }
-            // All other validity periods when owner and other values are updated
+            // Owner and other value is updated - all other validity periods
             if (fieldName.isNotBlank() && period.validFrom != latestPatch.validFrom && numPatchesCreated > 1) {
                 assertThat(periodValue).isEqualTo(previousPatchValue)
                 assertThat(period.owner).isNotEqualTo(previousPatch.owner)

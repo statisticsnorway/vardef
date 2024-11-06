@@ -49,8 +49,8 @@ class PatchesService(
     /**
      * Create a new *Patch*
      *
-     * If owner field is changed a new patch for each validity period is created.
-     * Only owner is updated in patch for each validity period,
+     * If owner field has new values a new patch for each validity period is created.
+     * Only owner values in new patch for each validity period,
      * except from selected validity period where all updated values are saved.
      *
      * If owner is not changed one patch is created for selected validity period.
@@ -69,14 +69,14 @@ class PatchesService(
         if (patch.owner != latestPatch.owner && patch.owner != null) {
             var result: SavedVariableDefinition
             validityPeriods
-                // The choosen validity period must be handled seperately in case there updates on more fields than owner
+                // The selected validity period must be handled separately in case of other updated values than owner
                 .filter { it.validFrom != latestPatch.validFrom }
                 .forEach { period ->
-                    // we only want to update owner in all other validity periods
+                    // we only want to update owner in all other validity periods than selected period
                     val patcOwner = patch.owner.let { period.copy(owner = it).toPatch() }
                     result = create(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
                 }
-            // Process and handle the specified validityPeriod last
+            // Process and handle the specified validity period
             result = create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
             return result
         }

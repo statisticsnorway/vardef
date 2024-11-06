@@ -10,7 +10,6 @@ import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.CoreMatchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test

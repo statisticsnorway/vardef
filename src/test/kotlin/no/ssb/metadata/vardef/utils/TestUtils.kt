@@ -12,7 +12,10 @@ const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"
  * Get object field value by String name.
  * Enables dynamic comparison of field values in parameterized tests
  */
-fun getPropertyByName(obj: Any, propertyName: String): Any? {
+fun getPropertyByName(
+    obj: Any,
+    propertyName: String,
+): Any? {
     return obj::class.memberProperties
         .firstOrNull { it.name == propertyName }
         ?.getter

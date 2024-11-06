@@ -163,6 +163,31 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .statusCode(HttpStatus.FORBIDDEN.code)
     }
 
+    @ParameterizedTest
+    @MethodSource("variableOwnerOperations")
+    fun `request with token without required audience claim value`(
+        method: Method,
+        path: String,
+        body: String?,
+        spec: RequestSpecification,
+    ) {
+        if (body != null) {
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(body)
+        }
+        spec
+            .given()
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .request(method, path)
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
     companion object {
         /**
          * Tests cases for operations requiring the [VARIABLE_CREATOR] role.

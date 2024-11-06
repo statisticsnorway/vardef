@@ -47,18 +47,18 @@ class PatchesService(
             .sortedBy { it.validFrom }
 
     /**
-     * Create a new *Patch*
+     * Create new *Patch(es)*
      *
      * If owner field has new values a new patch for each validity period is created.
-     * Only owner values in new patch for each validity period,
-     * except from selected validity period where all updated values are saved.
+     * Only owner values for each validity period are saved, except from selected validity period where all
+     * updated values are saved.
      *
-     * If owner is not changed one patch is created for selected validity period.
+     * If owner values are not changed one patch is created for selected validity period.
      *
      * @param patch The *Patch* to create, with updated values.
      * @param definitionId the id of the variable
      * @param latestPatch latest patch in selected validity period
-     * @return The created *Patch*
+     * @return The created *Patch* for selected validity period with all values updated
      */
     fun createPatch(
         patch: Patch,
@@ -67,18 +67,16 @@ class PatchesService(
     ): SavedVariableDefinition {
         val validityPeriods = listPeriods(definitionId)
         if (patch.owner != latestPatch.owner && patch.owner != null) {
-            var result: SavedVariableDefinition
             validityPeriods
-                // The selected validity period must be handled separately in case of other updated values than owner
+                // The selected validity period must be handled separately
                 .filter { it.validFrom != latestPatch.validFrom }
                 .forEach { period ->
-                    // we only want to update owner in all other validity periods than selected period
+                    // We only want to update owner values in not selected validity periods
                     val patcOwner = patch.owner.let { period.copy(owner = it).toPatch() }
-                    result = create(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
+                    create(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
                 }
-            // Process and handle the specified validity period
-            result = create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
-            return result
+            // Process and handle the specified validity period, update all values
+            return create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
         }
         // If no update on owner
         return create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))

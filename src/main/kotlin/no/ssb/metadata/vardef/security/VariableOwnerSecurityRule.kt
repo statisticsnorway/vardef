@@ -122,13 +122,17 @@ class VariableOwnerSecurityRule(
                 if (VARIABLE_OWNER !in authentication.roles) {
                     logger.info("Rejected access. Principal does not have $VARIABLE_OWNER role. Request: $request")
                     sink.next(SecurityRuleResult.REJECTED)
-                }
-                if (isOwner) {
-                    logger.info("Allowed access for: $request")
-                    sink.next(SecurityRuleResult.ALLOWED)
+                    sink.complete()
                 } else {
-                    logger.info("Rejected access. Principal does not own the requested resource. Request: $request")
-                    sink.next(SecurityRuleResult.REJECTED)
+                    if (isOwner) {
+                        logger.info("Allowed access for: $request")
+                        sink.next(SecurityRuleResult.ALLOWED)
+                        sink.complete()
+                    } else {
+                        logger.info("Rejected access. Principal does not own the requested resource. Request: $request")
+                        sink.next(SecurityRuleResult.REJECTED)
+                        sink.complete()
+                    }
                 }
             }.switchIfEmpty(Mono.just(SecurityRuleResult.UNKNOWN))
             .doOnError { logger.error("Error while authorizing for $VARIABLE_OWNER for $request", it) }

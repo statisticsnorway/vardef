@@ -130,8 +130,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                     assignRoles(it, request),
                     it.jwtClaimsSet.claims,
                 )
-            }.doOnError { logger.error("Error building authentication for $request", it) }
-            .onErrorResume { Mono.empty() }
+            }
     }
 
     /**

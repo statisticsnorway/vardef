@@ -491,7 +491,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(201)
-            .body(pathVariable, not(CoreMatchers.equalTo(valueBeforeUpdate)))
+            .body(pathVariable, not(equalTo(valueBeforeUpdate)))
     }
 
     @ParameterizedTest

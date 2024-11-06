@@ -30,7 +30,7 @@ class PatchesService(
     fun create(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
 
     /**
-     * Private helper method for grouping patches by validity period.
+     * Group patches by validity period.
      */
     private fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         list(definitionId)
@@ -38,7 +38,7 @@ class PatchesService(
             .toSortedMap()
 
     /**
-     * Private helper method for listing validity periods with latest patch in each period.
+     * List of the latest *Patch* in each *Validity Period*.
      */
     private fun listPeriods(definitionId: String): List<SavedVariableDefinition> =
         getAsMap(definitionId)
@@ -47,38 +47,41 @@ class PatchesService(
             .sortedBy { it.validFrom }
 
     /**
-     * Create new *Patch(es)*
+     * Creates new *Patch* or *Patches*.
      *
-     * If owner field has new values a new patch for each validity period is created.
-     * Only owner values for each validity period are saved, except from selected validity period where all
-     * updated values are saved.
+     * This method generates patches according to changes in the owner field values across validity periods:
+     * - If the owner field has new values, a separate patch is created for each validity period, containing only
+     *   the owner values. For the selected validity period, however, all updated values
+     *   are saved in the patch.
+     * - If the owner values remain unchanged, a single patch is created for the selected validity period.
      *
-     * If owner values are not changed one patch is created for selected validity period.
-     *
-     * @param patch The *Patch* to create, with updated values.
-     * @param definitionId the id of the variable
-     * @param latestPatch latest patch in selected validity period
-     * @return The created *Patch* for selected validity period with all values updated
+     * @param patch The *Patch* containing updated values to apply.
+     * @param definitionId The unique identifier for the variable.
+     * @param latestPatch The latest existing patch within the selected validity period.
+     * @return The created *Patch* for the selected validity period with all updated values applied.
      */
     fun createPatch(
         patch: Patch,
         definitionId: String,
         latestPatch: SavedVariableDefinition,
     ): SavedVariableDefinition {
+        // Retrieve all validity periods associated with the given definition ID
         val validityPeriods = listPeriods(definitionId)
+
+        // Check if the owner value has been updated and is not null
         if (patch.owner != latestPatch.owner && patch.owner != null) {
             validityPeriods
-                // The selected validity period must be handled separately
+                // Exclude the currently selected validity period, which is handled separately
                 .filter { it.validFrom != latestPatch.validFrom }
                 .forEach { period ->
-                    // We only want to update owner values in not selected validity periods
+                    // For non-selected validity periods, only update the owner field
                     val patcOwner = patch.owner.let { period.copy(owner = it).toPatch() }
                     create(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
                 }
-            // Process and handle the specified validity period, update all values
+            // For the selected validity period, apply all updated values
             return create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
         }
-        // If no update on owner
+        // If no change in owner, create a patch for the selected validity period with the provided values
         return create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
     }
 

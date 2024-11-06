@@ -32,6 +32,7 @@ import java.time.LocalDate
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
 @Secured(VARIABLE_CONSUMER)
+@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController {
     @Inject
@@ -43,6 +44,7 @@ class VariableDefinitionByIdController {
     /**
      * Get one variable definition.
      */
+    @Tag(name = VARIABLE_DEFINITIONS)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(
         responseCode = "200",
@@ -56,7 +58,6 @@ class VariableDefinitionByIdController {
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get
-    @SecurityRequirement(name = "Bearer Authentication")
     fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
@@ -91,7 +92,6 @@ class VariableDefinitionByIdController {
     @Status(HttpStatus.NO_CONTENT)
     @Delete
     @Secured(VARIABLE_OWNER)
-    @SecurityRequirement(name = "Bearer Authentication")
     fun deleteVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
@@ -140,7 +140,6 @@ class VariableDefinitionByIdController {
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch
     @Secured(VARIABLE_OWNER)
-    @SecurityRequirement(name = "Bearer Authentication")
     fun updateVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Schema(description = ID_FIELD_DESCRIPTION)

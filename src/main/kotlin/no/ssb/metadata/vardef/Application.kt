@@ -9,8 +9,8 @@ import io.swagger.v3.oas.annotations.extensions.ExtensionProperty
 import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.security.SecurityScheme
+import io.swagger.v3.oas.annotations.servers.Server
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.ssb.metadata.vardef.constants.*
 
@@ -32,7 +32,7 @@ import no.ssb.metadata.vardef.constants.*
                     ),
                 ),
         ),
-    security = [SecurityRequirement(name = "Keycloak token")],
+    servers = [Server(url = "https://metadata.intern.test.ssb.no", description = "Internal test server")],
     tags = [
         Tag(
             name = PUBLIC,
@@ -62,7 +62,10 @@ import no.ssb.metadata.vardef.constants.*
     ],
 )
 @SecurityScheme(
-    name = "Bearer Authentication",
+    name = KEYCLOAK_TOKEN_SCHEME,
+    description =
+        "A token granted by Statistics Norway's Keycloak instance. May be obtained " +
+            "from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service.",
     type = SecuritySchemeType.HTTP,
     bearerFormat = "JWT",
     scheme = "bearer",

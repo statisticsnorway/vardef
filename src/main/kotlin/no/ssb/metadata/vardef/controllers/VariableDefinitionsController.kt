@@ -28,6 +28,7 @@ import java.time.LocalDate
 @Validated
 @Controller("/variable-definitions")
 @Secured(VARIABLE_CONSUMER)
+@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionsController {
     @Inject
@@ -39,6 +40,7 @@ class VariableDefinitionsController {
     /**
      * List all variable definitions.
      */
+    @Tag(name = VARIABLE_DEFINITIONS)
     @ApiResponse(
         content = [
             Content(
@@ -55,7 +57,6 @@ class VariableDefinitionsController {
         ],
     )
     @Get
-    @SecurityRequirement(name = "Bearer Authentication")
     fun listVariableDefinitions(
         @QueryValue("date_of_validity")
         @Parameter(
@@ -92,7 +93,6 @@ class VariableDefinitionsController {
     )
     @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
-    @SecurityRequirement(name = "Bearer Authentication")
     @Secured(VARIABLE_CREATOR)
     fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE)

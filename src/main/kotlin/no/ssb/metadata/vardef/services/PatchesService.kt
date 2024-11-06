@@ -5,8 +5,6 @@ import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.security.VariableOwnerSecurityRule
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
 

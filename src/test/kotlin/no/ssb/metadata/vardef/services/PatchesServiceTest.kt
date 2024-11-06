@@ -16,6 +16,7 @@ import java.util.stream.Stream
 
 class PatchesServiceTest : BaseVardefTest() {
     private val logger = LoggerFactory.getLogger(PatchesServiceTest::class.java)
+
     @Test
     fun `get latest patch`() {
         assertThat(patches.latest(INCOME_TAX_VP1_P1.definitionId).patchId)

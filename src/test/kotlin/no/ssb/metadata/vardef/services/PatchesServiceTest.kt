@@ -3,6 +3,8 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.Owner
+import no.ssb.metadata.vardef.models.Patch
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -10,13 +12,9 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import org.slf4j.LoggerFactory
-import java.time.LocalDate
 import java.util.stream.Stream
 
 class PatchesServiceTest : BaseVardefTest() {
-    private val logger = LoggerFactory.getLogger(PatchesServiceTest::class.java)
-
     @Test
     fun `get latest patch`() {
         assertThat(patches.latest(INCOME_TAX_VP1_P1.definitionId).patchId)
@@ -55,132 +53,137 @@ class PatchesServiceTest : BaseVardefTest() {
         ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
     }
 
-    @Test
-    fun `create patch update only owner`() {
-        val latestPatchOnValidityPeriod =
-            validityPeriods.getMatchingOrLatest(
-                INCOME_TAX_VP1_P1.definitionId,
-                validFrom = null,
-            )
-        val patch =
-            INCOME_TAX_VP2_P6.copy(
-                owner =
-                    Owner(
-                        "dapla-felles",
-                        listOf(
-                            "pers-skatt-developers",
-                            TEST_DEVELOPERS_GROUP,
-                            "neighbourhood-dogs",
-                            "dapla-felles-developers",
-                        ),
-                    ),
-            ).toPatch()
-        patches.createPatch(
-            patch,
-            INCOME_TAX_VP1_P1.definitionId,
-            latestPatchOnValidityPeriod,
-        )
-        val validityPeriods = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
-        assertThat(validityPeriods[0].patchId).isEqualTo(8)
-        assertThat(validityPeriods[1].patchId).isEqualTo(9)
-    }
+    @ParameterizedTest
+    @MethodSource("createPatchTestCases")
+    fun `create patch`(
+        latestPatch: SavedVariableDefinition,
+        patch: Patch,
+        numPatchesCreated: Int,
+        previousPatch: SavedVariableDefinition,
+        fieldName: String
+    ) {
+        // Create patch
+        patches.createPatch(patch, INCOME_TAX_VP1_P1.definitionId, latestPatch)
 
-    @Test
-    fun `create patch update owner and unit types`() {
-        val latestPatchOnValidityPeriod =
-            validityPeriods.getMatchingOrLatest(
-                INCOME_TAX_VP1_P1.definitionId,
-                validFrom = null,
-            )
-        val patch =
-            INCOME_TAX_VP2_P6.copy(
-                unitTypes = listOf("01", "02", "03"),
-                owner =
-                    Owner(
-                        "dapla-felles",
-                        listOf(
-                            "pers-skatt-developers",
-                            TEST_DEVELOPERS_GROUP,
-                            "neighbourhood-dogs",
-                        ),
-                    ),
-            ).toPatch()
-        patches.createPatch(
-            patch,
-            INCOME_TAX_VP1_P1.definitionId,
-            latestPatchOnValidityPeriod,
-        )
-        val validityPeriods = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
-        assertThat(validityPeriods[0].patchId).isEqualTo(8)
-        assertThat(validityPeriods[1].patchId).isEqualTo(9)
-        assertThat(validityPeriods[0].unitTypes).isNotEqualTo(validityPeriods[1].unitTypes)
-    }
+        // Get latest patch in all validity periods
+        val validityPeriodList = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
 
-    @Test
-    fun `create patch update owner and name on spesific period`() {
-        val latestPatchOnValidityPeriod =
-            validityPeriods.getMatchingOrLatest(
-                INCOME_TAX_VP1_P1.definitionId,
-                validFrom = LocalDate.of(1980, 1, 1),
-            )
-        val patch =
-            INCOME_TAX_VP2_P6.copy(
-                name =
-                    LanguageStringType(
-                        nb = "Dødvekt",
-                        nn = "Dødvekt",
-                        en = "Dead weight",
-                    ),
-                owner =
-                    Owner(
-                        "dapla-felles",
-                        listOf(
-                            "pers-skatt-developers",
-                            TEST_DEVELOPERS_GROUP,
-                            "neighbourhood-dogs",
-                        ),
-                    ),
-            ).toPatch()
-        patches.createPatch(
-            patch,
-            INCOME_TAX_VP1_P1.definitionId,
-            latestPatchOnValidityPeriod,
-        )
-        val validityPeriods = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
-        assertThat(validityPeriods[0].patchId).isEqualTo(9)
-        assertThat(validityPeriods[1].patchId).isEqualTo(8)
-        assertThat(validityPeriods[0].name.nb).isNotEqualTo(validityPeriods[1].name.nb)
-    }
+       validityPeriodList.forEach { period ->
+            //
+            val periodValue = getPropertyByName(period, fieldName)
+            val latestPatchValue = getPropertyByName(latestPatch, fieldName)
+            val previousPatchValue = getPropertyByName(previousPatch, fieldName)
 
-    @Test
-    fun `create patch update name not owner`() {
-        val latestPatchOnValidityPeriod =
-            validityPeriods.getMatchingOrLatest(
-                INCOME_TAX_VP1_P1.definitionId,
-                validFrom = null,
-            )
-        val patch =
-            INCOME_TAX_VP2_P6.copy(
-                name =
-                    LanguageStringType(
-                        nb = "Dødvekt",
-                        nn = "Dødvekt",
-                        en = "Dead weight",
-                    ),
-            ).toPatch()
-        patches.createPatch(
-            patch,
-            INCOME_TAX_VP1_P1.definitionId,
-            latestPatchOnValidityPeriod,
-        )
-        val validityPeriods = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
-        logger.info("Test validity periods $validityPeriods")
-        assertThat(validityPeriods[0].patchId).isEqualTo(7)
-        assertThat(validityPeriods[1].patchId).isEqualTo(8)
-        assertThat(validityPeriods[0].name.nb).isNotEqualTo(validityPeriods[1].name.nb)
+            // Only owner is updated - owner values in all validity periods
+            if(fieldName.isBlank()){
+                assertThat(period.owner).isNotEqualTo(latestPatch.owner)
+                assertThat(period.owner).isNotEqualTo(previousPatch.owner)
+            }
+
+            // Only other value is updated - one patch is created in selected period
+            if(fieldName.isNotBlank() && numPatchesCreated == 1 && period.validFrom == latestPatch.validFrom){
+                assertThat(periodValue).isNotEqualTo(latestPatchValue)
+            }
+            // Selected validity period and owner and other value than owner updated
+            if (fieldName.isNotBlank() && period.validFrom == latestPatch.validFrom && numPatchesCreated > 1) {
+                assertThat(periodValue).isNotEqualTo(latestPatchValue)
+                assertThat(period.owner).isNotEqualTo(latestPatch.owner)
+                }
+            // All other validity periods when owner and other values are updated
+            if(fieldName.isNotBlank() && period.validFrom != latestPatch.validFrom && numPatchesCreated > 1) {
+                assertThat(periodValue).isEqualTo(previousPatchValue)
+                assertThat(period.owner).isNotEqualTo(previousPatch.owner)
+            }
+
+        }
+
     }
 
     companion object {
+
+        @JvmStatic
+        fun createPatchTestCases(): Stream<Arguments> {
+            return Stream.of(
+                Arguments.argumentSet(
+                    "Update only owner selected validity period",
+                    INCOME_TAX_VP1_P7,
+                    INCOME_TAX_VP1_P7.copy(
+                        owner =
+                        Owner(
+                            "dapla-felles",
+                            listOf(
+                                "pers-skatt-developers",
+                                TEST_DEVELOPERS_GROUP,
+                                "neighbourhood-dogs",
+                                "dapla-felles-developers",
+                            ),
+                        ),
+                    ).toPatch(),
+                    2,
+                    INCOME_TAX_VP2_P6,
+                    ""
+                ),
+                Arguments.argumentSet(
+                    "Update unit types and owner latest validity period",
+                    INCOME_TAX_VP2_P6,
+                    INCOME_TAX_VP2_P6.copy(
+                        unitTypes = listOf("01", "02", "03"),
+                        owner =
+                        Owner(
+                            "dapla-felles",
+                            listOf(
+                                "pers-skatt-developers",
+                                TEST_DEVELOPERS_GROUP,
+                                "neighbourhood-dogs",
+                            ),
+                        ),
+                    ).toPatch(),
+                    2,
+                    INCOME_TAX_VP1_P7,
+                    "unitTypes"
+
+                ),
+                Arguments.argumentSet(
+                    "Update name and owner selected period",
+                    INCOME_TAX_VP1_P7,
+                    INCOME_TAX_VP1_P7.copy(
+                        name = LanguageStringType(
+                            nb = "navn",
+                            nn = "namn",
+                            en = "name"
+                        ),
+                        owner =
+                        Owner(
+                            "dapla-felles",
+                            listOf(
+                                "pers-skatt-developers",
+                                TEST_DEVELOPERS_GROUP,
+                                "neighbourhood-dogs",
+                            ),
+                        ),
+                    ).toPatch(),
+                    2,
+                    INCOME_TAX_VP2_P6,
+                    "name"
+
+                ),
+                Arguments.argumentSet(
+                    "Update not owner",
+                    INCOME_TAX_VP2_P6,
+                    INCOME_TAX_VP2_P6.copy(
+                        name = LanguageStringType(
+                            nb = "navn",
+                            nn = "namn",
+                            en = "name"
+                        ),
+                    ).toPatch(),
+                    1,
+                    INCOME_TAX_VP1_P7,
+                    "name"
+                ),
+                )
+
+        }
         @JvmStatic
         fun getSpecificPatchTestCases(): Stream<Arguments> =
             Stream.of(

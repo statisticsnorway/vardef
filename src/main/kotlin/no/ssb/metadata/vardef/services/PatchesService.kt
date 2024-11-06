@@ -30,7 +30,7 @@ class PatchesService(
     fun create(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
 
     /**
-     * Group patches by validity period.
+     * Group patches by *Validity Period*.
      */
     private fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         list(definitionId)

@@ -56,45 +56,45 @@ class PatchesServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("createPatchTestCases")
     fun `create patch`(
-        latestPatch: SavedVariableDefinition,
+        latestPatchOnValidityPeriod: SavedVariableDefinition,
         patch: Patch,
         numPatchesCreated: Int,
-        previousPatch: SavedVariableDefinition,
+        latestPatchNotSelectedPeriod: SavedVariableDefinition,
         fieldName: String,
     ) {
         // Create patch
-        patches.createPatch(patch, INCOME_TAX_VP1_P1.definitionId, latestPatch)
+        patches.createPatch(patch, INCOME_TAX_VP1_P1.definitionId, latestPatchOnValidityPeriod)
 
-        // Get latest patch from all validity periods
+        // Retrieve all validity periods for the given definition ID
         val validityPeriodList = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
 
         validityPeriodList.forEach { period ->
-            // Property values for present, latest in selected period and latest in other periods
+            // Retrieve property values based on the specified field name
             val periodValue = getPropertyByName(period, fieldName)
-            val latestSelectedPatchValue = getPropertyByName(latestPatch, fieldName)
-            val latestPatchValue = getPropertyByName(previousPatch, fieldName)
+            val latestSelectedPatchValue = getPropertyByName(latestPatchOnValidityPeriod, fieldName)
+            val latestPatchValue = getPropertyByName(latestPatchNotSelectedPeriod, fieldName)
 
-            // Owner is updated - all periods updates value for owner
+            // Case: Owner field is updated - owner change across all periods
             if (fieldName.isBlank()) {
-                assertThat(period.owner).isNotEqualTo(latestPatch.owner)
-                assertThat(period.owner).isNotEqualTo(previousPatch.owner)
+                assertThat(period.owner).isNotEqualTo(latestPatchOnValidityPeriod.owner)
+                assertThat(period.owner).isNotEqualTo(latestPatchNotSelectedPeriod.owner)
             }
 
-            // Other value is updated - one patch is created in selected period
-            if (fieldName.isNotBlank() && numPatchesCreated == 1 && period.validFrom == latestPatch.validFrom) {
+            // Case: Non-owner field is updated, only one patch created in selected period
+            if (fieldName.isNotBlank() && numPatchesCreated == 1 && period.validFrom == latestPatchOnValidityPeriod.validFrom) {
                 assertThat(periodValue).isNotEqualTo(latestSelectedPatchValue)
             }
-            // Owner and other value is updated - selected validity period
-            // Owner is updated - Other value is updated
-            if (fieldName.isNotBlank() && period.validFrom == latestPatch.validFrom && numPatchesCreated > 1) {
+
+            // Case: Both owner and other fields updated in the selected validity period
+            if (fieldName.isNotBlank() && period.validFrom == latestPatchOnValidityPeriod.validFrom && numPatchesCreated > 1) {
                 assertThat(periodValue).isNotEqualTo(latestSelectedPatchValue)
-                assertThat(period.owner).isNotEqualTo(latestPatch.owner)
+                assertThat(period.owner).isNotEqualTo(latestPatchOnValidityPeriod.owner)
             }
-            // Owner and other value is updated - all other validity periods
-            // Owner is updated - Other value is not
-            if (fieldName.isNotBlank() && period.validFrom != latestPatch.validFrom && numPatchesCreated > 1) {
+
+            // Case: Only owner is updated in non-selected validity periods
+            if (fieldName.isNotBlank() && period.validFrom != latestPatchOnValidityPeriod.validFrom && numPatchesCreated > 1) {
                 assertThat(periodValue).isEqualTo(latestPatchValue)
-                assertThat(period.owner).isNotEqualTo(previousPatch.owner)
+                assertThat(period.owner).isNotEqualTo(latestPatchNotSelectedPeriod.owner)
             }
         }
     }

@@ -10,10 +10,12 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.stream.Stream
 
 class PatchesServiceTest : BaseVardefTest() {
+    private val logger = LoggerFactory.getLogger(PatchesServiceTest::class.java)
     @Test
     fun `get latest patch`() {
         assertThat(patches.latest(INCOME_TAX_VP1_P1.definitionId).patchId)
@@ -73,10 +75,8 @@ class PatchesServiceTest : BaseVardefTest() {
                     ),
             ).toPatch()
         patches.createPatch(
-            patch.toSavedVariableDefinition(
-                latestPatchOnValidityPeriod.patchId,
-                latestPatchOnValidityPeriod,
-            ),
+            patch,
+            INCOME_TAX_VP1_P1.definitionId,
             latestPatchOnValidityPeriod,
         )
         val validityPeriods = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
@@ -105,10 +105,8 @@ class PatchesServiceTest : BaseVardefTest() {
                     ),
             ).toPatch()
         patches.createPatch(
-            patch.toSavedVariableDefinition(
-                latestPatchOnValidityPeriod.patchId,
-                latestPatchOnValidityPeriod,
-            ),
+            patch,
+            INCOME_TAX_VP1_P1.definitionId,
             latestPatchOnValidityPeriod,
         )
         val validityPeriods = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
@@ -143,10 +141,8 @@ class PatchesServiceTest : BaseVardefTest() {
                     ),
             ).toPatch()
         patches.createPatch(
-            patch.toSavedVariableDefinition(
-                latestPatchOnValidityPeriod.patchId,
-                latestPatchOnValidityPeriod,
-            ),
+            patch,
+            INCOME_TAX_VP1_P1.definitionId,
             latestPatchOnValidityPeriod,
         )
         val validityPeriods = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
@@ -172,13 +168,12 @@ class PatchesServiceTest : BaseVardefTest() {
                     ),
             ).toPatch()
         patches.createPatch(
-            patch.toSavedVariableDefinition(
-                latestPatchOnValidityPeriod.patchId,
-                latestPatchOnValidityPeriod,
-            ),
+            patch,
+            INCOME_TAX_VP1_P1.definitionId,
             latestPatchOnValidityPeriod,
         )
         val validityPeriods = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
+        logger.info("Test validity periods $validityPeriods")
         assertThat(validityPeriods[0].patchId).isEqualTo(7)
         assertThat(validityPeriods[1].patchId).isEqualTo(8)
         assertThat(validityPeriods[0].name.nb).isNotEqualTo(validityPeriods[1].name.nb)

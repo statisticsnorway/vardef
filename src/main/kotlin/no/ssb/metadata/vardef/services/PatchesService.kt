@@ -2,8 +2,11 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import no.ssb.metadata.vardef.security.VariableOwnerSecurityRule
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
 
@@ -20,6 +23,7 @@ import java.util.*
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
+    private val logger = LoggerFactory.getLogger(PatchesService::class.java)
     /**
      * Create a new *Patch*
      *
@@ -53,31 +57,39 @@ class PatchesService(
      * changes from patch is saved
      *
      * @param patch The *Patch* to create, with updated values.
-     * @param validityPeriod (?
+     * @param latestPatch latest patch in selected validity period
      * @return The created *Patch*
      */
     fun createPatch(
-        patch: SavedVariableDefinition,
-        validityPeriod: SavedVariableDefinition,
-    ): SavedVariableDefinition? {
-        val validityPeriods = listPeriods(patch.definitionId)
-        var result: SavedVariableDefinition?
-        if (patch.toPatch().owner != null) {
+        patch: Patch,
+        definitionId: String,
+        latestPatch: SavedVariableDefinition,
+    ): SavedVariableDefinition {
+        val validityPeriods = listPeriods(definitionId)
+        logger.info("Checking is owner changed  ${patch.owner}")
+        if (patch.owner != latestPatch.owner && patch.owner != null) {
+            logger.info("Now owner can not be null  ${patch.owner}")
+            var result: SavedVariableDefinition = latestPatch
             validityPeriods
                 // the choosen validity period for the whole patch
-                .filter { it.validFrom != validityPeriod.validFrom }
+                .filter { it.validFrom != latestPatch.validFrom }
                 .forEach { period ->
                     // Only save owner update for each validity period
-                    val patcOwner = period.copy(owner = patch.owner).toPatch()
-                    result = create(patcOwner.toSavedVariableDefinition(latest(patch.definitionId).patchId, period))
+                    val patcOwner = patch.owner.let { period.copy(owner = it).toPatch() }
+                    result = create(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
                 }
             // Process and return the specified validityPeriod last
             // Save as normal patch
-            result = create(patch.toPatch().toSavedVariableDefinition(latest(patch.definitionId).patchId, validityPeriod))
+            if (validityPeriods.any { it.validFrom == latestPatch.validFrom }) {
+                logger.info("Still owner can not be null  ${patch.owner}")
+                result = create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
+                logger.info("Saving in owner section ${result.owner}")
+            }
+            return result
         }
         // If no update on owner
-        result = create(patch)
-        return result
+        logger.info("Saving $patch")
+        return create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
     }
 
     /**

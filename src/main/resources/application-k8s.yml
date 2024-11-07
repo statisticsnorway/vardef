@@ -1,3 +1,0 @@
-# Connect to the MongoDB instance
-mongodb:
-  uri: ${MONGODB_CONNECTION_STRING:}

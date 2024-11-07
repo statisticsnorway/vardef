@@ -11,6 +11,8 @@ import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import reactor.core.publisher.Mono
 
 @MicronautTest
@@ -45,17 +47,31 @@ class VardefTokenValidatorTest {
     }
 
     @Test
-    fun `request doesn't come from dapla lab`() {
+    fun `request token doesn't contain allowed audience`() {
         val auth =
             Mono
                 .from(
                     vardefTokenValidator.validateToken(
-                        JwtTokenHelper.jwtTokenSigned(listOf("blah")).parsedString,
+                        JwtTokenHelper.jwtTokenSigned(audienceClaim = listOf("blah")).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
         assertThat(auth?.roles).doesNotContain(VARIABLE_OWNER)
         assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["onyxia-api", "dapla-cli"])
+    fun `request token contains allowed audience`(allowedAudience: String) {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        JwtTokenHelper.jwtTokenSigned(audienceClaim = listOf("blah", allowedAudience)).parsedString,
+                        HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$TEST_DEVELOPERS_GROUP", ""),
+                    ),
+                ).block()
+        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER, VARIABLE_OWNER, VARIABLE_CREATOR)
     }
 
     @Test

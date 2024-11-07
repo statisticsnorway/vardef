@@ -54,18 +54,15 @@ class PatchesServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create patch owner field updated`(){
-
+    fun `create patch owner field updated`() {
     }
 
     @Test
-    fun `create patch owner field not updated`(){
-
+    fun `create patch owner field not updated`() {
     }
 
     @Test
-    fun `create patch owner field and other value updated`(){
-
+    fun `create patch owner field and other value updated`() {
     }
 
     @ParameterizedTest
@@ -81,7 +78,7 @@ class PatchesServiceTest : BaseVardefTest() {
         patches.createPatch(patch, INCOME_TAX_VP1_P1.definitionId, latestPatchOnValidityPeriod)
 
         // Retrieve all validity periods for the given definition ID
-        val validityPeriodList = validityPeriods.list(INCOME_TAX_VP1_P1.definitionId)
+        val validityPeriodList = validityPeriods.listLatestDefinitionsByValidFrom(INCOME_TAX_VP1_P1.definitionId)
 
         validityPeriodList.forEach { period ->
             // Retrieve property values based on the specified field name

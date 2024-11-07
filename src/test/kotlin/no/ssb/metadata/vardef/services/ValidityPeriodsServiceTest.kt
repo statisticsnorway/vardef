@@ -16,11 +16,14 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.stream.Stream
 
 class ValidityPeriodsServiceTest : BaseVardefTest() {
     private val savedVariableDefinitionId = INCOME_TAX_VP1_P1.definitionId
+
+    private val logger = LoggerFactory.getLogger(ValidityPeriodsService::class.java)
 
     @Test
     fun `end validity period`() {

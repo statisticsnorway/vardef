@@ -21,14 +21,6 @@ class PatchesService(
     private val validityPeriodsService: ValidityPeriodsService
 ) {
     /**
-     * Create a new *Patch*
-     *
-     * @param patch The *Patch* to create, with updated values.
-     * @return The created *Patch*
-     */
-    //fun save(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
-
-    /**
      * Creates new *Patch* or *Patches*.
      *
      * This method generates patches according to changes in the owner field values across validity periods:
@@ -57,8 +49,8 @@ class PatchesService(
                 .filter { it.validFrom != latestPatch.validFrom }
                 .forEach { period ->
                     // For non-selected validity periods, only update the owner field
-                    val patcOwner = patch.owner.let { period.copy(owner = it).toPatch() }
-                    variableDefinitionRepository.save(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
+                    val patchOwner = patch.owner.let { period.copy(owner = it).toPatch() }
+                    variableDefinitionRepository.save(patchOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
                 }
         }
         // For the selected validity period create a patch with the provided values

@@ -34,9 +34,6 @@ class ValidityPeriodsController {
     @Inject
     lateinit var validityPeriods: ValidityPeriodsService
 
-    @Inject
-    lateinit var patches: PatchesService
-
     /**
      * Create a new validity period for a variable definition.
      */

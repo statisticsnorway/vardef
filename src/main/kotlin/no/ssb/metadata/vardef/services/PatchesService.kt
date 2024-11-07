@@ -20,6 +20,7 @@ import java.util.*
 @Singleton
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
+    private val validityPeriodsService: ValidityPeriodsService
 ) {
     /**
      * Create a new *Patch*
@@ -28,23 +29,6 @@ class PatchesService(
      * @return The created *Patch*
      */
     fun create(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
-
-    /**
-     * Group patches by *Validity Period*.
-     */
-    private fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
-        list(definitionId)
-            .groupBy { it.validFrom }
-            .toSortedMap()
-
-    /**
-     * List of the latest *Patch* in each *Validity Period*.
-     */
-    private fun listPeriods(definitionId: String): List<SavedVariableDefinition> =
-        getAsMap(definitionId)
-            .values
-            .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
-            .sortedBy { it.validFrom }
 
     /**
      * Creates new *Patch* or *Patches*.
@@ -66,7 +50,7 @@ class PatchesService(
         latestPatch: SavedVariableDefinition,
     ): SavedVariableDefinition {
         // Retrieve all validity periods associated with the given definition ID
-        val validityPeriods = listPeriods(definitionId)
+        val validityPeriods = validityPeriodsService.listLatestDefinitionsByValidFrom(definitionId)
 
         // Check if the owner value has been updated and is not null
         if (patch.owner != latestPatch.owner && patch.owner != null) {

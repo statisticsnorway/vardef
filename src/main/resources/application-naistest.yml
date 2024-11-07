@@ -1,0 +1,9 @@
+micronaut:
+  security:
+    token:
+      jwt:
+        claims:
+          values:
+            allowed-audiences:
+              - dapla-cli
+              - onyxia-api

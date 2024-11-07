@@ -78,10 +78,8 @@ class PatchesService(
                     val patcOwner = patch.owner.let { period.copy(owner = it).toPatch() }
                     create(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
                 }
-            // For the selected validity period, apply all updated values
-            return create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
         }
-        // If no change in owner, create a patch for the selected validity period with the provided values
+        // For the selected validity period create a patch with the provided values
         return create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
     }
 

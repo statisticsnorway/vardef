@@ -53,6 +53,21 @@ class PatchesServiceTest : BaseVardefTest() {
         ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
     }
 
+    @Test
+    fun `create patch owner field updated`(){
+
+    }
+
+    @Test
+    fun `create patch owner field not updated`(){
+
+    }
+
+    @Test
+    fun `create patch owner field and other value updated`(){
+
+    }
+
     @ParameterizedTest
     @MethodSource("createPatchTestCases")
     fun `create patch`(

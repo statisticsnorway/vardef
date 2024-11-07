@@ -51,9 +51,8 @@ class PatchesServiceTest : BaseVardefTest() {
         ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
     }
 
-    // Case: Owner field is updated - owner change across all periods
     @Test
-    fun `create patch owner field updated`() {
+    fun `create patch owner field updated across all periods`() {
         val patch =
             INCOME_TAX_VP1_P7.copy(
                 owner =
@@ -67,9 +66,8 @@ class PatchesServiceTest : BaseVardefTest() {
                         ),
                     ),
             ).toPatch()
-        // Create patch
+
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7)
-        // num patches (patchId + 2)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         validityPeriodList.forEach { period ->
             assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP1_P7.owner)
@@ -77,9 +75,8 @@ class PatchesServiceTest : BaseVardefTest() {
         }
     }
 
-    // Case: Non-owner field is updated, only one patch created in selected period
     @Test
-    fun `create patch owner field not updated selected period`() {
+    fun `create patch owner field not updated`() {
         val patch =
             INCOME_TAX_VP2_P6.copy(
                 name =
@@ -90,10 +87,9 @@ class PatchesServiceTest : BaseVardefTest() {
                     ),
             ).toPatch()
 
-        // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
-        // num patches (patchId + 1)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
+        // Only one patch created in selected period
         validityPeriodList
             .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
             .forEach { period ->
@@ -101,9 +97,8 @@ class PatchesServiceTest : BaseVardefTest() {
             }
     }
 
-    // Case: Both owner and other fields updated in the selected validity period
     @Test
-    fun `create patch owner field and other value updated selected period`() {
+    fun `create patch owner and unit_types updated`() {
         val patch =
             INCOME_TAX_VP2_P6.copy(
                 unitTypes = listOf("01", "02", "03"),
@@ -117,10 +112,11 @@ class PatchesServiceTest : BaseVardefTest() {
                         ),
                     ),
             ).toPatch()
-        // Create patch
+
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
-        // num patches (patchId + 2)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
+
+        // For selected validity period
         validityPeriodList
             .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
             .forEach { period ->
@@ -128,29 +124,7 @@ class PatchesServiceTest : BaseVardefTest() {
                 assertThat(period.unitTypes).isNotEqualTo(INCOME_TAX_VP2_P6.unitTypes)
                 assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP2_P6.owner)
             }
-    }
-
-    // Case: Only owner is updated in non-selected validity periods
-
-    @Test
-    fun `create patch owner field and other value updated not selected period`() {
-        val patch =
-            INCOME_TAX_VP2_P6.copy(
-                unitTypes = listOf("01", "02", "03"),
-                owner =
-                    Owner(
-                        "dapla-felles",
-                        listOf(
-                            "pers-skatt-developers",
-                            TEST_DEVELOPERS_GROUP,
-                            "neighbourhood-dogs",
-                        ),
-                    ),
-            ).toPatch()
-        // Create patch
-        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
-        // num patches (patchId + 2)
-        val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
+        // For all other validity periods
         validityPeriodList
             .filter { it.validFrom != INCOME_TAX_VP2_P6.validFrom }
             .forEach { period ->

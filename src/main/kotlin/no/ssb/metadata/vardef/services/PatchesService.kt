@@ -5,8 +5,6 @@ import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import java.time.LocalDate
-import java.util.*
 
 /**
  * Patches service
@@ -28,7 +26,7 @@ class PatchesService(
      * @param patch The *Patch* to create, with updated values.
      * @return The created *Patch*
      */
-    fun create(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
+    //fun save(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
 
     /**
      * Creates new *Patch* or *Patches*.
@@ -44,13 +42,13 @@ class PatchesService(
      * @param latestPatch The latest existing patch within the selected validity period.
      * @return The created *Patch* for the selected validity period with all updated values applied.
      */
-    fun createPatch(
+    fun create(
         patch: Patch,
         definitionId: String,
         latestPatch: SavedVariableDefinition,
     ): SavedVariableDefinition {
         // Retrieve all validity periods associated with the given definition ID
-        val validityPeriods = validityPeriodsService.listLatestDefinitionsByValidFrom(definitionId)
+        val validityPeriods = validityPeriodsService.listLatestValidityPeriods(definitionId)
 
         // Check if the owner value has been updated and is not null
         if (patch.owner != latestPatch.owner && patch.owner != null) {
@@ -60,11 +58,11 @@ class PatchesService(
                 .forEach { period ->
                     // For non-selected validity periods, only update the owner field
                     val patcOwner = patch.owner.let { period.copy(owner = it).toPatch() }
-                    create(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
+                    variableDefinitionRepository.save(patcOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
                 }
         }
         // For the selected validity period create a patch with the provided values
-        return create(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
+        return variableDefinitionRepository.save(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
     }
 
     /**

@@ -33,9 +33,6 @@ class VariableDefinitionsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
 
-    @Inject
-    lateinit var patches: PatchesService
-
     /**
      * List all variable definitions.
      */
@@ -117,6 +114,6 @@ class VariableDefinitionsController {
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return patches.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
+        return varDefService.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
     }
 }

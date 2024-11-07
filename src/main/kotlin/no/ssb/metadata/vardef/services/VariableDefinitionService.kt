@@ -24,6 +24,8 @@ class VariableDefinitionService(
     private val klassService: KlassService,
     private val validityPeriods: ValidityPeriodsService,
 ) {
+
+    fun create(draft: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(draft)
     /**
      * Update a Draft Variable Definition
      *

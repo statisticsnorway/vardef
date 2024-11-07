@@ -33,8 +33,8 @@ class ValidityPeriodsService(
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
 
-    // KDoc
-    fun listLatestDefinitionsByValidFrom(definitionId: String): List<SavedVariableDefinition> =
+    // KDoc - rename
+    fun listLatestValidityPeriods(definitionId: String): List<SavedVariableDefinition> =
         getAsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
@@ -54,7 +54,7 @@ class ValidityPeriodsService(
         language: SupportedLanguages,
         definitionId: String,
     ): List<RenderedVariableDefinition> =
-        listLatestDefinitionsByValidFrom(definitionId)
+        listLatestValidityPeriods(definitionId)
             .map { it.render(language, klassService) }
 
     /**
@@ -67,7 +67,7 @@ class ValidityPeriodsService(
      * @return The list of *Validity Periods*
      */
     fun listComplete(definitionId: String): List<CompleteResponse> =
-        listLatestDefinitionsByValidFrom(definitionId)
+        listLatestValidityPeriods(definitionId)
             .map { it.toCompleteResponse() }
 
     /**

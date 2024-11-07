@@ -161,7 +161,7 @@ class PatchesController {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
         return patches
-            .createPatch(
+            .create(
                 patch,
                 variableDefinitionId,
                 latestPatchOnValidityPeriod,

@@ -174,7 +174,9 @@ class PatchesControllerTest : BaseVardefTest() {
                         .copy()
                         .apply {
                             this.variableStatus = variableStatus
-                        },
+                        }.toPatch(),
+                    DRAFT_BUS_EXAMPLE.definitionId,
+                    DRAFT_BUS_EXAMPLE
                 ).definitionId
 
         spec

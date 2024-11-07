@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.services
 
+import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
@@ -8,6 +9,7 @@ import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
+import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.time.LocalDate
 import java.util.*
 
@@ -16,16 +18,35 @@ import java.util.*
  *
  * Methods relating to versioning *Variable Definitions* by date
  *
- * @property patches The [PatchesService] Bean to be injected
+ * @property variableDefinitionRepository
  * @property klassService The [KlassService] Bean to be injected
  * @constructor Create empty Validity periods service
  */
 @Singleton
 class ValidityPeriodsService(
-    private val patches: PatchesService,
     private val klassService: KlassService,
+    private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
+    /**
+     * List all Patches for a specific Variable Definition.
+     *
+     * The list is ordered by Patch ID.
+     *
+     * @param definitionId The ID of the Variable Definition.
+     * @return An ordered list of all Patches for this Variable Definition.
+     */
     private fun list(definitionId: String): List<SavedVariableDefinition> =
+        variableDefinitionRepository
+            .findByDefinitionIdOrderByPatchId(definitionId)
+            .ifEmpty { throw EmptyResultException() }
+
+    /**
+     * List latest Patches ordered by Validity Period.
+     *
+     * @param definitionId The ID of the Variable Definition.
+     * @return An ordered list.
+     */
+    fun listLatestByValidityPeriod(definitionId: String): List<SavedVariableDefinition> =
         getAsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
@@ -45,7 +66,7 @@ class ValidityPeriodsService(
         language: SupportedLanguages,
         definitionId: String,
     ): List<RenderedVariableDefinition> =
-        list(definitionId)
+        listLatestByValidityPeriod(definitionId)
             .map { it.render(language, klassService) }
 
     /**
@@ -58,7 +79,7 @@ class ValidityPeriodsService(
      * @return The list of *Validity Periods*
      */
     fun listComplete(definitionId: String): List<CompleteResponse> =
-        list(definitionId)
+        listLatestByValidityPeriod(definitionId)
             .map { it.toCompleteResponse() }
 
     /**
@@ -71,8 +92,7 @@ class ValidityPeriodsService(
      * @return The map over *Validity Periods*
      */
     fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
-        patches
-            .list(definitionId)
+        list(definitionId)
             .groupBy { it.validFrom }
             .toSortedMap()
 
@@ -166,15 +186,15 @@ class ValidityPeriodsService(
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
-                .toSavedVariableDefinition(patches.latest(definitionId).patchId, lastValidityPeriod)
+                .toSavedVariableDefinition(list(definitionId).last().patchId, lastValidityPeriod)
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
-                .let { patches.create(it) }
+                .let { variableDefinitionRepository.save(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
-                .let { newPeriod.toSavedVariableDefinition(patches.latest(definitionId).patchId, it) }
+                .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
-                .let { patches.create(it) }
+                .let { variableDefinitionRepository.save(it) }
         }
     }
 
@@ -212,8 +232,8 @@ class ValidityPeriodsService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean =
-        patches
-            .list(definitionId)
+        // patches
+        list(definitionId)
             .map { it.validFrom }
             .let { dates ->
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
@@ -268,11 +288,11 @@ class ValidityPeriodsService(
         newPeriodValidFrom: LocalDate,
     ): SavedVariableDefinition {
         val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        return patches.create(
+        return variableDefinitionRepository.save(
             latestPatchInLastValidityPeriod
                 .copy(validUntil = newPeriodValidFrom.minusDays(1))
                 .toPatch()
-                .toSavedVariableDefinition(patches.latest(definitionId).patchId, latestPatchInLastValidityPeriod),
+                .toSavedVariableDefinition(list(definitionId).last().patchId, latestPatchInLastValidityPeriod),
         )
     }
 }

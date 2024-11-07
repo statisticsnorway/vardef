@@ -22,7 +22,6 @@ import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
-import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 
 @Tag(name = VALIDITY_PERIODS)
@@ -34,9 +33,6 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 class ValidityPeriodsController {
     @Inject
     lateinit var validityPeriods: ValidityPeriodsService
-
-    @Inject
-    lateinit var patches: PatchesService
 
     /**
      * Create a new validity period for a variable definition.

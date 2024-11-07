@@ -109,7 +109,7 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION =
         externalReferenceUri = URI("https://www.example.com").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(),
-        owner = Owner("my-team", listOf("my-team-developers", "other-group")),
+        owner = Owner("my-team", listOf("my-team-developers", "other-group", TEST_DEVELOPERS_GROUP)),
         contact =
             Contact(
                 LanguageStringType("", "", ""),

@@ -21,7 +21,6 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
-import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
@@ -33,9 +32,6 @@ import java.time.LocalDate
 class VariableDefinitionsController {
     @Inject
     lateinit var varDefService: VariableDefinitionService
-
-    @Inject
-    lateinit var patches: PatchesService
 
     /**
      * List all variable definitions.
@@ -117,6 +113,6 @@ class VariableDefinitionsController {
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return patches.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
+        return varDefService.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
     }
 }

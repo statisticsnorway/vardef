@@ -21,6 +21,19 @@ class VardefTokenValidatorTest {
     lateinit var vardefTokenValidator: VardefTokenValidator<MutableHttpRequest<*>>
 
     @Test
+    fun `request with malformed token`() {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        "not a token",
+                        HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$TEST_DEVELOPERS_GROUP", ""),
+                    ),
+                ).block()
+        assertThat(auth).isNull()
+    }
+
+    @Test
     fun `request comes from dapla lab and valid active group supplied`() {
         val auth =
             Mono

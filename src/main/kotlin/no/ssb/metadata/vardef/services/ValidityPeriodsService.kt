@@ -27,14 +27,27 @@ class ValidityPeriodsService(
     private val klassService: KlassService,
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
-    // check this write KDoc
-    fun list(definitionId: String): List<SavedVariableDefinition> =
+
+    /**
+     * List all Patches for a specific Variable Definition.
+     *
+     * The list is ordered by Patch ID.
+     *
+     * @param definitionId The ID of the Variable Definition.
+     * @return An ordered list of all Patches for this Variable Definition.
+     */
+    private fun list(definitionId: String): List<SavedVariableDefinition> =
         variableDefinitionRepository
             .findByDefinitionIdOrderByPatchId(definitionId)
             .ifEmpty { throw EmptyResultException() }
 
-    // KDoc - rename
-    fun listLatestValidityPeriods(definitionId: String): List<SavedVariableDefinition> =
+    /**
+     * List latest Patches ordered by Validity Period.
+     *
+     * @param definitionId The ID of the Variable Definition.
+     * @return An ordered list.
+     */
+    fun listLatestByValidityPeriod(definitionId: String): List<SavedVariableDefinition> =
         getAsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
@@ -54,7 +67,7 @@ class ValidityPeriodsService(
         language: SupportedLanguages,
         definitionId: String,
     ): List<RenderedVariableDefinition> =
-        listLatestValidityPeriods(definitionId)
+        listLatestByValidityPeriod(definitionId)
             .map { it.render(language, klassService) }
 
     /**
@@ -67,7 +80,7 @@ class ValidityPeriodsService(
      * @return The list of *Validity Periods*
      */
     fun listComplete(definitionId: String): List<CompleteResponse> =
-        listLatestValidityPeriods(definitionId)
+        listLatestByValidityPeriod(definitionId)
             .map { it.toCompleteResponse() }
 
     /**

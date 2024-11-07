@@ -70,7 +70,7 @@ class PatchesServiceTest : BaseVardefTest() {
         // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7)
         // num patches (patchId + 2)
-        val validityPeriodList = validityPeriods.listLatestValidityPeriods(INCOME_TAX_VP1_P1.definitionId)
+        val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         validityPeriodList.forEach { period ->
             assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP1_P7.owner)
             assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP2_P6.owner)
@@ -93,7 +93,7 @@ class PatchesServiceTest : BaseVardefTest() {
         // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
         // num patches (patchId + 1)
-        val validityPeriodList = validityPeriods.listLatestValidityPeriods(INCOME_TAX_VP1_P1.definitionId)
+        val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         validityPeriodList
             .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
             .forEach { period ->
@@ -120,7 +120,7 @@ class PatchesServiceTest : BaseVardefTest() {
         // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
         // num patches (patchId + 2)
-        val validityPeriodList = validityPeriods.listLatestValidityPeriods(INCOME_TAX_VP1_P1.definitionId)
+        val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         validityPeriodList
             .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
             .forEach { period ->
@@ -150,7 +150,7 @@ class PatchesServiceTest : BaseVardefTest() {
         // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
         // num patches (patchId + 2)
-        val validityPeriodList = validityPeriods.listLatestValidityPeriods(INCOME_TAX_VP1_P1.definitionId)
+        val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         validityPeriodList
             .filter { it.validFrom != INCOME_TAX_VP2_P6.validFrom }
             .forEach { period ->

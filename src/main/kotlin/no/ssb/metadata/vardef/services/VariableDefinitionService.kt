@@ -24,6 +24,12 @@ class VariableDefinitionService(
     private val klassService: KlassService,
     private val validityPeriods: ValidityPeriodsService,
 ) {
+    /**
+     * Create a new *Draft*
+     *
+     * @param draft The *Draft* to create.
+     * @return The created *Draft*
+     */
     fun create(draft: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(draft)
 
     /**

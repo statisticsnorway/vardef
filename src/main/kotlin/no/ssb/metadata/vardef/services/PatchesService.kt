@@ -40,7 +40,7 @@ class PatchesService(
         latestPatch: SavedVariableDefinition,
     ): SavedVariableDefinition {
         // Retrieve all validity periods associated with the given definition ID
-        val validityPeriods = validityPeriodsService.listLatestValidityPeriods(definitionId)
+        val validityPeriods = validityPeriodsService.listLatestByValidityPeriod(definitionId)
 
         // Check if the owner value has been updated and is not null
         if (patch.owner != latestPatch.owner && patch.owner != null) {

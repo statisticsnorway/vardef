@@ -7,3 +7,6 @@ micronaut:
             allowed-audiences:
               - dapla-cli
               - onyxia-api
+
+mongodb:
+  uri: ${MONGODB_CONNECTION_STRING:}

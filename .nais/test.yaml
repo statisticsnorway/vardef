@@ -40,6 +40,10 @@ spec:
   envFrom:
     - secret: metadata-vardef-test
 
+  env:
+    - name: MICRONAUT_ENVIRONMENTS
+      value: naistest
+
   prometheus:
     enabled: true
     path: /metrics

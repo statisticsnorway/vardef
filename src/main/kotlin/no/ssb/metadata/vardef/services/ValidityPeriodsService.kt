@@ -27,7 +27,6 @@ class ValidityPeriodsService(
     private val klassService: KlassService,
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
-
     /**
      * List all Patches for a specific Variable Definition.
      *

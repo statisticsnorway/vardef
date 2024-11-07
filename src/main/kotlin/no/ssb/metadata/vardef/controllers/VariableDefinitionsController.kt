@@ -21,7 +21,6 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
-import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 

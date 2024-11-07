@@ -54,18 +54,19 @@ class PatchesServiceTest : BaseVardefTest() {
     // Case: Owner field is updated - owner change across all periods
     @Test
     fun `create patch owner field updated`() {
-        val patch = INCOME_TAX_VP1_P7.copy(
-            owner =
-            Owner(
-                "dapla-felles",
-                listOf(
-                    "pers-skatt-developers",
-                    TEST_DEVELOPERS_GROUP,
-                    "neighbourhood-dogs",
-                    "dapla-felles-developers",
-                ),
-            ),
-        ).toPatch()
+        val patch =
+            INCOME_TAX_VP1_P7.copy(
+                owner =
+                    Owner(
+                        "dapla-felles",
+                        listOf(
+                            "pers-skatt-developers",
+                            TEST_DEVELOPERS_GROUP,
+                            "neighbourhood-dogs",
+                            "dapla-felles-developers",
+                        ),
+                    ),
+            ).toPatch()
         // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7)
         // num patches (patchId + 2)
@@ -81,13 +82,13 @@ class PatchesServiceTest : BaseVardefTest() {
     fun `create patch owner field not updated selected period`() {
         val patch =
             INCOME_TAX_VP2_P6.copy(
-            name =
-            LanguageStringType(
-                nb = "navn",
-                nn = "namn",
-                en = "name",
-            ),
-        ).toPatch()
+                name =
+                    LanguageStringType(
+                        nb = "navn",
+                        nn = "namn",
+                        en = "name",
+                    ),
+            ).toPatch()
 
         // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
@@ -96,26 +97,26 @@ class PatchesServiceTest : BaseVardefTest() {
         validityPeriodList
             .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
             .forEach { period ->
-            assertThat(period.name).isNotEqualTo(INCOME_TAX_VP2_P6.name)
-        }
+                assertThat(period.name).isNotEqualTo(INCOME_TAX_VP2_P6.name)
+            }
     }
 
     // Case: Both owner and other fields updated in the selected validity period
     @Test
     fun `create patch owner field and other value updated selected period`() {
-
-        val patch = INCOME_TAX_VP2_P6.copy(
-            unitTypes = listOf("01", "02", "03"),
-            owner =
-            Owner(
-                "dapla-felles",
-                listOf(
-                    "pers-skatt-developers",
-                    TEST_DEVELOPERS_GROUP,
-                    "neighbourhood-dogs",
-                ),
-            ),
-        ).toPatch()
+        val patch =
+            INCOME_TAX_VP2_P6.copy(
+                unitTypes = listOf("01", "02", "03"),
+                owner =
+                    Owner(
+                        "dapla-felles",
+                        listOf(
+                            "pers-skatt-developers",
+                            TEST_DEVELOPERS_GROUP,
+                            "neighbourhood-dogs",
+                        ),
+                    ),
+            ).toPatch()
         // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
         // num patches (patchId + 2)
@@ -124,29 +125,28 @@ class PatchesServiceTest : BaseVardefTest() {
             .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
             .forEach { period ->
 
-            assertThat(period.unitTypes).isNotEqualTo(INCOME_TAX_VP2_P6.unitTypes)
-            assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP2_P6.owner)
-        }
-
+                assertThat(period.unitTypes).isNotEqualTo(INCOME_TAX_VP2_P6.unitTypes)
+                assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP2_P6.owner)
+            }
     }
 
     // Case: Only owner is updated in non-selected validity periods
 
     @Test
     fun `create patch owner field and other value updated not selected period`() {
-
-        val patch = INCOME_TAX_VP2_P6.copy(
-            unitTypes = listOf("01", "02", "03"),
-            owner =
-            Owner(
-                "dapla-felles",
-                listOf(
-                    "pers-skatt-developers",
-                    TEST_DEVELOPERS_GROUP,
-                    "neighbourhood-dogs",
-                ),
-            ),
-        ).toPatch()
+        val patch =
+            INCOME_TAX_VP2_P6.copy(
+                unitTypes = listOf("01", "02", "03"),
+                owner =
+                    Owner(
+                        "dapla-felles",
+                        listOf(
+                            "pers-skatt-developers",
+                            TEST_DEVELOPERS_GROUP,
+                            "neighbourhood-dogs",
+                        ),
+                    ),
+            ).toPatch()
         // Create patch
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
         // num patches (patchId + 2)
@@ -158,7 +158,6 @@ class PatchesServiceTest : BaseVardefTest() {
                 assertThat(period.unitTypes).isEqualTo(INCOME_TAX_VP1_P7.unitTypes)
                 assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP1_P7.owner)
             }
-
     }
 
     companion object {

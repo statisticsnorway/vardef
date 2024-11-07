@@ -18,7 +18,7 @@ import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 @Singleton
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
-    private val validityPeriodsService: ValidityPeriodsService
+    private val validityPeriodsService: ValidityPeriodsService,
 ) {
     /**
      * Creates new *Patch* or *Patches*.

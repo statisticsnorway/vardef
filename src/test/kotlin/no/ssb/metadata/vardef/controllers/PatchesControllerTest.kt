@@ -642,13 +642,26 @@ class PatchesControllerTest : BaseVardefTest() {
                         }.toString(),
                 ),
                 argumentSet(
-                    "Groups empty list",
+                    "Groups list is null",
                     JSONObject()
                         .apply {
                             put(
                                 "owner",
                                 JSONObject().apply {
                                     put("team", "my-team")
+                                },
+                            )
+                        }.toString(),
+                ),
+                argumentSet(
+                    "Groups values are null",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-team")
+                                    put("groups", listOf(null))
                                 },
                             )
                         }.toString(),

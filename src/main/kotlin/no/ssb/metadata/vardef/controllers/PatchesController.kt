@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -32,13 +31,10 @@ import java.time.LocalDate
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
-class PatchesController {
-    @Inject
-    lateinit var validityPeriods: ValidityPeriodsService
-
-    @Inject
-    lateinit var patches: PatchesService
-
+class PatchesController(
+    private val validityPeriods: ValidityPeriodsService,
+    private val patches: PatchesService,
+) {
     /**
      * List all patches for the given variable definition.
      *

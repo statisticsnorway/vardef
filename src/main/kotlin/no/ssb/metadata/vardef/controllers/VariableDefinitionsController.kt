@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -29,10 +28,9 @@ import java.time.LocalDate
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
-class VariableDefinitionsController {
-    @Inject
-    lateinit var varDefService: VariableDefinitionService
-
+class VariableDefinitionsController(
+    private val vardef: VariableDefinitionService,
+) {
     /**
      * List all variable definitions.
      */
@@ -61,7 +59,7 @@ class VariableDefinitionsController {
             examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
         )
         dateOfValidity: LocalDate? = null,
-    ): List<CompleteResponse> = varDefService.listCompleteForDate(dateOfValidity = dateOfValidity)
+    ): List<CompleteResponse> = this.vardef.listCompleteForDate(dateOfValidity = dateOfValidity)
 
     /**
      * Create a variable definition.
@@ -107,12 +105,12 @@ class VariableDefinitionsController {
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {
-        if (varDefService.doesShortNameExist(draft.shortName)) {
+        if (this.vardef.doesShortNameExist(draft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return varDefService.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
+        return this.vardef.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
     }
 }

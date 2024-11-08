@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -34,13 +33,10 @@ import java.time.LocalDate
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
-class VariableDefinitionByIdController {
-    @Inject
-    lateinit var varDefService: VariableDefinitionService
-
-    @Inject
-    lateinit var patches: PatchesService
-
+class VariableDefinitionByIdController(
+    private val vardef: VariableDefinitionService,
+    private val patches: PatchesService,
+) {
     /**
      * Get one variable definition.
      */
@@ -72,7 +68,7 @@ class VariableDefinitionByIdController {
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
     ): CompleteResponse =
-        varDefService
+        vardef
             .getCompleteByDate(
                 definitionId = definitionId,
                 dateOfValidity = dateOfValidity,
@@ -167,14 +163,14 @@ class VariableDefinitionByIdController {
                 "The variable is published or deprecated and cannot be updated with this method",
             )
 
-            (updateDraft.shortName != null && varDefService.doesShortNameExist(updateDraft.shortName)) ->
+            (updateDraft.shortName != null && vardef.doesShortNameExist(updateDraft.shortName)) ->
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
                 )
         }
 
-        return varDefService
+        return vardef
             .update(patches.latest(definitionId).copyAndUpdate(updateDraft))
             .toCompleteResponse()
     }

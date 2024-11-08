@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
@@ -30,10 +29,9 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
-class ValidityPeriodsController {
-    @Inject
-    lateinit var validityPeriods: ValidityPeriodsService
-
+class ValidityPeriodsController(
+    private val validityPeriods: ValidityPeriodsService,
+) {
     /**
      * Create a new validity period for a variable definition.
      */

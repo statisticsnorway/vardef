@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
@@ -31,14 +30,10 @@ import org.reactivestreams.Publisher
 @Secured(VARIABLE_CREATOR)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
-class VarDokMigrationController {
-    @Inject
-    lateinit var vardokService: VardokService
-
-    @Client("/")
-    @Inject
-    lateinit var httpClient: ProxyHttpClient
-
+class VarDokMigrationController(
+    private val vardokService: VardokService,
+    @Client("/") private val httpClient: ProxyHttpClient,
+) {
     /**
      * Create a variable definition from a VarDok variable definition.
      */

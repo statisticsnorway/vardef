@@ -9,7 +9,7 @@ import no.ssb.metadata.vardef.models.Owner
  */
 class DaplaTeamService {
     companion object {
-        val DEVELOPERS_SUFFIX = "developers"
+        private const val DEVELOPERS_SUFFIX = "developers"
 
         /**
          * Is the given group the developers group
@@ -17,7 +17,7 @@ class DaplaTeamService {
          * @param group the group in question
          * @return `true` if it's the developers group
          */
-        fun isDevelopers(group: String): Boolean = group.endsWith(DEVELOPERS_SUFFIX)
+        fun isDevelopers(group: String): Boolean = group.matches(Regex("^.+-developers$"))
 
         fun containsDevelopersGroup(owner: Owner): Boolean =
             owner.groups.any {

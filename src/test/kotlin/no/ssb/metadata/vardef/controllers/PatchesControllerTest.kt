@@ -688,6 +688,45 @@ class PatchesControllerTest : BaseVardefTest() {
                             )
                         }.toString(),
                 ),
+                argumentSet(
+                    "Remove owner team developers group",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-team")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "other-group",
+                                            TEST_DEVELOPERS_GROUP,
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                ),
+                argumentSet(
+                    "Change owner team without changing developers group",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "other-team")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "my-team-developers",
+                                            "other-group",
+                                            TEST_DEVELOPERS_GROUP,
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                ),
             )
     }
 }

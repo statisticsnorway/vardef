@@ -2,6 +2,9 @@ micronaut:
   application:
     name: vardef
   security:
+    jwks:
+      # Token signature verification is performed by the gateway
+      enabled: false
     token:
       jwt:
         claims:

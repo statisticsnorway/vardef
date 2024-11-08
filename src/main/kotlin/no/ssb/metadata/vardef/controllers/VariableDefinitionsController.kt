@@ -56,7 +56,7 @@ class VariableDefinitionsController(
             examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
         )
         dateOfValidity: LocalDate? = null,
-    ): List<CompleteResponse> = this.vardef.listCompleteForDate(dateOfValidity = dateOfValidity)
+    ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity)
 
     /**
      * Create a variable definition.
@@ -102,12 +102,12 @@ class VariableDefinitionsController(
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {
-        if (this.vardef.doesShortNameExist(draft.shortName)) {
+        if (vardef.doesShortNameExist(draft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return this.vardef.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
+        return vardef.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
     }
 }

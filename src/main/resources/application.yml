@@ -13,6 +13,9 @@ micronaut:
             dapla-groups: groups
             dapla-teams: teams
             username: preferred_username
+          values:
+            allowed-audiences:
+              - onyxia-api
     intercept-url-map:
       - pattern: /health/**
         http-method: GET

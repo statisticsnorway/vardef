@@ -9,6 +9,7 @@ import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import kotlin.jvm.optionals.getOrElse
 
 @Factory
+@ExecuteOn(TaskExecutors.BLOCKING)
 class KlassValidationFactory(
     private val klassService: KlassService,
 ) {

@@ -606,7 +606,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                         }.toString(),
                 ),
                 argumentSet(
-                    "Groups empty list",
+                    "Groups list is null",
                     JSONObject()
                         .apply {
                             put(
@@ -616,6 +616,20 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                ),
+                argumentSet(
+                    "Groups values are null",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-team")
+                                    put("groups", listOf(null))
+                                },
+                            )
+                        }.toString(),
+                    "must not be empty",
                 ),
                 argumentSet(
                     "Groups empty values in list",

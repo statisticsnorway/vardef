@@ -1,16 +1,11 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.http.*
 import io.micronaut.http.HttpHeaders.AUTHORIZATION
-import io.micronaut.http.HttpRequest
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.MutableHttpHeaders
-import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.ProxyHttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -20,7 +15,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
@@ -32,15 +26,11 @@ import org.reactivestreams.Publisher
 @Validated
 @Controller("/vardok-migration/{vardok-id}")
 @Secured(VARIABLE_CREATOR)
-@ExecuteOn(TaskExecutors.BLOCKING)
-class VarDokMigrationController {
-    @Inject
-    lateinit var vardokService: VardokService
-
-    @Client("/")
-    @Inject
-    lateinit var httpClient: ProxyHttpClient
-
+@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
+class VarDokMigrationController(
+    private val vardokService: VardokService,
+    @Client("/") private val httpClient: ProxyHttpClient,
+) {
     /**
      * Create a variable definition from a VarDok variable definition.
      */
@@ -53,6 +43,7 @@ class VarDokMigrationController {
             [
                 Content(
                     schema = Schema(implementation = CompleteResponse::class),
+                    mediaType = MediaType.APPLICATION_JSON,
                     examples = [
                         ExampleObject(
                             name = "migrate_1607",
@@ -63,8 +54,7 @@ class VarDokMigrationController {
             ],
     )
     @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
-    @SecurityRequirement(name = "Bearer Authentication")
-    fun createVariableDefinitionFromVarDok(
+    suspend fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",
             description = "The ID of the definition in Vardok.",

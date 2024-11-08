@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.allopen)
@@ -7,7 +5,6 @@ plugins {
     alias(libs.plugins.micronaut.application)
     alias(libs.plugins.micronaut.test.resources)
     alias(libs.plugins.micronaut.aot)
-    alias(libs.plugins.shadow)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.jib)
 
@@ -33,13 +30,13 @@ dependencies {
     implementation(libs.micronaut.cache.caffeine)
     implementation(libs.micronaut.data.mongodb)
     implementation(libs.micronaut.http.client)
-    implementation(libs.micronaut.kotlin.runtime)
     implementation(libs.micronaut.management)
     implementation(libs.micronaut.micrometer.registry.prometheus)
     implementation(libs.micronaut.serde.jackson)
     implementation(libs.micronaut.jackson.xml)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.nanoid)
     implementation(libs.micronaut.security.jwt)
     implementation(libs.reactor)
@@ -81,7 +78,6 @@ micronaut {
         deduceEnvironment = true
         optimizeNetty = true
         replaceLogbackXml = true
-        configurationProperties.put("micronaut.security.jwks.enabled", "false")
     }
 }
 
@@ -122,9 +118,4 @@ tasks.withType<JacocoReport> {
     reports {
         xml.required = true
     }
-}
-
-tasks.withType<ShadowJar> {
-    archiveBaseName.set("vardef")
-    archiveVersion.set("")
 }

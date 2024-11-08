@@ -2,6 +2,9 @@ micronaut:
   application:
     name: vardef
   security:
+    jwks:
+      # Token signature verification is performed by the gateway
+      enabled: false
     token:
       jwt:
         claims:
@@ -11,7 +14,8 @@ micronaut:
             dapla-teams: teams
             username: preferred_username
           values:
-            dapla-lab-audience: onyxia-api
+            allowed-audiences:
+              - onyxia-api
     intercept-url-map:
       - pattern: /health/**
         http-method: GET

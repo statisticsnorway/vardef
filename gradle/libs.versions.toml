@@ -10,6 +10,7 @@ jib = "3.4.3"
 json = "20240303"
 junit = "5.11.2"
 kotlin = "2.0.20"
+kotlinxCoroutines = "1.9.0"
 ksp = "2.0.20-1.0.25"
 ktlint = "12.1.1"
 logback = "1.5.8"
@@ -17,7 +18,6 @@ micronaut = "4.6.1"
 micronautCache = "5.0.1"
 micronautData = "4.9.4"
 micronautGradle = "4.4.3"
-micronautKotlin = "4.4.0"
 micronautManagement = "4.6.6"
 micronautMicrometer = "5.8.0"
 micronautMongoDb = "5.4.0"
@@ -28,7 +28,6 @@ micronautTest = "4.5.0"
 mockk = "1.13.12"
 nanoid = "1.0.1"
 reactor = "3.6.8"
-shadow = "8.1.1"
 snakeyaml = "2.3"
 
 [libraries]
@@ -38,20 +37,19 @@ json = { module = "org.json:json", version.ref = "json" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit"}
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinxCoroutines" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 micronaut-cache-caffeine = { module = "io.micronaut.cache:micronaut-cache-caffeine", version.ref = "micronautCache"}
 micronaut-data-document-processor = { module = "io.micronaut.data:micronaut-data-document-processor", version.ref = "micronautData" }
 micronaut-data-mongodb = { module = "io.micronaut.data:micronaut-data-mongodb", version.ref = "micronautData" }
 micronaut-http-client = { module = "io.micronaut:micronaut-http-client", version.ref = "micronaut" }
 micronaut-http-validation = { module = "io.micronaut:micronaut-http-validation", version.ref = "micronaut" }
-micronaut-kotlin-runtime = { module = "io.micronaut.kotlin:micronaut-kotlin-runtime", version.ref = "micronautKotlin" }
 micronaut-management = { module = "io.micronaut:micronaut-management", version.ref = "micronautManagement" }
 micronaut-micrometer-registry-prometheus = { module = "io.micronaut.micrometer:micronaut-micrometer-registry-prometheus", version.ref = "micronautMicrometer" }
 micronaut-mongo-sync = { module = "io.micronaut.mongodb:micronaut-mongo-sync", version.ref = "micronautMongoDb" }
 micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi", version.ref = "micronautOpenapi" }
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronautOpenapi" }
 micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronaut" }
-micronaut-security-annotations = { module = "io.micronaut.security:micronaut-security-annotations", version.ref = "micronaut" }
 micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt", version.ref = "micronautSecurity" }
 micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson", version.ref = "micronautSerde" }
 micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor", version.ref = "micronautSerde" }
@@ -72,4 +70,3 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 micronaut-aot = { id = "io.micronaut.aot", version.ref = "micronautGradle" }
 micronaut-application = { id = "io.micronaut.application", version.ref = "micronautGradle" }
 micronaut-test-resources = { id = "io.micronaut.test-resources", version.ref = "micronautGradle" }
-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }

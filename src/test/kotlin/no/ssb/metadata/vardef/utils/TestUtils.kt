@@ -4,8 +4,23 @@ import no.ssb.metadata.vardef.models.VariableStatus
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
+import kotlin.reflect.full.memberProperties
 
 const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"
+
+/**
+ * Get object field value by String name.
+ * Enables dynamic comparison of field values in parameterized tests
+ */
+fun getPropertyByName(
+    obj: Any,
+    propertyName: String,
+): Any? {
+    return obj::class.memberProperties
+        .firstOrNull { it.name == propertyName }
+        ?.getter
+        ?.call(obj)
+}
 
 object TestUtils {
     /**

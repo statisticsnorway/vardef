@@ -4,7 +4,6 @@ import jakarta.validation.Constraint
 import jakarta.validation.Payload
 import kotlin.reflect.KClass
 
-
 /**
  * The annotated element must be a valid group name.
  */

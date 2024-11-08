@@ -54,12 +54,13 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = [
-        "dapla-felles-developers",
-        "play-enhjoern-a-developers",
-        "pers-skatt-developers",
-        "skip-stat-developers"
-        ]
+    @ValueSource(
+        strings = [
+            "dapla-felles-developers",
+            "play-enhjoern-a-developers",
+            "pers-skatt-developers",
+            "skip-stat-developers",
+        ],
     )
     fun `test valid group name`(group: String) {
         assertThat(

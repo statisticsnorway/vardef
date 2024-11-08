@@ -79,7 +79,10 @@ data class Owner(
     @DaplaTeam
     var team: String,
     @NotEmpty
-    val groups: List<@NotEmpty @DaplaGroup String>,
+    val groups: List<
+        @NotEmpty @DaplaGroup
+        String,
+        >,
 )
 
 @Schema(example = RENDERED_CONTACT_EXAMPLE)

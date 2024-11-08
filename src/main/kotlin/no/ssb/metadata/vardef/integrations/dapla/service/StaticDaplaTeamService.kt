@@ -30,7 +30,7 @@ class StaticDaplaTeamService : DaplaTeamService {
             "my-team-developers",
             "pers-skatt-developers",
             "skip-stat-developers",
-            "dapla-felles-developers"
+            "dapla-felles-developers",
         )
 
     override fun getTeam(teamName: String): Team? {

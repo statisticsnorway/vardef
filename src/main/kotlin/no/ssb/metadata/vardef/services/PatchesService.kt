@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 
@@ -17,14 +18,44 @@ import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 @Singleton
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
+    private val validityPeriodsService: ValidityPeriodsService,
 ) {
     /**
-     * Create a new *Patch*
+     * Creates new *Patch* or *Patches*.
      *
-     * @param patch The *Patch* to create, with updated values.
-     * @return The created *Patch*
+     * This method generates patches according to changes in the owner field values across validity periods:
+     * - If the owner field has new values, a separate patch is created for each validity period, containing only
+     *   the owner values. For the selected validity period, however, all updated values
+     *   are saved in the patch.
+     * - If the owner values remain unchanged, a single patch is created for the selected validity period.
+     *
+     * @param patch The *Patch* containing updated values to apply.
+     * @param definitionId The unique identifier for the variable.
+     * @param latestPatch The latest existing patch within the selected validity period.
+     * @return The created *Patch* for the selected validity period with all updated values applied.
      */
-    fun create(patch: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(patch)
+    fun create(
+        patch: Patch,
+        definitionId: String,
+        latestPatch: SavedVariableDefinition,
+    ): SavedVariableDefinition {
+        // Retrieve all validity periods associated with the given definition ID
+        val validityPeriods = validityPeriodsService.listLatestByValidityPeriod(definitionId)
+
+        // Check if the owner value has been updated and is not null
+        if (patch.owner != latestPatch.owner && patch.owner != null) {
+            validityPeriods
+                // Exclude the currently selected validity period, which is handled separately
+                .filter { it.validFrom != latestPatch.validFrom }
+                .forEach { period ->
+                    // For non-selected validity periods, only update the owner field
+                    val patchOwner = patch.owner.let { period.copy(owner = it).toPatch() }
+                    variableDefinitionRepository.save(patchOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
+                }
+        }
+        // For the selected validity period create a patch with the provided values
+        return variableDefinitionRepository.save(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
+    }
 
     /**
      * List all Patches for a specific Variable Definition.

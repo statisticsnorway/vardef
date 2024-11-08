@@ -4,8 +4,6 @@ import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.http.HttpAttributes
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.annotation.PathVariable
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.rules.AbstractSecurityRule
@@ -45,7 +43,6 @@ import java.util.*
  * @param rolesFinder
  */
 @Singleton
-@ExecuteOn(TaskExecutors.BLOCKING)
 class VariableOwnerSecurityRule(
     rolesFinder: RolesFinder,
     private val variableDefinitionService: VariableDefinitionService,
@@ -95,7 +92,7 @@ class VariableOwnerSecurityRule(
      * @param routeMatch the [RouteMatch] from Micronaut.
      * @return the requested definition ID
      */
-    private fun getDefinitionId(routeMatch: RouteMatch<*>): String =
+    private fun extractDefinitionIdFromUri(routeMatch: RouteMatch<*>): String =
         routeMatch.variableValues[VARIABLE_DEFINITION_ID_PATH_VARIABLE] as String
 
     /**
@@ -105,33 +102,40 @@ class VariableOwnerSecurityRule(
      * @param authentication [Authentication]
      * @return a [SecurityRuleResult]
      */
+    @Suppress("ReactiveStreamsTooLongSameOperatorsChain") // Too little data to cause performance overhead
     override fun check(
         request: HttpRequest<*>?,
         authentication: Authentication?,
     ): Publisher<SecurityRuleResult> {
-        if (request == null || authentication == null) return Mono.empty()
+        if (request == null || authentication == null) return Mono.just(SecurityRuleResult.UNKNOWN)
         return Mono
             .justOrEmpty<RouteMatch<*>?>(
                 request
                     .getAttribute(HttpAttributes.ROUTE_MATCH, RouteMatch::class.java)
                     ?.orElse(null),
-            ).filter {
-                doesOperationRequireVariableOwnerRole(it) &&
-                    VARIABLE_DEFINITION_ID_PATH_VARIABLE in it.variableValues &&
-                    ACTIVE_GROUP in request.parameters
-            }.filter {
-                VARIABLE_OWNER in authentication.roles
-            }.handle { routeMatch, sink ->
-                val activeGroup = request.parameters.get(ACTIVE_GROUP) as String
-                val definitionId = getDefinitionId(routeMatch)
-                if (variableDefinitionService.groupIsOwner(activeGroup, definitionId)
-                ) {
-                    logger.info("Allowed access for: $request")
-                    sink.next(SecurityRuleResult.ALLOWED)
-                } else {
-                    logger.info("Rejected access. Principal does not own the requested resource. Request: $request")
+            ).filter { doesOperationRequireVariableOwnerRole(it) }
+            .filter { VARIABLE_DEFINITION_ID_PATH_VARIABLE in it.variableValues }
+            .filter { ACTIVE_GROUP in request.parameters }
+            .map { extractDefinitionIdFromUri(it) }
+            .map { variableDefinitionService.groupIsOwner(request.parameters.get(ACTIVE_GROUP) as String, it) }
+            .handle { isOwner, sink ->
+                if (VARIABLE_OWNER !in authentication.roles) {
+                    logger.info("Rejected access. Principal does not have $VARIABLE_OWNER role. Request: $request")
                     sink.next(SecurityRuleResult.REJECTED)
+                    sink.complete()
+                } else {
+                    if (isOwner) {
+                        logger.info("Allowed access for: $request")
+                        sink.next(SecurityRuleResult.ALLOWED)
+                        sink.complete()
+                    } else {
+                        logger.info("Rejected access. Principal does not own the requested resource. Request: $request")
+                        sink.next(SecurityRuleResult.REJECTED)
+                        sink.complete()
+                    }
                 }
-            }.onErrorReturn(SecurityRuleResult.UNKNOWN)
+            }.switchIfEmpty(Mono.just(SecurityRuleResult.UNKNOWN))
+            .doOnError { logger.error("Error while authorizing for $VARIABLE_OWNER for $request", it) }
+            .onErrorReturn(SecurityRuleResult.UNKNOWN)
     }
 }

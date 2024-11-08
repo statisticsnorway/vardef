@@ -69,6 +69,7 @@ data class UpdateDraft(
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = OWNER_DESCRIPTION)
     @Nullable
+    @Valid
     val owner: Owner?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Nullable

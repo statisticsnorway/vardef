@@ -19,8 +19,8 @@ import reactor.core.publisher.Mono
 class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JWT, R> {
     private val logger = LoggerFactory.getLogger(VardefTokenValidator::class.java)
 
-    @Property(name = "micronaut.security.token.jwt.claims.values.dapla-lab-audience")
-    private lateinit var daplaLabAudience: String
+    @Property(name = "micronaut.security.token.jwt.claims.values.allowed-audiences")
+    private lateinit var allowedAudiences: Set<String>
 
     @Property(name = "micronaut.security.token.jwt.claims.keys.dapla")
     private lateinit var daplaClaim: String
@@ -52,7 +52,10 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     /**
      * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.
      */
-    private fun isVariableOwner(claimsSet: JWTClaimsSet): Boolean = daplaLabAudience in claimsSet.getStringListClaim(Claims.AUDIENCE)
+    private fun isVariableOwner(claimsSet: JWTClaimsSet): Boolean =
+        claimsSet.getStringListClaim(Claims.AUDIENCE).any {
+            it in allowedAudiences
+        }
 
     /**
      * @return `true` if the principal can be assigned the [VARIABLE_CREATOR] role.
@@ -139,5 +142,11 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     override fun validate(
         token: String?,
         request: R,
-    ): Publisher<JWT> = Mono.just(jsonWebTokenParser.parse(token).get())
+    ): Publisher<JWT> =
+        Mono
+            .just(jsonWebTokenParser.parse(token))
+            .filter { it.isPresent }
+            .map { it.get() }
+            .doOnError { logger.error("Error parsing token for $request", it) }
+            .onErrorResume { Mono.empty() }
 }

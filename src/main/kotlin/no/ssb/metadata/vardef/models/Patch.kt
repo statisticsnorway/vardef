@@ -70,6 +70,10 @@ data class Patch(
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
     val relatedVariableDefinitionUris: List<URL>?,
+    @Schema(description = OWNER_DESCRIPTION)
+    @Nullable
+    @Valid
+    val owner: Owner?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
     @Nullable
@@ -94,6 +98,7 @@ data class Patch(
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
             comment = comment ?: previousPatch.comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
+            owner = owner ?: previousPatch.owner,
             contact = contact ?: previousPatch.contact,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),

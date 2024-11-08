@@ -36,6 +36,7 @@ json = { module = "org.json:json", version.ref = "json" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit"}
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlin" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 micronaut-cache-caffeine = { module = "io.micronaut.cache:micronaut-cache-caffeine", version.ref = "micronautCache"}
 micronaut-data-document-processor = { module = "io.micronaut.data:micronaut-data-document-processor", version.ref = "micronautData" }

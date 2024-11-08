@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.micronaut.jackson.xml)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.nanoid)
     implementation(libs.micronaut.security.jwt)
     implementation(libs.reactor)

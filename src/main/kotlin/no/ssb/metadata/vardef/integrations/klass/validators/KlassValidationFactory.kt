@@ -9,11 +9,11 @@ import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import kotlin.jvm.optionals.getOrElse
 
 @Factory
-@ExecuteOn(TaskExecutors.BLOCKING)
 class KlassValidationFactory(
     private val klassService: KlassService,
 ) {
     @Singleton
+    @ExecuteOn(TaskExecutors.BLOCKING)
     fun klassCodeValidator(): ConstraintValidator<KlassCode, String> =
         ConstraintValidator {
                 value,
@@ -30,6 +30,7 @@ class KlassValidationFactory(
         }
 
     @Singleton
+    @ExecuteOn(TaskExecutors.BLOCKING)
     fun klassIdValidator(): ConstraintValidator<KlassId, String> =
         ConstraintValidator {
                 value,

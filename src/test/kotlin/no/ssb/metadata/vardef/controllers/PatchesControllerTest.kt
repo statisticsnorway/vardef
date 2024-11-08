@@ -547,6 +547,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                     put(
                                         "groups",
                                         listOf(
+                                            "my-oh-my-team-developers",
                                             "skip-stat-developers",
                                             "play-enhjoern-a-developers",
                                         ),
@@ -568,6 +569,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                     put(
                                         "groups",
                                         listOf(
+                                            "my-team-developers",
                                             "skip-stat-developers",
                                             "play-foeniks-a-developers",
                                         ),
@@ -589,6 +591,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                     put(
                                         "groups",
                                         listOf(
+                                            "my-team-developers",
                                             "skip-stat-developers",
                                             "play-enhjoern-a-developers",
                                             "play-foeniks-a-developers",

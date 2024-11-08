@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
@@ -39,19 +40,12 @@ class PatchesService(
         definitionId: String,
         latestPatch: SavedVariableDefinition,
     ): SavedVariableDefinition {
-        // Retrieve all validity periods associated with the given definition ID
-        val validityPeriods = validityPeriodsService.listLatestByValidityPeriod(definitionId)
-
-        // Check if the owner value has been updated and is not null
         if (patch.owner != latestPatch.owner && patch.owner != null) {
-            validityPeriods
-                // Exclude the currently selected validity period, which is handled separately
-                .filter { it.validFrom != latestPatch.validFrom }
-                .forEach { period ->
-                    // For non-selected validity periods, only update the owner field
-                    val patchOwner = patch.owner.let { period.copy(owner = it).toPatch() }
-                    variableDefinitionRepository.save(patchOwner.toSavedVariableDefinition(latest(definitionId).patchId, period))
-                }
+            if (!DaplaTeamService.containsDevelopersGroup(patch.owner)) {
+                throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
+            }
+            validityPeriodsService
+                .updateOwnerOnOtherPeriods(definitionId, patch.owner, latestPatch.validFrom)
         }
         // For the selected validity period create a patch with the provided values
         return variableDefinitionRepository.save(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))

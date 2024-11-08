@@ -5,7 +5,6 @@ import io.micronaut.context.annotation.*
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.json.JsonMapper
 import io.micronaut.serde.annotation.Serdeable
-import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Code
@@ -51,10 +50,9 @@ class StaticClassification(
 @Primary
 @Requires(env = ["test"], notEnv = ["integration-test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 @Singleton
-class StaticKlassService : KlassService {
-    @Inject
-    lateinit var beanContext: BeanContext
-
+class StaticKlassService(
+    private val beanContext: BeanContext,
+) : KlassService {
     @Property(name = "micronaut.klass-web.url.nb")
     private var klassUrlNb: String = ""
 

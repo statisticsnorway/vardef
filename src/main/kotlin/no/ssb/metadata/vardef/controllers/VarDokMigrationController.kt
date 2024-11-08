@@ -6,8 +6,6 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.client.ProxyHttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -17,7 +15,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
@@ -30,15 +27,10 @@ import org.reactivestreams.Publisher
 @Controller("/vardok-migration/{vardok-id}")
 @Secured(VARIABLE_CREATOR)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
-@ExecuteOn(TaskExecutors.BLOCKING)
-class VarDokMigrationController {
-    @Inject
-    lateinit var vardokService: VardokService
-
-    @Client("/")
-    @Inject
-    lateinit var httpClient: ProxyHttpClient
-
+class VarDokMigrationController(
+    private val vardokService: VardokService,
+    @Client("/") private val httpClient: ProxyHttpClient,
+) {
     /**
      * Create a variable definition from a VarDok variable definition.
      */
@@ -62,7 +54,7 @@ class VarDokMigrationController {
             ],
     )
     @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
-    fun createVariableDefinitionFromVarDok(
+    suspend fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",
             description = "The ID of the definition in Vardok.",

@@ -3,8 +3,6 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -14,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -28,11 +25,9 @@ import java.time.LocalDate
 @Controller("/variable-definitions")
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
-@ExecuteOn(TaskExecutors.BLOCKING)
-class VariableDefinitionsController {
-    @Inject
-    lateinit var varDefService: VariableDefinitionService
-
+class VariableDefinitionsController(
+    private val vardef: VariableDefinitionService,
+) {
     /**
      * List all variable definitions.
      */
@@ -53,7 +48,7 @@ class VariableDefinitionsController {
         ],
     )
     @Get
-    fun listVariableDefinitions(
+    suspend fun listVariableDefinitions(
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -61,7 +56,7 @@ class VariableDefinitionsController {
             examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
         )
         dateOfValidity: LocalDate? = null,
-    ): List<CompleteResponse> = varDefService.listCompleteForDate(dateOfValidity = dateOfValidity)
+    ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity)
 
     /**
      * Create a variable definition.
@@ -90,7 +85,7 @@ class VariableDefinitionsController {
     @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Secured(VARIABLE_CREATOR)
-    fun createVariableDefinition(
+    suspend fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE)
         @Body
         @Valid draft: Draft,
@@ -107,12 +102,12 @@ class VariableDefinitionsController {
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
     ): CompleteResponse {
-        if (varDefService.doesShortNameExist(draft.shortName)) {
+        if (vardef.doesShortNameExist(draft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return varDefService.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
+        return vardef.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
     }
 }

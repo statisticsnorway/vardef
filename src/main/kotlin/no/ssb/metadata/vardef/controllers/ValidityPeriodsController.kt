@@ -3,8 +3,6 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -13,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.inject.Inject
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
@@ -27,13 +24,11 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 @Tag(name = VALIDITY_PERIODS)
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
-@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
-class ValidityPeriodsController {
-    @Inject
-    lateinit var validityPeriods: ValidityPeriodsService
-
+class ValidityPeriodsController(
+    private val validityPeriods: ValidityPeriodsService,
+) {
     /**
      * Create a new validity period for a variable definition.
      */
@@ -56,7 +51,7 @@ class ValidityPeriodsController {
     @ApiResponse(responseCode = "400", description = "The request is missing or has errors in required fields.")
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     @Secured(VARIABLE_OWNER)
-    fun createValidityPeriod(
+    suspend fun createValidityPeriod(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])
         variableDefinitionId: String,
@@ -107,7 +102,7 @@ class ValidityPeriodsController {
             ),
         ],
     )
-    fun listValidityPeriods(
+    suspend fun listValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
         variableDefinitionId: String,

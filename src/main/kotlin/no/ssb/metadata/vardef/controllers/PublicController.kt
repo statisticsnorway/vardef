@@ -3,8 +3,6 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
@@ -25,7 +23,6 @@ import java.time.LocalDate
 @Validated
 @Controller("/public")
 @Secured(SecurityRule.IS_ANONYMOUS)
-@ExecuteOn(TaskExecutors.BLOCKING)
 class PublicController(
     private val varDefService: VariableDefinitionService,
     private val validityPeriods: ValidityPeriodsService,
@@ -52,7 +49,7 @@ class PublicController(
     )
     @Tag(name = VARIABLE_DEFINITIONS)
     @Get("/variable-definitions")
-    fun listPublicVariableDefinitions(
+    suspend fun listPublicVariableDefinitions(
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
@@ -87,7 +84,7 @@ class PublicController(
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
-    fun getPublicVariableDefinitionById(
+    suspend fun getPublicVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         definitionId: String,
@@ -146,7 +143,7 @@ class PublicController(
             ),
         ],
     )
-    fun listPublicValidityPeriods(
+    suspend fun listPublicValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
         variableDefinitionId: String,

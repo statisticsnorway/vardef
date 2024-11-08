@@ -295,4 +295,23 @@ class ValidityPeriodsService(
                 .toSavedVariableDefinition(list(definitionId).last().patchId, latestPatchInLastValidityPeriod),
         )
     }
+
+    fun updateOwnerOnOtherPeriods(
+        definitionId: String,
+        owner: Owner,
+        validFrom: LocalDate,
+    ): Unit =
+        listLatestByValidityPeriod(definitionId)
+            // Exclude the matching validity period, which is handled separately
+            .filter { it.validFrom != validFrom }
+            .forEach { period ->
+                // For non-selected validity periods, only update the owner field
+                val patchOwner = period.copy(owner = owner).toPatch()
+                variableDefinitionRepository.save(
+                    patchOwner.toSavedVariableDefinition(
+                        list(definitionId).last().patchId,
+                        period,
+                    ),
+                )
+            }
 }

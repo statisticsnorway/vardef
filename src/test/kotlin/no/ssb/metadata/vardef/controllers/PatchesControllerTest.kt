@@ -479,7 +479,7 @@ class PatchesControllerTest : BaseVardefTest() {
     fun `update owner`(
         valueBeforeUpdate: String,
         jsonInput: String,
-        pathVariable: String,
+        jsonPathToActual: String,
         spec: RequestSpecification,
     ) {
         spec
@@ -492,7 +492,7 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(201)
-            .body(pathVariable, not(equalTo(valueBeforeUpdate)))
+            .body(jsonPathToActual, not(equalTo(valueBeforeUpdate)))
     }
 
     @ParameterizedTest
@@ -600,7 +600,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "owner.groups[2]",
+                    "owner.groups[1]",
                 ),
             )
 

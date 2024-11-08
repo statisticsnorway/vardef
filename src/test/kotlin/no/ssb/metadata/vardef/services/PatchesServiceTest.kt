@@ -54,18 +54,19 @@ class PatchesServiceTest : BaseVardefTest() {
     @Test
     fun `create patch owner field updated across all periods`() {
         val patch =
-            INCOME_TAX_VP1_P7.copy(
-                owner =
-                    Owner(
-                        "dapla-felles",
-                        listOf(
-                            "pers-skatt-developers",
-                            TEST_DEVELOPERS_GROUP,
-                            "neighbourhood-dogs",
-                            "dapla-felles-developers",
+            INCOME_TAX_VP1_P7
+                .copy(
+                    owner =
+                        Owner(
+                            "dapla-felles",
+                            listOf(
+                                "pers-skatt-developers",
+                                TEST_DEVELOPERS_GROUP,
+                                "neighbourhood-dogs",
+                                "dapla-felles-developers",
+                            ),
                         ),
-                    ),
-            ).toPatch()
+                ).toPatch()
 
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
@@ -78,14 +79,15 @@ class PatchesServiceTest : BaseVardefTest() {
     @Test
     fun `create patch owner field not updated`() {
         val patch =
-            INCOME_TAX_VP2_P6.copy(
-                name =
-                    LanguageStringType(
-                        nb = "navn",
-                        nn = "namn",
-                        en = "name",
-                    ),
-            ).toPatch()
+            INCOME_TAX_VP2_P6
+                .copy(
+                    name =
+                        LanguageStringType(
+                            nb = "navn",
+                            nn = "namn",
+                            en = "name",
+                        ),
+                ).toPatch()
 
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
@@ -100,18 +102,19 @@ class PatchesServiceTest : BaseVardefTest() {
     @Test
     fun `create patch owner and unit_types updated`() {
         val patch =
-            INCOME_TAX_VP2_P6.copy(
-                unitTypes = listOf("01", "02", "03"),
-                owner =
-                    Owner(
-                        "dapla-felles",
-                        listOf(
-                            "pers-skatt-developers",
-                            TEST_DEVELOPERS_GROUP,
-                            "neighbourhood-dogs",
+            INCOME_TAX_VP2_P6
+                .copy(
+                    unitTypes = listOf("01", "02", "03"),
+                    owner =
+                        Owner(
+                            TEST_TEAM,
+                            listOf(
+                                "pers-skatt-developers",
+                                TEST_DEVELOPERS_GROUP,
+                                "neighbourhood-dogs",
+                            ),
                         ),
-                    ),
-            ).toPatch()
+                ).toPatch()
 
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)

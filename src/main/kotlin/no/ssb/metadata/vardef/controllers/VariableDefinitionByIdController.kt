@@ -6,8 +6,6 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -32,7 +30,6 @@ import java.time.LocalDate
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
-@ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController(
     private val vardef: VariableDefinitionService,
     private val patches: PatchesService,
@@ -54,7 +51,7 @@ class VariableDefinitionByIdController(
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get
-    fun getVariableDefinitionById(
+    suspend fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
         definitionId: String,
@@ -88,7 +85,7 @@ class VariableDefinitionByIdController(
     @Status(HttpStatus.NO_CONTENT)
     @Delete
     @Secured(VARIABLE_OWNER)
-    fun deleteVariableDefinitionById(
+    suspend fun deleteVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
         definitionId: String,
@@ -136,7 +133,7 @@ class VariableDefinitionByIdController(
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch
     @Secured(VARIABLE_OWNER)
-    fun updateVariableDefinitionById(
+    suspend fun updateVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Schema(description = ID_FIELD_DESCRIPTION)
         definitionId: String,

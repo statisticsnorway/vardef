@@ -3,8 +3,6 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -27,7 +25,6 @@ import java.time.LocalDate
 @Controller("/variable-definitions")
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
-@ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionsController(
     private val vardef: VariableDefinitionService,
 ) {
@@ -51,7 +48,7 @@ class VariableDefinitionsController(
         ],
     )
     @Get
-    fun listVariableDefinitions(
+    suspend fun listVariableDefinitions(
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -88,7 +85,7 @@ class VariableDefinitionsController(
     @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Secured(VARIABLE_CREATOR)
-    fun createVariableDefinition(
+    suspend fun createVariableDefinition(
         @Parameter(example = DRAFT_EXAMPLE)
         @Body
         @Valid draft: Draft,

@@ -513,6 +513,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                         listOf(
                                             "skip-stat-developers",
                                             "play-enhjoern-a-developers",
+                                            "my-oh-my-team-developers"
                                         ),
                                     )
                                 },

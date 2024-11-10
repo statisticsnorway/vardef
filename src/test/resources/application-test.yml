@@ -20,3 +20,14 @@ klass:
     618:
     303:
     91:
+# Dapla
+dapla:
+  static-data-path: dapla/teams
+  teams:
+    dapla-felles:
+    play-enhjoern-a:
+    play-foeniks-a:
+    my-team:
+    my-oh-my-team:
+    pers-skatt:
+    skip-stat:

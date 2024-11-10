@@ -32,13 +32,12 @@ class StaticDaplaTeam(
             team = jsonMapper.readValue(resource.readText(), Team::class.java)
         }
     }
-
 }
 
 @Primary
 @Requires(env = ["test"], notEnv = ["integration-test"], property = DAPLA_TEAM_PROPERTY_NAME)
 @Singleton
-class StaticDaplaTeamService(private val beanContext: BeanContext): DaplaTeamService {
+class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamService {
     private val logger = LoggerFactory.getLogger(StaticDaplaTeamService::class.java)
 
     private val groups =
@@ -63,7 +62,6 @@ class StaticDaplaTeamService(private val beanContext: BeanContext): DaplaTeamSer
 
     override fun isValidTeam(team: String): Boolean =
         try {
-
             logger.info("Checking if team '$team' is valid")
 
             // Log the available beans in the context to help diagnose if the bean exists
@@ -78,7 +76,7 @@ class StaticDaplaTeamService(private val beanContext: BeanContext): DaplaTeamSer
         } catch (e: Exception) {
             logger.error("Error retrieving StaticDaplaTeam for team '$team'", e)
             false
-    }
+        }
 
     override fun isValidGroup(group: String): Boolean {
         logger.info("Checking if group $group is valid")

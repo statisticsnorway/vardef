@@ -21,7 +21,6 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
     @Inject
     lateinit var daplaTeamApiStaticService: StaticDaplaTeamService
 
-
     @Inject
     lateinit var beanContext: BeanContext
 
@@ -115,6 +114,6 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
 
     @Test
     fun `test JsonMapper injection`() {
-        assertNotNull(jsonMapper)  // Ensure the JsonMapper bean is injected
+        assertNotNull(jsonMapper) // Ensure the JsonMapper bean is injected
     }
 }

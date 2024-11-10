@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 
-//@Serdeable
+// @Serdeable
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Team(val uniformName: String)

@@ -74,11 +74,12 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
         try {
             logger.info("Checking if team '$team' is valid")
 
-            // Log the available beans in the context to help diagnose if the bean exists
+            // Log the available beans in the context
             logger.info("Available beans for StaticDaplaTeam: ${beanContext.getBeansOfType(StaticDaplaTeam::class.java)}")
 
             // Try to get the bean
-            val teamBean = beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName(team))
+            val teamBean = getTeam(team)
+            // val teamBean = beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName(team))
 
             // Log after successfully getting the bean
             logger.info("Team '$team' is valid: $teamBean")
@@ -94,11 +95,12 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
         try {
             logger.info("Checking if group '$group' is valid")
 
-            // Log the available beans in the context to help diagnose if the bean exists
+            // Log the available beans in the context
             logger.info("Available beans for StaticDaplaGroup: ${beanContext.getBeansOfType(StaticDaplaGroup::class.java)}")
 
             // Try to get the bean
-            val groupBean = beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName(group))
+            val groupBean = getGroup(group)
+            // val groupBean = beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName(group))
 
             // Log after successfully getting the bean
             logger.info("Group '$group' is valid: $groupBean")
@@ -108,7 +110,9 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
             false
         }
 
-    override fun getGroup(groupName: String): Group? {
-        TODO("Not yet implemented")
+    override fun getGroup(groupName: String): Group {
+        val group: StaticDaplaGroup =
+            beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName(groupName))
+        return Group(group.toString())
     }
 }

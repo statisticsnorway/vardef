@@ -19,6 +19,7 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
     }
 
     override fun getGroup(groupName: String): Group? {
-        TODO("Not yet implemented")
+        val response = daplaTeamApiClient.fetchGroup(groupName)
+        return response.body()
     }
 }

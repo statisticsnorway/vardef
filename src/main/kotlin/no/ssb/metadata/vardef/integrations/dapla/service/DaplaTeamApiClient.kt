@@ -29,9 +29,4 @@ interface DaplaTeamApiClient {
         @PathVariable groupId: String,
     ): HttpResponse<Group?>
 
-    @Get("teams/{teamId}/groups")
-    @SingleResult
-    fun fetchGroupsByTeam(
-        @PathVariable teamId: String,
-    ): HttpResponse<Map<String, List<Group>>?>
 }

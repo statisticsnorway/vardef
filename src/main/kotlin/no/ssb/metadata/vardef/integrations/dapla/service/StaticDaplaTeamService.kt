@@ -36,8 +36,6 @@ class StaticDaplaTeam(
     }
 }
 
-
-
 @Singleton
 @Requires(env = ["test"], notEnv = ["integration-test"], property = DAPLA_GROUP_PROPERTY_NAME)
 @EachProperty(DAPLA_GROUP_PROPERTY_NAME)
@@ -59,7 +57,6 @@ class StaticDaplaGroup(
         }
     }
 }
-
 
 @Primary
 @Requires(env = ["test"], notEnv = ["integration-test"], property = DAPLA_PROPERTY)
@@ -110,7 +107,6 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
             logger.error("Error retrieving StaticDaplaGroup for group '$group'", e)
             false
         }
-
 
     override fun getGroup(groupName: String): Group? {
         TODO("Not yet implemented")

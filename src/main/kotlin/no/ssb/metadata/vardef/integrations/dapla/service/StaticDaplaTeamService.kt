@@ -79,7 +79,6 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
 
             // Try to get the bean
             val teamBean = getTeam(team)
-            // val teamBean = beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName(team))
 
             // Log after successfully getting the bean
             logger.info("Team '$team' is valid: $teamBean")
@@ -90,8 +89,6 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
         }
 
     override fun isValidGroup(group: String): Boolean =
-        // logger.info("Checking if group $group is valid")
-        // return groups.any { it == group }
         try {
             logger.info("Checking if group '$group' is valid")
 
@@ -100,7 +97,6 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
 
             // Try to get the bean
             val groupBean = getGroup(group)
-            // val groupBean = beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName(group))
 
             // Log after successfully getting the bean
             logger.info("Group '$group' is valid: $groupBean")

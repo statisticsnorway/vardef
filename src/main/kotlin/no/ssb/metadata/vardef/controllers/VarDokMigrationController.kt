@@ -6,6 +6,8 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.client.ProxyHttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -27,6 +29,7 @@ import org.reactivestreams.Publisher
 @Controller("/vardok-migration/{vardok-id}")
 @Secured(VARIABLE_CREATOR)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
+@ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController(
     private val vardokService: VardokService,
     @Client("/") private val httpClient: ProxyHttpClient,
@@ -54,7 +57,7 @@ class VarDokMigrationController(
             ],
     )
     @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
-    suspend fun createVariableDefinitionFromVarDok(
+    fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",
             description = "The ID of the definition in Vardok.",

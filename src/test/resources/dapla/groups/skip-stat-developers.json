@@ -1,0 +1,9 @@
+{
+  "uniform_name": "skip-stat-developers",
+  "azure_ad_id": "0873c393-58ee-479e-ba5f-e48400e2a9d0",
+  "_links": {
+    "self": {
+      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/groups/skip-stat-developers"
+    }
+  }
+}

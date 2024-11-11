@@ -80,6 +80,8 @@ micronaut:
         codes-at: 2024-08-01
       vardok:
         url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
+      dapla-team-api:
+        url: https://dapla-team-api-v2.prod-bip-app.ssb.no/
 
   klass-web:
     url:

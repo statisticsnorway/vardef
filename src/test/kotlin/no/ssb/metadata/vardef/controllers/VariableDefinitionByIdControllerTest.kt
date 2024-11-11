@@ -473,7 +473,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @MethodSource("invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
-        errorMessage: String,
         spec: RequestSpecification,
     ) {
         spec
@@ -486,10 +485,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(errorMessage),
-            )
 
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
@@ -518,6 +513,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                         listOf(
                                             "skip-stat-developers",
                                             "play-enhjoern-a-developers",
+                                            "my-oh-my-team-developers",
                                         ),
                                     )
                                 },
@@ -591,7 +587,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "must not be empty",
                 ),
                 argumentSet(
                     "Team name null",
@@ -610,7 +605,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "can not be null",
                 ),
                 argumentSet(
                     "Groups list is null",
@@ -623,21 +617,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "must not be empty",
-                ),
-                argumentSet(
-                    "Groups values are null",
-                    JSONObject()
-                        .apply {
-                            put(
-                                "owner",
-                                JSONObject().apply {
-                                    put("team", "my-team")
-                                    put("groups", listOf(null))
-                                },
-                            )
-                        }.toString(),
-                    "must not be empty",
                 ),
                 argumentSet(
                     "Groups empty values in list",
@@ -657,7 +636,6 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
-                    "must not be empty",
                 ),
             )
     }

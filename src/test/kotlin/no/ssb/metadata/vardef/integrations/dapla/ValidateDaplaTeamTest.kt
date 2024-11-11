@@ -6,6 +6,7 @@ import io.micronaut.json.JsonMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.dapla.service.StaticDaplaGroup
 import no.ssb.metadata.vardef.integrations.dapla.service.StaticDaplaTeam
 import no.ssb.metadata.vardef.integrations.dapla.service.StaticDaplaTeamService
 import no.ssb.metadata.vardef.models.Owner
@@ -102,6 +103,12 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
     fun `test StaticDaplaTeam loads correct data`() {
         val teamA = beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName("dapla-felles"))
         assertEquals("dapla-felles", teamA.uniformName)
+    }
+
+    @Test
+    fun `test StaticDaplaGroup loads correct data`() {
+        val group = beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName("dapla-felles-developers"))
+        assertEquals("dapla-felles-developers", group.uniformName)
     }
 
     @Test

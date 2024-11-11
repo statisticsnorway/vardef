@@ -22,6 +22,8 @@ klass:
     91:
 # Dapla
 dapla:
+  static-data-path: dapla/
+dapla-teams:
   static-data-path: dapla/teams
   teams:
     dapla-felles:
@@ -31,3 +33,13 @@ dapla:
     my-oh-my-team:
     pers-skatt:
     skip-stat:
+dapla-groups:
+  static-data-path: dapla/groups
+  groups:
+    dapla-felles-developers:
+    play-enhjoern-a-developers:
+    play-foeniks-a-developers:
+    my-team-developers:
+    my-oh-my-team-developers:
+    pers-skatt-developers:
+    skip-stat-developers:

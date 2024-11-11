@@ -67,7 +67,9 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
     override fun getTeam(teamName: String): Team {
         val team: StaticDaplaTeam =
             beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName(teamName))
-        return Team(team.toString())
+        return Team(
+            uniformName = team.uniformName,
+        )
     }
 
     override fun isValidTeam(team: String): Boolean =
@@ -99,6 +101,8 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
     override fun getGroup(groupName: String): Group {
         val group: StaticDaplaGroup =
             beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName(groupName))
-        return Group(group.toString())
+        return Group(
+            uniformName = group.uniformName,
+        )
     }
 }

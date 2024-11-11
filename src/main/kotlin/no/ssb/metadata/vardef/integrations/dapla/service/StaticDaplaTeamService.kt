@@ -74,13 +74,8 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
         try {
             logger.info("Checking if team '$team' is valid")
 
-            // Log the available beans in the context
-            logger.info("Available beans for StaticDaplaTeam: ${beanContext.getBeansOfType(StaticDaplaTeam::class.java)}")
-
-            // Try to get the bean
             val teamBean = getTeam(team)
 
-            // Log after successfully getting the bean
             logger.info("Team '$team' is valid: $teamBean")
             true
         } catch (e: Exception) {
@@ -92,13 +87,8 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
         try {
             logger.info("Checking if group '$group' is valid")
 
-            // Log the available beans in the context
-            logger.info("Available beans for StaticDaplaGroup: ${beanContext.getBeansOfType(StaticDaplaGroup::class.java)}")
-
-            // Try to get the bean
             val groupBean = getGroup(group)
 
-            // Log after successfully getting the bean
             logger.info("Group '$group' is valid: $groupBean")
             true
         } catch (e: Exception) {

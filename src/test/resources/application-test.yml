@@ -22,7 +22,7 @@ klass:
     91:
 # Dapla
 dapla:
-  static-data-path: dapla/
+  static-data-path: dapla
 dapla-teams:
   static-data-path: dapla/teams
   teams:

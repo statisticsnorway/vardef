@@ -1,17 +1,17 @@
 package no.ssb.metadata.vardef.integrations.dapla.service
 
+import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
 
-// @Singleton
+@Singleton
 open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClient) : DaplaTeamService {
     override fun getTeam(teamName: String): Team? {
-        val response = daplaTeamApiClient.fetchTeam(teamName)
-        return response.body()
+        TODO("Not yet implemented")
     }
 
     override fun isValidTeam(team: String): Boolean {
-        return getTeam(team) != null
+        TODO("Not yet implemented")
     }
 
     override fun isValidGroup(group: String): Boolean {
@@ -19,7 +19,6 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
     }
 
     override fun getGroup(groupName: String): Group? {
-        val response = daplaTeamApiClient.fetchGroup(groupName)
-        return response.body()
+        TODO("Not yet implemented")
     }
 }

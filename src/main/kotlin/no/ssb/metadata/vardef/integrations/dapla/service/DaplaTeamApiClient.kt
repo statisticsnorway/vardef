@@ -28,5 +28,4 @@ interface DaplaTeamApiClient {
     fun fetchGroup(
         @PathVariable groupId: String,
     ): HttpResponse<Group?>
-
 }

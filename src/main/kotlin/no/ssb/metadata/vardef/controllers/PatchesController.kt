@@ -5,6 +5,8 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -28,6 +30,7 @@ import java.time.LocalDate
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
+@ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController(
     private val validityPeriods: ValidityPeriodsService,
     private val patches: PatchesService,
@@ -53,7 +56,7 @@ class PatchesController(
         ],
     )
     @Get
-    suspend fun getAllPatches(
+    fun getAllPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
         variableDefinitionId: String,
@@ -83,7 +86,7 @@ class PatchesController(
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/{patch-id}")
-    suspend fun getOnePatch(
+    fun getOnePatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
         variableDefinitionId: String,
@@ -118,7 +121,7 @@ class PatchesController(
     @ApiResponse(responseCode = "400", description = "Bad request.")
     @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
     @Secured(VARIABLE_OWNER)
-    suspend fun createPatch(
+    fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
         variableDefinitionId: String,

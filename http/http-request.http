@@ -1,14 +1,44 @@
 # Start server
-# Make sure you add a token in a private env
+# Make sure to add a token and an active group in a private env
+
+# Json body can be added directly or imported from file
+# Save id from response
+POST http://127.0.0.1:8080/variable-definitions?active_group=play-obr-b-developers
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./landbakk.json
+
+> {% client.global.set('variable-definition-id', response.body.id) %}
+
+###
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+###
 GET http://127.0.0.1:8080/variable-definitions
 Accept: application/json
 Authorization: Bearer {{USER_TOKEN}}
 
 ###
-# Json body can be added directly or imported from file
-POST http://127.0.0.1:8080/variable-definitions?active_group=play-obr-b-developers
-Accept: application/json
-Authorization: Bearer {{USER_TOKEN}}
+PATCH  http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?active_group={{ACTIVE_GROUP}}
 Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
 
-< ./landbakk.json
+{
+  "short_name": "bakkerland"
+}
+
+###
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+###
+# Use local variables
+@patch-id = 1
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches/{{patch-id}}?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+

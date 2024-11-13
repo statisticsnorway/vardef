@@ -1,0 +1,14 @@
+# Start server
+# Make sure you add a token in a private env
+GET http://127.0.0.1:8080/variable-definitions
+Accept: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+###
+# Json body can be added directly or imported from file
+POST http://127.0.0.1:8080/variable-definitions?active_group=play-obr-b-developers
+Accept: application/json
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./landbakk.json

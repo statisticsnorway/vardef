@@ -10,8 +10,8 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
+// @Requires(env = ["integration-test"])
 @MicronautTest
-//@Requires(env = ["integration-test"])
 class DaplaTeamApiServiceTest {
     @Inject
     lateinit var daplaTeamApiService: DaplaTeamApiService

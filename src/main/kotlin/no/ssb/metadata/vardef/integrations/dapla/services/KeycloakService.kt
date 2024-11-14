@@ -15,7 +15,9 @@ import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton
-class KeycloakService(@Client private val httpClient: HttpClient) {
+class KeycloakService(
+    @Client private val httpClient: HttpClient,
+) {
     private val logger = LoggerFactory.getLogger(KeycloakService::class.java)
 
     @Property(name = "keycloak.url")

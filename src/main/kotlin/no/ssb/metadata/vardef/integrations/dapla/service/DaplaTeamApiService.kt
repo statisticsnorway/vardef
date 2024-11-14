@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.integrations.dapla.models.Team
 import no.ssb.metadata.vardef.security.KeycloakService
 import org.slf4j.LoggerFactory
 
+// KDoc - false message?
 @Singleton
 open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClient) : DaplaTeamService {
     private val logger = LoggerFactory.getLogger(DaplaTeamService::class.java)
@@ -14,37 +15,50 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
     @Inject
     lateinit var keycloakService: KeycloakService
 
+    private fun getAuthToken(): String {
+        val token = keycloakService.requestAccessToken()
+        return requireNotNull("Bearer $token") {
+            "Authorization token is missing"
+        }
+    }
+
     override fun getTeam(teamName: String): Team? {
-        val token = keycloakService.requestAccessToken() // get the access token from Keycloak
-        val authorizationHeader = "Bearer $token"
         try {
-            val team = daplaTeamApiClient.fetchTeam(teamName, authorizationHeader)
+            val team = daplaTeamApiClient.fetchTeam(teamName, getAuthToken())
             return team.body()
         } catch (e: Exception) {
-            logger.info("Can not fetch $teamName: ${e.message}")
+            logger.error("Error fetching team $teamName", e)
             return null
         }
     }
 
     override fun isValidTeam(teamName: String): Boolean {
         try {
-            logger.info("Checking if team '$teamName' is valid")
-
-            val team = getTeam(teamName)
-
-            logger.info("Team '$teamName' is valid: $team")
+            getTeam(teamName)
             return true
         } catch (e: Exception) {
-            logger.error("Error retrieving StaticDaplaTeam for team '$teamName'", e)
+            logger.error("Error for team '$teamName'", e)
             return false
         }
     }
 
-    override fun isValidGroup(group: String): Boolean {
-        TODO("Not yet implemented")
+    override fun getGroup(groupName: String): Group? {
+        try {
+            val group = daplaTeamApiClient.fetchGroup(groupName, getAuthToken())
+            return group.body()
+        } catch (e: Exception) {
+            logger.error("Error fetching group $groupName", e)
+            return null
+        }
     }
 
-    override fun getGroup(groupName: String): Group? {
-        TODO("Not yet implemented")
+    override fun isValidGroup(groupName: String): Boolean {
+        try {
+            getGroup(groupName)
+            return true
+        } catch (e: Exception) {
+            logger.error("Error'$groupName'", e)
+            return false
+        }
     }
 }

@@ -1,15 +1,22 @@
 package no.ssb.metadata.vardef.integrations.dapla.service
 
 import io.micronaut.core.async.annotation.SingleResult
+import io.micronaut.http.HttpHeaders.ACCEPT
+import io.micronaut.http.HttpHeaders.USER_AGENT
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
+import io.micronaut.http.annotation.Headers
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.client.annotation.Client
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
 
 @Client(id = "dapla-team-api")
+@Headers(
+    Header(name = USER_AGENT, value = "VarDef API"),
+    Header(name = ACCEPT, value = "application/hal+json"),
+)
 interface DaplaTeamApiClient {
     @Get("/teams/{teamId}")
     @SingleResult
@@ -22,5 +29,6 @@ interface DaplaTeamApiClient {
     @SingleResult
     fun fetchGroup(
         @PathVariable groupId: String,
+        @Header("Authorization") authHeader: String,
     ): HttpResponse<Group?>
 }

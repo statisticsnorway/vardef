@@ -1,19 +1,36 @@
 package no.ssb.metadata.vardef.integrations.dapla.service
 
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.security.KeycloakService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-// @Requires(env = ["integration-test"])
+// Null checks exceptions etc
+@Requires(env = ["integration-test"])
 @MicronautTest
 class DaplaTeamApiClientTest {
     @Inject
-    lateinit var daplaTeamApiService: DaplaTeamService
+    lateinit var daplaTeamApiClient: DaplaTeamApiClient
+
+    @Inject
+    lateinit var keycloakService: KeycloakService
+
+    private fun getAuthHeader(): String {
+        val token = keycloakService.requestAccessToken()
+        return "Bearer $token"
+    }
 
     @Test
-    fun `dapla service request`() {
-        val result = daplaTeamApiService.getTeam("dapla-felles")
-        assertThat(result?.uniformName).isEqualTo("dapla-felles")
+    fun `dapla service request team`() {
+        val result = daplaTeamApiClient.fetchTeam("dapla-felles", getAuthHeader())
+        assertThat(result).isNotNull
+    }
+
+    @Test
+    fun `dapla service request group`() {
+        val result = daplaTeamApiClient.fetchGroup("dapla-felles-developers", getAuthHeader())
+        assertThat(result).isNotNull
     }
 }

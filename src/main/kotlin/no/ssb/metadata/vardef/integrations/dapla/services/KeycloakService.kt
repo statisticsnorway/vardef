@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory
 class KeycloakService(
     @Client private val httpClient: HttpClient,
 ) {
-    private val logger = LoggerFactory.getLogger(KeycloakService::class.java)
-
     @Property(name = "keycloak.url")
     lateinit var keycloakUrl: String
 
@@ -31,9 +29,6 @@ class KeycloakService(
 
     fun requestAccessToken(): String? {
         val tokenEndpoint = "$keycloakUrl/realms/ssb/protocol/openid-connect/token"
-        logger.info("Endpoint $tokenEndpoint")
-        logger.info("Client id $clientId")
-
         val formData =
             mapOf(
                 "grant_type" to "client_credentials",
@@ -47,7 +42,6 @@ class KeycloakService(
 
         return try {
             val response = httpClient.toBlocking().retrieve(request, AccessTokenResponse::class.java)
-            logger.info("Response: $response")
             response.accessToken
         } catch (e: HttpClientResponseException) {
             println("Error fetching token: ${e.status} - ${e.message}")

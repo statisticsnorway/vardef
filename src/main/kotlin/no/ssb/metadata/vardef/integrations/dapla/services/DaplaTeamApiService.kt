@@ -21,25 +21,21 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
     }
 
     override fun getTeam(teamName: String): Team? {
-        try {
-            val team = daplaTeamApiClient.fetchTeam(teamName, getAuthToken())
-            return team.body()
-        } catch (e: Exception) {
-            logger.error("Error fetching team $teamName", e)
-            return null
-        }
+        return runCatching {
+            daplaTeamApiClient.fetchTeam(teamName, getAuthToken()).body()
+        }.onFailure { e ->
+            logger.error("Error fetching team with name '$teamName': ${e.message}", e)
+        }.getOrNull()
     }
 
     override fun isValidTeam(teamName: String): Boolean = getTeam(teamName) != null
 
     override fun getGroup(groupName: String): Group? {
-        try {
-            val group = daplaTeamApiClient.fetchGroup(groupName, getAuthToken())
-            return group.body()
-        } catch (e: Exception) {
-            logger.error("Error fetching group $groupName", e)
-            return null
-        }
+        return runCatching {
+            daplaTeamApiClient.fetchGroup(groupName, getAuthToken()).body()
+        }.onFailure { e ->
+            logger.error("Error fetching group with name '$groupName': ${e.message}", e)
+        }.getOrNull()
     }
 
     override fun isValidGroup(groupName: String): Boolean = getGroup(groupName) != null

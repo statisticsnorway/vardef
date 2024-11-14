@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @MockK
-class DaplaTeamApiMockServiceTest {
+class DaplaTeamApiMockkServiceTest {
     private lateinit var mockkDaplaTeamApiClient: DaplaTeamApiClient
     private lateinit var mockkKeycloakService: KeycloakService
     private lateinit var daplaTeamApiService: DaplaTeamApiService

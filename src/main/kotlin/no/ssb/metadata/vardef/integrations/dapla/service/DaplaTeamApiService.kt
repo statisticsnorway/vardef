@@ -43,13 +43,5 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
         }
     }
 
-    override fun isValidGroup(groupName: String): Boolean {
-        try {
-            getGroup(groupName)
-            return true
-        } catch (e: Exception) {
-            logger.error("Error'$groupName'", e)
-            return false
-        }
-    }
+    override fun isValidGroup(groupName: String): Boolean = getGroup(groupName) != null
 }

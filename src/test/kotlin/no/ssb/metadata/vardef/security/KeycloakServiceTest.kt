@@ -5,10 +5,9 @@ import jakarta.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@MicronautTest
 // @Requires(env = ["integration-test"])
+@MicronautTest
 class KeycloakServiceTest {
-
     @Inject
     lateinit var keycloakService: KeycloakService
 

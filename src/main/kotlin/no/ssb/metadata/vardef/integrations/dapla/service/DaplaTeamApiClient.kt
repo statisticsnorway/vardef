@@ -9,13 +9,13 @@ import io.micronaut.http.client.annotation.Client
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
 
-@Client(id="dapla-team-api")
+@Client(id = "dapla-team-api")
 interface DaplaTeamApiClient {
     @Get("/teams/{teamId}")
     @SingleResult
     fun fetchTeam(
         @PathVariable teamId: String,
-        @Header("Authorization") authHeader: String
+        @Header("Authorization") authHeader: String,
     ): HttpResponse<Team?>
 
     @Get("/groups/{groupId}")

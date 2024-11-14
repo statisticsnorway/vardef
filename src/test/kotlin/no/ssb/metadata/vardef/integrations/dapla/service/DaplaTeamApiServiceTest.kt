@@ -5,7 +5,10 @@ import jakarta.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
+import org.junit.jupiter.params.provider.MethodSource
+import java.util.stream.Stream
 
 @MicronautTest
 // @Requires(env = ["integration-test"])
@@ -15,15 +18,41 @@ class DaplaTeamApiServiceTest {
     lateinit var daplaTeamApiService: DaplaTeamService
 
     @Test
-    fun `dapla service request`() {
+    fun `get team`() {
         val result = daplaTeamApiService.getTeam("dapla-felles")
         assertThat(result?.uniformName).isEqualTo("dapla-felles")
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["dapla-felles", "play-enhjoern-a"])
-    fun `valid team names`(teamName: String){
-        val result = daplaTeamApiService.isValidTeam(teamName)
-        assertThat(result).isTrue
+    @MethodSource("isTeamValid")
+    fun `check team name with dapla team api`(teamName: String, expectedResult: Boolean){
+        assertThat(daplaTeamApiService.isValidTeam(teamName)).isEqualTo(expectedResult)
+    }
+
+    companion object {
+        @JvmStatic
+        fun isTeamValid(): Stream<Arguments> =
+            Stream.of(
+              arguments(
+                  "dapla-felles",
+                  true,
+              ),
+                arguments(
+                    "play-enhjoern-a",
+                    true,
+                ),
+                arguments(
+                    "play-oh-la-la-bimbom",
+                    false,
+                ),
+                arguments(
+                    "",
+                    false,
+                ),
+                arguments(
+                    "mimi",
+                    false,
+                )
+            )
     }
 }

@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.dapla.services
+package no.ssb.metadata.vardef.integrations.dapla.security
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

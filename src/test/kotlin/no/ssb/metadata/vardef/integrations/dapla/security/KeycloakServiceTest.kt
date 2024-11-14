@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.dapla.services
+package no.ssb.metadata.vardef.integrations.dapla.security
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject

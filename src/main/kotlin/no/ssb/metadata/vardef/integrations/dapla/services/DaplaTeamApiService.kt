@@ -4,6 +4,7 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
+import no.ssb.metadata.vardef.integrations.dapla.security.KeycloakService
 import org.slf4j.LoggerFactory
 
 /**

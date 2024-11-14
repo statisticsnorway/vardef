@@ -85,16 +85,16 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
             false
         }
 
-    override fun isValidGroup(group: String): Boolean =
+    override fun isValidGroup(groupName: String): Boolean =
         try {
-            logger.info("Checking if group '$group' is valid")
+            logger.info("Checking if group '$groupName' is valid")
 
-            val groupBean = getGroup(group)
+            val groupBean = getGroup(groupName)
 
-            logger.info("Group '$group' is valid: $groupBean")
+            logger.info("Group '$groupName' is valid: $groupBean")
             true
         } catch (e: Exception) {
-            logger.error("Error retrieving StaticDaplaGroup for group '$group'", e)
+            logger.error("Error retrieving StaticDaplaGroup for group '$groupName'", e)
             false
         }
 

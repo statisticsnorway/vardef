@@ -23,7 +23,7 @@ class DaplaTeamApiServiceTest {
     }
 
     @Test
-    fun `get team not found`() {
+    fun `team not found`() {
         val result = daplaTeamApiService.getTeam("dubi")
         assertThat(result).isNull()
     }
@@ -32,6 +32,12 @@ class DaplaTeamApiServiceTest {
     fun `get group`() {
         val result = daplaTeamApiService.getGroup("dapla-felles-managers")
         assertThat(result?.uniformName).isEqualTo("dapla-felles-managers")
+    }
+
+    @Test
+    fun `group not found`() {
+        val result = daplaTeamApiService.getGroup("sup-manag")
+        assertThat(result).isNull()
     }
 
     @ParameterizedTest

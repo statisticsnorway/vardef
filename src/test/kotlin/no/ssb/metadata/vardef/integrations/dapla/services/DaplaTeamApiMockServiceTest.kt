@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test
 
 @MockK
 class DaplaTeamApiMockServiceTest {
-
     private lateinit var daplaTeamApiClient: DaplaTeamApiClient
     private lateinit var keycloakService: KeycloakService
     private lateinit var daplaTeamApiService: DaplaTeamApiService
@@ -29,8 +28,8 @@ class DaplaTeamApiMockServiceTest {
     fun setUp() {
         httpClient = mockk()
         keycloakService = mockk()
-        mockkDaplaTeamApiClient= mockk<DaplaTeamApiClient>()
-        daplaTeamApiService =  DaplaTeamApiService(mockkDaplaTeamApiClient)
+        mockkDaplaTeamApiClient = mockk<DaplaTeamApiClient>()
+        daplaTeamApiService = DaplaTeamApiService(mockkDaplaTeamApiClient)
         daplaTeamApiService.keycloakService = keycloakService
     }
 
@@ -44,8 +43,8 @@ class DaplaTeamApiMockServiceTest {
         every {
             mockkDaplaTeamApiClient.fetchTeam("dapla-felles", "Bearer auth")
         } returns
-                HttpResponse.ok()
-                Team("dapla-felles")
+            HttpResponse.ok()
+        Team("dapla-felles")
     }
 
     @Test
@@ -84,5 +83,4 @@ class DaplaTeamApiMockServiceTest {
         assertEquals(null, result)
         verify { daplaTeamApiClient.fetchTeam(any(), any()) }
     }
-
 }

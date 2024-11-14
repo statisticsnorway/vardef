@@ -12,7 +12,6 @@ import org.junit.jupiter.params.provider.ValueSource
 
 @MicronautTest
 class DaplaTeamApiValidatorTest(private val validator: Validator) {
-
     @Inject
     lateinit var daplaTeamApiStaticService: StaticDaplaTeamService
 

@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
-// exceptions null checks etc
 @MicronautTest
 @Requires(env = ["integration-test"])
 class DaplaTeamApiServiceTest {
@@ -22,6 +21,12 @@ class DaplaTeamApiServiceTest {
     fun `get team`() {
         val result = daplaTeamApiService.getTeam("dapla-felles")
         assertThat(result?.uniformName).isEqualTo("dapla-felles")
+    }
+
+    @Test
+    fun `get team not found`() {
+        val result = daplaTeamApiService.getTeam("dubi")
+        assertThat(result).isNull()
     }
 
     @Test

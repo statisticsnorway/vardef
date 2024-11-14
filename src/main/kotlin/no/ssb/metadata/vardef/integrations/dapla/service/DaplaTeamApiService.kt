@@ -7,7 +7,6 @@ import no.ssb.metadata.vardef.integrations.dapla.models.Team
 import no.ssb.metadata.vardef.security.KeycloakService
 import org.slf4j.LoggerFactory
 
-// KDoc - false message?
 @Singleton
 open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClient) : DaplaTeamService {
     private val logger = LoggerFactory.getLogger(DaplaTeamService::class.java)
@@ -32,15 +31,7 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
         }
     }
 
-    override fun isValidTeam(teamName: String): Boolean {
-        try {
-            getTeam(teamName)
-            return true
-        } catch (e: Exception) {
-            logger.error("Error for team '$teamName'", e)
-            return false
-        }
-    }
+    override fun isValidTeam(teamName: String): Boolean = getTeam(teamName) != null
 
     override fun getGroup(groupName: String): Group? {
         try {

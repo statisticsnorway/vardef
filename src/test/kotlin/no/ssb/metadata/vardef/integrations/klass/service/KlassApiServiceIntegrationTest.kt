@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @MicronautTest(startApplication = false)
-@Requires(env = ["integration-test"])
+// @Requires(env = ["integration-test"])
 class KlassApiServiceIntegrationTest {
     @Inject
     lateinit var klassApiService: KlassApiService

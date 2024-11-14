@@ -7,7 +7,6 @@ import no.ssb.metadata.vardef.security.KeycloakService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-// Null checks exceptions etc
 @Requires(env = ["integration-test"])
 @MicronautTest
 class DaplaTeamApiClientTest {

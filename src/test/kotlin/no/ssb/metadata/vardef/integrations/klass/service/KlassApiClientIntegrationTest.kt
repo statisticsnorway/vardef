@@ -12,7 +12,7 @@ import org.junit.jupiter.api.TestInstance
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Requires(env = ["integration-test"])
+// @Requires(env = ["integration-test"])
 class KlassApiClientIntegrationTest {
     @Inject
     lateinit var klassApiClient: KlassApiClient

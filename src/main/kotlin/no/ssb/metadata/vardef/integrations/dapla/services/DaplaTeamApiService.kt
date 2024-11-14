@@ -6,6 +6,19 @@ import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
 import org.slf4j.LoggerFactory
 
+/**
+ * A service implementation for interacting with the Dapla Team API.
+ * This service is responsible for fetching details of teams and groups, as well as validating their existence.
+ * It uses the `DaplaTeamApiClient` for making requests to the API and the `KeycloakService` for authentication.
+ *
+ * The class provides methods to retrieve team and group details, check if a team or group is valid,
+ * and ensures that proper authorization tokens are used for accessing the Dapla Team API.
+ *
+ * @Singleton Indicates that a single instance of this service should be used within the application.
+ *
+ * @property daplaTeamApiClient The API client used for making requests to the Dapla Team API.
+ * @property keycloakService The service used to request authorization tokens from Keycloak.
+ */
 @Singleton
 open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClient) : DaplaTeamService {
     private val logger = LoggerFactory.getLogger(DaplaTeamService::class.java)

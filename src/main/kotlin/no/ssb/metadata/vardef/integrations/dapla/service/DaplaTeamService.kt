@@ -10,7 +10,7 @@ import no.ssb.metadata.vardef.integrations.dapla.models.Team
 interface DaplaTeamService {
     fun getTeam(teamName: String): Team?
 
-    fun isValidTeam(team: String): Boolean
+    fun isValidTeam(teamName: String): Boolean
 
     fun isValidGroup(group: String): Boolean
 

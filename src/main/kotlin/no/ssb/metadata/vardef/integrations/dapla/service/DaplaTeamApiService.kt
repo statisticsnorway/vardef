@@ -26,8 +26,18 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
         }
     }
 
-    override fun isValidTeam(team: String): Boolean {
-        TODO("Not yet implemented")
+    override fun isValidTeam(teamName: String): Boolean {
+        try {
+            logger.info("Checking if team '$teamName' is valid")
+
+            val team = getTeam(teamName)
+
+            logger.info("Team '$teamName' is valid: $team")
+            return true
+        } catch (e: Exception) {
+            logger.error("Error retrieving StaticDaplaTeam for team '$teamName'", e)
+            return false
+        }
     }
 
     override fun isValidGroup(group: String): Boolean {

@@ -72,16 +72,16 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
         )
     }
 
-    override fun isValidTeam(team: String): Boolean =
+    override fun isValidTeam(teamName: String): Boolean =
         try {
-            logger.info("Checking if team '$team' is valid")
+            logger.info("Checking if team '$teamName' is valid")
 
-            val teamBean = getTeam(team)
+            val teamBean = getTeam(teamName)
 
-            logger.info("Team '$team' is valid: $teamBean")
+            logger.info("Team '$teamName' is valid: $teamBean")
             true
         } catch (e: Exception) {
-            logger.error("Error retrieving StaticDaplaTeam for team '$team'", e)
+            logger.error("Error retrieving StaticDaplaTeam for team '$teamName'", e)
             false
         }
 

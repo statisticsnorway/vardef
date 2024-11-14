@@ -1,9 +1,8 @@
-package no.ssb.metadata.vardef.security
+package no.ssb.metadata.vardef.integrations.dapla.services
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.micronaut.context.annotation.Property
-import io.micronaut.core.annotation.Introspected
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.MediaType
@@ -16,9 +15,7 @@ import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton
-class KeycloakService(
-    @Client private val httpClient: HttpClient,
-) {
+class KeycloakService(@Client private val httpClient: HttpClient) {
     private val logger = LoggerFactory.getLogger(KeycloakService::class.java)
 
     @Property(name = "keycloak.url")
@@ -56,7 +53,6 @@ class KeycloakService(
         }
     }
 
-    @Introspected
     @Serdeable(naming = SnakeCaseStrategy::class)
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class AccessTokenResponse(

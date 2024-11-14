@@ -1,6 +1,5 @@
-package no.ssb.metadata.vardef.integrations.dapla.service
+package no.ssb.metadata.vardef.integrations.dapla.services
 
-import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 @MicronautTest
-@Requires(env = ["integration-test"])
+//@Requires(env = ["integration-test"])
 class DaplaTeamApiServiceTest {
     @Inject
     lateinit var daplaTeamApiService: DaplaTeamApiService

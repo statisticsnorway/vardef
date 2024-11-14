@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.integrations.dapla
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.dapla.service.StaticDaplaTeamService
+import no.ssb.metadata.vardef.integrations.dapla.services.StaticDaplaTeamService
 import no.ssb.metadata.vardef.models.Owner
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals

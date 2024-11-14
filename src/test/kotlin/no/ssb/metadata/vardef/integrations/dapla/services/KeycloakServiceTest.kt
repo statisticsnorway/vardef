@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.security
+package no.ssb.metadata.vardef.integrations.dapla.services
 
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest

@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.dapla.service
+package no.ssb.metadata.vardef.integrations.dapla.services
 
 import io.micronaut.context.BeanContext
 import io.micronaut.context.annotation.*

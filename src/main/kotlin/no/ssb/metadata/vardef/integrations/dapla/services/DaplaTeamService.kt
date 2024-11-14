@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.dapla.service
+package no.ssb.metadata.vardef.integrations.dapla.services
 
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected

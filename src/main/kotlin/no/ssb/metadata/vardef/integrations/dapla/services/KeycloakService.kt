@@ -12,7 +12,6 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 
 @Singleton
 class KeycloakService(

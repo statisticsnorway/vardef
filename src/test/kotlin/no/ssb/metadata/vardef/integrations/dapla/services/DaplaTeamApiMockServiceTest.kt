@@ -19,7 +19,6 @@ class DaplaTeamApiMockServiceTest {
     private lateinit var daplaTeamApiService: DaplaTeamApiService
     private lateinit var httpClient: HttpClient
 
-
     @BeforeEach
     fun setUp() {
         httpClient = mockk()

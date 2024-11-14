@@ -1,12 +1,13 @@
 package no.ssb.metadata.vardef.integrations.dapla.services
 
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.dapla.security.KeycloakService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-// @Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
 class DaplaTeamApiClientTest {
     @Inject

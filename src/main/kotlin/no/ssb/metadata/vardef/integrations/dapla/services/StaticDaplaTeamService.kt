@@ -37,8 +37,9 @@ class StaticDaplaTeam(
 
     private fun loadTeamData(): Team {
         val resourcePath = "$uniformName.json"
-        val resource = Thread.currentThread().contextClassLoader.getResource(path.resolve(resourcePath).toString())
-            ?: throw IllegalArgumentException("Resource not found: $resourcePath")
+        val resource =
+            Thread.currentThread().contextClassLoader.getResource(path.resolve(resourcePath).toString())
+                ?: throw IllegalArgumentException("Resource not found: $resourcePath")
 
         return jsonMapper.readValue(resource.readText(), Team::class.java)
     }
@@ -67,8 +68,9 @@ class StaticDaplaGroup(
 
     private fun loadGroupData(): Group {
         val resourcePath = "$uniformName.json"
-        val resource = Thread.currentThread().contextClassLoader.getResource(path.resolve(resourcePath).toString())
-            ?: throw IllegalArgumentException("Resource not found: $resourcePath")
+        val resource =
+            Thread.currentThread().contextClassLoader.getResource(path.resolve(resourcePath).toString())
+                ?: throw IllegalArgumentException("Resource not found: $resourcePath")
 
         return jsonMapper.readValue(resource.readText(), Group::class.java)
     }

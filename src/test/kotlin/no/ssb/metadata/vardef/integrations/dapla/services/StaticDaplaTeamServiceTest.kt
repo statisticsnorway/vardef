@@ -41,11 +41,7 @@ class StaticDaplaTeamServiceTest {
     @Test
     fun `test StaticDaplaTeam loads correct data`() {
         val team = daplaTeamApiStaticService.getTeam("dapla-felles")
-        assertThat(
-            testLogAppender.getLoggedMessages().any {
-                it.formattedMessage.contains("UNAUTHORIZED - Unauthorized")
-            },
-        ).isFalse()
+        assertThat(testLogAppender.getLoggedMessages()).isEmpty()
         assertEquals("dapla-felles", team?.uniformName)
     }
 

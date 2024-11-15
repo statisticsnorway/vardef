@@ -30,7 +30,6 @@ class TestLogAppender : AppenderBase<ILoggingEvent>() {
     }
 
     fun getLoggedMessages(): List<ILoggingEvent> = logMessages
-
     fun reset() = logMessages.clear()
 }
 

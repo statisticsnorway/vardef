@@ -90,12 +90,12 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
     @Test
     fun `test StaticDaplaTeam loads correct data`() {
         val team = daplaTeamApiStaticService.getTeam("dapla-felles")
-        assertEquals("dapla-felles", team.uniformName)
+        assertEquals("dapla-felles", team?.uniformName)
     }
 
     @Test
     fun `test StaticDaplaGroup loads correct data`() {
         val group = daplaTeamApiStaticService.getGroup("dapla-felles-developers")
-        assertEquals("dapla-felles-developers", group.uniformName)
+        assertEquals("dapla-felles-developers", group?.uniformName)
     }
 }

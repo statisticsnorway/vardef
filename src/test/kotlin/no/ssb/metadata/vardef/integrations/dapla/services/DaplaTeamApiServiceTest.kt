@@ -4,7 +4,6 @@ import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
@@ -17,28 +16,16 @@ class DaplaTeamApiServiceTest {
     @Inject
     lateinit var daplaTeamApiService: DaplaTeamApiService
 
-    @Test
-    fun `get team`() {
-        val result = daplaTeamApiService.getTeam("dapla-felles")
-        assertThat(result?.uniformName).isEqualTo("dapla-felles")
+    @ParameterizedTest
+    @MethodSource("fetchTeam")
+    fun `get team from dapla team api`(teamName: String, expectedResult: String?) {
+        assertThat(daplaTeamApiService.getTeam(teamName)?.uniformName).isEqualTo(expectedResult)
     }
 
-    @Test
-    fun `team not found`() {
-        val result = daplaTeamApiService.getTeam("dubi")
-        assertThat(result).isNull()
-    }
-
-    @Test
-    fun `get group`() {
-        val result = daplaTeamApiService.getGroup("dapla-felles-managers")
-        assertThat(result?.uniformName).isEqualTo("dapla-felles-managers")
-    }
-
-    @Test
-    fun `group not found`() {
-        val result = daplaTeamApiService.getGroup("sup-manag")
-        assertThat(result).isNull()
+    @ParameterizedTest
+    @MethodSource("fetchGroup")
+    fun `get group from dapla team api`(groupName: String, expectedResult: String?) {
+        assertThat(daplaTeamApiService.getGroup(groupName)?.uniformName).isEqualTo(expectedResult)
     }
 
     @ParameterizedTest
@@ -60,6 +47,54 @@ class DaplaTeamApiServiceTest {
     }
 
     companion object {
+        @JvmStatic
+        fun fetchTeam(): Stream<Arguments> =
+            Stream.of(
+                arguments(
+                    "dapla-felles",
+                    "dapla-felles",
+                ),
+                arguments(
+                    "play-enhjoern-a",
+                    "play-enhjoern-a",
+                ),
+                arguments(
+                    "play-dubi",
+                    null,
+                ),
+                arguments(
+                    "",
+                    null,
+                ),
+                arguments(
+                    "mimi",
+                    null,
+                ),
+            )
+        @JvmStatic
+        fun fetchGroup(): Stream<Arguments> =
+            Stream.of(
+                arguments(
+                    "dapla-felles-developers",
+                    "dapla-felles-developers",
+                ),
+                arguments(
+                    "play-enhjoern-a-managers",
+                    "play-enhjoern-a-managers",
+                ),
+                arguments(
+                    "play-dubi-data-admins",
+                    null,
+                ),
+                arguments(
+                    "",
+                    null,
+                ),
+                arguments(
+                    "mimi-dev",
+                    null,
+                ),
+            )
         @JvmStatic
         fun isTeamValid(): Stream<Arguments> =
             Stream.of(

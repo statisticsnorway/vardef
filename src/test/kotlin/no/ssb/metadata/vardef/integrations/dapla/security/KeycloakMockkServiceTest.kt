@@ -16,7 +16,7 @@ class KeycloakMockkServiceTest {
     fun setUp() {
         httpClient = mockk()
         keycloakService = KeycloakService(httpClient)
-
+        keycloakService.clientId = "test-client-id"
     }
 
     @AfterEach

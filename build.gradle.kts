@@ -50,6 +50,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.json)
+    testImplementation(libs.logback.classic)
     aotPlugins(platform(libs.micronaut.platform))
 }
 

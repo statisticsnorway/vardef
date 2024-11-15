@@ -9,6 +9,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
+import io.micronaut.http.client.exceptions.NoHostException
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import jakarta.inject.Singleton
@@ -68,6 +69,12 @@ class KeycloakService(
             if (e is HttpClientResponseException) {
                 logger.error("Error fetching token: ${e.status} - ${e.message}", e)
             }
+            if (e is NoHostException) {
+                logger.error("Error connecting host: ${e.message}", e)
+            } else
+                {
+                    logger.error("Unexpected error: ${e.message}", e)
+                }
         }.getOrNull()
     }
 

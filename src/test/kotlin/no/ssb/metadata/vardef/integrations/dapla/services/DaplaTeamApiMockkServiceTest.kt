@@ -5,6 +5,7 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.HttpClient
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
 import no.ssb.metadata.vardef.integrations.dapla.security.KeycloakService
 import org.junit.jupiter.api.AfterEach
@@ -70,5 +71,36 @@ class DaplaTeamApiMockkServiceTest {
         // Assert: Verify that the result is null due to the 404 response
         assertEquals(null, result)
         verify { mockkDaplaTeamApiClient.fetchTeam(any(), any()) }
+    }
+
+    @Test
+    fun `test getGroup should return group successfully`() {
+        val expectedGroup = Group("dapla-felles-developers")
+        val mockResponse: HttpResponse<Group?> = mockk()
+        every { mockResponse.status } returns HttpStatus.OK
+        every { mockResponse.body() } returns expectedGroup
+        every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
+
+        every { mockkDaplaTeamApiClient.fetchGroup(any(), any()) } returns mockResponse
+
+        val result = daplaTeamApiService.getGroup("dapla-felles-developers")
+
+        assertEquals(expectedGroup, result)
+        verify { mockkDaplaTeamApiClient.fetchGroup(any(), any()) }
+    }
+
+    @Test
+    fun `test getGroup should return null on error`() {
+        val mockResponse: HttpResponse<Group?> = mockk()
+        every { mockResponse.status } returns HttpStatus.NOT_FOUND
+        every { mockResponse.body() } returns null
+        every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
+
+        every { mockkDaplaTeamApiClient.fetchGroup(any(), any()) } returns mockResponse
+
+        val result = daplaTeamApiService.getGroup("non-existing-group")
+
+        assertEquals(null, result)
+        verify { mockkDaplaTeamApiClient.fetchGroup(any(), any()) }
     }
 }

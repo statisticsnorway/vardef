@@ -8,8 +8,8 @@ import io.mockk.impl.annotations.MockK
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
 import no.ssb.metadata.vardef.integrations.dapla.security.KeycloakService
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -35,46 +35,44 @@ class DaplaTeamApiMockkServiceTest {
     }
 
     @Test
-    fun `test getTeam should return team successfully`() {
-        // Arrange: Mock HttpResponse
+    fun `valid team request`() {
         val expectedTeam = Team("dapla-felles")
         val mockResponse: HttpResponse<Team?> = mockk()
         every { mockResponse.status } returns HttpStatus.OK
         every { mockResponse.body() } returns expectedTeam
         every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
 
-        // Mock daplaTeamApiClient.fetchTeam to return the mock HttpResponse
         every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns mockResponse
 
-        // Act: Call DaplaApiService method
-        val result = daplaTeamApiService.getTeam("dapla-felles")
+        val resultGetTeam = daplaTeamApiService.getTeam("dapla-felles")
+        val resultIsValidTeam = daplaTeamApiService.isValidTeam("play-obr-b")
 
-        // Assert: Verify that the returned team matches the expected team
-        assertEquals(expectedTeam, result)
-        verify { mockkDaplaTeamApiClient.fetchTeam(any(), any()) }
+        assertThat(resultGetTeam).isEqualTo(expectedTeam)
+        assertThat(resultIsValidTeam).isEqualTo(true)
+
+        verify(exactly = 2) { mockkDaplaTeamApiClient.fetchTeam(any(), any()) }
     }
 
     @Test
-    fun `test getTeam should return null on error`() {
-        // Arrange: Mock HttpResponse
+    fun `invalid team request`() {
         val mockResponse: HttpResponse<Team?> = mockk()
         every { mockResponse.status } returns HttpStatus.NOT_FOUND
         every { mockResponse.body() } returns null
         every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
 
-        // Mock daplaTeamApiClient.fetchTeam to return the mock HttpResponse
         every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns mockResponse
 
-        // Act: Call DaplaApiService method
-        val result = daplaTeamApiService.getTeam("non-existing-team")
+        val resultGetTeam = daplaTeamApiService.getTeam("non-existing-team")
+        val resultIsValidTeam = daplaTeamApiService.isValidTeam("timmy")
 
-        // Assert: Verify that the result is null due to the 404 response
-        assertEquals(null, result)
-        verify { mockkDaplaTeamApiClient.fetchTeam(any(), any()) }
+        assertThat(resultGetTeam).isEqualTo(null)
+        assertThat(resultIsValidTeam).isEqualTo(false)
+
+        verify(exactly = 2) { mockkDaplaTeamApiClient.fetchTeam(any(), any()) }
     }
 
     @Test
-    fun `test getGroup should return group successfully`() {
+    fun `valid group request`() {
         val expectedGroup = Group("dapla-felles-developers")
         val mockResponse: HttpResponse<Group?> = mockk()
         every { mockResponse.status } returns HttpStatus.OK
@@ -83,14 +81,16 @@ class DaplaTeamApiMockkServiceTest {
 
         every { mockkDaplaTeamApiClient.fetchGroup(any(), any()) } returns mockResponse
 
-        val result = daplaTeamApiService.getGroup("dapla-felles-developers")
+        val resultGetGroup = daplaTeamApiService.getGroup("dapla-felles-developers")
+        val resultIsValidGroup = daplaTeamApiService.isValidGroup("play-enhjoern-a-developers")
 
-        assertEquals(expectedGroup, result)
+        assertThat(resultGetGroup).isEqualTo(expectedGroup)
+        assertThat(resultIsValidGroup).isEqualTo(true)
         verify { mockkDaplaTeamApiClient.fetchGroup(any(), any()) }
     }
 
     @Test
-    fun `test getGroup should return null on error`() {
+    fun `invalid group request`() {
         val mockResponse: HttpResponse<Group?> = mockk()
         every { mockResponse.status } returns HttpStatus.NOT_FOUND
         every { mockResponse.body() } returns null
@@ -98,9 +98,11 @@ class DaplaTeamApiMockkServiceTest {
 
         every { mockkDaplaTeamApiClient.fetchGroup(any(), any()) } returns mockResponse
 
-        val result = daplaTeamApiService.getGroup("non-existing-group")
+        val resultGetGroup = daplaTeamApiService.getGroup("non-existing-group-developers")
+        val resultIsValidGroup = daplaTeamApiService.isValidGroup("group-managers")
 
-        assertEquals(null, result)
+        assertThat(resultGetGroup).isEqualTo(null)
+        assertThat(resultIsValidGroup).isEqualTo(false)
         verify { mockkDaplaTeamApiClient.fetchGroup(any(), any()) }
     }
 }

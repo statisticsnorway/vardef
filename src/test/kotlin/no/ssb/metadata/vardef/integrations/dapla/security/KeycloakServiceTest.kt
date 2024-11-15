@@ -5,7 +5,6 @@ import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.AppenderBase
 import io.micronaut.context.annotation.Property
-import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.assertj.core.api.Assertions.assertThat
@@ -35,7 +34,6 @@ class TestLogAppender : AppenderBase<ILoggingEvent>() {
     fun reset() = logMessages.clear()
 }
 
-@Requires(env = ["integration-test"])
 @MicronautTest
 class KeycloakServiceTest {
     @Inject

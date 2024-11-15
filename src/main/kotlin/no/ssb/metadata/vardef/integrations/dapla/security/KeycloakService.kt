@@ -71,10 +71,9 @@ class KeycloakService(
             }
             if (e is NoHostException) {
                 logger.error("Error connecting host: ${e.message}", e)
-            } else
-                {
-                    logger.error("Unexpected error: ${e.message}", e)
-                }
+            } else {
+                logger.error("Unexpected error: ${e.message}", e)
+            }
         }.getOrNull()
     }
 

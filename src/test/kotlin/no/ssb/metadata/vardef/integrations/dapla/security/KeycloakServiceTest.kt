@@ -13,7 +13,13 @@ import org.junit.jupiter.api.*
 import org.slf4j.LoggerFactory
 
 /**
+ * A custom appender for logging events used in testing scenarios.
  *
+ * This class extends [AppenderBase] and implements a simple in-memory appender
+ * that collects log messages for inspection. It allows you to capture logs generated
+ * during tests and later retrieve or clear them for validation purposes.
+ *
+ * @constructor Creates a [TestLogAppender] instance.
  */
 class TestLogAppender : AppenderBase<ILoggingEvent>() {
     private val logMessages = mutableListOf<ILoggingEvent>()
@@ -31,7 +37,6 @@ class TestLogAppender : AppenderBase<ILoggingEvent>() {
 
 @Requires(env = ["integration-test"])
 @MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KeycloakServiceTest {
     @Inject
     lateinit var keycloakService: KeycloakService
@@ -55,15 +60,12 @@ class KeycloakServiceTest {
     private val context = LoggerFactory.getILoggerFactory() as LoggerContext
     private val logger = context.getLogger(KeycloakService::class.java.name) as Logger
 
-    @BeforeAll
-    fun setUp() {
+    @BeforeEach
+    fun setup() {
+        // Save original KeycloakService properties to ensure reset to valid values
         originalKeyCloakUrl = keycloakService.keycloakUrl
         originalKeyCloakClientId = keycloakService.clientId
         originalKeyCloakClientSecret = keycloakService.clientSecret
-    }
-
-    @BeforeEach
-    fun setup() {
         // start collecting logger messages
         testLogAppender.start()
         logger.addAppender(testLogAppender)
@@ -93,7 +95,7 @@ class KeycloakServiceTest {
     }
 
     @Test
-    fun `incorrect client`()  {
+    fun `incorrect client`() {
         keycloakService.clientId = "test-client-id"
         val result = keycloakService.requestAccessToken()
         assertThat(
@@ -105,7 +107,7 @@ class KeycloakServiceTest {
     }
 
     @Test
-    fun `incorrect url`()  {
+    fun `incorrect url`() {
         keycloakService.keycloakUrl = "www.example.com"
         val result = keycloakService.requestAccessToken()
         assertThat(
@@ -117,7 +119,7 @@ class KeycloakServiceTest {
     }
 
     @Test
-    fun `incorrect secret`()  {
+    fun `incorrect secret`() {
         keycloakService.clientSecret = "jjjj"
         val result = keycloakService.requestAccessToken()
         assertThat(

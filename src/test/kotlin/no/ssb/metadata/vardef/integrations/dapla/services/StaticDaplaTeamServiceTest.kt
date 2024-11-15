@@ -4,7 +4,7 @@ import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.dapla.security.TestLogAppender
+import no.ssb.metadata.vardef.utils.TestLogAppender
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals

@@ -18,13 +18,19 @@ class DaplaTeamApiServiceTest {
 
     @ParameterizedTest
     @MethodSource("fetchTeam")
-    fun `get team from dapla team api`(teamName: String, expectedResult: String?) {
+    fun `get team from dapla team api`(
+        teamName: String,
+        expectedResult: String?,
+    ) {
         assertThat(daplaTeamApiService.getTeam(teamName)?.uniformName).isEqualTo(expectedResult)
     }
 
     @ParameterizedTest
     @MethodSource("fetchGroup")
-    fun `get group from dapla team api`(groupName: String, expectedResult: String?) {
+    fun `get group from dapla team api`(
+        groupName: String,
+        expectedResult: String?,
+    ) {
         assertThat(daplaTeamApiService.getGroup(groupName)?.uniformName).isEqualTo(expectedResult)
     }
 
@@ -71,6 +77,7 @@ class DaplaTeamApiServiceTest {
                     null,
                 ),
             )
+
         @JvmStatic
         fun fetchGroup(): Stream<Arguments> =
             Stream.of(
@@ -95,6 +102,7 @@ class DaplaTeamApiServiceTest {
                     null,
                 ),
             )
+
         @JvmStatic
         fun isTeamValid(): Stream<Arguments> =
             Stream.of(

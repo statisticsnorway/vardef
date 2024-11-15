@@ -2,36 +2,13 @@ package no.ssb.metadata.vardef.integrations.dapla.security
 
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
-import ch.qos.logback.classic.spi.ILoggingEvent
-import ch.qos.logback.core.AppenderBase
 import io.micronaut.context.annotation.Property
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.utils.TestLogAppender
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import org.slf4j.LoggerFactory
-
-/**
- * A custom appender for logging events used in testing scenarios.
- *
- * This class extends [AppenderBase] and implements a simple in-memory appender
- * that collects log messages for inspection. It allows you to capture logs generated
- * during tests and later retrieve or clear them for validation purposes.
- *
- * @constructor Creates a [TestLogAppender] instance.
- */
-class TestLogAppender : AppenderBase<ILoggingEvent>() {
-    private val logMessages = mutableListOf<ILoggingEvent>()
-
-    override fun append(eventObject: ILoggingEvent?) {
-        if (eventObject != null) {
-            logMessages.add(eventObject)
-        }
-    }
-
-    fun getLoggedMessages(): List<ILoggingEvent> = logMessages
-    fun reset() = logMessages.clear()
-}
 
 @MicronautTest
 class KeycloakServiceTest {

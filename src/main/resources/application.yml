@@ -107,4 +107,4 @@ jackson:
 keycloak:
   url: https://auth.test.ssb.no/
   clientId: vardef-to-dapla-team-api-m2m
-  clientSecret: plfdjmgxsS8swhFAHAoFqSm71umWs2mi
+  clientSecret: ${KEYCLOAK_CLIENT_SECRET}

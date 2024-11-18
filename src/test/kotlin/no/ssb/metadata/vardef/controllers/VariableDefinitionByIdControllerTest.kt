@@ -473,6 +473,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
     @MethodSource("invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
+        expectedErrorMessage: String,
         spec: RequestSpecification,
     ) {
         spec
@@ -485,6 +486,10 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                containsString(expectedErrorMessage),
+            )
 
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
@@ -587,6 +592,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "Invalid Dapla team",
                 ),
                 argumentSet(
                     "Team name null",
@@ -605,6 +611,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "owner team and groups can not be null",
                 ),
                 argumentSet(
                     "Groups list is null",
@@ -617,6 +624,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "must not be empty",
                 ),
                 argumentSet(
                     "Groups empty values in list",
@@ -636,6 +644,27 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "Invalid Dapla group",
+                ),
+                argumentSet(
+                    "Invalid Team name",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "playdida")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "skip-stat-developers",
+                                            "play-enhjoern-a-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "Invalid Dapla team",
                 ),
             )
     }

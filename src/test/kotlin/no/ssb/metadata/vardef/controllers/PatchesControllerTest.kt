@@ -499,6 +499,7 @@ class PatchesControllerTest : BaseVardefTest() {
     @MethodSource("invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
+        expectedErrorMessage: String,
         spec: RequestSpecification,
     ) {
         spec
@@ -511,6 +512,10 @@ class PatchesControllerTest : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
+            .body(
+                ERROR_MESSAGE_JSON_PATH,
+                containsString(expectedErrorMessage),
+            )
 
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
@@ -625,6 +630,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "Invalid Dapla team",
                 ),
                 argumentSet(
                     "Team name null",
@@ -643,6 +649,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "owner team and groups can not be null",
                 ),
                 argumentSet(
                     "Groups list is null",
@@ -655,6 +662,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "must not be empty",
                 ),
                 argumentSet(
                     "Groups values are null",
@@ -668,6 +676,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "must not be empty",
                 ),
                 argumentSet(
                     "Groups empty values in list",
@@ -687,6 +696,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "Invalid Dapla group",
                 ),
                 argumentSet(
                     "Remove owner team developers group",
@@ -706,6 +716,7 @@ class PatchesControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "Invalid Dapla group",
                 ),
                 argumentSet(
                     "Change owner team without changing developers group",
@@ -726,6 +737,28 @@ class PatchesControllerTest : BaseVardefTest() {
                                 },
                             )
                         }.toString(),
+                    "Invalid Dapla group",
+                ),
+                argumentSet(
+                    "Invalid group name",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "my-team")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "my-team-developers",
+                                            "pipi-managers",
+                                            TEST_DEVELOPERS_GROUP,
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "Invalid Dapla group",
                 ),
             )
     }

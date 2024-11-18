@@ -32,6 +32,8 @@ jobs:
           check
           jacocoTestReport
           --daemon --parallel --build-cache
+        env:
+          KEYCLOAK_CLIENT_SECRET: ${{ secrets.KEYCLOAK_CLIENT_SECRET }}
 
       - name: SonarCloud Scan
         env:

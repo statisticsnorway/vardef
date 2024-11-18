@@ -1,25 +1,35 @@
 package no.ssb.metadata.vardef.utils
 
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.AppenderBase
 import no.ssb.metadata.vardef.models.VariableStatus
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
-import kotlin.reflect.full.memberProperties
 
 const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"
 
 /**
- * Get object field value by String name.
- * Enables dynamic comparison of field values in parameterized tests
+ * A custom appender for logging events used in testing scenarios.
+ *
+ * This class extends [AppenderBase] and implements a simple in-memory appender
+ * that collects log messages for inspection. It allows you to capture logs generated
+ * during tests and later retrieve or clear them for validation purposes.
+ *
+ * @constructor Creates a [TestLogAppender] instance.
  */
-fun getPropertyByName(
-    obj: Any,
-    propertyName: String,
-): Any? {
-    return obj::class.memberProperties
-        .firstOrNull { it.name == propertyName }
-        ?.getter
-        ?.call(obj)
+class TestLogAppender : AppenderBase<ILoggingEvent>() {
+    private val logMessages = mutableListOf<ILoggingEvent>()
+
+    override fun append(eventObject: ILoggingEvent?) {
+        if (eventObject != null) {
+            logMessages.add(eventObject)
+        }
+    }
+
+    fun getLoggedMessages(): List<ILoggingEvent> = logMessages
+
+    fun reset() = logMessages.clear()
 }
 
 object TestUtils {

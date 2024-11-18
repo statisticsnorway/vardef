@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
-// @Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KlassApiClientIntegrationTest {

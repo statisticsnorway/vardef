@@ -91,7 +91,7 @@ data class SavedVariableDefinition(
         Patch(
             name = name,
             definition = definition,
-            classificationReference = classificationReference?.split("/")?.lastOrNull(),
+            classificationReference = classificationReference,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
@@ -112,7 +112,7 @@ data class SavedVariableDefinition(
             name = name,
             shortName = shortName,
             definition = definition,
-            classificationReference = classificationReference?.split("/")?.lastOrNull(),
+            classificationReference = classificationReference,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,

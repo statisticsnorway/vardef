@@ -87,7 +87,7 @@ data class Patch(
             patchId = highestPatchId + 1,
             name = name ?: previousPatch.name,
             definition = definition ?: previousPatch.definition,
-            classificationUri = classificationReference ?: previousPatch.classificationUri,
+            classificationReference = classificationReference ?: previousPatch.classificationReference,
             unitTypes = unitTypes ?: previousPatch.unitTypes,
             subjectFields = subjectFields ?: previousPatch.subjectFields,
             containsSensitivePersonalInformation =

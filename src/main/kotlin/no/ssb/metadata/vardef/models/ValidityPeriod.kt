@@ -78,7 +78,7 @@ data class ValidityPeriod(
             patchId = highestPatchId + 1,
             name = name ?: previousPatch.name,
             definition = definition,
-            classificationUri = classificationReference ?: previousPatch.classificationUri,
+            classificationReference = classificationReference ?: previousPatch.classificationReference,
             unitTypes = unitTypes ?: previousPatch.unitTypes,
             subjectFields = subjectFields ?: previousPatch.subjectFields,
             containsSensitivePersonalInformation =

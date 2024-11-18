@@ -25,6 +25,8 @@ spec:
         - host: ssb.no
         # Allow egress to auth
         - host: auth.test.ssb.no
+        # Allow egress to dapla-team-api
+        - host: dapla-team-api-v2.staging-bip-app.ssb.no
         # Allow egress to mongodb
         - host: metadata-test-shard-00-01.fuld2.mongodb.net
           ports:

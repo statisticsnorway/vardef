@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.integrations.dapla.security
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import io.micronaut.context.annotation.Property
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.utils.TestLogAppender
@@ -10,6 +11,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import org.slf4j.LoggerFactory
 
+@Requires(env = ["integration-test"])
 @MicronautTest
 class KeycloakServiceTest {
     @Inject

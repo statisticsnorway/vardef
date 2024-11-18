@@ -1,6 +1,7 @@
 # Start server
 # Make sure to add a token and an active group in a private env
 
+### Draft
 # Json body can be added directly or imported from file
 # Save id from response
 POST http://127.0.0.1:8080/variable-definitions?active_group=play-obr-b-developers
@@ -26,14 +27,30 @@ PATCH  http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?act
 Content-Type: application/json
 Authorization: Bearer {{USER_TOKEN}}
 
-{
-  "short_name": "bakkerland"
-}
+{ "variable_status": "PUBLISHED_INTERNAL" }
 
-###
-GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches?active_group={{ACTIVE_GROUP}}
+### { "variable_status": "PUBLISHED_INTERNAL" }
+
+### Patches
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches
 Content-Type: application/json
 Authorization: Bearer {{USER_TOKEN}}
+
+###
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{
+  "owner": {
+    "team": "play-obr-b",
+    "groups": [
+      "play-obr-b-developers",
+      "dapla-felles-developers",
+      "play-enhjoern-a-developers"
+    ]
+  }
+}
 
 ###
 # Use local variables

@@ -52,10 +52,38 @@ Authorization: Bearer {{USER_TOKEN}}
   }
 }
 
+### "variable_status": "PUBLISHED_EXTERNAL"
+
 ###
 # Use local variables
 @patch-id = 1
-GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches/{{patch-id}}?active_group={{ACTIVE_GROUP}}
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches/{{patch-id}}
 Content-Type: application/json
 Authorization: Bearer {{USER_TOKEN}}
 
+# Validity period
+###
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/validity-periods
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+###
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+# Vardok migration
+###
+@vardok-id = 130
+POST http://127.0.0.1:8080/vardok-migration/{{vardok-id}}?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+# Public
+###
+GET 127.0.0.1:8080/public/variable-definitions
+Content-Type: application/json
+
+###
+GET 127.0.0.1:8080/public/variable-definitions/{{variable-definition-id}}
+Content-Type: application/json

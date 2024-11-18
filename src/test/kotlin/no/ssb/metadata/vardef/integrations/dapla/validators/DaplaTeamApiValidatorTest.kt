@@ -1,18 +1,17 @@
-package no.ssb.metadata.vardef.integrations.dapla
+package no.ssb.metadata.vardef.integrations.dapla.validators
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.dapla.service.StaticDaplaTeamService
+import no.ssb.metadata.vardef.integrations.dapla.services.StaticDaplaTeamService
 import no.ssb.metadata.vardef.models.Owner
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
 @MicronautTest
-class ValidateDaplaTeamTest(private val validator: Validator) {
+class DaplaTeamApiValidatorTest(private val validator: Validator) {
     @Inject
     lateinit var daplaTeamApiStaticService: StaticDaplaTeamService
 
@@ -85,17 +84,5 @@ class ValidateDaplaTeamTest(private val validator: Validator) {
                 ),
             ),
         ).isNotEmpty()
-    }
-
-    @Test
-    fun `test StaticDaplaTeam loads correct data`() {
-        val team = daplaTeamApiStaticService.getTeam("dapla-felles")
-        assertEquals("dapla-felles", team.uniformName)
-    }
-
-    @Test
-    fun `test StaticDaplaGroup loads correct data`() {
-        val group = daplaTeamApiStaticService.getGroup("dapla-felles-developers")
-        assertEquals("dapla-felles-developers", group.uniformName)
     }
 }

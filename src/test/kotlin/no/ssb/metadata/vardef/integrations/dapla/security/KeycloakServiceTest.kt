@@ -60,11 +60,7 @@ class KeycloakServiceTest {
     @Test
     fun `get keycloak token`() {
         val result = keycloakService.requestAccessToken()
-        assertThat(
-            testLogAppender.getLoggedMessages().any {
-                it.formattedMessage.contains("UNAUTHORIZED - Unauthorized")
-            },
-        ).isFalse()
+        testLogAppender.getLoggedMessages().isEmpty()
         assertThat(result).isNotBlank()
     }
 

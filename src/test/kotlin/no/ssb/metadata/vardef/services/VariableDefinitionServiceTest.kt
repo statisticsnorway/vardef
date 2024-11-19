@@ -92,18 +92,29 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         fun invalidOwnerUpdate(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
-                    "Name",
+                    "New team",
                     UpdateDraft(
                         owner =
                             Owner(
                                 "my-team",
                                 listOf(
-                                    "pers-skatt-developers",
+                                    "skip-stat-developers",
                                     TEST_DEVELOPERS_GROUP,
-                                    "neighbourhood-dogs",
-                                    "dapla-felles-developers",
                                 ),
                             ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+                argumentSet(
+                    "Remove group associated with team",
+                    UpdateDraft(
+                        owner =
+                        Owner(
+                            "skip-stat",
+                            listOf(
+                                TEST_DEVELOPERS_GROUP,
+                            ),
+                        ),
                     ),
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
                 ),
@@ -113,7 +124,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         fun validOwnerUpdate(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
-                    "Name",
+                    "Update team and add group",
                     UpdateDraft(
                         owner =
                             Owner(
@@ -125,6 +136,48 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                                     "dapla-felles-developers",
                                 ),
                             ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+                argumentSet(
+                    "Update team",
+                    UpdateDraft(
+                        owner =
+                        Owner(
+                            TEST_TEAM,
+                            listOf(
+                                "skip-stat-developers",
+                                TEST_DEVELOPERS_GROUP,
+                            ),
+                        ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+                argumentSet(
+                    "Add group",
+                    UpdateDraft(
+                        owner =
+                        Owner(
+                            TEST_TEAM,
+                            listOf(
+                                "skip-stat-developers",
+                                TEST_DEVELOPERS_GROUP,
+                                "dapla-felles-developers"
+                            ),
+                        ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+                argumentSet(
+                    "Remove group",
+                    UpdateDraft(
+                        owner =
+                        Owner(
+                            "skip-stat",
+                            listOf(
+                                "skip-stat-developers",
+                            ),
+                        ),
                     ),
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
                 ),

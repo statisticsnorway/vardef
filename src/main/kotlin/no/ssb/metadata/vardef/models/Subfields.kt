@@ -77,7 +77,7 @@ data class Person(
 data class Owner(
     @NotEmpty
     @DaplaTeam
-    var team: String,
+    val team: String,
     @NotEmpty
     val groups: List<
         @NotEmpty @DaplaGroup

@@ -108,6 +108,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
                 ),
             )
+
         @JvmStatic
         fun validOwnerUpdate(): Stream<Arguments> =
             Stream.of(
@@ -115,15 +116,15 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Name",
                     UpdateDraft(
                         owner =
-                        Owner(
-                            "dapla-felles",
-                            listOf(
-                                "pers-skatt-developers",
-                                TEST_DEVELOPERS_GROUP,
-                                "neighbourhood-dogs",
-                                "dapla-felles-developers",
+                            Owner(
+                                "dapla-felles",
+                                listOf(
+                                    "pers-skatt-developers",
+                                    TEST_DEVELOPERS_GROUP,
+                                    "neighbourhood-dogs",
+                                    "dapla-felles-developers",
+                                ),
                             ),
-                        ),
                     ),
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
                 ),

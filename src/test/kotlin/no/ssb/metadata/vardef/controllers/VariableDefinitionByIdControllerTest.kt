@@ -667,7 +667,7 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "Invalid Dapla team",
                 ),
                 argumentSet(
-                    "Group is not coherent with team",
+                    "Owner team is not coherent with groups",
                     JSONObject()
                         .apply {
                             put(
@@ -686,6 +686,5 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                     "group of the owning team must be included",
                 ),
             )
-
     }
 }

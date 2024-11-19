@@ -1,10 +1,14 @@
 package no.ssb.metadata.vardef.integrations.dapla.services
 
+import io.micronaut.context.ApplicationContext
+import io.micronaut.context.annotation.Primary
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.client.HttpClient
+import io.micronaut.test.annotation.MockBean
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
 import no.ssb.metadata.vardef.integrations.dapla.security.KeycloakService
@@ -13,41 +17,88 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-@MockK
+@MicronautTest
 class DaplaTeamApiMockkServiceTest {
+
+    @Inject
+    private lateinit var keycloakService: KeycloakService
+
+    @Inject
     private lateinit var mockkDaplaTeamApiClient: DaplaTeamApiClient
+
+    @Inject
     private lateinit var mockkKeycloakService: KeycloakService
+
+
+    @Inject
     private lateinit var daplaTeamApiService: DaplaTeamApiService
-    private lateinit var httpClient: HttpClient
+
+    private val team = Team("dapla-felles")
+
+    @Primary
+    @MockBean(DaplaTeamApiClient::class)
+    fun mockkDaplaTeamApiClient(): DaplaTeamApiClient {
+        // mockkDaplaTeamApiClient = mockk<DaplaTeamApiClient>()
+        //every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
+        //every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns HttpResponse.ok(team)
+        return mockk()
+    }
+
+    @Primary
+    @MockBean(KeycloakService::class)
+    fun mockkKeycloakService(): KeycloakService {
+        return mockk()
+    }
 
     @BeforeEach
-    fun setUp() {
-        httpClient = mockk()
-        mockkKeycloakService = mockk<KeycloakService>()
-        mockkDaplaTeamApiClient = mockk<DaplaTeamApiClient>()
-        daplaTeamApiService = DaplaTeamApiService(mockkDaplaTeamApiClient)
-        daplaTeamApiService.keycloakService = mockkKeycloakService
+    fun setUp(){
+        val mockkClient = mockkDaplaTeamApiClient()
+        daplaTeamApiService = DaplaTeamApiService(mockkClient)
+        keycloakService = mockkKeycloakService()
     }
 
-    @AfterEach
+
+    //mockkDaplaTeamApiClient = mockk<DaplaTeamApiClient>()
+
+
+    /*@BeforeEach
+    fun setUp() {
+        mockkKeycloakService = mockk<KeycloakService>()
+        val mockk = mockDaplaTeamApiClient()
+        //mockkDaplaTeamApiClient = mockk<DaplaTeamApiClient>()
+        daplaTeamApiService = DaplaTeamApiService(mockk)
+        daplaTeamApiService.keycloakService = mockkKeycloakService
+    }*/
+
+   /* @AfterEach
     internal fun tearDown() {
         clearAllMocks()
-    }
+    }*/
 
     @Test
     fun `valid team request`() {
-        val expectedTeam = Team("dapla-felles")
+        //every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
+        val mockResponse: HttpResponse<Team?> = mockk()
+        every { mockResponse.status } returns HttpStatus.OK
+        every { mockResponse.body() } returns team
+
+        every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
+        daplaTeamApiService.keycloakService = mockkKeycloakService
+
+        every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns mockResponse
+        /*val expectedTeam = Team("dapla-felles")
         val mockResponse: HttpResponse<Team?> = mockk()
         every { mockResponse.status } returns HttpStatus.OK
         every { mockResponse.body() } returns expectedTeam
         every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
+        daplaTeamApiService.keycloakService = mockkKeycloakService
 
-        every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns mockResponse
+        every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns mockResponse*/
 
         val resultGetTeam = daplaTeamApiService.getTeam("dapla-felles")
         val resultIsValidTeam = daplaTeamApiService.isValidTeam("play-obr-b")
 
-        assertThat(resultGetTeam).isEqualTo(expectedTeam)
+        assertThat(resultGetTeam).isEqualTo(team)
         assertThat(resultIsValidTeam).isEqualTo(true)
 
         verify(exactly = 2) { mockkDaplaTeamApiClient.fetchTeam(any(), any()) }

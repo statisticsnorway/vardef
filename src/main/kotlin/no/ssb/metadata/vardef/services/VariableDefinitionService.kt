@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
@@ -38,13 +39,14 @@ class VariableDefinitionService(
      * @param varDef The object with updates applied
      * @return The same object
      */
-    fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
-    /*
-    if (patch.owner != latestPatch.owner && patch.owner != null) {
-    if (!DaplaTeamService.containsDevelopersGroup(patch.owner)) {
+    fun update(varDef: SavedVariableDefinition, updateDraft: UpdateDraft): SavedVariableDefinition {
+        if (updateDraft.owner != varDef.owner && updateDraft.owner != null) {
+            if (!DaplaTeamService.containsDevelopersGroup(updateDraft.owner)) {
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
-     */
+        }
+        return variableDefinitionRepository.update(varDef.copyAndUpdate(updateDraft))
+    }
 
     /**
      * List all objects in the repository

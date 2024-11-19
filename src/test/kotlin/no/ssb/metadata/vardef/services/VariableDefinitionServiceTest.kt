@@ -1,9 +1,11 @@
 package no.ssb.metadata.vardef.services
 
+import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
@@ -65,67 +67,68 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(variableDefinitionService.doesShortNameExist(shortName)).isEqualTo(expectedResult)
     }
 
-    @Test
-    fun `update owner team`() {
-        val existingOwnerTeam = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team
-        val input = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.apply { owner.team = "my-last-team" }
-        val updatedDraft = variableDefinitionService.update(input)
-        assertThat(updatedDraft.owner.team).isNotEqualTo(existingOwnerTeam)
+    @ParameterizedTest
+    @MethodSource("validOwnerUpdate")
+    fun `update owner valid`(
+        updateDraft: UpdateDraft,
+        valueBefore: Owner,
+    ) {
+        val updatedSavedVariable = variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft)
+        assertThat(updatedSavedVariable.owner).isNotEqualTo(valueBefore)
     }
 
-    @Test
-    fun `update owner group is dependent of team`() {
-        val input = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
-                owner =
-                    Owner(
-                        "dapla-felles",
-                        listOf(
-                            "pers-skatt-developers",
-                            TEST_DEVELOPERS_GROUP,
-                            "neighbourhood-dogs",
-                            "dapla-felles-developers",
-                        ),
-                    ),
-        )
-        val updatedDraft = variableDefinitionService.update(input)
-        assertThat(DaplaTeamService.containsDevelopersGroup(updatedDraft.owner)).isEqualTo(true)
-    }
-
-    @Test
-    fun `update owner group is dependent of team invalid`() {
-        val input = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
-            owner =
-            Owner(
-                "dapla-felles",
-                listOf(
-                    "pers-skatt-developers"
-                ),
-            ),
-        )
-        val updatedDraft = variableDefinitionService.update(input)
-        assertThat(DaplaTeamService.containsDevelopersGroup(updatedDraft.owner)).isEqualTo(false)
-    }
-
-    @Test
-    fun `update owner group is dependent of team is not updated if invalid`() {
-        val teamBeforeUpdate = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team
-        val input = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
-            owner =
-            Owner(
-                "my-team",
-                listOf(
-                    "pers-skatt-developers",
-                    TEST_DEVELOPERS_GROUP,
-                    "neighbourhood-dogs",
-                    "dapla-felles-developers",
-                ),
-            ),
-        )
-        val updatedDraft = variableDefinitionService.update(input)
-        assertThat(updatedDraft.owner.team).isEqualTo(teamBeforeUpdate)
+    @ParameterizedTest
+    @MethodSource("invalidOwnerUpdate")
+    fun `update owner invalid`(
+        updateDraft: UpdateDraft,
+        valueBefore: Owner,
+    ) {
+        assertThrows<InvalidOwnerStructureError> { variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft) }
+        assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
     }
 
     companion object {
+        @JvmStatic
+        fun invalidOwnerUpdate(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Name",
+                    UpdateDraft(
+                        owner =
+                            Owner(
+                                "my-team",
+                                listOf(
+                                    "pers-skatt-developers",
+                                    TEST_DEVELOPERS_GROUP,
+                                    "neighbourhood-dogs",
+                                    "dapla-felles-developers",
+                                ),
+                            ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+            )
+        @JvmStatic
+        fun validOwnerUpdate(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Name",
+                    UpdateDraft(
+                        owner =
+                        Owner(
+                            "dapla-felles",
+                            listOf(
+                                "pers-skatt-developers",
+                                TEST_DEVELOPERS_GROUP,
+                                "neighbourhood-dogs",
+                                "dapla-felles-developers",
+                            ),
+                        ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+            )
+
         @JvmStatic
         fun variableStatusTestCases(): Stream<Arguments> =
             Stream.of(

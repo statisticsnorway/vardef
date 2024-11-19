@@ -39,7 +39,10 @@ class VariableDefinitionService(
      * @param varDef The object with updates applied
      * @return The same object
      */
-    fun update(varDef: SavedVariableDefinition, updateDraft: UpdateDraft): SavedVariableDefinition {
+    fun update(
+        varDef: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): SavedVariableDefinition {
         if (updateDraft.owner != varDef.owner && updateDraft.owner != null) {
             if (!DaplaTeamService.containsDevelopersGroup(updateDraft.owner)) {
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")

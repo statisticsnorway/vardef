@@ -73,6 +73,24 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(updatedDraft.owner.team).isNotEqualTo(existingOwnerTeam)
     }
 
+    @Test
+    fun `update owner group is dependent of team`() {
+        val input = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
+                owner =
+                    Owner(
+                        "dapla-felles",
+                        listOf(
+                            "pers-skatt-developers",
+                            TEST_DEVELOPERS_GROUP,
+                            "neighbourhood-dogs",
+                            "dapla-felles-developers",
+                        ),
+                    ),
+        )
+        val updatedDraft = variableDefinitionService.update(input)
+        assertThat(DaplaTeamService.containsDevelopersGroup(updatedDraft.owner)).isEqualTo(true)
+    }
+
     companion object {
         @JvmStatic
         fun variableStatusTestCases(): Stream<Arguments> =

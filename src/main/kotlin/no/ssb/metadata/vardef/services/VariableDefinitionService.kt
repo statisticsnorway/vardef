@@ -39,6 +39,12 @@ class VariableDefinitionService(
      * @return The same object
      */
     fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
+    /*
+    if (patch.owner != latestPatch.owner && patch.owner != null) {
+    if (!DaplaTeamService.containsDevelopersGroup(patch.owner)) {
+                throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
+            }
+     */
 
     /**
      * List all objects in the repository

@@ -500,6 +500,34 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
         assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())
     }
 
+    @Test
+    fun `owner group must be dependent of owner team`(spec: RequestSpecification){
+        val jsonInput = JSONObject().apply {
+            put(
+                "owner",
+                JSONObject().apply {
+                    put("team", "skip-stat")
+                    put(
+                        "groups",
+                        listOf(
+                            "play-enhjoern-a-developers",
+                        ),
+                    )
+                }
+            )
+        }
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                jsonInput
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+    }
+
     companion object {
         @JvmStatic
         fun validOwnerUpdates(): Stream<Arguments> =

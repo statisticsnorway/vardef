@@ -109,12 +109,12 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Remove group associated with team",
                     UpdateDraft(
                         owner =
-                        Owner(
-                            "skip-stat",
-                            listOf(
-                                TEST_DEVELOPERS_GROUP,
+                            Owner(
+                                "skip-stat",
+                                listOf(
+                                    TEST_DEVELOPERS_GROUP,
+                                ),
                             ),
-                        ),
                     ),
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
                 ),
@@ -143,13 +143,13 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Update team",
                     UpdateDraft(
                         owner =
-                        Owner(
-                            TEST_TEAM,
-                            listOf(
-                                "skip-stat-developers",
-                                TEST_DEVELOPERS_GROUP,
+                            Owner(
+                                TEST_TEAM,
+                                listOf(
+                                    "skip-stat-developers",
+                                    TEST_DEVELOPERS_GROUP,
+                                ),
                             ),
-                        ),
                     ),
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
                 ),
@@ -157,14 +157,14 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Add group",
                     UpdateDraft(
                         owner =
-                        Owner(
-                            TEST_TEAM,
-                            listOf(
-                                "skip-stat-developers",
-                                TEST_DEVELOPERS_GROUP,
-                                "dapla-felles-developers"
+                            Owner(
+                                TEST_TEAM,
+                                listOf(
+                                    "skip-stat-developers",
+                                    TEST_DEVELOPERS_GROUP,
+                                    "dapla-felles-developers",
+                                ),
                             ),
-                        ),
                     ),
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
                 ),
@@ -172,12 +172,12 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Remove group",
                     UpdateDraft(
                         owner =
-                        Owner(
-                            "skip-stat",
-                            listOf(
-                                "skip-stat-developers",
+                            Owner(
+                                "skip-stat",
+                                listOf(
+                                    "skip-stat-developers",
+                                ),
                             ),
-                        ),
                     ),
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
                 ),

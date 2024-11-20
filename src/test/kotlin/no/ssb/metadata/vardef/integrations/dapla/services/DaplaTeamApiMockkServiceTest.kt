@@ -1,33 +1,28 @@
 package no.ssb.metadata.vardef.integrations.dapla.services
 
+import io.micronaut.context.annotation.Primary
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.client.HttpClient
+import io.micronaut.test.annotation.MockBean
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
+import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
-import no.ssb.metadata.vardef.integrations.dapla.security.KeycloakService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-@MockK
+@MicronautTest
 class DaplaTeamApiMockkServiceTest {
-    private lateinit var mockkDaplaTeamApiClient: DaplaTeamApiClient
-    private lateinit var mockkKeycloakService: KeycloakService
-    private lateinit var daplaTeamApiService: DaplaTeamApiService
-    private lateinit var httpClient: HttpClient
+    private val mockkDaplaTeamApiClient: DaplaTeamApiClient = mockk<DaplaTeamApiClient>()
 
-    @BeforeEach
-    fun setUp() {
-        httpClient = mockk()
-        mockkKeycloakService = mockk<KeycloakService>()
-        mockkDaplaTeamApiClient = mockk<DaplaTeamApiClient>()
-        daplaTeamApiService = DaplaTeamApiService(mockkDaplaTeamApiClient)
-        daplaTeamApiService.keycloakService = mockkKeycloakService
-    }
+    @Inject
+    private lateinit var daplaTeamApiService: DaplaTeamApiService
+
+    @Primary
+    @MockBean(DaplaTeamApiClient::class)
+    fun mockkDaplaTeamApiClient(): DaplaTeamApiClient = mockkDaplaTeamApiClient
 
     @AfterEach
     internal fun tearDown() {
@@ -40,7 +35,6 @@ class DaplaTeamApiMockkServiceTest {
         val mockResponse: HttpResponse<Team?> = mockk()
         every { mockResponse.status } returns HttpStatus.OK
         every { mockResponse.body() } returns expectedTeam
-        every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
 
         every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns mockResponse
 
@@ -58,7 +52,6 @@ class DaplaTeamApiMockkServiceTest {
         val mockResponse: HttpResponse<Team?> = mockk()
         every { mockResponse.status } returns HttpStatus.NOT_FOUND
         every { mockResponse.body() } returns null
-        every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
 
         every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns mockResponse
 
@@ -77,7 +70,6 @@ class DaplaTeamApiMockkServiceTest {
         val mockResponse: HttpResponse<Group?> = mockk()
         every { mockResponse.status } returns HttpStatus.OK
         every { mockResponse.body() } returns expectedGroup
-        every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
 
         every { mockkDaplaTeamApiClient.fetchGroup(any(), any()) } returns mockResponse
 
@@ -94,7 +86,6 @@ class DaplaTeamApiMockkServiceTest {
         val mockResponse: HttpResponse<Group?> = mockk()
         every { mockResponse.status } returns HttpStatus.NOT_FOUND
         every { mockResponse.body() } returns null
-        every { mockkKeycloakService.requestAccessToken() } returns "Bearer auth"
 
         every { mockkDaplaTeamApiClient.fetchGroup(any(), any()) } returns mockResponse
 

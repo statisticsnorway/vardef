@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
@@ -33,12 +34,31 @@ class VariableDefinitionService(
     fun create(draft: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(draft)
 
     /**
-     * Update a Draft Variable Definition
+     * Update a Draft Variable Definition based on the provided [updateDraft].
      *
-     * @param varDef The object with updates applied
-     * @return The same object
+     * It checks if the owner has changed and validates the new owner by ensuring
+     * the Developers group is included in the new owner's team groups.
+     *
+     * If the validation fails, an [InvalidOwnerStructureError] is thrown.
+     *
+     * @param savedDraft The current [SavedVariableDefinition] that is being updated.
+     * @param updateDraft containing the new data to update the [SavedVariableDefinition].
+     * @return The updated [SavedVariableDefinition]
+     *
+     * @throws InvalidOwnerStructureError
+     *
      */
-    fun update(varDef: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.update(varDef)
+    fun update(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): SavedVariableDefinition {
+        updateDraft.owner.takeIf { it != savedDraft.owner }?.let {
+            if (!DaplaTeamService.containsDevelopersGroup(it)) {
+                throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
+            }
+        }
+        return variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
+    }
 
     /**
      * List all objects in the repository

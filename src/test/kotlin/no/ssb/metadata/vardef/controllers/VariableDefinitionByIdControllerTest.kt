@@ -666,6 +666,25 @@ class VariableDefinitionByIdControllerTest : BaseVardefTest() {
                         }.toString(),
                     "Invalid Dapla team",
                 ),
+                argumentSet(
+                    "Owner team is not coherent with groups",
+                    JSONObject()
+                        .apply {
+                            put(
+                                "owner",
+                                JSONObject().apply {
+                                    put("team", "skip-stat")
+                                    put(
+                                        "groups",
+                                        listOf(
+                                            "dapla-felles-developers",
+                                        ),
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "group of the owning team must be included",
+                ),
             )
     }
 }

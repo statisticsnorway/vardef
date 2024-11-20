@@ -26,53 +26,53 @@ import java.time.LocalDate
 data class UpdateDraft(
     @Nullable
     @Schema(description = NAME_FIELD_DESCRIPTION)
-    val name: LanguageStringType?,
+    val name: LanguageStringType? = null,
     @Nullable
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
     @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
-    val shortName: String?,
+    val shortName: String? = null,
     @Nullable
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
-    val definition: LanguageStringType?,
+    val definition: LanguageStringType? = null,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @KlassId
-    val classificationReference: String?,
+    val classificationReference: String? = null,
     @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<@KlassCode(id = "702") String>?,
+    val unitTypes: List<@KlassCode(id = "702") String>? = null,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<@KlassCode(id = "618") String>?,
+    val subjectFields: List<@KlassCode(id = "618") String>? = null,
     @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
     @Nullable
-    val containsSensitivePersonalInformation: Boolean?,
+    val containsSensitivePersonalInformation: Boolean? = null,
     @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
     @Nullable
-    val variableStatus: VariableStatus?,
+    val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
-    val measurementType: String?,
+    val measurementType: String? = null,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Nullable
     @Format(DATE_FORMAT)
-    val validFrom: LocalDate?,
+    val validFrom: LocalDate? = null,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
-    val externalReferenceUri: URL?,
+    val externalReferenceUri: URL? = null,
     @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
-    val comment: LanguageStringType?,
+    val comment: LanguageStringType? = null,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
-    val relatedVariableDefinitionUris: List<URL>?,
+    val relatedVariableDefinitionUris: List<URL>? = null,
     @Schema(description = OWNER_DESCRIPTION)
     @Nullable
     @Valid
-    val owner: Owner?,
+    val owner: Owner? = null,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Nullable
     @Valid
-    val contact: Contact?,
+    val contact: Contact? = null,
 )

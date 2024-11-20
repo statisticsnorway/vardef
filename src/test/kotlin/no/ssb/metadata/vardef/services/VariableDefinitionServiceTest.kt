@@ -1,9 +1,11 @@
 package no.ssb.metadata.vardef.services
 
+import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
@@ -65,22 +67,122 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(variableDefinitionService.doesShortNameExist(shortName)).isEqualTo(expectedResult)
     }
 
-    @Test
-    fun `update owner team`() {
-        val existingOwnerTeam = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner.team
-        val input =
-            SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy().apply {
-                this.owner =
-                    Owner(
-                        "my-last-team",
-                        listOf("skip-stat-developers", TEST_DEVELOPERS_GROUP),
-                    )
-            }
-        val updatedDraft = variableDefinitionService.update(input)
-        assertThat(updatedDraft.owner.team).isNotEqualTo(existingOwnerTeam)
+    @ParameterizedTest
+    @MethodSource("validOwnerUpdate")
+    fun `update owner valid`(
+        updateDraft: UpdateDraft,
+        valueBefore: Owner,
+    ) {
+        val updatedSavedVariable = variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft)
+        assertThat(updatedSavedVariable.owner).isNotEqualTo(valueBefore)
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidOwnerUpdate")
+    fun `update owner invalid`(
+        updateDraft: UpdateDraft,
+        valueBefore: Owner,
+    ) {
+        assertThrows<InvalidOwnerStructureError> { variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft) }
+        assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
     }
 
     companion object {
+        @JvmStatic
+        fun invalidOwnerUpdate(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "New team",
+                    UpdateDraft(
+                        owner =
+                            Owner(
+                                "my-team",
+                                listOf(
+                                    "skip-stat-developers",
+                                    TEST_DEVELOPERS_GROUP,
+                                ),
+                            ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+                argumentSet(
+                    "Remove group associated with team",
+                    UpdateDraft(
+                        owner =
+                            Owner(
+                                "skip-stat",
+                                listOf(
+                                    TEST_DEVELOPERS_GROUP,
+                                ),
+                            ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+            )
+
+        @JvmStatic
+        fun validOwnerUpdate(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Update team and add group",
+                    UpdateDraft(
+                        owner =
+                            Owner(
+                                "dapla-felles",
+                                listOf(
+                                    "pers-skatt-developers",
+                                    TEST_DEVELOPERS_GROUP,
+                                    "neighbourhood-dogs",
+                                    "dapla-felles-developers",
+                                ),
+                            ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+                argumentSet(
+                    "Update team",
+                    UpdateDraft(
+                        owner =
+                            Owner(
+                                TEST_TEAM,
+                                listOf(
+                                    "skip-stat-developers",
+                                    TEST_DEVELOPERS_GROUP,
+                                ),
+                            ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+                argumentSet(
+                    "Add group",
+                    UpdateDraft(
+                        owner =
+                            Owner(
+                                TEST_TEAM,
+                                listOf(
+                                    "skip-stat-developers",
+                                    TEST_DEVELOPERS_GROUP,
+                                    "dapla-felles-developers",
+                                ),
+                            ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+                argumentSet(
+                    "Remove group",
+                    UpdateDraft(
+                        owner =
+                            Owner(
+                                "skip-stat",
+                                listOf(
+                                    "skip-stat-developers",
+                                ),
+                            ),
+                    ),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner,
+                ),
+            )
+
         @JvmStatic
         fun variableStatusTestCases(): Stream<Arguments> =
             Stream.of(

@@ -169,9 +169,8 @@ class VariableDefinitionByIdController(
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
                 )
         }
-
         return vardef
-            .update(patches.latest(definitionId).copyAndUpdate(updateDraft))
+            .update(variable, updateDraft)
             .toCompleteResponse()
     }
 }

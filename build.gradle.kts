@@ -36,7 +36,6 @@ dependencies {
     implementation(libs.micronaut.jackson.xml)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
-    implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.nanoid)
     implementation(libs.micronaut.security.jwt)
     implementation(libs.reactor)
@@ -59,7 +58,6 @@ application {
 }
 kotlin { jvmToolchain(21) }
 
-graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
     testRuntime("junit5")
@@ -79,6 +77,21 @@ micronaut {
         deduceEnvironment = true
         optimizeNetty = true
         replaceLogbackXml = true
+    }
+}
+
+graalvmNative {
+    toolchainDetection = false
+    binaries.all {
+        buildArgs.add(
+            "--initialize-at-build-time=io.netty.buffer,ch.qos.logback,org.slf4j,kotlin.coroutines.intrinsics.CoroutineSingletons",
+        )
+        buildArgs.add(
+            "--initialize-at-run-time=io.netty.handler",
+        )
+        buildArgs.add(
+            "--trace-object-instantiation=java.net.Inet6Address",
+        )
     }
 }
 

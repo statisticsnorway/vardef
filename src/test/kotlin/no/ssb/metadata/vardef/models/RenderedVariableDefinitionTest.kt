@@ -3,12 +3,17 @@ package no.ssb.metadata.vardef.models
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.UPDATE_DRAFT_CLASSIFICATION_REFERENCE
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.net.URI
 import java.time.LocalDate
 import java.util.stream.Stream
 
@@ -124,10 +129,11 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
     ) {
         for (date in dates) {
             val savedVariableDefinitionRendered =
-                INCOME_TAX_VP1_P1.copy(
-                    unitTypes = listOf(code),
-                    validFrom = date,
-                ).render(SupportedLanguages.NB, klassService)
+                INCOME_TAX_VP1_P1
+                    .copy(
+                        unitTypes = listOf(code),
+                        validFrom = date,
+                    ).render(SupportedLanguages.NB, klassService)
             assertThat(savedVariableDefinitionRendered.unitTypes[0]?.title).isEqualTo(title)
         }
     }
@@ -140,10 +146,11 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
     ) {
         for (date in dates) {
             val savedVariableDefinitionRendered =
-                INCOME_TAX_VP1_P1.copy(
-                    subjectFields = listOf(code),
-                    validFrom = date,
-                ).render(SupportedLanguages.NB, klassService)
+                INCOME_TAX_VP1_P1
+                    .copy(
+                        subjectFields = listOf(code),
+                        validFrom = date,
+                    ).render(SupportedLanguages.NB, klassService)
             assertThat(savedVariableDefinitionRendered.subjectFields[0]?.title).isEqualTo(title)
         }
     }
@@ -156,11 +163,44 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
     ) {
         for (date in dates) {
             val savedVariableDefinitionRendered =
-                INCOME_TAX_VP1_P1.copy(
-                    measurementType = code,
-                    validFrom = date,
-                ).render(SupportedLanguages.NB, klassService)
+                INCOME_TAX_VP1_P1
+                    .copy(
+                        measurementType = code,
+                        validFrom = date,
+                    ).render(SupportedLanguages.NB, klassService)
             assertThat(savedVariableDefinitionRendered.measurementType?.title).isEqualTo(title)
         }
     }
+
+    @Test
+    fun `render generate a classificationUri`() {
+        val savedVariableRendered = DRAFT_BUS_EXAMPLE.render(SupportedLanguages.NB, klassService)
+        assertTrue(isUri(savedVariableRendered.classificationUri))
+    }
+
+    @Test
+    fun `toPatch include classificationReference with expected value`() {
+        val savedVariablePatch = DRAFT_BUS_EXAMPLE.toPatch()
+        assertThat(savedVariablePatch.classificationReference).isEqualTo("91")
+    }
+
+    @Test
+    fun `toCompleteResponse include classificationReference with expected value`() {
+        val savedVariableCompleteResponse = DRAFT_BUS_EXAMPLE.toCompleteResponse()
+        assertThat(savedVariableCompleteResponse.classificationReference).isEqualTo("91")
+    }
+
+    @Test
+    fun `copyAndUpdate updates classificationReference to expected value`() {
+        val updatedVariable = DRAFT_BUS_EXAMPLE.copyAndUpdate(UPDATE_DRAFT_CLASSIFICATION_REFERENCE)
+        assertThat(updatedVariable.classificationReference).isEqualTo("92")
+    }
+
+    private fun isUri(input: String?): Boolean =
+        try {
+            URI(input ?: "").toURL()
+            true
+        } catch (e: Exception) {
+            false
+        }
 }

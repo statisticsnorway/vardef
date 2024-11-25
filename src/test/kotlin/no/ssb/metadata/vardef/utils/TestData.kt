@@ -452,3 +452,22 @@ fun jsonTestInput() =
     }
     """,
     )
+
+val UPDATE_DRAFT_CLASSIFICATION_REFERENCE =
+    UpdateDraft(
+        name = null,
+        shortName = null,
+        definition = null,
+        classificationReference = "92",
+        unitTypes = null,
+        subjectFields = null,
+        containsSensitivePersonalInformation = null,
+        measurementType = null,
+        validFrom = null,
+        externalReferenceUri = null,
+        relatedVariableDefinitionUris = null,
+        contact = null,
+        comment = null,
+        owner = null,
+        variableStatus = null,
+    )

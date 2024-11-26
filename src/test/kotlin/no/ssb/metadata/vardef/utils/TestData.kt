@@ -57,7 +57,7 @@ val SAVED_DEPRECATED_VARIABLE_DEFINITION =
                 nn = null,
                 en = "Letters",
             ),
-        classificationUri = "91",
+        classificationReference = "91",
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
         containsSensitivePersonalInformation = false,
@@ -98,7 +98,7 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION =
                 nn = "En variabeldefinisjon som er publisert for intern bruk",
                 en = "A variable definition published for internal use",
             ),
-        classificationUri = "91",
+        classificationReference = "91",
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
         containsSensitivePersonalInformation = false,
@@ -171,7 +171,7 @@ val INCOME_TAX_VP1_P1 =
                 nn = "Inntektsskatt utlignes til staten på grunnlag av alminnelig inntekt.",
                 en = "Income tax",
             ),
-        classificationUri = "91",
+        classificationReference = "91",
         unitTypes = listOf("01", "02"),
         subjectFields = listOf("he04"),
         containsSensitivePersonalInformation = false,
@@ -297,7 +297,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
                 nn = null,
                 en = "Dead weight",
             ),
-        classificationUri = "91",
+        classificationReference = "91",
         unitTypes = listOf("01", "02"),
         subjectFields = listOf("he04"),
         containsSensitivePersonalInformation = false,
@@ -451,4 +451,23 @@ fun jsonTestInput() =
         }
     }
     """,
+    )
+
+val UPDATE_DRAFT_CLASSIFICATION_REFERENCE =
+    UpdateDraft(
+        name = null,
+        shortName = null,
+        definition = null,
+        classificationReference = "92",
+        unitTypes = null,
+        subjectFields = null,
+        containsSensitivePersonalInformation = null,
+        measurementType = null,
+        validFrom = null,
+        externalReferenceUri = null,
+        relatedVariableDefinitionUris = null,
+        contact = null,
+        comment = null,
+        owner = null,
+        variableStatus = null,
     )

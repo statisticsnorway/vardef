@@ -28,7 +28,7 @@ data class SavedVariableDefinition(
     var shortName: String,
     var definition: LanguageStringType,
     @Nullable
-    var classificationUri: String?,
+    var classificationReference: String?,
     var unitTypes: List<String>,
     var subjectFields: List<String>,
     var containsSensitivePersonalInformation: Boolean,
@@ -73,7 +73,7 @@ data class SavedVariableDefinition(
             name = name.getValidLanguage(language),
             shortName = shortName,
             definition = definition.getValidLanguage(language),
-            classificationUri = classificationUri?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
+            classificationUri = classificationReference?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
             unitTypes = unitTypes.map { klassService.renderCode("702", it, language) },
             subjectFields = subjectFields.map { klassService.renderCode("618", it, language) },
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
@@ -91,7 +91,7 @@ data class SavedVariableDefinition(
         Patch(
             name = name,
             definition = definition,
-            classificationReference = classificationUri?.split("/")?.lastOrNull(),
+            classificationReference = classificationReference,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
@@ -112,7 +112,7 @@ data class SavedVariableDefinition(
             name = name,
             shortName = shortName,
             definition = definition,
-            classificationReference = classificationUri?.split("/")?.lastOrNull(),
+            classificationReference = classificationReference,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,
@@ -136,8 +136,7 @@ data class SavedVariableDefinition(
             name = varDefUpdates.name ?: name,
             shortName = varDefUpdates.shortName ?: shortName,
             definition = varDefUpdates.definition ?: definition,
-            // TODO DPMETA-257 convert reference to URI
-            classificationUri = varDefUpdates.classificationReference ?: classificationUri,
+            classificationReference = varDefUpdates.classificationReference ?: classificationReference,
             unitTypes = varDefUpdates.unitTypes ?: unitTypes,
             subjectFields = varDefUpdates.subjectFields ?: subjectFields,
             containsSensitivePersonalInformation =

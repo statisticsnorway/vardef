@@ -82,7 +82,7 @@ data class Draft(
             name = name,
             shortName = shortName,
             definition = definition,
-            classificationUri = classificationReference,
+            classificationReference = classificationReference,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
             containsSensitivePersonalInformation = containsSensitivePersonalInformation,

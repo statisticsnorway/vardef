@@ -56,7 +56,7 @@ class PatchesController(
         ],
     )
     @Get
-    fun getAllPatches(
+    fun listPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
         variableDefinitionId: String,
@@ -86,7 +86,7 @@ class PatchesController(
     )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @Get("/{patch-id}")
-    fun getOnePatch(
+    fun getPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
         variableDefinitionId: String,

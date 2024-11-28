@@ -79,7 +79,7 @@ class VariableDefinitionsController(
                 examples = [
                     ExampleObject(
                         name = "create_draft",
-                        value = DRAFT_EXAMPLE,
+                        value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
             ),
@@ -89,7 +89,14 @@ class VariableDefinitionsController(
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Secured(VARIABLE_CREATOR)
     fun createVariableDefinition(
-        @Parameter(example = DRAFT_EXAMPLE)
+        @Parameter(
+            examples = [
+                ExampleObject(
+                    name = "create_draft",
+                    value = DRAFT_EXAMPLE,
+                ),
+            ],
+        )
         @Body
         @Valid draft: Draft,
         @Parameter(

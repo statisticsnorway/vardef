@@ -47,7 +47,8 @@ class VariableDefinitionByIdController(
         content = [
             Content(
                 examples = [
-                    ExampleObject(name = "No date specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
+                    ExampleObject(name = "No date specified", value = COMPLETE_RESPONSE_EXAMPLE),
+                    ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
                 ],
             ),
         ],
@@ -56,7 +57,13 @@ class VariableDefinitionByIdController(
     @Get
     fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "No date specified", value = ID_EXAMPLE),
+                ExampleObject(name = "Specific date", value = ID_EXAMPLE),
+            ],
+        )
         definitionId: String,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -82,7 +89,17 @@ class VariableDefinitionByIdController(
      * Delete a variable definition.
      */
     @Tag(name = DRAFT)
-    @ApiResponse(responseCode = "204", description = "Successfully deleted")
+    @ApiResponse(
+        responseCode = "204",
+        description = "Successfully deleted",
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(name = "delete", value = ""),
+                ],
+            ),
+        ],
+    )
     @ApiResponse(responseCode = "404", description = "No such variable definition found")
     @ApiResponse(responseCode = "405", description = "Attempt to delete a variable definition with status unlike DRAFT.")
     @Status(HttpStatus.NO_CONTENT)
@@ -121,7 +138,20 @@ class VariableDefinitionByIdController(
      * Update a variable definition. Only the fields which need updating should be supplied.
      */
     @Tag(name = DRAFT)
-    @ApiResponse(responseCode = "200", description = "Successfully updated")
+    @ApiResponse(
+        responseCode = "200",
+        description = "Successfully updated",
+        content = [
+            io.swagger.v3.oas.annotations.media.Content(
+                examples = [
+                    io.swagger.v3.oas.annotations.media.ExampleObject(
+                        name = "update",
+                        value = no.ssb.metadata.vardef.constants.COMPLETE_RESPONSE_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
     @ApiResponse(
         responseCode = "400",
         description =
@@ -137,6 +167,7 @@ class VariableDefinitionByIdController(
     @Patch
     @Secured(VARIABLE_OWNER)
     fun updateVariableDefinitionById(
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "update", value = ID_EXAMPLE)])
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Schema(description = ID_FIELD_DESCRIPTION)
         definitionId: String,
@@ -145,12 +176,21 @@ class VariableDefinitionByIdController(
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
+                    name = "update",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
         )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        @Parameter(
+            examples = [
+                ExampleObject(
+                    name = "update",
+                    value = DRAFT_EXAMPLE,
+                ),
+            ],
+        )
         @Body
         @Valid
         updateDraft: UpdateDraft,

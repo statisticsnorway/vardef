@@ -81,7 +81,7 @@ micronaut:
       vardok:
         url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
       dapla-team-api:
-        url: https://dapla-team-api-v2.staging-bip-app.ssb.no/
+        url: https://dapla-team-api.intern.test.ssb.no
 
   klass-web:
     url:

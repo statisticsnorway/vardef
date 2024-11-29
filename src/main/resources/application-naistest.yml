@@ -7,6 +7,10 @@ micronaut:
             allowed-audiences:
               - dapla-cli
               - onyxia-api
+  http:
+    services:
+      dapla-team-api:
+        url: http://dapla-team-api.dapla-platform
 
 mongodb:
   uri: ${MONGODB_CONNECTION_STRING:}

@@ -18,7 +18,7 @@ const val CLASSIFICATIONS_CACHE = "classifications"
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
-    @Property(name = "klass.codes-at")
+    @Property(name = "micronaut.http.services.klass.codes-at")
     private val codesAt: String,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)

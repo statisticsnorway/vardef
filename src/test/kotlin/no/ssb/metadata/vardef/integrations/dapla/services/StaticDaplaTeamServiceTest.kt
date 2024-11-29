@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.dapla.services
 
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.utils.TestLogAppender
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 
 @MicronautTest
+@Requires(env = ["test"], notEnv = ["integration-test"], property = DAPLA_PROPERTY)
 class StaticDaplaTeamServiceTest {
     @Inject
     lateinit var daplaTeamApiStaticService: StaticDaplaTeamService

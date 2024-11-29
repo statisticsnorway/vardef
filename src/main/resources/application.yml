@@ -82,6 +82,10 @@ micronaut:
         url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
       dapla-team-api:
         url: https://dapla-team-api.intern.test.ssb.no
+      keycloak:
+        url: https://auth.test.ssb.no/
+        clientId: vardef-to-dapla-team-api-m2m
+        clientSecret: ${KEYCLOAK_CLIENT_SECRET}
 
   klass-web:
     url:
@@ -97,14 +101,6 @@ endpoints:
   metrics:
     sensitive: false
 
-klass:
-  codes-at: 2024-08-01
-
 jackson:
   xml:
     enabled: true
-
-keycloak:
-  url: https://auth.test.ssb.no/
-  clientId: vardef-to-dapla-team-api-m2m
-  clientSecret: ${KEYCLOAK_CLIENT_SECRET}

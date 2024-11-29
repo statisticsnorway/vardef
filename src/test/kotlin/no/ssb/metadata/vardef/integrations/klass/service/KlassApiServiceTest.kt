@@ -32,7 +32,7 @@ class KlassApiServiceTest {
     @Inject
     private lateinit var klassApiMockkClient: KlassApiClient
 
-    @Property(name = "klass.codes-at")
+    @Property(name = "micronaut.http.services.klass.codes-at")
     private lateinit var codesAt: String
 
     @Primary

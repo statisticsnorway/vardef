@@ -11,7 +11,7 @@ import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
-import no.ssb.metadata.vardef.services.DaplaTeamService
+import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono

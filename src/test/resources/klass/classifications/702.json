@@ -1,1 +1,312 @@
-{"codes":[{"code":"01","parentCode":null,"level":"1","name":"Adresse","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"En offisiell adresse er den fullstendige adressen for en bygning, bygningsdel, bruksenhet, eiendom eller et annet objekt som er registrert med adresse i eiendomsregisteret matrikkelen. Hver adresse skal være koordinatfestet."},{"code":"02","parentCode":null,"level":"1","name":"Arbeidsulykke","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Arbeidsulykke inkluderer yrkesskader og fatale ulykker på norsk eller utenlandsk landterritorium, i petroleumsvirksomhet til havs og i tjeneste på skip eller under fiske/fangst."},{"code":"03","parentCode":null,"level":"1","name":"Bolig","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Bolig er en boenhet bestående av ett eller flere rom som er bygd eller ombygd til helårs privatbolig for en eller flere personer, og som har egen atkomst til rommet/rommene uten at man må gå gjennom annen bolig. En bolig er enten en leilighet eller en hybel. En leilighet er en bolig med minst ett rom og kjøkken (leilighet inkluderer også enebolig, rekkehus osv.). En hybel er et rom med egen inngang beregnet som bolig for en eller flere personer som har adgang til vann og toalett uten at det er nødvendig å gå gjennom en annen leilighet. Dette inkluderer også hybler i hybelbygg med felles inngang og kjøkken, typisk studenthybler og enheter i bofellesskap for eldre, funksjonshemmede o.l. \"Hybler\" uten egen inngang (f.eks. rom i en privatbolig) regnes ikke som bolig. "},{"code":"04","parentCode":null,"level":"1","name":"Bygning","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Bygning er i Grunneiendoms-, adresse- og bygningsregisteret (GAB), som inngår i norsk statistikk, definert til å omfatte byggverk som kan angis med bruksareal. Måling av bruksareal følger Norsk Standard NS 3940 Areal- og volumberegning av bygninger. "},{"code":"05","parentCode":null,"level":"1","name":"Eiendom","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Eiendom er ethvert objekt som det kan knyttes eiendomsrett til. I SSBs statistikker er eiendom det samme som \"fast eiendom\". (De to andre hovedkategoriene er løsøre og immaterielle rettigheter.)"},{"code":"06","parentCode":null,"level":"1","name":"Familie","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Familie består av personer som er fast bosatt i samme bolig, og som er knyttet til hverandre som ektefeller, samboere, registrerte partnere og/eller som foreldre og ugifte barn (uansett det ugifte barnets alder). En familie kan høyst bestå av to (påfølgende) generasjoner, og kun ett ektepar/partnerskap/samboerpar. Som familie regnes også enkeltpersoner, slik at alle personer er med i en familie og en husholdning, enten sammen med andre personer, eller alene."},{"code":"07","parentCode":null,"level":"1","name":"Fylke (forvaltning)","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Fylke (forvaltning) er en administrativ enhet for henholdsvis regional statlig og fylkeskommunal virksomhet"},{"code":"08","parentCode":null,"level":"1","name":"Fylke (geografisk)","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Fylke (geografisk) er en betegnelsen på et regionalt nivå i statistikken. Fylkene er avgrenset av riksgrense, territorialgrense, avgrensningslinje i sjø og fylkesgrense."},{"code":"09","parentCode":null,"level":"1","name":"Havneanløp","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Om skip: det å gå innom en havn"},{"code":"10","parentCode":null,"level":"1","name":"Husholdning","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Husholdning består av personer som er fast bosatt i samme bolig (boenhet) eller institusjon. En privathusholdning består av personer som er fast bosatt i samme bolig, der denne boligen ikke er en institusjon. Privathusholdninger deles inn i bo- og kosthusholdninger. Bohusholdninger består av personer som er fast bosatt i samme bolig, mens kosthusholdning består av personer som er fast bosatt i samme bolig og har felles kost. En felleshusholdning består av personer som er fast bosatt, og får dekket sine behov for kost, pleie og omsorg, på en institusjon."},{"code":"11","parentCode":null,"level":"1","name":"Juridisk enhet","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"En juridisk enhet er det man oppretter når man registrerer seg for å drive næringsvirksomhet i Norge. Med juridisk enhet menes juridiske personer som er anerkjent i henhold til nasjonal lovgivning, uavhengig av de personer eller institusjoner som eier eller er medlemmer av dem, eller fysiske personer som utøver økonomisk virksomhet som personlig næringsdrivende. Eksemler på juridiske enheter er aksjeselskap, ansvarlig selskap, enkeltpersonsforetak etc. Juridisk enhet heter hovedenhet i Enhetsregisteret."},{"code":"12","parentCode":null,"level":"1","name":"Foretak","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Foretak er definert som den minste kombinasjonen av juridiske enheter som produserer varer eller tjenester, og som til ei viss grad har selvstendig beslutningsmyndighet. Et foretak utøver én eller flere aktiviteter på ett eller flere steder. Et foretak kan bestå av en enkelt juridisk enhet."},{"code":"13","parentCode":null,"level":"1","name":"Bedrift","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Bedrift er definert som en lokalt avgrenset funksjonell enhet som hovedsakelig driver aktivitet innenfor en bestemt næringsgruppe. SSB brukte tidligere termen \"virksomhet\" om denne."},{"code":"14","parentCode":null,"level":"1","name":"Bransjeenhet","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Bedrift er definert som en lokalt avgrenset funksjonell enhet som hovedsakelig driver aktivitet innenfor en bestemt næringsgruppe. SSB brukte tidligere termen \"virksomhet\" om denne."},{"code":"15","parentCode":null,"level":"1","name":"Kjøretøy","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Kjøretøy er en innretning som er bestemt til å kjøre på bakken."},{"code":"16","parentCode":null,"level":"1","name":"Kommune (forvaltning)","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Kommune (forvaltning) er en administrativ enhet som både betegner et politisk og forvaltningsmessig nivå."},{"code":"17","parentCode":null,"level":"1","name":"Kommune (geografisk)","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Kommune (geografisk) er en betegnelse på et regionalt nivå i statistikken. Kommunene avgrenses av riksgrense, territorialgrense, avgrensningslinje i sjø, fylkesgrense og kommunegrense. I tillegg inngår grunnlinje og 1 nautisk mil som er juridiske linjer utenfor kysten"},{"code":"18","parentCode":null,"level":"1","name":"Kurs","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Kurs er en utdanningsaktivitet."},{"code":"19","parentCode":null,"level":"1","name":"Lovbrudd","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Lovbrudd er en straffbar handling som er beskrevet i de norske straffelovene og spesiallovene. "},{"code":"20","parentCode":null,"level":"1","name":"Person","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Person er et enkeltmenneske, individ."},{"code":"21","parentCode":null,"level":"1","name":"Skip","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Et skip betegner en farkost som brukes til transport av personer eller gods til vanns. Skip er en vanlig betegnelse på et større sjøgående fartøy, i motsetning til båt, som vanligvis betegner en mindre farkost eller fartøy."},{"code":"22","parentCode":null,"level":"1","name":"Statlig virksomhet","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Statlige virksomheter er forvaltningsorganer, herunder departementer, det vil si alle virksomheter som er en del av staten som juridisk person. "},{"code":"23","parentCode":null,"level":"1","name":"Storfe","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Storfe, ofte bare omtalt som ku og okse, er en type husdyr som holdes for produksjon av melk og kjøtt. "},{"code":"24","parentCode":null,"level":"1","name":"Trafikkulykke","shortName":"","presentationName":"","validFrom":"2023-09-01","validTo":null,"notes":"Trafikkulykke omfatter dødsulykker og andre ulykker med personskade som er meldt til politiet. Trafikkulykker skjer på offentlig eller privat vei, gate eller plass som er åpen for alminnelig trafikk. "},{"code":"25","parentCode":null,"level":"1","name":"Transaksjon","shortName":"","presentationName":"","validFrom":"2024-05-01","validTo":null,"notes":"Transaksjon er et økonomisk begrep for overførselen av en gitt sum penger (digitalt eller kontant) fra en part til en annen, for en eller annen form for vare eller tjeneste. "},{"code":"26","parentCode":null,"level":"1","name":"Valg","shortName":"","presentationName":"","validFrom":"2024-05-01","validTo":null,"notes":"Valg inkluderer storting-, fylke-, kommune og sametingsvalg."},{"code":"27","parentCode":null,"level":"1","name":"Vare/tjeneste","shortName":"","presentationName":"","validFrom":"2024-05-01","validTo":null,"notes":"Vare er et konkret produkt, mens tjeneste er et immaterielt produkt/en aktivitet. "},{"code":"28","parentCode":null,"level":"1","name":"Verdipapir","shortName":"","presentationName":"","validFrom":null,"validTo":null,"notes":"Verdipapir er et dokument som representerer et pengekrav, f.eks.  aksjer, obligasjoner og kontrakter."}]}
+{
+  "codes": [
+    {
+      "code": "01",
+      "parentCode": null,
+      "level": "1",
+      "name": "Adresse",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "En offisiell adresse er den fullstendige adressen for en bygning, bygningsdel, bruksenhet, eiendom eller et annet objekt som er registrert med adresse i eiendomsregisteret matrikkelen. Hver adresse skal være koordinatfestet."
+    },
+    {
+      "code": "02",
+      "parentCode": null,
+      "level": "1",
+      "name": "Arbeidsulykke",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Arbeidsulykke inkluderer yrkesskader og fatale ulykker på norsk eller utenlandsk landterritorium, i petroleumsvirksomhet til havs og i tjeneste på skip eller under fiske/fangst."
+    },
+    {
+      "code": "03",
+      "parentCode": null,
+      "level": "1",
+      "name": "Bolig",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Bolig er en boenhet bestående av ett eller flere rom som er bygd eller ombygd til helårs privatbolig for en eller flere personer, og som har egen atkomst til rommet/rommene uten at man må gå gjennom annen bolig. En bolig er enten en leilighet eller en hybel. En leilighet er en bolig med minst ett rom og kjøkken (leilighet inkluderer også enebolig, rekkehus osv.). En hybel er et rom med egen inngang beregnet som bolig for en eller flere personer som har adgang til vann og toalett uten at det er nødvendig å gå gjennom en annen leilighet. Dette inkluderer også hybler i hybelbygg med felles inngang og kjøkken, typisk studenthybler og enheter i bofellesskap for eldre, funksjonshemmede o.l. \"Hybler\" uten egen inngang (f.eks. rom i en privatbolig) regnes ikke som bolig. "
+    },
+    {
+      "code": "04",
+      "parentCode": null,
+      "level": "1",
+      "name": "Bygning",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Bygning er i Grunneiendoms-, adresse- og bygningsregisteret (GAB), som inngår i norsk statistikk, definert til å omfatte byggverk som kan angis med bruksareal. Måling av bruksareal følger Norsk Standard NS 3940 Areal- og volumberegning av bygninger. "
+    },
+    {
+      "code": "05",
+      "parentCode": null,
+      "level": "1",
+      "name": "Eiendom",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Eiendom er ethvert objekt som det kan knyttes eiendomsrett til. I SSBs statistikker er eiendom det samme som \"fast eiendom\". (De to andre hovedkategoriene er løsøre og immaterielle rettigheter.)"
+    },
+    {
+      "code": "06",
+      "parentCode": null,
+      "level": "1",
+      "name": "Familie",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Familie består av personer som er fast bosatt i samme bolig, og som er knyttet til hverandre som ektefeller, samboere, registrerte partnere og/eller som foreldre og ugifte barn (uansett det ugifte barnets alder). En familie kan høyst bestå av to (påfølgende) generasjoner, og kun ett ektepar/partnerskap/samboerpar. Som familie regnes også enkeltpersoner, slik at alle personer er med i en familie og en husholdning, enten sammen med andre personer, eller alene."
+    },
+    {
+      "code": "07",
+      "parentCode": null,
+      "level": "1",
+      "name": "Fylke (forvaltning)",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Fylke (forvaltning) er en administrativ enhet for henholdsvis regional statlig og fylkeskommunal virksomhet"
+    },
+    {
+      "code": "08",
+      "parentCode": null,
+      "level": "1",
+      "name": "Fylke (geografisk)",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Fylke (geografisk) er en betegnelsen på et regionalt nivå i statistikken. Fylkene er avgrenset av riksgrense, territorialgrense, avgrensningslinje i sjø og fylkesgrense."
+    },
+    {
+      "code": "09",
+      "parentCode": null,
+      "level": "1",
+      "name": "Havneanløp",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Om skip: det å gå innom en havn"
+    },
+    {
+      "code": "10",
+      "parentCode": null,
+      "level": "1",
+      "name": "Husholdning",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Husholdning består av personer som er fast bosatt i samme bolig (boenhet) eller institusjon. En privathusholdning består av personer som er fast bosatt i samme bolig, der denne boligen ikke er en institusjon. Privathusholdninger deles inn i bo- og kosthusholdninger. Bohusholdninger består av personer som er fast bosatt i samme bolig, mens kosthusholdning består av personer som er fast bosatt i samme bolig og har felles kost. En felleshusholdning består av personer som er fast bosatt, og får dekket sine behov for kost, pleie og omsorg, på en institusjon."
+    },
+    {
+      "code": "11",
+      "parentCode": null,
+      "level": "1",
+      "name": "Juridisk enhet",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "En juridisk enhet er det man oppretter når man registrerer seg for å drive næringsvirksomhet i Norge. Med juridisk enhet menes juridiske personer som er anerkjent i henhold til nasjonal lovgivning, uavhengig av de personer eller institusjoner som eier eller er medlemmer av dem, eller fysiske personer som utøver økonomisk virksomhet som personlig næringsdrivende. Eksemler på juridiske enheter er aksjeselskap, ansvarlig selskap, enkeltpersonsforetak etc. Juridisk enhet heter hovedenhet i Enhetsregisteret."
+    },
+    {
+      "code": "12",
+      "parentCode": null,
+      "level": "1",
+      "name": "Foretak",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Foretak er definert som den minste kombinasjonen av juridiske enheter som produserer varer eller tjenester, og som til ei viss grad har selvstendig beslutningsmyndighet. Et foretak utøver én eller flere aktiviteter på ett eller flere steder. Et foretak kan bestå av en enkelt juridisk enhet."
+    },
+    {
+      "code": "13",
+      "parentCode": null,
+      "level": "1",
+      "name": "Bedrift",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Bedrift er definert som en lokalt avgrenset funksjonell enhet som hovedsakelig driver aktivitet innenfor en bestemt næringsgruppe. SSB brukte tidligere termen \"virksomhet\" om denne."
+    },
+    {
+      "code": "14",
+      "parentCode": null,
+      "level": "1",
+      "name": "Bransjeenhet",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Bedrift er definert som en lokalt avgrenset funksjonell enhet som hovedsakelig driver aktivitet innenfor en bestemt næringsgruppe. SSB brukte tidligere termen \"virksomhet\" om denne."
+    },
+    {
+      "code": "15",
+      "parentCode": null,
+      "level": "1",
+      "name": "Kjøretøy",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Kjøretøy er en innretning som er bestemt til å kjøre på bakken."
+    },
+    {
+      "code": "16",
+      "parentCode": null,
+      "level": "1",
+      "name": "Kommune (forvaltning)",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Kommune (forvaltning) er en administrativ enhet som både betegner et politisk og forvaltningsmessig nivå."
+    },
+    {
+      "code": "17",
+      "parentCode": null,
+      "level": "1",
+      "name": "Kommune (geografisk)",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Kommune (geografisk) er en betegnelse på et regionalt nivå i statistikken. Kommunene avgrenses av riksgrense, territorialgrense, avgrensningslinje i sjø, fylkesgrense og kommunegrense. I tillegg inngår grunnlinje og 1 nautisk mil som er juridiske linjer utenfor kysten"
+    },
+    {
+      "code": "18",
+      "parentCode": null,
+      "level": "1",
+      "name": "Kurs",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Kurs er en utdanningsaktivitet."
+    },
+    {
+      "code": "19",
+      "parentCode": null,
+      "level": "1",
+      "name": "Lovbrudd",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Lovbrudd er en straffbar handling som er beskrevet i de norske straffelovene og spesiallovene. "
+    },
+    {
+      "code": "20",
+      "parentCode": null,
+      "level": "1",
+      "name": "Person",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Person er et enkeltmenneske, individ."
+    },
+    {
+      "code": "21",
+      "parentCode": null,
+      "level": "1",
+      "name": "Skip",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Et skip betegner en farkost som brukes til transport av personer eller gods til vanns. Skip er en vanlig betegnelse på et større sjøgående fartøy, i motsetning til båt, som vanligvis betegner en mindre farkost eller fartøy."
+    },
+    {
+      "code": "22",
+      "parentCode": null,
+      "level": "1",
+      "name": "Statlig virksomhet",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Statlige virksomheter er forvaltningsorganer, herunder departementer, det vil si alle virksomheter som er en del av staten som juridisk person. "
+    },
+    {
+      "code": "23",
+      "parentCode": null,
+      "level": "1",
+      "name": "Storfe",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Storfe, ofte bare omtalt som ku og okse, er en type husdyr som holdes for produksjon av melk og kjøtt. "
+    },
+    {
+      "code": "24",
+      "parentCode": null,
+      "level": "1",
+      "name": "Trafikkulykke",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2023-09-01",
+      "validTo": null,
+      "notes": "Trafikkulykke omfatter dødsulykker og andre ulykker med personskade som er meldt til politiet. Trafikkulykker skjer på offentlig eller privat vei, gate eller plass som er åpen for alminnelig trafikk. "
+    },
+    {
+      "code": "25",
+      "parentCode": null,
+      "level": "1",
+      "name": "Transaksjon",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2024-05-01",
+      "validTo": null,
+      "notes": "Transaksjon er et økonomisk begrep for overførselen av en gitt sum penger (digitalt eller kontant) fra en part til en annen, for en eller annen form for vare eller tjeneste. "
+    },
+    {
+      "code": "26",
+      "parentCode": null,
+      "level": "1",
+      "name": "Valg",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2024-05-01",
+      "validTo": null,
+      "notes": "Valg inkluderer storting-, fylke-, kommune og sametingsvalg."
+    },
+    {
+      "code": "27",
+      "parentCode": null,
+      "level": "1",
+      "name": "Vare/tjeneste",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": "2024-05-01",
+      "validTo": null,
+      "notes": "Vare er et konkret produkt, mens tjeneste er et immaterielt produkt/en aktivitet. "
+    },
+    {
+      "code": "28",
+      "parentCode": null,
+      "level": "1",
+      "name": "Verdipapir",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": null,
+      "validTo": null,
+      "notes": "Verdipapir er et dokument som representerer et pengekrav, f.eks.  aksjer, obligasjoner og kontrakter."
+    }
+  ]
+}

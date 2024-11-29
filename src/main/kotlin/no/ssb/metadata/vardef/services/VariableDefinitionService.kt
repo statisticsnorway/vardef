@@ -4,6 +4,7 @@ import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
+import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository

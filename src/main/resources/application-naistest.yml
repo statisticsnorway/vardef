@@ -7,6 +7,14 @@ micronaut:
             allowed-audiences:
               - dapla-cli
               - onyxia-api
+  http:
+    services:
+      dapla-team-api:
+        url: http://dapla-team-api.dapla-platform
+      keycloak:
+        url: https://auth.test.ssb.no/
+        clientId: vardef-to-dapla-team-api-m2m
+        clientSecret: ${KEYCLOAK_CLIENT_SECRET}
 
 mongodb:
   uri: ${MONGODB_CONNECTION_STRING:}

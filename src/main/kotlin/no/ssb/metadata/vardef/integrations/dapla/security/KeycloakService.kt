@@ -23,23 +23,19 @@ import org.slf4j.LoggerFactory
  * configured via properties. The retrieved token is used for authenticating subsequent requests to secured APIs.
  *
  * @property httpClient The HTTP client used for making requests to Keycloak.
- * @property keycloakUrl The base URL for the Keycloak server
  * @property clientId The client ID used for authentication with Keycloak.
  * @property clientSecret The client secret used for authentication with Keycloak.
  */
 @Singleton
 class KeycloakService(
-    @Client private val httpClient: HttpClient,
+    @Client(id = "keycloak") private val httpClient: HttpClient,
 ) {
     private val logger = LoggerFactory.getLogger(KeycloakService::class.java)
 
-    @Property(name = "keycloak.url")
-    lateinit var keycloakUrl: String
-
-    @Property(name = "keycloak.clientId")
+    @Property(name = "micronaut.http.services.keycloak.clientId")
     lateinit var clientId: String
 
-    @Property(name = "keycloak.clientSecret")
+    @Property(name = "micronaut.http.services.keycloak.clientSecret")
     lateinit var clientSecret: String
 
     /**
@@ -51,7 +47,6 @@ class KeycloakService(
      * @return The access token as a `String`, or `null` if the token cannot be retrieved.
      */
     fun requestAccessToken(): String? {
-        val tokenEndpoint = "$keycloakUrl/realms/ssb/protocol/openid-connect/token"
         val formData =
             mapOf(
                 "grant_type" to "client_credentials",
@@ -60,7 +55,8 @@ class KeycloakService(
             )
 
         val request =
-            HttpRequest.POST(tokenEndpoint, formData)
+            HttpRequest
+                .POST("/realms/ssb/protocol/openid-connect/token", formData)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
 
         return runCatching {

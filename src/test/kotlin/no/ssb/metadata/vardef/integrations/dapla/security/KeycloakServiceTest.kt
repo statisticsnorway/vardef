@@ -8,7 +8,9 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.utils.TestLogAppender
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 
 @Requires(env = ["integration-test"])
@@ -19,16 +21,6 @@ class KeycloakServiceTest {
 
     private val testLogAppender = TestLogAppender()
 
-    @Property(name = "keycloak.url")
-    lateinit var keycloakUrl: String
-
-    @Property(name = "keycloak.clientId")
-    lateinit var clientId: String
-
-    @Property(name = "keycloak.clientSecret")
-    lateinit var clientSecret: String
-
-    private lateinit var originalKeyCloakUrl: String
     private lateinit var originalKeyCloakClientId: String
     private lateinit var originalKeyCloakClientSecret: String
 
@@ -39,7 +31,6 @@ class KeycloakServiceTest {
     @BeforeEach
     fun setup() {
         // Save original KeycloakService properties to ensure reset to valid values
-        originalKeyCloakUrl = keycloakService.keycloakUrl
         originalKeyCloakClientId = keycloakService.clientId
         originalKeyCloakClientSecret = keycloakService.clientSecret
         // start collecting logger messages
@@ -54,7 +45,6 @@ class KeycloakServiceTest {
         testLogAppender.stop()
         testLogAppender.reset()
         // Reset KeycloakService properties
-        keycloakService.keycloakUrl = originalKeyCloakUrl
         keycloakService.clientId = originalKeyCloakClientId
         keycloakService.clientSecret = originalKeyCloakClientSecret
     }
@@ -72,15 +62,15 @@ class KeycloakServiceTest {
         val result = keycloakService.requestAccessToken()
         assertThat(
             testLogAppender.getLoggedMessages().any {
-                it.formattedMessage.contains("UNAUTHORIZED - Unauthorized")
+                it.formattedMessage.contains("Client 'keycloak': Unauthorized")
             },
         ).isTrue()
         assertThat(result).isNull()
     }
 
     @Test
+    @Property(name = "micronaut.http.services.keycloak.url", value = "www.example.com")
     fun `incorrect url`() {
-        keycloakService.keycloakUrl = "www.example.com"
         val result = keycloakService.requestAccessToken()
         assertThat(
             testLogAppender.getLoggedMessages().any {
@@ -96,7 +86,7 @@ class KeycloakServiceTest {
         val result = keycloakService.requestAccessToken()
         assertThat(
             testLogAppender.getLoggedMessages().any {
-                it.formattedMessage.contains("UNAUTHORIZED - Unauthorized")
+                it.formattedMessage.contains("Client 'keycloak': Unauthorized")
             },
         ).isTrue()
         assertThat(result).isNull()

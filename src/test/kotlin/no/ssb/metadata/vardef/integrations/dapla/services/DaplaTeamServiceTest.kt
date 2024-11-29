@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.services
+package no.ssb.metadata.vardef.integrations.dapla.services
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import no.ssb.metadata.vardef.models.Owner

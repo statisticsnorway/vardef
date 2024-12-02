@@ -15,8 +15,8 @@ micronaut:
         url: https://auth.test.ssb.no/
         clientId: vardef-to-dapla-team-api-m2m
         clientSecret: ${KEYCLOAK_CLIENT_SECRET}
-  logger:
-    config: logback-kubernetes.xml
+logger:
+  config: logback-kubernetes.xml
 
 mongodb:
   uri: ${MONGODB_CONNECTION_STRING:}

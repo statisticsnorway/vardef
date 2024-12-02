@@ -11,6 +11,11 @@ metadata:
     - nais
   annotations:
     github.com/project-slug: statisticsnorway/vardef
+  links:
+    - url: https://statistics-norway.atlassian.net/wiki/x/p4Bw2Q
+      title: Design og utvikling dokumentasjon
+    - url: https://statistics-norway.atlassian.net/wiki/x/X4Bmsw
+      title: Datamodell spesifikasjon
 spec:
   type: service
   owner: dapla-metadata-developers
@@ -20,6 +25,7 @@ spec:
     - vardef-api
   consumesApis:
     - klass-api
+    - dapla-team-api
   dependsOn:
     - resource:metadata-mongodb
     - component:vardok

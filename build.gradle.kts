@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.nanoid)
     implementation(libs.micronaut.security.jwt)
     implementation(libs.reactor)
+    implementation(libs.logstash.logback.encoder)
     compileOnly(libs.micronaut.openapi.annotations)
     runtimeOnly(libs.logback.classic)
     runtimeOnly(libs.jackson.module.kotlin)

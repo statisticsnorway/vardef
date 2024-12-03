@@ -58,6 +58,8 @@ micronaut:
       strict-nullable: true
     serialization:
       inclusion: always
+  logger:
+    config: logback.xml
 
   caches:
     classifications:

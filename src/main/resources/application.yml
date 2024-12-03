@@ -74,6 +74,7 @@ micronaut:
         exclusions:
           - /health
           - /metrics
+          - /docs/.+
 
   http:
     services:

@@ -8,6 +8,7 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
@@ -47,6 +48,7 @@ class VariableDefinitionsController(
                         value = EMPTY_LIST_EXAMPLE,
                     ),
                 ],
+                array = ArraySchema(schema = Schema(implementation = CompleteResponse::class)),
             ),
         ],
     )
@@ -82,6 +84,7 @@ class VariableDefinitionsController(
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
+                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
     )
@@ -96,6 +99,7 @@ class VariableDefinitionsController(
                     value = DRAFT_EXAMPLE,
                 ),
             ],
+            schema = Schema(implementation = Draft::class),
         )
         @Body
         @Valid draft: Draft,

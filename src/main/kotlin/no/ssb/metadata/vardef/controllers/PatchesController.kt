@@ -10,7 +10,9 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.ExampleObject
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -49,9 +51,10 @@ class PatchesController(
                 examples = [
                     io.swagger.v3.oas.annotations.media.ExampleObject(
                         name = "one_patch",
-                        value = """[$COMPLETE_RESPONSE_EXAMPLE]""",
+                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
+                array = ArraySchema(schema = Schema(implementation = CompleteResponse::class)),
             ),
         ],
     )
@@ -81,6 +84,7 @@ class PatchesController(
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
+                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
     )
@@ -115,6 +119,7 @@ class PatchesController(
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
+                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
     )
@@ -132,7 +137,10 @@ class PatchesController(
         )
         @Format(DATE_FORMAT)
         validFrom: LocalDate?,
-        @Parameter(examples = [ExampleObject(name = "create_patch", value = PATCH_EXAMPLE)])
+        @Parameter(
+            examples = [ExampleObject(name = "create_patch", value = PATCH_EXAMPLE)],
+            schema = Schema(implementation = Patch::class),
+        )
         @Body
         @Valid
         patch: Patch,

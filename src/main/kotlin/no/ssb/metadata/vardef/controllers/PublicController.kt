@@ -9,6 +9,7 @@ import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
@@ -47,6 +48,7 @@ class PublicController(
                         value = EMPTY_LIST_EXAMPLE,
                     ),
                 ],
+                array = ArraySchema(schema = Schema(implementation = RenderedVariableDefinition::class)),
             ),
         ],
     )
@@ -82,6 +84,7 @@ class PublicController(
                 examples = [
                     ExampleObject(name = "No date specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
                 ],
+                schema = Schema(implementation = RenderedVariableDefinition::class),
             ),
         ],
     )
@@ -143,6 +146,7 @@ class PublicController(
                         value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
                     ),
                 ],
+                array = ArraySchema(schema = Schema(implementation = RenderedVariableDefinition::class)),
             ),
         ],
     )

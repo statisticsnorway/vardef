@@ -50,6 +50,7 @@ class VariableDefinitionByIdController(
                     ExampleObject(name = "No date specified", value = COMPLETE_RESPONSE_EXAMPLE),
                     ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
                 ],
+                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
     )
@@ -142,13 +143,14 @@ class VariableDefinitionByIdController(
         responseCode = "200",
         description = "Successfully updated",
         content = [
-            io.swagger.v3.oas.annotations.media.Content(
+            Content(
                 examples = [
-                    io.swagger.v3.oas.annotations.media.ExampleObject(
+                    ExampleObject(
                         name = "update",
-                        value = no.ssb.metadata.vardef.constants.COMPLETE_RESPONSE_EXAMPLE,
+                        value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
+                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
     )
@@ -190,6 +192,7 @@ class VariableDefinitionByIdController(
                     value = DRAFT_EXAMPLE,
                 ),
             ],
+            schema = Schema(implementation = UpdateDraft::class),
         )
         @Body
         @Valid

@@ -8,8 +8,10 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -48,6 +50,7 @@ class ValidityPeriodsController(
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
+                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
     )
@@ -60,7 +63,10 @@ class ValidityPeriodsController(
         variableDefinitionId: String,
         @Body
         @Valid
-        @Parameter(examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)])
+        @Parameter(
+            examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)],
+            schema = Schema(implementation = ValidityPeriod::class),
+        )
         newPeriod: ValidityPeriod,
         @Parameter(
             name = ACTIVE_GROUP,
@@ -102,6 +108,7 @@ class ValidityPeriodsController(
                         value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
+                array = ArraySchema(schema = Schema(implementation = CompleteResponse::class)),
             ),
         ],
     )

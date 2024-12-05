@@ -266,8 +266,8 @@ const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
 
-const val BAD_REQUEST = """
-    {"_links":
+const val BAD_REQUEST = """{
+    "_links":
         {
             "self": [
                 {
@@ -282,20 +282,18 @@ const val BAD_REQUEST = """
                 }
             ]
         },
-        "_embedded":
-            {
-                "errors": [
-                    {
-                        "_links":{},
-                        "_embedded":{},
-                         "message": "draft.unitTypes[0]: Code a is not a member of classification with id 702,
-                         "logref":null,
-                          "path":null
-                    }
-                ]
-            },
-            "message":"Conflict",
-            "logref":null,
-            "path":null
-   }
-"""
+        "_embedded":{
+            "errors":[
+                {
+                    "_links":{},
+                    "_embedded":{},
+                    "message":"draft.unitTypes[0]: Code a is not a member of classification with id 702",
+                    "logref":null,
+                    "path":null
+                }
+            ]
+        },
+        "message":"Bad Request",
+        "logref":null,
+        "path":null
+}"""

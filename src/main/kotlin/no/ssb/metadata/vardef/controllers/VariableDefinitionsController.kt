@@ -89,23 +89,23 @@ class VariableDefinitionsController(
             ),
         ],
     )
-    @ApiResponse(responseCode = "400", description = "Malformed data, missing data or attempt to specify disallowed fields.")
     @ApiResponse(
-        responseCode = "409",
-        description = "Short name is already in use by another variable definition.",
+        responseCode = "400",
+        description = "Malformed data, missing data or attempt to specify disallowed fields.",
         content = [
             Content(
                 mediaType = "application/json",
                 schema = Schema(implementation = HttpClientException::class),
                 examples = [
                     ExampleObject(
-                        name = "conflict",
-                        value = DUPLICATE_SHORTNAME,
+                        name = "bad_request",
+                        value = BAD_REQUEST,
                     ),
                 ],
             ),
         ],
     )
+    @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Secured(VARIABLE_CREATOR)
     fun createVariableDefinition(
         @Parameter(
@@ -113,6 +113,10 @@ class VariableDefinitionsController(
                 ExampleObject(
                     name = "create_draft",
                     value = DRAFT_EXAMPLE,
+                ),
+                ExampleObject(
+                    name = "bad_request",
+                    value = DRAFT_EXAMPLE_BAD_REQUEST,
                 ),
             ],
             schema = Schema(implementation = Draft::class),

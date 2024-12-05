@@ -227,3 +227,37 @@ const val LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE = """[
 const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
+
+const val DUPLICATE_SHORTNAME = """
+    {"_links":
+        {
+            "self": [
+                {
+                    "href":"/variable-definitions?active_group=dapla-felles-developers",
+                    "templated":false,
+                    "type":null,
+                    "deprecation":null,
+                    "profile":null,
+                    "name":null,
+                    "title":null,
+                    "hreflang":null
+                }
+            ]
+        },
+        "_embedded":
+            {
+                "errors": [
+                    {
+                        "_links":{},
+                        "_embedded":{},
+                         "message":"Short name test100 already exists.",
+                         "logref":null,
+                          "path":null
+                    }
+                ]
+            },
+            "message":"Conflict",
+            "logref":null,
+            "path":null
+   }
+"""

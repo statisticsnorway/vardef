@@ -118,10 +118,10 @@ object TestUtils {
             argumentSet(
                 "external_reference_uri invalid",
                 jsonTestInput().apply { put("external_reference_uri", "Not url") }.toString(),
-                "Error deserializing type",
+                "Not url",
             ),
             argumentSet(
-                "external_reference_uri malformed uri",
+                "related_variable_definition_uris malformed uri",
                 jsonTestInput()
                     .apply {
                         put(
@@ -129,7 +129,7 @@ object TestUtils {
                             listOf("not a url"),
                         )
                     }.toString(),
-                "Error deserializing type",
+                "no protocol",
             ),
             argumentSet(
                 "contact malformed email",

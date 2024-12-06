@@ -3,7 +3,7 @@
     <ExternalSystemSettings>
       <option name="env">
         <map>
-          <entry key="MICRONAUT_ENVIRONMENTS" value="local" />
+          <entry key="MICRONAUT_ENVIRONMENTS" value="local,test" />
         </map>
       </option>
       <option name="executionName" />

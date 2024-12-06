@@ -7,6 +7,10 @@ micronaut:
             allowed-audiences:
               - dapla-cli
               - onyxia-api
+  http:
+    services:
+      keycloak:
+        clientSecret: ${KEYCLOAK_CLIENT_SECRET:placeholder}
 
 mongodb:
 # Micronaut needs to know which package is holding the models/entities

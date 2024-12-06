@@ -266,7 +266,7 @@ const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
 
-const val BAD_REQUEST = """{
+const val BAD_REQUEST_ERROR_RESPONSE_EXAMPLE = """{
     "_links":
         {
             "self": [

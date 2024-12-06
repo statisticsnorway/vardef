@@ -66,7 +66,7 @@ const val DRAFT_EXAMPLE = """{
 }
 """
 
-const val DRAFT_EXAMPLE_BAD_REQUEST = """{
+const val DRAFT_INVALID_UNIT_TYPE_EXAMPLE = """{
     "name": {
         "en": "Country Background",
         "nb": "Landbakgrunn",

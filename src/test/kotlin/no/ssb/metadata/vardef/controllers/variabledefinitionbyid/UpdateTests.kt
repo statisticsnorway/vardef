@@ -116,7 +116,7 @@ class UpdateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
             .body(
-                "_embedded.errors[0].message",
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString("is already in use by another variable definition."),
             )
     }
@@ -137,7 +137,7 @@ class UpdateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(errorMessage),
             )
     }
@@ -180,7 +180,7 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -203,7 +203,7 @@ class UpdateTests : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString("Unknown property [id] encountered during deserialization of type"),
             )
         assertThat(
@@ -310,7 +310,7 @@ class UpdateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(expectedErrorMessage),
             )
 

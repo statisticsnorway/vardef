@@ -6,8 +6,8 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.PROBLEM_JSON_DETAIL_JSON_PATH
 import no.ssb.metadata.vardef.utils.numIncomeTaxPatches
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
@@ -152,7 +152,7 @@ class ReadTests : BaseVardefTest() {
             .get("/variable-definitions/${VariableDefinitionService.generateId()}/patches")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test
@@ -162,7 +162,7 @@ class ReadTests : BaseVardefTest() {
             .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/8987563")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test

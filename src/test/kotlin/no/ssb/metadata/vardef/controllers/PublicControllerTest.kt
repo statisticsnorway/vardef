@@ -41,7 +41,7 @@ class PublicControllerTest : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 startsWith("Failed to convert argument [language] for value [se]"),
             )
     }
@@ -145,7 +145,7 @@ class PublicControllerTest : BaseVardefTest() {
             .get("$publicVariableDefinitionsPath/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @ParameterizedTest

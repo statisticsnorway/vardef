@@ -5,8 +5,8 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.PROBLEM_JSON_DETAIL_JSON_PATH
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.containsString
@@ -32,7 +32,7 @@ class ReadTests : BaseVardefTest() {
             .get("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @ParameterizedTest

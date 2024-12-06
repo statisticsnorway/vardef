@@ -55,7 +55,7 @@ class DeleteTests : BaseVardefTest() {
             .delete("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No such variable definition found"))
     }
 
     @Test

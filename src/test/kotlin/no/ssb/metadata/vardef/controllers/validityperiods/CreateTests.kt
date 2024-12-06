@@ -194,7 +194,7 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "Failed to convert argument [newPeriod] for value [null]",
                 ),
@@ -219,7 +219,7 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "short_name may not be specified here",
                 ),
@@ -244,7 +244,7 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "valid_until may not be specified here",
                 ),

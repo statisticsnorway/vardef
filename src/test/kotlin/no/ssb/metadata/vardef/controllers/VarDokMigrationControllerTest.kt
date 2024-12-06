@@ -5,7 +5,7 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.ERROR_MESSAGE_JSON_PATH
+import no.ssb.metadata.vardef.utils.PROBLEM_JSON_DETAIL_JSON_PATH
 import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
 import no.ssb.metadata.vardef.utils.TEST_TEAM
 import org.assertj.core.api.Assertions.assertThat
@@ -62,7 +62,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(409)
             .body(
-                "_embedded.errors[0].message",
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "Short name wies already exists.",
                 ),
@@ -85,7 +85,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "Vardok id $id is missing Valid (valid dates) and can not be saved",
                 ),
@@ -104,7 +104,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "Vardok id 123 is missing DataElementName (short name) and can not be saved",
                 ),
@@ -140,7 +140,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "Vardok id $id Valid is missing 'from' date and can not be saved",
                 ),
@@ -167,7 +167,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
                 ),
@@ -194,7 +194,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(
                     "shortName: must match",
                 ),

@@ -26,7 +26,7 @@ class UpdateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No Validity Period with valid_from date"))
+            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No Validity Period with valid_from date"))
     }
 
     @Test
@@ -104,7 +104,7 @@ class UpdateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .body(
-                ERROR_MESSAGE_JSON_PATH,
+                PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(expectedErrorMessage),
             )
         val savedVariableDefinition =

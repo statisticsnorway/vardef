@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
 
-const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"
+const val PROBLEM_JSON_DETAIL_JSON_PATH = "detail"
 
 /**
  * A custom appender for logging events used in testing scenarios.

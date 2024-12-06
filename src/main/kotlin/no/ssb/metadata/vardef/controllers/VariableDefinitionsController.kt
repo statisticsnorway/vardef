@@ -41,7 +41,7 @@ class VariableDefinitionsController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "List of one variable definition",
+                        name = "Specific date",
                         value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ), ExampleObject(
                         name = "Empty list",

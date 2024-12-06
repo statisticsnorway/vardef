@@ -99,7 +99,7 @@ class VariableDefinitionsController(
                 examples = [
                     ExampleObject(
                         name = "bad_request",
-                        value = BAD_REQUEST,
+                        value = BAD_REQUEST_ERROR_RESPONSE_EXAMPLE,
                     ),
                 ],
             ),
@@ -116,7 +116,7 @@ class VariableDefinitionsController(
                 ),
                 ExampleObject(
                     name = "bad_request",
-                    value = DRAFT_EXAMPLE_BAD_REQUEST,
+                    value = DRAFT_INVALID_UNIT_TYPE_EXAMPLE,
                 ),
             ],
             schema = Schema(implementation = Draft::class),
@@ -129,6 +129,10 @@ class VariableDefinitionsController(
             examples = [
                 ExampleObject(
                     name = "create_draft",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+                ExampleObject(
+                    name = "bad_request",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],

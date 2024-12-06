@@ -90,6 +90,7 @@ class UpdateTests : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
+        constraintViolation: Boolean,
         expectedErrorMessage: String,
         spec: RequestSpecification,
     ) {
@@ -103,10 +104,18 @@ class UpdateTests : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
+
+        if (constraintViolation) {
+            spec.then().body(
+                "violations[0].message",
+                containsString(expectedErrorMessage),
+            )
+        } else {
+            spec.then().body(
                 PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(expectedErrorMessage),
             )
+        }
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
                 SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,

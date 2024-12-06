@@ -194,9 +194,14 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .then()
             .statusCode(400)
             .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
+                "violations[0].message",
                 containsString(
-                    "shortName: must match",
+                    "must match",
+                ),
+            ).body(
+                "violations[0].field",
+                containsString(
+                    "shortName",
                 ),
             )
     }

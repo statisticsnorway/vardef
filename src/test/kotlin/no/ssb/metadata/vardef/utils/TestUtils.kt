@@ -68,56 +68,78 @@ object TestUtils {
                             )
                         }
                     }.toString(),
+                false,
+                "name",
                 "Unknown property [se]",
             ),
             argumentSet(
                 "short_name with dashes",
                 jsonTestInput().apply { put("short_name", "dash-not-allowed") }.toString(),
-                "shortName: must match",
+                true,
+                "shortName",
+                "must match",
             ),
             argumentSet(
                 "short_name with capital letters",
                 jsonTestInput().apply { put("short_name", "CAPITALS") }.toString(),
-                "shortName: must match",
+                true,
+                "shortName",
+                "must match",
             ),
             argumentSet(
                 "short_name too short",
                 jsonTestInput().apply { put("short_name", "a") }.toString(),
-                "shortName: must match",
+                true,
+                "shortName",
+                "must match",
             ),
             argumentSet(
                 "classification_reference invalid",
                 jsonTestInput().apply { put("classification_reference", "100000") }.toString(),
-                "classificationReference: Code 100000 is not a valid classification id",
+                true,
+                "classificationReference",
+                "Code 100000 is not a valid classification id",
             ),
             argumentSet(
                 "unit_types invalid code",
                 jsonTestInput().apply { put("unit_types", listOf("blah")) }.toString(),
+                true,
+                "unitTypes",
                 "Code blah is not a member of classification with id",
             ),
             argumentSet(
                 "subject_fields invalid code",
                 jsonTestInput().apply { put("subject_fields", listOf("blah")) }.toString(),
+                true,
+                "subjectFields",
                 "Code blah is not a member of classification with id",
             ),
             argumentSet(
                 "measurement_type invalid code",
                 jsonTestInput().apply { put("measurement_type", "blah") }.toString(),
+                true,
+                "measurementType",
                 "Code blah is not a member of classification with id",
             ),
             argumentSet(
                 "valid_from invalid date",
                 jsonTestInput().apply { put("valid_from", "2024-20-11") }.toString(),
+                false,
+                "validFrom",
                 "Error deserializing type",
             ),
             argumentSet(
                 "valid_until specified",
                 jsonTestInput().apply { put("valid_until", "2030-06-30") }.toString(),
+                false,
+                "validUntil",
                 "valid_until may not be specified here",
             ),
             argumentSet(
                 "external_reference_uri invalid",
                 jsonTestInput().apply { put("external_reference_uri", "Not url") }.toString(),
+                false,
+                "externalReferenceUri",
                 "Not url",
             ),
             argumentSet(
@@ -129,6 +151,8 @@ object TestUtils {
                             listOf("not a url"),
                         )
                     }.toString(),
+                false,
+                "relatedVariableDefinitionUris",
                 "no protocol",
             ),
             argumentSet(
@@ -140,6 +164,8 @@ object TestUtils {
                             "not an email",
                         )
                     }.toString(),
+                true,
+                "contact",
                 "must be a well-formed email address",
             ),
         )

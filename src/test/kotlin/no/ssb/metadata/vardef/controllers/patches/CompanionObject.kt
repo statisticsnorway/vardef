@@ -115,6 +115,7 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    false,
                     "Invalid Dapla team",
                 ),
                 argumentSet(
@@ -134,6 +135,7 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    true,
                     "owner team and groups can not be null",
                 ),
                 argumentSet(
@@ -147,6 +149,7 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    false,
                     "must not be empty",
                 ),
                 argumentSet(
@@ -161,6 +164,7 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    false,
                     "must not be empty",
                 ),
                 argumentSet(
@@ -181,6 +185,7 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    true,
                     "Invalid Dapla group",
                 ),
                 argumentSet(
@@ -201,6 +206,7 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    false,
                     "Invalid Dapla group",
                 ),
                 argumentSet(
@@ -222,6 +228,7 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    true,
                     "Invalid Dapla group",
                 ),
                 argumentSet(
@@ -243,6 +250,7 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    false,
                     "Invalid Dapla group",
                 ),
             )

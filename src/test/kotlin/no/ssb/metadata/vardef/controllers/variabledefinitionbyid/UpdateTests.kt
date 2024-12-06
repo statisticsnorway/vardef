@@ -125,6 +125,8 @@ class UpdateTests : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `update draft variable definition with invalid inputs`(
         updatedJsonString: String,
+        constraintViolation: Boolean,
+        fieldName: String,
         errorMessage: String,
         spec: RequestSpecification,
     ) {
@@ -136,10 +138,29 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString(errorMessage),
-            )
+            .contentType("application/problem+json")
+
+        if (constraintViolation) {
+            spec
+                .then()
+                .body(
+                    "violations[0].field",
+                    containsString(fieldName),
+                ).body(
+                    "violations[0].message",
+                    containsString(errorMessage),
+                )
+        } else {
+            spec
+                .then()
+                .body(
+                    PROBLEM_JSON_DETAIL_JSON_PATH,
+                    containsString(fieldName),
+                ).body(
+                    PROBLEM_JSON_DETAIL_JSON_PATH,
+                    containsString(errorMessage),
+                )
+        }
     }
 
     @Test
@@ -296,6 +317,7 @@ class UpdateTests : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
+        constraintViolation: Boolean,
         expectedErrorMessage: String,
         spec: RequestSpecification,
     ) {
@@ -309,10 +331,19 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
+            .contentType("application/problem+json")
+
+        if (constraintViolation) {
+            spec.then().body(
+                "violations[0].message",
+                containsString(expectedErrorMessage),
+            )
+        } else {
+            spec.then().body(
                 PROBLEM_JSON_DETAIL_JSON_PATH,
                 containsString(expectedErrorMessage),
             )
+        }
 
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(

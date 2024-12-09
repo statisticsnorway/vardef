@@ -60,9 +60,10 @@ class VariableDefinitionByIdController(
         content = [
             Content(
                 mediaType = "application/problem+json",
+                schema = Schema(implementation = HttpStatusException::class),
                 examples = [
                     ExampleObject(
-                        name = "not_found",
+                        name = "Not found",
                         value = VARIABLE_NOT_FOUND_EXAMPLE,
                     ),
                 ],
@@ -77,7 +78,7 @@ class VariableDefinitionByIdController(
             examples = [
                 ExampleObject(name = "No date specified", value = ID_EXAMPLE),
                 ExampleObject(name = "Specific date", value = ID_EXAMPLE),
-                ExampleObject(name = "not_found", value = "invalid id"),
+                ExampleObject(name = "Not found", value = "invalid id"),
             ],
         )
         definitionId: String,

@@ -54,7 +54,21 @@ class VariableDefinitionByIdController(
             ),
         ],
     )
-    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @ApiResponse(
+        responseCode = "404",
+        description = "No such variable definition found",
+        content = [
+            Content(
+                mediaType = "application/problem+json",
+                examples = [
+                    ExampleObject(
+                        name = "not_found",
+                        value = VARIABLE_NOT_FOUND_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
     @Get
     fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
@@ -63,6 +77,7 @@ class VariableDefinitionByIdController(
             examples = [
                 ExampleObject(name = "No date specified", value = ID_EXAMPLE),
                 ExampleObject(name = "Specific date", value = ID_EXAMPLE),
+                ExampleObject(name = "not_found", value = "invalid id"),
             ],
         )
         definitionId: String,

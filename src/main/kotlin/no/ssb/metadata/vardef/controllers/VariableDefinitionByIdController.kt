@@ -54,25 +54,7 @@ class VariableDefinitionByIdController(
             ),
         ],
     )
-    @ApiResponse(
-        responseCode = "404",
-        description = "No such variable definition found",
-        content = [
-            Content(
-                mediaType = "application/problem+json",
-                schema =
-                    Schema(
-                        ref = "https://opensource.zalando.com/restful-api-guidelines/models/problem-1.0.1.yaml#/Problem",
-                    ),
-                examples = [
-                    ExampleObject(
-                        name = "Not found",
-                        value = VARIABLE_NOT_FOUND_EXAMPLE,
-                    ),
-                ],
-            ),
-        ],
-    )
+    @NotFoundApiResponse
     @Get
     fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
@@ -120,7 +102,7 @@ class VariableDefinitionByIdController(
             ),
         ],
     )
-    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @NotFoundApiResponse
     @ApiResponse(responseCode = "405", description = "Attempt to delete a variable definition with status unlike DRAFT.")
     @Status(HttpStatus.NO_CONTENT)
     @Delete
@@ -182,7 +164,7 @@ class VariableDefinitionByIdController(
                 "- Owner information missing.\n" +
                 "- Malformed email addresses.",
     )
-    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @NotFoundApiResponse
     @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status unlike DRAFT.")
     @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
     @Patch

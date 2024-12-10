@@ -228,11 +228,11 @@ const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
 
-const val VARIABLE_NOT_FOUND_EXAMPLE = """{
+const val NOT_FOUND_EXAMPLE = """{
     "type": "about:blank",
     "title": null,
     "status": 404,
-    "detail": "Variable with ID invalid id not found",
+    "detail": "Not found",
     "instance": null,
     "parameters": {   
     }

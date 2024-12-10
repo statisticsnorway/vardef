@@ -43,7 +43,7 @@ class PatchesController(
      * The full object is returned for comparison purposes.
      */
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @NotFoundApiResponse
     @ApiResponse(
         responseCode = "200",
         content = [
@@ -88,7 +88,7 @@ class PatchesController(
             ),
         ],
     )
-    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @NotFoundApiResponse
     @Get("/{patch-id}")
     fun getPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)

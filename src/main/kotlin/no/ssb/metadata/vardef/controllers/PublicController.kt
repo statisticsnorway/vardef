@@ -88,7 +88,7 @@ class PublicController(
             ),
         ],
     )
-    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @NotFoundApiResponse
     @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
     fun getPublicVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)

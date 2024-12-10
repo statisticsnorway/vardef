@@ -23,6 +23,7 @@ micronautManagement = "4.7.6"
 micronautMicrometer = "5.9.3"
 micronautMongoDb = "5.5.0"
 micronautOpenapi = "6.13.2"
+micronautProblem = "3.6.0"
 micronautSecurity = "4.11.2"
 micronautSerde = "2.13.0"
 micronautTest = "4.6.0"
@@ -52,6 +53,7 @@ micronaut-mongo-sync = { module = "io.micronaut.mongodb:micronaut-mongo-sync", v
 micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi", version.ref = "micronautOpenapi" }
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronautOpenapi" }
 micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronaut" }
+micronaut-problem-json = { module = "io.micronaut.problem:micronaut-problem-json", version.ref = "micronautProblem" }
 micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt", version.ref = "micronautSecurity" }
 micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson", version.ref = "micronautSerde" }
 micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor", version.ref = "micronautSerde" }

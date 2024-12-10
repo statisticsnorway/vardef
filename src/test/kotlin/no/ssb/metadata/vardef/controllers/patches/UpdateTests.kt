@@ -26,7 +26,13 @@ class UpdateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No Validity Period with valid_from date"))
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "No Validity Period with valid_from date",
+                ),
+            )
     }
 
     @Test
@@ -90,7 +96,9 @@ class UpdateTests : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
-        expectedErrorMessage: String,
+        constraintViolation: Boolean,
+        fieldName: String?,
+        expectedErrorMessage: String?,
         spec: RequestSpecification,
     ) {
         spec
@@ -103,10 +111,8 @@ class UpdateTests : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(expectedErrorMessage),
-            )
+            .spec(buildProblemJsonResponseSpec(constraintViolation, null, expectedErrorMessage))
+
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
                 SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,

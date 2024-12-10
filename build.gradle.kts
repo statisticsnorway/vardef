@@ -32,6 +32,7 @@ dependencies {
     implementation(libs.micronaut.http.client)
     implementation(libs.micronaut.management)
     implementation(libs.micronaut.micrometer.registry.prometheus)
+    implementation(libs.micronaut.problem.json)
     implementation(libs.micronaut.serde.jackson)
     implementation(libs.micronaut.jackson.xml)
     implementation(libs.kotlin.reflect)

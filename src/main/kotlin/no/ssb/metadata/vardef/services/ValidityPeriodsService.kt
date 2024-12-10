@@ -254,7 +254,8 @@ class ValidityPeriodsService(
             .map { it.validFrom }
             .let { dates ->
                 logger.info(
-                    "Checking if valid new valid from: $dateOfValidity is before: ${dates.min()}, or after: ${dates.max()}",
+                    "Checking if valid new valid from: $dateOfValidity " +
+                        "is before: ${dates.min()}, or after: ${dates.max()}",
                     kv("definitionId", definitionId),
                 )
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
@@ -335,7 +336,9 @@ class ValidityPeriodsService(
             .forEach { period ->
                 // For non-selected validity periods, only update the owner field
                 logger.info(
-                    "Updating owner to $owner for definition: $definitionId for period between: ${period.validFrom} - ${ period.validUntil} ",
+                    "Updating owner to $owner for definition: $definitionId " +
+                        "for period between: ${period.validFrom} - ${ period.validUntil} ",
+                    kv("definitionId", definitionId),
                 )
                 val patchOwner = period.copy(owner = owner).toPatch()
                 variableDefinitionRepository.save(

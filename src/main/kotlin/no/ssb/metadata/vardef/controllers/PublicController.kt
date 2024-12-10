@@ -41,10 +41,10 @@ class PublicController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "List of one variable definition",
+                        name = "Specific date",
                         value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
                     ), ExampleObject(
-                        name = "Empty list",
+                        name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
                 ],
@@ -62,7 +62,12 @@ class PublicController(
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             schema = Schema(format = DATE_FORMAT),
-            examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
+            examples = [
+                ExampleObject(
+                    name = "Date not specified",
+                    value = "",
+                ), ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
+            ],
         )
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =

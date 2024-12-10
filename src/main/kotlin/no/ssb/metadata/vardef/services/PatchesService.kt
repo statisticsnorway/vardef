@@ -105,7 +105,7 @@ class PatchesService(
         list(definitionId).forEach { item ->
             variableDefinitionRepository.deleteById(item.id)
             logger.info(
-                "Successfully deleted variable definition with id $definitionId",
+                "Successfully deleted variable definition with id: $definitionId",
                 kv("definitionId", definitionId),
             )
         }

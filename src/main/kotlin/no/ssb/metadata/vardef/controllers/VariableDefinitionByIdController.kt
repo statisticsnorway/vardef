@@ -47,7 +47,7 @@ class VariableDefinitionByIdController(
         content = [
             Content(
                 examples = [
-                    ExampleObject(name = "No date specified", value = COMPLETE_RESPONSE_EXAMPLE),
+                    ExampleObject(name = "Date not specified", value = COMPLETE_RESPONSE_EXAMPLE),
                     ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
                 ],
                 schema = Schema(implementation = CompleteResponse::class),
@@ -79,7 +79,7 @@ class VariableDefinitionByIdController(
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
             examples = [
-                ExampleObject(name = "No date specified", value = ID_EXAMPLE),
+                ExampleObject(name = "Date not specified", value = ID_EXAMPLE),
                 ExampleObject(name = "Specific date", value = ID_EXAMPLE),
                 ExampleObject(name = "Not found", value = "invalid id"),
             ],
@@ -88,7 +88,7 @@ class VariableDefinitionByIdController(
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
-                ExampleObject(name = "No date specified", value = ""),
+                ExampleObject(name = "Date not specified", value = ""),
                 ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
             ],
         )

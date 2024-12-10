@@ -80,7 +80,7 @@ class PatchesController(
         content = [
             io.swagger.v3.oas.annotations.media.Content(
                 examples = [
-                    io.swagger.v3.oas.annotations.media.ExampleObject(
+                    ExampleObject(
                         name = "Patch",
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),

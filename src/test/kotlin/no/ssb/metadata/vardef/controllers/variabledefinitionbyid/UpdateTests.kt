@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
 import io.micronaut.http.HttpStatus
+import io.micronaut.problem.ProblemErrorResponseProcessor.APPLICATION_PROBLEM_JSON
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
@@ -138,7 +139,7 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .contentType("application/problem+json")
+            .contentType(APPLICATION_PROBLEM_JSON)
 
         if (constraintViolation) {
             spec
@@ -331,7 +332,7 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .contentType("application/problem+json")
+            .contentType(APPLICATION_PROBLEM_JSON)
 
         if (constraintViolation) {
             spec.then().body(

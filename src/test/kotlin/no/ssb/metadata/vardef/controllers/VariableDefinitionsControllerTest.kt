@@ -136,8 +136,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     fun `create variable definition with invalid inputs`(
         updatedJsonString: String,
         constraintViolation: Boolean,
-        fieldName: String,
-        errorMessage: String,
+        fieldName: String?,
+        errorMessage: String?,
         spec: RequestSpecification,
     ) {
         spec
@@ -149,29 +149,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .contentType("application/problem+json")
-
-        if (constraintViolation) {
-            spec
-                .then()
-                .body(
-                    "violations[0].field",
-                    containsString(fieldName),
-                ).body(
-                    "violations[0].message",
-                    containsString(errorMessage),
-                )
-        } else {
-            spec
-                .then()
-                .body(
-                    PROBLEM_JSON_DETAIL_JSON_PATH,
-                    containsString(fieldName),
-                ).body(
-                    PROBLEM_JSON_DETAIL_JSON_PATH,
-                    containsString(errorMessage),
-                )
-        }
+            .spec(buildProblemJsonResponseSpec(constraintViolation, fieldName, errorMessage))
     }
 
     @ParameterizedTest

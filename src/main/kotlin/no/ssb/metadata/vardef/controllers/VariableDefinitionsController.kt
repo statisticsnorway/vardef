@@ -61,7 +61,11 @@ class VariableDefinitionsController(
                 ExampleObject(
                     name = "Date not specified",
                     value = "",
-                ), ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
+                ),
+                ExampleObject(
+                    name = "Specific date",
+                    value = DATE_EXAMPLE,
+                ),
             ],
         )
         dateOfValidity: LocalDate? = null,

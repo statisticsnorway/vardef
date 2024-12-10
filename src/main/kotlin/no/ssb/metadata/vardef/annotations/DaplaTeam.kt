@@ -1,12 +1,12 @@
-package no.ssb.metadata.vardef.integrations.klass.validators
+package no.ssb.metadata.vardef.annotations
 
 import jakarta.validation.Constraint
 import jakarta.validation.Payload
 import kotlin.reflect.KClass
 
 /**
- * The annotated element must be a valid Klass code belonging to the classification or code list referenced by id.
- */
+* The annotated element must be a valid team name.
+*/
 @Target(
     AnnotationTarget.FIELD,
     AnnotationTarget.FUNCTION,
@@ -19,8 +19,8 @@ import kotlin.reflect.KClass
 @Repeatable
 @MustBeDocumented
 @Constraint(validatedBy = [])
-annotation class KlassId(
-    val message: String = "Code {validatedValue} is not a valid classification id",
+annotation class DaplaTeam(
+    val message: String = "Invalid Dapla team",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = [],
 )

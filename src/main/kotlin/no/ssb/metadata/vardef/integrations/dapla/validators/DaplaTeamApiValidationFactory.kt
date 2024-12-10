@@ -4,6 +4,8 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.annotations.DaplaGroup
+import no.ssb.metadata.vardef.annotations.DaplaTeam
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 
 @Factory

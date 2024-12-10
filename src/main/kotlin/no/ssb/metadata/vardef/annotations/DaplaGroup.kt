@@ -1,12 +1,12 @@
-package no.ssb.metadata.vardef.integrations.dapla.validators
+package no.ssb.metadata.vardef.annotations
 
 import jakarta.validation.Constraint
 import jakarta.validation.Payload
 import kotlin.reflect.KClass
 
 /**
-* The annotated element must be a valid team name.
-*/
+ * The annotated element must be a valid group name.
+ */
 @Target(
     AnnotationTarget.FIELD,
     AnnotationTarget.FUNCTION,
@@ -19,8 +19,8 @@ import kotlin.reflect.KClass
 @Repeatable
 @MustBeDocumented
 @Constraint(validatedBy = [])
-annotation class DaplaTeam(
-    val message: String = "Invalid Dapla team",
+annotation class DaplaGroup(
+    val message: String = "Invalid Dapla group",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = [],
 )

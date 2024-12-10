@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.klass.validators
+package no.ssb.metadata.vardef.annotations
 
 import jakarta.validation.Constraint
 import jakarta.validation.Payload

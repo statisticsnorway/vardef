@@ -115,9 +115,12 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
-            .body(
-                "_embedded.errors[0].message",
-                containsString("is already in use by another variable definition."),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "is already in use by another variable definition.",
+                ),
             )
     }
 
@@ -125,7 +128,9 @@ class UpdateTests : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `update draft variable definition with invalid inputs`(
         updatedJsonString: String,
-        errorMessage: String,
+        constraintViolation: Boolean,
+        fieldName: String?,
+        errorMessage: String?,
         spec: RequestSpecification,
     ) {
         spec
@@ -136,10 +141,7 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(errorMessage),
-            )
+            .spec(buildProblemJsonResponseSpec(constraintViolation, fieldName, errorMessage))
     }
 
     @Test
@@ -180,7 +182,13 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "No such variable definition found",
+                ),
+            )
     }
 
     @Test
@@ -202,9 +210,12 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("Unknown property [id] encountered during deserialization of type"),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Unknown property [id] encountered during deserialization of type",
+                ),
             )
         assertThat(
             variableDefinitionService
@@ -296,6 +307,7 @@ class UpdateTests : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#invalidOwnerUpdates")
     fun `update owner bad request`(
         jsonInput: String,
+        constraintViolation: Boolean,
         expectedErrorMessage: String,
         spec: RequestSpecification,
     ) {
@@ -309,9 +321,12 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(expectedErrorMessage),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    constraintViolation = constraintViolation,
+                    fieldName = null,
+                    errorMessage = expectedErrorMessage,
+                ),
             )
 
         val savedVariableDefinition =

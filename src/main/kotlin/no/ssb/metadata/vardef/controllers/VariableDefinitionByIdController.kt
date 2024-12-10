@@ -54,7 +54,25 @@ class VariableDefinitionByIdController(
             ),
         ],
     )
-    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @ApiResponse(
+        responseCode = "404",
+        description = "No such variable definition found",
+        content = [
+            Content(
+                mediaType = "application/problem+json",
+                schema =
+                    Schema(
+                        ref = "https://opensource.zalando.com/restful-api-guidelines/models/problem-1.0.1.yaml#/Problem",
+                    ),
+                examples = [
+                    ExampleObject(
+                        name = "Not found",
+                        value = VARIABLE_NOT_FOUND_EXAMPLE,
+                    ),
+                ],
+            ),
+        ],
+    )
     @Get
     fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
@@ -63,6 +81,7 @@ class VariableDefinitionByIdController(
             examples = [
                 ExampleObject(name = "No date specified", value = ID_EXAMPLE),
                 ExampleObject(name = "Specific date", value = ID_EXAMPLE),
+                ExampleObject(name = "Not found", value = "invalid id"),
             ],
         )
         definitionId: String,

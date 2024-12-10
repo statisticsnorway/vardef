@@ -6,7 +6,6 @@ import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
@@ -55,7 +54,13 @@ class DeleteTests : BaseVardefTest() {
             .delete("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
-            .body(ERROR_MESSAGE_JSON_PATH, containsString("No such variable definition found"))
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "No such variable definition found",
+                ),
+            )
     }
 
     @Test

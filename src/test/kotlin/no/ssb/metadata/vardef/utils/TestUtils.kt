@@ -2,12 +2,18 @@ package no.ssb.metadata.vardef.utils
 
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.AppenderBase
+import io.micronaut.problem.ProblemErrorResponseProcessor.APPLICATION_PROBLEM_JSON
+import io.restassured.builder.ResponseSpecBuilder
+import io.restassured.specification.ResponseSpecification
 import no.ssb.metadata.vardef.models.VariableStatus
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import java.util.stream.Stream
 
-const val ERROR_MESSAGE_JSON_PATH = "_embedded.errors[0].message"
+const val PROBLEM_JSON_DETAIL_JSON_PATH = "detail"
+const val PROBLEM_JSON_VIOLATIONS_FIELD_JSON_PATH = "violations.field"
+const val PROBLEM_JSON_VIOLATIONS_MESSAGE_JSON_PATH = "violations.message"
 
 /**
  * A custom appender for logging events used in testing scenarios.
@@ -30,6 +36,55 @@ class TestLogAppender : AppenderBase<ILoggingEvent>() {
     fun getLoggedMessages(): List<ILoggingEvent> = logMessages
 
     fun reset() = logMessages.clear()
+}
+
+/**
+ * Build a reusable specification for asserting Problem JSON fields
+ *
+ * @param constraintViolation true if the format follows [Constraint Violation format](https://opensource.zalando.com/problem/constraint-violation/), false for the base Problem JSON format.
+ * @param fieldName optional, to assert on whether the field is included in the body
+ * @param errorMessage optional, to assert on whether the error message is included in the body
+ * @return the built [ResponseSpecification]
+ */
+fun buildProblemJsonResponseSpec(
+    constraintViolation: Boolean,
+    fieldName: String?,
+    errorMessage: String?,
+): ResponseSpecification {
+    val builder = ResponseSpecBuilder()
+    builder.expectContentType(APPLICATION_PROBLEM_JSON)
+    if (constraintViolation) {
+        fieldName?.let {
+            builder
+                .expectBody(
+                    PROBLEM_JSON_VIOLATIONS_FIELD_JSON_PATH,
+                    hasItems(containsString(it)),
+                )
+        }
+        errorMessage?.let {
+            builder
+                .expectBody(
+                    PROBLEM_JSON_VIOLATIONS_MESSAGE_JSON_PATH,
+                    hasItems(containsString(it)),
+                )
+        }
+    } else {
+        fieldName?.let {
+            builder
+                .expectBody(
+                    PROBLEM_JSON_DETAIL_JSON_PATH,
+                    containsString(it),
+                )
+        }
+        errorMessage?.let {
+            builder
+                .expectBody(
+                    PROBLEM_JSON_DETAIL_JSON_PATH,
+                    containsString(it),
+                )
+        }
+    }
+    return builder.build()
 }
 
 object TestUtils {
@@ -68,56 +123,78 @@ object TestUtils {
                             )
                         }
                     }.toString(),
+                false,
+                "name",
                 "Unknown property [se]",
             ),
             argumentSet(
                 "short_name with dashes",
                 jsonTestInput().apply { put("short_name", "dash-not-allowed") }.toString(),
-                "shortName: must match",
+                true,
+                "shortName",
+                "must match",
             ),
             argumentSet(
                 "short_name with capital letters",
                 jsonTestInput().apply { put("short_name", "CAPITALS") }.toString(),
-                "shortName: must match",
+                true,
+                "shortName",
+                "must match",
             ),
             argumentSet(
                 "short_name too short",
                 jsonTestInput().apply { put("short_name", "a") }.toString(),
-                "shortName: must match",
+                true,
+                "shortName",
+                "must match",
             ),
             argumentSet(
                 "classification_reference invalid",
                 jsonTestInput().apply { put("classification_reference", "100000") }.toString(),
-                "classificationReference: Code 100000 is not a valid classification id",
+                true,
+                "classificationReference",
+                "Code 100000 is not a valid classification id",
             ),
             argumentSet(
                 "unit_types invalid code",
                 jsonTestInput().apply { put("unit_types", listOf("blah")) }.toString(),
+                true,
+                "unitTypes",
                 "Code blah is not a member of classification with id",
             ),
             argumentSet(
                 "subject_fields invalid code",
                 jsonTestInput().apply { put("subject_fields", listOf("blah")) }.toString(),
+                true,
+                "subjectFields",
                 "Code blah is not a member of classification with id",
             ),
             argumentSet(
                 "measurement_type invalid code",
                 jsonTestInput().apply { put("measurement_type", "blah") }.toString(),
+                true,
+                "measurementType",
                 "Code blah is not a member of classification with id",
             ),
             argumentSet(
                 "valid_from invalid date",
                 jsonTestInput().apply { put("valid_from", "2024-20-11") }.toString(),
+                false,
+                null,
                 "Error deserializing type",
             ),
             argumentSet(
                 "valid_until specified",
                 jsonTestInput().apply { put("valid_until", "2030-06-30") }.toString(),
+                false,
+                null,
                 "valid_until may not be specified here",
             ),
             argumentSet(
                 "external_reference_uri invalid",
                 jsonTestInput().apply { put("external_reference_uri", "Not url") }.toString(),
+                false,
+                null,
                 "Not url",
             ),
             argumentSet(
@@ -129,6 +206,8 @@ object TestUtils {
                             listOf("not a url"),
                         )
                     }.toString(),
+                false,
+                null,
                 "no protocol",
             ),
             argumentSet(
@@ -140,6 +219,8 @@ object TestUtils {
                             "not an email",
                         )
                     }.toString(),
+                true,
+                "contact",
                 "must be a well-formed email address",
             ),
         )

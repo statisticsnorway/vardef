@@ -193,10 +193,11 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(
-                    "Failed to convert argument [newPeriod] for value [null]",
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Failed to convert argument [newPeriod] for value [null]",
                 ),
             )
     }
@@ -218,10 +219,11 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(
-                    "short_name may not be specified here",
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "short_name may not be specified here",
                 ),
             )
     }
@@ -243,10 +245,11 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(
-                    "valid_until may not be specified here",
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "valid_until may not be specified here",
                 ),
             )
     }

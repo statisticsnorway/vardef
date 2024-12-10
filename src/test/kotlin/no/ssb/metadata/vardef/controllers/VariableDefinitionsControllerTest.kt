@@ -135,7 +135,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `create variable definition with invalid inputs`(
         updatedJsonString: String,
-        errorMessage: String,
+        constraintViolation: Boolean,
+        fieldName: String?,
+        errorMessage: String?,
         spec: RequestSpecification,
     ) {
         spec
@@ -147,10 +149,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString(errorMessage),
-            )
+            .spec(buildProblemJsonResponseSpec(constraintViolation, fieldName, errorMessage))
     }
 
     @ParameterizedTest
@@ -185,9 +184,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("null annotate it with @Nullable"),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "null annotate it with @Nullable",
+                ),
             )
     }
 
@@ -264,9 +266,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
-            .body(
-                ERROR_MESSAGE_JSON_PATH,
-                containsString("already exists."),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "already exists.",
+                ),
             )
     }
 

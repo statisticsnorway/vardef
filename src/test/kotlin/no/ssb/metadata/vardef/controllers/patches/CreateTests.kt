@@ -163,7 +163,13 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("short_name may not be specified here"))
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "short_name may not be specified here",
+                ),
+            )
     }
 
     @Test
@@ -177,7 +183,13 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(400)
-            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("valid_from may not be specified here"))
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    "valid_from",
+                    errorMessage = "may not be specified here",
+                ),
+            )
     }
 
     @Test

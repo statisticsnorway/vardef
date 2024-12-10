@@ -184,9 +184,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString("null annotate it with @Nullable"),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "null annotate it with @Nullable",
+                ),
             )
     }
 
@@ -263,9 +266,12 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString("already exists."),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "already exists.",
+                ),
             )
     }
 

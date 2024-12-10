@@ -26,7 +26,13 @@ class UpdateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(404)
-            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No Validity Period with valid_from date"))
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "No Validity Period with valid_from date",
+                ),
+            )
     }
 
     @Test
@@ -91,7 +97,8 @@ class UpdateTests : BaseVardefTest() {
     fun `update owner bad request`(
         jsonInput: String,
         constraintViolation: Boolean,
-        expectedErrorMessage: String,
+        fieldName: String?,
+        expectedErrorMessage: String?,
         spec: RequestSpecification,
     ) {
         spec
@@ -104,18 +111,8 @@ class UpdateTests : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(buildProblemJsonResponseSpec(constraintViolation, null, expectedErrorMessage))
 
-        if (constraintViolation) {
-            spec.then().body(
-                "violations[0].message",
-                containsString(expectedErrorMessage),
-            )
-        } else {
-            spec.then().body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString(expectedErrorMessage),
-            )
-        }
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(
                 SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,

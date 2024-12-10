@@ -6,10 +6,9 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
-import no.ssb.metadata.vardef.utils.PROBLEM_JSON_DETAIL_JSON_PATH
+import no.ssb.metadata.vardef.utils.buildProblemJsonResponseSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -32,7 +31,13 @@ class ReadTests : BaseVardefTest() {
             .get("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
-            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No such variable definition found"))
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "No such variable definition found",
+                ),
+            )
     }
 
     @ParameterizedTest

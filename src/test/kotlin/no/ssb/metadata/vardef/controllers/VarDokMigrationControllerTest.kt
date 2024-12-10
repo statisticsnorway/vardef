@@ -4,12 +4,8 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.PROBLEM_JSON_DETAIL_JSON_PATH
-import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
-import no.ssb.metadata.vardef.utils.TEST_TEAM
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -61,12 +57,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/vardok-migration/2")
             .then()
             .statusCode(409)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString(
-                    "Short name wies already exists.",
-                ),
-            )
+            .spec(buildProblemJsonResponseSpec(false, null, errorMessage = "Short name wies already exists."))
     }
 
     @ParameterizedTest
@@ -84,10 +75,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/vardok-migration/$id")
             .then()
             .statusCode(400)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString(
-                    "Vardok id $id is missing Valid (valid dates) and can not be saved",
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Vardok id $id is missing Valid (valid dates) and can not be saved",
                 ),
             )
     }
@@ -103,10 +95,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/vardok-migration/123")
             .then()
             .statusCode(400)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString(
-                    "Vardok id 123 is missing DataElementName (short name) and can not be saved",
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Vardok id 123 is missing DataElementName (short name) and can not be saved",
                 ),
             )
     }
@@ -139,10 +132,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/vardok-migration/$id")
             .then()
             .statusCode(400)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString(
-                    "Vardok id $id Valid is missing 'from' date and can not be saved",
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Vardok id $id Valid is missing 'from' date and can not be saved",
                 ),
             )
     }
@@ -166,10 +160,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/vardok-migration/$id")
             .then()
             .statusCode(400)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString(
-                    "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
                 ),
             )
     }
@@ -193,17 +188,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .post("/vardok-migration/$id")
             .then()
             .statusCode(400)
-            .body(
-                "violations[0].message",
-                containsString(
-                    "must match",
-                ),
-            ).body(
-                "violations[0].field",
-                containsString(
-                    "shortName",
-                ),
-            )
+            .spec(buildProblemJsonResponseSpec(constraintViolation = true, fieldName = "shortName", errorMessage = "must match"))
     }
 
     @Test

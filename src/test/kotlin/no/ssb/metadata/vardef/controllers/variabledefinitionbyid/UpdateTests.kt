@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
 import io.micronaut.http.HttpStatus
-import io.micronaut.problem.ProblemErrorResponseProcessor.APPLICATION_PROBLEM_JSON
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
@@ -116,9 +115,12 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString("is already in use by another variable definition."),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "is already in use by another variable definition.",
+                ),
             )
     }
 
@@ -127,8 +129,8 @@ class UpdateTests : BaseVardefTest() {
     fun `update draft variable definition with invalid inputs`(
         updatedJsonString: String,
         constraintViolation: Boolean,
-        fieldName: String,
-        errorMessage: String,
+        fieldName: String?,
+        errorMessage: String?,
         spec: RequestSpecification,
     ) {
         spec
@@ -139,29 +141,7 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .contentType(APPLICATION_PROBLEM_JSON)
-
-        if (constraintViolation) {
-            spec
-                .then()
-                .body(
-                    "violations[0].field",
-                    containsString(fieldName),
-                ).body(
-                    "violations[0].message",
-                    containsString(errorMessage),
-                )
-        } else {
-            spec
-                .then()
-                .body(
-                    PROBLEM_JSON_DETAIL_JSON_PATH,
-                    containsString(fieldName),
-                ).body(
-                    PROBLEM_JSON_DETAIL_JSON_PATH,
-                    containsString(errorMessage),
-                )
-        }
+            .spec(buildProblemJsonResponseSpec(constraintViolation, fieldName, errorMessage))
     }
 
     @Test
@@ -202,7 +182,13 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
-            .body(PROBLEM_JSON_DETAIL_JSON_PATH, containsString("No such variable definition found"))
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "No such variable definition found",
+                ),
+            )
     }
 
     @Test
@@ -224,9 +210,12 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(400)
-            .body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString("Unknown property [id] encountered during deserialization of type"),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Unknown property [id] encountered during deserialization of type",
+                ),
             )
         assertThat(
             variableDefinitionService
@@ -332,19 +321,13 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .contentType(APPLICATION_PROBLEM_JSON)
-
-        if (constraintViolation) {
-            spec.then().body(
-                "violations[0].message",
-                containsString(expectedErrorMessage),
+            .spec(
+                buildProblemJsonResponseSpec(
+                    constraintViolation = constraintViolation,
+                    fieldName = null,
+                    errorMessage = expectedErrorMessage,
+                ),
             )
-        } else {
-            spec.then().body(
-                PROBLEM_JSON_DETAIL_JSON_PATH,
-                containsString(expectedErrorMessage),
-            )
-        }
 
         val savedVariableDefinition =
             variableDefinitionService.getCompleteByDate(

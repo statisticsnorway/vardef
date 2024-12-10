@@ -115,7 +115,8 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
-                    false,
+                    true,
+                    "owner.team",
                     "Invalid Dapla team",
                 ),
                 argumentSet(
@@ -135,7 +136,8 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
-                    true,
+                    false,
+                    null,
                     "owner team and groups can not be null",
                 ),
                 argumentSet(
@@ -149,7 +151,8 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
-                    false,
+                    true,
+                    "owner.groups",
                     "must not be empty",
                 ),
                 argumentSet(
@@ -164,7 +167,8 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
-                    false,
+                    true,
+                    "owner.groups",
                     "must not be empty",
                 ),
                 argumentSet(
@@ -186,6 +190,7 @@ class CompanionObject {
                             )
                         }.toString(),
                     true,
+                    "owner.groups",
                     "Invalid Dapla group",
                 ),
                 argumentSet(
@@ -206,7 +211,8 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
-                    false,
+                    true,
+                    "owner.groups",
                     "Invalid Dapla group",
                 ),
                 argumentSet(
@@ -229,6 +235,7 @@ class CompanionObject {
                             )
                         }.toString(),
                     true,
+                    "owner.groups",
                     "Invalid Dapla group",
                 ),
                 argumentSet(
@@ -250,7 +257,8 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
-                    false,
+                    true,
+                    "owner.groups",
                     "Invalid Dapla group",
                 ),
             )

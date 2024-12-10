@@ -58,14 +58,14 @@ fun buildProblemJsonResponseSpec(
             builder
                 .expectBody(
                     PROBLEM_JSON_VIOLATIONS_FIELD_JSON_PATH,
-                    contains(containsString(it)),
+                    hasItems(containsString(it)),
                 )
         }
         errorMessage?.let {
             builder
                 .expectBody(
                     PROBLEM_JSON_VIOLATIONS_MESSAGE_JSON_PATH,
-                    contains(containsString(it)),
+                    hasItems(containsString(it)),
                 )
         }
     } else {

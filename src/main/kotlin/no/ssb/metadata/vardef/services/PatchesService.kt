@@ -2,9 +2,7 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
-import net.logstash.logback.argument.StructuredArguments
-import net.logstash.logback.marker.Markers.append
-import net.logstash.logback.marker.Markers.appendEntries
+import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.models.Patch
@@ -106,8 +104,9 @@ class PatchesService(
     fun deleteAllForDefinitionId(definitionId: String) =
         list(definitionId).forEach { item ->
             variableDefinitionRepository.deleteById(item.id)
-            logger.info("Successfully deleted variable definition with id $definitionId",
-                append("definitionId", definitionId),
+            logger.info(
+                "Successfully deleted variable definition with id $definitionId",
+                kv("definitionId", definitionId),
             )
         }
 }

@@ -3,13 +3,12 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
-import net.logstash.logback.marker.Markers.append
+import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
@@ -39,7 +38,10 @@ class VariableDefinitionService(
      */
     fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
-        logger.info(append("definitionId",savedVariableDefinition.definitionId),"Successful saved draft variable: ${savedVariableDefinition.shortName}")
+        logger.info(
+            "Successful saved draft variable: ${savedVariableDefinition.shortName}",
+            kv("definitionId", savedVariableDefinition.definitionId),
+        )
         return savedVariableDefinition
     }
 
@@ -68,7 +70,10 @@ class VariableDefinitionService(
             }
         }
         val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
-        logger.info(append("definitionId", updatedVariable.definitionId),"Successful published variable with id: ${updatedVariable.definitionId} ")
+        logger.info(
+            "Successful published variable with id: ${updatedVariable.definitionId}",
+            kv("definitionId", updatedVariable.definitionId),
+        )
         return updatedVariable
     }
 
@@ -210,23 +215,18 @@ class VariableDefinitionService(
     ): CompleteResponse? {
         val result = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
         if (result == null) {
-
-                logger.info(
-                    "No Variable Definition found for definitionId: $definitionId}",
-                    mapOf(
-                        "definitionId" to definitionId,
-                        "dateOfValidity" to dateOfValidity.toString(),
-                        "variableStatus" to variableStatus.toString(),
-                    ),
-                )
+            logger.info(
+                "No Variable Definition found for definitionId: $definitionId}",
+                kv("definitionId", definitionId),
+                kv("dateOfValidity", dateOfValidity.toString()),
+                kv("status ", variableStatus.toString()),
+            )
         } else {
             logger.info(
                 "Found Variable Definition for definitionId: $definitionId",
-                mapOf(
-                    "definitionId" to definitionId,
-                    "dateOfValidity" to dateOfValidity.toString(),
-                    "variableStatus" to variableStatus.toString(),
-                    ),
+                kv("definitionId", definitionId),
+                kv("dateOfValidity", dateOfValidity.toString()),
+                kv("status ", variableStatus.toString()),
             )
         }
         return result

@@ -60,7 +60,9 @@ class VariableDefinitionByIdController(
         content = [
             Content(
                 mediaType = "application/problem+json",
-                schema = Schema(implementation = HttpStatusException::class),
+                schema = Schema(
+                    ref = "https://opensource.zalando.com/restful-api-guidelines/models/problem-1.0.1.yaml#/Problem"
+                ),
                 examples = [
                     ExampleObject(
                         name = "Not found",

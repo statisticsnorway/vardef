@@ -227,3 +227,13 @@ const val LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE = """[
 const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
+
+const val VARIABLE_NOT_FOUND_EXAMPLE = """{
+    "type": "about:blank",
+    "title": null,
+    "status": 404,
+    "detail": "Variable with ID invalid id not found",
+    "instance": null,
+    "parameters": {   
+    }
+}"""

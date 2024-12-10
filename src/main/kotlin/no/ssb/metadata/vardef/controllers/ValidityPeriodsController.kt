@@ -46,7 +46,7 @@ class ValidityPeriodsController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "create_validity_period",
+                        name = "Create validity period",
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
@@ -59,12 +59,12 @@ class ValidityPeriodsController(
     @Secured(VARIABLE_OWNER)
     fun createValidityPeriod(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_validity_period", value = ID_EXAMPLE)])
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Create validity period", value = ID_EXAMPLE)])
         variableDefinitionId: String,
         @Body
         @Valid
         @Parameter(
-            examples = [ExampleObject(name = "create_validity_period", value = VALIDITY_PERIOD_EXAMPLE)],
+            examples = [ExampleObject(name = "Create validity period", value = VALIDITY_PERIOD_EXAMPLE)],
             schema = Schema(implementation = ValidityPeriod::class),
         )
         newPeriod: ValidityPeriod,
@@ -73,7 +73,7 @@ class ValidityPeriodsController(
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
-                    name = "create_validity_period",
+                    name = "Create validity period",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
@@ -104,7 +104,7 @@ class ValidityPeriodsController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "one_validity_period",
+                        name = "Validity periods",
                         value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
@@ -114,7 +114,7 @@ class ValidityPeriodsController(
     )
     fun listValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Validity periods", value = ID_EXAMPLE)])
         variableDefinitionId: String,
     ): List<CompleteResponse> = validityPeriods.listComplete(variableDefinitionId)
 }

@@ -88,7 +88,7 @@ class VariableDefinitionsController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "create_draft",
+                        name = "Create draft",
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
@@ -103,7 +103,7 @@ class VariableDefinitionsController(
         @Parameter(
             examples = [
                 ExampleObject(
-                    name = "create_draft",
+                    name = "Create draft",
                     value = DRAFT_EXAMPLE,
                 ),
             ],
@@ -116,7 +116,7 @@ class VariableDefinitionsController(
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
-                    name = "create_draft",
+                    name = "Create draft",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],

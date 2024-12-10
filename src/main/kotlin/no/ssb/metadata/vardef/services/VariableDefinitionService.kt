@@ -3,12 +3,13 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
+import net.logstash.logback.marker.Markers.append
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.utils.addMDC
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
@@ -38,7 +39,7 @@ class VariableDefinitionService(
      */
     fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
-        logger.info("Successful saved draft variable: {}", savedVariableDefinition.shortName)
+        logger.info(append("definitionId",savedVariableDefinition.definitionId),"Successful saved draft variable: ${savedVariableDefinition.shortName}")
         return savedVariableDefinition
     }
 
@@ -66,7 +67,9 @@ class VariableDefinitionService(
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
         }
-        return variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
+        val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
+        logger.info(append("definitionId", updatedVariable.definitionId),"Successful published variable with id: ${updatedVariable.definitionId} ")
+        return updatedVariable
     }
 
     /**
@@ -207,31 +210,24 @@ class VariableDefinitionService(
     ): CompleteResponse? {
         val result = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
         if (result == null) {
-            addMDC(
-                mapOf(
-                    "definitionId" to definitionId,
-                    "dateOfValidity" to dateOfValidity.toString(),
-                    "variableStatus" to variableStatus.toString(),
-                ),
-            ) {
+
                 logger.info(
-                    "No Variable Definition found for definitionId={}",
-                    definitionId,
+                    "No Variable Definition found for definitionId: $definitionId}",
+                    mapOf(
+                        "definitionId" to definitionId,
+                        "dateOfValidity" to dateOfValidity.toString(),
+                        "variableStatus" to variableStatus.toString(),
+                    ),
                 )
-            }
         } else {
-            addMDC(
+            logger.info(
+                "Found Variable Definition for definitionId: $definitionId",
                 mapOf(
                     "definitionId" to definitionId,
                     "dateOfValidity" to dateOfValidity.toString(),
                     "variableStatus" to variableStatus.toString(),
-                ),
-            ) {
-                logger.info(
-                    "Found Variable Definition for definitionId={}",
-                    definitionId,
-                )
-            }
+                    ),
+            )
         }
         return result
     }

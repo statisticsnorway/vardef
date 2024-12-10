@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import net.logstash.logback.marker.Markers.append
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
@@ -10,7 +11,6 @@ import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.utils.addMDC
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -186,9 +186,7 @@ class ValidityPeriodsService(
         val lastValidityPeriod = validityPeriodsMap.lastEntry().value.last()
 
         return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
-            addMDC(mapOf("definitionId" to definitionId)) {
-                logger.info("Creating new validity period")
-            }
+            logger.info(append("definitionId", definitionId),"Creating new validity period")
             newPeriod
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
@@ -218,9 +216,10 @@ class ValidityPeriodsService(
     ) {
         when {
             !isValidValidFromValue(definitionId, newPeriod.validFrom) -> {
-                addMDC(mapOf("definitionId" to definitionId)) {
-                    logger.error("Invalid 'validFrom' value for definitionId: {}", definitionId)
-                }
+                logger.error(
+                    append("definitionId", definitionId),
+                    "Invalid 'validFrom' value for definitionId: {}", definitionId
+                )
                 throw InvalidValidFromException()
             }
 
@@ -228,9 +227,10 @@ class ValidityPeriodsService(
                 throw DefinitionTextUnchangedException()
             }
             else -> {
-                addMDC(mapOf("definitionId" to definitionId)) {
-                    logger.info("Validity period input is valid for definitionId: {}", definitionId)
-                }
+                    logger.info(
+                        append("definitionId", definitionId),
+                        "Validity period input is valid for definitionId: {}", definitionId
+                    )
             }
         }
     }
@@ -253,14 +253,10 @@ class ValidityPeriodsService(
         list(definitionId)
             .map { it.validFrom }
             .let { dates ->
-                addMDC(mapOf("definitionId" to definitionId)) {
-                    logger.info(
-                        "Checking if valid new valid from: {} is before: {} or after: {}",
-                        dateOfValidity,
-                        dates.min(),
-                        dates.max(),
-                    )
-                }
+                logger.info(
+                    append("definitionId", definitionId),
+                    "Checking if valid new valid from: $dateOfValidity is before: ${dates.min()}, or after: ${dates.max()}"
+                )
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
             }
 
@@ -294,9 +290,7 @@ class ValidityPeriodsService(
                 val changed = !oldValue.equals(newValue, ignoreCase = true)
                 if (!changed) {
                     logger.warn(
-                        "No change detected for language '{}': Value='{}'",
-                        lang,
-                        oldValue,
+                        "No change detected for language '$lang' and text: $oldValue",
                     )
                 }
                 changed
@@ -321,7 +315,7 @@ class ValidityPeriodsService(
         newPeriodValidFrom: LocalDate,
     ): SavedVariableDefinition {
         val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        addMDC(mapOf("definitionId" to definitionId)) { logger.info("Ending validity period for definitionId: {}", definitionId) }
+        logger.info("Ending validity period for definitionId: $definitionId", append("definitionId", definitionId))
         return variableDefinitionRepository.save(
             latestPatchInLastValidityPeriod
                 .copy(validUntil = newPeriodValidFrom.minusDays(1))
@@ -341,11 +335,7 @@ class ValidityPeriodsService(
             .forEach { period ->
                 // For non-selected validity periods, only update the owner field
                 logger.info(
-                    "Updating owner to {} for definition: {} for period between: {} - {} ",
-                    owner,
-                    definitionId,
-                    period.validFrom,
-                    period.validUntil,
+                    "Updating owner to $owner for definition: $definitionId for period between: ${period.validFrom} - ${ period.validUntil} ",
                 )
                 val patchOwner = period.copy(owner = owner).toPatch()
                 variableDefinitionRepository.save(

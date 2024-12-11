@@ -291,7 +291,7 @@ class ValidityPeriodsService(
                 val changed = !oldValue.equals(newValue, ignoreCase = true)
                 if (!changed) {
                     logger.warn(
-                        "No change detected for language '$lang' and text: $oldValue",
+                        "No change detected for language '$lang' and text: $newValue",
                     )
                 }
                 changed

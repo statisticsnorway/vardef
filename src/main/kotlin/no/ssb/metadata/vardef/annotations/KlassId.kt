@@ -1,11 +1,11 @@
-package no.ssb.metadata.vardef.integrations.dapla.validators
+package no.ssb.metadata.vardef.annotations
 
 import jakarta.validation.Constraint
 import jakarta.validation.Payload
 import kotlin.reflect.KClass
 
 /**
- * The annotated element must be a valid group name.
+ * The annotated element must be a valid Klass code belonging to the classification or code list referenced by id.
  */
 @Target(
     AnnotationTarget.FIELD,
@@ -19,8 +19,8 @@ import kotlin.reflect.KClass
 @Repeatable
 @MustBeDocumented
 @Constraint(validatedBy = [])
-annotation class DaplaGroup(
-    val message: String = "Invalid Dapla group",
+annotation class KlassId(
+    val message: String = "Code {validatedValue} is not a valid classification id",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = [],
 )

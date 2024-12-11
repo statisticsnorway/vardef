@@ -228,12 +228,60 @@ const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
 
-const val VARIABLE_NOT_FOUND_EXAMPLE = """{
+const val PROBLEM_JSON_NOT_FOUND_EXAMPLE = """{
     "type": "about:blank",
     "title": null,
     "status": 404,
-    "detail": "Variable with ID invalid id not found",
+    "detail": "Not found",
     "instance": null,
     "parameters": {   
     }
 }"""
+
+const val PROBLEM_JSON_CONFLICT_EXAMPLE = """{
+    "type": "about:blank",
+    "title": null,
+    "status": 409,
+    "detail": "Short name is already in use by another variable definition."
+}"""
+
+const val PROBLEM_JSON_METHOD_NOT_ALLOWED_EXAMPLE = """{
+    "type": "about:blank",
+    "title": null,
+    "status": 405,
+    "detail": "Not allowed for variable definitions with this status."
+}"""
+
+const val PROBLEM_JSON_BAD_REQUEST_EXAMPLE = """{
+    "type": "about:blank",
+    "title": null,
+    "status": 400,
+    "detail": "Failed to convert argument [example] for value [null] due to: Error deserializing type: example"
+}"""
+
+const val PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE = """
+    {
+    "cause": null,
+    "suppressed": [
+
+    ],
+    "detail": null,
+    "instance": null,
+    "parameters": {
+
+    },
+    "type": "https://zalando.github.io/problem/constraint-violation",
+    "title": "Constraint Violation",
+    "status": 400,
+    "violations": [
+        {
+            "field": "myField",
+            "message": "Invalid format"
+        },
+        {
+            "field": "otherField",
+            "message": "must not be empty"
+        }
+    ]
+}
+"""

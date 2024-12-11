@@ -8,9 +8,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
+import no.ssb.metadata.vardef.annotations.KlassCode
+import no.ssb.metadata.vardef.annotations.KlassId
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
-import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.net.URL
 import java.time.LocalDate

@@ -3,8 +3,8 @@ package no.ssb.metadata.vardef.integrations.klass
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
-import no.ssb.metadata.vardef.integrations.klass.validators.KlassCode
-import no.ssb.metadata.vardef.integrations.klass.validators.KlassId
+import no.ssb.metadata.vardef.annotations.KlassCode
+import no.ssb.metadata.vardef.annotations.KlassId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

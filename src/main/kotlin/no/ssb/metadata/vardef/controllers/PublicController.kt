@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -61,7 +62,6 @@ class PublicController(
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
-            schema = Schema(format = DATE_FORMAT),
             examples = [
                 ExampleObject(
                     name = "Date not specified",
@@ -94,7 +94,7 @@ class PublicController(
             ),
         ],
     )
-    @ApiResponse(responseCode = "404", description = "No such variable definition found")
+    @NotFoundApiResponse
     @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
     fun getPublicVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)

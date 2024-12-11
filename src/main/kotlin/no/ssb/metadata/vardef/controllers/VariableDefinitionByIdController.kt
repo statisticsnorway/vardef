@@ -54,9 +54,9 @@ class VariableDefinitionByIdController(
                     ExampleObject(name = "Date not specified", value = COMPLETE_RESPONSE_EXAMPLE),
                     ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
                 ],
+                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
-        useReturnTypeSchema = true,
     )
     @NotFoundApiResponse
     @Get
@@ -155,9 +155,9 @@ class VariableDefinitionByIdController(
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
+                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
-        useReturnTypeSchema = true,
     )
     @BadRequestApiResponse
     @NotFoundApiResponse

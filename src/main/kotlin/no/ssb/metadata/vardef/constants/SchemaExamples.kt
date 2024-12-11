@@ -228,7 +228,7 @@ const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
 
-const val NOT_FOUND_EXAMPLE = """{
+const val PROBLEM_JSON_NOT_FOUND_EXAMPLE = """{
     "type": "about:blank",
     "title": null,
     "status": 404,
@@ -237,3 +237,44 @@ const val NOT_FOUND_EXAMPLE = """{
     "parameters": {   
     }
 }"""
+
+const val PROBLEM_JSON_CONFLICT_EXAMPLE = """{
+    "type": "about:blank",
+    "title": null,
+    "status": 409,
+    "detail": "Short name is already in use by another variable definition."
+}"""
+
+const val PROBLEM_JSON_METHOD_NOT_ALLOWED_EXAMPLE = """{
+    "type": "about:blank",
+    "title": null,
+    "status": 405,
+    "detail": "Not allowed for variable definitions with this status."
+}"""
+
+const val PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE = """
+    {
+    "cause": null,
+    "suppressed": [
+
+    ],
+    "detail": null,
+    "instance": null,
+    "parameters": {
+
+    },
+    "type": "https://zalando.github.io/problem/constraint-violation",
+    "title": "Constraint Violation",
+    "status": 400,
+    "violations": [
+        {
+            "field": "myField",
+            "message": "Invalid format"
+        },
+        {
+            "field": "otherField",
+            "message": "must not be empty"
+        }
+    ]
+}
+"""

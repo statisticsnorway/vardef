@@ -18,6 +18,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
+import no.ssb.metadata.vardef.annotations.ConflictApiResponse
+import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -51,9 +54,9 @@ class VariableDefinitionByIdController(
                     ExampleObject(name = "No date specified", value = COMPLETE_RESPONSE_EXAMPLE),
                     ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
+        useReturnTypeSchema = true,
     )
     @NotFoundApiResponse
     @Get
@@ -104,7 +107,7 @@ class VariableDefinitionByIdController(
         ],
     )
     @NotFoundApiResponse
-    @ApiResponse(responseCode = "405", description = "Attempt to delete a variable definition with status unlike DRAFT.")
+    @MethodNotAllowedApiResponse
     @Status(HttpStatus.NO_CONTENT)
     @Delete
     @Secured(VARIABLE_OWNER)
@@ -152,22 +155,14 @@ class VariableDefinitionByIdController(
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
+        useReturnTypeSchema = true,
     )
-    @ApiResponse(
-        responseCode = "400",
-        description =
-            "Bad request. " +
-                "Examples of these are:\n" +
-                "- Reference to a Klass classification which doesn't exist.\n" +
-                "- Owner information missing.\n" +
-                "- Malformed email addresses.",
-    )
+    @BadRequestApiResponse
     @NotFoundApiResponse
-    @ApiResponse(responseCode = "405", description = "Attempt to patch a variable definition with status unlike DRAFT.")
-    @ApiResponse(responseCode = "409", description = "Short name is already in use by another variable definition.")
+    @MethodNotAllowedApiResponse
+    @ConflictApiResponse
     @Patch
     @Secured(VARIABLE_OWNER)
     fun updateVariableDefinitionById(

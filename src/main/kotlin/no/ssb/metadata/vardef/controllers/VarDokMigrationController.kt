@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
@@ -56,7 +57,7 @@ class VarDokMigrationController(
                 ),
             ],
     )
-    @ApiResponse(responseCode = "400", description = "The definition in Vardok has missing or malformed metadata.")
+    @BadRequestApiResponse
     fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",

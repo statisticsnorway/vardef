@@ -10,13 +10,14 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
+import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -55,9 +56,9 @@ class PatchesController(
                         value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
-                array = ArraySchema(schema = Schema(implementation = CompleteResponse::class)),
             ),
         ],
+        useReturnTypeSchema = true,
     )
     @Get
     fun listPatches(
@@ -85,9 +86,9 @@ class PatchesController(
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
+        useReturnTypeSchema = true,
     )
     @NotFoundApiResponse
     @Get("/{patch-id}")
@@ -120,12 +121,12 @@ class PatchesController(
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
             ),
         ],
+        useReturnTypeSchema = true,
     )
-    @ApiResponse(responseCode = "400", description = "Bad request.")
-    @ApiResponse(responseCode = "405", description = "Method only allowed for published variables.")
+    @BadRequestApiResponse
+    @MethodNotAllowedApiResponse
     @Secured(VARIABLE_OWNER)
     fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)

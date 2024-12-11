@@ -15,9 +15,6 @@
 
     <logger name="io.micronaut.security.rules.AbstractSecurityRule" level="debug" />
 
-    <!-- TODO: REMOVE THIS BEFORE PUSH -->
-    <logger name="HTTP_ACCESS_LOGGER" level="error" />
-
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>

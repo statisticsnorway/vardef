@@ -212,25 +212,7 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfValidity: LocalDate? = null,
         variableStatus: VariableStatus? = null,
-    ): CompleteResponse? {
-        val result = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
-        if (result == null) {
-            logger.info(
-                "No Variable Definition found for definitionId: $definitionId}",
-                kv("definitionId", definitionId),
-                kv("dateOfValidity", dateOfValidity.toString()),
-                kv("status ", variableStatus.toString()),
-            )
-        } else {
-            logger.info(
-                "Found Variable Definition for definitionId: $definitionId",
-                kv("definitionId", definitionId),
-                kv("dateOfValidity", dateOfValidity.toString()),
-                kv("status ", variableStatus.toString()),
-            )
-        }
-        return result
-    }
+    ): CompleteResponse? = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
 
     companion object {
         fun generateId(): String = NanoId.generate(8)

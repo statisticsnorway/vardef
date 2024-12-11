@@ -59,10 +59,6 @@ class VariableDefinitionsController(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
-                    name = "Date not specified",
-                    value = "",
-                ),
-                ExampleObject(
                     name = "Specific date",
                     value = DATE_EXAMPLE,
                 ),

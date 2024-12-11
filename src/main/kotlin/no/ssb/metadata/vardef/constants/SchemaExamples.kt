@@ -252,6 +252,13 @@ const val PROBLEM_JSON_METHOD_NOT_ALLOWED_EXAMPLE = """{
     "detail": "Not allowed for variable definitions with this status."
 }"""
 
+const val PROBLEM_JSON_BAD_REQUEST_EXAMPLE = """{
+    "type": "about:blank",
+    "title": null,
+    "status": 400,
+    "detail": "Failed to convert argument [example] for value [null] due to: Error deserializing type: example"
+}"""
+
 const val PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE = """
     {
     "cause": null,

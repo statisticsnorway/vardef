@@ -71,7 +71,7 @@ class VariableDefinitionService(
         }
         val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
         logger.info(
-            "Successful published variable with id: ${updatedVariable.definitionId}",
+            "Successful updated variable with id: ${updatedVariable.definitionId}",
             kv("definitionId", updatedVariable.definitionId),
         )
         return updatedVariable

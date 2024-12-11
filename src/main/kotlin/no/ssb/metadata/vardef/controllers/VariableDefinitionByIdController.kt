@@ -51,7 +51,7 @@ class VariableDefinitionByIdController(
         content = [
             Content(
                 examples = [
-                    ExampleObject(name = "No date specified", value = COMPLETE_RESPONSE_EXAMPLE),
+                    ExampleObject(name = "Date not specified", value = COMPLETE_RESPONSE_EXAMPLE),
                     ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
                 ],
             ),
@@ -65,7 +65,7 @@ class VariableDefinitionByIdController(
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
             examples = [
-                ExampleObject(name = "No date specified", value = ID_EXAMPLE),
+                ExampleObject(name = "Date not specified", value = ID_EXAMPLE),
                 ExampleObject(name = "Specific date", value = ID_EXAMPLE),
                 ExampleObject(name = "Not found", value = "invalid id"),
             ],
@@ -74,7 +74,7 @@ class VariableDefinitionByIdController(
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
-                ExampleObject(name = "No date specified", value = ""),
+                ExampleObject(name = "Date not specified", value = ""),
                 ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
             ],
         )
@@ -101,7 +101,7 @@ class VariableDefinitionByIdController(
         content = [
             Content(
                 examples = [
-                    ExampleObject(name = "delete", value = ""),
+                    ExampleObject(name = "Delete", value = ""),
                 ],
             ),
         ],
@@ -113,14 +113,14 @@ class VariableDefinitionByIdController(
     @Secured(VARIABLE_OWNER)
     fun deleteVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "delete", value = ID_EXAMPLE)])
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Delete", value = ID_EXAMPLE)])
         definitionId: String,
         @Parameter(
             name = ACTIVE_GROUP,
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
-                    name = "delete",
+                    name = "Delete",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
@@ -151,7 +151,7 @@ class VariableDefinitionByIdController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "update",
+                        name = "Update",
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
@@ -166,7 +166,7 @@ class VariableDefinitionByIdController(
     @Patch
     @Secured(VARIABLE_OWNER)
     fun updateVariableDefinitionById(
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "update", value = ID_EXAMPLE)])
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Update", value = ID_EXAMPLE)])
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Schema(description = ID_FIELD_DESCRIPTION)
         definitionId: String,
@@ -175,7 +175,7 @@ class VariableDefinitionByIdController(
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
-                    name = "update",
+                    name = "Update",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
@@ -185,7 +185,7 @@ class VariableDefinitionByIdController(
         @Parameter(
             examples = [
                 ExampleObject(
-                    name = "update",
+                    name = "Update",
                     value = DRAFT_EXAMPLE,
                 ),
             ],

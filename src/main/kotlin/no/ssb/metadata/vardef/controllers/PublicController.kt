@@ -42,10 +42,10 @@ class PublicController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "List of one variable definition",
+                        name = "Specific date",
                         value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
                     ), ExampleObject(
-                        name = "Empty list",
+                        name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
                 ],
@@ -62,7 +62,12 @@ class PublicController(
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
+            examples = [
+                ExampleObject(
+                    name = "Date not specified",
+                    value = "",
+                ), ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
+            ],
         )
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedVariableDefinition>> =
@@ -82,7 +87,8 @@ class PublicController(
         content = [
             Content(
                 examples = [
-                    ExampleObject(name = "No date specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
+                    ExampleObject(name = "Date not specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
+                    ExampleObject(name = "Specific date", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
                 ],
                 schema = Schema(implementation = RenderedVariableDefinition::class),
             ),
@@ -96,14 +102,17 @@ class PublicController(
         definitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "No date specified", value = DEFAULT_LANGUAGE)],
+            examples = [
+                ExampleObject(name = "Date not specified", value = DEFAULT_LANGUAGE),
+                ExampleObject(name = "Specific date", value = DEFAULT_LANGUAGE),
+            ],
         )
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
-                ExampleObject(name = "No date specified", value = ""),
+                ExampleObject(name = "Date not specified", value = ""),
                 ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
             ],
         )
@@ -142,7 +151,7 @@ class PublicController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "one_validity_period",
+                        name = "Validity periods",
                         value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
                     ),
                 ],
@@ -152,11 +161,11 @@ class PublicController(
     )
     fun listPublicValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_validity_period", value = ID_EXAMPLE)])
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Validity periods", value = ID_EXAMPLE)])
         variableDefinitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "one_validity_period", value = DEFAULT_LANGUAGE)],
+            examples = [ExampleObject(name = "Validity periods", value = DEFAULT_LANGUAGE)],
         )
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,

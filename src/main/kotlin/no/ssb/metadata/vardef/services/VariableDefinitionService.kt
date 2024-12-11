@@ -3,11 +3,14 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
+import net.logstash.logback.argument.StructuredArguments.kv
+import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 /**
@@ -26,13 +29,22 @@ class VariableDefinitionService(
     private val klassService: KlassService,
     private val validityPeriods: ValidityPeriodsService,
 ) {
+    private val logger = LoggerFactory.getLogger(VariableDefinitionService::class.java)
+
     /**
      * Create a new *Draft*
      *
      * @param draft The *Draft* to create.
      * @return The created *Draft*
      */
-    fun create(draft: SavedVariableDefinition): SavedVariableDefinition = variableDefinitionRepository.save(draft)
+    fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
+        val savedVariableDefinition = variableDefinitionRepository.save(draft)
+        logger.info(
+            "Successful saved draft variable: ${savedVariableDefinition.shortName}",
+            kv(DEFINITION_ID, savedVariableDefinition.definitionId),
+        )
+        return savedVariableDefinition
+    }
 
     /**
      * Update a Draft Variable Definition based on the provided [updateDraft].
@@ -58,7 +70,12 @@ class VariableDefinitionService(
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
         }
-        return variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
+        val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
+        logger.info(
+            "Successful updated variable with id: ${updatedVariable.definitionId}",
+            kv(DEFINITION_ID, updatedVariable.definitionId),
+        )
+        return updatedVariable
     }
 
     /**
@@ -72,7 +89,13 @@ class VariableDefinitionService(
      * @param shortName The value to check
      * @return `true` if the [shortName] exists, otherwise `false`
      */
-    fun doesShortNameExist(shortName: String): Boolean = variableDefinitionRepository.existsByShortName(shortName)
+    fun doesShortNameExist(shortName: String): Boolean {
+        if (variableDefinitionRepository.existsByShortName(shortName)) {
+            logger.info("Duplicate shortname $shortName")
+            return true
+        }
+        return false
+    }
 
     /**
      * @return `true` if [group] is an owner of the *Variable Definition*
@@ -110,11 +133,15 @@ class VariableDefinitionService(
     fun listPublicForDate(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
-    ): List<RenderedVariableDefinition> =
-        uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
-            .map {
-                getPublicByDate(language, it, dateOfValidity)
-            }
+    ): List<RenderedVariableDefinition> {
+        val results =
+            uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
+                .map {
+                    getPublicByDate(language, it, dateOfValidity)
+                }
+        logger.info("Found ${results.size} valid public variable definitions at date $dateOfValidity.")
+        return results
+    }
 
     /**
      * List *Variable Definitions* which are valid on the given date.
@@ -125,11 +152,13 @@ class VariableDefinitionService(
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
      * @return [List<CompleteResponse>] valid at the date.
      */
-    fun listCompleteForDate(dateOfValidity: LocalDate?): List<CompleteResponse> =
-        uniqueDefinitionIds()
-            .mapNotNull {
-                getCompleteByDate(it, dateOfValidity)
-            }
+    fun listCompleteForDate(dateOfValidity: LocalDate?): List<CompleteResponse> {
+        val results =
+            uniqueDefinitionIds()
+                .mapNotNull { getCompleteByDate(it, dateOfValidity) }
+        logger.info("Found ${results.size} valid variable definitions at date $dateOfValidity.")
+        return results
+    }
 
     /**
      * One rendered *Variable Definition*, valid at the given date.

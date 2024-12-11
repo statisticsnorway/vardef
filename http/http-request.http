@@ -10,7 +10,7 @@ POST http://127.0.0.1:8080/variable-definitions?active_group={{ACTIVE_GROUP}}
 Authorization: Bearer {{USER_TOKEN}}
 Content-Type: application/json
 
-< ./landbakk.json
+< ./data/landbakk.json
 
 > {% client.global.set('variable-definition-id', response.body.id) %}
 

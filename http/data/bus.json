@@ -1,0 +1,31 @@
+
+{
+  "name": {"en": "Bus", "nb": "Buss", "nn": "Buss"},
+  "short_name": "bus",
+  "definition": {
+    "en": "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+    "nb": null,
+    "nn": "A bus is"
+  },
+  "classification_reference": "91",
+  "unit_types": ["01", "02"],
+  "subject_fields": ["he04"],
+  "contains_sensitive_personal_information": "True",
+  "measurement_type": "01",
+  "valid_from": "2003-01-01",
+  "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+  "comment": {
+    "en": "",
+    "nb": "",
+    "nn": ""
+  },
+  "related_variable_definition_uris": ["https://example.com/"],
+  "contact": {
+    "title": {
+      "en": "Division for population statistics",
+      "nb": "Seksjon for befolkningsstatistikk",
+      "nn": "Seksjon for befolkningsstatistikk"
+    },
+    "email": "s320@ssb.no"
+  }
+}

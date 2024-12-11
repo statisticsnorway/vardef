@@ -2,6 +2,8 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import net.logstash.logback.argument.StructuredArguments.kv
+import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
@@ -10,6 +12,7 @@ import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
 
@@ -27,6 +30,8 @@ class ValidityPeriodsService(
     private val klassService: KlassService,
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
+    private val logger = LoggerFactory.getLogger(ValidityPeriodsService::class.java)
+
     /**
      * List all Patches for a specific Variable Definition.
      *
@@ -182,6 +187,7 @@ class ValidityPeriodsService(
         val lastValidityPeriod = validityPeriodsMap.lastEntry().value.last()
 
         return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
+            logger.info("Creating new validity period that is valid from ${newPeriod.validFrom}", kv(DEFINITION_ID, definitionId))
             newPeriod
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
@@ -190,6 +196,7 @@ class ValidityPeriodsService(
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { variableDefinitionRepository.save(it) }
         } else {
+            logger.info("Ending a validity period, now valid from ${newPeriod.validFrom}", kv(DEFINITION_ID, definitionId))
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
                 .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
@@ -210,11 +217,23 @@ class ValidityPeriodsService(
         newPeriod: ValidityPeriod,
     ) {
         when {
-            !isValidValidFromValue(definitionId, newPeriod.validFrom) ->
+            !isValidValidFromValue(definitionId, newPeriod.validFrom) -> {
+                logger.error(
+                    "Invalid 'validFrom' value ${newPeriod.validFrom} ",
+                    kv(DEFINITION_ID, definitionId),
+                )
                 throw InvalidValidFromException()
+            }
 
-            !isNewDefinition(definitionId, newPeriod) ->
+            !isNewDefinition(definitionId, newPeriod) -> {
                 throw DefinitionTextUnchangedException()
+            }
+            else -> {
+                logger.info(
+                    "Validity period input is valid for definitionId: $definitionId",
+                    kv(DEFINITION_ID, definitionId),
+                )
+            }
         }
     }
 
@@ -236,6 +255,11 @@ class ValidityPeriodsService(
         list(definitionId)
             .map { it.validFrom }
             .let { dates ->
+                logger.info(
+                    "Checking if valid new valid from: $dateOfValidity " +
+                        "is before: ${dates.min()}, or after: ${dates.max()}",
+                    kv(DEFINITION_ID, definitionId),
+                )
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
             }
 
@@ -264,11 +288,17 @@ class ValidityPeriodsService(
         }
         val allDefinitionsChanged =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                !lastValidityPeriod.definition.getValidLanguage(lang).equals(
-                    newPeriod.definition.getValidLanguage(lang),
-                    ignoreCase = true,
-                )
+                val oldValue = lastValidityPeriod.definition.getValidLanguage(lang)
+                val newValue = newPeriod.definition.getValidLanguage(lang)
+                val changed = !oldValue.equals(newValue, ignoreCase = true)
+                if (!changed) {
+                    logger.warn(
+                        "No change detected for language '$lang' and text: $newValue",
+                    )
+                }
+                changed
             }
+
         return allDefinitionsChanged
     }
 
@@ -306,6 +336,11 @@ class ValidityPeriodsService(
             .filter { it.validFrom != validFrom }
             .forEach { period ->
                 // For non-selected validity periods, only update the owner field
+                logger.info(
+                    "Updating owner to $owner for definition: $definitionId " +
+                        "for period between: ${period.validFrom} - ${ period.validUntil} ",
+                    kv(DEFINITION_ID, definitionId),
+                )
                 val patchOwner = period.copy(owner = owner).toPatch()
                 variableDefinitionRepository.save(
                     patchOwner.toSavedVariableDefinition(

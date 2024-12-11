@@ -1,0 +1,31 @@
+
+{
+  "name": {"en": "Price", "nb": "pris", "nn": "pris"},
+  "short_name": "pris",
+  "definition": {
+    "en": "Prisen forbruker betaler for varen eller tjenesten inklusive merverdiavgift (MVA).",
+    "nb": null,
+    "nn": "The price a consumer"
+  },
+  "classification_reference": "91",
+  "unit_types": ["01", "02"],
+  "subject_fields": ["he04"],
+  "contains_sensitive_personal_information": "True",
+  "measurement_type": "01",
+  "valid_from": "2003-01-01",
+  "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+  "comment": {
+    "en": "",
+    "nb": "",
+    "nn": ""
+  },
+  "related_variable_definition_uris": ["https://example.com/"],
+  "contact": {
+    "title": {
+      "en": "Division for population statistics",
+      "nb": "Seksjon for befolkningsstatistikk",
+      "nn": "Seksjon for befolkningsstatistikk"
+    },
+    "email": "s320@ssb.no"
+  }
+}

@@ -1,0 +1,35 @@
+#Start server
+# Make sure to add a token and an active group, either local .env or as variable
+// @USER_TOKEN=
+// @ACTIVE_GROUP=
+
+POST http://127.0.0.1:8080/variable-definitions?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/landbakk.json
+
+> {% client.global.set('variable-definition-id', response.body.id) %}
+
+###
+# Can add query value: date_of_validity
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+###
+GET http://127.0.0.1:8080/variable-definitions
+Accept: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+###
+DELETE http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+###
+PATCH  http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{"variable_status": "PUBLISHED_INTERNAL"}

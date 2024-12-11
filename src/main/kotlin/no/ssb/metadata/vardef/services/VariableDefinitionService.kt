@@ -4,6 +4,7 @@ import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
+import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -40,7 +41,7 @@ class VariableDefinitionService(
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName}",
-            kv("definitionId", savedVariableDefinition.definitionId),
+            kv(DEFINITION_ID, savedVariableDefinition.definitionId),
         )
         return savedVariableDefinition
     }
@@ -72,7 +73,7 @@ class VariableDefinitionService(
         val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
         logger.info(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
-            kv("definitionId", updatedVariable.definitionId),
+            kv(DEFINITION_ID, updatedVariable.definitionId),
         )
         return updatedVariable
     }

@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
+import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
@@ -186,7 +187,7 @@ class ValidityPeriodsService(
         val lastValidityPeriod = validityPeriodsMap.lastEntry().value.last()
 
         return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
-            logger.info("Creating new validity period", kv("definitionId", definitionId))
+            logger.info("Creating new validity period that is valid from ${newPeriod.validFrom}", kv(DEFINITION_ID, definitionId))
             newPeriod
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
@@ -195,6 +196,7 @@ class ValidityPeriodsService(
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { variableDefinitionRepository.save(it) }
         } else {
+            logger.info("Ending a validity period, now valid from ${newPeriod.validFrom}", kv(DEFINITION_ID, definitionId))
             endLastValidityPeriod(definitionId, newPeriod.validFrom)
                 .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
@@ -217,8 +219,8 @@ class ValidityPeriodsService(
         when {
             !isValidValidFromValue(definitionId, newPeriod.validFrom) -> {
                 logger.error(
-                    "Invalid 'validFrom' value for definitionId: $definitionId",
-                    kv("definitionId", definitionId),
+                    "Invalid 'validFrom' value ${newPeriod.validFrom} ",
+                    kv(DEFINITION_ID, definitionId),
                 )
                 throw InvalidValidFromException()
             }
@@ -229,7 +231,7 @@ class ValidityPeriodsService(
             else -> {
                 logger.info(
                     "Validity period input is valid for definitionId: $definitionId",
-                    kv("definitionId", definitionId),
+                    kv(DEFINITION_ID, definitionId),
                 )
             }
         }
@@ -256,7 +258,7 @@ class ValidityPeriodsService(
                 logger.info(
                     "Checking if valid new valid from: $dateOfValidity " +
                         "is before: ${dates.min()}, or after: ${dates.max()}",
-                    kv("definitionId", definitionId),
+                    kv(DEFINITION_ID, definitionId),
                 )
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
             }
@@ -316,7 +318,6 @@ class ValidityPeriodsService(
         newPeriodValidFrom: LocalDate,
     ): SavedVariableDefinition {
         val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        logger.info("Ending validity period for definitionId: $definitionId", kv("definitionId", definitionId))
         return variableDefinitionRepository.save(
             latestPatchInLastValidityPeriod
                 .copy(validUntil = newPeriodValidFrom.minusDays(1))
@@ -338,7 +339,7 @@ class ValidityPeriodsService(
                 logger.info(
                     "Updating owner to $owner for definition: $definitionId " +
                         "for period between: ${period.validFrom} - ${ period.validUntil} ",
-                    kv("definitionId", definitionId),
+                    kv(DEFINITION_ID, definitionId),
                 )
                 val patchOwner = period.copy(owner = owner).toPatch()
                 variableDefinitionRepository.save(

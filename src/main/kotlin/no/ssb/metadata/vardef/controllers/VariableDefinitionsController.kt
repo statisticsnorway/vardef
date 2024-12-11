@@ -41,10 +41,10 @@ class VariableDefinitionsController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "List of one variable definition",
+                        name = "Specific date",
                         value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ), ExampleObject(
-                        name = "Empty list",
+                        name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
                 ],
@@ -57,8 +57,12 @@ class VariableDefinitionsController(
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
-            schema = Schema(format = DATE_FORMAT),
-            examples = [ExampleObject(name = "Not specified", value = ""), ExampleObject(name = "Specific date", value = DATE_EXAMPLE)],
+            examples = [
+                ExampleObject(
+                    name = "Specific date",
+                    value = DATE_EXAMPLE,
+                ),
+            ],
         )
         dateOfValidity: LocalDate? = null,
     ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity)
@@ -80,7 +84,7 @@ class VariableDefinitionsController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "create_draft",
+                        name = "Create draft",
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
@@ -95,7 +99,7 @@ class VariableDefinitionsController(
         @Parameter(
             examples = [
                 ExampleObject(
-                    name = "create_draft",
+                    name = "Create draft",
                     value = DRAFT_EXAMPLE,
                 ),
             ],
@@ -108,7 +112,7 @@ class VariableDefinitionsController(
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
-                    name = "create_draft",
+                    name = "Create draft",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],

@@ -11,6 +11,7 @@ import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -47,10 +48,10 @@ class PatchesController(
     @ApiResponse(
         responseCode = "200",
         content = [
-            io.swagger.v3.oas.annotations.media.Content(
+            Content(
                 examples = [
-                    io.swagger.v3.oas.annotations.media.ExampleObject(
-                        name = "one_patch",
+                    ExampleObject(
+                        name = "Patches",
                         value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
@@ -61,7 +62,7 @@ class PatchesController(
     @Get
     fun listPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "one_patch", value = ID_EXAMPLE)])
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Patches", value = ID_EXAMPLE)])
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         patches
@@ -79,8 +80,8 @@ class PatchesController(
         content = [
             io.swagger.v3.oas.annotations.media.Content(
                 examples = [
-                    io.swagger.v3.oas.annotations.media.ExampleObject(
-                        name = "patch_1",
+                    ExampleObject(
+                        name = "Patch",
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
@@ -92,10 +93,10 @@ class PatchesController(
     @Get("/{patch-id}")
     fun getPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "patch_1", value = ID_EXAMPLE)])
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Patch", value = ID_EXAMPLE)])
         variableDefinitionId: String,
         @PathVariable("patch-id")
-        @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "patch_1", value = "1")])
+        @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "Patch", value = "1")])
         patchId: Int,
     ): CompleteResponse =
         patches
@@ -112,10 +113,10 @@ class PatchesController(
         responseCode = "201",
         description = "Successfully created.",
         content = [
-            io.swagger.v3.oas.annotations.media.Content(
+            Content(
                 examples = [
-                    io.swagger.v3.oas.annotations.media.ExampleObject(
-                        name = "create_patch",
+                    ExampleObject(
+                        name = "Create patch",
                         value = COMPLETE_RESPONSE_EXAMPLE,
                     ),
                 ],
@@ -128,17 +129,17 @@ class PatchesController(
     @Secured(VARIABLE_OWNER)
     fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "create_patch", value = ID_EXAMPLE)])
+        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Create patch", value = ID_EXAMPLE)])
         variableDefinitionId: String,
         @QueryValue("valid_from")
         @Parameter(
             description = VALID_FROM_QUERY_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "create_patch", value = DATE_EXAMPLE)],
+            examples = [ExampleObject(name = "Create patch", value = DATE_EXAMPLE)],
         )
         @Format(DATE_FORMAT)
         validFrom: LocalDate?,
         @Parameter(
-            examples = [ExampleObject(name = "create_patch", value = PATCH_EXAMPLE)],
+            examples = [ExampleObject(name = "Create patch", value = PATCH_EXAMPLE)],
             schema = Schema(implementation = Patch::class),
         )
         @Body
@@ -149,7 +150,7 @@ class PatchesController(
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
-                    name = "create_patch",
+                    name = "Create patch",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],

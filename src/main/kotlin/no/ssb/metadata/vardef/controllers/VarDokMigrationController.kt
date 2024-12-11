@@ -49,7 +49,7 @@ class VarDokMigrationController(
                     mediaType = MediaType.APPLICATION_JSON,
                     examples = [
                         ExampleObject(
-                            name = "migrate_1607",
+                            name = "Migrate Vardok",
                             value = COMPLETE_RESPONSE_EXAMPLE,
                         ),
                     ],
@@ -63,7 +63,7 @@ class VarDokMigrationController(
             description = "The ID of the definition in Vardok.",
             examples = [
                 ExampleObject(
-                    name = "migrate_1607",
+                    name = "Migrate Vardok",
                     value = "1607",
                 ),
             ],
@@ -75,7 +75,7 @@ class VarDokMigrationController(
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(
-                    name = "migrate_1607",
+                    name = "Migrate Vardok",
                     value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],

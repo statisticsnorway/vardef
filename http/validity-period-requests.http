@@ -1,0 +1,117 @@
+#Start server
+# Make sure to add a token and an active group, either local .env or as variable
+// @USER_TOKEN=
+// @ACTIVE_GROUP=
+
+POST http://127.0.0.1:8080/variable-definitions?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/landbakk.json
+
+> {% client.global.set('variable-definition-id', response.body.id) %}
+
+###
+PATCH  http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{"variable_status": "PUBLISHED_INTERNAL"}
+
+###
+# Creating a new validity period after
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{
+  "definition": {
+    "en": "New definition",
+    "nb": "Ny definisjon",
+    "nn": "Ny definisjon"
+  },
+  "valid_from": "2021-01-01"
+}
+
+###
+# Creating a new validity period before
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{
+  "definition": {
+    "en": "New definition 2",
+    "nb": "Ny definisjon 2",
+    "nn": "Ny definisjon 2"
+  },
+  "valid_from": "1900-01-01"
+}
+
+###
+# Can add query value: valid_from to specify to which period
+# Change status {"variable_status": "PUBLISHED_EXTERNAL"}
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{
+  "owner": {
+    "team": "play-obr-b",
+    "groups": [
+      "play-obr-b-developers",
+      "dapla-felles-developers",
+      "play-enhjoern-a-developers"
+    ]
+  }
+}
+
+###
+# Creating a new validity period in between
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{
+  "definition": {
+    "en": "New definition",
+    "nb": "Ny definisjon",
+    "nn": "Ny definisjon"
+  },
+  "valid_from": "2010-01-01"
+}
+
+###
+# Creating a new validity period but definition not supplied for a language
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{
+  "definition": {
+    "en": "New definition",
+    "nb": "Ny definisjon"
+  },
+  "valid_from": "2024-01-01"
+}
+
+###
+# Creating a new validity period but definition not changed for a language
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{
+  "definition": {
+    "en": "New definition",
+    "nb": "Ny definisjon",
+    "nn": "For personar fødd i utlandet, er dette (med nokre få unntak) eige fødeland. For personar fødd i Noreg er det fødelandet til foreldra. I dei tilfella der foreldra har ulikt fødeland, er det fødelandet til mora som blir valt. Viss ikkje personen sjølv eller nokon av foreldra er utenlandsfødt, blir henta landsbakgrunn frå dei første utenlandsfødte ein treffar på i rekkjefølgja mormor, morfar, farmor eller farfar."
+
+  },
+  "valid_from": "2024-01-01"
+}
+
+###
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/validity-periods
+Accept: application/json
+Authorization: Bearer {{USER_TOKEN}}

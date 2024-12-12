@@ -186,18 +186,24 @@ class ValidityPeriodsService(
         // Newest patch in the latest Validity Period
         val lastValidityPeriod = validityPeriodsMap.lastEntry().value.last()
 
-        return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
-            logger.info("Creating new validity period that is valid from ${newPeriod.validFrom}", kv(DEFINITION_ID, definitionId))
-            newPeriod
+        if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
+            logger.info(
+                "Creating a new validity period that is valid from ${newPeriod.validFrom}",
+                kv(DEFINITION_ID, definitionId)
+            )
+            return newPeriod
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
                 .toSavedVariableDefinition(list(definitionId).last().patchId, lastValidityPeriod)
-                .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
+                .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1)  }
                 .let { variableDefinitionRepository.save(it) }
         } else {
-            logger.info("Ending a validity period, now valid from ${newPeriod.validFrom}", kv(DEFINITION_ID, definitionId))
-            endLastValidityPeriod(definitionId, newPeriod.validFrom)
+            logger.info(
+                "Creating new validity period that is valid from ${newPeriod.validFrom}",
+                kv(DEFINITION_ID, definitionId)
+            )
+            return endLastValidityPeriod(definitionId, newPeriod.validFrom)
                 .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
@@ -226,6 +232,10 @@ class ValidityPeriodsService(
             }
 
             !isNewDefinition(definitionId, newPeriod) -> {
+                logger.error(
+                    "Definition not changed ${newPeriod.validFrom} ",
+                    kv(DEFINITION_ID, definitionId),
+                )
                 throw DefinitionTextUnchangedException()
             }
             else -> {
@@ -279,12 +289,12 @@ class ValidityPeriodsService(
         newPeriod: ValidityPeriod,
     ): Boolean {
         val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        val allLanguagesPresent =
-            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                newPeriod.definition.listPresentLanguages().contains(lang)
+        lastValidityPeriod.definition.listPresentLanguages().all { lang ->
+            if (!newPeriod.definition.listPresentLanguages().contains(lang)) {
+                logger.warn("Language $lang, should be changed but is not supplied", kv(DEFINITION_ID, definitionId))
+                return false
             }
-        if (!allLanguagesPresent) {
-            return false
+            true
         }
         val allDefinitionsChanged =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
@@ -293,7 +303,7 @@ class ValidityPeriodsService(
                 val changed = !oldValue.equals(newValue, ignoreCase = true)
                 if (!changed) {
                     logger.warn(
-                        "No change detected for language '$lang' and text: $newValue",
+                        "No change detected for language '$lang' and text: $newValue", kv(DEFINITION_ID, definitionId)
                     )
                 }
                 changed

@@ -185,13 +185,12 @@ class ValidityPeriodsService(
         val firstValidityPeriod = validityPeriodsMap.firstEntry().value.last()
         // Newest patch in the latest Validity Period
         val lastValidityPeriod = validityPeriodsMap.lastEntry().value.last()
-
-        if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
-            logger.info(
-                "Creating a new validity period that is valid from ${newPeriod.validFrom}",
-                kv(DEFINITION_ID, definitionId),
-            )
-            return newPeriod
+        logger.info(
+            "Creating new validity period that is valid from ${newPeriod.validFrom}",
+            kv(DEFINITION_ID, definitionId),
+        )
+        return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
+            newPeriod
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
@@ -199,11 +198,7 @@ class ValidityPeriodsService(
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { variableDefinitionRepository.save(it) }
         } else {
-            logger.info(
-                "Creating new validity period that is valid from ${newPeriod.validFrom}",
-                kv(DEFINITION_ID, definitionId),
-            )
-            return endLastValidityPeriod(definitionId, newPeriod.validFrom)
+            endLastValidityPeriod(definitionId, newPeriod.validFrom)
                 .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }

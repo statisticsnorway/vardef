@@ -36,7 +36,7 @@ class VariableDefinitionTest {
             classificationReference = "91",
             unitTypes = listOf("", ""),
             subjectFields = listOf("", ""),
-            containsSensitivePersonalInformation = false,
+            containsSpecialCategoriesOfPersonalData = false,
             measurementType = "",
             validFrom = LocalDate.of(1988, 5, 17),
             externalReferenceUri = URI("https://www.example.com").toURL(),

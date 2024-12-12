@@ -39,8 +39,8 @@ data class Draft(
     val unitTypes: List<@KlassCode(id = "702") String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     val subjectFields: List<@KlassCode(id = "618") String>,
-    @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION, defaultValue = false.toString())
-    val containsSensitivePersonalInformation: Boolean = false,
+    @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION, defaultValue = false.toString())
+    val containsSpecialCategoriesOfPersonalData: Boolean = false,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")
@@ -83,7 +83,7 @@ data class Draft(
             classificationReference = classificationReference,
             unitTypes = unitTypes,
             subjectFields = subjectFields,
-            containsSensitivePersonalInformation = containsSensitivePersonalInformation,
+            containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData,
             variableStatus = VariableStatus.DRAFT,
             measurementType = measurementType,
             validFrom = validFrom,

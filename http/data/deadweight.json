@@ -9,7 +9,7 @@
   "classification_reference": "91",
   "unit_types": ["01", "02"],
   "subject_fields": ["he04"],
-  "contains_sensitive_personal_information": "True",
+  "contains_special_categories_of_personal_data": "True",
   "measurement_type": "01",
   "valid_from": "2003-01-01",
   "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",

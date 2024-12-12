@@ -31,8 +31,8 @@ data class CompleteResponse(
     val unitTypes: List<String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     val subjectFields: List<String>,
-    @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
-    val containsSensitivePersonalInformation: Boolean,
+    @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
+    val containsSpecialCategoriesOfPersonalData: Boolean,
     @Schema(
         description = VARIABLE_STATUS_FIELD_DESCRIPTION,
     )

@@ -49,7 +49,7 @@ properties:
     examples:
       - ["he04"]
       - ["if02", "vf05"]
-  contains_sensitive_personal_information:
+  contains_special_categories_of_personal_data:
     title: Contains unit identifying information
     description: |
       True if variable instances contain particularly sensitive information. Applies even if the information or identifiers are pseudonymized.
@@ -126,5 +126,5 @@ required:
   - subject_fields
   - variable_status
   - contains_unit_identifying_information
-  - contains_sensitive_personal_information
+  - contains_special_categories_of_personal_data
   - contact

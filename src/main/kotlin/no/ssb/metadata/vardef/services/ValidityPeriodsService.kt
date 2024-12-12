@@ -189,19 +189,19 @@ class ValidityPeriodsService(
         if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
             logger.info(
                 "Creating a new validity period that is valid from ${newPeriod.validFrom}",
-                kv(DEFINITION_ID, definitionId)
+                kv(DEFINITION_ID, definitionId),
             )
             return newPeriod
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
                 .toSavedVariableDefinition(list(definitionId).last().patchId, lastValidityPeriod)
-                .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1)  }
+                .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { variableDefinitionRepository.save(it) }
         } else {
             logger.info(
                 "Creating new validity period that is valid from ${newPeriod.validFrom}",
-                kv(DEFINITION_ID, definitionId)
+                kv(DEFINITION_ID, definitionId),
             )
             return endLastValidityPeriod(definitionId, newPeriod.validFrom)
                 .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it) }
@@ -303,7 +303,8 @@ class ValidityPeriodsService(
                 val changed = !oldValue.equals(newValue, ignoreCase = true)
                 if (!changed) {
                     logger.warn(
-                        "No change detected for language '$lang' and text: $newValue", kv(DEFINITION_ID, definitionId)
+                        "No change detected for language '$lang' and text: $newValue",
+                        kv(DEFINITION_ID, definitionId),
                     )
                 }
                 changed

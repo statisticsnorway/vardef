@@ -6,7 +6,6 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
@@ -40,9 +39,8 @@ data class Draft(
     val unitTypes: List<@KlassCode(id = "702") String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     val subjectFields: List<@KlassCode(id = "618") String>,
-    @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
-    @NotNull
-    val containsSensitivePersonalInformation: Boolean,
+    @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION, defaultValue = false.toString())
+    val containsSensitivePersonalInformation: Boolean = false,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode("303")

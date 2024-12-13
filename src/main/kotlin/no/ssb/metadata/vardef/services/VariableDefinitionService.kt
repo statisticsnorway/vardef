@@ -98,6 +98,17 @@ class VariableDefinitionService(
     }
 
     /**
+     * When updating Draft there is only shortName conflict if the shortName is changed
+     *
+     * @param newShortName shortName from input
+     * @param existingShortName shortName saved Draft
+     * @return 'true' if the [newShortName] is changed and already exists
+     */
+    fun isShortNameConflict(newShortName: String?, existingShortName: String): Boolean {
+        return (newShortName != null && newShortName != existingShortName && doesShortNameExist(newShortName))
+    }
+
+    /**
      * @return `true` if [group] is an owner of the *Variable Definition*
      */
     fun groupIsOwner(

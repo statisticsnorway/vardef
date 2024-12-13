@@ -44,9 +44,9 @@ data class UpdateDraft(
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
     val subjectFields: List<@KlassCode(id = "618") String>? = null,
-    @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
+    @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
-    val containsSensitivePersonalInformation: Boolean? = null,
+    val containsSpecialCategoriesOfPersonalData: Boolean? = null,
     @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
     @Nullable
     val variableStatus: VariableStatus? = null,

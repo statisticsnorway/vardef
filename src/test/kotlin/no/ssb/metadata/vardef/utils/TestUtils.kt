@@ -238,7 +238,7 @@ object TestUtils {
         }
 
     @JvmStatic
-    fun variableDefinitionsMandatoryFieldsRemoved(): Stream<Arguments> =
+    fun draftVariableDefinitionMandatoryFieldsRemoved(): Stream<Arguments> =
         Stream.of("name", "short_name", "definition", "valid_from").map {
             argumentSet(
                 "$it removed",

@@ -39,9 +39,9 @@ data class ValidityPeriod(
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
     val subjectFields: List<@KlassCode(id = "618") String>?,
-    @Schema(description = CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION)
+    @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
-    val containsSensitivePersonalInformation: Boolean?,
+    val containsSpecialCategoriesOfPersonalData: Boolean?,
     @Schema(
         description = VARIABLE_STATUS_FIELD_DESCRIPTION,
         accessMode = Schema.AccessMode.READ_ONLY,
@@ -81,8 +81,8 @@ data class ValidityPeriod(
             classificationReference = classificationReference ?: previousPatch.classificationReference,
             unitTypes = unitTypes ?: previousPatch.unitTypes,
             subjectFields = subjectFields ?: previousPatch.subjectFields,
-            containsSensitivePersonalInformation =
-            containsSensitivePersonalInformation ?: previousPatch.containsSensitivePersonalInformation,
+            containsSpecialCategoriesOfPersonalData =
+            containsSpecialCategoriesOfPersonalData ?: previousPatch.containsSpecialCategoriesOfPersonalData,
             variableStatus = variableStatus ?: previousPatch.variableStatus,
             measurementType = measurementType ?: previousPatch.measurementType,
             validFrom = validFrom,

@@ -9,7 +9,7 @@ data class VardefInput(
     var validFrom: String,
     val unitTypes: List<String?>,
     val externalReferenceUri: String,
-    val containsSensitivePersonalInformation: Boolean,
+    val containsSpecialCategoriesOfPersonalData: Boolean,
     val subjectFields: List<String?>,
     val classificationReference: String?,
     val contact: String?,

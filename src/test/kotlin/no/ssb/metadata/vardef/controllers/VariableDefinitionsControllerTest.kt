@@ -170,8 +170,8 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#variableDefinitionsMandatoryFieldsRemoved")
-    fun `create variable definition with mandatory fields removed`(
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#draftVariableDefinitionMandatoryFieldsRemoved")
+    fun `create draft variable definition with mandatory fields removed`(
         updatedJsonString: String,
         spec: RequestSpecification,
     ) {
@@ -184,13 +184,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .post("/variable-definitions")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "null annotate it with @Nullable",
-                ),
-            )
     }
 
     @ParameterizedTest

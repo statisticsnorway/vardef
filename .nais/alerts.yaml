@@ -1,0 +1,33 @@
+apiVersion: "monitoring.coreos.com/v1"
+kind: PrometheusRule
+metadata:
+  name: alert-vardef
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  groups:
+    - name: dapla-metadata
+      rules:
+        - alert: High number of errors
+          expr: (100 * sum by (app, namespace) (rate(log_messages_errors{app="vardef",level=~"Error"}[3m])) / sum by (app, namespace) (rate(log_messages_total{app="vardef"}[3m]))) > 10
+          for: 3m
+          annotations:
+            title: "High number of errors logged"
+            consequence: "There can be different causes for errors, check logs for cause and evaluation of consequences."
+            action: "`kubectl describe pod -l app=vardef -n dapla-metadata` -> `kubectl logs <podname>`"
+          labels:
+            service: vardef
+            namespace: dapla-metadata
+            severity: critical
+
+        - alert: Guardian is unavailable
+          expr: kube_deployment_metadataus_replicas_available{deployment="vardef"} == 0
+          for: 1m
+          annotations:
+            title: "Vardef is unavailable"
+            consequence: "Service is unavailable to users. "
+          labels:
+            service: vardef
+            namespace: dapla-metadata
+            severity: critical

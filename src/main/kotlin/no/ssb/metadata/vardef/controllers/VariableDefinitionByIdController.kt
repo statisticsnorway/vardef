@@ -203,7 +203,10 @@ class VariableDefinitionByIdController(
                 "The variable is published or deprecated and cannot be updated with this method",
             )
 
-            (updateDraft.shortName != null && vardef.doesShortNameExist(updateDraft.shortName)) ->
+            (
+                updateDraft.shortName != null && updateDraft.shortName != variable.shortName &&
+                    vardef.doesShortNameExist(updateDraft.shortName)
+            ) ->
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",

@@ -124,6 +124,19 @@ class UpdateTests : BaseVardefTest() {
             )
     }
 
+    @Test
+    fun `update draft variable definition with unchanged short name`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("""{"short_name": "${DRAFT_BUS_EXAMPLE.shortName}"}""")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+    }
+
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `update draft variable definition with invalid inputs`(

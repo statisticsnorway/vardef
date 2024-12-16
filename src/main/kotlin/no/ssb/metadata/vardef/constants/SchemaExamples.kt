@@ -14,14 +14,12 @@ const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
 const val PERSON_EXAMPLE = """{
         "code": "ano@ssb.no",
         "name": "Ola Nordmann"
-    }
-"""
+    }"""
 
 const val RENDERED_CONTACT_EXAMPLE = """{
         "title": "Seksjon for befolkningsstatistikk",
         "email": "s320@ssb.no"
-    }
-"""
+    }"""
 
 const val OWNER_EXAMPLE = """{
     "team": "play-obr-b",
@@ -63,8 +61,7 @@ const val DRAFT_EXAMPLE = """{
         },
         "email": "s320@ssb.no"
     }
-}
-"""
+}"""
 
 const val COMPLETE_RESPONSE_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
@@ -151,8 +148,7 @@ const val PATCH_EXAMPLE = """
         },
         "email": "s320@ssb.no"
     }
-}
-"""
+}"""
 
 const val VALIDITY_PERIOD_EXAMPLE = """
 {
@@ -217,8 +213,7 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     ],
     "contact": $RENDERED_CONTACT_EXAMPLE,
     "last_updated_at": "2024-06-12T10:39:41.038Z"
-}
-"""
+}"""
 
 const val LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE = """[
     $RENDERED_VARIABLE_DEFINITION_EXAMPLE
@@ -259,8 +254,7 @@ const val PROBLEM_JSON_BAD_REQUEST_EXAMPLE = """{
     "detail": "Failed to convert argument [example] for value [null] due to: Error deserializing type: example"
 }"""
 
-const val PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE = """
-    {
+const val PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE = """{
     "cause": null,
     "suppressed": [
 
@@ -283,5 +277,4 @@ const val PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE = """
             "message": "must not be empty"
         }
     ]
-}
-"""
+}"""

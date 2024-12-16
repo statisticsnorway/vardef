@@ -284,12 +284,12 @@ class ValidityPeriodsService(
         newPeriod: ValidityPeriod,
     ): Boolean {
         val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-            if (!newPeriod.definition.listPresentLanguages().contains(lang)) {
-                logger.warn("Language $lang, should be changed but is not supplied", kv(DEFINITION_ID, definitionId))
-                return false
+        val allLanguagesPresent =
+            lastValidityPeriod.definition.listPresentLanguages().all { lang ->
+                newPeriod.definition.listPresentLanguages().contains(lang)
             }
-            true
+        if (!allLanguagesPresent) {
+            return false
         }
         val allDefinitionsChanged =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
@@ -299,7 +299,6 @@ class ValidityPeriodsService(
                 if (!changed) {
                     logger.warn(
                         "No change detected for language '$lang' and text: $newValue",
-                        kv(DEFINITION_ID, definitionId),
                     )
                 }
                 changed

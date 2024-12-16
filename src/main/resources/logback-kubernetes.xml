@@ -13,8 +13,6 @@
         </encoder>
     </appender>
 
-    <logger name="io.micronaut.security.rules.AbstractSecurityRule" level="debug" />
-
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>

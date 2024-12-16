@@ -1,0 +1,43 @@
+//@USER_TOKEN=
+//@ACTIVE_GROUP=
+@BASE_URL=http://127.0.0.1:8080/variable-definitions
+
+###
+POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/landbakk.json
+
+###
+POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/bus.json
+
+###
+POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/tax.json
+
+###
+POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/pris.json
+
+###
+POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/deadweight.json
+
+###
+GET http://127.0.0.1:8080/variable-definitions
+Accept: application/json
+Authorization: Bearer {{USER_TOKEN}}

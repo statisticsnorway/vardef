@@ -47,7 +47,7 @@ properties:
     title: Contains unit identifying information
     description: True if variable instances contain information which can identify a Person, Family or Household. Applies even if the information is pseudonymized.
     type: boolean
-  contains_sensitive_personal_information:
+  contains_special_categories_of_personal_data:
     title: Contains unit identifying information
     description: |
       True if variable instances contain particularly sensitive information. Applies even if the information or identifiers are pseudonymized.

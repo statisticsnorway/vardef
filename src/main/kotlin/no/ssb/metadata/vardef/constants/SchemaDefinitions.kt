@@ -14,7 +14,7 @@ const val UNIT_TYPES_FIELD_DESCRIPTION =
 const val SUBJECT_FIELDS_FIELD_DESCRIPTION =
     "A list of subject fields that the variable is used in. " +
         "Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/618."
-const val CONTAINS_SENSITIVE_PERSONAL_INFORMATION_FIELD_DESCRIPTION =
+const val CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION =
     "True if variable instances contain particularly " +
         "sensitive information. Applies even if the information or identifiers are pseudonymized. " +
         "Information within the following categories are regarded as particularly sensitive: " +

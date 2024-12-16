@@ -24,7 +24,7 @@ data class RenderedVariableDefinition(
     val classificationUri: String?,
     val unitTypes: List<KlassReference?>,
     val subjectFields: List<KlassReference?>,
-    val containsSensitivePersonalInformation: Boolean,
+    val containsSpecialCategoriesOfPersonalData: Boolean,
     val measurementType: KlassReference?,
     val validFrom: LocalDate,
     val validUntil: LocalDate?,

@@ -337,4 +337,56 @@ class UpdateTests : BaseVardefTest() {
         assertThat(savedVariableDefinition?.owner?.groups?.all { it.isNotBlank() })
         assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())
     }
+
+    @Test
+    fun `update variable definition not all languages`(spec: RequestSpecification) {
+        val expected: SavedVariableDefinition =
+            SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(
+                name = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.name.copy(en = "Update", nn = "Dødvekt", nb = "Dødvekt"),
+                definition =
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definition.copy(
+                        en = "Update",
+                        nn = null,
+                        nb = "Dødvekt er den største vekt skipet kan bære av last og beholdninger.",
+                    ),
+                comment =
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.comment?.copy(
+                        nb = "Update",
+                        en = null,
+                        nn = "Updated comment",
+                    ),
+            )
+        val bodyString =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """
+                    {"name": {
+                        "en": "Update"
+                    },
+                    "definition": {
+                        "en": "Update"
+                    },
+                    "comment": {
+                        "nb": "Update",
+                        "nn": "Updated comment"
+                    }}
+                    """.trimIndent(),
+                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .patch("/variable-definitions/${expected.definitionId}")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .extract()
+                .body()
+                .asString()
+        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
+
+        assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
+        assertThat(body.name).isEqualTo(expected.name)
+        assertThat(body.definition).isEqualTo(expected.definition)
+        assertThat(body.comment).isEqualTo(expected.comment)
+    }
 }

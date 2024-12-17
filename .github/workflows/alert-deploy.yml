@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - '../../.nais/test/alerts.yaml'
+      - '.nais/test/alerts.yaml'
       - '.github/workflows/alert-deploy.yml'
 permissions:
   id-token: write

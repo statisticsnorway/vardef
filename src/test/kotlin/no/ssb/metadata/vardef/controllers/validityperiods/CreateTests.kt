@@ -268,19 +268,6 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new validity period with deprecated status`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(allMandatoryFieldsChanged())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId}/validity-periods")
-            .then()
-            .statusCode(405)
-    }
-
-    @Test
     fun `create new validity period with comment`(spec: RequestSpecification) {
         val addComment =
             JSONObject(allMandatoryFieldsChanged())

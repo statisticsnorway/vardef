@@ -223,13 +223,13 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         // No definitions are valid on this date
         "1800-01-01, 0",
         // Specific definitions are valid on these dates
-        "2021-01-01, 4",
+        "2021-01-01, 3",
         "2020-01-01, 1",
-        "2024-06-05, 5",
+        "2024-06-05, 4",
         // Definitions without a validUntil date defined
-        "3000-12-31, 4",
+        "3000-12-31, 3",
         // All definitions
-        "null, 5",
+        "null, 4",
     )
     fun `filter variable definitions by date`(
         dateOfValidity: String,
@@ -391,7 +391,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 VariableStatus.DRAFT,
                 VariableStatus.PUBLISHED_INTERNAL,
                 VariableStatus.PUBLISHED_EXTERNAL,
-                VariableStatus.DEPRECATED,
             )
 
         val body =

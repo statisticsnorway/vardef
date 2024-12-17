@@ -10,7 +10,6 @@ enum class VariableStatus {
     DRAFT,
     PUBLISHED_INTERNAL,
     PUBLISHED_EXTERNAL,
-    DEPRECATED,
 }
 
 fun VariableStatus.isPublished(): Boolean = this in listOf(VariableStatus.PUBLISHED_EXTERNAL, VariableStatus.PUBLISHED_INTERNAL)

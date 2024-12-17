@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - '.nais/alerts.yaml'
+      - '../../.nais/test/alerts.yaml'
       - '.github/workflows/alert-deploy.yml'
 permissions:
   id-token: write
@@ -23,4 +23,4 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: test
-          RESOURCE: .nais/alerts.yaml
+          RESOURCE: .nais/test/alerts.yaml

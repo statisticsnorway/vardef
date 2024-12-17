@@ -41,6 +41,13 @@ data class LanguageStringType(
         if (en != null) presentLanguages.add(SupportedLanguages.EN)
         return presentLanguages
     }
+
+    fun update(updated: LanguageStringType): LanguageStringType =
+        this.copy(
+            nb = updated.nb ?: nb,
+            nn = updated.nn ?: nn,
+            en = updated.en ?: en,
+        )
 }
 
 @Schema(examples = [KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE])

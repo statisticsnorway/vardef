@@ -6,6 +6,7 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.controllers.patches.CompanionObject.Companion.patchBody
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -254,5 +255,53 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
+    }
+
+    @Test
+    fun `create new patch not all languages`(spec: RequestSpecification) {
+        val expected: SavedVariableDefinition =
+            INCOME_TAX_VP2_P6.copy(
+                name = INCOME_TAX_VP2_P6.name.copy(nb = "Update", nn = "Inntektsskatt", en = "Income tax"),
+                definition =
+                    INCOME_TAX_VP2_P6.definition.copy(
+                        en = "Update",
+                        nn = "Intektsskatt ny definisjon",
+                        nb = "Intektsskatt ny definisjon",
+                    ),
+                comment =
+                    INCOME_TAX_VP2_P6.comment?.copy(
+                        nb = "Gjelder for færre enhetstyper",
+                        en = null,
+                        nn = "Update",
+                    ),
+            )
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Update"
+                },
+                "definition": {
+                    "en": "Update"
+                },
+                "comment": {
+                    "nn": "Update"
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
+
+        val createdPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)
+
+        assertThat(createdPatch.name).isEqualTo(expected.name)
+        assertThat(createdPatch.definition).isEqualTo(expected.definition)
+        assertThat(createdPatch.comment).isEqualTo(expected.comment)
     }
 }

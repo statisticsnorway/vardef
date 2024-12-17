@@ -133,9 +133,9 @@ data class SavedVariableDefinition(
 
     fun copyAndUpdate(varDefUpdates: UpdateDraft): SavedVariableDefinition =
         copy(
-            name = varDefUpdates.name ?: name,
+            name = varDefUpdates.name?.let { name.update(it) } ?: name,
             shortName = varDefUpdates.shortName ?: shortName,
-            definition = varDefUpdates.definition ?: definition,
+            definition = varDefUpdates.definition?.let { definition.update(it) } ?: definition,
             classificationReference = varDefUpdates.classificationReference ?: classificationReference,
             unitTypes = varDefUpdates.unitTypes ?: unitTypes,
             subjectFields = varDefUpdates.subjectFields ?: subjectFields,
@@ -145,7 +145,7 @@ data class SavedVariableDefinition(
             measurementType = varDefUpdates.measurementType ?: measurementType,
             validFrom = varDefUpdates.validFrom ?: validFrom,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
-            comment = varDefUpdates.comment ?: comment,
+            comment = varDefUpdates.comment?.let { comment?.update(it) } ?: comment,
             relatedVariableDefinitionUris =
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             owner = varDefUpdates.owner ?: owner,

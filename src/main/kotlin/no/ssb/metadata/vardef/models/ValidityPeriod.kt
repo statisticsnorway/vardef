@@ -76,7 +76,7 @@ data class ValidityPeriod(
     ): SavedVariableDefinition =
         previousPatch.copy(
             patchId = highestPatchId + 1,
-            name = name ?: previousPatch.name,
+            name = name?.let { previousPatch.name.update(it) } ?: previousPatch.name,
             definition = definition,
             classificationReference = classificationReference ?: previousPatch.classificationReference,
             unitTypes = unitTypes ?: previousPatch.unitTypes,

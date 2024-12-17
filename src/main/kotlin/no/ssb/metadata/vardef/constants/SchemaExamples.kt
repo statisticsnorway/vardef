@@ -115,7 +115,7 @@ const val COMPLETE_RESPONSE_EXAMPLE = """{
 
 const val COMPLETE_RESPONSE_EXAMPLE_PUBLISHED_VARIABLE = """{
     "id": "$ID_EXAMPLE",
-    "patch_id": 1,
+    "patch_id": 2,
     "name": {
         "en": "Country Background",
         "nb": "Landbakgrunn",

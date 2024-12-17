@@ -22,7 +22,7 @@ spec:
             severity: critical
 
         - alert: Vardef is unavailable
-          expr: kube_deployment_metadataus_replicas_available{deployment="vardef"} == 0
+          expr: kube_deployment_status_replicas_available{deployment="vardef"} == 0
           for: 1m
           annotations:
             title: "Vardef is unavailable"

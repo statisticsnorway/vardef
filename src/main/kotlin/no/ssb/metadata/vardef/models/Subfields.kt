@@ -89,7 +89,7 @@ data class Owner(
     val groups: List<
         @NotEmpty @DaplaGroup
         String,
-    >,
+        >,
 )
 
 @Schema(example = RENDERED_CONTACT_EXAMPLE)

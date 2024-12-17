@@ -47,14 +47,30 @@ class PatchesService(
         latestPatch: SavedVariableDefinition,
     ): SavedVariableDefinition {
         if (patch.owner != latestPatch.owner && patch.owner != null) {
+            logger.info(
+                "When creating patch owner has changed from ${latestPatch.owner} to ${patch.owner} for definition: $definitionId",
+                kv(DEFINITION_ID, definitionId),
+            )
             if (!DaplaTeamService.containsDevelopersGroup(patch.owner)) {
+                logger.warn(
+                    "Creating patch and ${patch.owner} not in developers-group for definition: $definitionId",
+                    kv(DEFINITION_ID, definitionId),
+                )
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
-            validityPeriodsService
-                .updateOwnerOnOtherPeriods(definitionId, patch.owner, latestPatch.validFrom)
+            validityPeriodsService.updateOwnerOnOtherPeriods(definitionId, patch.owner, latestPatch.validFrom)
+            logger.info(
+                "Creating patch and updating owner to ${patch.owner} on other periods for definition: $definitionId",
+                kv(DEFINITION_ID, definitionId),
+            )
         }
         // For the selected validity period create a patch with the provided values
-        return variableDefinitionRepository.save(patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch))
+        val savedVariableDefinition =
+            variableDefinitionRepository.save(
+                patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch),
+            )
+        logger.info("Successfully saved patch for definition: $definitionId", kv(DEFINITION_ID, definitionId))
+        return savedVariableDefinition
     }
 
     /**
@@ -106,9 +122,6 @@ class PatchesService(
         list(definitionId).forEach { item ->
             variableDefinitionRepository.deleteById(item.id)
         }
-        logger.info(
-            "Successfully deleted variable definition with id: $definitionId",
-            kv(DEFINITION_ID, definitionId),
-        )
+        logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
     }
 }

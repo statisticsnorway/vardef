@@ -1,0 +1,93 @@
+# Start server
+# Make sure to add a token and an active group, either local .env or as variable
+//@USER_TOKEN=
+//@ACTIVE_GROUP=
+
+# Create a draft
+POST http://127.0.0.1:8080/variable-definitions?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/landbakk.json
+
+> {% client.global.set('variable-definition-id', response.body.id) %}
+
+
+###
+# Delete all patches for definition-id
+DELETE http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?active_group={{ACTIVE_GROUP}}
+Accept: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+
+###
+# Recreate a draft after delteting all patches
+POST http://127.0.0.1:8080/variable-definitions?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+< ./data/landbakk.json
+
+> {% client.global.set('variable-definition-id', response.body.id) %}
+
+
+###
+# Publish draft
+PATCH  http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?active_group={{ACTIVE_GROUP}}
+Content-Type: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+{"variable_status": "PUBLISHED_INTERNAL"}
+
+
+###
+# Make a patch
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+{
+  "definition": {
+    "en": "New definition"
+  }
+}
+
+
+###
+# Get patches
+GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches
+Accept: application/json
+Authorization: Bearer {{USER_TOKEN}}
+
+
+###
+# Make a patch to change owner
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches?active_group={{ACTIVE_GROUP}}
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+{
+  "owner": {
+    "team": "dapla-metadata",
+    "groups": [
+      "dapla-metadata-developers"
+    ]
+  }
+}
+
+
+###
+# Make a patch to change owner where new owner not in developers group (gives response code 400)
+POST http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}/patches?active_group=dapla-metadata-developers
+Authorization: Bearer {{USER_TOKEN}}
+Content-Type: application/json
+
+{
+  "owner": {
+    "team": "dapla-felles",
+    "groups": [
+      "dapla-felles-data-admins"
+    ]
+  }
+}
+

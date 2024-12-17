@@ -85,6 +85,6 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: test
-          RESOURCE: .nais/test.yaml
+          RESOURCE: .nais/test/test.yaml
           VAR: image=${{ needs.docker-build.outputs.image-tag }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

@@ -120,7 +120,7 @@ class PatchesController(
                 examples = [
                     ExampleObject(
                         name = "Create patch",
-                        value = COMPLETE_RESPONSE_EXAMPLE,
+                        value = COMPLETE_RESPONSE_EXAMPLE_PUBLISHED_VARIABLE,
                     ),
                 ],
                 schema = Schema(implementation = CompleteResponse::class),

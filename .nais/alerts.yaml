@@ -21,7 +21,7 @@ spec:
             namespace: dapla-metadata
             severity: critical
 
-        - alert: Guardian is unavailable
+        - alert: Vardef is unavailable
           expr: kube_deployment_metadataus_replicas_available{deployment="vardef"} == 0
           for: 1m
           annotations:

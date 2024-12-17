@@ -85,8 +85,8 @@ data class Patch(
     ): SavedVariableDefinition =
         previousPatch.copy(
             patchId = highestPatchId + 1,
-            name = name ?: previousPatch.name,
-            definition = definition ?: previousPatch.definition,
+            name = name?.let { previousPatch.name.update(it) } ?: previousPatch.name,
+            definition = definition?.let { previousPatch.definition.update(definition) } ?: previousPatch.definition,
             classificationReference = classificationReference ?: previousPatch.classificationReference,
             unitTypes = unitTypes ?: previousPatch.unitTypes,
             subjectFields = subjectFields ?: previousPatch.subjectFields,
@@ -96,7 +96,7 @@ data class Patch(
             measurementType = measurementType ?: previousPatch.measurementType,
             validUntil = validUntil ?: previousPatch.validUntil,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
-            comment = comment ?: previousPatch.comment,
+            comment = comment?.let { previousPatch.comment?.update(comment) } ?: previousPatch.comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             owner = owner ?: previousPatch.owner,
             contact = contact ?: previousPatch.contact,

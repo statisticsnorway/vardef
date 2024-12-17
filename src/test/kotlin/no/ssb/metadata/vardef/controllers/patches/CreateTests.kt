@@ -255,4 +255,42 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(201)
     }
+
+    @Test
+    fun `create new patch not all languages`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"name": {
+                    "nb": "Update"
+                },
+                "definition": {
+                    "en": "Update"
+                },
+                "comment": {
+                    "nn": "Update"
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(201)
+            .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
+        val createdPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)
+        val previousPatch = patches.get(INCOME_TAX_VP2_P6.definitionId, INCOME_TAX_VP2_P6.patchId)
+        assertThat(createdPatch.name.nb).isNotEqualTo(previousPatch.name.nb)
+        assertThat(createdPatch.name.en).isEqualTo(previousPatch.name.en)
+        assertThat(createdPatch.name.nn).isEqualTo(previousPatch.name.nn)
+
+        assertThat(createdPatch.definition.nb).isEqualTo(previousPatch.definition.nb)
+        assertThat(createdPatch.definition.en).isNotEqualTo(previousPatch.definition.en)
+        assertThat(createdPatch.definition.nn).isEqualTo(previousPatch.definition.nn)
+
+        assertThat(createdPatch.comment?.nb).isEqualTo(previousPatch.comment?.nb)
+        assertThat(createdPatch.comment?.en).isEqualTo(previousPatch.comment?.en)
+        assertThat(createdPatch.comment?.nn).isNotEqualTo(previousPatch.comment?.nn)
+    }
 }

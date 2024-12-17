@@ -1,35 +1,65 @@
-#Start server
-# Make sure to add a token and an active group, either local .env or as variable
-// @USER_TOKEN=
-// @ACTIVE_GROUP=
+# Choose an environment above
+# Define secrets in http-client.private.env.json
 
-POST http://127.0.0.1:8080/variable-definitions?active_group={{ACTIVE_GROUP}}
-Authorization: Bearer {{USER_TOKEN}}
+#@variable-definition-id=-FE5d6h_
+
+POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
 < ./data/landbakk.json
 
-> {% client.global.set('variable-definition-id', response.body.id) %}
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Request failed");
+    });
+    client.global.set('variable-definition-id', response.body.id);
+%}
 
 ###
 # Can add query value: date_of_validity
-GET http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}
+GET {{HOST}}/variable-definitions/{{variable-definition-id}}
 Content-Type: application/json
-Authorization: Bearer {{USER_TOKEN}}
+Authorization: Bearer {{OIDC_TOKEN}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Request failed");
+    });
+%}
 
 ###
-GET http://127.0.0.1:8080/variable-definitions
+GET {{HOST}}/variable-definitions
 Accept: application/json
-Authorization: Bearer {{USER_TOKEN}}
+Authorization: Bearer {{OIDC_TOKEN}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Request failed");
+    });
+%}
 
 ###
-DELETE http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?active_group={{ACTIVE_GROUP}}
+PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
 Content-Type: application/json
-Authorization: Bearer {{USER_TOKEN}}
-
-###
-PATCH  http://127.0.0.1:8080/variable-definitions/{{variable-definition-id}}?active_group={{ACTIVE_GROUP}}
-Content-Type: application/json
-Authorization: Bearer {{USER_TOKEN}}
+Authorization: Bearer {{OIDC_TOKEN}}
 
 {"variable_status": "PUBLISHED_INTERNAL"}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Request failed");
+    });
+%}
+
+###
+# We expect this to fail since the operation above published the variable
+DELETE {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+Content-Type: application/json
+Authorization: Bearer {{OIDC_TOKEN}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 405, "Request failed");
+    });
+%}

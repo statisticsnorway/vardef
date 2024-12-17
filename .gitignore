@@ -16,5 +16,4 @@ out/
 .settings
 .classpath
 .factorypath
-.env*
-http/
+http-client.private.env.json

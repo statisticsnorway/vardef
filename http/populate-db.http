@@ -1,43 +1,78 @@
-//@USER_TOKEN=
-//@ACTIVE_GROUP=
-@BASE_URL=http://127.0.0.1:8080/variable-definitions
+# Choose an environment above
+# Define secrets in http-client.private.env.json
 
 ###
-POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
-Authorization: Bearer {{USER_TOKEN}}
+POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
 < ./data/landbakk.json
 
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Request failed");
+    });
+%}
+
 ###
-POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
-Authorization: Bearer {{USER_TOKEN}}
+POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
 < ./data/bus.json
 
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Request failed");
+    });
+%}
+
 ###
-POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
-Authorization: Bearer {{USER_TOKEN}}
+POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
 < ./data/tax.json
 
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Request failed");
+    });
+%}
+
 ###
-POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
-Authorization: Bearer {{USER_TOKEN}}
+POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
 < ./data/pris.json
 
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Request failed");
+    });
+%}
+
 ###
-POST {{BASE_URL}}?active_group={{ACTIVE_GROUP}}
-Authorization: Bearer {{USER_TOKEN}}
+POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
 < ./data/deadweight.json
 
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Request failed");
+    });
+%}
+
 ###
-GET http://127.0.0.1:8080/variable-definitions
+GET {{HOST}}/variable-definitions
 Accept: application/json
-Authorization: Bearer {{USER_TOKEN}}
+Authorization: Bearer {{OIDC_TOKEN}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Request failed");
+    });
+%}

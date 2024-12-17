@@ -130,7 +130,7 @@ class VariableDefinitionByIdController(
         if (patches.latest(definitionId).variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
-                "The variable is published or deprecated and cannot be updated with this method",
+                "The variable is published and cannot be updated with this method",
             )
         }
 
@@ -199,7 +199,7 @@ class VariableDefinitionByIdController(
         when {
             variable.variableStatus != VariableStatus.DRAFT -> throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
-                "The variable is published or deprecated and cannot be updated with this method",
+                "The variable is published and cannot be updated with this method",
             )
 
             (

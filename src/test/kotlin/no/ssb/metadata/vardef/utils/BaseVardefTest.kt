@@ -46,7 +46,6 @@ open class BaseVardefTest {
         ALL_INCOME_TAX_PATCHES.forEach { variableDefinitionRepository.save(it) }
         variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE)
         variableDefinitionRepository.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
-        variableDefinitionRepository.save(SAVED_DEPRECATED_VARIABLE_DEFINITION)
         variableDefinitionRepository.save(SAVED_INTERNAL_VARIABLE_DEFINITION)
     }
 }

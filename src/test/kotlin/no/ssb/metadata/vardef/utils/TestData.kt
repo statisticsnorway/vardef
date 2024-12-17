@@ -39,47 +39,6 @@ val DRAFT_BUS_EXAMPLE =
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP)
 
-val SAVED_DEPRECATED_VARIABLE_DEFINITION =
-    SavedVariableDefinition(
-        id = ObjectId(),
-        definitionId = VariableDefinitionService.generateId(),
-        patchId = 5,
-        name =
-            LanguageStringType(
-                nb = "A",
-                nn = "A",
-                en = "B",
-            ),
-        shortName = "alphabet",
-        definition =
-            LanguageStringType(
-                nb = "Test bokstaver.",
-                nn = null,
-                en = "Letters",
-            ),
-        classificationReference = "91",
-        unitTypes = listOf("", ""),
-        subjectFields = listOf("", ""),
-        containsSpecialCategoriesOfPersonalData = false,
-        variableStatus = VariableStatus.DEPRECATED,
-        measurementType = "",
-        validFrom = LocalDate.of(2021, 1, 1),
-        validUntil = null,
-        externalReferenceUri = URI("https://www.example.com").toURL(),
-        comment = null,
-        relatedVariableDefinitionUris = listOf(),
-        owner = Owner("my-team", listOf(TEST_DEVELOPERS_GROUP, "my-team-developers", "other-group")),
-        contact =
-            Contact(
-                LanguageStringType("", "", ""),
-                "me@example.com",
-            ),
-        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy = Person("", ""),
-        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy = Person("", ""),
-    )
-
 val SAVED_INTERNAL_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),

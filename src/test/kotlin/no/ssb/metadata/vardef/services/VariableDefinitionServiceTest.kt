@@ -199,12 +199,6 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     null,
                 ),
                 argumentSet(
-                    "Published External on Deprecated",
-                    SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId,
-                    VariableStatus.PUBLISHED_EXTERNAL,
-                    null,
-                ),
-                argumentSet(
                     "Published External on Published Internal",
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     VariableStatus.PUBLISHED_EXTERNAL,
@@ -215,12 +209,6 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     DRAFT_BUS_EXAMPLE.definitionId,
                     VariableStatus.DRAFT,
                     DRAFT_BUS_EXAMPLE.toCompleteResponse(),
-                ),
-                argumentSet(
-                    "Deprecated matching",
-                    SAVED_DEPRECATED_VARIABLE_DEFINITION.definitionId,
-                    VariableStatus.DEPRECATED,
-                    SAVED_DEPRECATED_VARIABLE_DEFINITION.toCompleteResponse(),
                 ),
                 argumentSet(
                     "Published Internal matching",

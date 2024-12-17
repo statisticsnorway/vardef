@@ -74,7 +74,6 @@ properties:
       - DRAFT
       - PUBLISHED_INTERNAL
       - PUBLISHED_EXTERNAL
-      - DEPRECATED
   measurement_type:
     title: Measurement type
     description: Type of measurement for the variable, e.g. length, volume, currency. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303

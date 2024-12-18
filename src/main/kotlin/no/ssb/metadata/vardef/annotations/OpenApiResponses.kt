@@ -19,11 +19,11 @@ const val PROBLEM_JSON_SCHEMA_REF = "https://opensource.zalando.com/restful-api-
                 Schema(ref = PROBLEM_JSON_SCHEMA_REF),
             examples = [
                 ExampleObject(
-                    name = "Bad request",
+                    name = BAD_REQUEST_EXAMPLE_NAME,
                     value = PROBLEM_JSON_BAD_REQUEST_EXAMPLE,
                 ),
                 ExampleObject(
-                    name = "Constraint violation",
+                    name = CONSTRAINT_VIOLATION_EXAMPLE_NAME,
                     value = PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE,
                 ),
             ],
@@ -42,7 +42,7 @@ annotation class BadRequestApiResponse
                 Schema(ref = PROBLEM_JSON_SCHEMA_REF),
             examples = [
                 ExampleObject(
-                    name = "Conflict",
+                    name = CONFLICT_EXAMPLE_NAME,
                     value = PROBLEM_JSON_CONFLICT_EXAMPLE,
                 ),
             ],
@@ -61,7 +61,7 @@ annotation class ConflictApiResponse
                 Schema(ref = PROBLEM_JSON_SCHEMA_REF),
             examples = [
                 ExampleObject(
-                    name = "Method not allowed",
+                    name = METHOD_NOT_ALLOWED_EXAMPLE_NAME,
                     value = PROBLEM_JSON_METHOD_NOT_ALLOWED_EXAMPLE,
                 ),
             ],
@@ -72,7 +72,7 @@ annotation class MethodNotAllowedApiResponse
 
 @ApiResponse(
     responseCode = "404",
-    description = "Not found",
+    description = NOT_FOUND_EXAMPLE_NAME,
     content = [
         Content(
             mediaType = APPLICATION_PROBLEM_JSON,
@@ -80,7 +80,7 @@ annotation class MethodNotAllowedApiResponse
                 Schema(ref = PROBLEM_JSON_SCHEMA_REF),
             examples = [
                 ExampleObject(
-                    name = "Not found",
+                    name = NOT_FOUND_EXAMPLE_NAME,
                     value = PROBLEM_JSON_NOT_FOUND_EXAMPLE,
                 ),
             ],

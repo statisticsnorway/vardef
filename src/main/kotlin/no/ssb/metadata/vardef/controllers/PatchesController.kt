@@ -65,7 +65,13 @@ class PatchesController(
     @Get
     fun listPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Patches", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Patches", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
+            ],
+        )
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         patches
@@ -96,10 +102,22 @@ class PatchesController(
     @Get("/{patch-id}")
     fun getPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Patch", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Patch", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_EXAMPLE),
+            ],
+        )
         variableDefinitionId: String,
         @PathVariable("patch-id")
-        @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "Patch", value = "1")])
+        @Parameter(
+            description = "ID of the patch to retrieve",
+            examples = [
+                ExampleObject(name = "Patch", value = "1"),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = "244"),
+            ],
+        )
         patchId: Int,
     ): CompleteResponse =
         patches
@@ -127,12 +145,19 @@ class PatchesController(
             ),
         ],
     )
+    @NotFoundApiResponse
     @BadRequestApiResponse
     @MethodNotAllowedApiResponse
     @Secured(VARIABLE_OWNER)
     fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Create patch", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Create patch", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
+            ],
+        )
         variableDefinitionId: String,
         @QueryValue("valid_from")
         @Parameter(

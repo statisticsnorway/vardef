@@ -67,7 +67,7 @@ class VariableDefinitionByIdController(
             examples = [
                 ExampleObject(name = "Date not specified", value = ID_EXAMPLE),
                 ExampleObject(name = "Specific date", value = ID_EXAMPLE),
-                ExampleObject(name = "Not found", value = "invalid id"),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
             ],
         )
         definitionId: String,
@@ -112,7 +112,13 @@ class VariableDefinitionByIdController(
     @Secured(VARIABLE_OWNER)
     fun deleteVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Delete", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Delete", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
+            ],
+        )
         definitionId: String,
         @Parameter(
             name = ACTIVE_GROUP,
@@ -165,9 +171,14 @@ class VariableDefinitionByIdController(
     @Patch
     @Secured(VARIABLE_OWNER)
     fun updateVariableDefinitionById(
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Update", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Update", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
+            ],
+        )
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Schema(description = ID_FIELD_DESCRIPTION)
         definitionId: String,
         @Parameter(
             name = ACTIVE_GROUP,
@@ -203,7 +214,8 @@ class VariableDefinitionByIdController(
             )
 
             (
-                updateDraft.shortName != null && updateDraft.shortName != variable.shortName &&
+                updateDraft.shortName != null &&
+                    updateDraft.shortName != variable.shortName &&
                     vardef.doesShortNameExist(updateDraft.shortName)
             ) ->
                 throw HttpStatusException(

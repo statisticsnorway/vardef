@@ -40,7 +40,7 @@ class VariableDefinitionService(
     fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
-            "Successful saved draft variable: ${savedVariableDefinition.shortName}",
+            "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: $savedVariableDefinition.definitionId",
             kv(DEFINITION_ID, savedVariableDefinition.definitionId),
         )
         return savedVariableDefinition
@@ -91,7 +91,7 @@ class VariableDefinitionService(
      */
     fun doesShortNameExist(shortName: String): Boolean {
         if (variableDefinitionRepository.existsByShortName(shortName)) {
-            logger.info("Duplicate shortname $shortName")
+            logger.info("Shortname exists: $shortName")
             return true
         }
         return false

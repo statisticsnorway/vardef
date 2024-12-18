@@ -186,7 +186,7 @@ class ValidityPeriodsService(
         // Newest patch in the latest Validity Period
         val lastValidityPeriod = validityPeriodsMap.lastEntry().value.last()
         logger.info(
-            "Creating new validity period that is valid from ${newPeriod.validFrom}",
+            "Creating new validity period that is valid from ${newPeriod.validFrom} for definition: $definitionId",
             kv(DEFINITION_ID, definitionId),
         )
         return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
@@ -220,7 +220,7 @@ class ValidityPeriodsService(
         when {
             !isValidValidFromValue(definitionId, newPeriod.validFrom) -> {
                 logger.error(
-                    "Invalid 'validFrom' value ${newPeriod.validFrom} ",
+                    "Invalid 'validFrom' value ${newPeriod.validFrom} for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
                 throw InvalidValidFromException()
@@ -228,14 +228,14 @@ class ValidityPeriodsService(
 
             !isNewDefinition(definitionId, newPeriod) -> {
                 logger.error(
-                    "Definition not changed ${newPeriod.validFrom} ",
+                    "Definition not changed ${newPeriod.validFrom} for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
                 throw DefinitionTextUnchangedException()
             }
             else -> {
                 logger.info(
-                    "Validity period input is valid for definitionId: $definitionId",
+                    "Validity period input is valid for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
             }
@@ -262,7 +262,7 @@ class ValidityPeriodsService(
             .let { dates ->
                 logger.info(
                     "Checking if valid new valid from: $dateOfValidity " +
-                        "is before: ${dates.min()}, or after: ${dates.max()}",
+                        "is before: ${dates.min()}, or after: ${dates.max()}, for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
                 dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
@@ -298,7 +298,8 @@ class ValidityPeriodsService(
                 val changed = !oldValue.equals(newValue, ignoreCase = true)
                 if (!changed) {
                     logger.warn(
-                        "No change detected for language '$lang' and text: $newValue",
+                        "No change detected for language '$lang' and text: $newValue for definition: $definitionId",
+                        kv(DEFINITION_ID, definitionId),
                     )
                 }
                 changed

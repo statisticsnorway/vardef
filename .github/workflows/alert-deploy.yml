@@ -27,3 +27,4 @@ jobs:
         env:
           CLUSTER: test
           RESOURCE: .nais/test/alerts.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

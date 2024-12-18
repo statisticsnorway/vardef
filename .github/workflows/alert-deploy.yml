@@ -5,7 +5,7 @@ run-name: Deploy alerts for vardef to test
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - '.nais/test/alerts.yaml'
       - '.github/workflows/alert-deploy.yml'

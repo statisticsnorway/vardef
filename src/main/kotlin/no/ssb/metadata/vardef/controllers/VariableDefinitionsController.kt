@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -98,14 +99,18 @@ class VariableDefinitionsController(
     @ConflictApiResponse
     @Secured(VARIABLE_CREATOR)
     fun createVariableDefinition(
-        @Parameter(
-            examples = [
-                ExampleObject(
-                    name = "Create draft",
-                    value = DRAFT_EXAMPLE,
+        @RequestBody(
+            content = [
+                Content(
+                    examples = [
+                        ExampleObject(
+                            name = "Create draft",
+                            value = DRAFT_EXAMPLE,
+                        ),
+                    ],
+                    schema = Schema(implementation = Draft::class),
                 ),
             ],
-            schema = Schema(implementation = Draft::class),
         )
         @Body
         @Valid draft: Draft,

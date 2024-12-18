@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -73,9 +74,13 @@ class ValidityPeriodsController(
         variableDefinitionId: String,
         @Body
         @Valid
-        @Parameter(
-            examples = [ExampleObject(name = "Create validity period", value = VALIDITY_PERIOD_EXAMPLE)],
-            schema = Schema(implementation = ValidityPeriod::class),
+        @RequestBody(
+            content = [
+                Content(
+                    examples = [ExampleObject(name = "Create validity period", value = VALIDITY_PERIOD_EXAMPLE)],
+                    schema = Schema(implementation = ValidityPeriod::class),
+                ),
+            ],
         )
         newPeriod: ValidityPeriod,
         @Parameter(

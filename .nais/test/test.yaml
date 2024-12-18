@@ -51,7 +51,7 @@ spec:
 
   prometheus:
     enabled: true
-    path: /metrics
+    path: /prometheus
     port: "8090"
 
   liveness:

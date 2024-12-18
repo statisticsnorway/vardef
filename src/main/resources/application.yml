@@ -24,6 +24,9 @@ micronaut:
       - pattern: /metrics/**
         http-method: GET
         access: isAnonymous()
+      - pattern: /prometheus/**
+        http-method: GET
+        access: isAnonymous()
       - pattern: /docs/**
         http-method: GET
         access: isAnonymous()

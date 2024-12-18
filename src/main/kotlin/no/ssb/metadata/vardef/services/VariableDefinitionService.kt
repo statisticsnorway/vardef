@@ -91,7 +91,7 @@ class VariableDefinitionService(
      */
     fun doesShortNameExist(shortName: String): Boolean {
         if (variableDefinitionRepository.existsByShortName(shortName)) {
-            logger.info("Duplicate shortname $shortName")
+            logger.info("Shortname exists: $shortName")
             return true
         }
         return false

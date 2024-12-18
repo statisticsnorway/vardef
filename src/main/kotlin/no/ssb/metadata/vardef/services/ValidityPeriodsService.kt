@@ -299,6 +299,7 @@ class ValidityPeriodsService(
                 if (!changed) {
                     logger.warn(
                         "No change detected for language '$lang' and text: $newValue for definition: $definitionId",
+                        kv(DEFINITION_ID, definitionId),
                     )
                 }
                 changed

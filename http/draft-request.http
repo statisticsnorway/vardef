@@ -44,7 +44,7 @@ PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{D
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
-{"variable_status": "PUBLISHED_INTERNAL"}
+{"classification_reference": "incorrect"}
 
 > {%
     client.test("Request executed successfully", function() {

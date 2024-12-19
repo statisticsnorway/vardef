@@ -27,6 +27,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
@@ -199,7 +200,11 @@ class VariableDefinitionByIdController(
                     examples = [
                         ExampleObject(
                             name = "Update",
-                            value = DRAFT_EXAMPLE,
+                            value = UPDATE_DRAFT_EXAMPLE,
+                        ),
+                        ExampleObject(
+                            name = CONSTRAINT_VIOLATION_EXAMPLE_NAME,
+                            value = UPDATE_DRAFT_CONSTRAINT_VIOLATION_EXAMPLE,
                         ),
                     ],
                     schema = Schema(implementation = UpdateDraft::class),
@@ -213,7 +218,7 @@ class VariableDefinitionByIdController(
         val variable = patches.latest(definitionId)
 
         when {
-            variable.variableStatus != VariableStatus.DRAFT -> throw HttpStatusException(
+            variable.variableStatus.isPublished() -> throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "The variable is published and cannot be updated with this method",
             )

@@ -71,6 +71,10 @@ const val DRAFT_EXAMPLE = """{
     }
 }"""
 
+const val UPDATE_DRAFT_EXAMPLE = """{"classification_reference": "702"}"""
+
+const val UPDATE_DRAFT_CONSTRAINT_VIOLATION_EXAMPLE = """{"classification_reference": "incorrect"}"""
+
 const val COMPLETE_RESPONSE_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
     "patch_id": 1,
@@ -313,26 +317,18 @@ const val PROBLEM_JSON_BAD_REQUEST_EXAMPLE = """{
 }"""
 
 const val PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE = """{
-    "cause": null,
-    "suppressed": [
-
-    ],
-    "detail": null,
-    "instance": null,
-    "parameters": {
-
-    },
-    "type": "https://zalando.github.io/problem/constraint-violation",
-    "title": "Constraint Violation",
-    "status": 400,
-    "violations": [
-        {
-            "field": "myField",
-            "message": "Invalid format"
-        },
-        {
-            "field": "otherField",
-            "message": "must not be empty"
-        }
-    ]
+  "cause": null,
+  "suppressed": [],
+  "detail": null,
+  "instance": null,
+  "parameters": {},
+  "type": "https://zalando.github.io/problem/constraint-violation",
+  "title": "Constraint Violation",
+  "status": 400,
+  "violations": [
+    {
+      "field": "classificationReference",
+      "message": "Code incorrect is not a valid classification id"
+    }
+  ]
 }"""

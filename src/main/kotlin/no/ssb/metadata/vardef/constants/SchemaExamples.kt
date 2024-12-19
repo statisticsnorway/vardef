@@ -1,9 +1,17 @@
 package no.ssb.metadata.vardef.constants
 
 const val ID_EXAMPLE = """wypvb3wd"""
+const val ID_INVALID_EXAMPLE = "invalid id"
 const val EMPTY_LIST_EXAMPLE = """[]"""
 const val DATE_EXAMPLE = "1970-01-01"
 const val ACTIVE_GROUP_EXAMPLE = "dapla-felles-developers"
+
+// The following should be used to ensure that example names match
+const val NOT_FOUND_EXAMPLE_NAME = "Not found"
+const val METHOD_NOT_ALLOWED_EXAMPLE_NAME = "Method not allowed"
+const val CONFLICT_EXAMPLE_NAME = "Conflict"
+const val BAD_REQUEST_EXAMPLE_NAME = "Bad request"
+const val CONSTRAINT_VIOLATION_EXAMPLE_NAME = "Constraint violation"
 
 const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
             "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
@@ -62,6 +70,10 @@ const val DRAFT_EXAMPLE = """{
         "email": "s320@ssb.no"
     }
 }"""
+
+const val UPDATE_DRAFT_EXAMPLE = """{"classification_reference": "702"}"""
+
+const val UPDATE_DRAFT_CONSTRAINT_VIOLATION_EXAMPLE = """{"classification_reference": "incorrect"}"""
 
 const val COMPLETE_RESPONSE_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
@@ -305,26 +317,18 @@ const val PROBLEM_JSON_BAD_REQUEST_EXAMPLE = """{
 }"""
 
 const val PROBLEM_JSON_CONSTRAINT_VIOLATION_EXAMPLE = """{
-    "cause": null,
-    "suppressed": [
-
-    ],
-    "detail": null,
-    "instance": null,
-    "parameters": {
-
-    },
-    "type": "https://zalando.github.io/problem/constraint-violation",
-    "title": "Constraint Violation",
-    "status": 400,
-    "violations": [
-        {
-            "field": "myField",
-            "message": "Invalid format"
-        },
-        {
-            "field": "otherField",
-            "message": "must not be empty"
-        }
-    ]
+  "cause": null,
+  "suppressed": [],
+  "detail": null,
+  "instance": null,
+  "parameters": {},
+  "type": "https://zalando.github.io/problem/constraint-violation",
+  "title": "Constraint Violation",
+  "status": 400,
+  "violations": [
+    {
+      "field": "classificationReference",
+      "message": "Code incorrect is not a valid classification id"
+    }
+  ]
 }"""

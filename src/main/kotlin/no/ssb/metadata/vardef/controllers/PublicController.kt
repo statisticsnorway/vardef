@@ -95,7 +95,14 @@ class PublicController(
     @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
     fun getPublicVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, example = ID_EXAMPLE)
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Date not specified", value = ID_EXAMPLE),
+                ExampleObject(name = "Specific date", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
+            ],
+        )
         definitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
@@ -157,7 +164,13 @@ class PublicController(
     )
     fun listPublicValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Validity periods", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Validity periods", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
+            ],
+        )
         variableDefinitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,

@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -65,7 +66,13 @@ class PatchesController(
     @Get
     fun listPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Patches", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Patches", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
+            ],
+        )
         variableDefinitionId: String,
     ): List<CompleteResponse> =
         patches
@@ -96,10 +103,22 @@ class PatchesController(
     @Get("/{patch-id}")
     fun getPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Patch", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Patch", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_EXAMPLE),
+            ],
+        )
         variableDefinitionId: String,
         @PathVariable("patch-id")
-        @Parameter(description = "ID of the patch to retrieve", examples = [ExampleObject(name = "Patch", value = "1")])
+        @Parameter(
+            description = "ID of the patch to retrieve",
+            examples = [
+                ExampleObject(name = "Patch", value = "1"),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = "244"),
+            ],
+        )
         patchId: Int,
     ): CompleteResponse =
         patches
@@ -127,12 +146,19 @@ class PatchesController(
             ),
         ],
     )
+    @NotFoundApiResponse
     @BadRequestApiResponse
     @MethodNotAllowedApiResponse
     @Secured(VARIABLE_OWNER)
     fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
-        @Parameter(description = ID_FIELD_DESCRIPTION, examples = [ExampleObject(name = "Create patch", value = ID_EXAMPLE)])
+        @Parameter(
+            description = ID_FIELD_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Create patch", value = ID_EXAMPLE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
+            ],
+        )
         variableDefinitionId: String,
         @QueryValue("valid_from")
         @Parameter(
@@ -141,9 +167,13 @@ class PatchesController(
         )
         @Format(DATE_FORMAT)
         validFrom: LocalDate?,
-        @Parameter(
-            examples = [ExampleObject(name = "Create patch", value = PATCH_EXAMPLE)],
-            schema = Schema(implementation = Patch::class),
+        @RequestBody(
+            content = [
+                Content(
+                    examples = [ExampleObject(name = "Create patch", value = PATCH_EXAMPLE)],
+                    schema = Schema(implementation = Patch::class),
+                ),
+            ],
         )
         @Body
         @Valid

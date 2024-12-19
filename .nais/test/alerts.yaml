@@ -21,6 +21,17 @@ spec:
             namespace: dapla-metadata
             severity: critical
 
+        - alert: A Vardef client is unavailable
+          expr: http_client_requests_seconds_sum{app="vardef"} > 30
+          for: 1m
+          annotations:
+            title: "A Vardef client is unavailable "
+            consequence: "The service may lack some functionality "
+          labels:
+            service: vardef
+            namespace: dapla-metadata
+            severity: critical
+
         - alert: Vardef is unavailable
           expr: kube_deployment_status_replicas_available{deployment="vardef"} == 0
           for: 1m

@@ -21,6 +21,7 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 import java.util.*
 
 /**
@@ -117,6 +118,8 @@ class VariableOwnerSecurityRule(
             .filter { VARIABLE_DEFINITION_ID_PATH_VARIABLE in it.variableValues }
             .filter { ACTIVE_GROUP in request.parameters }
             .map { extractDefinitionIdFromUri(it) }
+            // The next call is blocking, so we need to run it on another thread
+            .publishOn(Schedulers.boundedElastic())
             .map { variableDefinitionService.groupIsOwner(request.parameters.get(ACTIVE_GROUP) as String, it) }
             .handle { isOwner, sink ->
                 if (VARIABLE_OWNER !in authentication.roles) {

@@ -22,7 +22,7 @@ spec:
             severity: critical
 
         - alert: A Vardef client is unavailable
-          expr: rate(http_client_requests_seconds_count{app="vardef", status!="200"}[$__rate_interval]) > 0
+          expr: rate(http_client_requests_seconds_count{app="vardef", status!="200"}[15s]) > 0
           for: 1m
           annotations:
             title: "A Vardef client is unavailable "

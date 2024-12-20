@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.Property
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 @MicronautTest
@@ -12,7 +13,7 @@ class ManagementEndpointsTest {
     private var endpointsPort: Int = 0
 
     @Test
-    fun `health endpoint`(spec: RequestSpecification) {
+    fun `readiness endpoint`(spec: RequestSpecification) {
         spec
             .given()
             .port(endpointsPort)
@@ -20,9 +21,25 @@ class ManagementEndpointsTest {
             .none()
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/health")
+            .get("/health/readiness")
             .then()
             .statusCode(200)
+            .body("status", equalTo("UP"))
+    }
+
+    @Test
+    fun `liveness endpoint`(spec: RequestSpecification) {
+        spec
+            .given()
+            .port(endpointsPort)
+            .auth()
+            .none()
+            .`when`()
+            .contentType(ContentType.JSON)
+            .get("/health/liveness")
+            .then()
+            .statusCode(200)
+            .body("status", equalTo("UP"))
     }
 
     @Test

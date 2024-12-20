@@ -76,7 +76,7 @@ micronaut:
       access-logger:
         enabled: true
         exclusions:
-          - /health
+          - /health/.+
           - /metrics
           - /prometheus
           - /docs/.+

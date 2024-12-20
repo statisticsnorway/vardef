@@ -26,6 +26,7 @@ spec:
         - host: data.ssb.no
         # Allow egress to Vardok
         - host: ssb.no
+        - host: www.ssb.no
         # Allow egress to auth
         - host: auth.test.ssb.no
         # Allow egress to mongodb

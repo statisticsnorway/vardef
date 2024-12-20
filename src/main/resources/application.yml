@@ -86,14 +86,22 @@ micronaut:
       klass:
         url: https://data.ssb.no/api/klass/v1/
         codes-at: 2024-08-01
+        health-check: true
+        health-check-interval: 15s
       vardok:
         url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
+        health-check: true
+        health-check-interval: 15s
       dapla-team-api:
         url: https://dapla-team-api.intern.test.ssb.no
+        health-check: true
+        health-check-interval: 15s
       keycloak:
         url: https://auth.test.ssb.no/
         clientId: vardef-to-dapla-team-api-m2m
         clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+        health-check: true
+        health-check-interval: 15s
 
   klass-web:
     url:
@@ -104,10 +112,24 @@ micronaut:
 endpoints:
   all:
     port: 8090
+  environments:
+    enabled: true
+    sensitive: false
   health:
     sensitive: false
+    details-visible: ANONYMOUS
+    service-http-client:
+      enabled: true
+    monitor:
+      enabled: true
   metrics:
     sensitive: false
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
 
 jackson:
   xml:

@@ -1,5 +1,9 @@
 package no.ssb.metadata.vardef
 
+import io.micronaut.health.HealthStatus
+import io.micronaut.management.health.indicator.HealthIndicator
+import io.micronaut.management.health.indicator.HealthResult
+import io.micronaut.management.health.indicator.annotation.Liveness
 import io.micronaut.runtime.Micronaut
 import io.swagger.v3.oas.annotations.ExternalDocumentation
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
@@ -10,7 +14,10 @@ import io.swagger.v3.oas.annotations.info.License
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import io.swagger.v3.oas.annotations.servers.Server
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.constants.*
+import org.reactivestreams.Publisher
+import reactor.core.publisher.Mono
 
 @Suppress("ktlint:standard:max-line-length")
 @OpenAPIDefinition(
@@ -112,6 +119,16 @@ Validity Periods are versions with a period defined by a `valid_from` date and o
     scheme = "bearer",
 )
 object Api
+
+@Singleton
+@Liveness
+class LivenessIndicator : HealthIndicator {
+    override fun getResult(): Publisher<HealthResult> = Mono.just(HealthResult.builder(LIVENESS_NAME).status(HealthStatus.UP).build())
+
+    companion object {
+        private const val LIVENESS_NAME = "liveness"
+    }
+}
 
 fun main(args: Array<String>) {
     Micronaut

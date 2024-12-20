@@ -55,11 +55,11 @@ spec:
     port: "8090"
 
   liveness:
-    path: /health
+    path: /health/liveness
     port: 8090
   readiness:
-    path: /health
+    path: /health/readiness
     port: 8090
   startup:
-    path: /health
+    path: /health/liveness
     port: 8090

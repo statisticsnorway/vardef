@@ -80,6 +80,7 @@ micronaut:
           - /metrics
           - /prometheus
           - /docs/.+
+          - /favicon.ico
 
   http:
     services:

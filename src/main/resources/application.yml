@@ -72,6 +72,13 @@ micronaut:
       maximumSize: 3600
 
   server:
+    cors:
+      enabled: true
+      configurations:
+        ui:
+          allowed-origins:
+            - https://metadata.test.ssb.no/
+
     netty:
       access-logger:
         enabled: true

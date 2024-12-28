@@ -77,8 +77,8 @@ micronaut:
       configurations:
         ui:
           allowed-origins:
-            - https://metadata.test.ssb.no/
-            - https://vardef.intern.test.ssb.no/
+            - https://metadata.test.ssb.no
+            - https://vardef.intern.test.ssb.no
 
     netty:
       access-logger:

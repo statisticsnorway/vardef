@@ -98,7 +98,7 @@ micronaut:
         health-check: true
         health-check-interval: 15s
       vardok:
-        url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok
+        url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
       dapla-team-api:
         url: https://dapla-team-api.intern.test.ssb.no
         health-check: true

@@ -44,7 +44,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch incorrect active group`(spec: RequestSpecification) {
+    fun `create new patch principal not owner`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)

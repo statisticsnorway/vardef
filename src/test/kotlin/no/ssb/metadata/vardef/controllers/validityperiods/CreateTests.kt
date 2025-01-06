@@ -17,7 +17,7 @@ import java.time.LocalDate
 
 class CreateTests : BaseVardefTest() {
     @Test
-    fun `create new patch incorrect active group`(spec: RequestSpecification) {
+    fun `create new validity period incorrect active group`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)

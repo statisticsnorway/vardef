@@ -49,7 +49,7 @@ micronaut-http-client = { module = "io.micronaut:micronaut-http-client", version
 micronaut-http-validation = { module = "io.micronaut:micronaut-http-validation", version.ref = "micronaut" }
 micronaut-management = { module = "io.micronaut:micronaut-management", version.ref = "micronautManagement" }
 micronaut-micrometer-registry-prometheus = { module = "io.micronaut.micrometer:micronaut-micrometer-registry-prometheus", version.ref = "micronautMicrometer" }
-micronaut-mongo-sync = { module = "io.micronaut.mongodb:micronaut-mongo-sync", version.ref = "micronautMongoDb" }
+micronaut-mongo-reactive = { module = "io.micronaut.mongodb:micronaut-mongo-reactive", version.ref = "micronautMongoDb" }
 micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi", version.ref = "micronautOpenapi" }
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronautOpenapi" }
 micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronaut" }

@@ -12,7 +12,6 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
-import no.ssb.metadata.vardef.services.UserContext
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -32,22 +31,8 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     @Property(name = "micronaut.security.token.jwt.claims.keys.username")
     private lateinit var usernameClaim: String
 
-    @Property(name = "micronaut.security.token.jwt.claims.keys.email")
-    private lateinit var emailClaim: String
-
     @Inject
     private lateinit var jsonWebTokenParser: JsonWebTokenParser<JWT>
-
-    @Inject
-    lateinit var usernameContext: UserContext
-
-    private fun setUser(email: String?) {
-        email?.let {
-            usernameContext.userEmail = it
-        } ?: run {
-            logger.warn("Could not retrieve user email from token")
-        }
-    }
 
     @Suppress("UNCHECKED_CAST")
     private fun getDaplaGroups(token: JWT) =
@@ -143,7 +128,6 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         return Mono
             .from(validate(token, request))
             .map {
-                setUser(it.jwtClaimsSet.getStringClaim(emailClaim))
                 Authentication.build(
                     it.jwtClaimsSet.getStringClaim(usernameClaim),
                     assignRoles(it, request),

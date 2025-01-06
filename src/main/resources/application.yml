@@ -13,7 +13,6 @@ micronaut:
             dapla-groups: groups
             dapla-teams: teams
             username: preferred_username
-            email: email
           values:
             allowed-audiences:
               - onyxia-api

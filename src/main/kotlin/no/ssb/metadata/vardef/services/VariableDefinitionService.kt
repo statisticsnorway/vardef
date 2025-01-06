@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
-import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
@@ -32,9 +31,6 @@ class VariableDefinitionService(
 ) {
     private val logger = LoggerFactory.getLogger(VariableDefinitionService::class.java)
 
-    @Inject
-    lateinit var usernameContext: UserContext
-
     /**
      * Create a new *Draft*
      *
@@ -43,8 +39,11 @@ class VariableDefinitionService(
      * @param draft The *Draft* to create.
      * @return The created *Draft*
      */
-    fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
-        draft.apply { this.createdBy = usernameContext.userEmail }
+    fun create(
+        draft: SavedVariableDefinition,
+        createdBy: String,
+    ): SavedVariableDefinition {
+        draft.apply { this.createdBy = createdBy }
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: $savedVariableDefinition.definitionId",

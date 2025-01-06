@@ -33,6 +33,7 @@ import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
+import io.micronaut.security.authentication.Authentication
 
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
@@ -214,6 +215,7 @@ class VariableDefinitionByIdController(
         @Body
         @Valid
         updateDraft: UpdateDraft,
+        authentication: Authentication,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
 
@@ -234,7 +236,7 @@ class VariableDefinitionByIdController(
                 )
         }
         return vardef
-            .update(variable, updateDraft)
+            .update(variable, updateDraft, authentication.name)
             .toCompleteResponse()
     }
 }

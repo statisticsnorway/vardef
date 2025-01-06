@@ -134,7 +134,7 @@ data class SavedVariableDefinition(
             createdBy = createdBy,
         )
 
-    fun copyAndUpdate(varDefUpdates: UpdateDraft): SavedVariableDefinition =
+    fun copyAndUpdate(varDefUpdates: UpdateDraft, updatedBy: String?): SavedVariableDefinition =
         copy(
             name = varDefUpdates.name?.let { name.update(it) } ?: name,
             shortName = varDefUpdates.shortName ?: shortName,
@@ -153,5 +153,6 @@ data class SavedVariableDefinition(
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             owner = varDefUpdates.owner ?: owner,
             contact = varDefUpdates.contact ?: contact,
+            lastUpdatedBy = updatedBy
         )
 }

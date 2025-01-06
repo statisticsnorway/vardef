@@ -34,7 +34,7 @@ class VariableDefinitionService(
     /**
      * Create a new *Draft*
      *
-     * Set *createdBy* with email from user token
+     * This function sets the `createdBy` property of the provided draft and saves it to the repository.
      *
      * @param draft The *Draft* to create.
      * @return The created *Draft*

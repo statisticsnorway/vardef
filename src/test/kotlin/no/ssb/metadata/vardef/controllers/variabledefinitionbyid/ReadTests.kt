@@ -6,6 +6,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.TEST_EMAIL
 import no.ssb.metadata.vardef.utils.buildProblemJsonResponseSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
@@ -107,5 +108,17 @@ class ReadTests : BaseVardefTest() {
             .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)
+    }
+
+    @Test
+    fun `get variable definition created by`(
+        spec: RequestSpecification,
+    ) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("created_by", equalTo(INCOME_TAX_VP1_P1.createdBy))
     }
 }

@@ -425,5 +425,6 @@ class UpdateTests : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.createdBy).isEqualTo(createdByBeforeUpdate)
+        assertThat(completeResponse.createdBy).isNotEqualTo(TOKEN_USERNAME)
     }
 }

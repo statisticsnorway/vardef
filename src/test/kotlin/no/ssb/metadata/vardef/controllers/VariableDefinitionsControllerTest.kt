@@ -431,6 +431,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .path<String>("id")
 
         val createdVariableDefinition = patches.latest(definitionId)
-        assertThat(createdVariableDefinition.createdBy).isEqualTo(TEST_EMAIL)
+        assertThat(createdVariableDefinition.createdBy).isEqualTo(TOKEN_USERNAME)
     }
 }

@@ -6,6 +6,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
+import no.ssb.metadata.vardef.services.UserContext
 import no.ssb.metadata.vardef.utils.JwtTokenHelper
 import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
 import org.assertj.core.api.Assertions.assertThat
@@ -19,6 +20,9 @@ import reactor.core.publisher.Mono
 class VardefTokenValidatorTest {
     @Inject
     lateinit var vardefTokenValidator: VardefTokenValidator<MutableHttpRequest<*>>
+
+    @Inject
+    lateinit var usernameContext: UserContext
 
     @Test
     fun `request with malformed token`() {
@@ -127,5 +131,17 @@ class VardefTokenValidatorTest {
                 ).block()
 
         assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+    }
+
+    @Test
+    fun `get user email from token`() {
+        Mono
+            .from(
+                vardefTokenValidator.validateToken(
+                    JwtTokenHelper.jwtTokenSigned().parsedString,
+                    HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$TEST_DEVELOPERS_GROUP", ""),
+                ),
+            ).block()
+        assertThat(usernameContext.userEmail).isEqualTo("ano@ssb.no")
     }
 }

@@ -95,7 +95,7 @@ data class Draft(
             contact = contact,
             // Provide a placeholder value, actual value set by data layer
             createdAt = LocalDateTime.now(),
-            // TODO depends on authentication to make user information available
+            // Value set by VariableDefinitionService
             createdBy = null,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),

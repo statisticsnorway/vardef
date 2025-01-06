@@ -19,11 +19,6 @@ const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
             "title": "Innvandrere"
         }"""
 
-const val PERSON_EXAMPLE = """{
-        "code": "ano@ssb.no",
-        "name": "Ola Nordmann"
-    }"""
-
 const val RENDERED_CONTACT_EXAMPLE = """{
         "title": "Seksjon for befolkningsstatistikk",
         "email": "s320@ssb.no"
@@ -119,9 +114,9 @@ const val COMPLETE_RESPONSE_EXAMPLE = """{
         "email": "s320@ssb.no"
     },
     "created_at": "2024-06-11T08:15:19.038Z",
-    "created_by": $PERSON_EXAMPLE,
+    "created_by": "ano@ssb.no",
     "last_updated_at": "2024-06-11T08:15:19.038Z",
-    "last_updated_by": $PERSON_EXAMPLE
+    "last_updated_by": "ano@ssb.no"
 }
 """
 
@@ -169,9 +164,9 @@ const val COMPLETE_RESPONSE_EXAMPLE_PUBLISHED_VARIABLE = """{
         "email": "s320@ssb.no"
     },
     "created_at": "2024-06-11T08:15:19.038Z",
-    "created_by": $PERSON_EXAMPLE,
+    "created_by": "ano@ssb.no",
     "last_updated_at": "2024-06-11T08:15:19.038Z",
-    "last_updated_by": $PERSON_EXAMPLE
+    "last_updated_by": "ano@ssb.no"
 }
 """
 

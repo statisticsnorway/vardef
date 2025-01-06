@@ -26,11 +26,6 @@ class SchemaExamplesTest {
                     listOf(KlassReference::class.java),
                 ),
                 argumentSet(
-                    "Person example validates",
-                    PERSON_EXAMPLE,
-                    listOf(Person::class.java),
-                ),
-                argumentSet(
                     "Owner example validates",
                     OWNER_EXAMPLE,
                     listOf(Owner::class.java),

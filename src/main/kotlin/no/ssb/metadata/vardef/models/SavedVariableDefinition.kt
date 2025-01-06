@@ -4,6 +4,7 @@ import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.*
 import io.micronaut.data.model.naming.NamingStrategies
 import io.micronaut.serde.annotation.Serdeable
+import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotNull
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.bson.types.ObjectId
@@ -50,11 +51,13 @@ data class SavedVariableDefinition(
     @DateCreated
     var createdAt: LocalDateTime,
     @Nullable
-    var createdBy: Person?,
+    @Email
+    var createdBy: String?,
     @DateUpdated
     var lastUpdatedAt: LocalDateTime,
     @Nullable
-    var lastUpdatedBy: Person?,
+    @Email
+    var lastUpdatedBy: String?,
 ) {
     /**
      * Render the variable definition, so it's suitable for display to humans.

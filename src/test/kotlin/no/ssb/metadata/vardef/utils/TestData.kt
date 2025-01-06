@@ -75,9 +75,9 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION =
                 "me@example.com",
             ),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy = Person("", ""),
+        createdBy = "me@example.com",
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy = Person("", ""),
+        lastUpdatedBy = "me@example.com",
     )
 
 val VALIDITY_PERIOD_TAX_EXAMPLE =
@@ -154,11 +154,9 @@ val INCOME_TAX_VP1_P1 =
                 "me@example.com",
             ),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy =
-            Person("", ""),
+        createdBy = "me@example.com",
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy =
-            Person("", ""),
+        lastUpdatedBy = "me@example.com",
     )
 
 // Validity Period 1, Patch 2
@@ -280,11 +278,9 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
                 "me@example.com",
             ),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy =
-            Person("", ""),
+        createdBy = "me@example.com",
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy =
-            Person("", ""),
+        lastUpdatedBy = "me@example.com",
     )
 
 val RENDERED_VARIABLE_DEFINITION =

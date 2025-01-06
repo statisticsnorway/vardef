@@ -19,11 +19,6 @@ const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
             "title": "Innvandrere"
         }"""
 
-const val PERSON_EXAMPLE = """{
-        "code": "ano@ssb.no",
-        "name": "Ola Nordmann"
-    }"""
-
 const val RENDERED_CONTACT_EXAMPLE = """{
         "title": "Seksjon for befolkningsstatistikk",
         "email": "s320@ssb.no"

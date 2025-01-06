@@ -9,7 +9,6 @@ import no.ssb.metadata.vardef.annotations.DaplaGroup
 import no.ssb.metadata.vardef.annotations.DaplaTeam
 import no.ssb.metadata.vardef.constants.KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
 import no.ssb.metadata.vardef.constants.OWNER_EXAMPLE
-import no.ssb.metadata.vardef.constants.PERSON_EXAMPLE
 import no.ssb.metadata.vardef.constants.RENDERED_CONTACT_EXAMPLE
 
 @Serdeable
@@ -63,13 +62,6 @@ data class Contact(
     val title: LanguageStringType,
     @Email
     val email: String,
-)
-
-@Schema(example = PERSON_EXAMPLE)
-@Serdeable(naming = SnakeCaseStrategy::class)
-data class Person(
-    val code: String,
-    val name: String,
 )
 
 /**

@@ -66,7 +66,6 @@ class VariableDefinitionService(
         updateDraft: UpdateDraft,
         lastUpdatedBy: String?,
     ): SavedVariableDefinition {
-
         updateDraft.owner.takeIf { it != savedDraft.owner }?.let {
             if (!DaplaTeamService.containsDevelopersGroup(it)) {
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")

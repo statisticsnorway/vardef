@@ -34,16 +34,12 @@ class VariableDefinitionService(
     /**
      * Create a new *Draft*
      *
-     * This function sets the `createdBy` property of the provided draft and saves it to the repository.
-     *
      * @param draft The *Draft* to create.
      * @return The created *Draft*
      */
     fun create(
         draft: SavedVariableDefinition,
-        createdBy: String,
     ): SavedVariableDefinition {
-        draft.apply { this.createdBy = createdBy }
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: $savedVariableDefinition.definitionId",

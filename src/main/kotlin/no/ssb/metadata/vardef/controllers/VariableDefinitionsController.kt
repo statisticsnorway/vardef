@@ -135,6 +135,6 @@ class VariableDefinitionsController(
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return vardef.create(draft.toSavedVariableDefinition(activeGroup), authentication.name).toCompleteResponse()
+        return vardef.create(draft.toSavedVariableDefinition(activeGroup, authentication.name)).toCompleteResponse()
     }
 }

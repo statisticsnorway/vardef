@@ -28,6 +28,7 @@ import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
+import io.micronaut.security.authentication.Authentication
 
 @Tag(name = VALIDITY_PERIODS)
 @Validated
@@ -95,6 +96,7 @@ class ValidityPeriodsController(
         )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        authentication: Authentication,
     ): CompleteResponse {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)
 
@@ -103,7 +105,7 @@ class ValidityPeriodsController(
         }
 
         return try {
-            validityPeriods.create(variableDefinitionId, newPeriod).toCompleteResponse()
+            validityPeriods.create(variableDefinitionId, newPeriod, authentication.name).toCompleteResponse()
         } catch (e: ValidityPeriodExceptions) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }

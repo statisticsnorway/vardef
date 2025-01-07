@@ -82,6 +82,7 @@ data class Patch(
     fun toSavedVariableDefinition(
         highestPatchId: Int,
         previousPatch: SavedVariableDefinition,
+        userName: String,
     ): SavedVariableDefinition =
         previousPatch.copy(
             patchId = highestPatchId + 1,
@@ -102,7 +103,6 @@ data class Patch(
             contact = contact ?: previousPatch.contact,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
-            // TODO depends on authentication to make user information available
-            lastUpdatedBy = null,
+            lastUpdatedBy = userName,
         )
 }

@@ -45,6 +45,7 @@ class PatchesService(
         patch: Patch,
         definitionId: String,
         latestPatch: SavedVariableDefinition,
+        userName: String,
     ): SavedVariableDefinition {
         if (patch.owner != latestPatch.owner && patch.owner != null) {
             logger.info(
@@ -58,7 +59,7 @@ class PatchesService(
                 )
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
-            validityPeriodsService.updateOwnerOnOtherPeriods(definitionId, patch.owner, latestPatch.validFrom)
+            validityPeriodsService.updateOwnerOnOtherPeriods(definitionId, patch.owner, latestPatch.validFrom, userName)
             logger.info(
                 "Creating patch and updating owner to ${patch.owner} on other periods for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
@@ -67,7 +68,7 @@ class PatchesService(
         // For the selected validity period create a patch with the provided values
         val savedVariableDefinition =
             variableDefinitionRepository.save(
-                patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch),
+                patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch, userName),
             )
         logger.info("Successfully saved patch for definition: $definitionId", kv(DEFINITION_ID, definitionId))
         return savedVariableDefinition

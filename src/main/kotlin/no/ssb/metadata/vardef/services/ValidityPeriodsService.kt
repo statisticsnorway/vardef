@@ -176,6 +176,7 @@ class ValidityPeriodsService(
     fun create(
         definitionId: String,
         newPeriod: ValidityPeriod,
+        userName: String
     ): SavedVariableDefinition {
         val validityPeriodsMap = getAsMap(definitionId)
 
@@ -198,7 +199,7 @@ class ValidityPeriodsService(
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { variableDefinitionRepository.save(it) }
         } else {
-            endLastValidityPeriod(definitionId, newPeriod.validFrom)
+            endLastValidityPeriod(definitionId, newPeriod.validFrom, userName)
                 .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
@@ -322,13 +323,14 @@ class ValidityPeriodsService(
     fun endLastValidityPeriod(
         definitionId: String,
         newPeriodValidFrom: LocalDate,
+        userName: String
     ): SavedVariableDefinition {
         val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
         return variableDefinitionRepository.save(
             latestPatchInLastValidityPeriod
                 .copy(validUntil = newPeriodValidFrom.minusDays(1))
                 .toPatch()
-                .toSavedVariableDefinition(list(definitionId).last().patchId, latestPatchInLastValidityPeriod),
+                .toSavedVariableDefinition(list(definitionId).last().patchId, latestPatchInLastValidityPeriod, userName),
         )
     }
 
@@ -336,6 +338,7 @@ class ValidityPeriodsService(
         definitionId: String,
         owner: Owner,
         validFrom: LocalDate,
+        userName: String
     ): Unit =
         listLatestByValidityPeriod(definitionId)
             // Exclude the matching validity period, which is handled separately
@@ -352,6 +355,7 @@ class ValidityPeriodsService(
                     patchOwner.toSavedVariableDefinition(
                         list(definitionId).last().patchId,
                         period,
+                        userName,
                     ),
                 )
             }

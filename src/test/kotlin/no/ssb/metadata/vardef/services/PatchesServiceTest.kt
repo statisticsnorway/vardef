@@ -68,7 +68,7 @@ class PatchesServiceTest : BaseVardefTest() {
                         ),
                 ).toPatch()
 
-        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7)
+        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7, "ano@ssb.no")
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         validityPeriodList.forEach { period ->
             assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP1_P7.owner)
@@ -89,7 +89,7 @@ class PatchesServiceTest : BaseVardefTest() {
                         ),
                 ).toPatch()
 
-        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
+        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6, TEST_USER)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         // Only one patch created in selected period
         validityPeriodList
@@ -116,7 +116,7 @@ class PatchesServiceTest : BaseVardefTest() {
                         ),
                 ).toPatch()
 
-        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6)
+        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6, TEST_USER)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
 
         // For selected validity period

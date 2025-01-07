@@ -31,6 +31,7 @@ import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import java.time.LocalDate
+import io.micronaut.security.authentication.Authentication
 
 @Tag(name = PATCHES)
 @Validated
@@ -190,6 +191,7 @@ class PatchesController(
         )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        authentication: Authentication,
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
 
@@ -201,6 +203,7 @@ class PatchesController(
                 patch,
                 variableDefinitionId,
                 latestPatchOnValidityPeriod,
+                authentication.name,
             ).toCompleteResponse()
     }
 }

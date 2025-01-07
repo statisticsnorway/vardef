@@ -26,6 +26,7 @@ import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
+import io.micronaut.security.authentication.Authentication
 
 @Validated
 @Controller("/variable-definitions")
@@ -126,6 +127,7 @@ class VariableDefinitionsController(
         )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        authentication: Authentication,
     ): CompleteResponse {
         if (vardef.doesShortNameExist(draft.shortName)) {
             throw HttpStatusException(
@@ -133,6 +135,6 @@ class VariableDefinitionsController(
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return vardef.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
+        return vardef.create(draft.toSavedVariableDefinition(activeGroup), authentication.name).toCompleteResponse()
     }
 }

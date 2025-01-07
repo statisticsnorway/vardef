@@ -37,7 +37,7 @@ val DRAFT_BUS_EXAMPLE =
                 LanguageStringType("", "", ""),
                 "",
             ),
-    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP)
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
 val SAVED_INTERNAL_VARIABLE_DEFINITION =
     SavedVariableDefinition(
@@ -361,9 +361,9 @@ val COMPLETE_RESPONSE =
             ),
         contact = null,
         createdAt = LocalDateTime.now(),
-        createdBy = null,
+        createdBy = TEST_USER,
         lastUpdatedAt = LocalDateTime.now(),
-        lastUpdatedBy = null,
+        lastUpdatedBy = TEST_USER,
     )
 
 fun jsonTestInput() =

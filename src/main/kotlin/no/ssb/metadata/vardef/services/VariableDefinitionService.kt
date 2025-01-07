@@ -68,7 +68,7 @@ class VariableDefinitionService(
     fun update(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
-        userName: String?,
+        userName: String,
     ): SavedVariableDefinition {
         updateDraft.owner.takeIf { it != savedDraft.owner }?.let {
             if (!DaplaTeamService.containsDevelopersGroup(it)) {

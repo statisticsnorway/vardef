@@ -195,12 +195,12 @@ class ValidityPeriodsService(
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
-                .toSavedVariableDefinition(list(definitionId).last().patchId, lastValidityPeriod)
+                .toSavedVariableDefinition(list(definitionId).last().patchId, lastValidityPeriod, userName)
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
                 .let { variableDefinitionRepository.save(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom, userName)
-                .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it) }
+                .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it, userName) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
                 .let { variableDefinitionRepository.save(it) }

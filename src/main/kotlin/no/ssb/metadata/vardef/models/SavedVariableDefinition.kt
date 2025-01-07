@@ -52,12 +52,12 @@ data class SavedVariableDefinition(
     var createdAt: LocalDateTime,
     @Nullable
     @Email
-    var createdBy: String?,
+    var createdBy: String,
     @DateUpdated
     var lastUpdatedAt: LocalDateTime,
     @Nullable
     @Email
-    var lastUpdatedBy: String?,
+    var lastUpdatedBy: String,
 ) {
     /**
      * Render the variable definition, so it's suitable for display to humans.
@@ -136,7 +136,7 @@ data class SavedVariableDefinition(
 
     fun copyAndUpdate(
         varDefUpdates: UpdateDraft,
-        updatedBy: String?,
+        updatedBy: String,
     ): SavedVariableDefinition =
         copy(
             name = varDefUpdates.name?.let { name.update(it) } ?: name,

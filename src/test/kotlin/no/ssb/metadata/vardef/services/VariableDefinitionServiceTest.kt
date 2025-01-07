@@ -73,7 +73,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         updateDraft: UpdateDraft,
         valueBefore: Owner,
     ) {
-        val updatedSavedVariable = variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft, "ano@ssb.no")
+        val updatedSavedVariable = variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft, TEST_USER)
         assertThat(updatedSavedVariable.owner).isNotEqualTo(valueBefore)
     }
 

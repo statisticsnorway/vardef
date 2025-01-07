@@ -405,7 +405,7 @@ class UpdateTests : BaseVardefTest() {
 
     @Test
     fun `created by is not changed when updated by another user`(spec: RequestSpecification) {
-        val createdByBeforeUpdate = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.createdBy
+        val createdBy = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.createdBy
         val body =
             spec
                 .given()
@@ -424,7 +424,8 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.createdBy).isEqualTo(createdByBeforeUpdate)
-        assertThat(completeResponse.createdBy).isNotEqualTo(TEST_USER)
+        assertThat(completeResponse.createdBy).isEqualTo(createdBy)
+        assertThat(completeResponse.lastUpdatedBy).isNotEqualTo(createdBy)
+        assertThat(completeResponse.lastUpdatedBy).isEqualTo(TEST_USER)
     }
 }

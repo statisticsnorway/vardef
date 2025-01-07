@@ -409,7 +409,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition created by`(spec: RequestSpecification) {
+    fun `create variable definition created by and last updated by is set`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
                 .apply {
@@ -432,6 +432,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
 
         val createdVariableDefinition = patches.latest(definitionId)
         assertThat(createdVariableDefinition.createdBy).isEqualTo(TEST_USER)
+        assertThat(createdVariableDefinition.lastUpdatedBy).isEqualTo(TEST_USER)
     }
 
     @Test

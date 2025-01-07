@@ -369,5 +369,7 @@ class CreateTests : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
+        assertThat(completeResponse.lastUpdatedBy).isEqualTo(TEST_USER)
+        assertThat(completeResponse.createdBy).isEqualTo("me@example.com")
     }
 }

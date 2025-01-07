@@ -39,9 +39,7 @@ class VariableDefinitionService(
      */
     fun create(
         draft: SavedVariableDefinition,
-        // userName: String,
     ): SavedVariableDefinition {
-        // draft.apply { this.lastUpdatedBy = userName }
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: $savedVariableDefinition.definitionId",

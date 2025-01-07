@@ -50,12 +50,10 @@ data class SavedVariableDefinition(
     var contact: Contact?,
     @DateCreated
     var createdAt: LocalDateTime,
-    @Nullable
     @Email
     var createdBy: String,
     @DateUpdated
     var lastUpdatedAt: LocalDateTime,
-    @Nullable
     @Email
     var lastUpdatedBy: String,
 ) {
@@ -136,7 +134,7 @@ data class SavedVariableDefinition(
 
     fun copyAndUpdate(
         varDefUpdates: UpdateDraft,
-        updatedBy: String,
+        userName: String,
     ): SavedVariableDefinition =
         copy(
             name = varDefUpdates.name?.let { name.update(it) } ?: name,
@@ -156,6 +154,6 @@ data class SavedVariableDefinition(
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             owner = varDefUpdates.owner ?: owner,
             contact = varDefUpdates.contact ?: contact,
-            lastUpdatedBy = updatedBy,
+            lastUpdatedBy = userName,
         )
 }

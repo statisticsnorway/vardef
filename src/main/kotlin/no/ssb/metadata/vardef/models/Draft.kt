@@ -73,7 +73,10 @@ data class Draft(
         }
     }
 
-    fun toSavedVariableDefinition(ownerGroup: String, userName: String): SavedVariableDefinition =
+    fun toSavedVariableDefinition(
+        ownerGroup: String,
+        userName: String,
+    ): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = VariableDefinitionService.generateId(),
             patchId = 1,

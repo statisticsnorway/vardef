@@ -14,7 +14,6 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
-import javax.print.attribute.standard.JobOriginatingUserName
 
 /**
  * Create a Draft Variable Definition
@@ -74,7 +73,10 @@ data class Draft(
         }
     }
 
-    fun toSavedVariableDefinition(ownerGroup: String, userName: String): SavedVariableDefinition =
+    fun toSavedVariableDefinition(
+        ownerGroup: String,
+        userName: String,
+    ): SavedVariableDefinition =
         SavedVariableDefinition(
             definitionId = VariableDefinitionService.generateId(),
             patchId = 1,

@@ -402,4 +402,29 @@ class UpdateTests : BaseVardefTest() {
         assertThat(body.definition).isEqualTo(expected.definition)
         assertThat(body.comment).isEqualTo(expected.comment)
     }
+
+    @Test
+    fun `created by is not changed when updated by another user`(spec: RequestSpecification) {
+        val createdByBeforeUpdate = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.createdBy
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """
+                    {"short_name": "nothing"}
+                    """.trimIndent(),
+                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.createdBy).isEqualTo(createdByBeforeUpdate)
+        assertThat(completeResponse.createdBy).isNotEqualTo(TOKEN_USERNAME)
+    }
 }

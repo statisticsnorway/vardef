@@ -108,4 +108,14 @@ class ReadTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
+
+    @Test
+    fun `get variable definition created by`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("created_by", equalTo(INCOME_TAX_VP1_P1.createdBy))
+    }
 }

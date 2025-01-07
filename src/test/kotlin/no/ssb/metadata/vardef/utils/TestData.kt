@@ -37,7 +37,7 @@ val DRAFT_BUS_EXAMPLE =
                 LanguageStringType("", "", ""),
                 "",
             ),
-    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP)
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TOKEN_USERNAME)
 
 val SAVED_INTERNAL_VARIABLE_DEFINITION =
     SavedVariableDefinition(

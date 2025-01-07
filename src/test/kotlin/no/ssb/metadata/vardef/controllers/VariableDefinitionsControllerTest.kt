@@ -407,4 +407,30 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
         assertThat(actualStatuses).containsAll(expectedStatuses)
     }
+
+    @Test
+    fun `create variable definition created by`(spec: RequestSpecification) {
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put("short_name", "blah")
+                }.toString()
+
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .path<String>("id")
+
+        val createdVariableDefinition = patches.latest(definitionId)
+        assertThat(createdVariableDefinition.createdBy).isEqualTo(TOKEN_USERNAME)
+    }
 }

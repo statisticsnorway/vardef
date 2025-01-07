@@ -6,6 +6,7 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.authentication.Authentication
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -126,6 +127,7 @@ class VariableDefinitionsController(
         )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        authentication: Authentication,
     ): CompleteResponse {
         if (vardef.doesShortNameExist(draft.shortName)) {
             throw HttpStatusException(
@@ -133,6 +135,6 @@ class VariableDefinitionsController(
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return vardef.create(draft.toSavedVariableDefinition(activeGroup)).toCompleteResponse()
+        return vardef.create(draft.toSavedVariableDefinition(activeGroup, authentication.name)).toCompleteResponse()
     }
 }

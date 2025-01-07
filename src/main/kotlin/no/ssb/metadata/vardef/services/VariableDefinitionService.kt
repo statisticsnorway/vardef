@@ -37,9 +37,7 @@ class VariableDefinitionService(
      * @param draft The *Draft* to create.
      * @return The created *Draft*
      */
-    fun create(
-        draft: SavedVariableDefinition,
-    ): SavedVariableDefinition {
+    fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: $savedVariableDefinition.definitionId",

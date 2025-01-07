@@ -6,6 +6,7 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.authentication.Authentication
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -26,7 +27,6 @@ import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
-import io.micronaut.security.authentication.Authentication
 
 @Validated
 @Controller("/variable-definitions")

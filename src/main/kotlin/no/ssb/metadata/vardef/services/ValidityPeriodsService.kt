@@ -176,7 +176,7 @@ class ValidityPeriodsService(
     fun create(
         definitionId: String,
         newPeriod: ValidityPeriod,
-        userName: String
+        userName: String,
     ): SavedVariableDefinition {
         val validityPeriodsMap = getAsMap(definitionId)
 
@@ -323,7 +323,7 @@ class ValidityPeriodsService(
     fun endLastValidityPeriod(
         definitionId: String,
         newPeriodValidFrom: LocalDate,
-        userName: String
+        userName: String,
     ): SavedVariableDefinition {
         val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
         return variableDefinitionRepository.save(
@@ -338,7 +338,7 @@ class ValidityPeriodsService(
         definitionId: String,
         owner: Owner,
         validFrom: LocalDate,
-        userName: String
+        userName: String,
     ): Unit =
         listLatestByValidityPeriod(definitionId)
             // Exclude the matching validity period, which is handled separately

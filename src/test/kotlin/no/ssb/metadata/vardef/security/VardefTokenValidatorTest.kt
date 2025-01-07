@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.utils.JwtTokenHelper
 import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
+import no.ssb.metadata.vardef.utils.TEST_USER
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -127,5 +128,31 @@ class VardefTokenValidatorTest {
                 ).block()
 
         assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+    }
+
+    @Test
+    fun `authentication object contains username`() {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        JwtTokenHelper.jwtTokenSigned().parsedString,
+                        HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$TEST_DEVELOPERS_GROUP", ""),
+                    ),
+                ).block()
+        assertThat(auth?.name).isEqualTo(TEST_USER)
+    }
+
+    @Test
+    fun `authentication object does not contain username`() {
+        val auth =
+            Mono
+                .from(
+                    vardefTokenValidator.validateToken(
+                        JwtTokenHelper.jwtTokenSigned(includeUsername = false).parsedString,
+                        HttpRequest.POST("/variable-definitions?$ACTIVE_GROUP=$TEST_DEVELOPERS_GROUP", ""),
+                    ),
+                ).block()
+        assertThat(auth?.name).isNull()
     }
 }

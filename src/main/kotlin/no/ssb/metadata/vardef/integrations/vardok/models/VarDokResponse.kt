@@ -62,6 +62,14 @@ data class Common(
 
 @Serdeable
 @Introspected
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class Relations(
+    @field:JacksonXmlProperty(localName = "ClassificationRelation")
+    val classificationRelation: String?,
+)
+
+@Serdeable
+@Introspected
 data class SubjectArea(
     @field:JacksonXmlProperty(localName = "CodeValue")
     val codeValue: String?,
@@ -117,5 +125,6 @@ data class VardokResponse(
     val common: Common?,
     @field:JacksonXmlProperty(localName = "Variable", isAttribute = false)
     val variable: Variable? = null,
-    val relations: String? = null,
+    @field:JacksonXmlProperty(localName = "Relations", isAttribute = false)
+    val relations: Relations? = null,
 )

@@ -10,18 +10,17 @@ import org.junit.jupiter.api.Test
 @Requires(env = ["integration-test"])
 @MicronautTest
 class VardokResponseTest {
-
     @Inject
     lateinit var vardokClient: VardokClient
 
     @Test
-    fun `calculation in response`(){
+    fun `calculation in response`()  {
         val response = vardokClient.fetchVardokById("566")
         assertThat(response.variable?.calculation).isNotNull
     }
 
     @Test
-    fun `calculation not in response`(){
+    fun `calculation not in response`()  {
         val response = vardokClient.fetchVardokById("2")
         assertThat(response.variable?.calculation).isEmpty()
     }

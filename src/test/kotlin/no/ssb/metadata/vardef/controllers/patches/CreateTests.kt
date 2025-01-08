@@ -232,7 +232,7 @@ class CreateTests : BaseVardefTest() {
                         }.toPatch(),
                     DRAFT_BUS_EXAMPLE.definitionId,
                     DRAFT_BUS_EXAMPLE,
-                    "ano@ssb.no",
+                    TEST_USER,
                 ).definitionId
         spec
             .given()

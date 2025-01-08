@@ -113,14 +113,14 @@ class JwtTokenHelper {
             "name": "Ola Nordmann",
             "short_username": "ssb-ano",
             ${ if (includeUsername) {
-                """"preferred_username": "ano@ssb.no","""
+                """"preferred_username": $TEST_USER,"""
             } else {
                 ""
             }
             }
             "given_name": "Ola",
             "family_name": "Nordmann",
-            "email": "ano@ssb.no"
+            "email": $TEST_USER
                   }
             """.trimIndent(),
         )

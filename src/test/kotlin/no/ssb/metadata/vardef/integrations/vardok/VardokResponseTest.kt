@@ -12,10 +12,22 @@ class VardokResponseTest {
     lateinit var vardokService: VardokService
 
     @Test
+    fun `calculation in response`() {
+        val response = vardokService.getVardokItem("566")
+        assertThat(response?.variable?.calculation).isNotNull
+    }
+
+    @Test
     fun `relations in response`() {
         val response = vardokService.getVardokItem("2")
         assertThat(response?.relations).isNotNull()
         assertThat(response?.relations?.classificationRelation).isNull()
+    }
+
+    @Test
+    fun `calculation not in response`() {
+        val response = vardokService.getVardokItem("2")
+        assertThat(response?.variable?.calculation).isEmpty()
     }
 
     @Test

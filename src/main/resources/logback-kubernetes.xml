@@ -1,7 +1,5 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp />
@@ -11,11 +9,16 @@
                 <arguments/>
             </providers>
         </encoder>
+        <filter class="no.ssb.metadata.vardef.utils.HealthStatusFilter" />
     </appender>
+
+    <logger name="io.micronaut.management.health.monitor.HealthMonitorTask" level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </logger>
 
     <logger name="io.micronaut.http.client.netty.DefaultHttpClient" level="ERROR" />
 
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

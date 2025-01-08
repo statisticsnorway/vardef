@@ -123,9 +123,8 @@ properties:
     format: date-time
     readOnly: true
   created_by:
-    title: Created by person
-    description: Person that created the variable, name and initials (SSB identifier)
-    $ref: person.json
+    title: Created by
+    description: Username (email) person that created the variable (SSB identifier)
     readOnly: true
   last_updated_at:
     title: Last updated date
@@ -135,6 +134,5 @@ properties:
     readOnly: true
   last_updated_by:
     title: Last updated by
-    description: Person that last updated the variable, name and initials (SSB identifier)
-    $ref: person.json
+    description: Username (email) person that last updated the variable (SSB identifier)
     readOnly: true

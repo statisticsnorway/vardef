@@ -101,7 +101,6 @@ data class Draft(
             createdBy = userName,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
-            // TODO depends on authentication to make user information available
-            lastUpdatedBy = null,
+            lastUpdatedBy = userName,
         )
 }

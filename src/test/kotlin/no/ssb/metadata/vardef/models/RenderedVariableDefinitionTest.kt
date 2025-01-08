@@ -2,10 +2,7 @@ package no.ssb.metadata.vardef.models
 
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.DRAFT_BUS_EXAMPLE
-import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
-import no.ssb.metadata.vardef.utils.UPDATE_DRAFT_CLASSIFICATION_REFERENCE
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -192,7 +189,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
 
     @Test
     fun `copyAndUpdate updates classificationReference to expected value`() {
-        val updatedVariable = DRAFT_BUS_EXAMPLE.copyAndUpdate(UPDATE_DRAFT_CLASSIFICATION_REFERENCE)
+        val updatedVariable = DRAFT_BUS_EXAMPLE.copyAndUpdate(UPDATE_DRAFT_CLASSIFICATION_REFERENCE, TEST_USER)
         assertThat(updatedVariable.classificationReference).isEqualTo("92")
     }
 

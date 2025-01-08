@@ -64,13 +64,14 @@ class VariableDefinitionService(
     fun update(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
+        userName: String,
     ): SavedVariableDefinition {
         updateDraft.owner.takeIf { it != savedDraft.owner }?.let {
             if (!DaplaTeamService.containsDevelopersGroup(it)) {
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
         }
-        val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft))
+        val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft, userName))
         logger.info(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
             kv(DEFINITION_ID, updatedVariable.definitionId),

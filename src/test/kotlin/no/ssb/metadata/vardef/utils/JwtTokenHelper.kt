@@ -28,9 +28,10 @@ class JwtTokenHelper {
                     "play-foeniks-a-developers",
                 ),
             includeDaplaStructure: Boolean = true,
+            includeUsername: Boolean = true,
         ) = SignedJWT(
             header.toBase64URL(),
-            claims(audienceClaim, daplaTeams, daplaGroups, includeDaplaStructure).toPayload().toBase64URL(),
+            claims(audienceClaim, daplaTeams, daplaGroups, includeDaplaStructure, includeUsername).toPayload().toBase64URL(),
             signature,
         )
 
@@ -58,6 +59,7 @@ class JwtTokenHelper {
             daplaTeams: List<String>,
             daplaGroups: List<String>?,
             includeDaplaStructure: Boolean,
+            includeUsername: Boolean,
         ) = JWTClaimsSet.parse(
             """
             {
@@ -110,10 +112,15 @@ class JwtTokenHelper {
             }
             "name": "Ola Nordmann",
             "short_username": "ssb-ano",
-            "preferred_username": "ano@ssb.no",
+            ${ if (includeUsername) {
+                """"preferred_username": $TEST_USER,"""
+            } else {
+                ""
+            }
+            }
             "given_name": "Ola",
             "family_name": "Nordmann",
-            "email": "ano@ssb.no"
+            "email": $TEST_USER
                   }
             """.trimIndent(),
         )

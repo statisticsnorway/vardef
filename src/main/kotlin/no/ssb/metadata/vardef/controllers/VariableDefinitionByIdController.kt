@@ -9,6 +9,7 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.authentication.Authentication
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -214,6 +215,7 @@ class VariableDefinitionByIdController(
         @Body
         @Valid
         updateDraft: UpdateDraft,
+        authentication: Authentication,
     ): CompleteResponse {
         val variable = patches.latest(definitionId)
 
@@ -234,7 +236,7 @@ class VariableDefinitionByIdController(
                 )
         }
         return vardef
-            .update(variable, updateDraft)
+            .update(variable, updateDraft, authentication.name)
             .toCompleteResponse()
     }
 }

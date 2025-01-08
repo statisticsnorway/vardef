@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.TEST_USER
 import no.ssb.metadata.vardef.utils.VALIDITY_PERIOD_TAX_EXAMPLE
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.AssertionsForClassTypes
@@ -30,6 +31,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             validityPeriods.endLastValidityPeriod(
                 savedVariableDefinitionId,
                 newValidityPeriodValidFrom,
+                TEST_USER,
             )
 
         assertThat(patchEndValidityPeriod.validUntil).isAfter(patchEndValidityPeriod.validFrom)
@@ -68,6 +70,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                 validityPeriods.create(
                     INCOME_TAX_VP1_P1.definitionId,
                     inputObject,
+                    TEST_USER,
                 )
             }
         } else {
@@ -76,6 +79,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                     validityPeriods.create(
                         INCOME_TAX_VP1_P1.definitionId,
                         inputObject,
+                        TEST_USER,
                     ),
                 ).isInstanceOf(SavedVariableDefinition::class.java)
         }
@@ -92,6 +96,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                 validityPeriods.create(
                     INCOME_TAX_VP1_P1.definitionId,
                     inputObject,
+                    TEST_USER,
                 )
             }
         } else {
@@ -100,6 +105,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                     validityPeriods.create(
                         INCOME_TAX_VP1_P1.definitionId,
                         inputObject,
+                        TEST_USER,
                     ),
                 ).isInstanceOf(SavedVariableDefinition::class.java)
         }
@@ -113,6 +119,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             validityPeriods.create(
                 savedVariableDefinitionId,
                 inputData,
+                TEST_USER,
             )
         val patchesAfter =
             patches.list(
@@ -149,6 +156,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                             en = "New def",
                         ),
                 ),
+                TEST_USER,
             )
         val patchesAfterSave = patches.list(savedVariableDefinitionId)
 

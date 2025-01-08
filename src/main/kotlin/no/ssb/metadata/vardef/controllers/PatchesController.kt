@@ -8,6 +8,7 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.authentication.Authentication
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -190,6 +191,7 @@ class PatchesController(
         )
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
+        authentication: Authentication,
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
 
@@ -201,6 +203,7 @@ class PatchesController(
                 patch,
                 variableDefinitionId,
                 latestPatchOnValidityPeriod,
+                authentication.name,
             ).toCompleteResponse()
     }
 }

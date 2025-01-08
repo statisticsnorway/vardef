@@ -117,7 +117,7 @@ class VariableDefinitionTest {
         group: String,
         expectedteam: String,
     ) {
-        val savedVariableDefinition = draftExample.toSavedVariableDefinition(group, TOKEN_USERNAME)
+        val savedVariableDefinition = draftExample.toSavedVariableDefinition(group, TEST_USER)
         assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
     }
 }

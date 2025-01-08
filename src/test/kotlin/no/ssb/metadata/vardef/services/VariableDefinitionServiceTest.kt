@@ -73,7 +73,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         updateDraft: UpdateDraft,
         valueBefore: Owner,
     ) {
-        val updatedSavedVariable = variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft)
+        val updatedSavedVariable = variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft, TEST_USER)
         assertThat(updatedSavedVariable.owner).isNotEqualTo(valueBefore)
     }
 
@@ -83,7 +83,13 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         updateDraft: UpdateDraft,
         valueBefore: Owner,
     ) {
-        assertThrows<InvalidOwnerStructureError> { variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft) }
+        assertThrows<InvalidOwnerStructureError> {
+            variableDefinitionService.update(
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE,
+                updateDraft,
+                TEST_USER,
+            )
+        }
         assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
     }
 

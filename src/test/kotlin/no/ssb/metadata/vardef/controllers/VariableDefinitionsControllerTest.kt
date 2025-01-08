@@ -409,7 +409,7 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition created by`(spec: RequestSpecification) {
+    fun `create variable definition created by and last updated by is set`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
                 .apply {
@@ -431,6 +431,35 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                 .path<String>("id")
 
         val createdVariableDefinition = patches.latest(definitionId)
-        assertThat(createdVariableDefinition.createdBy).isEqualTo(TOKEN_USERNAME)
+        assertThat(createdVariableDefinition.createdBy).isEqualTo(TEST_USER)
+        assertThat(createdVariableDefinition.lastUpdatedBy).isEqualTo(TEST_USER)
+    }
+
+    @Test
+    fun `create variable definition no username in token`(spec: RequestSpecification) {
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put("short_name", "blah")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned(includeUsername = false).parsedString)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(500)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Internal Server Error: getName(...) must not be null",
+                ),
+            )
     }
 }

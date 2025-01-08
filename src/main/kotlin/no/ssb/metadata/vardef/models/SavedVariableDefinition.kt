@@ -50,14 +50,12 @@ data class SavedVariableDefinition(
     var contact: Contact?,
     @DateCreated
     var createdAt: LocalDateTime,
-    @Nullable
     @Email
-    var createdBy: String?,
+    var createdBy: String,
     @DateUpdated
     var lastUpdatedAt: LocalDateTime,
-    @Nullable
     @Email
-    var lastUpdatedBy: String?,
+    var lastUpdatedBy: String,
 ) {
     /**
      * Render the variable definition, so it's suitable for display to humans.
@@ -134,7 +132,10 @@ data class SavedVariableDefinition(
             createdBy = createdBy,
         )
 
-    fun copyAndUpdate(varDefUpdates: UpdateDraft): SavedVariableDefinition =
+    fun copyAndUpdate(
+        varDefUpdates: UpdateDraft,
+        userName: String,
+    ): SavedVariableDefinition =
         copy(
             name = varDefUpdates.name?.let { name.update(it) } ?: name,
             shortName = varDefUpdates.shortName ?: shortName,
@@ -153,5 +154,6 @@ data class SavedVariableDefinition(
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             owner = varDefUpdates.owner ?: owner,
             contact = varDefUpdates.contact ?: contact,
+            lastUpdatedBy = userName,
         )
 }

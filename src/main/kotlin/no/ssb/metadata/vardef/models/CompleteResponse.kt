@@ -56,9 +56,9 @@ data class CompleteResponse(
     @Schema(description = CREATED_AT_FIELD_DESCRIPTION)
     var createdAt: LocalDateTime,
     @Schema(description = CREATED_BY_FIELD_DESCRIPTION)
-    var createdBy: String?,
+    var createdBy: String,
     @Schema(description = LAST_UPDATED_AT_FIELD_DESCRIPTION)
     var lastUpdatedAt: LocalDateTime,
     @Schema(description = LAST_UPDATED_BY_FIELD_DESCRIPTION)
-    var lastUpdatedBy: String?,
+    var lastUpdatedBy: String,
 )

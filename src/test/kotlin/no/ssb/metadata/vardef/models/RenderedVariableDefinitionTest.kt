@@ -192,7 +192,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
 
     @Test
     fun `copyAndUpdate updates classificationReference to expected value`() {
-        val updatedVariable = DRAFT_BUS_EXAMPLE.copyAndUpdate(UPDATE_DRAFT_CLASSIFICATION_REFERENCE, "ano@ssb.no")
+        val updatedVariable = DRAFT_BUS_EXAMPLE.copyAndUpdate(UPDATE_DRAFT_CLASSIFICATION_REFERENCE, TEST_USER)
         assertThat(updatedVariable.classificationReference).isEqualTo("92")
     }
 

@@ -9,11 +9,9 @@
                 <arguments/>
             </providers>
         </encoder>
-        <!-- Add filter for health monitor logs -->
         <filter class="no.ssb.metadata.vardef.utils.HealthStatusFilter" />
     </appender>
 
-    <!-- Specific logger for health monitor with debug level -->
     <logger name="io.micronaut.management.health.monitor.HealthMonitorTask" level="DEBUG">
         <appender-ref ref="STDOUT"/>
     </logger>

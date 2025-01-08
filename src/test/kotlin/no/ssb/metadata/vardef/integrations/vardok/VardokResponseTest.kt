@@ -12,14 +12,14 @@ class VardokResponseTest {
     lateinit var vardokService: VardokService
 
     @Test
-    fun `relations in response`()  {
+    fun `relations in response`() {
         val response = vardokService.getVardokItem("2")
         assertThat(response?.relations).isNotNull()
         assertThat(response?.relations?.classificationRelation).isNull()
     }
 
     @Test
-    fun `relations classificationRelation in response`()  {
+    fun `relations classificationRelation in response`() {
         val response = vardokService.getVardokItem("1919")
         assertThat(response?.relations?.classificationRelation).isNotNull()
     }

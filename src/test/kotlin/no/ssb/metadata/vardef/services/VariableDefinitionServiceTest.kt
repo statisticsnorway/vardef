@@ -87,7 +87,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             variableDefinitionService.update(
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE,
                 updateDraft,
-                "ano@ssb.no",
+                TEST_USER,
             )
         }
         assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)

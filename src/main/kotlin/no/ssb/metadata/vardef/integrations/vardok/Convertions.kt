@@ -139,11 +139,12 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  */
 fun mapVardokCalculationAndNotesToComment(vardokItem: MutableMap<String, VardokResponse>): LanguageStringType {
     val comment = LanguageStringType()
-    val languages = mapOf(
-        "nb" to { value: String? -> comment.nb = value },
-        "nn" to { value: String? -> comment.nn = value },
-        "en" to { value: String? -> comment.en = value }
-    )
+    val languages =
+        mapOf(
+            "nb" to { value: String? -> comment.nb = value },
+            "nn" to { value: String? -> comment.nn = value },
+            "en" to { value: String? -> comment.en = value },
+        )
     for ((language, assign) in languages) {
         val notes = vardokItem[language]?.common?.notes
         val calculation = vardokItem[language]?.variable?.calculation

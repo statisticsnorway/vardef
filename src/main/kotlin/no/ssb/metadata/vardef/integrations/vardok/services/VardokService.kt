@@ -42,7 +42,12 @@ interface VardokService {
                         vardokItem["nn"]?.common?.title,
                         vardokItem["en"]?.common?.title,
                     ),
-                shortName = vardokItemNb.variable?.dataElementName?.lowercase(),
+                shortName =
+                    vardokItemNb.variable
+                        ?.dataElementName
+                        ?.lowercase()
+                        ?.replace("-", "_")
+                        ?.replace(Regex("[^a-z0-9_]"), ""),
                 definition =
                     LanguageStringType(
                         vardokItemNb.common?.description,

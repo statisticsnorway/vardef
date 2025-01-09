@@ -157,4 +157,11 @@ class VardokMigrationTest {
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
     }
+
+    @Test
+    fun `data element name with with illegal characters`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("999999")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.shortName).isEqualTo("uf_g")
+    }
 }

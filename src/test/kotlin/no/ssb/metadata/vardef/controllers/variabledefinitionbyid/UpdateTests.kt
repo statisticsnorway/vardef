@@ -454,8 +454,6 @@ class UpdateTests : BaseVardefTest() {
             ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
-            .log()
-            .everything()
             .statusCode(400)
     }
 }

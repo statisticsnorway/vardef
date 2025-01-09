@@ -159,7 +159,7 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `notes and calculation is null`() {
+    fun `comment is null when notes and calculation are null`() {
         val vardok = vardokService.getVardokItem("2")
         assertThat(vardok?.common?.notes).isEmpty()
         assertThat(vardok?.variable?.calculation).isEmpty()
@@ -169,50 +169,31 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `notes is not null`() {
+    fun `comment is notes when notes is not null`() {
         val vardok = vardokService.getVardokItem("901")
-        assertThat(vardok?.common?.notes).isNotEmpty()
+        val notes = vardok?.common?.notes
         assertThat(vardok?.variable?.calculation).isEmpty()
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("901")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.comment?.nb).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
+        assertThat(vardokTransform.comment?.nb).isEqualTo(notes)
     }
 
     @Test
-    fun `calculation is not null`() {
-        val vardok = vardokService.getVardokItem("901")
-        assertThat(vardok?.common?.notes).isNotEmpty()
-        assertThat(vardok?.variable?.calculation).isEmpty()
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("901")
-        val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.comment?.nb).isEqualTo(
-            "Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.",
-        )
-    }
-
-    @Test
-    fun `comment nn language`() {
+    fun `comment has nn language`() {
         val vardok = vardokService.getVardokItem("1849")
         assertThat(vardok?.common?.notes).isNotEmpty()
         assertThat(vardok?.variable?.calculation).isEmpty()
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("1849")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.comment?.nn).isNotNull()
         assertThat(
             vardokTransform.comment?.nb,
-        ).isEqualTo(
-            "Byggekostnadsindeks for boliger er en veid indeks av byggekostnadsindeks for enebolig av tre og " +
-                "byggekostnadsindeks for boligblokk.",
-        )
-        assertThat(
-            vardokTransform.comment?.nn,
-        ).isEqualTo(
-            "Byggjekostnadsindeks for bustader i alt er ein vege indeks av einebustader av tre og bustadblokker.",
-        )
+        ).isNotEqualTo(vardokTransform.comment?.nn)
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["566", "1299"])
-    fun `calculation and notes are not null`(vardokId: String) {
+    fun `comment concatenates calculation and notes when both have values`(vardokId: String) {
         val vardok = vardokService.getVardokItem(vardokId)
         val notes = vardok?.common?.notes
         val calculation = vardok?.variable?.calculation

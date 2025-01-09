@@ -69,7 +69,7 @@ data class Relations(
     val classificationRelation: String?,
     @field:JacksonXmlElementWrapper(useWrapping = false) // Prevents wrapping in an additional list element
     @field:JacksonXmlProperty(localName = "ConceptVariableRelation")
-    val conceptVariableRelations: List<String>?
+    val conceptVariableRelations: List<String>?,
 )
 
 @Serdeable

@@ -159,7 +159,7 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `notes and calculation is null`(){
+    fun `notes and calculation is null`() {
         val vardok = vardokService.getVardokItem("2")
         assertThat(vardok?.common?.notes).isEmpty()
         assertThat(vardok?.variable?.calculation).isEmpty()
@@ -169,7 +169,7 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `notes is not null`(){
+    fun `notes is not null`() {
         val vardok = vardokService.getVardokItem("901")
         assertThat(vardok?.common?.notes).isNotEmpty()
         assertThat(vardok?.variable?.calculation).isEmpty()
@@ -179,7 +179,7 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `calculation is not null`(){
+    fun `calculation is not null`() {
         val vardok = vardokService.getVardokItem("901")
         assertThat(vardok?.common?.notes).isNotEmpty()
         assertThat(vardok?.variable?.calculation).isEmpty()

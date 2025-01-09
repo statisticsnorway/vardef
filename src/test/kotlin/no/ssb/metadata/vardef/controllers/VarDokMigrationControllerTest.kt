@@ -207,7 +207,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create vardok return comment`(spec: RequestSpecification) {
+    fun `create vardok has comment`(spec: RequestSpecification) {
         val body =
             spec
                 .given()

@@ -31,7 +31,7 @@ interface VardokService {
     }
 
     companion object {
-        fun extractVardefInput(vardokItem: MutableMap<String, VardokResponse>): VardefInput {
+        fun extractVardefInput(vardokItem: Map<String, VardokResponse>): VardefInput {
             val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
             val vardokId = mapVardokIdentifier(vardokItemNb)
 

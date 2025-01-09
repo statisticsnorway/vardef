@@ -33,7 +33,7 @@ class OutdatedUnitTypesException(
         "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
     )
 
-fun checkVardokForMissingElements(varDokItems: MutableMap<String, VardokResponse>) {
+fun checkVardokForMissingElements(varDokItems: Map<String, VardokResponse>) {
     if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()) {
         throw MissingDataElementNameException(varDokItems["nb"]?.id?.substringAfterLast(":").toString())
     }

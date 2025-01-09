@@ -49,4 +49,16 @@ class VardokResponseTest {
         val response = vardokService.getVardokItem("5")
         assertThat(response?.relations?.conceptVariableRelations).isNull()
     }
+
+    @Test
+    fun `notes in response`() {
+        val response = vardokService.getVardokItem("134")
+        assertThat(response?.common?.notes).isEqualTo("Dokumentet det refereres til er \"Om statistikken\" som ligger på Internett.")
+    }
+
+    @Test
+    fun `notes not in response`() {
+        val response = vardokService.getVardokItem("2")
+        assertThat(response?.common?.notes).isEmpty()
+    }
 }

@@ -122,7 +122,7 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
                 uniformName = group.uniformName,
             )
         }.onFailure { e ->
-            logger.error("Error fetching static hroup with name '$groupName': ${e.message}", e)
+            logger.error("Error fetching static group with name '$groupName': ${e.message}", e)
         }.getOrNull()
     }
 

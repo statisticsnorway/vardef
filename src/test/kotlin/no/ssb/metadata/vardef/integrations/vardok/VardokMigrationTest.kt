@@ -165,7 +165,7 @@ class VardokMigrationTest {
         assertThat(vardok?.variable?.calculation).isEmpty()
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.comment).isNull()
+        assertThat(vardokTransform.comment?.nb).isNull()
     }
 
     @Test
@@ -175,7 +175,7 @@ class VardokMigrationTest {
         assertThat(vardok?.variable?.calculation).isEmpty()
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("901")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.comment).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
+        assertThat(vardokTransform.comment?.nb).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
     }
 
     @Test
@@ -185,7 +185,7 @@ class VardokMigrationTest {
         assertThat(vardok?.variable?.calculation).isEmpty()
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("901")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.comment).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
+        assertThat(vardokTransform.comment?.nb).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
     }
 
     @ParameterizedTest

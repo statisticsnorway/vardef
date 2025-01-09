@@ -134,13 +134,13 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @param vardokItem The VardokResponse object containing the `common` and `variable` fields.
  * @return A combined comment string or `null` if both fields are empty.
  */
-fun mapVardokCalculationAndNotesToComment(vardokItem: VardokResponse): LanguageStringType? {
+fun mapVardokCalculationAndNotesToComment(vardokItem: MutableMap<String, VardokResponse> ): LanguageStringType? {
     return when {
-        vardokItem.common?.notes?.isEmpty() == true && vardokItem.variable?.calculation?.isEmpty() == true -> null
-        vardokItem.common?.notes?.isEmpty() == true && vardokItem.variable?.calculation?.isEmpty() == false ->
-            LanguageStringType(vardokItem.variable.calculation, null, null)
-        vardokItem.common?.notes?.isEmpty() == false && vardokItem.variable?.calculation?.isEmpty() == true ->
-            LanguageStringType(vardokItem.common.notes, null, null)
-        else -> LanguageStringType(vardokItem.common?.notes + vardokItem.variable?.calculation, null, null)
+        vardokItem["nb"]?.common?.notes?.isEmpty() == true && vardokItem["nb"]?.variable?.calculation?.isEmpty() == true -> null
+        vardokItem["nb"]?.common?.notes?.isEmpty() == true && vardokItem["nb"]?.variable?.calculation?.isEmpty() == false ->
+            LanguageStringType(vardokItem["nb"]?.variable?.calculation, null, null)
+        vardokItem["nb"]?.common?.notes?.isEmpty() == false && vardokItem["nb"]?.variable?.calculation?.isEmpty() == true ->
+            LanguageStringType(vardokItem["nb"]?.common?.notes, null, null)
+        else -> LanguageStringType(vardokItem["nb"]?.common?.notes + vardokItem["nb"]?.variable?.calculation, null, null)
     }
 }

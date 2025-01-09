@@ -53,7 +53,7 @@ interface VardokService {
                 validFrom = getValidDates(vardokItemNb).first,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
                 externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
-                comment = mapVardokCalculationAndNotesToComment(vardokItemNb),
+                comment = mapVardokCalculationAndNotesToComment(vardokItem),
                 containsSpecialCategoriesOfPersonalData = false,
                 subjectFields = emptyList(),
                 classificationReference = null,

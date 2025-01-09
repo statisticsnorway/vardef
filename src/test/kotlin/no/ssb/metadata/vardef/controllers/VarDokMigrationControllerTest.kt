@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -101,7 +102,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .path<String>("id")
 
         val createdVariableDefinition = patches.latest(definitionId)
-        assertThat(createdVariableDefinition.shortName).startsWith("ugyldig_kortnavn")
+        assertThat(createdVariableDefinition.shortName).startsWith(ILLEGAL_SHORNAME_KEYWORD)
     }
 
     @Test

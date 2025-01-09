@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokIdentifier
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
@@ -38,7 +39,7 @@ interface VardokService {
                 vardokItemNb.variable
                     ?.dataElementName
                     ?.takeIf { it.isNotBlank() }
-                    ?: "ugyldig_kortnavn_${NanoId.generate(8)}"
+                    ?: (ILLEGAL_SHORNAME_KEYWORD + NanoId.generate(8))
 
             return VardefInput(
                 name =

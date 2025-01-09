@@ -436,24 +436,22 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 """
-                {"short_name": "ugyldig_kortnavn_abcd"}
+                {"variable_status": "PUBLISHED_INTERNAL"}
                 """.trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .patch("/variable-definitions/${SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME.definitionId}")
             .then()
-            .statusCode(200)
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {"status": "PUBLISHED_INTERNAL"}
-                """.trimIndent(),
-            ).`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(400)
+            .log()
+            .everything()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    "The short name ${SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME.shortName} " +
+                        "is illegal and must be changed before it is published",
+                ),
+            )
     }
 }

@@ -225,7 +225,7 @@ class VariableDefinitionByIdController(
                     updateDraft.variableStatus == VariableStatus.PUBLISHED_EXTERNAL
             ) &&
                 (
-                    variable.shortName.contains("ugyldig-kortnavn") || updateDraft.shortName?.contains("ugyldig-kortnavn") == true
+                    variable.shortName.contains("ugyldig_kortnavn") || updateDraft.shortName?.contains("ugyldig_kortnavn") == true
                 ) -> {
                 throw HttpStatusException(
                     HttpStatus.BAD_REQUEST,

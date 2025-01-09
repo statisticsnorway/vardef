@@ -35,4 +35,18 @@ class VardokResponseTest {
         val response = vardokService.getVardokItem("1919")
         assertThat(response?.relations?.classificationRelation).isNotNull()
     }
+
+    @Test
+    fun `relations conceptVariableRelation list in response`() {
+        val response = vardokService.getVardokItem("2")
+        assertThat(response?.relations?.conceptVariableRelations).isNotNull()
+        assertThat(response?.relations?.conceptVariableRelations?.size).isEqualTo(5)
+        assertThat(response?.relations?.conceptVariableRelations).isInstanceOf(List::class.java)
+    }
+
+    @Test
+    fun `relations conceptVariableRelation list not in response`() {
+        val response = vardokService.getVardokItem("5")
+        assertThat(response?.relations?.conceptVariableRelations).isNull()
+    }
 }

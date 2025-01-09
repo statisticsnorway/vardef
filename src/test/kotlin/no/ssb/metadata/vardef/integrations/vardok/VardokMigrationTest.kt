@@ -188,7 +188,6 @@ class VardokMigrationTest {
         assertThat(vardokTransform.comment?.nb).isEqualTo(calculation)
     }
 
-
     @Test
     fun `comment has nn language`() {
         val vardok = vardokService.getVardokItem("1849")

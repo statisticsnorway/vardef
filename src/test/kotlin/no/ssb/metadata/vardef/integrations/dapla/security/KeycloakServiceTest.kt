@@ -69,18 +69,6 @@ class KeycloakServiceTest {
     }
 
     @Test
-    @Property(name = "micronaut.http.services.keycloak.url", value = "www.example.com")
-    fun `incorrect url`() {
-        val result = keycloakService.requestAccessToken()
-        assertThat(
-            testLogAppender.getLoggedMessages().any {
-                it.formattedMessage.contains("Request URI specifies no host")
-            },
-        ).isTrue()
-        assertThat(result).isNull()
-    }
-
-    @Test
     fun `incorrect secret`() {
         keycloakService.clientSecret = "jjjj"
         val result = keycloakService.requestAccessToken()

@@ -157,4 +157,24 @@ class VardokMigrationTest {
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
     }
+
+    @Test
+    fun `comment field is null`(){
+        val vardok = vardokService.getVardokItem("2")
+        assertThat(vardok?.common?.notes).isEmpty()
+        assertThat(vardok?.variable?.calculation).isEmpty()
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.comment).isNull()
+    }
+
+    @Test
+    fun `comment field is null 2`(){
+        val vardok = vardokService.getVardokItem("901")
+        assertThat(vardok?.common?.notes).isNotEmpty()
+        assertThat(vardok?.variable?.calculation).isEmpty()
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("901")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.comment).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
+    }
 }

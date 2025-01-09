@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import no.ssb.metadata.vardef.integrations.vardok.getValidDates
+import no.ssb.metadata.vardef.integrations.vardok.mapVardokCalculationAndNotesToComment
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokIdentifier
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
 import no.ssb.metadata.vardef.integrations.vardok.models.*
@@ -52,7 +53,7 @@ interface VardokService {
                 validFrom = getValidDates(vardokItemNb).first,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
                 externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
-                comment = null,
+                comment = mapVardokCalculationAndNotesToComment(vardokItemNb),
                 containsSpecialCategoriesOfPersonalData = false,
                 subjectFields = emptyList(),
                 classificationReference = null,

@@ -118,3 +118,12 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
 
     throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
 }
+
+fun mapVardokCalculationAndNotesToComment(vardokItem: VardokResponse): String? {
+    return if(vardokItem.common?.notes?.isEmpty() == true){
+        null
+    }
+    else{
+        vardokItem.common?.notes
+    }
+}

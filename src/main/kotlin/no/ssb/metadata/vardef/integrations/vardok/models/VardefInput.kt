@@ -4,7 +4,7 @@ import no.ssb.metadata.vardef.models.LanguageStringType
 
 data class VardefInput(
     val name: LanguageStringType?,
-    val shortName: String?,
+    var shortName: String?,
     val definition: LanguageStringType?,
     var validFrom: String,
     val unitTypes: List<String?>,

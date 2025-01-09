@@ -86,22 +86,22 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
     @Test
     fun `post request vardok with missing short name`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/123")
-            .then()
-            .statusCode(400)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Vardok id 123 is missing DataElementName (short name) and can not be saved",
-                ),
-            )
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/123")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .path<String>("id")
+
+        val createdVariableDefinition = patches.latest(definitionId)
+        assertThat(createdVariableDefinition.shortName).startsWith("ugyldig_kortnavn")
     }
 
     @Test

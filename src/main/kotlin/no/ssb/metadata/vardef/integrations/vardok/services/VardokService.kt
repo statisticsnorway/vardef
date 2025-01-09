@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
+import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.integrations.vardok.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokIdentifier
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
@@ -26,9 +27,17 @@ interface VardokService {
         checkVardokForMissingElements(varDokItems)
         val varDefInput = extractVardefInput(varDokItems)
 
+        if (missingShortName(varDefInput)) {
+            varDefInput.shortName = generateShortname()
+        }
+
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)
     }
+
+    fun missingShortName(varDefInput: VardefInput): Boolean = varDefInput.shortName.isNullOrBlank()
+
+    fun generateShortname(): String = "ugyldig_kortnavn_${NanoId.generate(8)}".lowercase()
 
     companion object {
         fun extractVardefInput(vardokItem: MutableMap<String, VardokResponse>): VardefInput {

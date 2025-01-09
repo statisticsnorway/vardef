@@ -220,6 +220,19 @@ class VariableDefinitionByIdController(
         val variable = patches.latest(definitionId)
 
         when {
+            (
+                updateDraft.variableStatus == VariableStatus.PUBLISHED_INTERNAL ||
+                    updateDraft.variableStatus == VariableStatus.PUBLISHED_EXTERNAL
+            ) &&
+                (
+                    variable.shortName.contains("ugyldig-kortnavn") || updateDraft.shortName?.contains("ugyldig-kortnavn") == true
+                ) -> {
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The short name ${variable.shortName} is illegal and must be changed before it is published",
+                )
+            }
+
             variable.variableStatus.isPublished() -> throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "The variable is published and cannot be updated with this method",

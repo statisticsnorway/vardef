@@ -428,4 +428,34 @@ class UpdateTests : BaseVardefTest() {
         assertThat(completeResponse.lastUpdatedBy).isNotEqualTo(createdBy)
         assertThat(completeResponse.lastUpdatedBy).isEqualTo(TEST_USER)
     }
+
+    @Test
+    fun `publish variable with illegal shortname`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"short_name": "ugyldig_kortnavn_abcd"}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(200)
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"status": "PUBLISHED_INTERNAL"}
+                """.trimIndent(),
+            ).`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .log()
+            .everything()
+            .statusCode(400)
+    }
 }

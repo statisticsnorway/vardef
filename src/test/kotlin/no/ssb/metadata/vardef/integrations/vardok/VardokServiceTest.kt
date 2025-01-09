@@ -9,6 +9,7 @@ import io.mockk.mockk
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService.Companion.extractVardefInput
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -132,20 +133,16 @@ class VardokServiceTest : BaseVardokTest() {
     }
 
     @Test
-    fun `get vardok with missing data element name`() {
-        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse6)
-        every {
-            vardokMockkService.createVarDefInputFromVarDokItems(mapVardokResponse)
-        } throws
-            MissingDataElementNameException(mapVardokResponse["nb"]?.id.toString())
+    fun `vardok items with missing shornames`() {
+        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse6, "en" to vardokResponse8)
+        val varDefInput = extractVardefInput(mapVardokResponse)
+        assertThat(vardokApiService.missingShortName(varDefInput)).isTrue()
+    }
 
-        val exception: VardokException =
-            assertThrows(MissingDataElementNameException::class.java) {
-                vardokApiService.createVarDefInputFromVarDokItems(mapVardokResponse)
-            }
-        val expectedMessage = "Vardok id 123 is missing DataElementName (short name) and can not be saved"
-        val actualMessage = exception.message
-
-        assertThat(expectedMessage).isEqualTo(actualMessage)
+    @Test
+    fun `vardok items with valid shornames`() {
+        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse1)
+        val varDefInput = extractVardefInput(mapVardokResponse)
+        assertThat(vardokApiService.missingShortName(varDefInput)).isFalse()
     }
 }

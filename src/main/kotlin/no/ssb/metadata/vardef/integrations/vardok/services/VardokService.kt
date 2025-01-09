@@ -26,23 +26,19 @@ interface VardokService {
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)
         val varDefInput = extractVardefInput(varDokItems)
-
-        if (missingShortName(varDefInput)) {
-            varDefInput.shortName = generateShortname()
-        }
-
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)
     }
-
-    fun missingShortName(varDefInput: VardefInput): Boolean = varDefInput.shortName.isNullOrBlank()
-
-    fun generateShortname(): String = "ugyldig_kortnavn_${NanoId.generate(8)}".lowercase()
 
     companion object {
         fun extractVardefInput(vardokItem: MutableMap<String, VardokResponse>): VardefInput {
             val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
             val vardokId = mapVardokIdentifier(vardokItemNb)
+            val vardokShortname =
+                vardokItemNb.variable
+                    ?.dataElementName
+                    ?.takeIf { it.isNotBlank() }
+                    ?: "ugyldig_kortnavn_${NanoId.generate(8)}"
 
             return VardefInput(
                 name =
@@ -51,7 +47,7 @@ interface VardokService {
                         vardokItem["nn"]?.common?.title,
                         vardokItem["en"]?.common?.title,
                     ),
-                shortName = vardokItemNb.variable?.dataElementName?.lowercase(),
+                shortName = vardokShortname.lowercase(),
                 definition =
                     LanguageStringType(
                         vardokItemNb.common?.description,

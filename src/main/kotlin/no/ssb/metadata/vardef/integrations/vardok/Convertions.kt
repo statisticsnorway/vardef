@@ -121,23 +121,30 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
 }
 
 /**
- * Maps the notes and calculation fields of a VardokItem to a single comment string.
+ * Maps the `notes` and `calculation` fields of a `VardokItem` to a `LanguageStringType` object.
  *
- * This function combines the `notes` from `common` and the `calculation` from `variable`
- * in the `VardokResponse` object based on the following conditions:
+ * This function processes the `common.notes` and `variable.calculation` fields in the `VardokResponse` object
+ * for each language (`nb`, `nn`, `en`) and assigns the resulting comment string to the corresponding
+ * field in the `LanguageStringType` object based on the following rules:
  *
- * - If both `notes` and `calculation` are empty, it returns `null`.
- * - If `notes` is empty and `calculation` is not empty, it returns `calculation`.
- * - If `calculation` is empty and `notes` is not empty, it returns `notes`.
- * - If both `notes` and `calculation` are non-empty, it concatenates them.
+ * - If both `notes` and `calculation` are empty, it assigns `null`.
+ * - If `notes` is empty and `calculation` is not empty, it assigns the value of `calculation`.
+ * - If `calculation` is empty and `notes` is not empty, it assigns the value of `notes`.
+ * - If both `notes` and `calculation` are non-empty, it concatenates them and assigns the result.
  *
- * @param vardokItem The VardokResponse object containing the `common` and `variable` fields.
- * @return A combined comment string or `null` if both fields are empty.
+ * The function preserves existing values for each language while processing only the relevant fields.
+ *
+ * @param vardokItem A map where the keys are language codes (`nb`, `nn`, `en`) and the values are `VardokResponse` objects.
+ * @return A `LanguageStringType` object containing the mapped comment strings for each language.
  */
 fun mapVardokCalculationAndNotesToComment(vardokItem: MutableMap<String, VardokResponse>): LanguageStringType {
     val comment = LanguageStringType()
-    val languages = listOf("nb", "nn", "en")
-    for (language in languages) {
+    val languages = mapOf(
+        "nb" to { value: String? -> comment.nb = value },
+        "nn" to { value: String? -> comment.nn = value },
+        "en" to { value: String? -> comment.en = value }
+    )
+    for ((language, assign) in languages) {
         val notes = vardokItem[language]?.common?.notes
         val calculation = vardokItem[language]?.variable?.calculation
 
@@ -154,12 +161,7 @@ fun mapVardokCalculationAndNotesToComment(vardokItem: MutableMap<String, VardokR
 
                 else -> null
             }
-
-        when (language) {
-            "nb" -> comment.nb = commentByLanguage
-            "nn" -> comment.nn = commentByLanguage
-            "en" -> comment.en = commentByLanguage
-        }
+        assign(commentByLanguage)
     }
     return comment
 }

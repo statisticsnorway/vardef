@@ -119,11 +119,27 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
     throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
 }
 
+/**
+ * Maps the notes and calculation fields of a VardokItem to a single comment string.
+ *
+ * This function combines the `notes` from `common` and the `calculation` from `variable`
+ * in the `VardokResponse` object based on the following conditions:
+ *
+ * - If both `notes` and `calculation` are empty, it returns `null`.
+ * - If `notes` is empty and `calculation` is not empty, it returns `calculation`.
+ * - If `calculation` is empty and `notes` is not empty, it returns `notes`.
+ * - If both `notes` and `calculation` are non-empty, it concatenates them.
+ *
+ * @param vardokItem The VardokResponse object containing the `common` and `variable` fields.
+ * @return A combined comment string or `null` if both fields are empty.
+ */
 fun mapVardokCalculationAndNotesToComment(vardokItem: VardokResponse): String? {
-    return if(vardokItem.common?.notes?.isEmpty() == true){
-        null
-    }
-    else{
-        vardokItem.common?.notes
+    return when {
+        vardokItem.common?.notes?.isEmpty() == true && vardokItem.variable?.calculation?.isEmpty() == true -> null
+        vardokItem.common?.notes?.isEmpty() == true && vardokItem.variable?.calculation?.isEmpty() == false ->
+            vardokItem.variable.calculation
+        vardokItem.common?.notes?.isEmpty() == false && vardokItem.variable?.calculation?.isEmpty() == true ->
+            vardokItem.common.notes
+        else -> vardokItem.common?.notes + vardokItem.variable?.calculation
     }
 }

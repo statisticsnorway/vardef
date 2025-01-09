@@ -159,7 +159,7 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `comment field is null`(){
+    fun `notes and calculation is null`(){
         val vardok = vardokService.getVardokItem("2")
         assertThat(vardok?.common?.notes).isEmpty()
         assertThat(vardok?.variable?.calculation).isEmpty()
@@ -169,12 +169,35 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `comment field is null 2`(){
+    fun `notes is not null`(){
         val vardok = vardokService.getVardokItem("901")
         assertThat(vardok?.common?.notes).isNotEmpty()
         assertThat(vardok?.variable?.calculation).isEmpty()
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("901")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.comment).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
+    }
+
+    @Test
+    fun `calculation is not null`(){
+        val vardok = vardokService.getVardokItem("901")
+        assertThat(vardok?.common?.notes).isNotEmpty()
+        assertThat(vardok?.variable?.calculation).isEmpty()
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("901")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.comment).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["566", "1299"])
+    fun `calculation and notes are not null`(vardokId: String) {
+        val vardok = vardokService.getVardokItem(vardokId)
+        val notes = vardok?.common?.notes
+        val calculation = vardok?.variable?.calculation
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.comment).contains(notes)
+        assertThat(vardokTransform.comment).isNotNull()
+        assertThat(vardokTransform.comment).containsSubsequence(notes, calculation)
     }
 }

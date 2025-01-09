@@ -185,7 +185,9 @@ class VardokMigrationTest {
         assertThat(vardok?.variable?.calculation).isEmpty()
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("901")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.comment?.nb).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
+        assertThat(vardokTransform.comment?.nb).isEqualTo(
+            "Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.",
+        )
     }
 
     @Test
@@ -195,8 +197,17 @@ class VardokMigrationTest {
         assertThat(vardok?.variable?.calculation).isEmpty()
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("1849")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.comment?.nb).isEqualTo("Byggekostnadsindeks for boliger er en veid indeks av byggekostnadsindeks for enebolig av tre og byggekostnadsindeks for boligblokk.")
-        assertThat(vardokTransform.comment?.nn).isEqualTo("Byggjekostnadsindeks for bustader i alt er ein vege indeks av einebustader av tre og bustadblokker.")
+        assertThat(
+            vardokTransform.comment?.nb,
+        ).isEqualTo(
+            "Byggekostnadsindeks for boliger er en veid indeks av byggekostnadsindeks for enebolig av tre og " +
+                "byggekostnadsindeks for boligblokk.",
+        )
+        assertThat(
+            vardokTransform.comment?.nn,
+        ).isEqualTo(
+            "Byggjekostnadsindeks for bustader i alt er ein vege indeks av einebustader av tre og bustadblokker.",
+        )
     }
 
     @ParameterizedTest

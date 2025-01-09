@@ -133,14 +133,14 @@ class VardokServiceTest : BaseVardokTest() {
     }
 
     @Test
-    fun `vardok items with missing shornames`() {
+    fun `vardok items with missing data element name`() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse6, "en" to vardokResponse8)
         val varDefInput = extractVardefInput(mapVardokResponse)
         assertThat(vardokApiService.missingShortName(varDefInput)).isTrue()
     }
 
     @Test
-    fun `vardok items with valid shornames`() {
+    fun `vardok items with valid data element name`() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse1)
         val varDefInput = extractVardefInput(mapVardokResponse)
         assertThat(vardokApiService.missingShortName(varDefInput)).isFalse()

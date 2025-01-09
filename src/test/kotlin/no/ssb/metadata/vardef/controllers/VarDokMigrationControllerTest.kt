@@ -205,4 +205,25 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
             .body("owner.team", equalTo(TEST_TEAM))
     }
+
+    @Test
+    fun `create vardok return comment`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/566")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.comment?.nb).isNotNull
+        assertThat(completeResponse.comment?.en).isNull()
+    }
 }

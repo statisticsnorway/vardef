@@ -4,6 +4,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
+import no.ssb.metadata.vardef.models.LanguageStringType
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -196,8 +197,8 @@ class VardokMigrationTest {
         val calculation = vardok?.variable?.calculation
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.comment).contains(notes)
+        assertThat(vardokTransform.comment?.nb).contains(notes)
         assertThat(vardokTransform.comment).isNotNull()
-        assertThat(vardokTransform.comment).containsSubsequence(notes, calculation)
+        assertThat(vardokTransform.comment?.nb).containsSubsequence(notes, calculation)
     }
 }

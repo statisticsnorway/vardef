@@ -4,6 +4,7 @@ import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCatego
 import no.ssb.metadata.vardef.integrations.vardok.models.MissingValidFromException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
+import no.ssb.metadata.vardef.models.LanguageStringType
 
 /**
  * Enum of all official titles for unit types.
@@ -133,13 +134,13 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @param vardokItem The VardokResponse object containing the `common` and `variable` fields.
  * @return A combined comment string or `null` if both fields are empty.
  */
-fun mapVardokCalculationAndNotesToComment(vardokItem: VardokResponse): String? {
+fun mapVardokCalculationAndNotesToComment(vardokItem: VardokResponse): LanguageStringType? {
     return when {
         vardokItem.common?.notes?.isEmpty() == true && vardokItem.variable?.calculation?.isEmpty() == true -> null
         vardokItem.common?.notes?.isEmpty() == true && vardokItem.variable?.calculation?.isEmpty() == false ->
-            vardokItem.variable.calculation
+            LanguageStringType(vardokItem.variable.calculation, null, null)
         vardokItem.common?.notes?.isEmpty() == false && vardokItem.variable?.calculation?.isEmpty() == true ->
-            vardokItem.common.notes
-        else -> vardokItem.common?.notes + vardokItem.variable?.calculation
+            LanguageStringType(vardokItem.common.notes, null, null)
+        else -> LanguageStringType(vardokItem.common?.notes + vardokItem.variable?.calculation, null, null)
     }
 }

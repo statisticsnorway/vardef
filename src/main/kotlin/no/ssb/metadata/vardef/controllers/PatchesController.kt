@@ -198,7 +198,6 @@ class PatchesController(
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
-
         return patches
             .create(
                 patch,

@@ -27,7 +27,6 @@ class VardokResponseTest {
     fun `notes in response`() {
         val response = vardokService.getVardokItem("134")
         assertThat(response?.common?.notes).isEqualTo("Dokumentet det refereres til er \"Om statistikken\" som ligger på Internett.")
-
     }
 
     @Test

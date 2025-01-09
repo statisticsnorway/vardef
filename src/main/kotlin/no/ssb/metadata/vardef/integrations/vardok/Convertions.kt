@@ -6,6 +6,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesExcept
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.LanguageStringType
 
+
 /**
  * Enum of all official titles for unit types.
  * Set of string values which maps to the title
@@ -135,12 +136,30 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @return A combined comment string or `null` if both fields are empty.
  */
 fun mapVardokCalculationAndNotesToComment(vardokItem: MutableMap<String, VardokResponse> ): LanguageStringType? {
-    return when {
-        vardokItem["nb"]?.common?.notes?.isEmpty() == true && vardokItem["nb"]?.variable?.calculation?.isEmpty() == true -> null
-        vardokItem["nb"]?.common?.notes?.isEmpty() == true && vardokItem["nb"]?.variable?.calculation?.isEmpty() == false ->
-            LanguageStringType(vardokItem["nb"]?.variable?.calculation, null, null)
-        vardokItem["nb"]?.common?.notes?.isEmpty() == false && vardokItem["nb"]?.variable?.calculation?.isEmpty() == true ->
-            LanguageStringType(vardokItem["nb"]?.common?.notes, null, null)
-        else -> LanguageStringType(vardokItem["nb"]?.common?.notes + vardokItem["nb"]?.variable?.calculation, null, null)
+    val comment = LanguageStringType()
+    val languages = listOf("nb","nn","en")
+    for (language in languages) {
+        val notes = vardokItem[language]?.common?.notes
+        val calculation = vardokItem[language]?.variable?.calculation
+
+        val commentByLanguage = when {
+            notes?.isEmpty() == true && calculation?.isEmpty() == true -> null
+            notes?.isEmpty() == true && calculation?.isEmpty() == false ->
+                calculation
+
+            notes?.isEmpty() == false && calculation?.isEmpty() == true ->
+                notes
+            notes?.isEmpty() == false && calculation?.isEmpty() == false ->
+                notes + calculation
+
+            else -> null
+        }
+
+        when (language) {
+            "nb" -> comment.nb = commentByLanguage
+            "nn" -> comment.nn = commentByLanguage
+            "en" -> comment.en = commentByLanguage
+        }
     }
+    return comment
 }

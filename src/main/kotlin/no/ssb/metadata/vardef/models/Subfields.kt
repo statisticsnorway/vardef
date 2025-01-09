@@ -13,9 +13,9 @@ import no.ssb.metadata.vardef.constants.RENDERED_CONTACT_EXAMPLE
 
 @Serdeable
 data class LanguageStringType(
-    val nb: String?,
-    val nn: String?,
-    val en: String?,
+    var nb: String? = null,
+    var nn: String? = null,
+    var en: String? = null,
 ) {
     fun getValidLanguage(language: SupportedLanguages): String? =
         when (language) {

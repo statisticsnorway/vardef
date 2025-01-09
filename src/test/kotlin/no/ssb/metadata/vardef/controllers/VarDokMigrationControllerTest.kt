@@ -224,6 +224,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.comment?.nb).isNotNull
-        assertThat(completeResponse.comment?.en).isNull()
+        assertThat(completeResponse.comment?.en).isNotNull
+        assertThat(completeResponse.comment?.nn).isNull()
     }
 }

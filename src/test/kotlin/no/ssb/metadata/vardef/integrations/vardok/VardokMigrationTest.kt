@@ -188,6 +188,17 @@ class VardokMigrationTest {
         assertThat(vardokTransform.comment?.nb).isEqualTo("Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.")
     }
 
+    @Test
+    fun `comment nn language`() {
+        val vardok = vardokService.getVardokItem("1849")
+        assertThat(vardok?.common?.notes).isNotEmpty()
+        assertThat(vardok?.variable?.calculation).isEmpty()
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("1849")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.comment?.nb).isEqualTo("Byggekostnadsindeks for boliger er en veid indeks av byggekostnadsindeks for enebolig av tre og byggekostnadsindeks for boligblokk.")
+        assertThat(vardokTransform.comment?.nn).isEqualTo("Byggjekostnadsindeks for bustader i alt er ein vege indeks av einebustader av tre og bustadblokker.")
+    }
+
     @ParameterizedTest
     @ValueSource(strings = ["566", "1299"])
     fun `calculation and notes are not null`(vardokId: String) {

@@ -169,7 +169,7 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `comment is notes when notes is not null`() {
+    fun `comment is notes when notes is not null and calculation is null`() {
         val vardok = vardokService.getVardokItem("901")
         val notes = vardok?.common?.notes
         assertThat(vardok?.variable?.calculation).isEmpty()
@@ -177,6 +177,17 @@ class VardokMigrationTest {
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.comment?.nb).isEqualTo(notes)
     }
+
+    @Test
+    fun `comment is calculation when calculation is not null and notes is null`() {
+        val vardok = vardokService.getVardokItem("267")
+        val calculation = vardok?.variable?.calculation
+        assertThat(vardok?.common?.notes).isEmpty()
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("267")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.comment?.nb).isEqualTo(calculation)
+    }
+
 
     @Test
     fun `comment has nn language`() {

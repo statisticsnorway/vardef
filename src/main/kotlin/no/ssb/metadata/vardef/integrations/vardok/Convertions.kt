@@ -4,7 +4,6 @@ import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCatego
 import no.ssb.metadata.vardef.integrations.vardok.models.MissingValidFromException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
-import no.ssb.metadata.vardef.models.LanguageStringType
 
 /**
  * Enum of all official titles for unit types.
@@ -136,7 +135,7 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @param vardokItem A map where the keys are language codes (`nb`, `nn`, `en`) and the values are `VardokResponse` objects.
  * @return A `LanguageStringType` object containing the mapped comment strings for each language.
  */
-fun mapVardokCalculationAndNotesToComment(vardokItem: Map<String, VardokResponse>): LanguageStringType {
+fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String, String?> {
     val languageComments = mutableMapOf<String, String?>()
     val languages = listOf("nb", "nn", "en")
     for (language in languages) {
@@ -144,18 +143,13 @@ fun mapVardokCalculationAndNotesToComment(vardokItem: Map<String, VardokResponse
         val calculation = vardokItem[language]?.variable?.calculation
 
         val commentByLanguage =
-         when {
-            notes.isNullOrEmpty() && calculation.isNullOrEmpty() -> null
-            notes.isNullOrEmpty() -> calculation
-            calculation.isNullOrEmpty() -> notes
-            else -> notes + calculation
-        }
+            when {
+                notes.isNullOrEmpty() && calculation.isNullOrEmpty() -> null
+                notes.isNullOrEmpty() -> calculation
+                calculation.isNullOrEmpty() -> notes
+                else -> notes + calculation
+            }
         languageComments[language] = commentByLanguage
     }
-    val comment = LanguageStringType(null, null, null).apply {
-        nb = languageComments["nb"]
-        nn = languageComments["nn"]
-        en = languageComments["en"]
-    }
-    return comment
+    return languageComments
 }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
+import io.viascom.nanoid.NanoId
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokIdentifier
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
@@ -25,7 +27,6 @@ interface VardokService {
     fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)
         val varDefInput = extractVardefInput(varDokItems)
-
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)
     }
@@ -34,6 +35,11 @@ interface VardokService {
         fun extractVardefInput(vardokItem: MutableMap<String, VardokResponse>): VardefInput {
             val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
             val vardokId = mapVardokIdentifier(vardokItemNb)
+            val vardokShortname =
+                vardokItemNb.variable
+                    ?.dataElementName
+                    ?.takeIf { it.isNotBlank() }
+                    ?: (ILLEGAL_SHORNAME_KEYWORD + NanoId.generate(8))
 
             return VardefInput(
                 name =
@@ -42,11 +48,7 @@ interface VardokService {
                         vardokItem["nn"]?.common?.title,
                         vardokItem["en"]?.common?.title,
                     ),
-                shortName =
-                    vardokItemNb.variable
-                        ?.dataElementName
-                        ?.lowercase()
-                        ?.replace("-", "_"),
+                shortName = vardokShortname.lowercase().lowercase().replace("-", "_"),
                 definition =
                     LanguageStringType(
                         vardokItemNb.common?.description,

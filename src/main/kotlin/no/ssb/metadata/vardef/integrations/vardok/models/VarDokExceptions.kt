@@ -4,10 +4,6 @@ open class VardokException(
     override val message: String,
 ) : Exception()
 
-class MissingDataElementNameException(
-    id: String,
-) : VardokException("Vardok id $id is missing DataElementName (short name) and can not be saved")
-
 class MissingValidDatesException(
     id: String,
 ) : VardokException("Vardok id $id is missing Valid (valid dates) and can not be saved")
@@ -34,9 +30,6 @@ class OutdatedUnitTypesException(
     )
 
 fun checkVardokForMissingElements(varDokItems: MutableMap<String, VardokResponse>) {
-    if (varDokItems["nb"]?.variable?.dataElementName.isNullOrBlank()) {
-        throw MissingDataElementNameException(varDokItems["nb"]?.id?.substringAfterLast(":").toString())
-    }
     if (varDokItems["nb"]?.dc?.valid.isNullOrBlank()) {
         throw MissingValidDatesException(varDokItems["nb"]?.id?.substringAfterLast(":").toString())
     }

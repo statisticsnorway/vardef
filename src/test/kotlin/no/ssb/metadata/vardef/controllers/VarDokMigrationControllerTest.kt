@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -86,22 +87,22 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
     @Test
     fun `post request vardok with missing short name`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/123")
-            .then()
-            .statusCode(400)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Vardok id 123 is missing DataElementName (short name) and can not be saved",
-                ),
-            )
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/123")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .path<String>("id")
+
+        val createdVariableDefinition = patches.latest(definitionId)
+        assertThat(createdVariableDefinition.shortName).startsWith(ILLEGAL_SHORNAME_KEYWORD)
     }
 
     @Test

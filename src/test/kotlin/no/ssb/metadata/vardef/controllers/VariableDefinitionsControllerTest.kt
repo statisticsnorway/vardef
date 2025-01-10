@@ -2,6 +2,10 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.restassured.RestAssured
+import io.restassured.RestAssured.oauth2
+import io.restassured.filter.log.RequestLoggingFilter
+import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
@@ -34,6 +38,13 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
     @BeforeEach
     fun setUp() {
         variableDefinitionRepository.deleteAll()
+    }
+
+    init {
+        if (RestAssured.filters() == null) {
+            RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
+        }
+        RestAssured.authentication = oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
     }
 
     @Test
@@ -223,13 +234,13 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         // No definitions are valid on this date
         "1800-01-01, 0",
         // Specific definitions are valid on these dates
-        "2021-01-01, 3",
+        "2021-01-01, 4",
         "2020-01-01, 1",
-        "2024-06-05, 4",
+        "2024-06-05, 5",
         // Definitions without a validUntil date defined
-        "3000-12-31, 3",
+        "3000-12-31, 4",
         // All definitions
-        "null, 4",
+        "null, 5",
     )
     fun `filter variable definitions by date`(
         dateOfValidity: String,

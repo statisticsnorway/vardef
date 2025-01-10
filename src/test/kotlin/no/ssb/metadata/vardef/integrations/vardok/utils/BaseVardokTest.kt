@@ -21,6 +21,7 @@ open class BaseVardokTest {
     lateinit var vardokResponse5: VardokResponse
     lateinit var vardokResponse6: VardokResponse
     lateinit var vardokResponse7: VardokResponse
+    lateinit var vardokResponse8: VardokResponse
 
     @BeforeEach
     open fun setUp() {
@@ -32,5 +33,6 @@ open class BaseVardokTest {
         vardokResponse5 = xmlMapper.readValue(vardokId100NoValidDates)
         vardokResponse6 = xmlMapper.readValue(vardokId123NoDataElementName)
         vardokResponse7 = xmlMapper.readValue(vardokId2677UnitTypeList)
+        vardokResponse8 = xmlMapper.readValue(vardokId123NoDataElementNameEn)
     }
 }

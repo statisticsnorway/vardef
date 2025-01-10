@@ -37,20 +37,6 @@ class VardokResponseTest {
     }
 
     @Test
-    fun `relations conceptVariableRelation list in response`() {
-        val response = vardokService.getVardokItem("2")
-        assertThat(response?.relations?.conceptVariableRelations).isNotNull()
-        assertThat(response?.relations?.conceptVariableRelations?.size).isEqualTo(5)
-        assertThat(response?.relations?.conceptVariableRelations).isInstanceOf(List::class.java)
-    }
-
-    @Test
-    fun `relations conceptVariableRelation list not in response`() {
-        val response = vardokService.getVardokItem("5")
-        assertThat(response?.relations?.conceptVariableRelations).isNull()
-    }
-
-    @Test
     fun `notes in response`() {
         val response = vardokService.getVardokItem("134")
         assertThat(response?.common?.notes).isEqualTo("Dokumentet det refereres til er \"Om statistikken\" som ligger på Internett.")

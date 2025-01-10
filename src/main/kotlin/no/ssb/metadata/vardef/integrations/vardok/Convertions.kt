@@ -124,8 +124,7 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * Maps the `notes` and `calculation` fields of a `VardokItem` to a `LanguageStringType` object.
  *
  * This function processes the `common.notes` and `variable.calculation` fields in the `VardokResponse` object
- * for each language (`nb`, `nn`, `en`) and assigns the resulting comment string to the corresponding
- * field in the `LanguageStringType` object based on the following rules:
+ * for each language (`nb`, `nn`, `en`) based on the following rules:
  *
  * - If both `notes` and `calculation` are empty, it assigns `null`.
  * - If `notes` is empty and `calculation` is not empty, it assigns the value of `calculation`.
@@ -138,31 +137,25 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @return A `LanguageStringType` object containing the mapped comment strings for each language.
  */
 fun mapVardokCalculationAndNotesToComment(vardokItem: MutableMap<String, VardokResponse>): LanguageStringType {
-    val comment = LanguageStringType()
-    val languages =
-        mapOf(
-            "nb" to { value: String? -> comment.nb = value },
-            "nn" to { value: String? -> comment.nn = value },
-            "en" to { value: String? -> comment.en = value },
-        )
-    for ((language, assign) in languages) {
+    val languageComments = mutableMapOf<String, String?>()
+    val languages = listOf("nb", "nn", "en")
+    for (language in languages) {
         val notes = vardokItem[language]?.common?.notes
         val calculation = vardokItem[language]?.variable?.calculation
 
         val commentByLanguage =
-            when {
-                notes?.isEmpty() == true && calculation?.isEmpty() == true -> null
-                notes?.isEmpty() == true && calculation?.isEmpty() == false ->
-                    calculation
-
-                notes?.isEmpty() == false && calculation?.isEmpty() == true ->
-                    notes
-                notes?.isEmpty() == false && calculation?.isEmpty() == false ->
-                    notes + calculation
-
-                else -> null
-            }
-        assign(commentByLanguage)
+         when {
+            notes.isNullOrEmpty() && calculation.isNullOrEmpty() -> null
+            notes.isNullOrEmpty() -> calculation
+            calculation.isNullOrEmpty() -> notes
+            else -> notes + calculation
+        }
+        languageComments[language] = commentByLanguage
+    }
+    val comment = LanguageStringType(null, null, null).apply {
+        nb = languageComments["nb"]
+        nn = languageComments["nn"]
+        en = languageComments["en"]
     }
     return comment
 }

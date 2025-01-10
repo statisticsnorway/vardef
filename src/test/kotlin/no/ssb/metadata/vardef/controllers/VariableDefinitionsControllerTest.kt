@@ -2,6 +2,10 @@ package no.ssb.metadata.vardef.controllers
 
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.restassured.RestAssured
+import io.restassured.RestAssured.oauth2
+import io.restassured.filter.log.RequestLoggingFilter
+import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
@@ -34,6 +38,13 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
     @BeforeEach
     fun setUp() {
         variableDefinitionRepository.deleteAll()
+    }
+
+    init {
+        if (RestAssured.filters() == null) {
+            RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
+        }
+        RestAssured.authentication = oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
     }
 
     @Test

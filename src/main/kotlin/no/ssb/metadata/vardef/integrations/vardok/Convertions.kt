@@ -4,6 +4,7 @@ import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCatego
 import no.ssb.metadata.vardef.integrations.vardok.models.MissingValidFromException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
+import no.ssb.metadata.vardef.models.SupportedLanguages
 
 /**
  * Enum of all official titles for unit types.
@@ -137,10 +138,9 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  */
 fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String, String?> {
     val languageComments = mutableMapOf<String, String?>()
-    val languages = listOf("nb", "nn", "en")
-    for (language in languages) {
-        val notes = vardokItem[language]?.common?.notes
-        val calculation = vardokItem[language]?.variable?.calculation
+    for (language in SupportedLanguages.entries) {
+        val notes = vardokItem[language.toString()]?.common?.notes
+        val calculation = vardokItem[language.toString()]?.variable?.calculation
 
         val commentByLanguage =
             when {
@@ -149,7 +149,7 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
                 calculation.isNullOrEmpty() -> notes
                 else -> notes + calculation
             }
-        languageComments[language] = commentByLanguage
+        languageComments[language.toString()] = commentByLanguage
     }
     return languageComments
 }

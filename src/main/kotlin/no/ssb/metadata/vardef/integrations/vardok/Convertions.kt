@@ -136,7 +136,7 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @param vardokItem A map where the keys are language codes (`nb`, `nn`, `en`) and the values are `VardokResponse` objects.
  * @return A `LanguageStringType` object containing the mapped comment strings for each language.
  */
-fun mapVardokCalculationAndNotesToComment(vardokItem: MutableMap<String, VardokResponse>): LanguageStringType {
+fun mapVardokCalculationAndNotesToComment(vardokItem: Map<String, VardokResponse>): LanguageStringType {
     val languageComments = mutableMapOf<String, String?>()
     val languages = listOf("nb", "nn", "en")
     for (language in languages) {

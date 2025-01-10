@@ -47,5 +47,6 @@ open class BaseVardefTest {
         variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE)
         variableDefinitionRepository.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
         variableDefinitionRepository.save(SAVED_INTERNAL_VARIABLE_DEFINITION)
+        variableDefinitionRepository.save(SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME)
     }
 }

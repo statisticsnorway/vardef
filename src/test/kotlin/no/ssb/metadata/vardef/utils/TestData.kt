@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.utils
 
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.bson.types.ObjectId
@@ -324,6 +325,53 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         relatedVariableDefinitionUris = listOf(),
         contact = null,
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+    )
+
+val SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        patchId = 1,
+        name =
+            LanguageStringType(
+                nb = "Bydel",
+                nn = null,
+                en = null,
+            ),
+        shortName = ILLEGAL_SHORNAME_KEYWORD + "abcd",
+        definition =
+            LanguageStringType(
+                nb = "Bydel",
+                nn = null,
+                en = null,
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("01", "02"),
+        subjectFields = listOf("he04"),
+        containsSpecialCategoriesOfPersonalData = false,
+        variableStatus = VariableStatus.DRAFT,
+        measurementType = "02.01",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://example.com/").toURL(),
+        comment =
+            LanguageStringType(
+                "Legger til merknad",
+                null,
+                null,
+            ),
+        relatedVariableDefinitionUris = listOf(),
+        owner =
+            Owner("skip-stat", listOf("skip-stat-developers", TEST_DEVELOPERS_GROUP)),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "me@example.com",
+            ),
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = "me@example.com",
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = "me@example.com",
     )
 
 val COMPLETE_RESPONSE =

@@ -48,7 +48,12 @@ interface VardokService {
                         vardokItem["nn"]?.common?.title,
                         vardokItem["en"]?.common?.title,
                     ),
-                shortName = vardokShortname.lowercase().lowercase().replace("-", "_"),
+                shortName =
+                    vardokShortname
+                        .lowercase()
+                        .lowercase()
+                        .replace("-", "_")
+                        .replace(" ", "_"),
                 definition =
                     LanguageStringType(
                         vardokItemNb.common?.description,

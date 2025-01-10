@@ -173,7 +173,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
-            16, 3365,
+            16,
         ],
     )
     fun `vardok dataelement name does not conform to short name rules`(

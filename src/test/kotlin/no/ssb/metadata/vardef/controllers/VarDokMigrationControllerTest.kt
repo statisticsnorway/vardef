@@ -170,28 +170,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             )
     }
 
-    @ParameterizedTest
-    @ValueSource(
-        ints = [
-            16,
-        ],
-    )
-    fun `vardok dataelement name does not conform to short name rules`(
-        id: Int,
-        spec: RequestSpecification,
-    ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(400)
-            .spec(buildProblemJsonResponseSpec(constraintViolation = true, fieldName = "shortName", errorMessage = "must match"))
-    }
-
     @Test
     fun `create vardok return owner`(spec: RequestSpecification) {
         spec

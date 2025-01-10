@@ -46,8 +46,7 @@ interface VardokService {
                     vardokItemNb.variable
                         ?.dataElementName
                         ?.lowercase()
-                        ?.replace("-", "_")
-                        ?.replace(Regex("[^a-z0-9_]"), ""),
+                        ?.replace("-", "_"),
                 definition =
                     LanguageStringType(
                         vardokItemNb.common?.description,

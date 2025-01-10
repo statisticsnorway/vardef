@@ -1,0 +1,68 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2006-09-25" defaultValidFrom="1978-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1849" lastChangedDate="2012-04-18" otherLanguages="nn" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for bygg- og tjenestestatistikk</dc:contributor>
+        <dc:creator>Permisjon/Sluttet</dc:creator>
+        <dcterms:modified>2012-04-18</dcterms:modified>
+        <dcterms:valid>1978-01-01 - </dcterms:valid>
+        <dc:description>Prisen entreprenør, byggmester eller installatør betaler for innsatsfaktorene: arbeidskraft, materialer, maskiner, transport og annet. Merverdiavgift er ikke inkludert i prisen.</dc:description>
+        <dcterms:abstract/>
+        <dcterms:tableOfContents>Bolig</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:1849</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>08.02.30 - Boligprisindekser</dc:subject>
+        <dc:title>Byggekostnad</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Byggekostnad</Title>
+        <Description>Prisen entreprenør, byggmester eller installatør betaler for innsatsfaktorene: arbeidskraft, materialer, maskiner, transport og annet. Merverdiavgift er ikke inkludert i prisen.</Description>
+        <ContactPerson>
+            <CodeValue>wil</CodeValue>
+            <CodeText>Permisjon/Sluttet</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>460</CodeValue>
+            <CodeText>Seksjon for bygg- og tjenestestatistikk</CodeText>
+        </ContactDivision>
+        <Notes>Byggekostnadsindeks for boliger er en veid indeks av byggekostnadsindeks for enebolig av tre og byggekostnadsindeks for boligblokk.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Bolig</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>08.02.30</CodeValue>
+            <CodeText>Boligprisindekser</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource/>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>http://www.ssb.no/emner/08/02/30/rapp_200028/rapp_200028.pdf</ExternalDocument>
+        <DataElementName/>
+        <ShortNameWeb>
+            <CodeValue>bkibol</CodeValue>
+            <CodeText>Byggekostnadsindeks, boliger</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08663" xlink:title="08663: Kostnadsindeks for drift og vedlikehold av veger (1. kv. 2004=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08662" xlink:title="08662: Byggekostnadsindeks for veganlegg (1. kv. 2004=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08660" xlink:title="08660: Kostnadsindeks for drift og vedlikehold av veger (1. kv. 2004=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08658" xlink:title="08658: Byggekostnadsindeks for veganlegg (1. kv. 2004=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08655" xlink:title="08655: Byggjekostnadsindeks for bustadblokk, etter arbeidstype (2000=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08654" xlink:title="08654: Byggjekostnadsindeks for bustadblokk, etter arbeidstype (2000=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08653" xlink:title="08653: Byggjekostnadsindeks for einebustad av tre, etter arbeidstype (2000=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08652" xlink:title="08652: Byggjekostnadsindeks for einebustad av tre, etter arbeidstype (2000=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08651" xlink:title="08651: Byggjekostnadsindeks for bustader i alt, etter arbeidstype (2000=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08650" xlink:title="08650: Byggjekostnadsindeks for bustader i alt, etter arbeidstype (2000=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08649" xlink:title="08649: Byggjekostnadsindeks for røyrleggjararbeid i kontor- og forretningsbygg (2000=100)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04534" xlink:title="04534: Byggjekostnadsindeks for røyrleggjararbeid i kontor- og forretningsbygg (2000=100)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

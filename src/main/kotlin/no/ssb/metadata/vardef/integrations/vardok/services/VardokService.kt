@@ -37,6 +37,8 @@ interface VardokService {
             val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
             val vardokId = mapVardokIdentifier(vardokItemNb)
             val comment = mapVardokComment(vardokItem)
+            val classificationRelation = vardokItemNb.relations?.classificationRelation?.href
+
             val vardokShortname =
                 vardokItemNb.variable
                     ?.dataElementName
@@ -67,7 +69,7 @@ interface VardokService {
                     ),
                 containsSpecialCategoriesOfPersonalData = false,
                 subjectFields = emptyList(),
-                classificationReference = null,
+                classificationReference = classificationRelation?.split("/")?.last(),
                 contact = null,
                 measurementType = null,
                 relatedVariableDefinitionUris = emptyList(),

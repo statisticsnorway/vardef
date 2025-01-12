@@ -15,7 +15,7 @@ open class VardokApiService(
 ) : VardokService {
     private val logger = LoggerFactory.getLogger(VardokApiService::class.java)
 
-    val xmlMapper = XmlMapper().registerKotlinModule()
+    private val xmlMapper = XmlMapper().registerKotlinModule()
 
     override fun getVardokItem(id: String): VardokResponse? {
         try {

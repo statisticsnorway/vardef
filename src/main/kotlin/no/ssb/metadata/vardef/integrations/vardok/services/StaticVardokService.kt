@@ -12,7 +12,7 @@ import java.io.File
 @Requires(env = ["test"], notEnv = ["integration-test"])
 @Singleton
 class StaticVardokService : VardokService {
-    val xmlMapper = XmlMapper().registerKotlinModule()
+    private val xmlMapper = XmlMapper().registerKotlinModule()
 
     override fun getVardokItem(id: String): VardokResponse? {
         val xmlFile = File("src/test/resources/vardokFiles/$id.xml")

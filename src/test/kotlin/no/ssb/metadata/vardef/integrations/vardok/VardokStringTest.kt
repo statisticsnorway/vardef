@@ -11,7 +11,7 @@ import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 
-@Requires(env = ["integration-test"])
+//@Requires(env = ["integration-test"])
 @MicronautTest
 class VardokStringTest {
     @Inject
@@ -20,7 +20,7 @@ class VardokStringTest {
     @Inject
     lateinit var vardokApiService: VardokApiService
 
-    val xmlMapper = XmlMapper().registerKotlinModule()
+    private val xmlMapper = XmlMapper().registerKotlinModule()
 
     @Test
     fun`get item`() {
@@ -57,5 +57,11 @@ class VardokStringTest {
     fun `fetch multiple languages`() {
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage("476")
         assertThat(result).isInstanceOf(MutableMap::class.java)
+    }
+
+    @Test
+    fun `get classification`() {
+        val result = vardokApiService.getVardokItem("123")
+        assertThat(result?.relations?.classificationRelation?.href).isEqualTo("http://www.ssb.no/classification/klass/91")
     }
 }

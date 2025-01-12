@@ -61,24 +61,15 @@ data class Common(
     val notes: String? = null,
 )
 
-//@JsonCreator constructor
 @Serdeable
 @Introspected
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Relations (
     @field:JacksonXmlProperty(localName = "ClassificationRelation")
-    val classificationRelation: ClassificationRelation?,
-    /*@field:JacksonXmlProperty(localName = "ConceptVariableRelation")
+    val classificationRelation: ClassificationRelation? = null,
+    @field:JacksonXmlProperty(localName = "ConceptVariableRelation")
     @JacksonXmlElementWrapper(useWrapping = false)
-    val relations: List<Relation?> = emptyList(),*/
-)
-
-@Serdeable
-@Introspected
-@JsonIgnoreProperties(ignoreUnknown = true)
-open class Relation(
-    @JacksonXmlProperty(isAttribute = true, localName = "href") open val href: String? = null,
-    @JacksonXmlProperty(isAttribute = true, localName = "type") open val type: String? = null,
+    val conceptVariableRelations: List<ConceptVariableRelation?>? = emptyList()
 )
 
 @Serdeable
@@ -95,8 +86,8 @@ data class ClassificationRelation(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JacksonXmlRootElement(localName = "ConceptVariableRelation")
 data class ConceptVariableRelation(
-    val href: String?,
-    val type: String?
+    val href: String? = null,
+    val type: String? = null
 )
 
 
@@ -160,6 +151,4 @@ data class VardokResponse(
     val variable: Variable? = null,
     @field:JacksonXmlProperty(localName = "Relations", isAttribute = false)
     val relations: Relations? = null,
-    //@field:JacksonXmlProperty(localName = "Relations")
-    //val relations: Relations? = Relations(),
 )

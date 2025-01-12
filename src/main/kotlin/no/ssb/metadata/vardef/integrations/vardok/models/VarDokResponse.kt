@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import io.micronaut.core.annotation.Introspected
@@ -60,13 +61,44 @@ data class Common(
     val notes: String? = null,
 )
 
+//@JsonCreator constructor
 @Serdeable
 @Introspected
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class Relations(
+data class Relations (
     @field:JacksonXmlProperty(localName = "ClassificationRelation")
-    val classificationRelation: String?,
+    val classificationRelation: ClassificationRelation?,
+    /*@field:JacksonXmlProperty(localName = "ConceptVariableRelation")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    val relations: List<Relation?> = emptyList(),*/
 )
+
+@Serdeable
+@Introspected
+@JsonIgnoreProperties(ignoreUnknown = true)
+open class Relation(
+    @JacksonXmlProperty(isAttribute = true, localName = "href") open val href: String? = null,
+    @JacksonXmlProperty(isAttribute = true, localName = "type") open val type: String? = null,
+)
+
+@Serdeable
+@Introspected
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JacksonXmlRootElement(localName = "ClassificationRelation")
+data class ClassificationRelation(
+    val href: String?,
+    val type: String?
+)
+
+@Serdeable
+@Introspected
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JacksonXmlRootElement(localName = "ConceptVariableRelation")
+data class ConceptVariableRelation(
+    val href: String?,
+    val type: String?
+)
+
 
 @Serdeable
 @Introspected
@@ -128,4 +160,6 @@ data class VardokResponse(
     val variable: Variable? = null,
     @field:JacksonXmlProperty(localName = "Relations", isAttribute = false)
     val relations: Relations? = null,
+    //@field:JacksonXmlProperty(localName = "Relations")
+    //val relations: Relations? = Relations(),
 )

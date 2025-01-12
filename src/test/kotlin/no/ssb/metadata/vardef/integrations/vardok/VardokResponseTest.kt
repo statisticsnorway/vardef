@@ -34,6 +34,7 @@ class VardokResponseTest {
     fun `relations classificationRelation in response`() {
         val response = vardokService.getVardokItem("1919")
         assertThat(response?.relations?.classificationRelation).isNotNull()
+        assertThat(response?.relations?.classificationRelation?.href).isEqualTo("http://www.ssb.no/classification/klass/91")
     }
 
     @Test

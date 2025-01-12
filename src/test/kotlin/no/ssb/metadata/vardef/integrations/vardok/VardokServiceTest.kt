@@ -1,14 +1,21 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.exceptions.HttpStatusException
 import io.mockk.clearAllMocks
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
+import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 @MockK
 class VardokServiceTest : BaseVardokTest() {
@@ -29,12 +36,12 @@ class VardokServiceTest : BaseVardokTest() {
         clearAllMocks()
     }
 
-   /* @Test
+    @Test
     fun `get vardok with valid and data element name`() {
         every {
             vardokMockkClient.fetchVardokById("1466")
         } returns
-            vardokResponse1
+            vardokId1466validFromDateAndOtherLanguages
         val result = vardokApiService.getVardokItem("1466")
         assertThat(result).isEqualTo(vardokResponse1)
     }
@@ -44,7 +51,7 @@ class VardokServiceTest : BaseVardokTest() {
         every {
             vardokMockkClient.fetchVardokByIdAndLanguage("476", "nn")
         } returns
-            vardokResponse3
+            vardokId476validFromDateAndNNInOtherLanguages
         val result = vardokApiService.getVardokByIdAndLanguage("476", "nn")
         assertThat(result).isEqualTo(vardokResponse3)
         assertThat(result?.otherLanguages).isEqualTo("nn;en")
@@ -67,24 +74,11 @@ class VardokServiceTest : BaseVardokTest() {
     }
 
     @Test
-    fun `get vardok by valid id and not valid nn language returns nb language`() {
-        val resultNNLanguage = vardokApiService.getVardokByIdAndLanguage("1466", "nn")
-        val resultNBLanguage = vardokApiService.getVardokByIdAndLanguage("1466", "nb")
-        assertThat(resultNNLanguage?.common?.title).isEqualTo(resultNBLanguage?.common?.title)
-    }
-
-    @Test
-    fun `fetch multiple languages`() {
-        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("476")
-        assertThat(result).isInstanceOf(MutableMap::class.java)
-    }
-
-    @Test
     fun `get vardok with valid end date returns VardokResponse`() {
         every {
             vardokMockkClient.fetchVardokById("49")
         } returns
-            vardokResponse2
+            vardokId49validUntilDate
         val result = vardokApiService.getVardokItem("49")
         assertThat(result).isInstanceOf(VardokResponse::class.java)
         assertThat(result).isEqualTo(vardokResponse2)
@@ -137,5 +131,5 @@ class VardokServiceTest : BaseVardokTest() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse1)
         val varDefInput = VardokService.extractVardefInput(mapVardokResponse)
         assertThat(varDefInput.shortName).isEqualTo("r_dato")
-    }*/
+    }
 }

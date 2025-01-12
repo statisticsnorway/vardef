@@ -64,12 +64,12 @@ data class Common(
 @Serdeable
 @Introspected
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class Relations (
+data class Relations(
     @field:JacksonXmlProperty(localName = "ClassificationRelation")
     val classificationRelation: ClassificationRelation? = null,
     @field:JacksonXmlProperty(localName = "ConceptVariableRelation")
     @JacksonXmlElementWrapper(useWrapping = false)
-    val conceptVariableRelations: List<ConceptVariableRelation?>? = emptyList()
+    val conceptVariableRelations: List<ConceptVariableRelation?>? = emptyList(),
 )
 
 @Serdeable
@@ -78,7 +78,7 @@ data class Relations (
 @JacksonXmlRootElement(localName = "ClassificationRelation")
 data class ClassificationRelation(
     val href: String?,
-    val type: String?
+    val type: String?,
 )
 
 @Serdeable
@@ -86,10 +86,9 @@ data class ClassificationRelation(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JacksonXmlRootElement(localName = "ConceptVariableRelation")
 data class ConceptVariableRelation(
-    val href: String? = null,
-    val type: String? = null
+    val href: String?,
+    val type: String?,
 )
-
 
 @Serdeable
 @Introspected

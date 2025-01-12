@@ -24,10 +24,8 @@ class VardokStringTest {
 
     @Test
     fun`get item`() {
-        val res = vardokClient.fetchVardokById("90")
-        val res2 = xmlMapper.readValue(res, VardokResponse::class.java)
-        assertThat(res2.relations?.conceptVariableRelations?.size).isEqualTo(0)
-        assertThat(res2.relations?.classificationRelation).isNull()
+        val result = xmlMapper.readValue(vardokClient.fetchVardokById("90"), VardokResponse::class.java)
+        assertThat(result.relations?.classificationRelation).isNull()
     }
 
     @Test
@@ -42,7 +40,6 @@ class VardokStringTest {
         val res = vardokClient.fetchVardokById("2")
         val res2 = xmlMapper.readValue(res, VardokResponse::class.java)
         assertThat(res2.relations?.classificationRelation).isNull()
-        assertThat(res2.relations?.conceptVariableRelations?.size).isEqualTo(5)
     }
 
     @Test

@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import io.micronaut.core.annotation.Introspected
@@ -67,9 +66,6 @@ data class Common(
 data class Relations(
     @field:JacksonXmlProperty(localName = "ClassificationRelation")
     val classificationRelation: ClassificationRelation? = null,
-    @field:JacksonXmlProperty(localName = "ConceptVariableRelation")
-    @JacksonXmlElementWrapper(useWrapping = false)
-    val conceptVariableRelations: List<ConceptVariableRelation?>? = emptyList(),
 )
 
 @Serdeable
@@ -77,15 +73,6 @@ data class Relations(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JacksonXmlRootElement(localName = "ClassificationRelation")
 data class ClassificationRelation(
-    val href: String?,
-    val type: String?,
-)
-
-@Serdeable
-@Introspected
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JacksonXmlRootElement(localName = "ConceptVariableRelation")
-data class ConceptVariableRelation(
     val href: String?,
     val type: String?,
 )

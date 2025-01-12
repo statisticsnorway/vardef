@@ -38,7 +38,6 @@ interface VardokService {
             val vardokId = mapVardokIdentifier(vardokItemNb)
             val comment = mapVardokComment(vardokItem)
             val classificationRelation = vardokItemNb.relations?.classificationRelation?.href
-
             val vardokShortname =
                 vardokItemNb.variable
                     ?.dataElementName

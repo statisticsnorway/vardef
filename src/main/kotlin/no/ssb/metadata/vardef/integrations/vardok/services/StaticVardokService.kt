@@ -38,7 +38,7 @@ class StaticVardokService : VardokService {
             responseMap["nb"] = it
         }
         result.otherLanguages.split(";").filter { it.isNotEmpty() }.forEach { l ->
-            getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
+            getVardokByIdAndLanguage(id, l).let { responseMap[l] = it }
         }
 
         return responseMap

@@ -11,7 +11,7 @@ import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 
-//@Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
 class VardokStringTest {
     @Inject

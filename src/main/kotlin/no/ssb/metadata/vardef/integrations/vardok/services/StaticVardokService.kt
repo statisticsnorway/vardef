@@ -14,7 +14,7 @@ import java.io.File
 class StaticVardokService : VardokService {
     private val xmlMapper = XmlMapper().registerKotlinModule()
 
-    override fun getVardokItem(id: String): VardokResponse? {
+    override fun getVardokItem(id: String): VardokResponse {
         val xmlFile = File("src/test/resources/vardokFiles/$id.xml")
         val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
         return varDokResponse
@@ -23,7 +23,7 @@ class StaticVardokService : VardokService {
     override fun getVardokByIdAndLanguage(
         id: String,
         language: String,
-    ): VardokResponse? {
+    ): VardokResponse {
         val xmlFile = File("src/test/resources/vardokFiles/${id}$language.xml")
         val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
         return varDokResponse

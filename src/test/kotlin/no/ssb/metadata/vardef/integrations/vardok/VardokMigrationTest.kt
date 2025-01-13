@@ -149,4 +149,11 @@ class VardokMigrationTest {
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
     }
+
+    @Test
+    fun `vardokresponse subject area are values in SubjectFields`() {
+        val vardokresponse = vardokService.getVardokItem("130")
+        val result = vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
+        assertThat(result).isEqualTo(listOf("15"))
+    }
 }

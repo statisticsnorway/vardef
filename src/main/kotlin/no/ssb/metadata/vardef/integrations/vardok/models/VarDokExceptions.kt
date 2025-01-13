@@ -29,6 +29,12 @@ class OutdatedUnitTypesException(
         "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
     )
 
+class OutdatedSubjectAreaException(
+    id: String,
+) : VardokException(
+        "Vardok id $id SubjectArea has outdated subject are value and can not be saved",
+    )
+
 fun checkVardokForMissingElements(varDokItems: MutableMap<String, VardokResponse>) {
     if (varDokItems["nb"]?.dc?.valid.isNullOrBlank()) {
         throw MissingValidDatesException(varDokItems["nb"]?.id?.substringAfterLast(":").toString())

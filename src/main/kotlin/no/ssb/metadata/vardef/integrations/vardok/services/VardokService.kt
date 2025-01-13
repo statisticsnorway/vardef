@@ -6,10 +6,7 @@ import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
-import no.ssb.metadata.vardef.integrations.vardok.getValidDates
-import no.ssb.metadata.vardef.integrations.vardok.mapVardokComment
-import no.ssb.metadata.vardef.integrations.vardok.mapVardokIdentifier
-import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
+import no.ssb.metadata.vardef.integrations.vardok.*
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.models.LanguageStringType
 
@@ -67,7 +64,7 @@ interface VardokService {
                         comment["en"],
                     ),
                 containsSpecialCategoriesOfPersonalData = false,
-                subjectFields = emptyList(),
+                subjectFields = mapVardokSubjectAreaToSubjectFiled(vardokItemNb),
                 classificationReference = classificationRelation?.split("/")?.last(),
                 contact = null,
                 measurementType = null,

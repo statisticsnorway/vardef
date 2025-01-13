@@ -1,11 +1,9 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCategoryForValue
-import no.ssb.metadata.vardef.integrations.vardok.models.MissingValidFromException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
-import java.time.LocalDate
 
 /**
  * Enum of all official titles for unit types.
@@ -104,7 +102,7 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
         firstDate = "1900-01-01"
     }
     return Pair(firstDate, secondDate)
-    //throw MissingValidFromException(vardokItem.id.substringAfterLast(":"))
+    // throw MissingValidFromException(vardokItem.id.substringAfterLast(":"))
 }
 
 fun mapVardokIdentifier(vardokItem: VardokResponse): String {

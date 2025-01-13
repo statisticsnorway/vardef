@@ -85,9 +85,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(1900,1,1))
+        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
         assertThat(completeResponse.validUntil).isNull()
-
     }
 
     @Test
@@ -144,9 +143,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(1900,1,1))
+        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
         assertThat(completeResponse.validUntil).isNotNull()
-
     }
 
     @ParameterizedTest

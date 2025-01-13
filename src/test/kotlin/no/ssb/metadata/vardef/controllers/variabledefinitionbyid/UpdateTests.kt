@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
 import io.micronaut.http.HttpStatus
+import io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
@@ -13,7 +14,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
-import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -459,21 +459,42 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `publish variable with valid until`(spec: RequestSpecification) {
-        val body =
-            spec
+    fun `can not update valid until`(spec: RequestSpecification) {
+        spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-                """{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent(),
+                """{"valid_until": "2024-11-12"}""".trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
-            .statusCode(200)
-            .extract()
-            .body()
-            .asString()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    "valid_until may not be specified here",
+                ),
+            )
+    }
+
+    @Test
+    fun `publish variable with valid until`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent(),
+                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)

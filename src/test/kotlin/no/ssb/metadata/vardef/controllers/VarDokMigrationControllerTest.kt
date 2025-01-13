@@ -231,9 +231,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `post valid until in response`(
-        spec: RequestSpecification,
-    ) {
+    fun `post valid until in response`(spec: RequestSpecification) {
         val id = 948
         val body =
             spec
@@ -250,6 +248,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2001,12,31))
+        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2001, 12, 31))
     }
 }

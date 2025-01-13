@@ -9,7 +9,7 @@ data class VardefInput(
     val definition: LanguageStringType?,
     var validFrom: String,
     val unitTypes: List<String?>,
-    val externalReferenceUri: URL? = null,
+    val externalReferenceUri: URL?,
     val comment: LanguageStringType?,
     val containsSpecialCategoriesOfPersonalData: Boolean,
     val subjectFields: List<String?>,

@@ -1,0 +1,55 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2004-02-16" defaultValidFrom="1993-01-01" defaultValidTo="2003-12-31" id="urn:ssb:conceptvariable:vardok:566" lastChangedDate="2008-01-28" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for income and wage statistics</dc:contributor>
+        <dc:creator>Vidar Pedersen</dc:creator>
+        <dcterms:modified>2008-01-28</dcterms:modified>
+        <dcterms:valid>1993-01-01 - 2003-12-31</dcterms:valid>
+        <dc:description>Child support, private maintenance and alimony received during the calendar year.</dc:description>
+        <dcterms:abstract> Inntektsstatistikk for husholdninger</dcterms:abstract>
+        <dcterms:tableOfContents>Person</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:566</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>05.01 - Income, property, taxes</dc:subject>
+        <dc:title>Alimonies and child support</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Alimonies and child support</Title>
+        <Description>Child support, private maintenance and alimony received during the calendar year.</Description>
+        <ContactPerson>
+            <CodeValue>vip</CodeValue>
+            <CodeText>Vidar Pedersen</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>225</CodeValue>
+            <CodeText>Division for income and wage statistics</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Person</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>05.01</CodeValue>
+            <CodeText>Income, property, taxes</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Inntektsstatistikk for husholdninger</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>bidrag</DataElementName>
+        <ShortNameWeb>
+            <CodeValue>ifhus</CodeValue>
+            <CodeText>Income statistics for households. Different households</CodeText>
+        </ShortNameWeb>
+        <Calculation>Fra Selvangivelse for næringsdrivende mv.: Postene 2.6.1 + 2.6.2 + 2.6.3 (eller 2.6.5 - 2.6.4).</Calculation>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

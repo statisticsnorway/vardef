@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok.models
 
 import no.ssb.metadata.vardef.models.LanguageStringType
+import java.net.URL
 
 data class VardefInput(
     val name: LanguageStringType?,
@@ -8,7 +9,7 @@ data class VardefInput(
     val definition: LanguageStringType?,
     var validFrom: String,
     val unitTypes: List<String?>,
-    val externalReferenceUri: String,
+    val externalReferenceUri: URL? = null,
     val comment: LanguageStringType?,
     val containsSpecialCategoriesOfPersonalData: Boolean,
     val subjectFields: List<String?>,

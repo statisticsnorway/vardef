@@ -58,6 +58,7 @@ interface VardokService {
                         vardokItem["en"]?.common?.description,
                     ),
                 validFrom = getValidDates(vardokItemNb).first,
+                validUntil = getValidDates(vardokItemNb).second,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
                 externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
                 comment =

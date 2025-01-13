@@ -142,14 +142,13 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
         val notes = vardokItem[language.toString()]?.common?.notes
         val calculation = vardokItem[language.toString()]?.variable?.calculation
 
-        val commentByLanguage =
+        languageComments[language.toString()] =
             when {
                 notes.isNullOrEmpty() && calculation.isNullOrEmpty() -> null
                 notes.isNullOrEmpty() -> calculation
                 calculation.isNullOrEmpty() -> notes
                 else -> notes + calculation
             }
-        languageComments[language.toString()] = commentByLanguage
     }
     return languageComments
 }

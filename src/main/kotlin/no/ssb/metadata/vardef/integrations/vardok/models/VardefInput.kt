@@ -8,6 +8,7 @@ data class VardefInput(
     val shortName: String?,
     val definition: LanguageStringType?,
     var validFrom: String,
+    val validUntil: String?,
     val unitTypes: List<String?>,
     val externalReferenceUri: URL?,
     val comment: LanguageStringType?,

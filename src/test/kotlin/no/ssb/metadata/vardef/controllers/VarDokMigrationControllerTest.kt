@@ -236,6 +236,27 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeResponse.comment?.nn).isNull()
     }
 
+    @Test
+    fun `create vardok has valid until in response`(spec: RequestSpecification) {
+        val id = 948
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2001, 12, 31))
+    }
+
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.integrations.vardok.VardokResponseTest#mapExternalDocument")
     fun `create vardok externalreference uri`(

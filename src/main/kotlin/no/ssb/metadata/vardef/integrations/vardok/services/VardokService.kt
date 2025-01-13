@@ -24,15 +24,15 @@ interface VardokService {
 
     fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
 
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
-       // checkVardokForMissingElements(varDokItems)
+    fun createVarDefInputFromVarDokItems(varDokItems: Map<String, VardokResponse>): String {
+        checkVardokForMissingElements(varDokItems)
         val varDefInput = extractVardefInput(varDokItems)
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)
     }
 
     companion object {
-        fun extractVardefInput(vardokItem: MutableMap<String, VardokResponse>): VardefInput {
+        fun extractVardefInput(vardokItem: Map<String, VardokResponse>): VardefInput {
             val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
             val comment = mapVardokComment(vardokItem)
             val classificationRelation = vardokItemNb.relations?.classificationRelation?.href
@@ -56,6 +56,7 @@ interface VardokService {
                         vardokItem["en"]?.common?.description,
                     ),
                 validFrom = getValidDates(vardokItemNb).first,
+                validUntil = getValidDates(vardokItemNb).second,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
                 externalReferenceUri = vardokItemNb.variable?.externalDocument,
                 comment =

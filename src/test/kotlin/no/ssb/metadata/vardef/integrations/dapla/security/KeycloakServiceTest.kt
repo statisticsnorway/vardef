@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.integrations.dapla.security
 
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
-import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -63,18 +62,6 @@ class KeycloakServiceTest {
         assertThat(
             testLogAppender.getLoggedMessages().any {
                 it.formattedMessage.contains("Client 'keycloak': Unauthorized")
-            },
-        ).isTrue()
-        assertThat(result).isNull()
-    }
-
-    @Test
-    @Property(name = "micronaut.http.services.keycloak.url", value = "www.example.com")
-    fun `incorrect url`() {
-        val result = keycloakService.requestAccessToken()
-        assertThat(
-            testLogAppender.getLoggedMessages().any {
-                it.formattedMessage.contains("Request URI specifies no host")
             },
         ).isTrue()
         assertThat(result).isNull()

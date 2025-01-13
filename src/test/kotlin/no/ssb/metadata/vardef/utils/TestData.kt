@@ -41,6 +41,11 @@ val DRAFT_BUS_EXAMPLE =
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
+val DRAFT_BUS_EXAMPLE_WITH_VALID_UNTIL =
+    DRAFT_BUS_EXAMPLE.apply {
+        validUntil = LocalDate.of(2023, 10, 8)
+    }
+
 val SAVED_INTERNAL_VARIABLE_DEFINITION =
     SavedVariableDefinition(
         id = ObjectId(),

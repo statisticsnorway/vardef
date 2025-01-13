@@ -6,15 +6,18 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 class UpdateTests : BaseVardefTest() {
@@ -453,5 +456,27 @@ class UpdateTests : BaseVardefTest() {
                         "is illegal and must be changed before it is published",
                 ),
             )
+    }
+
+    @Test
+    fun `publish variable with valid until`(spec: RequestSpecification) {
+        val body =
+            spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
+            .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
+        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2023, 10, 8))
     }
 }

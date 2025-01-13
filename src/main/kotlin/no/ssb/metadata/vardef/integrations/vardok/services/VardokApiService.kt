@@ -20,8 +20,8 @@ open class VardokApiService(
     override fun getVardokItem(id: String): VardokResponse? {
         try {
             logger.info("Retrieving definition by $id from vardok")
-            val res = vardokClient.fetchVardokById(id)
-            return xmlMapper.readValue(res, VardokResponse::class.java)
+            val response = vardokClient.fetchVardokById(id)
+            return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
             logger.warn("$id is not found. Exception message: ${e.message}")
             throw VardokNotFoundException(id)
@@ -34,8 +34,8 @@ open class VardokApiService(
     ): VardokResponse? {
         try {
             logger.info("Retrieving $id by $language")
-            val res = vardokClient.fetchVardokByIdAndLanguage(id, language)
-            return xmlMapper.readValue(res, VardokResponse::class.java)
+            val response = vardokClient.fetchVardokByIdAndLanguage(id, language)
+            return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
             logger.warn("Error while fetching vardok by id and language", e)
             throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))

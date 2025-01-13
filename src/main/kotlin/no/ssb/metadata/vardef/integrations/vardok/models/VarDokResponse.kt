@@ -65,7 +65,16 @@ data class Common(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Relations(
     @field:JacksonXmlProperty(localName = "ClassificationRelation")
-    val classificationRelation: String?,
+    val classificationRelation: ClassificationRelation? = null,
+)
+
+@Serdeable
+@Introspected
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JacksonXmlRootElement(localName = "ClassificationRelation")
+data class ClassificationRelation(
+    val href: String?,
+    val type: String?,
 )
 
 @Serdeable

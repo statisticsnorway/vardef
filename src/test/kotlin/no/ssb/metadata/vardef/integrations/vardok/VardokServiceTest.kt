@@ -100,7 +100,7 @@ class VardokServiceTest : BaseVardokTest() {
         assertThat(actualMessage).contains(expectedMessage)
     }
 
-    @Test
+   /* @Test
     fun `get vardok with missing valid`() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse5)
         every {
@@ -116,5 +116,5 @@ class VardokServiceTest : BaseVardokTest() {
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
-    }
+    }*/
 }

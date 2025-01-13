@@ -10,7 +10,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.net.URL
 
 class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
@@ -227,5 +229,30 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeResponse.comment?.nb).isNotNull
         assertThat(completeResponse.comment?.en).isNotNull
         assertThat(completeResponse.comment?.nn).isNull()
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.integrations.vardok.VardokResponseTest#mapExternalDocument")
+    fun `create vardok externalreference uri`(
+        id: Int,
+        expectedResult: URL?,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.externalReferenceUri).isEqualTo(expectedResult)
     }
 }

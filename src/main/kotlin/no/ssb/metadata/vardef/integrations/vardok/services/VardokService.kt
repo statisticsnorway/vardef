@@ -24,7 +24,7 @@ interface VardokService {
 
     fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
 
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
+    fun createVarDefInputFromVarDokItems(varDokItems: Map<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)
         val varDefInput = extractVardefInput(varDokItems)
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
@@ -32,7 +32,7 @@ interface VardokService {
     }
 
     companion object {
-        fun extractVardefInput(vardokItem: MutableMap<String, VardokResponse>): VardefInput {
+        fun extractVardefInput(vardokItem: Map<String, VardokResponse>): VardefInput {
             val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
             val comment = mapVardokComment(vardokItem)
             val classificationRelation = vardokItemNb.relations?.classificationRelation?.href

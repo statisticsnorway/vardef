@@ -30,6 +30,7 @@ val DRAFT_BUS_EXAMPLE =
         containsSpecialCategoriesOfPersonalData = false,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
         externalReferenceUri = URI("https://www.example.com").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),

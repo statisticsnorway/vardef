@@ -41,7 +41,6 @@ val DRAFT_BUS_EXAMPLE =
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
-
 val DRAFT_EXAMPLE_WITH_VALID_UNTIL =
     Draft(
         name =

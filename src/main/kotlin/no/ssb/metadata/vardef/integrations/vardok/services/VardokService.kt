@@ -56,6 +56,7 @@ interface VardokService {
                         vardokItem["en"]?.common?.description,
                     ),
                 validFrom = getValidDates(vardokItemNb).first,
+                validUntil = getValidDates(vardokItemNb).second,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
                 externalReferenceUri = vardokItemNb.variable?.externalDocument,
                 comment =

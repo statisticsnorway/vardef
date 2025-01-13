@@ -1,65 +1,24 @@
-package no.ssb.metadata.vardef.controllers
+package no.ssb.metadata.vardef.controllers.variabledefinitions
 
 import io.micronaut.http.HttpStatus
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.restassured.RestAssured
-import io.restassured.RestAssured.oauth2
-import io.restassured.filter.log.RequestLoggingFilter
-import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.VariableStatus
-import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.matchesRegex
+import org.hamcrest.Matchers.nullValue
 import org.json.JSONObject
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-@MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class VariableDefinitionsControllerEmptyDatabaseTest {
-    @Inject
-    lateinit var variableDefinitionRepository: VariableDefinitionRepository
-
-    @BeforeEach
-    fun setUp() {
-        variableDefinitionRepository.deleteAll()
-    }
-
-    init {
-        if (RestAssured.filters() == null) {
-            RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
-        }
-        RestAssured.authentication = oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
-    }
-
-    @Test
-    fun `access empty database`(spec: RequestSpecification) {
-        spec
-            .`when`()
-            .contentType(ContentType.JSON)
-            .get("/variable-definitions")
-            .then()
-            .statusCode(200)
-            .body("", empty<List<Any>>())
-    }
-}
-
-class VariableDefinitionsControllerTest : BaseVardefTest() {
+class CreateTests : BaseVardefTest() {
     @Test
     fun `create variable definition`(spec: RequestSpecification) {
         val startTime = LocalDateTime.now()
@@ -215,49 +174,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `klass url renders correctly`(spec: RequestSpecification) {
-        spec
-            .given()
-            .`when`()
-            .get("/public/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
-            .then()
-            .body(
-                "classification_uri",
-                equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/91",
-                ),
-            )
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        // No definitions are valid on this date
-        "1800-01-01, 0",
-        // Specific definitions are valid on these dates
-        "2021-01-01, 4",
-        "2020-01-01, 1",
-        "2024-06-05, 4",
-        // Definitions without a validUntil date defined
-        "3000-12-31, 3",
-        // All definitions
-        "null, 5",
-    )
-    fun `filter variable definitions by date`(
-        dateOfValidity: String,
-        expectedNumber: Int,
-        spec: RequestSpecification,
-    ) {
-        spec
-            .given()
-            .queryParam("date_of_validity", if (dateOfValidity == "null") null else dateOfValidity)
-            .`when`()
-            .get("/variable-definitions")
-            .then()
-            .statusCode(200)
-            .body("size()", Matchers.equalTo(expectedNumber))
-    }
-
-    @Test
     fun `create new variable with existing shortname`(spec: RequestSpecification) {
         val updatedJsonString = jsonTestInput().apply { put("short_name", "intskatt") }.toString()
 
@@ -277,18 +193,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
                     errorMessage = "already exists.",
                 ),
             )
-    }
-
-    @Test
-    fun `all variable definitions have comment field`(spec: RequestSpecification) {
-        spec
-            .`when`()
-            .contentType(ContentType.JSON)
-            .get("/variable-definitions")
-            .then()
-            .statusCode(200)
-            .body("find { it }", hasKey("comment"))
-            .body("find { it.short_name == 'intskatt' }.comment", notNullValue())
     }
 
     @Test
@@ -367,56 +271,6 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
             .body("owner.groups[0]", equalTo(TEST_DEVELOPERS_GROUP))
             .body("owner.groups[1]", nullValue())
             .body("owner.team", equalTo(TEST_TEAM))
-    }
-
-    @Test
-    fun `list variable definitions return type`(spec: RequestSpecification) {
-        val body =
-            spec
-                .`when`()
-                .get("/variable-definitions")
-                .then()
-                .statusCode(HttpStatus.OK.code)
-                .extract()
-                .body()
-                .asString()
-        assertThat(jsonMapper.readValue(body, Array<CompleteResponse>::class.java)).isNotNull
-    }
-
-    @Test
-    fun `list variables definitions unauthenticated`(spec: RequestSpecification) {
-        spec
-            .given()
-            .auth()
-            .none()
-            .`when`()
-            .get("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
-    }
-
-    @Test
-    fun `list variables definitions all statuses`(spec: RequestSpecification) {
-        val expectedStatuses =
-            setOf(
-                VariableStatus.DRAFT,
-                VariableStatus.PUBLISHED_INTERNAL,
-                VariableStatus.PUBLISHED_EXTERNAL,
-            )
-
-        val body =
-            spec
-                .`when`()
-                .get("/variable-definitions")
-                .then()
-                .statusCode(HttpStatus.OK.code)
-                .extract()
-                .body()
-                .asString()
-
-        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
-        val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
-        assertThat(actualStatuses).containsAll(expectedStatuses)
     }
 
     @Test

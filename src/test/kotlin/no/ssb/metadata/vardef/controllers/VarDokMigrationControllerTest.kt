@@ -231,7 +231,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `post valid until in response`(spec: RequestSpecification) {
+    fun `create vardok has valid until in response`(spec: RequestSpecification) {
         val id = 948
         val body =
             spec

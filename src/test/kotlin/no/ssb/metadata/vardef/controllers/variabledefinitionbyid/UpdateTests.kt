@@ -466,7 +466,7 @@ class UpdateTests : BaseVardefTest() {
                 """{"valid_until": "2024-11-12"}""".trimIndent(),
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
+            .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .spec(
@@ -488,7 +488,7 @@ class UpdateTests : BaseVardefTest() {
                     """{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent(),
                 ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
-                .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
+                .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -497,6 +497,6 @@ class UpdateTests : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
-        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2023, 10, 8))
+        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
     }
 }

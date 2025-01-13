@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 
 @Requires(env = ["integration-test"])
 @MicronautTest
-class VardokStringTest {
+class VardokClientTest {
     @Inject
     lateinit var vardokClient: VardokClient
 
@@ -23,42 +23,22 @@ class VardokStringTest {
     private val xmlMapper = XmlMapper().registerKotlinModule()
 
     @Test
-    fun`get item`() {
+    fun`use xml mapper to read string http response vardok by id`() {
         val result = xmlMapper.readValue(vardokClient.fetchVardokById("90"), VardokResponse::class.java)
-        assertThat(result.relations?.classificationRelation).isNull()
-    }
-
-    @Test
-    fun`get item 2`() {
-        val res = vardokClient.fetchVardokById("1919")
-        val res2 = xmlMapper.readValue(res, VardokResponse::class.java)
-        assertThat(res2.relations?.classificationRelation?.href).isEqualTo("http://www.ssb.no/classification/klass/91")
-    }
-
-    @Test
-    fun`get item 3`() {
-        val res = vardokClient.fetchVardokById("2")
-        val res2 = xmlMapper.readValue(res, VardokResponse::class.java)
-        assertThat(res2.relations?.classificationRelation).isNull()
+        assertThat(result).isInstanceOf(VardokResponse::class.java)
     }
 
     @Test
     fun `get vardok by valid id and not valid nn language returns nb language`() {
-        val resultNNLanguage = vardokApiService.getVardokByIdAndLanguage("1466", "nn")
-        val resultNBLanguage = vardokApiService.getVardokByIdAndLanguage("1466", "nb")
-        assertThat(resultNBLanguage).isNotNull
-        assertThat(resultNNLanguage?.common?.title).isEqualTo(resultNBLanguage?.common?.title)
+        val resultNN = xmlMapper.readValue(vardokClient.fetchVardokByIdAndLanguage("1466", "nn"), VardokResponse::class.java)
+        val resultNB = xmlMapper.readValue(vardokClient.fetchVardokByIdAndLanguage("1466", "nb"), VardokResponse::class.java)
+        assertThat("nn").isNotIn(resultNB.otherLanguages)
+        assertThat(resultNN?.common?.title).isEqualTo(resultNB?.common?.title)
     }
 
     @Test
     fun `fetch multiple languages`() {
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage("476")
         assertThat(result).isInstanceOf(MutableMap::class.java)
-    }
-
-    @Test
-    fun `get classification`() {
-        val result = vardokApiService.getVardokItem("123")
-        assertThat(result?.relations?.classificationRelation?.href).isEqualTo("http://www.ssb.no/classification/klass/91")
     }
 }

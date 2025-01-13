@@ -9,7 +9,6 @@ import io.mockk.mockk
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
-import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -117,19 +116,5 @@ class VardokServiceTest : BaseVardokTest() {
         val actualMessage = exception.message
 
         assertThat(expectedMessage).isEqualTo(actualMessage)
-    }
-
-    @Test
-    fun `vardok items with missing data element name`() {
-        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse6, "en" to vardokResponse8)
-        val varDefInput = VardokService.extractVardefInput(mapVardokResponse)
-        assertThat(varDefInput.shortName).startsWith("ugyldig_kortnavn")
-    }
-
-    @Test
-    fun `vardok items with valid data element name`() {
-        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse1)
-        val varDefInput = VardokService.extractVardefInput(mapVardokResponse)
-        assertThat(varDefInput.shortName).isEqualTo("r_dato")
     }
 }

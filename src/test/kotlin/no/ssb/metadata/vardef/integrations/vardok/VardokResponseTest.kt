@@ -24,7 +24,7 @@ class VardokResponseTest {
     }
 
     @Test
-    fun `relations in response not classification relation`() {
+    fun `relations in response and not classificationRelation`() {
         val response = vardokService.getVardokItem("2")
         assertThat(response?.relations).isNotNull()
         assertThat(response?.relations?.classificationRelation).isNull()

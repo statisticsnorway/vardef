@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
 import io.micronaut.http.HttpStatus
-import io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP

@@ -236,9 +236,9 @@ class VariableDefinitionsControllerTest : BaseVardefTest() {
         // Specific definitions are valid on these dates
         "2021-01-01, 4",
         "2020-01-01, 1",
-        "2024-06-05, 5",
+        "2024-06-05, 4",
         // Definitions without a validUntil date defined
-        "3000-12-31, 4",
+        "3000-12-31, 3",
         // All definitions
         "null, 5",
     )

@@ -18,4 +18,3 @@ class OutdatedUnitTypesException(
 ) : VardokException(
         "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
     )
-

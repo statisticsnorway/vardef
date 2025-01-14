@@ -6,6 +6,7 @@ import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
+import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
 import no.ssb.metadata.vardef.integrations.vardok.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokComment
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
@@ -32,15 +33,23 @@ interface VardokService {
     }
 
     companion object {
+        private fun generateShortName() = "${ILLEGAL_SHORNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
+
+        private fun isValidShortName(name: String) = name.matches(Regex(VARDEF_SHORT_NAME_PATTERN))
+
+        private fun processShortName(name: String?) =
+            name
+                ?.lowercase()
+                ?.replace("""[-\s]""".toRegex(), "_")
+                ?.takeIf { it.isNotBlank() && isValidShortName(it) }
+                ?: generateShortName()
+
         fun extractVardefInput(vardokItem: Map<String, VardokResponse>): VardefInput {
             val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
             val comment = mapVardokComment(vardokItem)
             val classificationRelation = vardokItemNb.relations?.classificationRelation?.href
-            val vardokShortname =
-                vardokItemNb.variable
-                    ?.dataElementName
-                    ?.takeIf { it.isNotBlank() }
-                    ?: (ILLEGAL_SHORNAME_KEYWORD + NanoId.generate(8))
+            val vardokShortName = processShortName(vardokItemNb.variable?.dataElementName)
+
             return VardefInput(
                 name =
                     LanguageStringType(
@@ -48,7 +57,7 @@ interface VardokService {
                         vardokItem["nn"]?.common?.title,
                         vardokItem["en"]?.common?.title,
                     ),
-                shortName = vardokShortname.lowercase(),
+                shortName = vardokShortName,
                 definition =
                     LanguageStringType(
                         vardokItemNb.common?.description,

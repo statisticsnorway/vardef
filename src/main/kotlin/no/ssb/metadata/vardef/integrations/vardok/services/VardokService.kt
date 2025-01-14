@@ -7,6 +7,10 @@ import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.*
+import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
+import no.ssb.metadata.vardef.integrations.vardok.getValidDates
+import no.ssb.metadata.vardef.integrations.vardok.mapVardokComment
+import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.models.LanguageStringType
 
@@ -22,7 +26,7 @@ interface VardokService {
 
     fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
 
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
+    fun createVarDefInputFromVarDokItems(varDokItems: Map<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)
         val varDefInput = extractVardefInput(varDokItems)
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
@@ -30,16 +34,23 @@ interface VardokService {
     }
 
     companion object {
-        fun extractVardefInput(vardokItem: MutableMap<String, VardokResponse>): VardefInput {
+        private fun generateShortName() = "${ILLEGAL_SHORNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
+
+        private fun isValidShortName(name: String) = name.matches(Regex(VARDEF_SHORT_NAME_PATTERN))
+
+        private fun processShortName(name: String?) =
+            name
+                ?.lowercase()
+                ?.replace("""[-\s]""".toRegex(), "_")
+                ?.takeIf { it.isNotBlank() && isValidShortName(it) }
+                ?: generateShortName()
+
+        fun extractVardefInput(vardokItem: Map<String, VardokResponse>): VardefInput {
             val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
-            val vardokId = mapVardokIdentifier(vardokItemNb)
             val comment = mapVardokComment(vardokItem)
             val classificationRelation = vardokItemNb.relations?.classificationRelation?.href
-            val vardokShortname =
-                vardokItemNb.variable
-                    ?.dataElementName
-                    ?.takeIf { it.isNotBlank() }
-                    ?: (ILLEGAL_SHORNAME_KEYWORD + NanoId.generate(8))
+            val vardokShortName = processShortName(vardokItemNb.variable?.dataElementName)
+
             return VardefInput(
                 name =
                     LanguageStringType(
@@ -47,7 +58,7 @@ interface VardokService {
                         vardokItem["nn"]?.common?.title,
                         vardokItem["en"]?.common?.title,
                     ),
-                shortName = vardokShortname.lowercase(),
+                shortName = vardokShortName,
                 definition =
                     LanguageStringType(
                         vardokItemNb.common?.description,
@@ -55,8 +66,9 @@ interface VardokService {
                         vardokItem["en"]?.common?.description,
                     ),
                 validFrom = getValidDates(vardokItemNb).first,
+                validUntil = getValidDates(vardokItemNb).second,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
-                externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+                externalReferenceUri = vardokItemNb.variable?.externalDocument,
                 comment =
                     LanguageStringType(
                         comment["nb"],

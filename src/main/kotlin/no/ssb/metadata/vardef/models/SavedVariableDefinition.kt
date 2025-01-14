@@ -151,6 +151,7 @@ data class SavedVariableDefinition(
             variableStatus = varDefUpdates.variableStatus ?: variableStatus,
             measurementType = varDefUpdates.measurementType ?: measurementType,
             validFrom = varDefUpdates.validFrom ?: validFrom,
+            validUntil = validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
             comment = varDefUpdates.comment?.let { comment?.update(it) } ?: comment,
             relatedVariableDefinitionUris =

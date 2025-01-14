@@ -10,7 +10,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.net.URL
+import java.time.LocalDate
 
 class VarDokMigrationControllerTest : BaseVardefTest() {
     @ParameterizedTest
@@ -170,28 +173,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             )
     }
 
-    @ParameterizedTest
-    @ValueSource(
-        ints = [
-            16, 3365,
-        ],
-    )
-    fun `vardok dataelement name does not conform to short name rules`(
-        id: Int,
-        spec: RequestSpecification,
-    ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(400)
-            .spec(buildProblemJsonResponseSpec(constraintViolation = true, fieldName = "shortName", errorMessage = "must match"))
-    }
-
     @Test
     fun `create vardok return owner`(spec: RequestSpecification) {
         spec
@@ -227,5 +208,51 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeResponse.comment?.nb).isNotNull
         assertThat(completeResponse.comment?.en).isNotNull
         assertThat(completeResponse.comment?.nn).isNull()
+    }
+
+    @Test
+    fun `create vardok has valid until in response`(spec: RequestSpecification) {
+        val id = 948
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2001, 12, 31))
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.integrations.vardok.VardokResponseTest#mapExternalDocument")
+    fun `create vardok externalreference uri`(
+        id: Int,
+        expectedResult: URL?,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.externalReferenceUri).isEqualTo(expectedResult)
     }
 }

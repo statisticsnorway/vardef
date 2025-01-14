@@ -48,6 +48,10 @@ data class Draft(
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format(DATE_FORMAT)
     val validFrom: LocalDate,
+    @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
+    @Nullable
+    @Format(DATE_FORMAT)
+    val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,
@@ -90,7 +94,7 @@ data class Draft(
             variableStatus = VariableStatus.DRAFT,
             measurementType = measurementType,
             validFrom = validFrom,
-            validUntil = null,
+            validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },

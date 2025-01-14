@@ -39,6 +39,7 @@ class VariableDefinitionTest {
             containsSpecialCategoriesOfPersonalData = false,
             measurementType = "",
             validFrom = LocalDate.of(1988, 5, 17),
+            validUntil = null,
             externalReferenceUri = URI("https://www.example.com").toURL(),
             comment = null,
             relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),

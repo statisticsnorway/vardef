@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.MethodSource
+import java.net.URL
 import java.util.stream.Stream
 
 @MicronautTest
@@ -76,6 +77,16 @@ class VardokResponseTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("mapExternalDocument")
+    fun `external document field in Vardokresponse`(
+        vardokId: String,
+        expectedResult: URL?,
+    ) {
+        val result = vardokService.getVardokItem(vardokId)
+        assertThat(result?.variable?.externalDocument).isEqualTo(expectedResult)
+    }
+
     companion object {
         @JvmStatic
         fun mapCommentField(): Stream<Arguments> =
@@ -122,6 +133,26 @@ class VardokResponseTest {
                     null,
                     null,
                     true,
+                ),
+            )
+
+        @JvmStatic
+        fun mapExternalDocument(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Vardok id 2 has external document",
+                    "2",
+                    "http://www.ssb.no/emner/05/90/notat_200372/notat_200372.pdf",
+                ),
+                argumentSet(
+                    "Vardok id 130 has not external document",
+                    "130",
+                    null,
+                ),
+                argumentSet(
+                    "Vardok id 123 has external document",
+                    "123",
+                    "http://www.ssb.no/emner/02/01/10/innvbef/om.html",
                 ),
             )
     }

@@ -30,6 +30,39 @@ val DRAFT_BUS_EXAMPLE =
         containsSpecialCategoriesOfPersonalData = false,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val DRAFT_EXAMPLE_WITH_VALID_UNTIL =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Tog",
+                nn = "Tog",
+                en = "Train",
+            ),
+        shortName = "train",
+        definition =
+            LanguageStringType(
+                nb = "Et tog er et transportmiddel på skinner.",
+                nn = null,
+                en = "A train is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("", ""),
+        subjectFields = listOf("", ""),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = LocalDate.of(2030, 9, 15),
         externalReferenceUri = URI("https://www.example.com").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),

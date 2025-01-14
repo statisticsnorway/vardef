@@ -9,7 +9,9 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.net.URL
 
 @MicronautTest
 class VardokMigrationTest {
@@ -79,20 +81,6 @@ class VardokMigrationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["1422", "1919", "2", "5", "123"])
-    fun `set link to vardok`(vardokId: String) {
-        val result = vardokService.getVardokItem(vardokId)
-        if (result != null) {
-            val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
-            val renderVarDok = VardokService.extractVardefInput(mapResult)
-            assertThat(renderVarDok).isNotNull
-            assertThat(
-                renderVarDok.externalReferenceUri,
-            ).isEqualTo("https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId")
-        }
-    }
-
-    @ParameterizedTest
     @ValueSource(
         ints = [
             2, 5, 26, 120,
@@ -155,5 +143,16 @@ class VardokMigrationTest {
         val vardokresponse = vardokService.getVardokItem("130")
         val result = vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
         assertThat(result).isEqualTo(listOf("15"))
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.integrations.vardok.VardokResponseTest#mapExternalDocument")
+    fun `externalReferenceUri field is set with value from externalDocument`(
+        vardokId: String,
+        expectedResult: URL?,
+    ) {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.externalReferenceUri).isEqualTo(expectedResult)
     }
 }

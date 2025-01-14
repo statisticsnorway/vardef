@@ -6,8 +6,8 @@ import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
-import no.ssb.metadata.vardef.integrations.vardok.*
 import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
+import no.ssb.metadata.vardef.integrations.vardok.*
 import no.ssb.metadata.vardef.integrations.vardok.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokComment
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes

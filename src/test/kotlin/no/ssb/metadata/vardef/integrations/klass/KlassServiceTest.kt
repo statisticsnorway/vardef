@@ -2,6 +2,9 @@ package no.ssb.metadata.vardef.integrations.klass
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
+import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
+import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -15,38 +18,38 @@ class KlassServiceTest {
     @Test
     fun `get klass code item for unit types test`() {
         klassService
-            .renderCode("702", "01", SupportedLanguages.NB)
+            .renderCode(UNIT_TYPES_KLASS_CODE, "01", SupportedLanguages.NB)
             ?.let { klassItem ->
-                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/702")
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("01")
                 assertThat(klassItem.title).isEqualTo("Adresse")
             }
 
         klassService
-            .renderCode("702", "17", SupportedLanguages.NB)
+            .renderCode(UNIT_TYPES_KLASS_CODE, "17", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("17")
                 assertThat(klassItem.title).isEqualTo("Kommune (geografisk)")
             }
 
         klassService
-            .renderCode("702", "17", SupportedLanguages.EN)
+            .renderCode(UNIT_TYPES_KLASS_CODE, "17", SupportedLanguages.EN)
             ?.let { klassItem ->
-                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/en/klass/klassifikasjoner/702")
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/en/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("17")
                 assertThat(klassItem.title).isEqualTo(null)
             }
 
         klassService
-            .renderCode("702", "41", SupportedLanguages.NB)
+            .renderCode(UNIT_TYPES_KLASS_CODE, "41", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem).isEqualTo(null)
             }
 
         klassService
-            .renderCode("702", "01", SupportedLanguages.NN)
+            .renderCode(UNIT_TYPES_KLASS_CODE, "01", SupportedLanguages.NN)
             ?.let { klassItem ->
-                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/702")
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("01")
                 assertThat(klassItem.title).isEqualTo(null)
             }
@@ -55,22 +58,22 @@ class KlassServiceTest {
     @Test
     fun `get klass code item for subject fields test`() {
         klassService
-            .renderCode("618", "vf", SupportedLanguages.NB)
+            .renderCode(SUBJECT_FIELDS_KLASS_CODE, "vf", SupportedLanguages.NB)
             ?.let { klassItem ->
-                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/618")
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("vf")
                 assertThat(klassItem.title).isEqualTo("Bedrifter, foretak og regnskap")
             }
 
         klassService
-            .renderCode("618", "al", SupportedLanguages.NB)
+            .renderCode(SUBJECT_FIELDS_KLASS_CODE, "al", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("al")
                 assertThat(klassItem.title).isEqualTo("Arbeid og lønn")
             }
 
         klassService
-            .renderCode("618", "vgh", SupportedLanguages.NB)
+            .renderCode(SUBJECT_FIELDS_KLASS_CODE, "vgh", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem).isEqualTo(null)
             }
@@ -79,22 +82,22 @@ class KlassServiceTest {
     @Test
     fun `get klass code item for measurement type test`() {
         klassService
-            .renderCode("303", "02", SupportedLanguages.NB)
+            .renderCode(MEASUREMENT_TYPE_KLASS_CODE, "02", SupportedLanguages.NB)
             ?.let { klassItem ->
-                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/303")
+                assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("02")
                 assertThat(klassItem.title).isEqualTo("Antall")
             }
 
         klassService
-            .renderCode("303", "17.23", SupportedLanguages.NB)
+            .renderCode(MEASUREMENT_TYPE_KLASS_CODE, "17.23", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("17.23")
                 assertThat(klassItem.title).isEqualTo("øre per kWh")
             }
 
         klassService
-            .renderCode("303", "156.3", SupportedLanguages.NB)
+            .renderCode(MEASUREMENT_TYPE_KLASS_CODE, "156.3", SupportedLanguages.NB)
             ?.let { klassItem ->
                 assertThat(klassItem.code).isEqualTo(null)
             }

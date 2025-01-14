@@ -4,6 +4,7 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
+import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
@@ -19,7 +20,7 @@ class UpdateTests : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSONObject().apply { put("classification_reference", "303") }.toString())
+            .body(JSONObject().apply { put("classification_reference", MEASUREMENT_TYPE_KLASS_CODE) }.toString())
             .queryParams("valid_from", "3030-12-31")
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
@@ -58,14 +59,14 @@ class UpdateTests : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSONObject().apply { put("classification_reference", "303") }.toString())
+            .body(JSONObject().apply { put("classification_reference", MEASUREMENT_TYPE_KLASS_CODE) }.toString())
             .queryParams("valid_from", validFrom)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
-            .body("classification_reference", equalTo("303"))
+            .body("classification_reference", equalTo(MEASUREMENT_TYPE_KLASS_CODE))
             .body("definition.en", equalTo(definitionEn))
             .body("comment.nb", equalTo(commentNb))
             .body("patch_id", equalTo(numIncomeTaxPatches + 1))

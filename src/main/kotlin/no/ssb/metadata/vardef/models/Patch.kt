@@ -35,13 +35,13 @@ data class Patch(
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @Nullable
     val unitTypes: List<
-            @KlassCode("702")
+            @KlassCode(UNIT_TYPES_KLASS_CODE)
             String,
             >?,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
     val subjectFields: List<
-            @KlassCode("618")
+            @KlassCode(SUBJECT_FIELDS_KLASS_CODE)
             String,
             >?,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
@@ -55,7 +55,7 @@ data class Patch(
     val variableStatus: VariableStatus?,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
-    @KlassCode("303")
+    @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
     val measurementType: String?,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable

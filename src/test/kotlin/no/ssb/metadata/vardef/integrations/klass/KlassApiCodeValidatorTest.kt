@@ -5,6 +5,9 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
+import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
+import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
+import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -13,15 +16,15 @@ import org.junit.jupiter.api.Test
 @Introspected
 data class TestCodeObject(
     var unitCodes: List<
-            @KlassCode("702")
+            @KlassCode(UNIT_TYPES_KLASS_CODE)
             String,
             >? = null,
     var subjectCodes: List<
-            @KlassCode("618")
+            @KlassCode(SUBJECT_FIELDS_KLASS_CODE)
             String,
             >? = null,
     var measurementType: List<
-            @KlassCode("303")
+            @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
             String,
             >? = null,
 )
@@ -42,9 +45,9 @@ class KlassApiCodeValidatorTest(
                 TestCodeObject(
                     listOf("01", "08", "28"),
                     listOf(
-                        "al",
-                        "bb",
-                        "vf",
+                        "01",
+                        "02",
+                        "11",
                     ),
                     listOf(
                         "05",
@@ -68,7 +71,7 @@ class KlassApiCodeValidatorTest(
             result
                 .any {
                     it.invalidValue == "33" &&
-                        it.message == "Code 33 is not a member of classification with id 702"
+                        it.message == "Code 33 is not a member of classification with id $UNIT_TYPES_KLASS_CODE"
                 },
         )
     }
@@ -84,7 +87,7 @@ class KlassApiCodeValidatorTest(
             result
                 .any {
                     it.invalidValue == "" &&
-                        it.message == "Code  is not a member of classification with id 702"
+                        it.message == "Code  is not a member of classification with id $UNIT_TYPES_KLASS_CODE"
                 },
         )
     }
@@ -98,8 +101,8 @@ class KlassApiCodeValidatorTest(
             },
         ).isEqualTo(
             listOf(
-                "Code 999 is not a member of classification with id 702",
-                "Code 33 is not a member of classification with id 702",
+                "Code 999 is not a member of classification with id $UNIT_TYPES_KLASS_CODE",
+                "Code 33 is not a member of classification with id $UNIT_TYPES_KLASS_CODE",
             ),
         )
         assertThat(result.elementAt(1).invalidValue).isEqualTo("33")

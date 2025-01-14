@@ -1,7 +1,7 @@
 {
   "codes": [
     {
-      "code": "1",
+      "code": "01",
       "parentCode": null,
       "level": "1",
       "name": "Arbeid og lønn",
@@ -45,7 +45,7 @@
       "notes": ""
     },
     {
-      "code": "2",
+      "code": "02",
       "parentCode": null,
       "level": "1",
       "name": "Bank og finansmarked",
@@ -89,7 +89,7 @@
       "notes": ""
     },
     {
-      "code": "3",
+      "code": "03",
       "parentCode": null,
       "level": "1",
       "name": "Befolkning",
@@ -155,7 +155,7 @@
       "notes": ""
     },
     {
-      "code": "4",
+      "code": "04",
       "parentCode": null,
       "level": "1",
       "name": "Bygg, bolig og eiendom",
@@ -199,7 +199,7 @@
       "notes": ""
     },
     {
-      "code": "5",
+      "code": "05",
       "parentCode": null,
       "level": "1",
       "name": "Energi og industri",
@@ -243,7 +243,7 @@
       "notes": ""
     },
     {
-      "code": "6",
+      "code": "06",
       "parentCode": null,
       "level": "1",
       "name": "FoU, teknologi og innovasjon",
@@ -287,7 +287,7 @@
       "notes": ""
     },
     {
-      "code": "7",
+      "code": "07",
       "parentCode": null,
       "level": "1",
       "name": "Helse og omsorg",
@@ -375,7 +375,7 @@
       "notes": ""
     },
     {
-      "code": "8",
+      "code": "08",
       "parentCode": null,
       "level": "1",
       "name": "Inntekt og forbruk",
@@ -419,7 +419,7 @@
       "notes": ""
     },
     {
-      "code": "9",
+      "code": "09",
       "parentCode": null,
       "level": "1",
       "name": "Kultur og fritid",

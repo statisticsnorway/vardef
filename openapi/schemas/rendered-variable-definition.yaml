@@ -39,7 +39,7 @@ properties:
   subject_fields:
     title: Subject fields
     description: A list of subject fields that the variable is used in. Valid values
-      defined by https://www.ssb.no/klass/klassifikasjoner/618
+      defined by https://www.ssb.no/klass/klassifikasjoner/685
     type: array
     items:
       $ref: klass-reference.yaml

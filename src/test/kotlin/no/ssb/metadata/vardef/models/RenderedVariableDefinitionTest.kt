@@ -63,19 +63,15 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
         fun subjectFields(): Stream<Arguments> =
             Stream.of(
                 arguments(
-                    "al04",
-                    "Arbeidsmiljø, sykefravær og arbeidskonflikter",
+                    "01",
+                    "Arbeid og lønn",
                 ),
                 arguments(
-                    "al05",
-                    "Lønn og arbeidskraftkostnader",
-                ),
-                arguments(
-                    "vf",
+                    "21",
                     "Bedrifter, foretak og regnskap",
                 ),
                 arguments(
-                    "vf05",
+                    "21.05",
                     "Bedrifter og foretak",
                 ),
             )

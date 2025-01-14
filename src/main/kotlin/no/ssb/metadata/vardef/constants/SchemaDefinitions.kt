@@ -10,10 +10,10 @@ const val CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION =
         "classification defines all possible values for the defined variable."
 const val UNIT_TYPES_FIELD_DESCRIPTION =
     "A list of one or more unit types, e.g. person, vehicle, household." +
-        " Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702."
+        " Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE."
 const val SUBJECT_FIELDS_FIELD_DESCRIPTION =
     "A list of subject fields that the variable is used in. " +
-        "Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/618."
+        "Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE."
 const val CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION =
     "True if variable instances contain particularly " +
         "sensitive information. Applies even if the information or identifiers are pseudonymized. " +
@@ -23,7 +23,7 @@ const val CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION =
 const val VARIABLE_STATUS_FIELD_DESCRIPTION = "Status of the life cycle of the variable"
 const val MEASUREMENT_TYPE_FIELD_DESCRIPTION =
     "Type of measurement for the variable, e.g. length, volume, currency. " +
-        "Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303"
+        "Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE"
 const val VALID_FROM_FIELD_DESCRIPTION = "The variable definition is valid from this date inclusive"
 const val VALID_UNTIL_FIELD_DESCRIPTION = "The variable definition is valid until this date inclusive"
 const val EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION = "A link (URI) to an external definition/documentation"

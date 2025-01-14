@@ -42,7 +42,7 @@ properties:
       - ["10"]
   subject_fields:
     title: Subject fields
-    description: A list of subject fields that the variable is used in. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/618.
+    description: A list of subject fields that the variable is used in. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/685.
     type: array
     items:
       type: string

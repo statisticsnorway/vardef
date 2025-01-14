@@ -7,6 +7,9 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
+import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
+import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
@@ -238,24 +241,24 @@ class PublicControllerTest : BaseVardefTest() {
             .body(
                 "[0].measurement_type.reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/303",
+                    "https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE",
                 ),
             ).body("[0].measurement_type.code", equalTo("02.01"))
             .body("[0].measurement_type.title", equalTo("antall"))
             .body(
                 "[0].unit_types[0].reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/702",
+                    "https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE",
                 ),
             ).body("[0].unit_types[0].code", equalTo("01"))
             .body("[0].unit_types[0].title", equalTo("Adresse"))
             .body(
                 "[0].subject_fields[0].reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/618",
+                    "https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE",
                 ),
-            ).body("[0].subject_fields[0].code", equalTo("he04"))
-            .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
+            ).body("[0].subject_fields[0].code", equalTo("07"))
+            .body("[0].subject_fields[0].title", equalTo("Helse og omsorg"))
     }
 
     companion object {

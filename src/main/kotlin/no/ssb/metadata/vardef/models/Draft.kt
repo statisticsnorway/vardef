@@ -38,7 +38,7 @@ data class Draft(
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     val unitTypes: List<@KlassCode(id = "702") String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    val subjectFields: List<@KlassCode(id = "618") String>,
+    val subjectFields: List<@KlassCode(id = "685") String>,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION, defaultValue = false.toString())
     val containsSpecialCategoriesOfPersonalData: Boolean = false,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)

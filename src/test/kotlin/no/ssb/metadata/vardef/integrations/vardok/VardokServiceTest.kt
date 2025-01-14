@@ -99,22 +99,4 @@ class VardokServiceTest : BaseVardokTest() {
 
         assertThat(actualMessage).contains(expectedMessage)
     }
-
-   /* @Test
-    fun `get vardok with missing valid`() {
-        val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse5)
-        every {
-            vardokMockkService.createVarDefInputFromVarDokItems(mapVardokResponse)
-        } throws
-            MissingValidDatesException(mapVardokResponse["nb"]?.id.toString())
-
-        val exception: VardokException =
-            assertThrows(MissingValidDatesException::class.java) {
-                vardokApiService.createVarDefInputFromVarDokItems(mapVardokResponse)
-            }
-        val expectedMessage = "Vardok id 100 is missing Valid (valid dates) and can not be saved"
-        val actualMessage = exception.message
-
-        assertThat(expectedMessage).isEqualTo(actualMessage)
-    }*/
 }

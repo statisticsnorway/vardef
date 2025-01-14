@@ -7,7 +7,6 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Produces
 import io.micronaut.http.client.annotation.Client
-import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 
 @Client(id = "vardok")
 @Produces(MediaType.APPLICATION_XML)
@@ -16,7 +15,7 @@ interface VardokClient {
     @Produces(MediaType.APPLICATION_XML)
     @Get("{id}")
     @SingleResult
-    fun fetchVardokById(id: String): VardokResponse
+    fun fetchVardokById(id: String): String
 
     @Produces(MediaType.APPLICATION_XML)
     @Get("{id}/{language}")
@@ -24,5 +23,5 @@ interface VardokClient {
     fun fetchVardokByIdAndLanguage(
         id: String,
         language: String,
-    ): VardokResponse
+    ): String
 }

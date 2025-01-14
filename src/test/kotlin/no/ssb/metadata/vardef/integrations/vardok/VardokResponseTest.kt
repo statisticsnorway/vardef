@@ -5,6 +5,12 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.argumentSet
+import org.junit.jupiter.params.provider.MethodSource
+import java.net.URL
+import java.util.stream.Stream
 
 @MicronautTest
 class VardokResponseTest {
@@ -18,36 +24,23 @@ class VardokResponseTest {
     }
 
     @Test
-    fun `relations in response`() {
-        val response = vardokService.getVardokItem("2")
-        assertThat(response?.relations).isNotNull()
-        assertThat(response?.relations?.classificationRelation).isNull()
-    }
-
-    @Test
     fun `calculation not in response`() {
         val response = vardokService.getVardokItem("2")
         assertThat(response?.variable?.calculation).isEmpty()
     }
 
     @Test
+    fun `relations in response and not classificationRelation`() {
+        val response = vardokService.getVardokItem("2")
+        assertThat(response?.relations).isNotNull()
+        assertThat(response?.relations?.classificationRelation).isNull()
+    }
+
+    @Test
     fun `relations classificationRelation in response`() {
         val response = vardokService.getVardokItem("1919")
         assertThat(response?.relations?.classificationRelation).isNotNull()
-    }
-
-    @Test
-    fun `relations conceptVariableRelation list in response`() {
-        val response = vardokService.getVardokItem("2")
-        assertThat(response?.relations?.conceptVariableRelations).isNotNull()
-        assertThat(response?.relations?.conceptVariableRelations?.size).isEqualTo(5)
-        assertThat(response?.relations?.conceptVariableRelations).isInstanceOf(List::class.java)
-    }
-
-    @Test
-    fun `relations conceptVariableRelation list not in response`() {
-        val response = vardokService.getVardokItem("5")
-        assertThat(response?.relations?.conceptVariableRelations).isNull()
+        assertThat(response?.relations?.classificationRelation?.href).isEqualTo("http://www.ssb.no/classification/klass/91")
     }
 
     @Test
@@ -60,5 +53,107 @@ class VardokResponseTest {
     fun `notes not in response`() {
         val response = vardokService.getVardokItem("2")
         assertThat(response?.common?.notes).isEmpty()
+    }
+
+    @ParameterizedTest
+    @MethodSource("mapCommentField")
+    fun `map Vardok notes and calculation to vardef comment`(
+        vardokId: String,
+        expectedCommentNB: String?,
+        expectedCommentNN: String?,
+        expectedCommentEN: String?,
+        isConcatenated: Boolean,
+    ) {
+        val vardok = vardokService.getVardokItem(vardokId)
+        val notes = vardok?.common?.notes
+        val calculation = vardok?.variable?.calculation
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.comment?.nb).isEqualTo(expectedCommentNB)
+        assertThat(vardokTransform.comment?.nn).isEqualTo(expectedCommentNN)
+        assertThat(vardokTransform.comment?.en).isEqualTo(expectedCommentEN)
+        if (isConcatenated) {
+            assertThat(vardokTransform.comment?.nb).containsSubsequence(notes, calculation)
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("mapExternalDocument")
+    fun `external document field in Vardokresponse`(
+        vardokId: String,
+        expectedResult: URL?,
+    ) {
+        val result = vardokService.getVardokItem(vardokId)
+        assertThat(result?.variable?.externalDocument).isEqualTo(expectedResult)
+    }
+
+    companion object {
+        @JvmStatic
+        fun mapCommentField(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "comment is null when notes and calculation are null",
+                    "2",
+                    null,
+                    null,
+                    null,
+                    false,
+                ),
+                argumentSet(
+                    "comment is notes when notes is not null and calculation is null",
+                    "901",
+                    "Opplysningene er hentet fra boligskjemaet i FoB2001, spørsmål 21.",
+                    null,
+                    "The information is collected from the Housing form in Census 2001, question 21.",
+                    false,
+                ),
+                argumentSet(
+                    "comment is calculation when calculation is not null and notes is null",
+                    "267",
+                    "= P8005 + P8006",
+                    null,
+                    null,
+                    false,
+                ),
+                argumentSet(
+                    "comment has nn language",
+                    "1849",
+                    "Byggekostnadsindeks for boliger er en veid indeks av byggekostnadsindeks for enebolig av tre og " +
+                        "byggekostnadsindeks for boligblokk.",
+                    "Byggjekostnadsindeks for bustader i alt er ein vege indeks av einebustader av tre " +
+                        "og bustadblokker.",
+                    null,
+                    false,
+                ),
+                argumentSet(
+                    "comment concatenates calculation and notes when both have values",
+                    "1299",
+                    "Denne variabelen benyttes både for foretak og bedrift.Beregnes via Næringsoppgaven: " +
+                        "Post 9000/9900-post3400-post 3800/3895",
+                    null,
+                    null,
+                    true,
+                ),
+            )
+
+        @JvmStatic
+        fun mapExternalDocument(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Vardok id 2 has external document",
+                    "2",
+                    "http://www.ssb.no/emner/05/90/notat_200372/notat_200372.pdf",
+                ),
+                argumentSet(
+                    "Vardok id 130 has not external document",
+                    "130",
+                    null,
+                ),
+                argumentSet(
+                    "Vardok id 123 has external document",
+                    "123",
+                    "http://www.ssb.no/emner/02/01/10/innvbef/om.html",
+                ),
+            )
     }
 }

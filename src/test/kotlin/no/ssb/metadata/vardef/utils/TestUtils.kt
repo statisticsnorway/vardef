@@ -184,13 +184,6 @@ object TestUtils {
                 "Error deserializing type",
             ),
             argumentSet(
-                "valid_until specified",
-                jsonTestInput().apply { put("valid_until", "2030-06-30") }.toString(),
-                false,
-                null,
-                "valid_until may not be specified here",
-            ),
-            argumentSet(
                 "external_reference_uri invalid",
                 jsonTestInput().apply { put("external_reference_uri", "Not url") }.toString(),
                 false,

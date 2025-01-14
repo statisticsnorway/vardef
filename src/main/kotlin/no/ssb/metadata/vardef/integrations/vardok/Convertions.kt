@@ -4,6 +4,7 @@ import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCatego
 import no.ssb.metadata.vardef.integrations.vardok.models.MissingValidFromException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
+import no.ssb.metadata.vardef.models.SupportedLanguages
 
 /**
  * Enum of all official titles for unit types.
@@ -117,4 +118,37 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
     }
 
     throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
+}
+
+/**
+ * Maps the `notes` and `calculation` fields of a `VardokItem` to a `LanguageStringType` object.
+ *
+ * This function processes the `common.notes` and `variable.calculation` fields in the `VardokResponse` object
+ * for each language (`nb`, `nn`, `en`) based on the following rules:
+ *
+ * - If both `notes` and `calculation` are empty, it assigns `null`.
+ * - If `notes` is empty and `calculation` is not empty, it assigns the value of `calculation`.
+ * - If `calculation` is empty and `notes` is not empty, it assigns the value of `notes`.
+ * - If both `notes` and `calculation` are non-empty, it concatenates them and assigns the result.
+ *
+ * The function preserves existing values for each language while processing only the relevant fields.
+ *
+ * @param vardokItem A map where the keys are language codes (`nb`, `nn`, `en`) and the values are `VardokResponse` objects.
+ * @return A `LanguageStringType` object containing the mapped comment strings for each language.
+ */
+fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String, String?> {
+    val languageComments = mutableMapOf<String, String?>()
+    for (language in SupportedLanguages.entries) {
+        val notes = vardokItem[language.toString()]?.common?.notes
+        val calculation = vardokItem[language.toString()]?.variable?.calculation
+
+        languageComments[language.toString()] =
+            when {
+                notes.isNullOrEmpty() && calculation.isNullOrEmpty() -> null
+                notes.isNullOrEmpty() -> calculation
+                calculation.isNullOrEmpty() -> notes
+                else -> notes + calculation
+            }
+    }
+    return languageComments
 }

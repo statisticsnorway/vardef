@@ -1,0 +1,115 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2005-10-03" defaultValidFrom="2003-10-03" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1299" lastChangedDate="2014-06-23" otherLanguages="" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for bygg- og tjenestestatistikk</dc:contributor>
+        <dc:creator>Jakob Kalko</dc:creator>
+        <dcterms:modified>2014-06-23</dcterms:modified>
+        <dcterms:valid>2003-10-03 - </dcterms:valid>
+        <dc:description>Omsetning er definert som foretakets driftsinntekter, fratrukket både offentlige tilskudd og gevinst ved salg av anleggsmidler. Spesielle offentlige avgifter vedrørende salget, og skatter og avgifter er inkludert i omsetningen, mens merverdiavgift ikke er inkludert.</dc:description>
+        <dcterms:abstract> Strukturstatistikk SKD - Skattedirektoratet</dcterms:abstract>
+        <dcterms:tableOfContents>Foretak</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:1299</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>10 - Næringsvirksomhet</dc:subject>
+        <dc:title>Omsetning - strukturstatistikk</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Omsetning - strukturstatistikk</Title>
+        <Description>Omsetning er definert som foretakets driftsinntekter, fratrukket både offentlige tilskudd og gevinst ved salg av anleggsmidler. Spesielle offentlige avgifter vedrørende salget, og skatter og avgifter er inkludert i omsetningen, mens merverdiavgift ikke er inkludert.</Description>
+        <ContactPerson>
+            <CodeValue>kaj</CodeValue>
+            <CodeText>Jakob Kalko</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>460</CodeValue>
+            <CodeText>Seksjon for bygg- og tjenestestatistikk</CodeText>
+        </ContactDivision>
+        <Notes>Denne variabelen benyttes både for foretak og bedrift.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Foretak</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>10</CodeValue>
+            <CodeText>Næringsvirksomhet</CodeText>
+        </SubjectArea>
+        <ExternalSource>SKD - Skattedirektoratet</ExternalSource>
+        <InternalSource>Strukturstatistikk</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName/>
+        <ShortNameWeb/>
+        <Calculation>Beregnes via Næringsoppgaven: Post 9000/9900-post3400-post 3800/3895</Calculation>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09632" xlink:title="09632: Svalbard. Hovedtall for bedrifter i offentlig sektor, etter hovednæring (SN2007)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09099" xlink:title="09099: Åpnede konkurser, omsetning og sysselsatte i informasjonssektoren" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08228" xlink:title="08228: Foretak, omsetning og sysselsatte, unntatt offentlig forvaltning, etter næring (SN2007), organisasjonsform og antall sysselsatte (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08086" xlink:title="08086: Utenlandskontrollerte foretak, etter land til ultimate eier" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08085" xlink:title="08085: Utenlandskontrollerte foretak, strukturstatistikk, etter eierkategori, næring (SN2007) og sysselsetting" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08018" xlink:title="08018: Transport og lagring. Hovedtall, etter næringsundergruppe (SN2007). Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08016" xlink:title="08016: Hovedtall for næringshovedområdet (SN2007). Bedrifter (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08014" xlink:title="08014: Fordeling av omsetning på ulike næringer, etter næringsundergruppe (SN2007). Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08011" xlink:title="08011: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2007). Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08010" xlink:title="08010: Hovedtall, etter næringsundergruppe (SN2007). Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08009" xlink:title="08009: Hovedtall, etter region og næringshovedgruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08008" xlink:title="08008: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08007" xlink:title="08007: Hovedtall, etter næringsundergruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07959" xlink:title="07959: Annen tjenesteyting. Hovedtall, etter næringsgruppe (SN2007). Bedrifter (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07958" xlink:title="07958: Annen tjenesteyting. Hovedtall, etter sysselsettingsgruppe og næringsundergruppe (SN2007). Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07957" xlink:title="07957: Annen tjenesteyting. Hovedtall, etter næringsundergruppe (SN2007). Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07956" xlink:title="07956: Annen tjenesteyting. Hovedtall, etter region og næringshovedgruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07955" xlink:title="07955: Annen tjenesteyting. Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07954" xlink:title="07954: Annen tjenesteyting. Hovedtall, etter næringsundergruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07909" xlink:title="07909: Næringslivstjenester. Hovedtall, etter næringshovedgruppe (SN2007). Bedrifter (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07908" xlink:title="07908: Næringslivstjenester. Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2007). Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07907" xlink:title="07907: Næringslivstjenester. Hovedtall, etter næringsundergruppe (SN2007) Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07906" xlink:title="07906: Næringslivstjenester. Hovedtall, etter region og næringshovedgruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07904" xlink:title="07904: Næringslivstjenester. Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07901" xlink:title="07901: Næringslivstjenester. Hovedtall, etter næringsundergruppe (SN2007). Bedrifter" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07438" xlink:title="07438: Informasjon og kommunikasjon. Hovedtall, etter næringshovedgruppe (SN2007). Foreløpige tall. Foretak" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07420" xlink:title="07420: Hovedtall, etter næringshovedgruppe (SN2007). Foretak. Foreløpige tall" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07383" xlink:title="07383: Svalbard. Sysselsatte, etter næring (SN2007), kjønn og type stilling" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07381" xlink:title="07381: Svalbard. Omsetning, etter næring (SN2007) og kundegruppe (1 000 kr)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07380" xlink:title="07380: Svalbard. Strukturstatistikk, etter hovednæring (SN2007)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07374" xlink:title="07374: Annen tjenesteyting. Hovedtall for foretak, etter næringshovedgruppe (SN2007). Foretak. Foreløpige tall" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07370" xlink:title="07370: Næringslivstjenester. Hovedtall, etter næring (SN2007). Foretak. Foreløpige tall" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07164" xlink:title="07164: Åpnede konkurser, etter næring (SN2007), organisasjonsform, omsetning, sysselsetting og etableringsår (F)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/07096" xlink:title="07096: Omsetningsstatistikk. Olje- og gassutvinning, industri, bergverksdrift og kraftforsyning, etter marked, næring (SN2007) og varetype" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06778" xlink:title="06778: Utenlandskontrollerte foretak, etter land til ultimate eier (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06663" xlink:title="06663: Utenlandskontrollerte foretak, strukturstatistikk (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/05018" xlink:title="05018: Transport og kommunikasjon. Hovedtall, etter næringsundergruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04892" xlink:title="04892: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04891" xlink:title="04891: Hovedtall, etter næringsgruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04890" xlink:title="04890: Hovedtall, etter region og næring (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04889" xlink:title="04889: Hovedtall, etter sysselsettingsgruppe og næring (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04888" xlink:title="04888: Hovedtall, etter næringsundergruppe (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04852" xlink:title="04852: Kulturell tjenesteyting. Hovedtall, etter næringsundergruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04784" xlink:title="04784: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04338" xlink:title="04338: Kulturell tjenesteyting. Hovedtall, etter næringshovedgruppe (SN2002). Foreløpige tall. Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04223" xlink:title="04223: Databehandlingsvirksomhet. Hovedtall, etter næringshovedgruppe (SN94). Foreløpige tall. Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/04051" xlink:title="04051: Omsetning fra hovedvirksomhet, etter næringsgruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03931" xlink:title="03931: Hovedtall, etter næringshovedgruppe (SN2002). Foretak. Foreløpige tall (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03925" xlink:title="03925: Prosentvis fordeling av omsetning på ulike næringer, etter næringsundergruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03921" xlink:title="03921: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03918" xlink:title="03918: Hovedtall, etter næringsundergruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03916" xlink:title="03916: Hovedtall for næringshovedområdet. Bedrifter (F) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03915" xlink:title="03915: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03914" xlink:title="03914: Hovedtall, etter næringsundergruppe (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03912" xlink:title="03912: Hovedtall, etter næringshovedgruppe (SN2002). Foretak. Foreløpige tall (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03907" xlink:title="03907: Hovedtall, etter sysselsettingsgruppe og næringshovedgruppe (SN2002). Foretak (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03905" xlink:title="03905: Hovedtall, etter region og næring (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03904" xlink:title="03904: Hovedtall for næringshovedområdet. Bedrifter (F) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03903" xlink:title="03903: Hovedtall, etter sysselsettingsgruppe og næring (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03902" xlink:title="03902: Hovedtall, etter næringsundergruppe (SN2002). Bedrifter (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03611" xlink:title="03611: Åpnede konkurser, etter næring (SN94), organisasjonsform, omsetning, sysselsetting og etableringsår (F) (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/03219" xlink:title="03219: Foretak (unntatt offentlig forvaltning), etter næring (SN94), organisasjonsform og antall sysselsatte (F) (avslutta serie)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

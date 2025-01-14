@@ -8,7 +8,6 @@ import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
 import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
 import no.ssb.metadata.vardef.integrations.vardok.getValidDates
-import no.ssb.metadata.vardef.integrations.vardok.mapVardokIdentifier
 import no.ssb.metadata.vardef.integrations.vardok.mapVardokStatisticalUnitToUnitTypes
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.models.LanguageStringType
@@ -25,7 +24,7 @@ interface VardokService {
 
     fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
 
-    fun createVarDefInputFromVarDokItems(varDokItems: MutableMap<String, VardokResponse>): String {
+    fun createVarDefInputFromVarDokItems(varDokItems: Map<String, VardokResponse>): String {
         checkVardokForMissingElements(varDokItems)
         val varDefInput = extractVardefInput(varDokItems)
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
@@ -64,11 +63,18 @@ interface VardokService {
                         vardokItem["en"]?.common?.description,
                     ),
                 validFrom = getValidDates(vardokItemNb).first,
+                validUntil = getValidDates(vardokItemNb).second,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
-                externalReferenceUri = "https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/$vardokId",
+                externalReferenceUri = vardokItemNb.variable?.externalDocument,
+                comment =
+                    LanguageStringType(
+                        comment["nb"],
+                        comment["nn"],
+                        comment["en"],
+                    ),
                 containsSpecialCategoriesOfPersonalData = false,
                 subjectFields = emptyList(),
-                classificationReference = null,
+                classificationReference = classificationRelation?.split("/")?.last(),
                 contact = null,
                 measurementType = null,
                 relatedVariableDefinitionUris = emptyList(),

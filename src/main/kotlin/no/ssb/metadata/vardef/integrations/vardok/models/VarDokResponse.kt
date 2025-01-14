@@ -1,11 +1,11 @@
 package no.ssb.metadata.vardef.integrations.vardok.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.serde.annotation.Serdeable
+import java.net.URL
 
 @Serdeable
 @Introspected
@@ -66,10 +66,16 @@ data class Common(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Relations(
     @field:JacksonXmlProperty(localName = "ClassificationRelation")
-    val classificationRelation: String?,
-    @field:JacksonXmlElementWrapper(useWrapping = false) // Prevents wrapping in an additional list element
-    @field:JacksonXmlProperty(localName = "ConceptVariableRelation")
-    val conceptVariableRelations: List<String>?,
+    val classificationRelation: ClassificationRelation? = null,
+)
+
+@Serdeable
+@Introspected
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JacksonXmlRootElement(localName = "ClassificationRelation")
+data class ClassificationRelation(
+    val href: String?,
+    val type: String?,
 )
 
 @Serdeable
@@ -98,7 +104,7 @@ data class Variable(
     @field:JacksonXmlProperty(localName = "Sensitivity")
     val sensitivity: String,
     @field:JacksonXmlProperty(localName = "ExternalDocument")
-    val externalDocument: String? = null,
+    val externalDocument: URL? = null,
     @field:JacksonXmlProperty(localName = "DataElementName")
     val dataElementName: String? = null,
     @field:JacksonXmlProperty(localName = "Calculation")

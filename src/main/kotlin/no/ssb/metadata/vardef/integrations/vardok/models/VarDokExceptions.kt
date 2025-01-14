@@ -24,9 +24,3 @@ class OutdatedSubjectAreaException(
 ) : VardokException(
         "Vardok id $id SubjectArea has outdated subject are value and can not be saved",
     )
-
-fun checkVardokForMissingElements(varDokItems: Map<String, VardokResponse>) {
-    if (varDokItems["nb"]?.dc?.valid.isNullOrBlank()) {
-        throw MissingValidDatesException(varDokItems["nb"]?.id?.substringAfterLast(":").toString())
-    }
-}

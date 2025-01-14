@@ -12,7 +12,7 @@ class VardokInputTest : BaseVardokTest() {
     fun `vardok items with missing data element name`() {
         val mapVardokResponse: MutableMap<String, VardokResponse> = mutableMapOf("nb" to vardokResponse6, "en" to vardokResponse8)
         val varDefInput = VardokService.extractVardefInput(mapVardokResponse)
-        assertThat(varDefInput.shortName).startsWith("ugyldig_kortnavn")
+        assertThat(varDefInput.shortName).startsWith("generert_kortnavn")
     }
 
     @Test

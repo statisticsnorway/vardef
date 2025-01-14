@@ -22,5 +22,5 @@ class OutdatedUnitTypesException(
 class OutdatedSubjectAreaException(
     id: String,
 ) : VardokException(
-        "Vardok id $id SubjectArea has outdated subject are value and can not be saved",
+        "Vardok id $id SubjectArea has outdated subject area value and can not be saved",
     )

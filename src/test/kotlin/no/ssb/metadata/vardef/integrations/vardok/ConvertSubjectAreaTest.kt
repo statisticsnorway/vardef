@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import no.ssb.metadata.vardef.integrations.vardok.convertions.convertSubjectArea
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
@@ -58,6 +59,6 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
         name: String,
         code: String?,
     ) {
-        assertThat(getCodeForSubjectArea(name)).isEqualTo(code)
+        assertThat(convertSubjectArea(name)).isEqualTo(code)
     }
 }

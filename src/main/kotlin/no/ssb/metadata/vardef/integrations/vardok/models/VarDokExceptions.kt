@@ -8,12 +8,6 @@ class MissingValidDatesException(
     id: String,
 ) : VardokException("Vardok id $id is missing Valid (valid dates) and can not be saved")
 
-class MissingValidFromException(
-    id: String,
-) : VardokException(
-        "Vardok id $id Valid is missing 'from' date and can not be saved",
-    )
-
 class MissingNbLanguageException :
     VardokException(
         "The VarDok definition is missing the Norwegian Bokmål language and can not be migrated.",

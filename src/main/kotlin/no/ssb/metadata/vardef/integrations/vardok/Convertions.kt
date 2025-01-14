@@ -102,13 +102,6 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
         firstDate = "1900-01-01"
     }
     return Pair(firstDate, secondDate)
-    // throw MissingValidFromException(vardokItem.id.substringAfterLast(":"))
-}
-
-fun mapVardokIdentifier(vardokItem: VardokResponse): String {
-    val vardokId = vardokItem.id
-    val splitId = vardokId.split(":")
-    return splitId[splitId.size - 1]
 }
 
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> {

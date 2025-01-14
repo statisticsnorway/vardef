@@ -70,22 +70,23 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         id: Int,
         spec: RequestSpecification,
     ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(400)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Vardok id $id is missing Valid (valid dates) and can not be saved",
-                ),
-            )
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
+        assertThat(completeResponse.validUntil).isNull()
     }
 
     @Test
@@ -127,22 +128,23 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         id: Int,
         spec: RequestSpecification,
     ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(400)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Vardok id $id Valid is missing 'from' date and can not be saved",
-                ),
-            )
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
+        assertThat(completeResponse.validUntil).isNotNull()
     }
 
     @ParameterizedTest

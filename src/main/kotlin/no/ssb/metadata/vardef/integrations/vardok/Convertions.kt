@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.vardef.integrations.vardok.UnitTypes.Companion.findCategoryForValue
-import no.ssb.metadata.vardef.integrations.vardok.models.MissingValidFromException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -96,19 +95,13 @@ fun convertUnitTypes(name: String): List<String?> =
 fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     val dateString = vardokItem.dc?.valid?.split(" - ")
 
-    val firstDate = dateString?.getOrNull(0)?.trim()?.takeIf { it.isNotEmpty() }
+    var firstDate = dateString?.getOrNull(0)?.trim()?.takeIf { it.isNotEmpty() }
     val secondDate = dateString?.getOrNull(1)?.trim()?.takeIf { it.isNotEmpty() }
 
-    if (firstDate != null) {
-        return Pair(firstDate, secondDate)
+    if (firstDate == null) {
+        firstDate = "1900-01-01"
     }
-    throw MissingValidFromException(vardokItem.id.substringAfterLast(":"))
-}
-
-fun mapVardokIdentifier(vardokItem: VardokResponse): String {
-    val vardokId = vardokItem.id
-    val splitId = vardokId.split(":")
-    return splitId[splitId.size - 1]
+    return Pair(firstDate, secondDate)
 }
 
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> {

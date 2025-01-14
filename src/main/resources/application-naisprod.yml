@@ -1,0 +1,22 @@
+micronaut:
+  security:
+    token:
+      jwt:
+        claims:
+          values:
+            allowed-audiences:
+              - dapla-cli
+              - onyxia-api
+  http:
+    services:
+      dapla-team-api:
+        url: http://dapla-team-api.dapla-platform
+      keycloak:
+        url: https://auth.ssb.no/
+        clientId: vardef-to-dapla-team-api-m2m
+        clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+logger:
+  config: logback-kubernetes.xml
+
+mongodb:
+  uri: ${MONGODB_CONNECTION_STRING:}

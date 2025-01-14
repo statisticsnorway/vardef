@@ -6,7 +6,6 @@ import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -61,16 +60,11 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `map vardok missing valid date`() {
-        val res = vardokService.getVardokItem("134")
-
-        val exception: VardokException =
-            assertThrows(MissingValidFromException::class.java) {
-                if (res != null) {
-                    getValidDates(res)
-                }
-            }
-        assertThat(exception.message).isEqualTo("Vardok id 134 Valid is missing 'from' date and can not be saved")
+    fun `map vardok missing valid from date but has valid to date`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("134")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.validFrom).isEqualTo("1900-01-01")
+        assertThat(vardokTransform.validUntil).isEqualTo("2005-12-31")
     }
 
     @Test
@@ -106,18 +100,11 @@ class VardokMigrationTest {
     @Test
     fun `vardok item has not valid dates`() {
         val result = vardokService.getVardokItem("100")
-        if (result != null) {
-            val mapResult: MutableMap<String, VardokResponse> = mutableMapOf("nb" to result)
-            val exception: MissingValidDatesException =
-                assertThrows(MissingValidDatesException::class.java) {
-                    vardokService.createVarDefInputFromVarDokItems(mapResult)
-                }
-            assertThat(exception).isInstanceOf(MissingValidDatesException::class.java)
-            val expectedMessage = "Vardok id 100 is missing Valid (valid dates) and can not be saved"
-            val actualMessage = exception.message
-
-            assertThat(expectedMessage).isEqualTo(actualMessage)
-        }
+        assertThat(result?.dc?.valid).isNullOrEmpty()
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("100")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.validFrom).isEqualTo("1900-01-01")
+        assertThat(vardokTransform.validUntil).isNull()
     }
 
     @Test

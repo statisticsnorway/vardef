@@ -1,0 +1,66 @@
+# Deploy config for the test cluster
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: vardef
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  image: "{{ image }}"  # Injected from the GitHub Action
+  port: 8080
+
+  ingresses:
+    - https://vardef.intern.ssb.no
+
+  accessPolicy:
+    inbound:
+      rules:
+        - application: metadata-api-gateway
+    outbound:
+      rules:
+        - application: dapla-team-api
+          namespace: dapla-platform
+      external:
+        # Allow egress to Klass
+        - host: data.ssb.no
+        # Allow egress to Vardok
+        - host: ssb.no
+        - host: www.ssb.no
+        # Allow egress to auth
+        - host: auth.ssb.no
+        # Allow egress to mongodb
+        - host: metadata-prod-shard-00-01.9txq8.mongodb.net:2
+          ports:
+            - port: 27016
+            - port: 27017
+        - host: metadata-prod-shard-00-00.9txq8.mongodb.net
+          ports:
+            - port: 27016
+            - port: 27017
+        - host: metadata-prod-shard-00-02.9txq8.mongodb.net
+          ports:
+            - port: 27016
+            - port: 27017
+
+  envFrom:
+    - secret: metadata-vardef-prod
+
+  env:
+    - name: MICRONAUT_ENVIRONMENTS
+      value: naisprod
+
+  prometheus:
+    enabled: true
+    path: /prometheus
+    port: "8090"
+
+  liveness:
+    path: /health/liveness
+    port: 8090
+  readiness:
+    path: /health/readiness
+    port: 8090
+  startup:
+    path: /health/liveness
+    port: 8090

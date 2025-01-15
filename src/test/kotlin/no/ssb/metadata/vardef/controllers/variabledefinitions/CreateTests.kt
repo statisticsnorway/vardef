@@ -336,22 +336,40 @@ class CreateTests : BaseVardefTest() {
                     put("valid_until", "2020-01-06")
                 }.toString()
 
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(400)
-                .spec(
-                    buildProblemJsonResponseSpec(
-                        false,
-                        null,
-                        errorMessage = "Valid until can not be before valid from",
-                    ),
-                )
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Valid until can not be before valid from",
+                ),
+            )
+    }
 
+    @Test
+    fun `create variable definition valid until is before valid from`(spec: RequestSpecification) {
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put("valid_until", "2040-11-10")
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
     }
 }

@@ -32,7 +32,7 @@ class SchemaExamplesTest {
                 ),
                 argumentSet(
                     "Draft example validates",
-                    DRAFT_EXAMPLE,
+                    DRAFT_UPDATE_EXAMPLE,
                     listOf(Draft::class.java, UpdateDraft::class.java),
                 ),
                 argumentSet(

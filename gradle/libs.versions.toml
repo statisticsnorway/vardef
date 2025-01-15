@@ -5,6 +5,7 @@
 
 [versions]
 assertj = "3.27.2"
+axionRelease = "1.18.7"
 jackson = "2.17.0"
 jib = "3.4.4"
 json = "20241224"
@@ -67,6 +68,7 @@ snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 
 [plugins]
 allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+axion-release = { id = "pl.allegro.tech.build.axion-release", version.ref = "axionRelease" }
 jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

@@ -7,11 +7,12 @@ plugins {
     alias(libs.plugins.micronaut.aot)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.jib)
+    alias(libs.plugins.axion.release)
 
     id("jacoco")
 }
 
-version = "0.1"
+version = scmVersion.version
 group = "no.ssb.metadata.vardef"
 
 val kotlinVersion = project.properties["kotlinVersion"]

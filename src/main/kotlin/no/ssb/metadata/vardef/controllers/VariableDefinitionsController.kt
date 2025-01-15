@@ -129,16 +129,16 @@ class VariableDefinitionsController(
         activeGroup: String,
         authentication: Authentication,
     ): CompleteResponse {
-        if (vardef.doesShortNameExist(draft.shortName)) {
-            throw HttpStatusException(
+        when {
+            vardef.doesShortNameExist(draft.shortName) ->  throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "Short name ${draft.shortName} already exists.",
             )
-        }
-        if(draft.validUntil?.isBefore(draft.validFrom) == true){
-            throw HttpStatusException(
-                HttpStatus.BAD_REQUEST, "Valid until can not be before valid from"
-            )
+            draft.validUntil?.isBefore(draft.validFrom) == true ->
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Valid until can not be before valid from",
+                )
         }
         return vardef.create(draft.toSavedVariableDefinition(activeGroup, authentication.name)).toCompleteResponse()
     }

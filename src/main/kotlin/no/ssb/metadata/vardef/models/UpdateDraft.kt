@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.models
 
-import com.nimbusds.jose.shaded.gson.annotations.Until
 import io.micronaut.core.annotation.Nullable
 import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable

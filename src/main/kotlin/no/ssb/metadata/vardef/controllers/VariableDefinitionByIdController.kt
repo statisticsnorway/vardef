@@ -248,6 +248,9 @@ class VariableDefinitionByIdController(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
                 )
+            updateDraft.validUntil?.isBefore(variable.validFrom) == true -> throw HttpStatusException(
+                HttpStatus.BAD_REQUEST, " Valid until can not be before valid from,"
+            )
         }
         return vardef
             .update(variable, updateDraft, authentication.name)

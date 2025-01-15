@@ -329,7 +329,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition valid until is after valid from`(spec: RequestSpecification) {
+    fun `create variable definition valid until is set before valid from`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
                 .apply {
@@ -355,13 +355,30 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition valid until is before valid from`(spec: RequestSpecification) {
+    fun `create variable definition valid until is set after valid from`(spec: RequestSpecification) {
         val updatedJsonString =
             jsonTestInput()
                 .apply {
                     put("valid_until", "2040-11-10")
                 }.toString()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+    }
 
+    @Test
+    fun `create variable definition valid until is set equal valid from`(spec: RequestSpecification) {
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put("valid_until", "2024-06-05")
+                }.toString()
         spec
             .given()
             .contentType(ContentType.JSON)

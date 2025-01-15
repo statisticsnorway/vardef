@@ -318,45 +318,4 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(400)
     }
-
-   /* @Test
-    fun `create new patch with valid_until when patch 1 has valid until set`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(patchBody().apply { put("valid_until", "2020-06-30") }.toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${INCOME_TAX_VP1_P2.definitionId}/patches")
-            .then()
-            .statusCode(201)
-
-        val responseList =
-            spec
-                .`when`()
-                .get("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
-                .then()
-                .statusCode(200)
-                .body("find { it }", hasKey("owner"))
-                .extract()
-                .body()
-                .asString()
-
-        val completeResponseList = jsonMapper.readValue(responseList, Array<CompleteResponse>::class.java)
-        assertThat(completeResponseList[0].validFrom).isEqualTo(LocalDate.of(2024, 1, 1))
-        assertThat(completeResponseList[0].validUntil).isEqualTo(LocalDate.of(2030, 1, 1))
-        assertThat(completeResponseList[1].validFrom).isEqualTo(LocalDate.of(2024, 1, 1))
-        assertThat(completeResponseList[1].validUntil).isEqualTo(LocalDate.of(2020, 6, 30))
-
-        val allDefinitions = variableDefinitionService.list()
-        val thisHit = allDefinitions.find { it.definitionId == SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId }
-
-        assertThat(thisHit).isNotNull
-        val all_patches = patches.latest(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
-        //assertThat(all_patches.validUntil).isAfter(all_patches.validFrom)
-
-        val one_patch_1 = patches.get(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, 1)
-        val one_patch_2 = patches.get(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, 2)
-        assertThat(one_patch_1.validUntil).isBefore(one_patch_2.validFrom)
-    }*/
 }

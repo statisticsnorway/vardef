@@ -130,7 +130,7 @@ class VariableDefinitionsController(
         authentication: Authentication,
     ): CompleteResponse {
         when {
-            vardef.doesShortNameExist(draft.shortName) ->  throw HttpStatusException(
+            vardef.doesShortNameExist(draft.shortName) -> throw HttpStatusException(
                 HttpStatus.CONFLICT,
                 "Short name ${draft.shortName} already exists.",
             )

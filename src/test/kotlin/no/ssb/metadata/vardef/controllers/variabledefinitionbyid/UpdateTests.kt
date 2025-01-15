@@ -457,14 +457,18 @@ class UpdateTests : BaseVardefTest() {
             )
     }
 
-    // parameterize tests
-    @Test
-    fun `update valid until before valid from`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#inValidDateUpdates")
+    fun `invalid date update`(
+        input: String,
+        errorMessage: String,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-                """{"valid_until": "1970-11-12"}""".trimIndent(),
+                input,
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
@@ -474,76 +478,28 @@ class UpdateTests : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Valid until can not be before valid from",
+                    errorMessage = errorMessage,
                 ),
             )
     }
 
-    @Test
-    fun `update valid until before prev valid until`(spec: RequestSpecification) {
-        val validUntilBeforeUpdate = DRAFT_EXAMPLE_WITH_VALID_UNTIL.validUntil
-
-        val body =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(
-                    """{"valid_until": "2024-11-12"}""".trimIndent(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
-                .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
-                .then()
-                .statusCode(HttpStatus.OK.code)
-                .extract()
-                .body()
-                .asString()
-
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validUntil).isNotEqualTo(validUntilBeforeUpdate)
-    }
-
-    @Test
-    fun `update valid until after prev valid until`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#validDateUpdates")
+    fun `valid date update`(
+        input: String,
+        field: String,
+        valueBeforeUpdate: String,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(
-                """{"valid_until": "2041-02-22"}""".trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .body(input).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
             .statusCode(HttpStatus.OK.code)
-            .body("valid_until", equalTo("2041-02-22"))
-    }
-
-    @Test
-    fun `update valid from before when valid until is set`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """{"valid_from": "2041-02-22"}""".trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-    }
-
-    @Test
-    fun `update valid from when valid until is set`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                """{"valid_from": "2012-10-29"}""".trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
-            .then()
-            .statusCode(HttpStatus.OK.code)
-            .body("valid_from", equalTo("2012-10-29"))
+            .body(field, not(valueBeforeUpdate))
     }
 
     @Test

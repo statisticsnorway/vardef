@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
+import no.ssb.metadata.vardef.utils.DRAFT_EXAMPLE_WITH_VALID_UNTIL
 import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
@@ -197,6 +198,59 @@ class CompanionObject {
                         }.toString(),
                     false,
                     "group of the owning team must be included",
+                ),
+            )
+
+        @JvmStatic
+        fun inValidDateUpdates(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "valid until before valid from",
+                    JSONObject()
+                        .apply {
+                            put("valid_until", "1970-11-12")
+                        }.toString(),
+                    "Valid until can not be before valid from",
+                ),
+                argumentSet(
+                    "valid from after valid until",
+                    JSONObject()
+                        .apply {
+                            put("valid_from", "2041-02-22")
+                        }.toString(),
+                    "Valid from can not be after valid until",
+                ),
+            )
+
+        @JvmStatic
+        fun validDateUpdates(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "valid until before previous valid until",
+                    JSONObject()
+                        .apply {
+                            put("valid_until", "2024-11-12")
+                        }.toString(),
+                    "valid_until",
+                    DRAFT_EXAMPLE_WITH_VALID_UNTIL.validUntil.toString(),
+                ),
+                argumentSet(
+                    "valid until after previous valid until",
+                    JSONObject()
+                        .apply {
+                            put("valid_until", "2041-02-22")
+                        }.toString(),
+                    "valid_until",
+                    DRAFT_EXAMPLE_WITH_VALID_UNTIL.validUntil.toString(),
+                ),
+                argumentSet(
+                    "valid from before valid until",
+                    JSONObject()
+                        .apply {
+                            put("valid_from", "2012-10-29")
+                        }.toString(),
+                    "valid_from",
+                    DRAFT_EXAMPLE_WITH_VALID_UNTIL.validFrom.toString(),
                 ),
             )
     }

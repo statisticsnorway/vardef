@@ -458,7 +458,7 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `can not update valid until`(spec: RequestSpecification) {
+    fun `can update valid until`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -468,14 +468,7 @@ class UpdateTests : BaseVardefTest() {
             .`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    "valid_until may not be specified here",
-                ),
-            )
+            .statusCode(HttpStatus.OK.code)
     }
 
     @Test

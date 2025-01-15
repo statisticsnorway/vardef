@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.models
 
+import com.nimbusds.jose.shaded.gson.annotations.Until
 import io.micronaut.core.annotation.Nullable
 import io.micronaut.core.convert.format.Format
 import io.micronaut.serde.annotation.Serdeable
@@ -58,6 +59,9 @@ data class UpdateDraft(
     @Nullable
     @Format(DATE_FORMAT)
     val validFrom: LocalDate? = null,
+    @Nullable
+    @Format(DATE_FORMAT)
+    val validUntil: LocalDate? = null,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL? = null,

@@ -10,6 +10,7 @@ import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.CoreMatchers
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -304,5 +305,26 @@ class CreateTests : BaseVardefTest() {
         assertThat(createdPatch.name).isEqualTo(expected.name)
         assertThat(createdPatch.definition).isEqualTo(expected.definition)
         assertThat(createdPatch.comment).isEqualTo(expected.comment)
+    }
+
+    @Test
+    fun `create new patch with valid_until when patch 1 has valid until set`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(patchBody().apply { put("valid_until", "2020-06-30") }.toString())
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(201)
+
+        spec
+            .`when`()
+            .get("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("patch_id", equalTo(2))
+
     }
 }

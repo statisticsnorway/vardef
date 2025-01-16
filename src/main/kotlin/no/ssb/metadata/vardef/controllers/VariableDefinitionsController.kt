@@ -134,7 +134,7 @@ class VariableDefinitionsController(
                 HttpStatus.CONFLICT,
                 "Short name ${draft.shortName} already exists.",
             )
-            !vardef.isCorrectDateOrder(draft.validUntil, draft.validFrom) ->
+            draft.validUntil?.isBefore(draft.validFrom) == true ->
                 throw HttpStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Valid until can not be before valid from",

@@ -5,6 +5,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.allMandatoryFieldsChanged
+import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.newVal
 import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.noneMandatoryFieldsChanged
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
@@ -13,6 +14,8 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 
 class CreateTests : BaseVardefTest() {
@@ -372,4 +375,36 @@ class CreateTests : BaseVardefTest() {
         assertThat(completeResponse.lastUpdatedBy).isEqualTo(TEST_USER)
         assertThat(completeResponse.createdBy).isEqualTo("me@example.com")
     }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#checkValidUntilDates")
+    fun `create new validity period on closed validity period`(
+        input: String,
+        vardefId: String,
+        httpStatus: HttpStatus,
+        expectedValidFrom: LocalDate?,
+        expectedValidUntil: LocalDate?,
+        spec: RequestSpecification
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(input)
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/variable-definitions/$vardefId/validity-periods")
+                .then()
+                .statusCode(httpStatus.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse).isNotNull
+        assertThat(completeResponse.validFrom).isEqualTo(expectedValidFrom)
+        assertThat(completeResponse.validUntil).isEqualTo(expectedValidUntil)
+    }
+
+
 }

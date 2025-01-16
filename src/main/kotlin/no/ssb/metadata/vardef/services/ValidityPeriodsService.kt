@@ -269,13 +269,15 @@ class ValidityPeriodsService(
             val validFrom = validFromDates.first()
             val validUntil = validUntilDates.first()
             logger.info(
-                "Checking if valid new valid from: $dateOfValidity is between validFrom: $validFrom and validUntil: $validUntil for definition: $definitionId",
+                "Checking if valid new valid from: $dateOfValidity is between validFrom: $validFrom and " +
+                    "validUntil: $validUntil for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
-                )
+            )
             return !(dateOfValidity.isAfter(validFrom) && dateOfValidity.isBefore(validUntil))
         }
         logger.info(
-            "Checking if valid new valid from: $dateOfValidity is before: ${validFromDates.min()} or after: ${validFromDates.max()} for definition: $definitionId",
+            "Checking if valid new valid from: $dateOfValidity is before: ${validFromDates.min()} " +
+                "or after: ${validFromDates.max()} for definition: $definitionId",
             kv(DEFINITION_ID, definitionId),
         )
         return dateOfValidity.isBefore(validFromDates.minOrNull()) || dateOfValidity.isAfter(validFromDates.maxOrNull())

@@ -27,43 +27,53 @@ class PatchesServiceTest : BaseVardefTest() {
 
     @Test
     fun `list patches one validity period`() {
-        val expectedValidFrom = listOf(LocalDate.of(2024,1,1))
-        val expectedValidUntil = listOf(LocalDate.of(2030,1,1))
-        assertThat(patches.list(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId).map {
-            it.validFrom }
+        val expectedValidFrom = listOf(LocalDate.of(2024, 1, 1))
+        val expectedValidUntil = listOf(LocalDate.of(2030, 1, 1))
+        assertThat(
+            patches.list(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId).map {
+                it.validFrom
+            },
         ).isEqualTo(expectedValidFrom)
 
-        assertThat(patches.list(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId).map {
-            it.validUntil }
+        assertThat(
+            patches.list(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId).map {
+                it.validUntil
+            },
         ).isEqualTo(expectedValidUntil)
     }
 
     @Test
     fun `list patches validity period`() {
-        val expectedValidFrom = listOf(
-            LocalDate.of(1980,1,1),
-            LocalDate.of(1980,1,1),
-            LocalDate.of(1980,1,1),
-            LocalDate.of(1980,1,1),
-            LocalDate.of(2021,1,1),
-            LocalDate.of(2021,1,1),
-            LocalDate.of(1980,1,1)
-        )
-        val expectedValidUntil= listOf(
-            null,
-            null,
-            null,
-            LocalDate.of(2020,12,31),
-            null,
-            null,
-            LocalDate.of(2020,12,31),
-        )
-        assertThat(patches.list(INCOME_TAX_VP1_P1.definitionId).map {
-            it.validFrom }
+        val expectedValidFrom =
+            listOf(
+                LocalDate.of(1980, 1, 1),
+                LocalDate.of(1980, 1, 1),
+                LocalDate.of(1980, 1, 1),
+                LocalDate.of(1980, 1, 1),
+                LocalDate.of(2021, 1, 1),
+                LocalDate.of(2021, 1, 1),
+                LocalDate.of(1980, 1, 1),
+            )
+        val expectedValidUntil =
+            listOf(
+                null,
+                null,
+                null,
+                LocalDate.of(2020, 12, 31),
+                null,
+                null,
+                LocalDate.of(2020, 12, 31),
+            )
+        assertThat(
+            patches.list(INCOME_TAX_VP1_P1.definitionId).map {
+                it.validFrom
+            },
         ).isEqualTo(expectedValidFrom)
 
-        assertThat(patches.list(INCOME_TAX_VP1_P1.definitionId).map {
-            it.validUntil }
+        assertThat(
+            patches.list(INCOME_TAX_VP1_P1.definitionId).map {
+                it.validUntil
+            },
         ).isEqualTo(expectedValidUntil)
     }
 

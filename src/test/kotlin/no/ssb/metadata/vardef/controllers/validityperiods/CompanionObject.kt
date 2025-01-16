@@ -1,8 +1,6 @@
 package no.ssb.metadata.vardef.controllers.validityperiods
 
 import io.micronaut.http.HttpStatus
-import no.ssb.metadata.vardef.controllers.patches.CompanionObject.Companion.patchBody
-import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import no.ssb.metadata.vardef.utils.SAVED_INTERNAL_VARIABLE_DEFINITION
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
@@ -44,20 +42,6 @@ class CompanionObject {
                     }.toString()
             return testCase
         }
-        @JvmStatic
-        fun newVal(): String =
-            JSONObject()
-                .apply {
-                    put("valid_from", "2026-01-11")
-                    put(
-                        "definition",
-                        JSONObject().apply {
-                            put("nb", "Intektsskatt atter ny definisjon")
-                            put("nn", "Intektsskatt atter ny definisjon")
-                            put("en", "Yet another definition")
-                        },
-                    )
-                }.toString()
 
         @JvmStatic
         fun checkValidUntilDates(): Stream<Arguments> =
@@ -78,8 +62,8 @@ class CompanionObject {
                         }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     HttpStatus.CREATED,
-                    LocalDate.of(2022,5,21),
-                    LocalDate.of(2023,12,31),
+                    LocalDate.of(2022, 5, 21),
+                    LocalDate.of(2023, 12, 31),
                 ),
                 argumentSet(
                     "new validity period after closed validity period",
@@ -97,7 +81,7 @@ class CompanionObject {
                         }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     HttpStatus.CREATED,
-                    LocalDate.of(2031,1,11),
+                    LocalDate.of(2031, 1, 11),
                     null,
                 ),
                 argumentSet(
@@ -117,7 +101,7 @@ class CompanionObject {
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     HttpStatus.BAD_REQUEST,
                     null,
-                    null
+                    null,
                 ),
             )
     }

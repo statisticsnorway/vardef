@@ -5,7 +5,6 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.allMandatoryFieldsChanged
-import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.newVal
 import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.noneMandatoryFieldsChanged
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
@@ -384,7 +383,7 @@ class CreateTests : BaseVardefTest() {
         httpStatus: HttpStatus,
         expectedValidFrom: LocalDate?,
         expectedValidUntil: LocalDate?,
-        spec: RequestSpecification
+        spec: RequestSpecification,
     ) {
         val body =
             spec
@@ -400,15 +399,12 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        if(httpStatus == HttpStatus.CREATED){
+        if (httpStatus == HttpStatus.CREATED) {
             jsonMapper.readValue(body, CompleteResponse::class.java).apply {
                 assertThat(this).isNotNull
                 assertThat(validFrom).isEqualTo(expectedValidFrom)
                 assertThat(validUntil).isEqualTo(expectedValidUntil)
             }
         }
-
     }
-
-
 }

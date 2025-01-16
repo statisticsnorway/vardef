@@ -210,7 +210,7 @@ class CompanionObject {
                         .apply {
                             put("valid_until", "1970-11-12")
                         }.toString(),
-                    "Valid until can not be before valid from",
+                    "Invalid date order.",
                 ),
                 argumentSet(
                     "valid from after valid until",
@@ -218,7 +218,7 @@ class CompanionObject {
                         .apply {
                             put("valid_from", "2041-02-22")
                         }.toString(),
-                    "Valid from can not be after valid until",
+                    "Invalid date order.",
                 ),
             )
 

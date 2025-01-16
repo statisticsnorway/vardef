@@ -10,7 +10,8 @@ import kotlin.reflect.KClass
     AnnotationTarget.ANNOTATION_CLASS,
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.TYPE,
-    AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.CLASS,
+    AnnotationTarget.LOCAL_VARIABLE,
+    AnnotationTarget.CLASS,
 )
 @Retention(AnnotationRetention.RUNTIME)
 @Repeatable

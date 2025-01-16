@@ -256,7 +256,6 @@ class VariableDefinitionByIdController(
                 HttpStatus.BAD_REQUEST,
                 " Valid from can not be after valid until,",
             )
-            // make a check method
         }
         return vardef
             .update(variable, updateDraft, authentication.name)

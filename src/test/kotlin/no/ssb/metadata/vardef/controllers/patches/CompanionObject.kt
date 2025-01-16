@@ -286,6 +286,13 @@ class CompanionObject {
                     HttpStatus.CREATED,
                 ),
                 argumentSet(
+                    "patch latest valid_until valid until is before valid_from",
+                    patchBody().apply { put("valid_until", "2019-06-30") }.toString(),
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                    null,
+                    HttpStatus.CREATED,
+                ),
+                argumentSet(
                     "patch valid_until on validity period valid until has value",
                     patchBody().apply { put("valid_until", "2020-06-30") }.toString(),
                     INCOME_TAX_VP1_P1.definitionId,

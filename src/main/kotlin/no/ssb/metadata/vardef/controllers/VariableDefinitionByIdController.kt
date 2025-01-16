@@ -250,7 +250,7 @@ class VariableDefinitionByIdController(
                 )
             !vardef.isCorrectComparedToSaved(updateDraft, variable) -> throw HttpStatusException(
                 HttpStatus.BAD_REQUEST,
-                "Invalid date order.",
+                "Invalid date order",
             )
         }
         return vardef

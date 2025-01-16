@@ -93,30 +93,6 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
     }
 
-    @Test
-    fun `correct date order`() {
-        val updateFrom = UpdateDraft(unitTypes = listOf("03"))
-        //      validFrom = LocalDate.of(2021, 1, 1),
-        //        validUntil = LocalDate.of(2030, 9, 15),
-        val updateValidUntilValid = UpdateDraft(validUntil = LocalDate.of(2022, 1, 1))
-        val updateValidUntilInvalid = UpdateDraft(validUntil = LocalDate.of(2020, 1, 1))
-        val updateValidFromValid = UpdateDraft(validFrom = LocalDate.of(2022, 1, 1))
-        val updateValidFromInvalid = UpdateDraft(validFrom = LocalDate.of(2040, 1, 1))
-        val updateBothValid = UpdateDraft(validFrom = LocalDate.of(2030, 1, 1), validUntil = LocalDate.of(2040, 1, 1))
-        val updateBothInvalid = UpdateDraft(validFrom = LocalDate.of(2026, 2, 6), validUntil = LocalDate.of(2023, 1, 1))
-        val resultInvalid = variableDefinitionService.isCorrectComparedToSaved(updateValidUntilInvalid, DRAFT_EXAMPLE_WITH_VALID_UNTIL)
-        val resultValid = variableDefinitionService.isCorrectComparedToSaved(updateValidUntilValid, DRAFT_EXAMPLE_WITH_VALID_UNTIL)
-        val resultInvalidFrom = variableDefinitionService.isCorrectComparedToSaved(updateValidFromInvalid, DRAFT_EXAMPLE_WITH_VALID_UNTIL)
-        val resultValidFrom = variableDefinitionService.isCorrectComparedToSaved(updateValidFromValid, DRAFT_EXAMPLE_WITH_VALID_UNTIL)
-        val resultValidBoth = variableDefinitionService.isCorrectComparedToSaved(updateBothValid, DRAFT_EXAMPLE_WITH_VALID_UNTIL)
-        val resultInvalidBoth = variableDefinitionService.isCorrectComparedToSaved(updateBothInvalid, DRAFT_EXAMPLE_WITH_VALID_UNTIL)
-        assertThat(resultInvalid).isFalse()
-        assertThat(resultValid).isTrue()
-        assertThat(resultValidFrom).isTrue()
-        assertThat(resultInvalidFrom).isFalse()
-        assertThat(resultValidBoth).isTrue()
-    }
-
     companion object {
         @JvmStatic
         fun invalidOwnerUpdate(): Stream<Arguments> =

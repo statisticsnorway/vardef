@@ -166,7 +166,7 @@ val INCOME_TAX_VP1_P1 =
             ),
         classificationReference = "91",
         unitTypes = listOf("01", "02"),
-        subjectFields = listOf("07"),
+        subjectFields = listOf("he04"),
         containsSpecialCategoriesOfPersonalData = false,
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = "02.01",
@@ -290,7 +290,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
             ),
         classificationReference = "91",
         unitTypes = listOf("01", "02"),
-        subjectFields = listOf("06"),
+        subjectFields = listOf("he04"),
         containsSpecialCategoriesOfPersonalData = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = "02.01",
@@ -380,7 +380,7 @@ val SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME =
             ),
         classificationReference = "91",
         unitTypes = listOf("01", "02"),
-        subjectFields = listOf("06"),
+        subjectFields = listOf("he04"),
         containsSpecialCategoriesOfPersonalData = false,
         variableStatus = VariableStatus.DRAFT,
         measurementType = "02.01",
@@ -468,7 +468,7 @@ fun jsonTestInput() =
             "05"
         ],
         "subject_fields": [
-            "01"
+            "he04"
         ],
         "contains_special_categories_of_personal_data": true,
         "measurement_type": "02.01",

@@ -257,8 +257,8 @@ class PublicControllerTest : BaseVardefTest() {
                 equalTo(
                     "https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE",
                 ),
-            ).body("[0].subject_fields[0].code", equalTo("07"))
-            .body("[0].subject_fields[0].title", equalTo("Helse og omsorg"))
+            ).body("[0].subject_fields[0].code", equalTo("he04"))
+            .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
     }
 
     companion object {

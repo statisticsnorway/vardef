@@ -21,7 +21,7 @@ class KlassApiClientIntegrationTest {
     private val unitTypesId: Int = 702
 
     @Property(name = "klass.cached-classifications.areas")
-    private val areasId: Int = 685
+    private val areasId: Int = 618
 
     @Property(name = "micronaut.http.services.klass.codes-at")
     private val codesAt: String = "2024-08-01"

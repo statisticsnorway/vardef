@@ -16,35 +16,35 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
             Stream.of(
                 arguments(
                     "Regionale",
-                    "12",
+                    "be",
                 ),
                 arguments(
                     "Valg",
-                    "19",
+                    "va",
                 ),
                 arguments(
                     "Vann",
-                    "12",
+                    "nm",
                 ),
                 arguments(
                     "Barnevern",
-                    "15",
+                    "sk",
                 ),
                 arguments(
                     "Skatt",
-                    "08",
+                    "if",
                 ),
                 arguments(
                     "Sosiale tjenester, trygd og sosialhjelp",
-                    "15",
+                    "sk",
                 ),
                 arguments(
                     "Elektrisitets-, gass-, damp- og varmtvannsforsyning",
-                    "05",
+                    "ei",
                 ),
                 arguments(
                     "Arbeidsledighet",
-                    "01",
+                    "al",
                 ),
                 arguments(
                     "Hubba hubba",

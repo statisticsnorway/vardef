@@ -45,9 +45,9 @@ class KlassApiCodeValidatorTest(
                 TestCodeObject(
                     listOf("01", "08", "28"),
                     listOf(
-                        "01",
-                        "02",
-                        "11",
+                        "al",
+                        "bb",
+                        "vf",
                     ),
                     listOf(
                         "05",

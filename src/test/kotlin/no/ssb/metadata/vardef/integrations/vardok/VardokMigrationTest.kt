@@ -132,7 +132,7 @@ class VardokMigrationTest {
     fun `vardokresponse subject area are values in SubjectFields`() {
         val vardokresponse = vardokService.getVardokItem("130")
         val result = vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
-        assertThat(result).isEqualTo(listOf("15"))
+        assertThat(result).isEqualTo(listOf("sk"))
     }
 
     @ParameterizedTest

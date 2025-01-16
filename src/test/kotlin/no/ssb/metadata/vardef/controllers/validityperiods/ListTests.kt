@@ -5,6 +5,7 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.SAVED_INTERNAL_VARIABLE_DEFINITION
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.`is`
@@ -25,6 +26,19 @@ class ListTests : BaseVardefTest() {
             .body("[0].patch_id", equalTo(7))
             .body("[1].valid_from", equalTo("2021-01-01"))
             .body("[1].patch_id", equalTo(6))
+    }
+
+    @Test
+    fun `list validity periods on closed`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(200)
+            .body("size()", `is`(1))
+            .body("[0].valid_from", equalTo("2024-01-01"))
+            .body("[0].patch_id", equalTo(1))
+            .body("[0].valid_until", equalTo("2030-01-01"))
     }
 
     @Test

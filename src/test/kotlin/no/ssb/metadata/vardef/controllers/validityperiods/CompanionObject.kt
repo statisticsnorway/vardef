@@ -115,7 +115,7 @@ class CompanionObject {
                             )
                         }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-                    HttpStatus.CREATED,
+                    HttpStatus.BAD_REQUEST,
                     null,
                     null
                 ),

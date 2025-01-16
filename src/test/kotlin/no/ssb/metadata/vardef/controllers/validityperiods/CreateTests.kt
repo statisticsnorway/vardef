@@ -378,7 +378,7 @@ class CreateTests : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#checkValidUntilDates")
-    fun `create new validity period on closed validity period`(
+    fun `create new validity period when last validity period is closed on one patch`(
         input: String,
         vardefId: String,
         httpStatus: HttpStatus,
@@ -400,10 +400,14 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
-        assertThat(completeResponse.validFrom).isEqualTo(expectedValidFrom)
-        assertThat(completeResponse.validUntil).isEqualTo(expectedValidUntil)
+        if(httpStatus == HttpStatus.CREATED){
+            jsonMapper.readValue(body, CompleteResponse::class.java).apply {
+                assertThat(this).isNotNull
+                assertThat(validFrom).isEqualTo(expectedValidFrom)
+                assertThat(validUntil).isEqualTo(expectedValidUntil)
+            }
+        }
+
     }
 
 

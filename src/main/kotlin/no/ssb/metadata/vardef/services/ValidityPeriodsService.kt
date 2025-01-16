@@ -258,13 +258,13 @@ class ValidityPeriodsService(
         dateOfValidity: LocalDate,
     ): Boolean {
         // patches
-        val validDates = list(definitionId)
+        val patches = list(definitionId)
 
         // Extract validFrom and validUntil values
-        val validFromDates = validDates.map { it.validFrom }
-        val validUntilDates = validDates.map { it.validUntil }
+        val validFromDates = patches.map { it.validFrom }
+        val validUntilDates = patches.map { it.validUntil }
 
-        // Handling new validity period when there is only one that is closed
+        // Handling new validity period when there is only one that is closed on same patch
         if (validFromDates.size == 1 && validUntilDates.firstOrNull() != null) {
             val validFrom = validFromDates.first()
             val validUntil = validUntilDates.first()

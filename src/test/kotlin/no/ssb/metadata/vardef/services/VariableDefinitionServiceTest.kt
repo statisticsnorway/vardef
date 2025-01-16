@@ -93,6 +93,16 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
     }
 
+    @Test
+    fun `is this correct`(){
+        val validFrom = LocalDate.of(1988, 5, 17)
+        val validUntil = LocalDate.of(1990, 5, 17)
+        val result = variableDefinitionService.isCorrectDateOrder(null, validUntil)
+        assertThat(result).isTrue()
+        // equal is false
+        // wrong prder is false
+    }
+
     companion object {
         @JvmStatic
         fun invalidOwnerUpdate(): Stream<Arguments> =

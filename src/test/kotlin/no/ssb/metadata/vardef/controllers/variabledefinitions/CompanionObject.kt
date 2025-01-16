@@ -33,7 +33,7 @@ class CompanionObject {
                         .apply {
                             put("valid_until", "2024-06-05")
                         }.toString(),
-                    HttpStatus.CREATED,
+                    HttpStatus.BAD_REQUEST,
                 ),
             )
     }

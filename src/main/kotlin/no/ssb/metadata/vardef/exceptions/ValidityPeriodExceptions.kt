@@ -9,3 +9,4 @@ class InvalidValidFromException() : ValidityPeriodExceptions(
 class DefinitionTextUnchangedException() : ValidityPeriodExceptions(
     "Definition text for all languages must be changed when creating a new validity period.",
 )
+

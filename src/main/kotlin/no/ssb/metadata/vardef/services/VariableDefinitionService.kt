@@ -6,6 +6,8 @@ import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
+import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
+import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
@@ -38,6 +40,11 @@ class VariableDefinitionService(
      * @return The created *Draft*
      */
     fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
+        if(draft.validUntil?.isBefore(draft.validFrom) == true){
+            throw InvalidValidFromException(
+
+            )
+        }
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: $savedVariableDefinition.definitionId",

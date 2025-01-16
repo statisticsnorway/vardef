@@ -1,10 +1,8 @@
 package no.ssb.metadata.vardef.controllers.patches
 
+import io.micronaut.http.HttpStatus
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.utils.ALL_INCOME_TAX_PATCHES
-import no.ssb.metadata.vardef.utils.SAVED_INTERNAL_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
-import no.ssb.metadata.vardef.utils.jsonTestInput
+import no.ssb.metadata.vardef.utils.*
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
@@ -260,6 +258,46 @@ class CompanionObject {
                     true,
                     "owner.groups",
                     "Invalid Dapla group",
+                ),
+            )
+
+        @JvmStatic
+        fun patchValidUntil(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "patch latest validity period valid until is null",
+                    patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    null,
+                    HttpStatus.CREATED,
+                ),
+                argumentSet(
+                    "patch latest validity period valid until has value",
+                    patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    null,
+                    HttpStatus.BAD_REQUEST,
+                ),
+                argumentSet(
+                    "patch valid_until on validity period valid until is null",
+                    patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    "2021-01-01",
+                    HttpStatus.CREATED,
+                ),
+                argumentSet(
+                    "patch valid_until on validity period valid until has value",
+                    patchBody().apply { put("valid_until", "2020-06-30") }.toString(),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    "1980-01-01",
+                    HttpStatus.BAD_REQUEST,
+                ),
+                argumentSet(
+                    "patch valid_until on validity period validity period does not exist",
+                    patchBody().apply { put("valid_until", "2020-06-30") }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    "1980-01-01",
+                    HttpStatus.NOT_FOUND,
                 ),
             )
     }

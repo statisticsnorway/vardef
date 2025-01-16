@@ -15,6 +15,7 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.MethodSource
 
 class CreateTests : BaseVardefTest() {
     @Test
@@ -246,19 +247,6 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch with valid_until`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(patchBody().apply { put("valid_until", "2030-06-30") }.toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
-            .then()
-            .statusCode(201)
-    }
-
-    @Test
     fun `create new patch not all languages`(spec: RequestSpecification) {
         val expected: SavedVariableDefinition =
             INCOME_TAX_VP2_P6.copy(
@@ -306,16 +294,23 @@ class CreateTests : BaseVardefTest() {
         assertThat(createdPatch.comment).isEqualTo(expected.comment)
     }
 
-    @Test
-    fun `can not create patch with new valid until if patch id is 1 and valid until is set`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchValidUntil")
+    fun `create new patch with valid_until`(
+        input: String,
+        vardefId: String,
+        validityPeriod: String?,
+        httpStatus: HttpStatus,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(patchBody().apply { put("valid_until", "2020-06-30") }.toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .body(input)
+            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", validityPeriod)
             .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
+            .post("/variable-definitions/$vardefId/patches")
             .then()
-            .statusCode(400)
+            .statusCode(httpStatus.code)
     }
 }

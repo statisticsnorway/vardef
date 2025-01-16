@@ -194,7 +194,7 @@ class PatchesController(
         authentication: Authentication,
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
-        if (latestPatchOnValidityPeriod.patchId == 1 && latestPatchOnValidityPeriod.validUntil != null && patch.validUntil != null) {
+        if (latestPatchOnValidityPeriod.validUntil != null && patch.validUntil != null) {
             throw HttpStatusException(HttpStatus.BAD_REQUEST, "Valid until was set in draft, to change create a new validity period")
         }
 

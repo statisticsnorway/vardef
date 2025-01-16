@@ -286,11 +286,11 @@ class CompanionObject {
                     HttpStatus.CREATED,
                 ),
                 argumentSet(
-                    "patch latest valid_until valid until is before valid_from",
+                    "patch latest valid_until valid until is before valid_from valid_until is null",
                     patchBody().apply { put("valid_until", "2019-06-30") }.toString(),
-                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                    SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL.definitionId,
                     null,
-                    HttpStatus.CREATED,
+                    HttpStatus.BAD_REQUEST,
                 ),
                 argumentSet(
                     "patch valid_until on validity period valid until has value",

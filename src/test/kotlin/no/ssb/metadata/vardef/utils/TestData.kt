@@ -114,6 +114,11 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION =
         lastUpdatedBy = "me@example.com",
     )
 
+val SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        validUntil = null,
+    )
+
 val VALIDITY_PERIOD_TAX_EXAMPLE =
     ValidityPeriod(
         name =

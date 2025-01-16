@@ -328,65 +328,21 @@ class CreateTests : BaseVardefTest() {
             )
     }
 
-    @Test
-    fun `create variable definition valid until is set before valid from`(spec: RequestSpecification) {
-        val updatedJsonString =
-            jsonTestInput()
-                .apply {
-                    put("valid_until", "2020-01-06")
-                }.toString()
-
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#validUntilInRequest")
+    fun `create variable definition valid until in request`(
+        input: String,
+        httpStatus: HttpStatus,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(updatedJsonString)
+            .body(input)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Valid until can not be before valid from",
-                ),
-            )
-    }
-
-    @Test
-    fun `create variable definition valid until is set after valid from`(spec: RequestSpecification) {
-        val updatedJsonString =
-            jsonTestInput()
-                .apply {
-                    put("valid_until", "2040-11-10")
-                }.toString()
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.CREATED.code)
-    }
-
-    @Test
-    fun `create variable definition valid until is set equal valid from`(spec: RequestSpecification) {
-        val updatedJsonString =
-            jsonTestInput()
-                .apply {
-                    put("valid_until", "2024-06-05")
-                }.toString()
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions")
-            .then()
-            .statusCode(HttpStatus.CREATED.code)
+            .statusCode(httpStatus.code)
     }
 }

@@ -40,10 +40,10 @@ data class UpdateDraft(
     val classificationReference: String? = null,
     @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<@KlassCode(id = "702") String>? = null,
+    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) String>? = null,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<@KlassCode(id = "618") String>? = null,
+    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) String>? = null,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
     val containsSpecialCategoriesOfPersonalData: Boolean? = null,
@@ -52,7 +52,7 @@ data class UpdateDraft(
     val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
-    @KlassCode("303")
+    @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
     val measurementType: String? = null,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Nullable

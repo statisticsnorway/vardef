@@ -6,6 +6,9 @@ import io.micronaut.data.model.naming.NamingStrategies
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotNull
+import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
+import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
+import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.bson.types.ObjectId
 import java.net.URI
@@ -75,10 +78,10 @@ data class SavedVariableDefinition(
             shortName = shortName,
             definition = definition.getValidLanguage(language),
             classificationUri = classificationReference?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
-            unitTypes = unitTypes.map { klassService.renderCode("702", it, language) },
-            subjectFields = subjectFields.map { klassService.renderCode("618", it, language) },
+            unitTypes = unitTypes.map { klassService.renderCode(UNIT_TYPES_KLASS_CODE, it, language) },
+            subjectFields = subjectFields.map { klassService.renderCode(SUBJECT_FIELDS_KLASS_CODE, it, language) },
             containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData,
-            measurementType = measurementType?.let { klassService.renderCode("303", it, language) },
+            measurementType = measurementType?.let { klassService.renderCode(MEASUREMENT_TYPE_KLASS_CODE, it, language) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

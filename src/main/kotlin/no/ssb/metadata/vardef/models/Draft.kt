@@ -36,14 +36,14 @@ data class Draft(
     @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<@KlassCode(id = "702") String>,
+    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    val subjectFields: List<@KlassCode(id = "618") String>,
+    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) String>,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION, defaultValue = false.toString())
     val containsSpecialCategoriesOfPersonalData: Boolean = false,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
-    @KlassCode("303")
+    @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format(DATE_FORMAT)

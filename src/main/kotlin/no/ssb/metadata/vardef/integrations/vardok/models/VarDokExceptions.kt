@@ -18,3 +18,9 @@ class OutdatedUnitTypesException(
 ) : VardokException(
         "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
     )
+
+class OutdatedSubjectAreaException(
+    id: String,
+) : VardokException(
+        "Vardok id $id SubjectArea has outdated subject area value and can not be saved",
+    )

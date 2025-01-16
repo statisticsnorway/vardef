@@ -2,6 +2,9 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
+import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokStatisticalUnitToUnitTypes
+import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokSubjectAreaToSubjectFiled
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.Assertions.assertThat
@@ -123,6 +126,13 @@ class VardokMigrationTest {
         val vardokresponse = vardokService.getVardokItem(vardokId)
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
+    }
+
+    @Test
+    fun `vardokresponse subject area are values in SubjectFields`() {
+        val vardokresponse = vardokService.getVardokItem("130")
+        val result = vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
+        assertThat(result).isEqualTo(listOf("sk"))
     }
 
     @ParameterizedTest

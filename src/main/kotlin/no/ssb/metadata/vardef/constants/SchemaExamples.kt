@@ -14,7 +14,7 @@ const val BAD_REQUEST_EXAMPLE_NAME = "Bad request"
 const val CONSTRAINT_VIOLATION_EXAMPLE_NAME = "Constraint violation"
 
 const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
-            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
+            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE",
             "code": "be07",
             "title": "Innvandrere"
         }"""
@@ -66,7 +66,7 @@ const val DRAFT_EXAMPLE = """{
     }
 }"""
 
-const val UPDATE_DRAFT_EXAMPLE = """{"classification_reference": "702"}"""
+const val UPDATE_DRAFT_EXAMPLE = """{"classification_reference": $UNIT_TYPES_KLASS_CODE}"""
 
 const val UPDATE_DRAFT_CONSTRAINT_VIOLATION_EXAMPLE = """{"classification_reference": "incorrect"}"""
 
@@ -251,7 +251,7 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
     "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
     "unit_types": [{
-            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/702",
+            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE",
             "code": "20",
             "title": "Person"
         }

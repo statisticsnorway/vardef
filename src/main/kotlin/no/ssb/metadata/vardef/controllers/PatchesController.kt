@@ -195,7 +195,7 @@ class PatchesController(
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
         if (latestPatchOnValidityPeriod.validUntil != null && patch.validUntil != null) {
-            throw HttpStatusException(HttpStatus.BAD_REQUEST, "Valid until was set in draft, to change create a new validity period")
+            throw HttpStatusException(HttpStatus.BAD_REQUEST, "This validity period is closed, create a new validity period")
         }
 
         if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {

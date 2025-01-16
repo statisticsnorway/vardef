@@ -194,12 +194,13 @@ class PatchesController(
         authentication: Authentication,
     ): CompleteResponse {
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
-        if (latestPatchOnValidityPeriod.validUntil != null && patch.validUntil != null) {
-            throw HttpStatusException(HttpStatus.BAD_REQUEST, "This validity period is closed, create a new validity period")
-        }
-
-        if (!latestPatchOnValidityPeriod.variableStatus.isPublished()) {
-            throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
+        when{
+            latestPatchOnValidityPeriod.validUntil != null && patch.validUntil != null ->
+                throw HttpStatusException(HttpStatus.BAD_REQUEST,
+                    "This validity period is closed, create a new validity period"
+                )
+            !latestPatchOnValidityPeriod.variableStatus.isPublished() ->
+                throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
         return patches
             .create(

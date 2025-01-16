@@ -219,4 +219,11 @@ class VariableDefinitionService(
     companion object {
         fun generateId(): String = NanoId.generate(8)
     }
+
+    fun isCorrectDateOrder(
+        validFrom: LocalDate?,
+        validUntil: LocalDate?,
+    ): Boolean {
+        return validFrom == null || validUntil == null || validFrom.isBefore(validUntil)
+    }
 }

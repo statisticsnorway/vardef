@@ -16,8 +16,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
-import org.junit.jupiter.params.provider.ValueSource
-import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_CREATED
 
 class CreateTests : BaseVardefTest() {
@@ -322,9 +320,8 @@ class CreateTests : BaseVardefTest() {
     fun `create patch on validity period in between closed validity periods`(
         validUntil: String,
         httpStatus: Int,
-        spec: RequestSpecification
+        spec: RequestSpecification,
     ) {
-
         // create validity period
         spec
             .given()

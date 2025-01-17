@@ -307,24 +307,25 @@ class CompanionObject {
                     HTTP_NOT_FOUND,
                 ),
             )
+
         @JvmStatic
         fun patchValidUntilInBetween(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
                     "valid until in subsequent validity period",
                     "2022-06-30",
-                    HTTP_BAD_REQUEST
+                    HTTP_BAD_REQUEST,
                 ),
                 argumentSet(
                     "valid until before start subsequent validity period",
                     "2019-06-30",
-                    HTTP_CREATED
+                    HTTP_CREATED,
                 ),
                 argumentSet(
                     "valid until equal start date subsequent validity period",
                     "2020-01-01",
-                    HTTP_BAD_REQUEST
-                )
+                    HTTP_BAD_REQUEST,
+                ),
             )
     }
 }

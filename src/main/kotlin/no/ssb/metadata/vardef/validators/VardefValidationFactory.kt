@@ -18,7 +18,7 @@ class VardefValidationFactory {
     fun draftDateOrderValidator(): ConstraintValidator<ValidDateOrder, Draft> =
         ConstraintValidator {
                 value,
-                annotationMetadata,
+                _,
                 _,
             ->
             value == null || variableDefinitionService.isCorrectDateOrder(value.validFrom, value.validUntil)
@@ -28,7 +28,7 @@ class VardefValidationFactory {
     fun updateDraftDateOrderValidator(): ConstraintValidator<ValidDateOrder, UpdateDraft> =
         ConstraintValidator {
                 value,
-                annotationMetadata,
+                _,
                 _,
             ->
             value == null || variableDefinitionService.isCorrectDateOrder(value.validFrom, value.validUntil)

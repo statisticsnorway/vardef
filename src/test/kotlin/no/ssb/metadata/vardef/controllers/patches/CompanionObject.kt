@@ -265,35 +265,35 @@ class CompanionObject {
         fun patchValidUntil(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
-                    "patch latest validity period multiple patches",
+                    "latest validity period multiple patches",
                     patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
                     INCOME_TAX_VP1_P1.definitionId,
                     null,
                     HttpStatus.CREATED,
                 ),
                 argumentSet(
-                    "patch latest single validity period",
+                    "latest is single validity period",
                     patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     null,
                     HttpStatus.BAD_REQUEST,
                 ),
                 argumentSet(
-                    "patch specific period multiple patches",
+                    "specific period multiple patches",
                     patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
                     INCOME_TAX_VP1_P1.definitionId,
                     "2021-01-01",
                     HttpStatus.CREATED,
                 ),
                 argumentSet(
-                    "patch latest single validity period not closed valid until is before valid_from",
+                    "latest is single validity period not closed valid until is before valid_from",
                     patchBody().apply { put("valid_until", "2019-06-30") }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL.definitionId,
                     null,
                     HttpStatus.BAD_REQUEST,
                 ),
                 argumentSet(
-                    "validity period is closed patch",
+                    "selected validity period is closed",
                     patchBody().apply { put("valid_until", "2020-06-30") }.toString(),
                     INCOME_TAX_VP1_P1.definitionId,
                     "1980-01-01",

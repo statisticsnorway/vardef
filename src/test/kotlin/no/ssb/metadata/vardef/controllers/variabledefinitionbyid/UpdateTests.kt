@@ -461,7 +461,6 @@ class UpdateTests : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#inValidDateUpdates")
     fun `invalid date update`(
         input: String,
-        errorMessage: String,
         spec: RequestSpecification,
     ) {
         spec
@@ -478,7 +477,7 @@ class UpdateTests : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = errorMessage,
+                    errorMessage = "Invalid date order",
                 ),
             )
     }

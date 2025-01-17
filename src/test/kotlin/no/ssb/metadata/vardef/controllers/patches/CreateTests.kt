@@ -317,7 +317,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create patch on validity period in between`(spec: RequestSpecification)  {
+    fun `create patch on validity period in between`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)

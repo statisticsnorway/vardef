@@ -342,16 +342,16 @@ class CreateTests : BaseVardefTest() {
             .statusCode(HTTP_CREATED)
 
         // close validity period in between
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(patchBody().apply { put("valid_until", "2022-06-30") }.toString())
-                .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", "2019-12-31")
-                .`when`()
-                .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
-                .then()
-                .statusCode(HTTP_BAD_REQUEST)
-                .extract()
-                .body().asString()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(patchBody().apply { put("valid_until", "2022-06-30") }.toString())
+            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", "2019-12-31")
+            .`when`()
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(HTTP_BAD_REQUEST)
+            .extract()
+            .body().asString()
     }
 }

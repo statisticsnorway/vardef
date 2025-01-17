@@ -129,13 +129,12 @@ class VariableDefinitionsController(
         activeGroup: String,
         authentication: Authentication,
     ): CompleteResponse {
-        if (vardef.doesShortNameExist(draft.shortName))
-            {
-                throw HttpStatusException(
-                    HttpStatus.CONFLICT,
-                    "Short name ${draft.shortName} already exists.",
-                )
-            }
+        if (vardef.doesShortNameExist(draft.shortName)) {
+            throw HttpStatusException(
+                HttpStatus.CONFLICT,
+                "Short name ${draft.shortName} already exists.",
+            )
+        }
         return vardef.create(draft.toSavedVariableDefinition(activeGroup, authentication.name)).toCompleteResponse()
     }
 }

@@ -375,6 +375,41 @@ class CreateTests : BaseVardefTest() {
         assertThat(completeResponse.createdBy).isEqualTo("me@example.com")
     }
 
+    @Test
+    fun `create validity period during closed validity period`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                JSONObject()
+                    .apply {
+                        put("valid_from", "2025-01-11")
+                        put(
+                            "definition",
+                            JSONObject().apply {
+                                put("nb", "Intektsskatt atter ny definisjon")
+                                put("nn", "Intektsskatt atter ny definisjon")
+                                put("en", "Yet another definition")
+                            },
+                        )
+                    }.toString(),
+            )
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage =
+                        "The date selected cannot be added because it falls between previously " +
+                            "added valid from dates.",
+                ),
+            )
+    }
+
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#newValidityPeriods")
     fun `create new validity period last validity period is closed on one patch`(

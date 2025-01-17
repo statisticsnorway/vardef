@@ -224,6 +224,14 @@ class VariableDefinitionService(
         fun generateId(): String = NanoId.generate(8)
     }
 
+    /**
+     * Checks if the given dates are in the correct chronological order.
+     *
+     * @param validFrom The starting date (may be `null`).
+     * @param validUntil The ending date (may be `null`).
+     * @return `true` if the dates are in the correct order, or if either date is `null`.
+     *         Otherwise, `false` if `validFrom` occurs after `validUntil`.
+     */
     fun isCorrectDateOrder(
         validFrom: LocalDate?,
         validUntil: LocalDate?,
@@ -231,6 +239,14 @@ class VariableDefinitionService(
         return validFrom == null || validUntil == null || validFrom.isBefore(validUntil)
     }
 
+    /**
+     * Checks if the date range in the updated draft is logically correct compared to the saved draft.
+     *
+     * @param updateDraft The draft to be updated.
+     * @param savedDraft The existing saved draft with its validity period.
+     * @return `true` if the `updateDraft`'s dates are logically correct compared to the `savedDraft`,
+     *         otherwise `false`.
+     */
     fun isCorrectComparedToSaved(
         updateDraft: UpdateDraft,
         savedDraft: SavedVariableDefinition,

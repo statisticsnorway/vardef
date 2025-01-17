@@ -247,7 +247,7 @@ class VariableDefinitionService(
      * @return `true` if the `updateDraft`'s dates are logically correct compared to the `savedDraft`,
      *         otherwise `false`.
      */
-    fun isCorrectComparedToSaved(
+    fun isCorrectDateOrderComparedToSaved(
         updateDraft: UpdateDraft,
         savedDraft: SavedVariableDefinition,
     ): Boolean {

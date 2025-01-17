@@ -248,7 +248,7 @@ class VariableDefinitionByIdController(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
                 )
-            !vardef.isCorrectComparedToSaved(updateDraft, variable) -> throw HttpStatusException(
+            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, variable) -> throw HttpStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Invalid date order",
             )

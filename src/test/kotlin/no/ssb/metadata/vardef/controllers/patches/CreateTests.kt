@@ -342,7 +342,6 @@ class CreateTests : BaseVardefTest() {
             .statusCode(HTTP_CREATED)
 
         // close validity period in between
-        val body =
             spec
                 .given()
                 .contentType(ContentType.JSON)
@@ -354,31 +353,5 @@ class CreateTests : BaseVardefTest() {
                 .statusCode(HTTP_BAD_REQUEST)
                 .extract()
                 .body().asString()
-
-        /*val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(2019,12,31))
-        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2022,6,30))*/
-
-        /*val createdPatches = patches.list(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
-        assertThat(createdPatches).hasSize(6)
-        assertThat(createdPatches.map { it.validFrom }).isEqualTo(
-            listOf(
-            LocalDate.of(2024,1,1),
-            LocalDate.of(2020,1,1),
-            LocalDate.of(1970,8,1),
-            LocalDate.of(2024,1,1),
-            LocalDate.of(2019,12,31),
-            LocalDate.of(2019,12,31),
-            ))
-
-        assertThat(createdPatches.map { it.validUntil }).isEqualTo(
-            listOf(
-                LocalDate.of(2030,1,1),
-                LocalDate.of(2023,12,31),
-                LocalDate.of(1989,12,31),
-                LocalDate.of(2019,12,30),
-                null,
-                LocalDate.of(2022,6,30),
-        ))*/
     }
 }

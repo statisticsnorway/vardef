@@ -182,15 +182,4 @@ class PatchesService(
         )
         return true
     }
-
-    fun isCorrectDateOrderComparedToSaved(
-        patch: Patch,
-        savedVariable: SavedVariableDefinition,
-    ): Boolean {
-        return if (patch.validUntil == null) {
-            true
-        } else {
-            (patch.validUntil.isAfter(savedVariable.validFrom))
-        }
-    }
 }

@@ -5,11 +5,15 @@ import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
+import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
+import no.ssb.metadata.vardef.extensions.isEqualOrAfter
+import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
 
 /**
  * Patches service
@@ -47,11 +51,19 @@ class PatchesService(
         latestPatch: SavedVariableDefinition,
         userName: String,
     ): SavedVariableDefinition {
+        if (patch.validUntil?.let { isValidValidUntilValue(definitionId, it,latestPatch.validFrom )} == false){
+            logger.error(
+                "Invalid 'validUntil' value ${patch.validUntil} for definition: $definitionId",
+                kv(DEFINITION_ID, definitionId),
+            )
+            throw InvalidValidDateException()
+        }
+
         if (patch.owner != latestPatch.owner && patch.owner != null) {
             logger.info(
                 "When creating patch owner has changed from ${latestPatch.owner} to ${patch.owner} for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
-            )
+                )
             if (!DaplaTeamService.containsDevelopersGroup(patch.owner)) {
                 logger.warn(
                     "Creating patch and ${patch.owner} not in developers-group for definition: $definitionId",
@@ -124,5 +136,61 @@ class PatchesService(
             variableDefinitionRepository.deleteById(item.id)
         }
         logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
+    }
+
+    private fun isValidValidUntilValue(
+        definitionId: String,
+        dateOfValidUntil: LocalDate,
+        validFromDate: LocalDate
+    ): Boolean {
+        // Retrieve all patches for the given definition
+        val patches = list(definitionId)
+
+        // Map validFrom and validUntil dates, ensuring only closed periods are considered
+        val validPeriods = patches.mapNotNull { patch ->
+            val validFrom = patch.validFrom
+            val validUntil = patch.validUntil
+            if (validUntil != null) validFrom to validUntil else null
+        }.sortedBy { it.first }
+
+        // Check if the new validUntil overlaps with any closed validity period
+        validPeriods.forEach { (validFrom, validUntil) ->
+            logger.info(
+                "Checking if new valid until: $dateOfValidUntil overlaps with period validFrom: $validFrom " +
+                        "and validUntil: $validUntil for definition: $definitionId",
+                kv(DEFINITION_ID, definitionId),
+            )
+            if (dateOfValidUntil.isEqualOrAfter(validFrom) && dateOfValidUntil.isEqualOrBefore(validUntil)) {
+                return false // Overlap found
+            }
+        }
+
+        // Ensure validUntil is not earlier than validFrom for the same period
+        if (dateOfValidUntil.isBefore(validFromDate)) {
+            logger.info(
+                "Invalid validUntil: $dateOfValidUntil for period starting with validFrom: $validFromDate " +
+                        "for definition: $definitionId",
+                kv(DEFINITION_ID, definitionId),
+            )
+            return false // validUntil cannot precede validFrom
+        }
+
+        logger.info(
+            "Valid validUntil: $dateOfValidUntil for definition: $definitionId",
+            kv(DEFINITION_ID, definitionId),
+        )
+        return true
+    }
+
+
+    fun isCorrectDateOrderComparedToSaved(
+        patch: Patch,
+        savedVariable: SavedVariableDefinition,
+    ): Boolean {
+        return if (patch.validUntil == null) {
+            true
+        } else {
+            (patch.validUntil.isAfter(savedVariable.validFrom))
+        }
     }
 }

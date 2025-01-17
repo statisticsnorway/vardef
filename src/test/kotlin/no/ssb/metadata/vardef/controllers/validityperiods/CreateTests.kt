@@ -164,7 +164,7 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
+            .body(containsString("The date selected cannot be added because it falls between previously added valid dates."))
 
         val correctValidFrom = JSONObject(noneMandatoryFieldsChanged()).apply { put("valid_from", "2030-01-11") }.toString()
         spec
@@ -321,8 +321,7 @@ class CreateTests : BaseVardefTest() {
             .statusCode(400)
             .body(
                 containsString(
-                    "The date selected cannot be added because it falls between previously added valid " +
-                        "from dates.",
+                    "The date selected cannot be added because it falls between previously added valid dates.",
                 ),
             )
     }
@@ -404,8 +403,7 @@ class CreateTests : BaseVardefTest() {
                     false,
                     null,
                     errorMessage =
-                        "The date selected cannot be added because it falls between previously " +
-                            "added valid from dates.",
+                        "The date selected cannot be added because it falls between previously added valid dates."
                 ),
             )
     }
@@ -441,5 +439,27 @@ class CreateTests : BaseVardefTest() {
                 assertThat(validUntil).isEqualTo(expectedValidUntil)
             }
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#testOnlyClosedValidityPeriods")
+    fun `new validity on variable period with three closed periods validity periods`(
+        input: String,
+        httpStatus: Int,
+        spec: RequestSpecification
+    ) {
+        assertThat(SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_BEFORE.definitionId).isEqualTo(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
+        assertThat(validityPeriods.listComplete(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId).size).isEqualTo(3)
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/validity-periods")
+            .then()
+            .statusCode(httpStatus)
+
     }
 }

@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.Owner
+import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -53,21 +54,30 @@ class PatchesServiceTest : BaseVardefTest() {
 
     @Test
     fun `create patch owner field updated across all periods`() {
-        val patch =
-            INCOME_TAX_VP1_P7
-                .copy(
-                    owner =
-                        Owner(
-                            "dapla-felles",
-                            listOf(
-                                "pers-skatt-developers",
-                                TEST_DEVELOPERS_GROUP,
-                                "neighbourhood-dogs",
-                                "dapla-felles-developers",
-                            ),
-                        ),
-                ).toPatch()
-
+        val patch = Patch(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            Owner(
+                "dapla-felles",
+                listOf(
+                    "pers-skatt-developers",
+                    TEST_DEVELOPERS_GROUP,
+                    "neighbourhood-dogs",
+                    "dapla-felles-developers",
+                ),
+            ),
+            null
+        )
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7, TEST_USER)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         validityPeriodList.forEach { period ->

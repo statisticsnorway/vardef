@@ -114,9 +114,29 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION =
         lastUpdatedBy = "me@example.com",
     )
 
+val SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_BEFORE =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        patchId = 2,
+        validFrom = LocalDate.of(2020, 1, 1),
+        validUntil = LocalDate.of(2023, 12, 31),
+    )
+
+val SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_GAP_BEFORE =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        patchId = 3,
+        validFrom = LocalDate.of(1970, 8, 1),
+        validUntil = LocalDate.of(1989, 12, 31),
+    )
+
 val SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL =
     SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
         validUntil = null,
+    )
+val ALL_SAVED_INTERNAL_PATCHES =
+    listOf(
+        SAVED_INTERNAL_VARIABLE_DEFINITION,
+        SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_BEFORE,
+        SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_GAP_BEFORE
     )
 
 val VALIDITY_PERIOD_TAX_EXAMPLE =

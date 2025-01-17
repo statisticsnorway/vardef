@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef.services
 
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
-import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
+import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.ValidityPeriod
@@ -64,7 +64,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         expectSuccess: Boolean,
     ) {
         if (!expectSuccess) {
-            assertThrows<InvalidValidFromException> {
+            assertThrows<InvalidValidDateException> {
                 validityPeriods.create(
                     definitionId,
                     inputObject,

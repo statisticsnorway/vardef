@@ -1,11 +1,11 @@
 package no.ssb.metadata.vardef.controllers.patches
 
-import io.micronaut.http.HttpStatus
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.utils.*
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
+import java.net.HttpURLConnection.*
 import java.util.stream.Stream
 
 class CompanionObject {
@@ -269,43 +269,62 @@ class CompanionObject {
                     patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
                     INCOME_TAX_VP1_P1.definitionId,
                     null,
-                    HttpStatus.CREATED,
+                    HTTP_CREATED,
                 ),
                 argumentSet(
                     "validity period is closed single patch - select default period",
                     patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     null,
-                    HttpStatus.BAD_REQUEST,
+                    HTTP_BAD_REQUEST,
                 ),
                 argumentSet(
                     "validity period is open valid until is before valid_from - select default period",
                     patchBody().apply { put("valid_until", "2019-06-30") }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL.definitionId,
                     null,
-                    HttpStatus.BAD_REQUEST,
+                    HTTP_BAD_REQUEST,
                 ),
                 argumentSet(
                     "validity period is open multiple patches - select specific period",
                     patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
                     INCOME_TAX_VP1_P1.definitionId,
                     "2021-01-01",
-                    HttpStatus.CREATED,
+                    HTTP_CREATED,
                 ),
                 argumentSet(
                     "validity period is closed multiple patches - select specific period",
                     patchBody().apply { put("valid_until", "2020-06-30") }.toString(),
                     INCOME_TAX_VP1_P1.definitionId,
                     "1980-01-01",
-                    HttpStatus.BAD_REQUEST,
+                    HTTP_BAD_REQUEST,
                 ),
                 argumentSet(
                     "validity period does not exist - select specific period",
                     patchBody().apply { put("valid_until", "2020-06-30") }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     "1980-01-01",
-                    HttpStatus.NOT_FOUND,
+                    HTTP_NOT_FOUND,
                 ),
+            )
+        @JvmStatic
+        fun patchValidUntilInBetween(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "valid until in subsequent validity period",
+                    "2022-06-30",
+                    HTTP_BAD_REQUEST
+                ),
+                argumentSet(
+                    "valid until before start subsequent validity period",
+                    "2019-06-30",
+                    HTTP_CREATED
+                ),
+                argumentSet(
+                    "valid until equal start date subsequent validity period",
+                    "2020-01-01",
+                    HTTP_BAD_REQUEST
+                )
             )
     }
 }

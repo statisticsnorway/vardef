@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.ValueSource
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_CREATED
 
@@ -302,7 +303,7 @@ class CreateTests : BaseVardefTest() {
         input: String,
         vardefId: String,
         validityPeriod: String?,
-        httpStatus: HttpStatus,
+        httpStatus: Int,
         spec: RequestSpecification,
     ) {
         spec
@@ -313,18 +314,25 @@ class CreateTests : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions/$vardefId/patches")
             .then()
-            .statusCode(httpStatus.code)
+            .statusCode(httpStatus)
     }
 
-    @Test
-    fun `create patch on validity period in between`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchValidUntilInBetween")
+    fun `create patch on validity period in between closed validity periods`(
+        validUntil: String,
+        httpStatus: Int,
+        spec: RequestSpecification
+    ) {
+
+        // create validity period
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
                 JSONObject()
                     .apply {
-                        put("valid_from", "2019-12-31")
+                        put("valid_from", "2012-12-31")
                         put(
                             "definition",
                             JSONObject().apply {
@@ -341,17 +349,15 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(HTTP_CREATED)
 
-        // close validity period in between
+        // close validity period with a patch
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(patchBody().apply { put("valid_until", "2022-06-30") }.toString())
-            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", "2019-12-31")
+            .body(patchBody().apply { put("valid_until", validUntil) }.toString())
+            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", "2012-12-31")
             .`when`()
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
-            .statusCode(HTTP_BAD_REQUEST)
-            .extract()
-            .body().asString()
+            .statusCode(httpStatus)
     }
 }

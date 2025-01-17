@@ -54,30 +54,31 @@ class PatchesServiceTest : BaseVardefTest() {
 
     @Test
     fun `create patch owner field updated across all periods`() {
-        val patch = Patch(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            Owner(
-                "dapla-felles",
-                listOf(
-                    "pers-skatt-developers",
-                    TEST_DEVELOPERS_GROUP,
-                    "neighbourhood-dogs",
-                    "dapla-felles-developers",
+        val patch =
+            Patch(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                Owner(
+                    "dapla-felles",
+                    listOf(
+                        "pers-skatt-developers",
+                        TEST_DEVELOPERS_GROUP,
+                        "neighbourhood-dogs",
+                        "dapla-felles-developers",
+                    ),
                 ),
-            ),
-            null
-        )
+                null,
+            )
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7, TEST_USER)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
         validityPeriodList.forEach { period ->

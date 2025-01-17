@@ -7,10 +7,10 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Produces
 import io.micronaut.http.server.exceptions.ExceptionHandler
+import io.micronaut.http.server.exceptions.response.ErrorContext
 import io.micronaut.http.server.exceptions.response.ErrorResponseProcessor
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
-import io.micronaut.http.server.exceptions.response.ErrorContext
 
 @Produces
 @Singleton
@@ -19,7 +19,7 @@ import io.micronaut.http.server.exceptions.response.ErrorContext
 )
 class ValidityPeriodExceptionHandler(
     private val errorResponseProcessor: ErrorResponseProcessor<*>,
-) : ExceptionHandler<ValidityPeriodExceptions, HttpResponse<*>>{
+) : ExceptionHandler<ValidityPeriodExceptions, HttpResponse<*>> {
     override fun handle(
         request: HttpRequest<*>,
         exception: ValidityPeriodExceptions,

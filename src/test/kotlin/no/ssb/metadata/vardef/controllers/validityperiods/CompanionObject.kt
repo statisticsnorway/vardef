@@ -129,22 +129,22 @@ class CompanionObject {
         @JvmStatic
         fun testOnlyClosedValidityPeriods(): Stream<Arguments> =
             Stream.of(
-            argumentSet(
-                "valid from before all",
-                JSONObject()
-                    .apply {
-                        put("valid_from", "1969-01-01")
-                        put(
-                            "definition",
-                            JSONObject().apply {
-                                put("nb", "Intektsskatt atter ny definisjon")
-                                put("nn", "Intektsskatt atter ny definisjon")
-                                put("en", "Yet another definition")
-                            },
-                        )
-                    }.toString(),
-                HTTP_CREATED,
-            ),
+                argumentSet(
+                    "valid from before all",
+                    JSONObject()
+                        .apply {
+                            put("valid_from", "1969-01-01")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
+                    HTTP_CREATED,
+                ),
                 argumentSet(
                     "valid from after all",
                     JSONObject()
@@ -274,6 +274,5 @@ class CompanionObject {
                     HTTP_CREATED,
                 ),
             )
-
     }
 }

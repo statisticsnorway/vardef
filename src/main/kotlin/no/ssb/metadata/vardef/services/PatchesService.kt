@@ -51,7 +51,7 @@ class PatchesService(
         latestPatch: SavedVariableDefinition,
         userName: String,
     ): SavedVariableDefinition {
-        if (patch.validUntil?.let { isValidValidUntilValue(definitionId, it,latestPatch.validFrom )} == false){
+        if (patch.validUntil?.let { isValidValidUntilValue(definitionId, it, latestPatch.validFrom) } == false) {
             logger.error(
                 "Invalid 'validUntil' value ${patch.validUntil} for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
@@ -63,7 +63,7 @@ class PatchesService(
             logger.info(
                 "When creating patch owner has changed from ${latestPatch.owner} to ${patch.owner} for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
-                )
+            )
             if (!DaplaTeamService.containsDevelopersGroup(patch.owner)) {
                 logger.warn(
                     "Creating patch and ${patch.owner} not in developers-group for definition: $definitionId",
@@ -141,23 +141,24 @@ class PatchesService(
     private fun isValidValidUntilValue(
         definitionId: String,
         dateOfValidUntil: LocalDate,
-        validFromDate: LocalDate
+        validFromDate: LocalDate,
     ): Boolean {
         // Retrieve all patches for the given definition
         val patches = list(definitionId)
 
         // Map validFrom and validUntil dates, ensuring only closed periods are considered
-        val validPeriods = patches.mapNotNull { patch ->
-            val validFrom = patch.validFrom
-            val validUntil = patch.validUntil
-            if (validUntil != null) validFrom to validUntil else null
-        }.sortedBy { it.first }
+        val validPeriods =
+            patches.mapNotNull { patch ->
+                val validFrom = patch.validFrom
+                val validUntil = patch.validUntil
+                if (validUntil != null) validFrom to validUntil else null
+            }.sortedBy { it.first }
 
         // Check if the new validUntil overlaps with any closed validity period
         validPeriods.forEach { (validFrom, validUntil) ->
             logger.info(
                 "Checking if new valid until: $dateOfValidUntil overlaps with period validFrom: $validFrom " +
-                        "and validUntil: $validUntil for definition: $definitionId",
+                    "and validUntil: $validUntil for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
             )
             if (dateOfValidUntil.isEqualOrAfter(validFrom) && dateOfValidUntil.isEqualOrBefore(validUntil)) {
@@ -169,7 +170,7 @@ class PatchesService(
         if (dateOfValidUntil.isBefore(validFromDate)) {
             logger.info(
                 "Invalid validUntil: $dateOfValidUntil for period starting with validFrom: $validFromDate " +
-                        "for definition: $definitionId",
+                    "for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
             )
             return false // validUntil cannot precede validFrom
@@ -181,7 +182,6 @@ class PatchesService(
         )
         return true
     }
-
 
     fun isCorrectDateOrderComparedToSaved(
         patch: Patch,

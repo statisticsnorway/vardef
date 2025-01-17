@@ -403,7 +403,7 @@ class CreateTests : BaseVardefTest() {
                     false,
                     null,
                     errorMessage =
-                        "The date selected cannot be added because it falls between previously added valid dates."
+                        "The date selected cannot be added because it falls between previously added valid dates.",
                 ),
             )
     }
@@ -446,7 +446,7 @@ class CreateTests : BaseVardefTest() {
     fun `new validity on variable period with three closed periods validity periods`(
         input: String,
         httpStatus: Int,
-        spec: RequestSpecification
+        spec: RequestSpecification,
     ) {
         assertThat(SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_BEFORE.definitionId).isEqualTo(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
         assertThat(validityPeriods.listComplete(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId).size).isEqualTo(3)
@@ -460,6 +460,5 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/validity-periods")
             .then()
             .statusCode(httpStatus)
-
     }
 }

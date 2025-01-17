@@ -24,7 +24,6 @@ import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
@@ -205,11 +204,11 @@ class PatchesController(
                 throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
         return patches
-                .create(
-                    patch,
-                    variableDefinitionId,
-                    latestPatchOnValidityPeriod,
-                    authentication.name,
-                ).toCompleteResponse()
+            .create(
+                patch,
+                variableDefinitionId,
+                latestPatchOnValidityPeriod,
+                authentication.name,
+            ).toCompleteResponse()
     }
 }

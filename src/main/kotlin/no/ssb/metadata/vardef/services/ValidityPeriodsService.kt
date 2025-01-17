@@ -211,7 +211,7 @@ class ValidityPeriodsService(
      * Check mandatory input for creating a new validity period
      * @param newPeriod The input data to check
      * @param definitionId The id for the variable definition to check
-     * @throws InvalidValidFromException validFrom is invalid
+     * @throws InvalidValidDateException validFrom is invalid
      * @throws DefinitionTextUnchangedException definition text in all present languages has not changed
      */
     private fun checkValidityPeriodInput(
@@ -257,22 +257,22 @@ class ValidityPeriodsService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean {
-
         // either the last valid from or the last valid until
         val patches = list(definitionId)
 
         // Map the validFrom and validUntil dates
-        val validPeriods = patches.mapNotNull { patch ->
-            val validFrom = patch.validFrom
-            val validUntil = patch.validUntil
-            if (validUntil != null) validFrom to validUntil else null
-        }.sortedBy { it.first }
+        val validPeriods =
+            patches.mapNotNull { patch ->
+                val validFrom = patch.validFrom
+                val validUntil = patch.validUntil
+                if (validUntil != null) validFrom to validUntil else null
+            }.sortedBy { it.first }
 
         // Check if the new date overlaps with any closed validity period
         validPeriods.forEach { (validFrom, validUntil) ->
             logger.info(
                 "Checking if new valid from: $dateOfValidity overlaps with period validFrom: $validFrom " +
-                        "and validUntil: $validUntil for definition: $definitionId",
+                    "and validUntil: $validUntil for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
             )
             if (dateOfValidity.isEqualOrAfter(validFrom) && dateOfValidity.isEqualOrBefore(validUntil)) {
@@ -289,7 +289,7 @@ class ValidityPeriodsService(
             if (dateOfValidity.isAfter(currentPeriod.second) && dateOfValidity.isBefore(nextPeriod.first)) {
                 logger.info(
                     "New valid from: $dateOfValidity fits in the gap between validUntil: ${currentPeriod.second} " +
-                            "and validFrom: ${nextPeriod.first} for definition: $definitionId",
+                        "and validFrom: ${nextPeriod.first} for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
                 return true
@@ -300,32 +300,10 @@ class ValidityPeriodsService(
         val validFromDates = patches.map { it.validFrom }
         logger.info(
             "Checking if valid new valid from: $dateOfValidity is before: ${validFromDates.minOrNull()} " +
-                    "or after: ${validFromDates.maxOrNull()} for definition: $definitionId",
+                "or after: ${validFromDates.maxOrNull()} for definition: $definitionId",
             kv(DEFINITION_ID, definitionId),
         )
         return dateOfValidity.isBefore(validFromDates.minOrNull()) || dateOfValidity.isAfter(validFromDates.maxOrNull())
-
-        //val validFromDates = patches.map { it.validFrom }
-        //val validUntilDates = patches.map { it.validUntil }
-
-        // Handle single validity period on same patch,
-        // check dateOfValidity is not between validFrom and validUntil
-        /*if (validFromDates.size == 1 && validUntilDates.firstOrNull() != null) {
-            val validFrom = validFromDates.first()
-            val validUntil = validUntilDates.first()
-            logger.info(
-                "Checking if valid new valid from: $dateOfValidity is between validFrom: $validFrom and " +
-                    "validUntil: $validUntil for definition: $definitionId",
-                kv(DEFINITION_ID, definitionId),
-            )
-            return !(dateOfValidity.isEqualOrAfter(validFrom) && validUntil?.let { dateOfValidity.isEqualOrBefore(it) } == true)
-        }
-        logger.info(
-            "Checking if valid new valid from: $dateOfValidity is before: ${validFromDates.min()} " +
-                "or after: ${validFromDates.max()} for definition: $definitionId",
-            kv(DEFINITION_ID, definitionId),
-        )
-        return dateOfValidity.isBefore(validFromDates.minOrNull()) || dateOfValidity.isAfter(validFromDates.maxOrNull())*/
     }
 
     /**

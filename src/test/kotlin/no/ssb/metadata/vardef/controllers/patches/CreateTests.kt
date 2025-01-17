@@ -18,7 +18,6 @@ import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_CREATED
-import java.time.LocalDate
 
 class CreateTests : BaseVardefTest() {
     @Test
@@ -318,23 +317,24 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create patch on validity period in between`(spec: RequestSpecification){
-
+    fun `create patch on validity period in between`(spec: RequestSpecification)  {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(JSONObject()
-                .apply {
-                    put("valid_from", "2019-12-31")
-                    put(
-                        "definition",
-                        JSONObject().apply {
-                            put("nb", "Intektsskatt atter ny definisjon")
-                            put("nn", "Intektsskatt atter ny definisjon")
-                            put("en", "Yet another definition")
-                        },
-                    )
-                }.toString(),)
+            .body(
+                JSONObject()
+                    .apply {
+                        put("valid_from", "2019-12-31")
+                        put(
+                            "definition",
+                            JSONObject().apply {
+                                put("nb", "Intektsskatt atter ny definisjon")
+                                put("nn", "Intektsskatt atter ny definisjon")
+                                put("en", "Yet another definition")
+                            },
+                        )
+                    }.toString(),
+            )
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/validity-periods")
@@ -344,16 +344,16 @@ class CreateTests : BaseVardefTest() {
         // close validity period in between
         val body =
             spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(patchBody().apply { put("valid_until", "2022-06-30") }.toString())
-            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", "2019-12-31")
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
-            .then()
-            .statusCode(HTTP_BAD_REQUEST)
-            .extract()
-            .body().asString()
+                .given()
+                .contentType(ContentType.JSON)
+                .body(patchBody().apply { put("valid_until", "2022-06-30") }.toString())
+                .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", "2019-12-31")
+                .`when`()
+                .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
+                .then()
+                .statusCode(HTTP_BAD_REQUEST)
+                .extract()
+                .body().asString()
 
         /*val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(2019,12,31))
@@ -380,6 +380,5 @@ class CreateTests : BaseVardefTest() {
                 null,
                 LocalDate.of(2022,6,30),
         ))*/
-
     }
 }

@@ -376,8 +376,8 @@ class CreateTests : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#checkValidUntilDates")
-    fun `create new validity period when only validity period is closed on one patch`(
+    @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#newValidityPeriods")
+    fun `create new validity period last validity period is closed on one patch`(
         input: String,
         vardefId: String,
         httpStatus: HttpStatus,

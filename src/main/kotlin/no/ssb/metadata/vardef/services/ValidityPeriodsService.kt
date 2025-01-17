@@ -272,7 +272,7 @@ class ValidityPeriodsService(
                     "validUntil: $validUntil for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
             )
-            return !(dateOfValidity.isAfter(validFrom) && dateOfValidity.isBefore(validUntil))
+            return !(dateOfValidity.isEqualOrAfter(validFrom) && validUntil?.let { dateOfValidity.isEqualOrBefore(it) } == true)
         }
         logger.info(
             "Checking if valid new valid from: $dateOfValidity is before: ${validFromDates.min()} " +

@@ -44,10 +44,10 @@ class CompanionObject {
         }
 
         @JvmStatic
-        fun checkValidUntilDates(): Stream<Arguments> =
+        fun newValidityPeriods(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
-                    "new validity period before closed validity period",
+                    "validity period before closed validity period",
                     JSONObject()
                         .apply {
                             put("valid_from", "2022-05-21")
@@ -66,7 +66,7 @@ class CompanionObject {
                     LocalDate.of(2023, 12, 31),
                 ),
                 argumentSet(
-                    "new validity period after closed validity period",
+                    "validity period after closed validity period",
                     JSONObject()
                         .apply {
                             put("valid_from", "2031-01-11")
@@ -85,10 +85,48 @@ class CompanionObject {
                     null,
                 ),
                 argumentSet(
-                    "new validity period during closed validity period",
+                    "validity period during closed validity period",
                     JSONObject()
                         .apply {
                             put("valid_from", "2026-01-11")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    HttpStatus.BAD_REQUEST,
+                    null,
+                    null,
+                ),
+                argumentSet(
+                    "validity period same date closed validity period ended",
+                    JSONObject()
+                        .apply {
+                            put("valid_from", "2030-01-01")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    HttpStatus.BAD_REQUEST,
+                    null,
+                    null,
+                ),
+                argumentSet(
+                    "validity period same date closed validity period started",
+                    JSONObject()
+                        .apply {
+                            put("valid_from", "2024-01-01")
                             put(
                                 "definition",
                                 JSONObject().apply {

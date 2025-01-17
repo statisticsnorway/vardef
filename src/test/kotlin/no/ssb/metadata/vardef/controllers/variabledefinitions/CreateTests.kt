@@ -329,7 +329,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#validUntilInRequest")
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#validUntilInCreateDraft")
     fun `create variable definition valid until in request`(
         input: String,
         httpStatus: HttpStatus,

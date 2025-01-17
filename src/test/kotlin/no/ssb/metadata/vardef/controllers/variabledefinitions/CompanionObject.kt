@@ -9,7 +9,7 @@ import java.util.stream.Stream
 class CompanionObject {
     companion object {
         @JvmStatic
-        fun validUntilInRequest(): Stream<Arguments> =
+        fun validUntilInCreateDraft(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
                     "valid until before valid from",

@@ -138,12 +138,20 @@ class PatchesService(
         logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
     }
 
+    /**
+     * Validates if the provided `dateOfValidUntil` is valid for a given definition period.
+     *
+     * @param definitionId The identifier for the definition to validate.
+     * @param dateOfValidUntil The proposed "valid until" date to validate.
+     * @param validFromDate The starting date of the validity period.
+     * @return `true` if `dateOfValidUntil` is valid; otherwise, `false`.
+     */
+
     private fun isValidValidUntilValue(
         definitionId: String,
         dateOfValidUntil: LocalDate,
         validFromDate: LocalDate,
     ): Boolean {
-        // Retrieve all patches for the given definition
         val patches = list(definitionId)
 
         // Map validFrom and validUntil dates, ensuring only closed periods are considered

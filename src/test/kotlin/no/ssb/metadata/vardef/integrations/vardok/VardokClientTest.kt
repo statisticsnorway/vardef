@@ -10,6 +10,11 @@ import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.argumentSet
+import org.junit.jupiter.params.provider.MethodSource
+import java.util.stream.Stream
 
 // @Requires(env = ["integration-test"])
 @MicronautTest
@@ -54,5 +59,36 @@ class VardokClientTest {
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage("2216")
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.unitTypes).isEqualTo(listOf("01", "04", "05"))
+    }
+
+    @ParameterizedTest
+    @MethodSource("mapUnitTypes")
+    fun `test unit types special cases`(
+        vardokId: String,
+        expectedResult: List<String>,
+    )  {
+        val result = vardokApiService.fetchMultipleVardokItemsByLanguage(vardokId)
+        val varDefInput = VardokService.extractVardefInput(result)
+        assertThat(varDefInput.unitTypes).isEqualTo(expectedResult)
+    }
+
+    companion object {
+        @JvmStatic
+        fun mapUnitTypes(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "",
+                    "3125",
+                    listOf("21"),
+                ),
+                argumentSet(
+                    "2141",
+                    listOf("04"),
+                ),
+                argumentSet(
+                    "3246",
+                    listOf("12", "13"),
+                ),
+            )
     }
 }

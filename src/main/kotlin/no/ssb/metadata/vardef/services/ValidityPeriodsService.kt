@@ -279,24 +279,6 @@ class ValidityPeriodsService(
                 return false // Overlap found
             }
         }
-
-        // Check for gaps between periods
-       /* for (i in 0 until validPeriods.size - 1) {
-            val currentPeriod = validPeriods[i]
-            val nextPeriod = validPeriods[i + 1]
-
-            // Ensure the new date falls in the gap between current.validUntil and next.validFrom
-            if (dateOfValidity.isAfter(currentPeriod.second) && dateOfValidity.isBefore(nextPeriod.first)) {
-                logger.info(
-                    "New valid from: $dateOfValidity fits in the gap between validUntil: ${currentPeriod.second} " +
-                        "and validFrom: ${nextPeriod.first} for definition: $definitionId",
-                    kv(DEFINITION_ID, definitionId),
-                )
-                return true
-            }
-        }*/
-
-        // If no overlap is found, validate against the extreme validFrom dates
         val validFromDates = patches.map { it.validFrom }
         logger.info(
             "Checking if valid new valid from: $dateOfValidity is before: ${validFromDates.minOrNull()} " +

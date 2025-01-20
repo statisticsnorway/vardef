@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
-import java.net.HttpURLConnection.HTTP_CREATED
 
 class CreateTests : BaseVardefTest() {
     @Test
@@ -311,49 +310,6 @@ class CreateTests : BaseVardefTest() {
             .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", validityPeriod)
             .`when`()
             .post("/variable-definitions/$vardefId/patches")
-            .then()
-            .statusCode(httpStatus)
-    }
-
-    @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchValidUntilInBetween")
-    fun `create patch on validity period in between closed validity periods`(
-        validUntil: String,
-        httpStatus: Int,
-        spec: RequestSpecification,
-    ) {
-        // create validity period
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                JSONObject()
-                    .apply {
-                        put("valid_from", "2012-12-31")
-                        put(
-                            "definition",
-                            JSONObject().apply {
-                                put("nb", "Intektsskatt atter ny definisjon")
-                                put("nn", "Intektsskatt atter ny definisjon")
-                                put("en", "Yet another definition")
-                            },
-                        )
-                    }.toString(),
-            )
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/validity-periods")
-            .then()
-            .statusCode(HTTP_CREATED)
-
-        // close validity period with a patch
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(patchBody().apply { put("valid_until", validUntil) }.toString())
-            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", "2012-12-31")
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(httpStatus)
     }

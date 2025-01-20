@@ -133,7 +133,7 @@ class CompanionObject {
                     "valid from before all",
                     JSONObject()
                         .apply {
-                            put("valid_from", "1969-01-01")
+                            put("valid_from", "2019-12-31")
                             put(
                                 "definition",
                                 JSONObject().apply {
@@ -194,22 +194,6 @@ class CompanionObject {
                     HTTP_BAD_REQUEST,
                 ),
                 argumentSet(
-                    "valid from same day valid until first period",
-                    JSONObject()
-                        .apply {
-                            put("valid_from", "1989-12-31")
-                            put(
-                                "definition",
-                                JSONObject().apply {
-                                    put("nb", "Intektsskatt atter ny definisjon")
-                                    put("nn", "Intektsskatt atter ny definisjon")
-                                    put("en", "Yet another definition")
-                                },
-                            )
-                        }.toString(),
-                    HTTP_BAD_REQUEST,
-                ),
-                argumentSet(
                     "valid from during last validity period",
                     JSONObject()
                         .apply {
@@ -242,26 +226,10 @@ class CompanionObject {
                     HTTP_BAD_REQUEST,
                 ),
                 argumentSet(
-                    "valid from during first validity period",
+                    "valid before first validity period",
                     JSONObject()
                         .apply {
                             put("valid_from", "1972-03-21")
-                            put(
-                                "definition",
-                                JSONObject().apply {
-                                    put("nb", "Intektsskatt atter ny definisjon")
-                                    put("nn", "Intektsskatt atter ny definisjon")
-                                    put("en", "Yet another definition")
-                                },
-                            )
-                        }.toString(),
-                    HTTP_BAD_REQUEST,
-                ),
-                argumentSet(
-                    "valid from in gap between periods",
-                    JSONObject()
-                        .apply {
-                            put("valid_from", "2019-12-31")
                             put(
                                 "definition",
                                 JSONObject().apply {

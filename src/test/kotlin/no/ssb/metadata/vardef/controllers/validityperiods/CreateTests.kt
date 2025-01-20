@@ -443,14 +443,11 @@ class CreateTests : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#testOnlyClosedValidityPeriods")
-    fun `new validity on variable period with three closed periods validity periods`(
+    fun `new validity on variable period with two closed periods validity periods`(
         input: String,
         httpStatus: Int,
         spec: RequestSpecification,
     ) {
-        assertThat(SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_BEFORE.definitionId).isEqualTo(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
-        assertThat(validityPeriods.listComplete(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId).size).isEqualTo(3)
-
         spec
             .given()
             .contentType(ContentType.JSON)

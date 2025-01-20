@@ -80,7 +80,6 @@ fun specialCaseUnitMapping(vardokId: String): List<String>? =
         "1997", "2129", "2130", "2133", "2192", "2193" -> listOf("29")
         "2216", "2217", "2210", "2218" -> listOf("01", "04", "05")
         "2182" -> listOf("12", "20")
-        "3125" -> listOf("21")
         else -> null
     }
 

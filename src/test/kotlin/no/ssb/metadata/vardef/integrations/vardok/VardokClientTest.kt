@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
@@ -16,7 +17,7 @@ import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
-// @Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
 class VardokClientTest {
     @Inject

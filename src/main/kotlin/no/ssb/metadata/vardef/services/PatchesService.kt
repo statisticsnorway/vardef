@@ -49,14 +49,13 @@ class PatchesService(
         latestPatch: SavedVariableDefinition,
         userName: String,
     ): SavedVariableDefinition {
-        if (patch.validUntil != null && latestPatch.validFrom.let { patch.validUntil.isEqualOrBefore(it) })
-            {
-                logger.error(
-                    "Invalid 'validUntil' value ${patch.validUntil} for definition: $definitionId",
-                    kv(DEFINITION_ID, definitionId),
-                )
-                throw InvalidValidDateException()
-            }
+        if (patch.validUntil != null && latestPatch.validFrom.let { patch.validUntil.isEqualOrBefore(it) }) {
+            logger.error(
+                "Invalid 'validUntil' value ${patch.validUntil} for definition: $definitionId",
+                kv(DEFINITION_ID, definitionId),
+            )
+            throw InvalidValidDateException()
+        }
         if (patch.owner != latestPatch.owner && patch.owner != null) {
             logger.info(
                 "When creating patch owner has changed from ${latestPatch.owner} to ${patch.owner} for definition: $definitionId",

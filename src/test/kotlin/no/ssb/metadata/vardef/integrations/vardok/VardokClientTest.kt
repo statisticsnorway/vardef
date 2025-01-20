@@ -66,7 +66,7 @@ class VardokClientTest {
     fun `test unit types special cases`(
         vardokId: String,
         expectedResult: List<String>,
-    )  {
+    ) {
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage(vardokId)
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.unitTypes).isEqualTo(expectedResult)

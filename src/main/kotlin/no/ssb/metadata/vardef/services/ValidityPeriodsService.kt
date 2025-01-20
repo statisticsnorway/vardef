@@ -257,7 +257,6 @@ class ValidityPeriodsService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean {
-        // either the last valid from or the last valid until
         val patches = list(definitionId)
 
         // Map the validFrom and validUntil dates

@@ -49,7 +49,7 @@ class PatchesService(
         latestPatch: SavedVariableDefinition,
         userName: String,
     ): SavedVariableDefinition {
-        if (patch.validUntil != null && latestPatch.validUntil?.let { patch.validUntil.isEqualOrBefore(it) } == true)
+        if (patch.validUntil != null && latestPatch.validFrom.let { patch.validUntil.isEqualOrBefore(it) })
             {
                 logger.error(
                     "Invalid 'validUntil' value ${patch.validUntil} for definition: $definitionId",

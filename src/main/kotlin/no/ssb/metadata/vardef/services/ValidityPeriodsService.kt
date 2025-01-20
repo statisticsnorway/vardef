@@ -281,7 +281,7 @@ class ValidityPeriodsService(
         }
 
         // Check for gaps between periods
-        for (i in 0 until validPeriods.size - 1) {
+       /* for (i in 0 until validPeriods.size - 1) {
             val currentPeriod = validPeriods[i]
             val nextPeriod = validPeriods[i + 1]
 
@@ -294,7 +294,7 @@ class ValidityPeriodsService(
                 )
                 return true
             }
-        }
+        }*/
 
         // If no overlap is found, validate against the extreme validFrom dates
         val validFromDates = patches.map { it.validFrom }

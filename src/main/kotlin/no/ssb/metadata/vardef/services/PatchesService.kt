@@ -146,7 +146,6 @@ class PatchesService(
      * @param validFromDate The starting date of the validity period.
      * @return `true` if `dateOfValidUntil` is valid; otherwise, `false`.
      */
-
     private fun isValidValidUntilValue(
         definitionId: String,
         dateOfValidUntil: LocalDate,
@@ -163,7 +162,7 @@ class PatchesService(
             }.sortedBy { it.first }
 
         // Check if the new validUntil overlaps with any closed validity period
-        validPeriods.forEach { (validFrom, validUntil) ->
+       /* validPeriods.forEach { (validFrom, validUntil) ->
             logger.info(
                 "Checking if new valid until: $dateOfValidUntil overlaps with period validFrom: $validFrom " +
                     "and validUntil: $validUntil for definition: $definitionId",
@@ -172,7 +171,7 @@ class PatchesService(
             if (dateOfValidUntil.isEqualOrAfter(validFrom) && dateOfValidUntil.isEqualOrBefore(validUntil)) {
                 return false // Overlap found
             }
-        }
+        }*/
 
         // Ensure validUntil is not earlier than validFrom for the same period
         if (dateOfValidUntil.isBefore(validFromDate)) {

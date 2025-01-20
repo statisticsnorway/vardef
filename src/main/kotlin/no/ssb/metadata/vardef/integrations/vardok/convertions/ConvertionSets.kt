@@ -1,91 +1,74 @@
 package no.ssb.metadata.vardef.integrations.vardok.convertions
 
 /**
- * Enum of all official titles for unit types.
- * Set of string values which maps to the title
+ * Set of string values which maps to unittypes list
  */
-enum class UnitTypes(
-    val values: Set<String>,
-) {
-    ADRESSE(setOf("Adresse")),
-    ARBEIDSULYKKE(setOf("Arbeidsulykke")),
-    BEDRIFT(setOf("Bedrift", "Virksomhet")),
-    BOLIG(setOf("Bolig")),
-    BRANSJE_ENHET(setOf("Bransjeenhet")),
-    KJOERETOEY(setOf("Kjøretøy")),
-    BYGNING(setOf("Bygning")),
-    EIENDOM(setOf("Eiendom", "Tinglyst omsetning", "Skogareal", "Landbrukseiendom", "Grunneiendom")),
-    FAMILIE(setOf("Familie")),
-    FORETAK(setOf("Foretak")),
-    FYLKE_FORVALTNING(setOf("Fylke (forvaltning)")),
-    FYLKE_GEOGRAFISK(setOf("Fylke (geografisk)")),
-    HAVNEANLOEP(setOf("Havneanløp")),
-    HUSHOLDNING(setOf("Husholdning")),
-    JURIDISK_ENHET(setOf("Juridisk enhet")),
-    KURS(setOf("Kurs")),
-    KOMMUNE_FORVALTNING(setOf("Kommune (forvaltning)")),
-    KOMMUNE_GEOGRAFISK(setOf("Kommune (geografisk)")),
-    LOVBRUDD(setOf("Lovbrudd")),
-    PERSON(setOf("Arbeidsforhold", "Person")),
-    SKIP(setOf("Skip", "Fiskefartøy")),
-    STATLIG_VIRKSOMHET(setOf("Statlig virksomhet", "Offentlig forvaltning")),
-    STORFE(setOf("Storfe")),
-    TRAFIKKULYKKE(setOf("Trafikkulykke", "Ulykke")),
-    TRANSAKSJON(setOf("Transaksjon")),
-    VALG(setOf("Valg")),
-    VARE_TJENESTE(setOf("Vare/tjeneste", "Repr.vare og -tjeneste", "Internett-abonnement")),
-    VERDIPAPIR(setOf("Verdipapir")),
-    SAK(setOf("Sak")),
-    AVFALL_ANLOEP_LUFTFARTOEY(setOf("Avfallsanlegg", "Avløpsanlegg", "Luftfartøy")),
-    ;
+val unitTypesMapping =
+    mapOf(
+        setOf("Adresse") to listOf("01"),
+        setOf("Arbeidsulykke") to listOf("02"),
+        setOf("Bolig") to listOf("03"),
+        setOf("Bygning") to listOf("04"),
+        setOf(
+            "Eiendom",
+            "Tinglyst omsetning",
+            "Skogareal",
+            "Landbrukseiendom",
+            "Grunneiendom"
+        ) to listOf("05"),
+        setOf("Familie") to listOf("06"),
+        setOf("Fylke (forvaltning)") to listOf("07"),
+        setOf("Fylke (geografisk)") to listOf("08"),
+        setOf("Havneanløp") to listOf("09"),
+        setOf("Husholdning") to listOf("10"),
+        setOf("Juridisk enhet") to listOf("11"),
+        setOf("Foretak") to listOf("12"),
+        setOf(
+            "Bedrift",
+            "Virksomhet"
+        ) to listOf("13"),
+        setOf("Bransjeenhet") to listOf("14"),
+        setOf("Kjøretøy") to listOf("15"),
+        setOf("Kommune (forvaltning)") to listOf("15"),
+        setOf("Kommune (forvaltning)") to listOf("16"),
+        setOf("Fylke (geografisk)") to listOf("17"),
+        setOf("Kurs") to listOf("18"),
+        setOf("Lovbrudd") to listOf("19"),
+        setOf(
+            "Arbeidsforhold",
+            "Person"
+        ) to listOf("20"),
+        setOf(
+            "Skip",
+            "Fiskefartøy"
+        ) to listOf("21"),
+        setOf(
+            "Statlig virksomhet",
+            "Offentlig forvaltning"
+        ) to listOf("22"),
+        setOf("Storfe") to listOf("23"),
+        setOf("Trafikkulykke", "Ulykke") to listOf("24"),
+        setOf("Transaksjon") to listOf("25"),
+        setOf("Valg") to listOf("26"),
+        setOf(
+            "Vare/tjeneste",
+            "Repr.vare og -tjeneste",
+            "Internett-abonnement"
+        ) to listOf("27"),
+        setOf("Verdipapir") to listOf("28"),
+        setOf(
+            "Arbeidskonflikt",
+            "Avfallsanlegg",
+            "Avløpsanlegg",
+            "Luftfartøy",
+            "Sak"
+        ) to listOf("12", "13"),
+    )
 
-    companion object {
-        // Method to find the category for a given value
-        fun findCategoryForValue(value: String): UnitTypes? = entries.find { category -> value in category.values }
-    }
-}
-
-/**
- * This converter map statisticalUnit (title) with unitType codes.
- * Some statisticalUnits are outdated and are mapped according to set rules.
- *
- * @param name: statisticalUnit in Vardok
- * @return A list of codes
- */
-fun convertUnitTypes(name: String): List<String?> =
-    when (UnitTypes.findCategoryForValue(name)) {
-        UnitTypes.ADRESSE -> listOf("01")
-        UnitTypes.ARBEIDSULYKKE -> listOf("02")
-        UnitTypes.BOLIG -> listOf("03")
-        UnitTypes.BYGNING -> listOf("04")
-        UnitTypes.EIENDOM -> listOf("05")
-        UnitTypes.FAMILIE -> listOf("06")
-        UnitTypes.FYLKE_FORVALTNING -> listOf("07")
-        UnitTypes.FYLKE_GEOGRAFISK -> listOf("08")
-        UnitTypes.HAVNEANLOEP -> listOf("09")
-        UnitTypes.HUSHOLDNING -> listOf("10")
-        UnitTypes.JURIDISK_ENHET -> listOf("11")
-        UnitTypes.FORETAK -> listOf("12")
-        UnitTypes.BEDRIFT -> listOf("13")
-        UnitTypes.BRANSJE_ENHET -> listOf("14")
-        UnitTypes.KJOERETOEY -> listOf("15")
-        UnitTypes.KOMMUNE_FORVALTNING -> listOf("16")
-        UnitTypes.KOMMUNE_GEOGRAFISK -> listOf("17")
-        UnitTypes.KURS -> listOf("18")
-        UnitTypes.LOVBRUDD -> listOf("19")
-        UnitTypes.PERSON -> listOf("20")
-        UnitTypes.SKIP -> listOf("21")
-        UnitTypes.STATLIG_VIRKSOMHET -> listOf("22")
-        UnitTypes.STORFE -> listOf("23")
-        UnitTypes.TRAFIKKULYKKE -> listOf("24")
-        UnitTypes.TRANSAKSJON -> listOf("25")
-        UnitTypes.VALG -> listOf("26")
-        UnitTypes.VARE_TJENESTE -> listOf("27")
-        UnitTypes.VERDIPAPIR -> listOf("28")
-        UnitTypes.SAK -> listOf("05", "13")
-        UnitTypes.AVFALL_ANLOEP_LUFTFARTOEY -> listOf("12", "13")
-        else -> emptyList()
-    }
+fun convertUnitTypes(name: String): List<String?>? =
+    unitTypesMapping.entries
+        .firstOrNull { entry -> name in entry.key }
+        ?.value
 
 /**
  * Set of string values which maps to the subject filed value

@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.convertions
 
-import no.ssb.metadata.vardef.integrations.vardok.convertions.UnitTypes.Companion.findCategoryForValue
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
@@ -18,14 +17,10 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     return Pair(firstDate, secondDate)
 }
 
-fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> {
-    val statisticalUnit = vardokItem.variable?.statisticalUnit
-    if (statisticalUnit != null && findCategoryForValue(statisticalUnit) != null) {
-        return convertUnitTypes(statisticalUnit)
-    }
-
-    throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
-}
+fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> =
+    vardokItem.variable?.statisticalUnit?.let {
+        convertUnitTypes(it)
+    } ?: throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
 
 fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String?> =
     vardokItem.variable?.subjectArea?.codeText?.let {

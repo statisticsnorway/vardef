@@ -14,7 +14,7 @@ val unitTypesMapping =
             "Tinglyst omsetning",
             "Skogareal",
             "Landbrukseiendom",
-            "Grunneiendom"
+            "Grunneiendom",
         ) to listOf("05"),
         setOf("Familie") to listOf("06"),
         setOf("Fylke (forvaltning)") to listOf("07"),
@@ -25,7 +25,7 @@ val unitTypesMapping =
         setOf("Foretak") to listOf("12"),
         setOf(
             "Bedrift",
-            "Virksomhet"
+            "Virksomhet",
         ) to listOf("13"),
         setOf("Bransjeenhet") to listOf("14"),
         setOf("Kjøretøy") to listOf("15"),
@@ -36,15 +36,15 @@ val unitTypesMapping =
         setOf("Lovbrudd") to listOf("19"),
         setOf(
             "Arbeidsforhold",
-            "Person"
+            "Person",
         ) to listOf("20"),
         setOf(
             "Skip",
-            "Fiskefartøy"
+            "Fiskefartøy",
         ) to listOf("21"),
         setOf(
             "Statlig virksomhet",
-            "Offentlig forvaltning"
+            "Offentlig forvaltning",
         ) to listOf("22"),
         setOf("Storfe") to listOf("23"),
         setOf("Trafikkulykke", "Ulykke") to listOf("24"),
@@ -53,7 +53,7 @@ val unitTypesMapping =
         setOf(
             "Vare/tjeneste",
             "Repr.vare og -tjeneste",
-            "Internett-abonnement"
+            "Internett-abonnement",
         ) to listOf("27"),
         setOf("Verdipapir") to listOf("28"),
         setOf(
@@ -61,7 +61,7 @@ val unitTypesMapping =
             "Avfallsanlegg",
             "Avløpsanlegg",
             "Luftfartøy",
-            "Sak"
+            "Sak",
         ) to listOf("12", "13"),
     )
 
@@ -69,6 +69,19 @@ fun convertUnitTypes(name: String): List<String?>? =
     unitTypesMapping.entries
         .firstOrNull { entry -> name in entry.key }
         ?.value
+
+fun specialCaseUnitMapping(vardokId: String): List<String>? =
+    when (vardokId) {
+        "2124", "2141", "2142" -> listOf("04")
+        "2139", "2149", "2206", "2148" -> listOf("05")
+        "1431", "2092", "3246", "1943" -> listOf("12", "13")
+        "1700", "1712", "1713", "1319", "1320" -> listOf("16")
+        "1416", "2097", "1701", "1321", "2190" -> listOf("20")
+        "1997", "2129", "2130", "2133", "2192", "2193" -> listOf("29")
+        "2216", "2217", "2210", "2218" -> listOf("01", "04", "05")
+        "2182" -> listOf("12", "20")
+        else -> null
+    }
 
 /**
  * Set of string values which maps to the subject filed value

@@ -17,10 +17,17 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     return Pair(firstDate, secondDate)
 }
 
+/**
+ * When null response from method [convertUnitTypes] identifier is checked in method [specialCaseUnitMapping]
+ *
+ * @returns list except if result is null then
+ * @throws OutdatedUnitTypesException
+ */
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> =
-    vardokItem.variable?.statisticalUnit?.let {
-        convertUnitTypes(it)
-    } ?: throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
+    vardokItem.variable?.statisticalUnit?.let { statUnit ->
+        convertUnitTypes(statUnit) ?: specialCaseUnitMapping(vardokItem.id.substringAfterLast(":"))
+    } ?: specialCaseUnitMapping(vardokItem.id)
+        ?: throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
 
 fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String?> =
     vardokItem.variable?.subjectArea?.codeText?.let {

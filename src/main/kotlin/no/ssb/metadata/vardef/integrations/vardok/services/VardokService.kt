@@ -27,7 +27,6 @@ interface VardokService {
     fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
 
     fun createVarDefInputFromVarDokItems(varDokItems: Map<String, VardokResponse>): String {
-        // checkVardokForMissingElements(varDokItems)
         val varDefInput = extractVardefInput(varDokItems)
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return mapper.writeValueAsString(varDefInput)

@@ -50,6 +50,10 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
                     "Hubba hubba",
                     null,
                 ),
+                arguments(
+                    "Jordbruk, jakt, viltstell",
+                    null,
+                ),
             )
     }
 

@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokSubjectAr
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.AssertionsForClassTypes
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -137,6 +138,15 @@ class VardokMigrationTest {
         val vardokresponse = vardokService.getVardokItem("130")
         val result = vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
         assertThat(result).isEqualTo(listOf("sk"))
+    }
+
+    @Test
+    fun `vardokresponse subject area incorrect input`() {
+        assertThatThrownBy {
+            val vardokresponse = vardokService.getVardokItem("99999")
+            vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
+        }.isInstanceOf(OutdatedSubjectAreaException::class.java)
+            .hasMessageContaining("Vardok id 3125 SubjectArea has outdated subject area value and can not be saved")
     }
 
     @ParameterizedTest

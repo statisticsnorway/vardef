@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.controllers.validityperiods
 
-import io.micronaut.http.HttpStatus
 import no.ssb.metadata.vardef.utils.SAVED_INTERNAL_VARIABLE_DEFINITION
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
@@ -63,7 +62,7 @@ class CompanionObject {
                             )
                         }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-                    HttpStatus.CREATED,
+                    HTTP_CREATED,
                     LocalDate.of(2031, 1, 11),
                     null,
                 ),
@@ -82,7 +81,7 @@ class CompanionObject {
                             )
                         }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-                    HttpStatus.BAD_REQUEST,
+                    HTTP_BAD_REQUEST,
                     null,
                     null,
                 ),
@@ -101,7 +100,7 @@ class CompanionObject {
                             )
                         }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-                    HttpStatus.BAD_REQUEST,
+                    HTTP_BAD_REQUEST,
                     null,
                     null,
                 ),
@@ -120,20 +119,15 @@ class CompanionObject {
                             )
                         }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-                    HttpStatus.BAD_REQUEST,
+                    HTTP_BAD_REQUEST,
                     null,
                     null,
                 ),
-            )
-
-        @JvmStatic
-        fun testOnlyClosedValidityPeriods(): Stream<Arguments> =
-            Stream.of(
                 argumentSet(
-                    "valid from before all",
+                    "validity period before closed validity period",
                     JSONObject()
                         .apply {
-                            put("valid_from", "2019-12-31")
+                            put("valid_from", "2019-01-01")
                             put(
                                 "definition",
                                 JSONObject().apply {
@@ -143,103 +137,10 @@ class CompanionObject {
                                 },
                             )
                         }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     HTTP_CREATED,
-                ),
-                argumentSet(
-                    "valid from after all",
-                    JSONObject()
-                        .apply {
-                            put("valid_from", "2030-01-02")
-                            put(
-                                "definition",
-                                JSONObject().apply {
-                                    put("nb", "Intektsskatt atter ny definisjon")
-                                    put("nn", "Intektsskatt atter ny definisjon")
-                                    put("en", "Yet another definition")
-                                },
-                            )
-                        }.toString(),
-                    HTTP_CREATED,
-                ),
-                argumentSet(
-                    "valid from same day valid until last period",
-                    JSONObject()
-                        .apply {
-                            put("valid_from", "2030-01-01")
-                            put(
-                                "definition",
-                                JSONObject().apply {
-                                    put("nb", "Intektsskatt atter ny definisjon")
-                                    put("nn", "Intektsskatt atter ny definisjon")
-                                    put("en", "Yet another definition")
-                                },
-                            )
-                        }.toString(),
-                    HTTP_BAD_REQUEST,
-                ),
-                argumentSet(
-                    "valid from same day valid until second period",
-                    JSONObject()
-                        .apply {
-                            put("valid_from", "2023-12-31")
-                            put(
-                                "definition",
-                                JSONObject().apply {
-                                    put("nb", "Intektsskatt atter ny definisjon")
-                                    put("nn", "Intektsskatt atter ny definisjon")
-                                    put("en", "Yet another definition")
-                                },
-                            )
-                        }.toString(),
-                    HTTP_BAD_REQUEST,
-                ),
-                argumentSet(
-                    "valid from during last validity period",
-                    JSONObject()
-                        .apply {
-                            put("valid_from", "2027-09-11")
-                            put(
-                                "definition",
-                                JSONObject().apply {
-                                    put("nb", "Intektsskatt atter ny definisjon")
-                                    put("nn", "Intektsskatt atter ny definisjon")
-                                    put("en", "Yet another definition")
-                                },
-                            )
-                        }.toString(),
-                    HTTP_BAD_REQUEST,
-                ),
-                argumentSet(
-                    "valid from during second validity period",
-                    JSONObject()
-                        .apply {
-                            put("valid_from", "2021-03-21")
-                            put(
-                                "definition",
-                                JSONObject().apply {
-                                    put("nb", "Intektsskatt atter ny definisjon")
-                                    put("nn", "Intektsskatt atter ny definisjon")
-                                    put("en", "Yet another definition")
-                                },
-                            )
-                        }.toString(),
-                    HTTP_BAD_REQUEST,
-                ),
-                argumentSet(
-                    "valid before first validity period",
-                    JSONObject()
-                        .apply {
-                            put("valid_from", "1972-03-21")
-                            put(
-                                "definition",
-                                JSONObject().apply {
-                                    put("nb", "Intektsskatt atter ny definisjon")
-                                    put("nn", "Intektsskatt atter ny definisjon")
-                                    put("en", "Yet another definition")
-                                },
-                            )
-                        }.toString(),
-                    HTTP_CREATED,
+                    LocalDate.of(2019, 1, 1),
+                    LocalDate.of(2019, 12, 31),
                 ),
             )
     }

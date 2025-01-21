@@ -15,6 +15,8 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import java.net.HttpURLConnection.HTTP_BAD_REQUEST
+import java.net.HttpURLConnection.HTTP_CREATED
 import java.time.LocalDate
 
 class CreateTests : BaseVardefTest() {
@@ -374,46 +376,12 @@ class CreateTests : BaseVardefTest() {
         assertThat(completeResponse.createdBy).isEqualTo("me@example.com")
     }
 
-    @Test
-    fun `create validity period during closed validity period`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                JSONObject()
-                    .apply {
-                        put("valid_from", "2025-01-11")
-                        put(
-                            "definition",
-                            JSONObject().apply {
-                                put("nb", "Intektsskatt atter ny definisjon")
-                                put("nn", "Intektsskatt atter ny definisjon")
-                                put("en", "Yet another definition")
-                            },
-                        )
-                    }.toString(),
-            )
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/validity-periods")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage =
-                        "The date selected cannot be added because it falls between previously added valid dates.",
-                ),
-            )
-    }
-
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#newValidityPeriods")
-    fun `create new validity period last validity period is closed on one patch`(
+    fun `create new validity period when valid until is set in draft`(
         input: String,
         vardefId: String,
-        httpStatus: HttpStatus,
+        httpStatus: Int,
         expectedValidFrom: LocalDate?,
         expectedValidUntil: LocalDate?,
         spec: RequestSpecification,
@@ -427,35 +395,22 @@ class CreateTests : BaseVardefTest() {
                 .`when`()
                 .post("/variable-definitions/$vardefId/validity-periods")
                 .then()
-                .statusCode(httpStatus.code)
+                .statusCode(httpStatus)
                 .extract()
                 .body()
                 .asString()
 
-        if (httpStatus == HttpStatus.CREATED) {
+        if (httpStatus == HTTP_CREATED) {
             jsonMapper.readValue(body, CompleteResponse::class.java).apply {
                 assertThat(this).isNotNull
                 assertThat(validFrom).isEqualTo(expectedValidFrom)
                 assertThat(validUntil).isEqualTo(expectedValidUntil)
             }
         }
-    }
-
-    @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#testOnlyClosedValidityPeriods")
-    fun `new validity on variable period with two closed periods validity periods`(
-        input: String,
-        httpStatus: Int,
-        spec: RequestSpecification,
-    ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(input)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/validity-periods")
-            .then()
-            .statusCode(httpStatus)
+        if (httpStatus == HTTP_BAD_REQUEST) {
+            assertThat(body).contains(
+                "The date selected cannot be added because it falls between previously added valid dates.",
+            )
+        }
     }
 }

@@ -40,7 +40,7 @@ class ConvertionsTest : BaseVardokTest() {
                 ),
                 arguments(
                     "Sak",
-                    listOf("05", "13"),
+                    listOf("12", "13"),
                 ),
                 arguments(
                     "Fiskefartøy",
@@ -53,10 +53,6 @@ class ConvertionsTest : BaseVardokTest() {
                 arguments(
                     "Repr.vare og -tjeneste",
                     listOf("27"),
-                ),
-                arguments(
-                    "Hubba hubba",
-                    emptyList<String?>(),
                 ),
                 arguments(
                     "Offentlig forvaltning",

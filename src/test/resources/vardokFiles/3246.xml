@@ -1,0 +1,55 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2014-07-01" defaultValidFrom="2012-12-31" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:3246" lastChangedDate="2014-07-01" otherLanguages="nn" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for regnskapsstatistikk</dc:contributor>
+        <dc:creator>Arild Langseth</dc:creator>
+        <dcterms:modified>2014-07-01</dcterms:modified>
+        <dcterms:valid>2012-12-31 - </dcterms:valid>
+        <dc:description>Annen innskutt egenkapital som aksjeselskapet har nedsatt og betalt tilbake til aksjonærene. Dette er en skattefri overføring.</dc:description>
+        <dcterms:abstract/>
+        <dcterms:tableOfContents>Aksjonær</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:3246</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>11.01 - Aksjer, obligasjoner, seritfikater og øvrig kredittmarked</dc:subject>
+        <dc:title>Mottatt annen innskutt egenkapital</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Mottatt annen innskutt egenkapital</Title>
+        <Description>Annen innskutt egenkapital som aksjeselskapet har nedsatt og betalt tilbake til aksjonærene. Dette er en skattefri overføring.</Description>
+        <ContactPerson>
+            <CodeValue>ala</CodeValue>
+            <CodeText>Arild Langseth</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>970</CodeValue>
+            <CodeText>Seksjon for regnskapsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Aksjonær</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>11.01</CodeValue>
+            <CodeText>Aksjer, obligasjoner, seritfikater og øvrig kredittmarked</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource/>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName/>
+        <ShortNameWeb>
+            <CodeValue>aksjer</CodeValue>
+            <CodeText>Aksjestatistikk</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

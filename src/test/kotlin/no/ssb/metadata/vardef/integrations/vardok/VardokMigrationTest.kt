@@ -8,12 +8,16 @@ import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokSubjectAr
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.AssertionsForClassTypes
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.net.URL
+import java.util.stream.Stream
 
 @MicronautTest
 class VardokMigrationTest {
@@ -144,5 +148,35 @@ class VardokMigrationTest {
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.externalReferenceUri).isEqualTo(expectedResult)
+    }
+
+    @ParameterizedTest
+    @MethodSource("mapUnitTypes")
+    fun `test unit types special cases`(
+        vardokId: String,
+        expectedResult: List<String>,
+    ) {
+        val result = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
+        val varDefInput = VardokService.extractVardefInput(result)
+        AssertionsForClassTypes.assertThat(varDefInput.unitTypes).isEqualTo(expectedResult)
+    }
+
+    companion object {
+        @JvmStatic
+        fun mapUnitTypes(): Stream<Arguments> =
+            Stream.of(
+                arguments(
+                    "3125",
+                    listOf("21"),
+                ),
+                arguments(
+                    "2141",
+                    listOf("04"),
+                ),
+                arguments(
+                    "3246",
+                    listOf("12", "13"),
+                ),
+            )
     }
 }

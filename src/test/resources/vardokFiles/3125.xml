@@ -1,0 +1,55 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2012-10-29" defaultValidFrom="" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:3125" lastChangedDate="2012-10-29" otherLanguages="" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for transport-, reiselivs- og IKT-statistikk</dc:contributor>
+        <dc:creator>Permisjon/Sluttet</dc:creator>
+        <dcterms:modified>2012-10-29</dcterms:modified>
+        <dcterms:valid/>
+        <dc:description>En hendelse på, eller i tilknytning til, et eller flere skip, som resulterer i skade på skip eller person.</dc:description>
+        <dcterms:abstract> Sjøulykkesstatistikk</dcterms:abstract>
+        <dcterms:tableOfContents>Ulykke</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:3125</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>10.12.40 - Sjøtransport</dc:subject>
+        <dc:title>Sjøulykke</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Sjøulykke</Title>
+        <Description>En hendelse på, eller i tilknytning til, et eller flere skip, som resulterer i skade på skip eller person.</Description>
+        <ContactPerson>
+            <CodeValue>tgj</CodeValue>
+            <CodeText>Permisjon/Sluttet</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>440</CodeValue>
+            <CodeText>Seksjon for transport-, reiselivs- og IKT-statistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Ulykke</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>10.12.40</CodeValue>
+            <CodeText>Sjøtransport</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource>Sjøulykkesstatistikk</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName/>
+        <ShortNameWeb>
+            <CodeValue>sjoulykker</CodeValue>
+            <CodeText>Sjøulykker</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations/>
+</FIMD>

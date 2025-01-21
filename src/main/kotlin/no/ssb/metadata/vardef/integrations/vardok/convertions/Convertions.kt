@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.convertions
 
-import no.ssb.metadata.vardef.integrations.vardok.convertions.UnitTypes.Companion.findCategoryForValue
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaException
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
@@ -18,14 +17,23 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     return Pair(firstDate, secondDate)
 }
 
-fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> {
-    val statisticalUnit = vardokItem.variable?.statisticalUnit
-    if (statisticalUnit != null && findCategoryForValue(statisticalUnit) != null) {
-        return convertUnitTypes(statisticalUnit)
-    }
+fun vardokId(vardokItem: VardokResponse): String = vardokItem.id.substringAfterLast(":")
 
-    throw OutdatedUnitTypesException(vardokItem.id.substringAfterLast(":"))
-}
+/**
+ * When null response from method [convertUnitTypes] identifier is checked in method [specialCaseUnitMapping]
+ *
+ * @returns list except if result is null then
+ * @throws OutdatedUnitTypesException
+ */
+fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String?> =
+    // Handle id with valid statisticalUnit to code 24, but shall map to 21
+    if (vardokId(vardokItem) == "3125") {
+        listOf("21")
+    } else {
+        vardokItem.variable?.statisticalUnit?.let { statUnit ->
+            convertUnitTypes(statUnit) ?: specialCaseUnitMapping(vardokId(vardokItem))
+        } ?: specialCaseUnitMapping(vardokId(vardokItem))
+    } ?: throw OutdatedUnitTypesException(vardokId(vardokItem))
 
 fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String?> =
     vardokItem.variable?.subjectArea?.codeText?.let {

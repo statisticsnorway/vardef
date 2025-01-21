@@ -250,12 +250,10 @@ class VariableDefinitionService(
     fun isCorrectDateOrderComparedToSaved(
         updateDraft: UpdateDraft,
         savedDraft: SavedVariableDefinition,
-    ): Boolean {
-        return if (updateDraft.validFrom == null && updateDraft.validUntil == null) {
-            true
-        } else {
-            (updateDraft.validFrom?.isBefore(savedDraft.validUntil) ?: true) &&
-                (updateDraft.validUntil?.isAfter(savedDraft.validFrom) ?: true)
-        }
-    }
+    ): Boolean =
+        (updateDraft.validFrom == null && updateDraft.validUntil == null) ||
+            (
+                isCorrectDateOrder(updateDraft.validFrom, savedDraft.validUntil) &&
+                    isCorrectDateOrder(savedDraft.validFrom, updateDraft.validUntil)
+            )
 }

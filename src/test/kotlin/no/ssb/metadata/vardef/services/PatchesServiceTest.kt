@@ -3,11 +3,9 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
-import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.Owner
 import no.ssb.metadata.vardef.models.Patch
-import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -65,7 +63,7 @@ class PatchesServiceTest : BaseVardefTest() {
         validityPeriod: LocalDate?,
         isClosedValidityPeriodException: Boolean,
         isInvalidDateException: Boolean,
-    ){
+    ) {
         val patch =
             Patch(
                 null,
@@ -90,12 +88,11 @@ class PatchesServiceTest : BaseVardefTest() {
                 patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
             }
         }
-        if( isInvalidDateException){
+        if (isInvalidDateException) {
             assertThrows<InvalidValidDateException> {
                 patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
             }
         }
-
     }
 
     @Test
@@ -239,7 +236,7 @@ class PatchesServiceTest : BaseVardefTest() {
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     null,
                     true,
-                    false
+                    false,
                 ),
                 Arguments.argumentSet(
                     "Valid until on previous closed validity period",
@@ -247,7 +244,7 @@ class PatchesServiceTest : BaseVardefTest() {
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     LocalDate.of(2020, 1, 1),
                     true,
-                    false
+                    false,
                 ),
                 Arguments.argumentSet(
                     "Valid until equal saved valid from",

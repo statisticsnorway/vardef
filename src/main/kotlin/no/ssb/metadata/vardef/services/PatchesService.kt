@@ -1,8 +1,6 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID

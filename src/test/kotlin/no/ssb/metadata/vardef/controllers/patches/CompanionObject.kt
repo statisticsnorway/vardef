@@ -293,7 +293,7 @@ class CompanionObject {
                     HTTP_CREATED,
                 ),
                 argumentSet(
-                    "validity period is open valid until is before valid_from",
+                    "validity period is open valid until is before valid from",
                     patchBody().apply { put("valid_until", "2019-06-30") }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL.definitionId,
                     null,
@@ -307,7 +307,7 @@ class CompanionObject {
                     HTTP_BAD_REQUEST,
                 ),
                 argumentSet(
-                    "validity period does not exist - select specific period",
+                    "validity period does not exist",
                     patchBody().apply { put("valid_until", "2020-06-30") }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     "1980-01-01",

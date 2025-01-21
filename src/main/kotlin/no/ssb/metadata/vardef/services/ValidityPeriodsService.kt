@@ -257,34 +257,23 @@ class ValidityPeriodsService(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean {
-        val patches = list(definitionId)
-
-        // Map the validFrom and validUntil dates
         val validPeriods =
-            patches.mapNotNull { patch ->
+            list(definitionId).map { patch ->
                 val validFrom = patch.validFrom
                 val validUntil = patch.validUntil
-                if (validUntil != null) validFrom to validUntil else null
+                validFrom to validUntil
             }.sortedBy { it.first }
 
-        // Check if the new date overlaps with any closed validity period
-        validPeriods.forEach { (validFrom, validUntil) ->
-            logger.info(
-                "Checking if new valid from: $dateOfValidity overlaps with period validFrom: $validFrom " +
-                    "and validUntil: $validUntil for definition: $definitionId",
-                kv(DEFINITION_ID, definitionId),
-            )
-            if (dateOfValidity.isEqualOrAfter(validFrom) && dateOfValidity.isEqualOrBefore(validUntil)) {
-                return false // Overlap found
-            }
-        }
-        val validFromDates = patches.map { it.validFrom }
+        val firstValidFrom = validPeriods.first().first
+        val upperBoundary = validPeriods.last().second ?: validPeriods.last().first
+
         logger.info(
-            "Checking if valid new valid from: $dateOfValidity is before: ${validFromDates.minOrNull()} " +
-                "or after: ${validFromDates.maxOrNull()} for definition: $definitionId",
+            "Checking if valid new valid from: $dateOfValidity " +
+                "is before: $firstValidFrom, or after: $upperBoundary, for definition: $definitionId",
             kv(DEFINITION_ID, definitionId),
         )
-        return dateOfValidity.isBefore(validFromDates.minOrNull()) || dateOfValidity.isAfter(validFromDates.maxOrNull())
+
+        return dateOfValidity.isBefore(firstValidFrom) || dateOfValidity.isAfter(upperBoundary)
     }
 
     /**

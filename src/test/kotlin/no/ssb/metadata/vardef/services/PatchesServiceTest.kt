@@ -1,9 +1,13 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
+import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
+import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
+import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.Owner
 import no.ssb.metadata.vardef.models.Patch
+import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -11,6 +15,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.time.LocalDate
 import java.util.stream.Stream
 
 class PatchesServiceTest : BaseVardefTest() {
@@ -50,6 +55,47 @@ class PatchesServiceTest : BaseVardefTest() {
         assertThat(
             variableDefinitionService.list().map { it.definitionId },
         ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
+    }
+
+    @ParameterizedTest
+    @MethodSource("getValidUntilTestCases")
+    fun `create patch with valid until`(
+        validUntil: LocalDate,
+        definitionId: String,
+        validityPeriod: LocalDate?,
+        isClosedValidityPeriodException: Boolean,
+        isInvalidDateException: Boolean,
+    ){
+        val patch =
+            Patch(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                validUntil = validUntil,
+                null,
+                null,
+                null,
+                null,
+                null,
+            )
+        val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(definitionId, validityPeriod)
+
+        if (isClosedValidityPeriodException) {
+            assertThrows<ClosedValidityPeriodException> {
+                patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+            }
+        }
+        if( isInvalidDateException){
+            assertThrows<InvalidValidDateException> {
+                patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+            }
+        }
+
     }
 
     @Test
@@ -181,6 +227,43 @@ class PatchesServiceTest : BaseVardefTest() {
                     DRAFT_BUS_EXAMPLE.definitionId,
                     0,
                     false,
+                ),
+            )
+
+        @JvmStatic
+        fun getValidUntilTestCases(): Stream<Arguments> =
+            Stream.of(
+                Arguments.argumentSet(
+                    "Valid until on closed validity period latest",
+                    LocalDate.of(2031, 12, 31),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    null,
+                    true,
+                    false
+                ),
+                Arguments.argumentSet(
+                    "Valid until on previous closed validity period",
+                    LocalDate.of(2019, 12, 31),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    LocalDate.of(2020, 1, 1),
+                    true,
+                    false
+                ),
+                Arguments.argumentSet(
+                    "Valid until equal saved valid from",
+                    LocalDate.of(2021, 1, 1),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    LocalDate.of(2021, 1, 1),
+                    false,
+                    true,
+                ),
+                Arguments.argumentSet(
+                    "Valid until before saved valid from",
+                    LocalDate.of(2020, 12, 1),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    LocalDate.of(2021, 1, 1),
+                    false,
+                    true,
                 ),
             )
     }

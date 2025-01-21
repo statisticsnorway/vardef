@@ -1,9 +1,12 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
+import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
@@ -42,6 +45,9 @@ class PatchesService(
      * @param definitionId The unique identifier for the variable.
      * @param latestPatch The latest existing patch within the selected validity period.
      * @return The created *Patch* for the selected validity period with all updated values applied.
+     *
+     * @throws InvalidValidDateException if valid until date is equal or before valid from
+     * @throws ClosedValidityPeriodException if attempt tp patch valid until on closed validity period
      */
     fun create(
         patch: Patch,
@@ -49,12 +55,21 @@ class PatchesService(
         latestPatch: SavedVariableDefinition,
         userName: String,
     ): SavedVariableDefinition {
-        if (patch.validUntil != null && latestPatch.validFrom.let { patch.validUntil.isEqualOrBefore(it) }) {
-            logger.error(
-                "Invalid 'validUntil' value ${patch.validUntil} for definition: $definitionId",
-                kv(DEFINITION_ID, definitionId),
-            )
-            throw InvalidValidDateException()
+        if (patch.validUntil != null) {
+            if (latestPatch.validUntil != null) {
+                logger.error(
+                    "Attempt to patch 'validUntil' on closed 'validityPeriod' for definition: $definitionId",
+                    kv(DEFINITION_ID, definitionId),
+                )
+                throw ClosedValidityPeriodException()
+            }
+            if (latestPatch.validFrom.let { patch.validUntil.isEqualOrBefore(it) }) {
+                logger.error(
+                    "Invalid 'validUntil' value ${patch.validUntil} for definition: $definitionId",
+                    kv(DEFINITION_ID, definitionId),
+                )
+                throw InvalidValidDateException()
+            }
         }
         if (patch.owner != latestPatch.owner && patch.owner != null) {
             logger.info(

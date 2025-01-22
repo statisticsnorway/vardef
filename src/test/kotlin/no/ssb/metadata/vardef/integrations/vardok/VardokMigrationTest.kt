@@ -158,7 +158,6 @@ class VardokMigrationTest {
             vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         }.isInstanceOf(OutdatedUnitTypesException::class.java)
             .hasMessageContaining("Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved")
-
     }
 
     @ParameterizedTest

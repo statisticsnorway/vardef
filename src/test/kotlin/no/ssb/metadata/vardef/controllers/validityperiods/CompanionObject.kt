@@ -48,10 +48,10 @@ class CompanionObject {
         fun newValidityPeriods(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
-                    "validity period after closed validity period",
+                    "validity period after closed validity period with gap",
                     JSONObject()
                         .apply {
-                            put("valid_from", "2031-01-11")
+                            put("valid_from", "2032-01-11")
                             put(
                                 "definition",
                                 JSONObject().apply {
@@ -62,8 +62,8 @@ class CompanionObject {
                             )
                         }.toString(),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-                    HTTP_CREATED,
-                    LocalDate.of(2031, 1, 11),
+                    HTTP_BAD_REQUEST,
+                    null,
                     null,
                 ),
                 argumentSet(
@@ -102,6 +102,25 @@ class CompanionObject {
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     HTTP_BAD_REQUEST,
                     null,
+                    null,
+                ),
+                argumentSet(
+                    "validity period day after closed validity period ended",
+                    JSONObject()
+                        .apply {
+                            put("valid_from", "2030-01-02")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    HTTP_CREATED,
+                    LocalDate.of(2030, 1, 2),
                     null,
                 ),
                 argumentSet(

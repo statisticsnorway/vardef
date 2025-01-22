@@ -195,6 +195,7 @@ val SubjectAreaMapping =
             "Teknologiske indikatorer, inkl. IKT",
         ) to "ti",
         setOf(
+            "Jordbruk, jakt, viltstell",
             "Jordbruk og skogbruk",
             "Skogbruk",
             "Fiske og fiskeoppdrett",

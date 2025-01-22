@@ -39,9 +39,6 @@ class VariableDefinitionService(
      * @return The created *Draft*
      */
     fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
-        if (draft.validUntil?.isBefore(draft.validFrom) == true) {
-            throw InvalidValidDateException()
-        }
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: $savedVariableDefinition.definitionId",

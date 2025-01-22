@@ -246,6 +246,9 @@ class ValidityPeriodsService(
     /**
      * Check that a given date is not between any existing validity dates for the given variable definition.
      *
+     * If the [ValidityPeriod] is closed only valid 'validFrom' is before or the day after closed period.
+     * this to prevent gaps between validity periods.
+     *
      * This is important to preserve metadata immutability, such that a consumer specifying a particular date
      * will not suddenly get a different result because a new period was inserted between existing ones.
      *
@@ -258,14 +261,13 @@ class ValidityPeriodsService(
         dateOfValidity: LocalDate,
     ): Boolean {
         val validPeriods =
-            list(definitionId).map { patch ->
-                val validFrom = patch.validFrom
-                val validUntil = patch.validUntil
-                validFrom to validUntil
-            }.sortedBy { it.first }
+            list(definitionId)
+                .map { it.validFrom to it.validUntil }
+                .sortedBy { it.first }
 
         val firstValidFrom = validPeriods.first().first
-        val upperBoundary = validPeriods.last().second ?: validPeriods.last().first
+        val lastValidPeriod = validPeriods.last()
+        val upperBoundary = lastValidPeriod.second ?: lastValidPeriod.first
 
         logger.info(
             "Checking if valid new valid from: $dateOfValidity " +
@@ -273,7 +275,14 @@ class ValidityPeriodsService(
             kv(DEFINITION_ID, definitionId),
         )
 
-        return dateOfValidity.isBefore(firstValidFrom) || dateOfValidity.isAfter(upperBoundary)
+        return when {
+            lastValidPeriod.second == null -> {
+                dateOfValidity.isBefore(firstValidFrom) || dateOfValidity.isAfter(upperBoundary)
+            }
+            else -> {
+                dateOfValidity.isBefore(firstValidFrom) || dateOfValidity == upperBoundary.plusDays(1)
+            }
+        }
     }
 
     /**

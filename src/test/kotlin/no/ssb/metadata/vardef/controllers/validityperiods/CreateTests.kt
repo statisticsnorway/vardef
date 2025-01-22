@@ -166,7 +166,12 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .body(containsString("The date selected cannot be added because it falls between previously added valid dates."))
+            .body(
+                containsString(
+                    "The selected date range cannot be added as it overlaps with or " +
+                        "creates a gap in existing validity periods.",
+                ),
+            )
 
         val correctValidFrom = JSONObject(noneMandatoryFieldsChanged()).apply { put("valid_from", "2030-01-11") }.toString()
         spec
@@ -323,7 +328,8 @@ class CreateTests : BaseVardefTest() {
             .statusCode(400)
             .body(
                 containsString(
-                    "The date selected cannot be added because it falls between previously added valid dates.",
+                    "The selected date range cannot be added as it overlaps with or " +
+                        "creates a gap in existing validity periods.",
                 ),
             )
     }
@@ -409,7 +415,8 @@ class CreateTests : BaseVardefTest() {
         }
         if (httpStatus == HTTP_BAD_REQUEST) {
             assertThat(body).contains(
-                "The date selected cannot be added because it falls between previously added valid dates.",
+                "The selected date range cannot be added as it overlaps with or " +
+                    "creates a gap in existing validity periods.",
             )
         }
     }

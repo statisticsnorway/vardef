@@ -36,17 +36,16 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
     } ?: throw OutdatedUnitTypesException(vardokId(vardokItem))
 
 /**
- * When null response from method [convertSubjectArea]
  *
  * @returns list except if result is null then
  * @throws OutdatedSubjectAreaException
  */
-fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String?> {
+fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String> {
     val code =
         vardokItem.variable?.subjectArea?.codeText
             ?: return emptyList()
 
-    return convertSubjectArea(code)?.let(::listOf)
+    return convertSubjectArea(code)?.let { listOf(it) }
         ?: throw OutdatedSubjectAreaException(vardokItem.id.substringAfterLast(":"))
 }
 

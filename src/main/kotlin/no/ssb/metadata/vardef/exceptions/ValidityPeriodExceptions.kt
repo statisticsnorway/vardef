@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.exceptions
 open class ValidityPeriodExceptions(override val message: String) : Exception()
 
 class InvalidValidDateException() : ValidityPeriodExceptions(
-    "The date selected cannot be added because it falls between previously added valid dates.",
+    "Invalid 'valid_from' value.",
 )
 
 class DefinitionTextUnchangedException() : ValidityPeriodExceptions(

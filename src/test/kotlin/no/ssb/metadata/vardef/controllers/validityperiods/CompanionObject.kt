@@ -161,6 +161,25 @@ class CompanionObject {
                     LocalDate.of(2019, 1, 1),
                     LocalDate.of(2019, 12, 31),
                 ),
+                argumentSet(
+                    "validity period day before closed validity period",
+                    JSONObject()
+                        .apply {
+                            put("valid_from", "2019-12-31")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    HTTP_CREATED,
+                    LocalDate.of(2019, 12, 31),
+                    LocalDate.of(2019, 12, 31),
+                ),
             )
     }
 }

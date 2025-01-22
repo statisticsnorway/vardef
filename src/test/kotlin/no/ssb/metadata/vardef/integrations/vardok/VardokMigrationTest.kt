@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokSubjectAr
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.AssertionsForClassTypes
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -148,6 +149,16 @@ class VardokMigrationTest {
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.externalReferenceUri).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `vardokresponse statistical unit incorrect input`() {
+        assertThatThrownBy {
+            val vardokresponse = vardokService.getVardokItem("0000")
+            vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
+        }.isInstanceOf(OutdatedUnitTypesException::class.java)
+            .hasMessageContaining("Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved")
+
     }
 
     @ParameterizedTest

@@ -65,7 +65,7 @@ val unitTypesMapping =
         ) to listOf("12", "13"),
     )
 
-fun convertUnitTypes(name: String): List<String?>? =
+fun convertUnitTypes(name: String): List<String>? =
     unitTypesMapping.entries
         .firstOrNull { entry -> name in entry.key }
         ?.value

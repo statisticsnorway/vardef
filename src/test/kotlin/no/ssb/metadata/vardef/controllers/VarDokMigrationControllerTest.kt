@@ -191,6 +191,26 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `create vardok invalid unit types`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/vardok-migration/0000")
+            .then()
+            .statusCode(400)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved",
+                ),
+            )
+    }
+
+    @Test
     fun `create vardok has comment`(spec: RequestSpecification) {
         val body =
             spec

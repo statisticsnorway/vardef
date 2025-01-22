@@ -35,10 +35,19 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
         } ?: specialCaseUnitMapping(vardokId(vardokItem))
     } ?: throw OutdatedUnitTypesException(vardokId(vardokItem))
 
-fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String?> =
-    vardokItem.variable?.subjectArea?.codeText?.let {
-        listOf(convertSubjectArea(it))
-    } ?: throw OutdatedSubjectAreaException(vardokItem.id.substringAfterLast(":"))
+/**
+ *
+ * @returns list except if result is null then
+ * @throws OutdatedSubjectAreaException
+ */
+fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String> {
+    val code =
+        vardokItem.variable?.subjectArea?.codeText
+            ?: return emptyList()
+
+    return convertSubjectArea(code)?.let { listOf(it) }
+        ?: throw OutdatedSubjectAreaException(vardokItem.id.substringAfterLast(":"))
+}
 
 /**
  * Maps the `notes` and `calculation` fields of a `VardokItem` to a `LanguageStringType` object.

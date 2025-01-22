@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers
 
+import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
@@ -276,5 +277,26 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.externalReferenceUri).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `post vardok incorrect updated subject area`(spec: RequestSpecification) {
+        val id = 99999
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/vardok-migration/$id")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Vardok id 3125 SubjectArea has outdated subject area value and can not be saved",
+                ),
+            )
     }
 }

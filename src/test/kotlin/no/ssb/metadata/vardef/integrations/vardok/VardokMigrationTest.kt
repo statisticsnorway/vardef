@@ -140,6 +140,15 @@ class VardokMigrationTest {
         assertThat(result).isEqualTo(listOf("sk"))
     }
 
+    @Test
+    fun `vardokresponse subject area incorrect input`() {
+        assertThatThrownBy {
+            val vardokresponse = vardokService.getVardokItem("99999")
+            vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
+        }.isInstanceOf(OutdatedSubjectAreaException::class.java)
+            .hasMessageContaining("Vardok id 3125 SubjectArea has outdated subject area value and can not be saved")
+    }
+
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.integrations.vardok.VardokResponseTest#mapExternalDocument")
     fun `externalReferenceUri field is set with value from externalDocument`(

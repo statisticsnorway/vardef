@@ -22,7 +22,6 @@ import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.exceptions.ValidityPeriodExceptions
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
@@ -104,11 +103,7 @@ class ValidityPeriodsController(
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
-        return try {
-            validityPeriods.create(variableDefinitionId, newPeriod, authentication.name).toCompleteResponse()
-        } catch (e: ValidityPeriodExceptions) {
-            throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
-        }
+        return validityPeriods.create(variableDefinitionId, newPeriod, authentication.name).toCompleteResponse()
     }
 
     /**

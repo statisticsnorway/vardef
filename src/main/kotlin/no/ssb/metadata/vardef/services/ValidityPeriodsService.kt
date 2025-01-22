@@ -5,7 +5,7 @@ import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
-import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
+import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.exceptions.NoMatchingValidityPeriodFound
 import no.ssb.metadata.vardef.extensions.isEqualOrAfter
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
@@ -211,7 +211,7 @@ class ValidityPeriodsService(
      * Check mandatory input for creating a new validity period
      * @param newPeriod The input data to check
      * @param definitionId The id for the variable definition to check
-     * @throws InvalidValidFromException validFrom is invalid
+     * @throws InvalidValidDateException validFrom is invalid
      * @throws DefinitionTextUnchangedException definition text in all present languages has not changed
      */
     private fun checkValidityPeriodInput(
@@ -224,7 +224,7 @@ class ValidityPeriodsService(
                     "Invalid 'validFrom' value ${newPeriod.validFrom} for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
-                throw InvalidValidFromException()
+                throw InvalidValidDateException()
             }
 
             !isNewDefinition(definitionId, newPeriod) -> {
@@ -256,18 +256,25 @@ class ValidityPeriodsService(
     private fun isValidValidFromValue(
         definitionId: String,
         dateOfValidity: LocalDate,
-    ): Boolean =
-        // patches
-        list(definitionId)
-            .map { it.validFrom }
-            .let { dates ->
-                logger.info(
-                    "Checking if valid new valid from: $dateOfValidity " +
-                        "is before: ${dates.min()}, or after: ${dates.max()}, for definition: $definitionId",
-                    kv(DEFINITION_ID, definitionId),
-                )
-                dateOfValidity.isBefore(dates.min()) || dateOfValidity.isAfter(dates.max())
-            }
+    ): Boolean {
+        val validPeriods =
+            list(definitionId).map { patch ->
+                val validFrom = patch.validFrom
+                val validUntil = patch.validUntil
+                validFrom to validUntil
+            }.sortedBy { it.first }
+
+        val firstValidFrom = validPeriods.first().first
+        val upperBoundary = validPeriods.last().second ?: validPeriods.last().first
+
+        logger.info(
+            "Checking if valid new valid from: $dateOfValidity " +
+                "is before: $firstValidFrom, or after: $upperBoundary, for definition: $definitionId",
+            kv(DEFINITION_ID, definitionId),
+        )
+
+        return dateOfValidity.isBefore(firstValidFrom) || dateOfValidity.isAfter(upperBoundary)
+    }
 
     /**
      * Check if *definition* is eligible for a new validity period.

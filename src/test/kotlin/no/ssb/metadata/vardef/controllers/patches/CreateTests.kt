@@ -15,6 +15,7 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.MethodSource
 
 class CreateTests : BaseVardefTest() {
     @Test
@@ -246,19 +247,6 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch with valid_until`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(patchBody().apply { put("valid_until", "2030-06-30") }.toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
-            .then()
-            .statusCode(201)
-    }
-
-    @Test
     fun `create new patch not all languages`(spec: RequestSpecification) {
         val expected: SavedVariableDefinition =
             INCOME_TAX_VP2_P6.copy(
@@ -304,5 +292,25 @@ class CreateTests : BaseVardefTest() {
         assertThat(createdPatch.name).isEqualTo(expected.name)
         assertThat(createdPatch.definition).isEqualTo(expected.definition)
         assertThat(createdPatch.comment).isEqualTo(expected.comment)
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchValidUntil")
+    fun `create new patch with valid_until`(
+        input: String,
+        vardefId: String,
+        validityPeriod: String?,
+        httpStatus: Int,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", validityPeriod)
+            .`when`()
+            .post("/variable-definitions/$vardefId/patches")
+            .then()
+            .statusCode(httpStatus)
     }
 }

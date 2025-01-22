@@ -327,4 +327,22 @@ class CreateTests : BaseVardefTest() {
                 ),
             )
     }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#validUntilInCreateDraft")
+    fun `create variable definition valid until in request`(
+        input: String,
+        httpStatus: HttpStatus,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(httpStatus.code)
+    }
 }

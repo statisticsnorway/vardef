@@ -6,6 +6,7 @@ import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
+import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
@@ -38,6 +39,9 @@ class VariableDefinitionService(
      * @return The created *Draft*
      */
     fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
+        if (draft.validUntil?.isBefore(draft.validFrom) == true) {
+            throw InvalidValidDateException()
+        }
         val savedVariableDefinition = variableDefinitionRepository.save(draft)
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: $savedVariableDefinition.definitionId",
@@ -219,4 +223,37 @@ class VariableDefinitionService(
     companion object {
         fun generateId(): String = NanoId.generate(8)
     }
+
+    /**
+     * Checks if the given dates are in the correct chronological order.
+     *
+     * @param validFrom The starting date (may be `null`).
+     * @param validUntil The ending date (may be `null`).
+     * @return `true` if the dates are in the correct order, or if either date is `null`.
+     *         Otherwise, `false` if `validFrom` occurs after `validUntil`.
+     */
+    fun isCorrectDateOrder(
+        validFrom: LocalDate?,
+        validUntil: LocalDate?,
+    ): Boolean {
+        return validFrom == null || validUntil == null || validFrom.isBefore(validUntil)
+    }
+
+    /**
+     * Checks if the date range in the updated draft is logically correct compared to the saved draft.
+     *
+     * @param updateDraft The draft to be updated.
+     * @param savedDraft The existing saved draft with its validity period.
+     * @return `true` if the `updateDraft`'s dates are logically correct compared to the `savedDraft`,
+     *         otherwise `false`.
+     */
+    fun isCorrectDateOrderComparedToSaved(
+        updateDraft: UpdateDraft,
+        savedDraft: SavedVariableDefinition,
+    ): Boolean =
+        (updateDraft.validFrom == null && updateDraft.validUntil == null) ||
+            (
+                isCorrectDateOrder(updateDraft.validFrom, savedDraft.validUntil) &&
+                    isCorrectDateOrder(savedDraft.validFrom, updateDraft.validUntil)
+            )
 }

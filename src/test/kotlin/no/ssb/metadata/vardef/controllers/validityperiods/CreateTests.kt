@@ -13,6 +13,10 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matchers.hasKey
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import java.net.HttpURLConnection.HTTP_BAD_REQUEST
+import java.net.HttpURLConnection.HTTP_CREATED
 import java.time.LocalDate
 
 class CreateTests : BaseVardefTest() {
@@ -162,7 +166,7 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .body(containsString("The date selected cannot be added because it falls between previously added valid from dates."))
+            .body(containsString("The date selected cannot be added because it falls between previously added valid dates."))
 
         val correctValidFrom = JSONObject(noneMandatoryFieldsChanged()).apply { put("valid_from", "2030-01-11") }.toString()
         spec
@@ -319,8 +323,7 @@ class CreateTests : BaseVardefTest() {
             .statusCode(400)
             .body(
                 containsString(
-                    "The date selected cannot be added because it falls between previously added valid " +
-                        "from dates.",
+                    "The date selected cannot be added because it falls between previously added valid dates.",
                 ),
             )
     }
@@ -371,5 +374,43 @@ class CreateTests : BaseVardefTest() {
         assertThat(completeResponse).isNotNull
         assertThat(completeResponse.lastUpdatedBy).isEqualTo(TEST_USER)
         assertThat(completeResponse.createdBy).isEqualTo("me@example.com")
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#newValidityPeriods")
+    fun `create new validity period when valid until is set in draft`(
+        input: String,
+        vardefId: String,
+        httpStatus: Int,
+        expectedValidFrom: LocalDate?,
+        expectedValidUntil: LocalDate?,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(input)
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/variable-definitions/$vardefId/validity-periods")
+                .then()
+                .statusCode(httpStatus)
+                .extract()
+                .body()
+                .asString()
+
+        if (httpStatus == HTTP_CREATED) {
+            jsonMapper.readValue(body, CompleteResponse::class.java).apply {
+                assertThat(this).isNotNull
+                assertThat(validFrom).isEqualTo(expectedValidFrom)
+                assertThat(validUntil).isEqualTo(expectedValidUntil)
+            }
+        }
+        if (httpStatus == HTTP_BAD_REQUEST) {
+            assertThat(body).contains(
+                "The date selected cannot be added because it falls between previously added valid dates.",
+            )
+        }
     }
 }

@@ -457,13 +457,17 @@ class UpdateTests : BaseVardefTest() {
             )
     }
 
-    @Test
-    fun `can not update valid until`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#inValidDateUpdates")
+    fun `invalid date update`(
+        input: String,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(
-                """{"valid_until": "2024-11-12"}""".trimIndent(),
+                input,
             ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
@@ -473,9 +477,28 @@ class UpdateTests : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    "valid_until may not be specified here",
+                    errorMessage = "Invalid date order",
                 ),
             )
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#validDateUpdates")
+    fun `valid date update`(
+        input: String,
+        field: String,
+        valueBeforeUpdate: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body(field, not(valueBeforeUpdate))
     }
 
     @Test

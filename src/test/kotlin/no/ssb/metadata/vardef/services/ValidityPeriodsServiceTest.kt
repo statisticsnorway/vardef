@@ -1,14 +1,11 @@
 package no.ssb.metadata.vardef.services
 
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
-import no.ssb.metadata.vardef.exceptions.InvalidValidFromException
+import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.ValidityPeriod
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
-import no.ssb.metadata.vardef.utils.TEST_USER
-import no.ssb.metadata.vardef.utils.VALIDITY_PERIOD_TAX_EXAMPLE
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.AssertionsForClassTypes
 import org.junit.jupiter.api.Test
@@ -62,13 +59,14 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("validFromTestCases")
     fun `validate valid_from values in new validity period`(
+        definitionId: String,
         inputObject: ValidityPeriod,
         expectSuccess: Boolean,
     ) {
         if (!expectSuccess) {
-            assertThrows<InvalidValidFromException> {
+            assertThrows<InvalidValidDateException> {
                 validityPeriods.create(
-                    INCOME_TAX_VP1_P1.definitionId,
+                    definitionId,
                     inputObject,
                     TEST_USER,
                 )
@@ -77,7 +75,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             AssertionsForClassTypes
                 .assertThat(
                     validityPeriods.create(
-                        INCOME_TAX_VP1_P1.definitionId,
+                        definitionId,
                         inputObject,
                         TEST_USER,
                     ),
@@ -214,6 +212,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
             Stream.of(
                 Arguments.argumentSet(
                     "Between existing periods",
+                    INCOME_TAX_VP1_P1.definitionId,
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
@@ -226,7 +225,22 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                     false,
                 ),
                 Arguments.argumentSet(
+                    "Between existing periods only one patch",
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        definition =
+                            LanguageStringType(
+                                nb = "Endring",
+                                nn = "Endring",
+                                en = "Endring",
+                            ),
+                        validFrom = LocalDate.of(2026, 1, 1),
+                    ),
+                    false,
+                ),
+                Arguments.argumentSet(
                     "Before existing periods",
+                    INCOME_TAX_VP1_P1.definitionId,
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(
@@ -240,6 +254,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
                 ),
                 Arguments.argumentSet(
                     "After existing periods",
+                    INCOME_TAX_VP1_P1.definitionId,
                     VALIDITY_PERIOD_TAX_EXAMPLE.copy(
                         definition =
                             LanguageStringType(

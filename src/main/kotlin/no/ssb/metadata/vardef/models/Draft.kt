@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
+import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.net.URL
@@ -23,6 +24,7 @@ import java.time.LocalDateTime
 @Schema(
     example = DRAFT_EXAMPLE,
 )
+@ValidDateOrder
 data class Draft(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     val name: LanguageStringType,

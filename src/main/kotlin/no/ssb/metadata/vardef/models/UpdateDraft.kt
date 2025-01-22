@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
+import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.constants.*
 import java.net.URL
 import java.time.LocalDate
@@ -23,6 +24,7 @@ import java.time.LocalDate
 @Schema(
     example = DRAFT_EXAMPLE,
 )
+@ValidDateOrder
 data class UpdateDraft(
     @Nullable
     @Schema(description = NAME_FIELD_DESCRIPTION)
@@ -58,6 +60,9 @@ data class UpdateDraft(
     @Nullable
     @Format(DATE_FORMAT)
     val validFrom: LocalDate? = null,
+    @Nullable
+    @Format(DATE_FORMAT)
+    val validUntil: LocalDate? = null,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL? = null,

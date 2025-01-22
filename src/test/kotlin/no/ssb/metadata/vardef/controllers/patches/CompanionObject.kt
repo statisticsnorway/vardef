@@ -1,13 +1,11 @@
 package no.ssb.metadata.vardef.controllers.patches
 
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.utils.ALL_INCOME_TAX_PATCHES
-import no.ssb.metadata.vardef.utils.SAVED_INTERNAL_VARIABLE_DEFINITION
-import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
-import no.ssb.metadata.vardef.utils.jsonTestInput
+import no.ssb.metadata.vardef.utils.*
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
+import java.net.HttpURLConnection.*
 import java.util.stream.Stream
 
 class CompanionObject {
@@ -260,6 +258,60 @@ class CompanionObject {
                     true,
                     "owner.groups",
                     "Invalid Dapla group",
+                ),
+            )
+
+        @JvmStatic
+        fun patchValidUntil(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "can only patch latest",
+                    patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    "1980-01-01",
+                    HTTP_BAD_REQUEST,
+                ),
+                argumentSet(
+                    "can not patch valid until before valid from",
+                    patchBody().apply { put("valid_until", "2020-12-31") }.toString(),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    null,
+                    HTTP_BAD_REQUEST,
+                ),
+                argumentSet(
+                    "validity period is closed",
+                    patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    null,
+                    HTTP_BAD_REQUEST,
+                ),
+                argumentSet(
+                    "validity period is open",
+                    patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    null,
+                    HTTP_CREATED,
+                ),
+                argumentSet(
+                    "validity period is open valid until is before valid from",
+                    patchBody().apply { put("valid_until", "2019-06-30") }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL.definitionId,
+                    null,
+                    HTTP_BAD_REQUEST,
+                ),
+                argumentSet(
+                    "not latest validity period",
+                    patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
+                    INCOME_TAX_VP1_P1.definitionId,
+                    "1980-01-01",
+                    HTTP_BAD_REQUEST,
+                ),
+                argumentSet(
+                    "validity period does not exist",
+                    patchBody().apply { put("valid_until", "2020-06-30") }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    "1980-01-01",
+                    HTTP_NOT_FOUND,
                 ),
             )
     }

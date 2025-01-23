@@ -1,7 +1,10 @@
 package no.ssb.metadata.vardef.integrations.vardok.convertions
 
 /**
- * Set of string values which maps to unittypes list
+ * Set of string values which maps from *StatisticalUnit* in Vardok to unittypes list
+ *
+ * For more information about unit type mapping from Vardok to Vardef see
+ * [Migreringsplan- enhetstyper](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4128276501/Migreringsplan+fra+Vardok+til+Vardef#Enhetstyper)
  */
 val unitTypesMapping =
     mapOf(
@@ -70,6 +73,16 @@ fun convertUnitTypes(name: String): List<String>? =
         .firstOrNull { entry -> name in entry.key }
         ?.value
 
+/**
+ * This mapping covers variable definitions from Vardok identified by id
+ * where *StatisticalUnit* shall not be mapped according to existing mapping of unittypes
+ *
+ *  For more information about unit type mapping from Vardok to Vardef see
+ *  [Migreringsplan- Enhetstyper](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4128276501/Migreringsplan+fra+Vardok+til+Vardef#Enhetstyper).
+ *
+ * @see unitTypesMapping
+ *
+ */
 fun specialCaseUnitMapping(vardokId: String): List<String>? =
     when (vardokId) {
         "2124", "2141", "2142" -> listOf("04")
@@ -84,7 +97,10 @@ fun specialCaseUnitMapping(vardokId: String): List<String>? =
     }
 
 /**
- * Set of string values which maps to the subject filed value
+ * Set of string values which maps to the subject field value
+ *
+ * For more information about subject area mapping from Vardok to Vardef see
+ * [Migreringsplan- Statistikkområde](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4128276501/Migreringsplan+fra+Vardok+til+Vardef#Statistikkomr%C3%A5de)
  */
 val SubjectAreaMapping =
     mapOf(

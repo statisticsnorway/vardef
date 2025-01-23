@@ -26,7 +26,7 @@ fun vardokId(vardokItem: VardokResponse): String = vardokItem.id.substringAfterL
  * @throws OutdatedUnitTypesException
  */
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String> =
-    // Handle id with valid statisticalUnit to code 24, but shall map to 21
+    // Handle Vardok id 3125 which does not conform to neither 'converUnitTypes' nor 'specialCaseUnitMapping'
     if (vardokId(vardokItem) == "3125") {
         listOf("21")
     } else {

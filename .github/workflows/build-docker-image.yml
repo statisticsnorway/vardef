@@ -16,16 +16,27 @@
 name: Image Build and Deploy
 
 on:
-  release:
-    types: [ published ]
-  push:
-    branches:
-      - main
-env:
-  REGISTRY: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef
-  IMAGE: vardef
-  TAG: ${{ github.sha }}
-
+  workflow_call:
+    inputs:
+      registry:
+        description: Registry, for example "europe-north1-docker.pkg.dev"
+        required: true
+        type: string
+      repository:
+        description: Registry repository
+        required: true
+        type: string
+      image-name:
+        description: Image name
+        required: true
+        type: string
+      image-tag:
+        description: Tag for the image
+        required: true
+        type: string
+    secrets:
+      registry-project:
+        description: Artifact Registry project
 
 jobs:
   docker-build:
@@ -34,15 +45,13 @@ jobs:
       contents: "read"
       id-token: "write"
     runs-on: ubuntu-latest
-    outputs:
-      image-tag: ${{ env.DOCKER_IMAGE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set docker image env var
         run: |
-          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE=${{inputs.registry}}/${{inputs.image-name}}:${{inputs.image-tag}}" >> $GITHUB_ENV
       - name: "Authenticate to Google Cloud"
         id: "auth"
         uses: "google-github-actions/auth@v2.1.7"
@@ -74,16 +83,3 @@ jobs:
           --image=${{ env.DOCKER_IMAGE }}
           --daemon --parallel --build-cache
 
-  deploy:
-    name: Deploy to NAIS
-    needs: docker-build
-    uses: ./.github/workflows/deploy-to-nais.yml
-    with:
-      registry: europe-north1-docker.pkg.dev
-      repository: dapla-metadata
-      image-name: vardef
-      image-tag: ${{ needs.docker-build.outputs.image-tag }}
-      cluster: naisprod
-      nais-config-path: .nais/test/test.yaml
-    secrets:
-      registry-project: ${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}

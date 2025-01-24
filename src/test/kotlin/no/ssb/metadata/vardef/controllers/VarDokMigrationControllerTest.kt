@@ -3,8 +3,10 @@ package no.ssb.metadata.vardef.controllers
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -17,6 +19,9 @@ import java.net.URL
 import java.time.LocalDate
 
 class VarDokMigrationControllerTest : BaseVardefTest() {
+    @Inject
+    lateinit var vardokService: VardokService
+
     @ParameterizedTest
     @ValueSource(
         ints = [
@@ -298,5 +303,26 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     errorMessage = "Vardok id 3125 SubjectArea has outdated subject area value and can not be saved",
                 ),
             )
+    }
+
+    @Test
+    fun `vardok id is mapped to vardef id`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/2")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+
+        assertThat(vardokService.getVardefIdForVardokId("2")).isEqualTo(completeResponse.id)
     }
 }

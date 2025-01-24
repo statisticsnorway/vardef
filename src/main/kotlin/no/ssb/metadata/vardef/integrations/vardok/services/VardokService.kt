@@ -32,6 +32,8 @@ interface VardokService {
         return mapper.writeValueAsString(varDefInput)
     }
 
+    fun getVardefIdForVardokId(vardokId: String): String = ""
+
     companion object {
         private fun generateShortName() = "${ILLEGAL_SHORNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
 

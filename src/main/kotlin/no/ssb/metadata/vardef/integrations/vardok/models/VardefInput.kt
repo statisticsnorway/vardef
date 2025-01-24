@@ -1,5 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok.models
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import no.ssb.metadata.vardef.models.LanguageStringType
 import java.net.URL
 
@@ -18,4 +20,9 @@ data class VardefInput(
     val contact: String?,
     val measurementType: String?,
     val relatedVariableDefinitionUris: List<String?>,
-)
+) {
+    override fun toString(): String {
+        val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+        return mapper.writeValueAsString(this)
+    }
+}

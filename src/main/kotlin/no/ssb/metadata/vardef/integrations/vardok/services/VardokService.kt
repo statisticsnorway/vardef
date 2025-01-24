@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.services
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
@@ -26,13 +24,12 @@ interface VardokService {
 
     fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
 
-    fun createVarDefInputFromVarDokItems(varDokItems: Map<String, VardokResponse>): String {
-        val varDefInput = extractVardefInput(varDokItems)
-        val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-        return mapper.writeValueAsString(varDefInput)
-    }
+    fun createVardokVardefIdMapping(
+        vardokId: String,
+        vardefId: String,
+    ): VardokVardefIdPair
 
-    fun getVardefIdForVardokId(vardokId: String): String = ""
+    fun getVardefIdByVardokId(vardokId: String): String?
 
     companion object {
         private fun generateShortName() = "${ILLEGAL_SHORNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")

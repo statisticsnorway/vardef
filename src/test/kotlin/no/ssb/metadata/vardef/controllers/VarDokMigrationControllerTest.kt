@@ -323,6 +323,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
 
-        assertThat(vardokService.getVardefIdForVardokId("2")).isEqualTo(completeResponse.id)
+        assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeResponse.id)
     }
 }

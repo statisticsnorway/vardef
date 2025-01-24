@@ -6,8 +6,10 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
+import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -22,11 +24,14 @@ class VardokServiceTest : BaseVardokTest() {
     private lateinit var vardokApiService: VardokApiService
     private lateinit var vardokMockkService: VardokApiService
 
+    @Inject
+    private lateinit var vardokIdMappingRepository: VardokIdMappingRepository
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
         vardokMockkClient = mockk<VardokClient>(relaxed = true)
-        vardokApiService = VardokApiService(vardokMockkClient)
+        vardokApiService = VardokApiService(vardokMockkClient, vardokIdMappingRepository)
         vardokMockkService = mockk<VardokApiService>(relaxed = true)
     }
 

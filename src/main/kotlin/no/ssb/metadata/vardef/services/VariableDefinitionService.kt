@@ -231,9 +231,7 @@ class VariableDefinitionService(
     fun isCorrectDateOrder(
         validFrom: LocalDate?,
         validUntil: LocalDate?,
-    ): Boolean {
-        return validFrom == null || validUntil == null || validFrom.isBefore(validUntil)
-    }
+    ): Boolean = validFrom == null || validUntil == null || validFrom.isBefore(validUntil)
 
     /**
      * Checks if the date range in the updated draft is logically correct compared to the saved draft.
@@ -252,4 +250,6 @@ class VariableDefinitionService(
                 isCorrectDateOrder(updateDraft.validFrom, savedDraft.validUntil) &&
                     isCorrectDateOrder(savedDraft.validFrom, updateDraft.validUntil)
             )
+
+    fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
 }

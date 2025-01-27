@@ -7,11 +7,13 @@ import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
+import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import org.slf4j.LoggerFactory
 
 @Singleton
 open class VardokApiService(
     private val vardokClient: VardokClient,
+    private val vardokIdMappingRepository: VardokIdMappingRepository,
 ) : VardokService {
     private val logger = LoggerFactory.getLogger(VardokApiService::class.java)
 
@@ -53,4 +55,13 @@ open class VardokApiService(
         }
         return responseMap
     }
+
+    override fun createVardokVardefIdMapping(
+        vardokId: String,
+        vardefId: String,
+    ): VardokVardefIdPair = vardokIdMappingRepository.save(VardokVardefIdPair(vardokId, vardefId))
+
+    override fun getVardefIdByVardokId(vardokId: String): String? = vardokIdMappingRepository.getVardefIdByVardokId(vardokId)
+
+    override fun isAlreadyMigrated(vardokId: String): Boolean = vardokIdMappingRepository.existsByVardokId(vardokId)
 }

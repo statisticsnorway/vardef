@@ -17,13 +17,17 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.constants.*
+import no.ssb.metadata.vardef.integrations.vardok.models.VardefInput
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
-import org.reactivestreams.Publisher
+import no.ssb.metadata.vardef.services.VariableDefinitionService
+import org.slf4j.LoggerFactory
 
 @Tag(name = DATA_MIGRATION)
 @Validated
@@ -33,8 +37,11 @@ import org.reactivestreams.Publisher
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController(
     private val vardokService: VardokService,
+    private val vardefService: VariableDefinitionService,
     @Client("/") private val httpClient: ProxyHttpClient,
 ) {
+    private val logger = LoggerFactory.getLogger(VarDokMigrationController::class.java)
+
     /**
      * Create a variable definition from a VarDok variable definition.
      */
@@ -84,20 +91,20 @@ class VarDokMigrationController(
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
         httpRequest: HttpRequest<*>,
-    ): Publisher<MutableHttpResponse<*>>? {
+    ): MutableHttpResponse<*> {
+        if (vardokService.isAlreadyMigrated(id)) {
+            throw HttpStatusException(
+                HttpStatus.CONFLICT,
+                "Vardok definition with ID $id already migrated and may not be migrated again.",
+            )
+        }
+
+        val vardefInput: VardefInput
         try {
-            val varDefInput =
-                vardokService.createVarDefInputFromVarDokItems(
+            vardefInput =
+                VardokService.extractVardefInput(
                     vardokService.fetchMultipleVardokItemsByLanguage(id),
                 )
-
-            return httpClient.proxy(
-                HttpRequest
-                    .POST("/variable-definitions?$ACTIVE_GROUP=$activeGroup", varDefInput)
-                    .headers { entries: MutableHttpHeaders ->
-                        entries.set(AUTHORIZATION, httpRequest.headers.get(AUTHORIZATION))
-                    },
-            )
         } catch (e: VardokNotFoundException) {
             // We always want to return NOT_FOUND in this case
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)
@@ -105,5 +112,33 @@ class VarDokMigrationController(
             // Other validation exceptions
             throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
+
+        val createVariableDefinitionResponse =
+            httpClient.proxy(
+                HttpRequest
+                    .POST("/variable-definitions?$ACTIVE_GROUP=$activeGroup", vardefInput.toString())
+                    .headers { entries: MutableHttpHeaders ->
+                        entries.set(AUTHORIZATION, httpRequest.headers.get(AUTHORIZATION))
+                    },
+            )
+
+        val response: MutableHttpResponse<*>
+        runBlocking {
+            response = createVariableDefinitionResponse.awaitFirst()
+            if (response.code() == HttpStatus.CREATED.code) {
+                val vardefId = vardefInput.shortName?.let { vardefService.getByShortName(it)?.id }
+                if (vardefId != null) {
+                    vardokService
+                        .createVardokVardefIdMapping(vardokId = id, vardefId = vardefId)
+                        .also { mapping ->
+                            logger.info("Created Vardok ID mapping $mapping")
+                        }
+                } else {
+                    logger.warn("Could not find corresponding Vardef ID to map to Vardok ID $id")
+                }
+            }
+        }
+
+        return response
     }
 }

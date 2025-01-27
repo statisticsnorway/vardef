@@ -137,7 +137,6 @@ endpoints:
     monitor:
       enabled: true
 
-
 jackson:
   xml:
     enabled: true

@@ -6,13 +6,26 @@ import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requires
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
+import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import java.io.File
 
 @Primary
 @Requires(env = ["test"], notEnv = ["integration-test"])
 @Singleton
-class StaticVardokService : VardokService {
+class StaticVardokService(
+    private val vardokIdMappingRepository: VardokIdMappingRepository,
+) : VardokService {
     private val xmlMapper = XmlMapper().registerKotlinModule()
+
+    override fun createVardokVardefIdMapping(
+        vardokId: String,
+        vardefId: String,
+    ): VardokVardefIdPair = vardokIdMappingRepository.save(VardokVardefIdPair(vardokId, vardefId))
+
+    override fun getVardefIdByVardokId(vardokId: String): String? = vardokIdMappingRepository.getVardefIdByVardokId(vardokId)
+
+    override fun isAlreadyMigrated(vardokId: String): Boolean = vardokIdMappingRepository.existsByVardokId(vardokId)
 
     override fun getVardokItem(id: String): VardokResponse {
         val xmlFile = File("src/test/resources/vardokFiles/$id.xml")

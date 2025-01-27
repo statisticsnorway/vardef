@@ -55,8 +55,6 @@ jobs:
     needs: create-release
     uses: ./.github/workflows/deploy-to-nais.yml
     with:
-      registry: europe-north1-docker.pkg.dev
-      repository: dapla-metadata
       image-name: vardef
       image-tag: ${{ needs.create-release.outputs.image-tag }}
 

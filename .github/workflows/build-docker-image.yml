@@ -18,14 +18,6 @@ name: Image Build and Deploy
 on:
   workflow_call:
     inputs:
-      registry:
-        description: Registry, for example "europe-north1-docker.pkg.dev"
-        required: true
-        type: string
-      repository:
-        description: Registry repository
-        required: true
-        type: string
       image-name:
         description: Image name
         required: true
@@ -37,6 +29,8 @@ on:
     secrets:
       registry-project:
         description: Artifact Registry project
+env:
+  REGISTRY: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef
 
 jobs:
   docker-build:
@@ -51,7 +45,7 @@ jobs:
 
       - name: Set docker image env var
         run: |
-          echo "DOCKER_IMAGE=${{inputs.registry}}/${{inputs.image-name}}:${{inputs.image-tag}}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE=${{ env.REGISTRY}}/${{inputs.image-name}}:${{inputs.image-tag}}" >> $GITHUB_ENV
       - name: "Authenticate to Google Cloud"
         id: "auth"
         uses: "google-github-actions/auth@v2.1.7"

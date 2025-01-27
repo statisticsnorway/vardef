@@ -111,6 +111,17 @@ micronaut:
       en: https://www.ssb.no/en/klass
       nb: https://www.ssb.no/klass
 
+  metrics:
+    sensitive: false
+    enabled: true
+    tags:
+      application: ${micronaut.application.name}
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+
 # Allow unauthenticated access
 endpoints:
   all:
@@ -125,16 +136,7 @@ endpoints:
       enabled: true
     monitor:
       enabled: true
-  metrics:
-    sensitive: false
-    enabled: true
-    tags:
-      application: ${micronaut.application.name}
-    export:
-      prometheus:
-        enabled: true
-        descriptions: true
-        step: PT1M
+
 
 jackson:
   xml:

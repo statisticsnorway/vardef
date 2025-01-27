@@ -92,6 +92,13 @@ class VarDokMigrationController(
         activeGroup: String,
         httpRequest: HttpRequest<*>,
     ): MutableHttpResponse<*> {
+        if (vardokService.isAlreadyMigrated(id)) {
+            throw HttpStatusException(
+                HttpStatus.CONFLICT,
+                "Vardok definition with ID $id already migrated and may not be migrated again.",
+            )
+        }
+
         val vardefInput: VardefInput
         try {
             vardefInput =

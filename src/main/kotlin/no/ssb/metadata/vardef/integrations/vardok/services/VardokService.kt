@@ -31,6 +31,8 @@ interface VardokService {
 
     fun getVardefIdByVardokId(vardokId: String): String?
 
+    fun isAlreadyMigrated(vardokId: String): Boolean
+
     companion object {
         private fun generateShortName() = "${ILLEGAL_SHORNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
 

@@ -6,11 +6,13 @@ import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
+import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -21,6 +23,14 @@ import java.time.LocalDate
 class VarDokMigrationControllerTest : BaseVardefTest() {
     @Inject
     lateinit var vardokService: VardokService
+
+    @Inject
+    lateinit var vardokIdMappingRepository: VardokIdMappingRepository
+
+    @BeforeEach
+    fun resetVardokIdMappingRepository() {
+        vardokIdMappingRepository.deleteAll()
+    }
 
     @ParameterizedTest
     @ValueSource(
@@ -51,7 +61,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `post duplicate short name`(spec: RequestSpecification) {
+    fun `migrate twice`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -60,14 +70,20 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/2")
             .then()
-            .statusCode(201)
+            .statusCode(HttpStatus.CREATED.code)
 
         spec
             .`when`()
             .post("/vardok-migration/2")
             .then()
-            .statusCode(409)
-            .spec(buildProblemJsonResponseSpec(false, null, errorMessage = "Short name wies already exists."))
+            .statusCode(HttpStatus.CONFLICT.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Vardok definition with ID 2 already migrated and may not be migrated again.",
+                ),
+            )
     }
 
     @ParameterizedTest

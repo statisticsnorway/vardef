@@ -25,6 +25,8 @@ class StaticVardokService(
 
     override fun getVardefIdByVardokId(vardokId: String): String? = vardokIdMappingRepository.getVardefIdByVardokId(vardokId)
 
+    override fun isAlreadyMigrated(vardokId: String): Boolean = vardokIdMappingRepository.existsByVardokId(vardokId)
+
     override fun getVardokItem(id: String): VardokResponse {
         val xmlFile = File("src/test/resources/vardokFiles/$id.xml")
         val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)

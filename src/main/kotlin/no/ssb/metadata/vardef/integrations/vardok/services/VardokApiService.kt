@@ -62,4 +62,6 @@ open class VardokApiService(
     ): VardokVardefIdPair = vardokIdMappingRepository.save(VardokVardefIdPair(vardokId, vardefId))
 
     override fun getVardefIdByVardokId(vardokId: String): String? = vardokIdMappingRepository.getVardefIdByVardokId(vardokId)
+
+    override fun isAlreadyMigrated(vardokId: String): Boolean = vardokIdMappingRepository.existsByVardokId(vardokId)
 }

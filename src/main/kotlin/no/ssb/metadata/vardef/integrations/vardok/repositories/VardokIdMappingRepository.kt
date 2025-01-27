@@ -8,4 +8,6 @@ import org.bson.types.ObjectId
 @MongoRepository(databaseName = "vardok-id-mapping")
 interface VardokIdMappingRepository : CrudRepository<VardokVardefIdPair, ObjectId> {
     fun getVardefIdByVardokId(vardokId: String): String?
+
+    fun existsByVardokId(vardokId: String): Boolean
 }

@@ -15,12 +15,16 @@
 
 name: Image Build and Deploy
 
+#on:
+#  release:
+#    types: [ published ]
+#  push:
+#    branches:
+#      - main
 on:
-  release:
-    types: [ published ]
   push:
-    branches:
-      - main
+
+
 env:
   REGISTRY: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef
   IMAGE: vardef
@@ -66,7 +70,7 @@ jobs:
 
       - name: Set docker image env var
         run: |
-          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}-${steps.nais-deploy-vars.outputs.nais_tag}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}-${{ steps.nais-deploy-vars.outputs.nais_tag }}" >> $GITHUB_ENV
       - name: "Authenticate to Google Cloud"
         id: "auth"
         uses: "google-github-actions/auth@v2.1.7"

@@ -46,4 +46,3 @@ jobs:
           RESOURCE: ${{ inputs.nais-config-path }}
           VAR: image= ${{inputs.image-tag}}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-          WAIT: false

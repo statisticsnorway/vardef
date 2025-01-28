@@ -16,11 +16,11 @@
 name: Image Build and Deploy
 
 on:
-  release:
-    types: [ published ]
+#  release:
+#    types: [ published ]
   push:
-    branches:
-      - main
+#    branches:
+#      - main
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef

@@ -1,0 +1,60 @@
+name: Create GitHub Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: read
+    outputs:
+      image-tag: ${{steps.check-version.outputs.tag}}
+
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DAPLA_BOT_APP_ID }}
+          private-key: ${{ secrets.DAPLA_BOT_PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2 # Fetch last 2 commits to compare
+
+      - name: Check Version Change
+        id: check-version
+        run: |
+          CURRENT_VERSION=$(grep 'version =' build.gradle.kts | cut -d'"' -f2)
+          PREVIOUS_VERSION=$(git show HEAD~1:build.gradle.kts | grep 'version =' | cut -d'"' -f2)
+          
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+            echo "tag=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Git Tag
+        if: steps.check-version.outputs.tag
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag ${{ steps.check-version.outputs.tag }}
+          git push origin ${{ steps.check-version.outputs.tag }}
+
+      - name: Publish release notes
+        if: steps.check-version.outputs.tag
+        uses: release-drafter/release-drafter@v6.0.0
+        with:
+          publish: true
+          tag: ${{ steps.check-version.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+
+

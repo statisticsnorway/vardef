@@ -17,6 +17,13 @@ jobs:
       image-tag: ${{steps.check-version.outputs.tag}}
 
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DAPLA_BOT_APP_ID }}
+          private-key: ${{ secrets.DAPLA_BOT_PRIVATE_KEY }}
+
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -48,26 +55,6 @@ jobs:
           publish: true
           tag: ${{ steps.check-version.outputs.tag }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
 
-  build-docker-image:
-    name: Build docker image
-    needs: create-release
-    uses: ./.github/workflows/deploy-to-nais.yml
-    with:
-      image-name: vardef
-      image-tag: ${{ needs.create-release.outputs.image-tag }}
 
-  deploy:
-    name: Deploy to NAIS
-    needs: create-release
-    uses: ./.github/workflows/deploy-to-nais.yml
-    with:
-      registry: europe-north1-docker.pkg.dev
-      repository: dapla-metadata
-      image-name: vardef
-      image-tag: ${{ needs.create-release.outputs.image-tag }}
-      cluster: naisprod
-      nais-config-path: .nais/prod/prod.yaml
-    secrets:
-      registry-project: ${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}

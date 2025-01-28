@@ -78,7 +78,7 @@ jobs:
       - name: Login to registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ${{env.REGISTRY}}
           username: "oauth2accesstoken"
           password: "${{ steps.auth.outputs.access_token }}"
 

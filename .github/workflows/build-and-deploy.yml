@@ -36,7 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image-tag: ${{ env.DOCKER_IMAGE }}
-      nais-tag: ${{ steps.nais-deploy-vars.outputs.nais_tag }}
       nais-cluster: ${{ steps.nais-deploy-vars.outputs.cluster }}
       nais-config-path: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
 
@@ -107,7 +106,7 @@ jobs:
       registry: europe-north1-docker.pkg.dev
       repository: dapla-metadata
       image-name: vardef
-      image-tag: ${{ needs.docker-build.outputs.nais-tag }}
+      image-tag: ${{ needs.docker-build.outputs.image-tag }}
       cluster: ${{needs.docker-build.outputs.nais-cluster}}
       nais-config-path:  ${{needs.docker-build.outputs.nais-config-path}}
     secrets:

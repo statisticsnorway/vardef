@@ -66,7 +66,7 @@ jobs:
 
       - name: Set docker image env var
         run: |
-          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}-${steps.nais-deploy-vars.outputs.nais_tag}" >> $GITHUB_ENV
       - name: "Authenticate to Google Cloud"
         id: "auth"
         uses: "google-github-actions/auth@v2.1.7"
@@ -96,7 +96,6 @@ jobs:
           ./gradlew
           jib
           --image=${{ env.DOCKER_IMAGE }}
-          --tags=${{ steps.nais-deploy-vars.outputs.nais_tag }}
           --daemon --parallel --build-cache
           
   deploy:

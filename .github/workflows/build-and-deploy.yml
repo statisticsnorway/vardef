@@ -59,7 +59,7 @@ jobs:
             echo "cluster=prod" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/prod/nais.yaml" >> "$GITHUB_OUTPUT"
           else
-            echo "nais_tag=" >> "$GITHUB_OUTPUT"
+            echo "nais_tag=test" >> "$GITHUB_OUTPUT"
             echo "cluster=test" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/test/nais.yaml" >> "$GITHUB_OUTPUT"
           fi    
@@ -104,8 +104,6 @@ jobs:
           --image=${{ env.DOCKER_IMAGE }}
           -Djib.extraTags="${{ env.DOCKER_TAGS }}"
           --daemon --parallel --build-cache
-
-
           
   deploy:
     name: Deploy to NAIS

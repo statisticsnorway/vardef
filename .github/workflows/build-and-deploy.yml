@@ -71,6 +71,7 @@ jobs:
             TAGS="${TAGS},${{ steps.nais-deploy-vars.outputs.nais_tag }}"
           fi
           echo "DOCKER_TAGS=${TAGS}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}" >> $GITHUB_ENV
 
       - name: "Authenticate to Google Cloud"
         id: "auth"
@@ -100,9 +101,10 @@ jobs:
         run: >
           ./gradlew
           jib
-          --image=${REGISTRY}/${IMAGE}
-          --tags=${DOCKER_TAGS}
+          --image=${{ env.DOCKER_IMAGE }}
+          -Djib.extraTags="${{ env.DOCKER_TAGS }}"
           --daemon --parallel --build-cache
+
 
           
   deploy:

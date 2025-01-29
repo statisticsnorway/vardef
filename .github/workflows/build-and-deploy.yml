@@ -59,19 +59,14 @@ jobs:
             echo "cluster=prod" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/prod/nais.yaml" >> "$GITHUB_OUTPUT"
           else
-            echo "nais_tag=v0.0.1" >> "$GITHUB_OUTPUT"
+            echo "nais_tag=" >> "$GITHUB_OUTPUT"
             echo "cluster=test" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/test/nais.yaml" >> "$GITHUB_OUTPUT"
           fi    
 
       - name: Set docker image env var
         run: |
-          TAGS="${{ github.sha }}"
-          if [[ -n "${{ steps.nais-deploy-vars.outputs.nais_tag }}" ]]; then
-            TAGS="${TAGS},${{ steps.nais-deploy-vars.outputs.nais_tag }}"
-          fi
-          echo "DOCKER_TAGS=${TAGS}" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}" >> $GITHUB_ENV
 
       - name: "Authenticate to Google Cloud"
         id: "auth"
@@ -102,7 +97,6 @@ jobs:
           ./gradlew
           jib
           --image=${{ env.DOCKER_IMAGE }}
-          -Djib.extraTags="${{ env.DOCKER_TAGS }}"
           --daemon --parallel --build-cache
           
   deploy:

@@ -3,18 +3,6 @@ name: Deploy to NAIS
 on:
   workflow_call:
     inputs:
-      registry:
-        description: Registry, for example "europe-north1-docker.pkg.dev"
-        required: true
-        type: string
-      repository:
-        description: Registry repository
-        required: true
-        type: string
-      image-name:
-        description: Image name
-        required: true
-        type: string
       image-tag:
         description: Tag for the image
         required: true

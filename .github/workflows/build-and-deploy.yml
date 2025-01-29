@@ -103,9 +103,6 @@ jobs:
     needs: docker-build
     uses: ./.github/workflows/deploy-to-nais.yml
     with:
-      registry: europe-north1-docker.pkg.dev
-      repository: dapla-metadata
-      image-name: vardef
       image-tag: ${{needs.docker-build.outputs.image-tag}}
       cluster: ${{needs.docker-build.outputs.nais-cluster}}
       nais-config-path:  ${{needs.docker-build.outputs.nais-config-path}}

@@ -46,7 +46,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git tag ${{ steps.check-version.outputs.tag }}
-          git push origin ${{ steps.check-version.outputs.tag }}
+          git push origin tag ${{ steps.check-version.outputs.tag }}
 
       - name: Publish release notes
         if: steps.check-version.outputs.tag

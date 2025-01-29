@@ -59,7 +59,7 @@ jobs:
             echo "cluster=prod" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/prod/nais.yaml" >> "$GITHUB_OUTPUT"
           else
-            echo "nais_tag=test" >> "$GITHUB_OUTPUT"
+            echo "nais_tag=v0.0.1" >> "$GITHUB_OUTPUT"
             echo "cluster=test" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/test/nais.yaml" >> "$GITHUB_OUTPUT"
           fi    

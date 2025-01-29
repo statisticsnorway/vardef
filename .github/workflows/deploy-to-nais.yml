@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: ${{inputs.cluster}}
-          RESOURCE: ${{inputs.nais-config-path}}
-          VAR: image=${{inputs.image-tag}}
+          CLUSTER: ${{ inputs.cluster }}
+          RESOURCE: ${{ inputs.nais-config-path }}
+          VAR: image=${{ inputs.image-tag }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

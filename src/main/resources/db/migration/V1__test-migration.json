@@ -1,0 +1,4 @@
+{
+  "insert": "user",
+  "documents": [ {"name":  "Ada Lovelace", "age":  205} ]
+}

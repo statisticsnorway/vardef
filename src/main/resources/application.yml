@@ -122,6 +122,17 @@ micronaut:
         descriptions: true
         step: PT1M
 
+flyway:
+  datasources:
+    mongodb:
+      url: mongodb://localhost:27017
+      enabled: true
+      sql-migration-suffixes:
+        # MongoDB migration scripts are JSON (or Javascript), not SQL
+        - ".json"
+      username: user
+      password: pass
+
 # Allow unauthenticated access
 endpoints:
   all:

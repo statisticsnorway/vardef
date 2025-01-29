@@ -17,6 +17,9 @@ group = "no.ssb.metadata.vardef"
 val kotlinVersion = project.properties["kotlinVersion"]
 repositories {
     mavenCentral()
+    flatDir {
+        dirs("src/main/resources/db/drivers")
+    }
 }
 
 dependencies {
@@ -29,6 +32,16 @@ dependencies {
     implementation(libs.micronaut.mongo.reactive)
     implementation(libs.micronaut.cache.caffeine)
     implementation(libs.micronaut.data.mongodb)
+    implementation("io.micronaut.flyway:micronaut-flyway")
+    implementation("org.flywaydb:flyway-database-mongodb:11.2.0")
+    implementation("com.github.kornilova203:mongo-jdbc-driver:1.19")
+//    implementation(files("src/main/resources/db/drivers/mongo-jdbc-standalone-1.19.jar"))
+//    implementation(
+//        group = "com.github.kornilova203",
+//        name = "mongo-jdbc-driver",
+//        version = "1.19",
+//        dependencyConfiguration = files("src/main/resources/db/drivers/mongo-jdbc-standalone-1.19.jar"),
+//    )
     implementation(libs.micronaut.http.client)
     implementation(libs.micronaut.management)
     implementation(libs.micronaut.micrometer.registry.prometheus)

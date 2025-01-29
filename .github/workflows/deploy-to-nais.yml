@@ -3,18 +3,6 @@ name: Deploy to NAIS
 on:
   workflow_call:
     inputs:
-      registry:
-        description: Registry, for example "europe-north1-docker.pkg.dev"
-        required: true
-        type: string
-      repository:
-        description: Registry repository
-        required: true
-        type: string
-      image-name:
-        description: Image name
-        required: true
-        type: string
       image-tag:
         description: Tag for the image
         required: true
@@ -40,11 +28,9 @@ jobs:
       id-token: "write"
     steps:
       - uses: actions/checkout@v4
-
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: ${{ inputs.cluster }}
           RESOURCE: ${{ inputs.nais-config-path }}
-          VAR: image=${{ inputs.registry }}/${{ secrets.registry-project }}/${{ inputs.repository }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
+          VAR: image=${{ inputs.image-tag }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-          WAIT: false

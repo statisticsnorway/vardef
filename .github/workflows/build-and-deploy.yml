@@ -16,11 +16,11 @@
 name: Image Build and Deploy
 
 on:
-  release:
-    types: [ published ]
+  #release:
+  #  types: [ published ]
   push:
-    branches:
-      - main
+  #  branches:
+  #    - main
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef
@@ -66,7 +66,12 @@ jobs:
 
       - name: Set docker image env var
         run: |
-          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}" >> $GITHUB_ENV
+          TAGS="${{ github.sha }}"
+          if [[ -n "${{ steps.nais-deploy-vars.outputs.nais_tag }}" ]]; then
+            TAGS="${TAGS},${{ steps.nais-deploy-vars.outputs.nais_tag }}"
+          fi
+          echo "DOCKER_TAGS=${TAGS}" >> $GITHUB_ENV
+
       - name: "Authenticate to Google Cloud"
         id: "auth"
         uses: "google-github-actions/auth@v2.1.7"
@@ -95,8 +100,10 @@ jobs:
         run: >
           ./gradlew
           jib
-          --image=${{ env.DOCKER_IMAGE }}
+          --image=${REGISTRY}/${IMAGE}
+          --tags=${DOCKER_TAGS}
           --daemon --parallel --build-cache
+
           
   deploy:
     name: Deploy to NAIS

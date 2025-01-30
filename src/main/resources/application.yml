@@ -140,3 +140,6 @@ endpoints:
 jackson:
   xml:
     enabled: true
+
+mongodb:
+  uri: mongodb://localhost:27017

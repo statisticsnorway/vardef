@@ -43,6 +43,8 @@ dependencies {
     implementation(libs.reactor)
     implementation(libs.logstash.logback.encoder)
     implementation(libs.logback.classic)
+    implementation("io.mongock:mongock-standalone:5.5.0")
+    implementation("io.mongock:mongodb-reactive-driver:5.5.0")
     compileOnly(libs.micronaut.openapi.annotations)
     runtimeOnly(libs.jackson.module.kotlin)
     runtimeOnly(libs.snakeyaml)

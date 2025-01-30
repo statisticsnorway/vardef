@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef.utils
 
-import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.bson.types.ObjectId
@@ -462,7 +462,7 @@ val SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME =
                 nn = null,
                 en = null,
             ),
-        shortName = ILLEGAL_SHORNAME_KEYWORD + "abcd",
+        shortName = ILLEGAL_SHORTNAME_KEYWORD + "abcd",
         definition =
             LanguageStringType(
                 nb = "Bydel",

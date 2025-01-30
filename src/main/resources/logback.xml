@@ -9,6 +9,8 @@
     </appender>
 
     <logger name="io.micronaut.http.client.netty.DefaultHttpClient" level="ERROR" />
+    <logger name="io.mongock" level="WARN" />
+    <logger name="org.reflections.Reflections" level="WARN" />
 
     <root level="info">
         <appender-ref ref="STDOUT"/>

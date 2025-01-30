@@ -114,6 +114,80 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION =
         lastUpdatedBy = "me@example.com",
     )
 
+val SAVED_DRAFT =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        patchId = 1,
+        name =
+            LanguageStringType(
+                nb = null,
+                nn = null,
+                en = null,
+            ),
+        shortName = "",
+        definition =
+            LanguageStringType(
+                nb = null,
+                nn = null,
+                en = null,
+            ),
+        classificationReference = null,
+        unitTypes = emptyList(),
+        subjectFields = emptyList(),
+        containsSpecialCategoriesOfPersonalData = false,
+        variableStatus = VariableStatus.DRAFT,
+        measurementType = null,
+        validFrom = LocalDate.of(2024, 1, 1),
+        validUntil = null,
+        externalReferenceUri = null,
+        comment = null,
+        relatedVariableDefinitionUris = null,
+        owner = Owner("my-team", listOf("my-team-developers", "other-group", TEST_DEVELOPERS_GROUP)),
+        contact = null,
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = "me@example.com",
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = "me@example.com",
+    )
+
+val SAVED_PUBLISHED_INTERNAL =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        patchId = 1,
+        name =
+            LanguageStringType(
+                nb = null,
+                nn = null,
+                en = null,
+            ),
+        shortName = "",
+        definition =
+            LanguageStringType(
+                nb = null,
+                nn = null,
+                en = null,
+            ),
+        classificationReference = null,
+        unitTypes = emptyList(),
+        subjectFields = emptyList(),
+        containsSpecialCategoriesOfPersonalData = false,
+        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
+        measurementType = null,
+        validFrom = LocalDate.of(2024, 1, 1),
+        validUntil = null,
+        externalReferenceUri = null,
+        comment = null,
+        relatedVariableDefinitionUris = null,
+        owner = Owner("my-team", listOf("my-team-developers", "other-group", TEST_DEVELOPERS_GROUP)),
+        contact = null,
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = "me@example.com",
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = "me@example.com",
+    )
+
 val SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_BEFORE =
     SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
         patchId = 2,

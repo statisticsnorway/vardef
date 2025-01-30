@@ -12,12 +12,19 @@ import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 
 class CreateTests : BaseVardefTest() {
+
+    @BeforeEach
+    fun beforeEach() {
+        variableDefinitionRepository.save(SAVED_PUBLISHED_INTERNAL)
+    }
+
     @Test
     fun `create new patch`(spec: RequestSpecification) {
         spec

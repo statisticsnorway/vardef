@@ -4,22 +4,30 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
-import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
+import org.bson.types.ObjectId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import java.net.URI
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 class UpdateTests : BaseVardefTest() {
+
+    @BeforeEach
+    fun beforeEach() {
+        variableDefinitionRepository.save(SAVED_DRAFT)
+    }
+
     @Test
     fun `update variable definition`(spec: RequestSpecification) {
         val expected: SavedVariableDefinition =
@@ -522,4 +530,18 @@ class UpdateTests : BaseVardefTest() {
         assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
         assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
     }
-}
+
+    @Test
+    fun `publish variable missing obligatory fields`(spec: RequestSpecification) {
+            spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("""{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent())
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+    }
+
+    }

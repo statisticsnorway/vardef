@@ -232,7 +232,28 @@ object TestUtils {
 
     @JvmStatic
     fun draftVariableDefinitionMandatoryFieldsRemoved(): Stream<Arguments> =
-        Stream.of("name", "short_name", "definition", "valid_from").map {
+        Stream.of("name", "short_name", "definition", "valid_from", "contains_special_categories_of_personal_data").map {
+            argumentSet(
+                "$it removed",
+                jsonTestInput()
+                    .apply {
+                        remove(it)
+                    }.toString(),
+            )
+        }
+
+    @JvmStatic
+    fun publishVariableDefinitionMandatoryFieldsRemoved(): Stream<Arguments> =
+        Stream.of(
+            "name",
+            "short_name",
+            "definition",
+            "valid_from",
+            "unit_types",
+            "subject_fields",
+            "contains_special_categories_of_personal_data",
+            "contact"
+        ).map {
             argumentSet(
                 "$it removed",
                 jsonTestInput()

@@ -1,6 +1,8 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.exceptions.HttpStatusException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
@@ -71,6 +73,13 @@ class VariableDefinitionService(
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
         }
+        if(updateDraft.variableStatus == VariableStatus.PUBLISHED_INTERNAL){
+            if(!checkMandatoryBeforePublish(savedDraft, updateDraft)){
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,"Invalid publish"
+                )
+            }
+        }
         val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft, userName))
         logger.info(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
@@ -78,6 +87,12 @@ class VariableDefinitionService(
         )
         return updatedVariable
     }
+
+    private fun checkMandatoryBeforePublish(savedDraft: SavedVariableDefinition, updateDraft: UpdateDraft): Boolean {
+        return !(savedDraft.unitTypes.isEmpty() && updateDraft.unitTypes.isNullOrEmpty() ||
+                savedDraft.subjectFields.isEmpty() && updateDraft.subjectFields.isNullOrEmpty())
+    }
+
 
     /**
      * List all objects in the repository

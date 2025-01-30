@@ -73,13 +73,6 @@ class VariableDefinitionService(
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
         }
-        if(updateDraft.variableStatus == VariableStatus.PUBLISHED_INTERNAL){
-            if(!checkMandatoryBeforePublish(savedDraft, updateDraft)){
-                throw HttpStatusException(
-                    HttpStatus.BAD_REQUEST,"Invalid publish"
-                )
-            }
-        }
         val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft, userName))
         logger.info(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
@@ -87,12 +80,6 @@ class VariableDefinitionService(
         )
         return updatedVariable
     }
-
-    private fun checkMandatoryBeforePublish(savedDraft: SavedVariableDefinition, updateDraft: UpdateDraft): Boolean {
-        return !(savedDraft.unitTypes.isEmpty() && updateDraft.unitTypes.isNullOrEmpty() ||
-                savedDraft.subjectFields.isEmpty() && updateDraft.subjectFields.isNullOrEmpty())
-    }
-
 
     /**
      * List all objects in the repository
@@ -267,4 +254,16 @@ class VariableDefinitionService(
             )
 
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
+
+    /**
+     *
+     */
+    fun draftCanBePublished(savedDraft: SavedVariableDefinition, updateDraft: UpdateDraft): Boolean {
+        // logger
+        if(updateDraft.variableStatus?.isPublished() == true) {
+            return !(savedDraft.unitTypes.isEmpty() && updateDraft.unitTypes.isNullOrEmpty() ||
+                    savedDraft.subjectFields.isEmpty() && updateDraft.subjectFields.isNullOrEmpty())
+        }
+        return false
+    }
 }

@@ -4,7 +4,6 @@ import java.time.LocalDate
 
 class ServiceUtils {
     companion object {
-
         /**
          *
          */

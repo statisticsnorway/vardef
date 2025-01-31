@@ -277,9 +277,14 @@ class VariableDefinitionService(
     /**
      *
      */
-    fun shortNameExists(savedDraft: SavedVariableDefinition, updateDraft: UpdateDraft): Boolean {
-        return (updateDraft.shortName != null && updateDraft.shortName != savedDraft.shortName
-                && doesShortNameExist(updateDraft.shortName))
+    fun shortNameExists(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): Boolean {
+        return (
+            updateDraft.shortName != null && updateDraft.shortName != savedDraft.shortName &&
+                doesShortNameExist(updateDraft.shortName)
+        )
     }
 
     /**

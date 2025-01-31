@@ -9,10 +9,9 @@ import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
-import no.ssb.metadata.vardef.models.Patch
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import no.ssb.metadata.vardef.utils.ServiceUtils.Companion.isNotNullOrEmpty
 import org.slf4j.LoggerFactory
 
 /**
@@ -156,13 +155,23 @@ class PatchesService(
         savedDraft: SavedVariableDefinition,
         patch: Patch,
     ): Boolean {
-        // logger
-        if (patch.variableStatus == VariableStatus.PUBLISHED_EXTERNAL) {
-            return !(
-                savedDraft.unitTypes.isEmpty() && patch.unitTypes.isNullOrEmpty() ||
-                    savedDraft.subjectFields.isEmpty() && patch.subjectFields.isNullOrEmpty()
+        val propertiesToCheck =
+            listOf(
+                "name",
+                "unitTypes",
+                "subjectFields",
             )
+        if (patch.variableStatus == VariableStatus.PUBLISHED_EXTERNAL) {
+            return propertiesToCheck.all { propertyName ->
+                val savedValue =
+                    SavedVariableDefinition::class.members.first { it.name == propertyName }.call(savedDraft)
+                val updateValue = Patch::class.members.first { it.name == propertyName }.call(patch)
+
+                logger.info("property $propertyName has savedValue: $savedValue, patchValue: $updateValue")
+
+                savedValue.isNotNullOrEmpty() || updateValue.isNotNullOrEmpty()
+            }
         }
-        return false
+        return true
     }
 }

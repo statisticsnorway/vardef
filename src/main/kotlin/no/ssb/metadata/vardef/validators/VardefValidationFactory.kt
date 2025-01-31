@@ -8,11 +8,10 @@ import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.services.VariableDefinitionService
+import no.ssb.metadata.vardef.utils.ServiceUtils.Companion.isCorrectDateOrder
 
 @Factory
 class VardefValidationFactory {
-    @Inject
-    private lateinit var variableDefinitionService: VariableDefinitionService
 
     @Singleton
     fun draftDateOrderValidator(): ConstraintValidator<ValidDateOrder, Draft> =
@@ -21,7 +20,7 @@ class VardefValidationFactory {
                 _,
                 _,
             ->
-            value == null || variableDefinitionService.isCorrectDateOrder(value.validFrom, value.validUntil)
+            value == null || isCorrectDateOrder(value.validFrom, value.validUntil)
         }
 
     @Singleton
@@ -31,6 +30,6 @@ class VardefValidationFactory {
                 _,
                 _,
             ->
-            value == null || variableDefinitionService.isCorrectDateOrder(value.validFrom, value.validUntil)
+            value == null || isCorrectDateOrder(value.validFrom, value.validUntil)
         }
 }

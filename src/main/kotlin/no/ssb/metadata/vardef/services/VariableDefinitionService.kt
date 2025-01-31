@@ -11,6 +11,8 @@ import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import no.ssb.metadata.vardef.utils.ServiceUtils.Companion.isCorrectDateOrder
+import no.ssb.metadata.vardef.utils.ServiceUtils.Companion.isNotNullOrEmpty
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
@@ -225,19 +227,6 @@ class VariableDefinitionService(
     }
 
     /**
-     * Checks if the given dates are in the correct chronological order.
-     *
-     * @param validFrom The starting date (may be `null`).
-     * @param validUntil The ending date (may be `null`).
-     * @return `true` if the dates are in the correct order, or if either date is `null`.
-     *         Otherwise, `false` if `validFrom` occurs after `validUntil`.
-     */
-    fun isCorrectDateOrder(
-        validFrom: LocalDate?,
-        validUntil: LocalDate?,
-    ): Boolean = validFrom == null || validUntil == null || validFrom.isBefore(validUntil)
-
-    /**
      * Checks if the date range in the updated draft is logically correct compared to the saved draft.
      *
      * @param updateDraft The draft to be updated.
@@ -271,15 +260,13 @@ class VariableDefinitionService(
                 "unitTypes",
                 "subjectFields",
             )
-        // Check if the draft is marked as published
         if (updateDraft.variableStatus?.isPublished() == true) {
-            // Check the properties and their values in both savedDraft and updateDraft
             return propertiesToCheck.all { propertyName ->
                 // Use reflection to get the value of the property from both drafts
                 val savedValue = SavedVariableDefinition::class.members.first { it.name == propertyName }.call(savedDraft)
                 val updateValue = UpdateDraft::class.members.first { it.name == propertyName }.call(updateDraft)
 
-                logger.info("property $propertyName has savedValue: $savedValue, updateValue: $updateValue")
+                logger.info("property $propertyName has saved value: $savedValue, updateValue: $updateValue")
 
                 savedValue.isNotNullOrEmpty() || updateValue.isNotNullOrEmpty()
             }
@@ -287,6 +274,17 @@ class VariableDefinitionService(
         return true
     }
 
+    /**
+     *
+     */
+    fun shortNameExists(savedDraft: SavedVariableDefinition, updateDraft: UpdateDraft): Boolean {
+        return (updateDraft.shortName != null && updateDraft.shortName != savedDraft.shortName
+                && doesShortNameExist(updateDraft.shortName))
+    }
+
+    /**
+     *
+     */
     fun illegalShortName(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
@@ -295,12 +293,4 @@ class VariableDefinitionService(
         return savedDraft.shortName.contains(ILLEGAL_SHORTNAME_KEYWORD) ||
             updateDraft.shortName?.contains(ILLEGAL_SHORTNAME_KEYWORD) == true
     }
-
-    private fun Any?.isNotNullOrEmpty(): Boolean =
-        when (this) {
-            is String -> this.isNotBlank() // String: Not null and not blank
-            is Collection<*> -> this.isNotEmpty() && this.any { it.isNotNullOrEmpty() } // Lists/Sets: Not empty
-            is Map<*, *> -> this.isNotEmpty() // Maps: Not empty
-            else -> this != null // Any other type: Just not null
-        }
 }

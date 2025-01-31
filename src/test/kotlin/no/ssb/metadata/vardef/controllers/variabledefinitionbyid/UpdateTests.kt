@@ -9,25 +9,15 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
-import org.bson.types.ObjectId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import java.net.URI
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 class UpdateTests : BaseVardefTest() {
-
-    @BeforeEach
-    fun beforeEach() {
-        variableDefinitionRepository.save(SAVED_DRAFT)
-    }
-
     @Test
     fun `update variable definition`(spec: RequestSpecification) {
         val expected: SavedVariableDefinition =
@@ -531,17 +521,53 @@ class UpdateTests : BaseVardefTest() {
         assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
     }
 
-    @Test
-    fun `publish variable missing obligatory fields`(spec: RequestSpecification) {
-            spec
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#invalidPublish")
+    fun `publish variable missing mandatory field`(
+        definitionId: String,
+        spec: RequestSpecification,
+    ) {
+        spec
             .given()
             .contentType(ContentType.JSON)
             .body("""{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent())
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/${SAVED_DRAFT.definitionId}")
+            .patch("/variable-definitions/$definitionId")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 
+    @Test
+    fun `publish variable missing mandatory field 2`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("""{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent())
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
     }
+
+    @Test
+    fun `publish variable missing mandatory field 3`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("""{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent())
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+    }
+}

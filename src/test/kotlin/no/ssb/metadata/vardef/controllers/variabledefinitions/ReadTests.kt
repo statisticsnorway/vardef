@@ -37,13 +37,13 @@ class ReadTests : BaseVardefTest() {
         // No definitions are valid on this date
         "1800-01-01, 0",
         // Specific definitions are valid on these dates
-        "2021-01-01, 6",
+        "2021-01-01, 11",
         "2020-01-01, 2",
-        "2024-06-05, 6",
+        "2024-06-05, 11",
         // Definitions without a validUntil date defined
-        "3000-12-31, 4",
+        "3000-12-31, 9",
         // All definitions
-        "null, 6",
+        "null, 11",
     )
     fun `filter variable definitions by date`(
         dateOfValidity: String,

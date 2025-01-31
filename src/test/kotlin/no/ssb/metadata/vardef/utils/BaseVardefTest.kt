@@ -49,5 +49,10 @@ open class BaseVardefTest {
         variableDefinitionRepository.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
         ALL_SAVED_INTERNAL_PATCHES.forEach { variableDefinitionRepository.save(it) }
         variableDefinitionRepository.save(SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_MISSING_UNIT_TYPES)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_MISSING_ILLEGAL_SHORT_NAME)
     }
 }

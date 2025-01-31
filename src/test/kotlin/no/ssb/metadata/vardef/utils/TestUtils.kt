@@ -252,7 +252,7 @@ object TestUtils {
             "unit_types",
             "subject_fields",
             "contains_special_categories_of_personal_data",
-            "contact"
+            "contact",
         ).map {
             argumentSet(
                 "$it removed",

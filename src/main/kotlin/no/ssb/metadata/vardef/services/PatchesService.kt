@@ -11,7 +11,6 @@ import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.slf4j.LoggerFactory
@@ -153,11 +152,16 @@ class PatchesService(
     /**
      *
      */
-    fun patchCanBePublishedExternally(savedDraft: SavedVariableDefinition, patch: Patch): Boolean {
+    fun patchCanBePublishedExternally(
+        savedDraft: SavedVariableDefinition,
+        patch: Patch,
+    ): Boolean {
         // logger
-        if(patch.variableStatus == VariableStatus.PUBLISHED_EXTERNAL) {
-                return !(savedDraft.unitTypes.isEmpty() && patch.unitTypes.isNullOrEmpty() ||
-                    savedDraft.subjectFields.isEmpty() && patch.subjectFields.isNullOrEmpty())
+        if (patch.variableStatus == VariableStatus.PUBLISHED_EXTERNAL) {
+            return !(
+                savedDraft.unitTypes.isEmpty() && patch.unitTypes.isNullOrEmpty() ||
+                    savedDraft.subjectFields.isEmpty() && patch.subjectFields.isNullOrEmpty()
+            )
         }
         return false
     }

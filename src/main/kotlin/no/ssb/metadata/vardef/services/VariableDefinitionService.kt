@@ -1,12 +1,11 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.exceptions.HttpStatusException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -78,6 +77,9 @@ class VariableDefinitionService(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
             kv(DEFINITION_ID, updatedVariable.definitionId),
         )
+        if (updatedVariable.variableStatus.isPublished()) {
+            logger.info("Published variable with id: ${updatedVariable.definitionId}")
+        }
         return updatedVariable
     }
 
@@ -258,12 +260,47 @@ class VariableDefinitionService(
     /**
      *
      */
-    fun draftCanBePublished(savedDraft: SavedVariableDefinition, updateDraft: UpdateDraft): Boolean {
-        // logger
-        if(updateDraft.variableStatus?.isPublished() == true) {
-            return !(savedDraft.unitTypes.isEmpty() && updateDraft.unitTypes.isNullOrEmpty() ||
-                    savedDraft.subjectFields.isEmpty() && updateDraft.subjectFields.isNullOrEmpty())
+    fun draftCanBePublished(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): Boolean {
+        val propertiesToCheck =
+            listOf(
+                "name",
+                "shortName",
+                "unitTypes",
+                "subjectFields",
+            )
+        // Check if the draft is marked as published
+        if (updateDraft.variableStatus?.isPublished() == true) {
+            // Check the properties and their values in both savedDraft and updateDraft
+            return propertiesToCheck.all { propertyName ->
+                // Use reflection to get the value of the property from both drafts
+                val savedValue = SavedVariableDefinition::class.members.first { it.name == propertyName }.call(savedDraft)
+                val updateValue = UpdateDraft::class.members.first { it.name == propertyName }.call(updateDraft)
+
+                logger.info("property $propertyName has savedValue: $savedValue, updateValue: $updateValue")
+
+                savedValue.isNotNullOrEmpty() || updateValue.isNotNullOrEmpty()
+            }
         }
-        return false
+        return true
     }
+
+    fun illegalShortName(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): Boolean {
+        logger.info("Checking ShortName $savedDraft, shortName $updateDraft contains illegal shortName")
+        return savedDraft.shortName.contains(ILLEGAL_SHORTNAME_KEYWORD) ||
+            updateDraft.shortName?.contains(ILLEGAL_SHORTNAME_KEYWORD) == true
+    }
+
+    private fun Any?.isNotNullOrEmpty(): Boolean =
+        when (this) {
+            is String -> this.isNotBlank() // String: Not null and not blank
+            is Collection<*> -> this.isNotEmpty() && this.any { it.isNotNullOrEmpty() } // Lists/Sets: Not empty
+            is Map<*, *> -> this.isNotEmpty() // Maps: Not empty
+            else -> this != null // Any other type: Just not null
+        }
 }

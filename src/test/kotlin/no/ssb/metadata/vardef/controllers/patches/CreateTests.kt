@@ -19,7 +19,6 @@ import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 
 class CreateTests : BaseVardefTest() {
-
     @BeforeEach
     fun beforeEach() {
         variableDefinitionRepository.save(SAVED_PUBLISHED_INTERNAL)

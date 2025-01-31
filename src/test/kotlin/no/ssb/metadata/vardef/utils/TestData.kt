@@ -57,8 +57,8 @@ val DRAFT_EXAMPLE_WITH_VALID_UNTIL =
                 en = "A train is",
             ),
         classificationReference = "91",
-        unitTypes = listOf("", ""),
-        subjectFields = listOf("", ""),
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
         containsSpecialCategoriesOfPersonalData = false,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
@@ -108,43 +108,6 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION =
                 LanguageStringType("", "", ""),
                 "me@example.com",
             ),
-        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        createdBy = "me@example.com",
-        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
-        lastUpdatedBy = "me@example.com",
-    )
-
-val SAVED_DRAFT =
-    SavedVariableDefinition(
-        id = ObjectId(),
-        definitionId = VariableDefinitionService.generateId(),
-        patchId = 1,
-        name =
-            LanguageStringType(
-                nb = null,
-                nn = null,
-                en = null,
-            ),
-        shortName = "",
-        definition =
-            LanguageStringType(
-                nb = null,
-                nn = null,
-                en = null,
-            ),
-        classificationReference = null,
-        unitTypes = emptyList(),
-        subjectFields = emptyList(),
-        containsSpecialCategoriesOfPersonalData = false,
-        variableStatus = VariableStatus.DRAFT,
-        measurementType = null,
-        validFrom = LocalDate.of(2024, 1, 1),
-        validUntil = null,
-        externalReferenceUri = null,
-        comment = null,
-        relatedVariableDefinitionUris = null,
-        owner = Owner("my-team", listOf("my-team-developers", "other-group", TEST_DEVELOPERS_GROUP)),
-        contact = null,
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         createdBy = "me@example.com",
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
@@ -598,3 +561,163 @@ val UPDATE_DRAFT_CLASSIFICATION_REFERENCE =
         owner = null,
         variableStatus = null,
     )
+
+val SAVED_TO_PUBLISH =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = "Buss",
+                en = "Bus",
+            ),
+        shortName = "bus2",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val SAVED_TO_PUBLISH_MISSING_UNIT_TYPES =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = "Buss",
+                en = "Bus",
+            ),
+        shortName = "bus3",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("", ""),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = "Buss",
+                en = "Bus",
+            ),
+        shortName = "bus4",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = emptyList(),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val SAVED_TO_PUBLISH_MISSING_ILLEGAL_SHORT_NAME =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = "Buss",
+                en = "Bus",
+            ),
+        shortName = ILLEGAL_SHORTNAME_KEYWORD,
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = "Buss",
+                en = "Bus",
+            ),
+        shortName = "bus5",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = emptyList(),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)

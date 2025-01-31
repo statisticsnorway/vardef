@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
-import no.ssb.metadata.vardef.utils.DRAFT_EXAMPLE_WITH_VALID_UNTIL
-import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
+import no.ssb.metadata.vardef.utils.*
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
@@ -249,6 +248,23 @@ class CompanionObject {
                         }.toString(),
                     "valid_from",
                     DRAFT_EXAMPLE_WITH_VALID_UNTIL.validFrom.toString(),
+                ),
+            )
+
+        @JvmStatic
+        fun invalidPublish(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "empty unit types",
+                    SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES.definitionId,
+                ),
+                argumentSet(
+                    "blank values unit types",
+                    SAVED_TO_PUBLISH_MISSING_UNIT_TYPES.definitionId,
+                ),
+                argumentSet(
+                    "generated short name",
+                    SAVED_TO_PUBLISH_MISSING_ILLEGAL_SHORT_NAME.definitionId,
                 ),
             )
     }

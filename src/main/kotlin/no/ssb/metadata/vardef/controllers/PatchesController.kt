@@ -197,10 +197,6 @@ class PatchesController(
         when {
             !latestPatchOnValidityPeriod.variableStatus.isPublished() ->
                 throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
-            !patches.patchCanBePublishedExternally(latestPatchOnValidityPeriod, patch) -> throw HttpStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Variable ${latestPatchOnValidityPeriod.definitionId} is missing mandatory fields and can not be published external",
-            )
         }
         return patches
             .create(

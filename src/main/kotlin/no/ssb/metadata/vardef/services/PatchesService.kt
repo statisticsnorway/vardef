@@ -11,7 +11,6 @@ import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
-import no.ssb.metadata.vardef.utils.ServiceUtils.Companion.isNotNullOrEmpty
 import org.slf4j.LoggerFactory
 
 /**
@@ -146,32 +145,5 @@ class PatchesService(
             variableDefinitionRepository.deleteById(item.id)
         }
         logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
-    }
-
-    /**
-     *
-     */
-    fun patchCanBePublishedExternally(
-        savedDraft: SavedVariableDefinition,
-        patch: Patch,
-    ): Boolean {
-        val propertiesToCheck =
-            listOf(
-                "name",
-                "unitTypes",
-                "subjectFields",
-            )
-        if (patch.variableStatus == VariableStatus.PUBLISHED_EXTERNAL) {
-            return propertiesToCheck.all { propertyName ->
-                val savedValue =
-                    SavedVariableDefinition::class.members.first { it.name == propertyName }.call(savedDraft)
-                val updateValue = Patch::class.members.first { it.name == propertyName }.call(patch)
-
-                logger.info("property $propertyName has savedValue: $savedValue, patchValue: $updateValue")
-
-                savedValue.isNotNullOrEmpty() || updateValue.isNotNullOrEmpty()
-            }
-        }
-        return true
     }
 }

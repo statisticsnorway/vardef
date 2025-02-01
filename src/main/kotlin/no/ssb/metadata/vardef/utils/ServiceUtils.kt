@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.utils
 
+import no.ssb.metadata.vardef.models.LanguageStringType
 import java.time.LocalDate
 
 class ServiceUtils {
@@ -14,6 +15,11 @@ class ServiceUtils {
                 is Map<*, *> -> this.isNotEmpty() // Maps: Not empty
                 else -> this != null // Any other type: Just not null
             }
+
+        /**
+         *
+         */
+        fun LanguageStringType.isNotNullOrEmptyAllLanguages(): Boolean = this.listPresentLanguages().all { it.isNotNullOrEmpty() }
 
         /**
          * Checks if the given dates are in the correct chronological order.

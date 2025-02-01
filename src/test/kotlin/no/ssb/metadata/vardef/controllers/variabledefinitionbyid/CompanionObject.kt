@@ -266,6 +266,10 @@ class CompanionObject {
                     "generated short name",
                     SAVED_TO_PUBLISH_MISSING_ILLEGAL_SHORT_NAME.definitionId,
                 ),
+                argumentSet(
+                    "subject fields",
+                    SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS.definitionId,
+                ),
             )
     }
 }

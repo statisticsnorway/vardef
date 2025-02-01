@@ -224,15 +224,15 @@ class VariableDefinitionByIdController(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "The variable is published and cannot be updated with this method",
             )
-            vardef.illegalShortName(variable, updateDraft) -> throw HttpStatusException(
+            vardef.isIllegalShortNameForPublishing(variable, updateDraft) -> throw HttpStatusException(
                 HttpStatus.BAD_REQUEST,
                 "The short name ${variable.shortName} is illegal and must be changed before it is published",
             )
-            !vardef.draftCanBePublished(variable, updateDraft) -> throw HttpStatusException(
+            !vardef.hasRequiredFieldsForPublishing(variable, updateDraft) -> throw HttpStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Variable $definitionId is missing mandatory fields and can not be published",
             )
-            vardef.shortNameExists(variable, updateDraft) ->
+            vardef.isDuplicatedShortName(variable, updateDraft) ->
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",

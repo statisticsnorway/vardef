@@ -539,7 +539,7 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `publish variable missing mandatory field 2`(spec: RequestSpecification) {
+    fun `publish valid variable`(spec: RequestSpecification) {
         val body =
             spec
                 .given()
@@ -556,18 +556,5 @@ class UpdateTests : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
-    }
-
-    @Test
-    fun `publish variable missing mandatory field 3`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("""{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .patch("/variable-definitions/${SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS.definitionId}")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 }

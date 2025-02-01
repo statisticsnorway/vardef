@@ -249,25 +249,28 @@ class VariableDefinitionService(
     /**
      *
      */
-    fun draftCanBePublished(
+    fun hasRequiredFieldsForPublishing(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
     ): Boolean {
         val propertiesToCheck =
             listOf(
                 "name",
+                "definition",
                 "shortName",
                 "unitTypes",
                 "subjectFields",
+                "containsSpecialCategoriesOfPersonalData",
             )
         if (updateDraft.variableStatus?.isPublished() == true) {
             return propertiesToCheck.all { propertyName ->
-                // Use reflection to get the value of the property from both drafts
                 val savedValue = SavedVariableDefinition::class.members.first { it.name == propertyName }.call(savedDraft)
                 val updateValue = UpdateDraft::class.members.first { it.name == propertyName }.call(updateDraft)
 
-                logger.info("property $propertyName has saved value: $savedValue, updateValue: $updateValue")
-
+                logger.info(
+                    "Checking if mandatory property $propertyName has either saved value: $savedValue or " +
+                        "update value: $updateValue",
+                )
                 savedValue.isNotNullOrEmpty() || updateValue.isNotNullOrEmpty()
             }
         }
@@ -277,7 +280,7 @@ class VariableDefinitionService(
     /**
      *
      */
-    fun shortNameExists(
+    fun isDuplicatedShortName(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
     ): Boolean {
@@ -290,7 +293,7 @@ class VariableDefinitionService(
     /**
      *
      */
-    fun illegalShortName(
+    fun isIllegalShortNameForPublishing(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
     ): Boolean {

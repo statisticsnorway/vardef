@@ -95,7 +95,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `check mandatory fields before publish`()  {
+    fun `check mandatory fields before publish`() {
         assertThat(
             variableDefinitionService.hasRequiredFieldsForPublishing(
                 SAVED_TO_PUBLISH,
@@ -111,7 +111,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `check duplicate shortname update`()  {
+    fun `check duplicate shortname update`() {
         assertThat(
             variableDefinitionService.isUpdatedShortNameDuplicate(
                 SAVED_INTERNAL_VARIABLE_DEFINITION,
@@ -127,7 +127,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `check illegal shortname for publish`()  {
+    fun `check illegal shortname for publish`() {
         assertThat(
             variableDefinitionService.isIllegalShortNameForPublishing(
                 SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,

@@ -285,7 +285,7 @@ class VariableDefinitionService(
      * @param updateDraft The updated draft containing potential changes.
      * @return `true` if the short name in `updateDraft` already exists, `false` otherwise.
      */
-    fun isDuplicatedShortName(
+    fun isUpdatedShortNameDuplicate(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
     ): Boolean {

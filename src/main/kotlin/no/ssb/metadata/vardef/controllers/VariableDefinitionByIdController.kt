@@ -232,7 +232,7 @@ class VariableDefinitionByIdController(
                 HttpStatus.BAD_REQUEST,
                 "Variable $definitionId is missing mandatory fields and can not be published",
             )
-            vardef.isDuplicatedShortName(variable, updateDraft) ->
+            vardef.isUpdatedShortNameDuplicate(variable, updateDraft) ->
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",

@@ -5,7 +5,6 @@ import java.time.LocalDate
 
 class ServiceUtils {
     companion object {
-
         /**
          * Checks whether the given object is not null or empty.
          *

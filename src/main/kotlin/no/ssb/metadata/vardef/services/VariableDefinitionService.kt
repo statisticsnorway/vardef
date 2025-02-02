@@ -6,6 +6,7 @@ import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
+import no.ssb.metadata.vardef.constants.mandatoryFields
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -260,15 +261,7 @@ class VariableDefinitionService(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
     ): Boolean {
-        val propertiesToCheck =
-            listOf(
-                "name",
-                "definition",
-                "shortName",
-                "unitTypes",
-                "subjectFields",
-                "containsSpecialCategoriesOfPersonalData",
-            )
+        val propertiesToCheck = mandatoryFields
         if (updateDraft.variableStatus?.isPublished() == true) {
             return propertiesToCheck.all { propertyName ->
                 val savedValue = SavedVariableDefinition::class.members.first { it.name == propertyName }.call(savedDraft)
@@ -285,14 +278,12 @@ class VariableDefinitionService(
     }
 
     /**
-     * Checks whether the short name in the update draft is a duplicate.
-     *
-     * This function verifies if the short name in the `updateDraft` is different from the one in the `savedDraft`
-     * and already exists in the system.
+     * Determines whether the updated short name is a duplicate, while ensuring that
+     * the check does not incorrectly flag the saved value as a duplicate of itself.
      *
      * @param savedDraft The saved version of the variable definition.
      * @param updateDraft The updated draft containing potential changes.
-     * @return `true` if the short name in `updateDraft` is different from `savedDraft` and already exists, `false` otherwise.
+     * @return `true` if the short name in `updateDraft` already exists, `false` otherwise.
      */
     fun isDuplicatedShortName(
         savedDraft: SavedVariableDefinition,

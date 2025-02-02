@@ -247,7 +247,14 @@ class VariableDefinitionService(
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
 
     /**
+     * Checks whether the required fields for publishing are present in either the saved draft or the update draft.
      *
+     * This function ensures that all mandatory properties exist in at least one of the provided objects if the
+     * variable status of *updateDraft* indicates
+     *
+     * @param savedDraft The saved version of the variable definition.
+     * @param updateDraft The updated draft containing potential changes.
+     * @return `true` if all required fields are present in at least one of the drafts, `false` otherwise.
      */
     fun hasRequiredFieldsForPublishing(
         savedDraft: SavedVariableDefinition,
@@ -278,7 +285,14 @@ class VariableDefinitionService(
     }
 
     /**
+     * Checks whether the short name in the update draft is a duplicate.
      *
+     * This function verifies if the short name in the `updateDraft` is different from the one in the `savedDraft`
+     * and already exists in the system.
+     *
+     * @param savedDraft The saved version of the variable definition.
+     * @param updateDraft The updated draft containing potential changes.
+     * @return `true` if the short name in `updateDraft` is different from `savedDraft` and already exists, `false` otherwise.
      */
     fun isDuplicatedShortName(
         savedDraft: SavedVariableDefinition,
@@ -291,7 +305,12 @@ class VariableDefinitionService(
     }
 
     /**
+     * Determines whether the short name in the saved or updated draft contains an illegal keyword,
+     * making it unsuitable for publishing.
      *
+     * @param savedDraft The saved version of the variable definition.
+     * @param updateDraft The updated draft containing potential changes.
+     * @return `true` if either short name contains an illegal keyword, `false` otherwise.
      */
     fun isIllegalShortNameForPublishing(
         savedDraft: SavedVariableDefinition,

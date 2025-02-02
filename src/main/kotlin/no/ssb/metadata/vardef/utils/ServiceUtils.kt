@@ -5,8 +5,17 @@ import java.time.LocalDate
 
 class ServiceUtils {
     companion object {
+
         /**
+         * Checks whether the given object is not null or empty.
          *
+         *  This function acts as an extension for various types:
+         *  - **String**: Returns `true` if the string is not blank.
+         *  - **Collection**: Returns `true` if the collection is not empty and contains at least one non-null/non-empty element.
+         *  - **Map**: Returns `true` if the map is not empty.
+         *  - **Any other type**: Returns `true` if the object is not null.
+         *
+         *  @return `true` if the object is not null or empty, `false` otherwise.
          */
         fun Any?.isNotNullOrEmpty(): Boolean =
             when (this) {
@@ -17,7 +26,12 @@ class ServiceUtils {
             }
 
         /**
+         * Checks whether all language entries in the `LanguageStringType` are not null or empty.
          *
+         * This function verifies that every language entry returned by `listPresentLanguages()`
+         * is not null or empty.
+         *
+         * @return `true` if all language entries are not null or empty, `false` otherwise.
          */
         fun LanguageStringType.isNotNullOrEmptyAllLanguages(): Boolean = this.listPresentLanguages().all { it.isNotNullOrEmpty() }
 

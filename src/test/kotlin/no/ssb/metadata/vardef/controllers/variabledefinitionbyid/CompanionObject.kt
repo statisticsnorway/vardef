@@ -255,20 +255,40 @@ class CompanionObject {
         fun invalidPublish(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
-                    "empty unit types",
+                    "empty unit types list",
                     SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES.definitionId,
+                    "Variable ${SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES.definitionId} is missing mandatory fields " +
+                        "and can not be published",
                 ),
                 argumentSet(
-                    "blank values unit types",
+                    "empty values in unit types list",
                     SAVED_TO_PUBLISH_MISSING_UNIT_TYPES.definitionId,
+                    "Variable ${SAVED_TO_PUBLISH_MISSING_UNIT_TYPES.definitionId} is missing mandatory fields " +
+                        "and can not be published",
                 ),
                 argumentSet(
                     "generated short name",
-                    SAVED_TO_PUBLISH_MISSING_ILLEGAL_SHORT_NAME.definitionId,
+                    SAVED_TO_PUBLISH_ILLEGAL_SHORT_NAME.definitionId,
+                    "The short name ${SAVED_TO_PUBLISH_ILLEGAL_SHORT_NAME.shortName} is illegal and must be changed " +
+                        "before it is published",
                 ),
                 argumentSet(
-                    "subject fields",
+                    "empty values in subject fields list",
                     SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS.definitionId,
+                    "Variable ${SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS.definitionId} is missing mandatory fields " +
+                        "and can not be published",
+                ),
+                argumentSet(
+                    "null values all languages name",
+                    SAVED_TO_PUBLISH_NULL_NAME.definitionId,
+                    "Variable ${SAVED_TO_PUBLISH_NULL_NAME.definitionId} is missing mandatory fields " +
+                        "and can not be published",
+                ),
+                argumentSet(
+                    "empty values all languages name",
+                    SAVED_TO_PUBLISH_EMPTY_NAME.definitionId,
+                    "Variable ${SAVED_TO_PUBLISH_EMPTY_NAME.definitionId} is missing mandatory fields " +
+                        "and can not be published",
                 ),
             )
     }

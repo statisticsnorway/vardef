@@ -251,7 +251,7 @@ class VariableDefinitionService(
      * Checks whether the required fields for publishing are present in either the saved draft or the update draft.
      *
      * This function ensures that all mandatory properties exist in at least one of the provided objects if the
-     * variable status of *updateDraft* indicates
+     * variable status of *updateDraft* indicates a change in status from draft to published
      *
      * @param savedDraft The saved version of the variable definition.
      * @param updateDraft The updated draft containing potential changes.

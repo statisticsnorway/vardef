@@ -525,6 +525,7 @@ class UpdateTests : BaseVardefTest() {
     @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#invalidPublish")
     fun `publish variable missing mandatory field`(
         definitionId: String,
+        errorMessage: String?,
         spec: RequestSpecification,
     ) {
         spec
@@ -536,6 +537,13 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/$definitionId")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = errorMessage,
+                ),
+            )
     }
 
     @Test

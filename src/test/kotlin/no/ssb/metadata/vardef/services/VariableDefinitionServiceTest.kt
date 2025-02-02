@@ -4,6 +4,7 @@ import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.utils.*
+import no.ssb.metadata.vardef.utils.ServiceUtils.Companion.isNotNullOrEmpty
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -95,7 +96,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `check mandatory fields before publish`() {
+    fun `check mandatory fields before publishing`() {
         assertThat(
             variableDefinitionService.hasRequiredFieldsForPublishing(
                 SAVED_TO_PUBLISH,
@@ -109,10 +110,25 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL),
             ),
         ).isFalse()
+
+        assertThat(
+            variableDefinitionService.hasRequiredFieldsForPublishing(
+                SAVED_TO_PUBLISH_EMPTY_NAME,
+                UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL),
+            ),
+        ).isFalse()
+    }
+
+    @Test
+    fun `check languagestringtype has value any language`() {
+        assertThat(SAVED_TO_PUBLISH_EMPTY_NAME.name.isNotNullOrEmpty()).isFalse()
+        assertThat(SAVED_TO_PUBLISH_NULL_NAME.name.isNotNullOrEmpty()).isFalse()
+        assertThat(SAVED_TO_PUBLISH.name.isNotNullOrEmpty()).isTrue()
     }
 
     @Test
     fun `check duplicate shortname update`() {
+        // update shortname is the same as saved shortname
         assertThat(
             variableDefinitionService.isUpdatedShortNameDuplicate(
                 SAVED_INTERNAL_VARIABLE_DEFINITION,
@@ -120,6 +136,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             ),
         ).isFalse()
 
+        // shortname exists
         assertThat(
             variableDefinitionService.isUpdatedShortNameDuplicate(
                 SAVED_INTERNAL_VARIABLE_DEFINITION,
@@ -133,11 +150,10 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 UpdateDraft(shortName = "not_duplicate"),
             ),
         ).isFalse()
-
     }
 
     @Test
-    fun `check illegal shortname for publish`() {
+    fun `check illegal shortname before publishing`() {
         assertThat(
             variableDefinitionService.isIllegalShortNameForPublishing(
                 SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,

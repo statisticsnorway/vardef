@@ -53,6 +53,8 @@ open class BaseVardefTest {
         variableDefinitionRepository.save(SAVED_TO_PUBLISH_MISSING_UNIT_TYPES)
         variableDefinitionRepository.save(SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES)
         variableDefinitionRepository.save(SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS)
-        variableDefinitionRepository.save(SAVED_TO_PUBLISH_MISSING_ILLEGAL_SHORT_NAME)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_ILLEGAL_SHORT_NAME)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_EMPTY_NAME)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_NULL_NAME)
     }
 }

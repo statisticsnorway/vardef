@@ -567,8 +567,72 @@ val SAVED_TO_PUBLISH =
         name =
             LanguageStringType(
                 nb = "Buss",
-                nn = "Buss",
+                nn = null,
                 en = "Bus",
+            ),
+        shortName = "bus2",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val SAVED_TO_PUBLISH_EMPTY_NAME =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "",
+                nn = "",
+                en = "",
+            ),
+        shortName = "bus2",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val SAVED_TO_PUBLISH_NULL_NAME =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = null,
+                nn = null,
+                en = null,
             ),
         shortName = "bus2",
         definition =
@@ -658,7 +722,7 @@ val SAVED_TO_PUBLISH_MISSING_SUBJECT_FIELDS =
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
-val SAVED_TO_PUBLISH_MISSING_ILLEGAL_SHORT_NAME =
+val SAVED_TO_PUBLISH_ILLEGAL_SHORT_NAME =
     Draft(
         name =
             LanguageStringType(

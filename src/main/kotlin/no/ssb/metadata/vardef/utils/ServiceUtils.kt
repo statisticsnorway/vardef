@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.utils
 
 import no.ssb.metadata.vardef.models.LanguageStringType
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import java.time.LocalDate
 
 class ServiceUtils {
@@ -12,6 +13,7 @@ class ServiceUtils {
          *  - **String**: Returns `true` if the string is not blank.
          *  - **Collection**: Returns `true` if the collection is not empty and contains at least one
          *    non-null/non-empty element.
+         *    **LanguageStringType**: Returns `true` if there at least one non-null/non-empty language
          *  - **Any other type**: Returns `true` if the object is not null.
          *
          *  @return `true` if the object is not null or empty, `false` otherwise.
@@ -20,15 +22,13 @@ class ServiceUtils {
             when (this) {
                 is String -> this.isNotBlank()
                 is Collection<*> -> this.isNotEmpty() && this.any { it.isNotNullOrEmpty() }
+                is LanguageStringType ->
+                    SupportedLanguages.entries.any { language ->
+                        val languageValue = this.getValidLanguage(language)
+                        languageValue?.isNotBlank() == true
+                    }
                 else -> this != null
             }
-
-        /**
-         * Checks whether all language entries in the `LanguageStringType` are not null or empty.
-         *
-         * @return `true` if all language entries are not null or empty, `false` otherwise.
-         */
-        fun LanguageStringType.isNotNullOrEmptyAllLanguages(): Boolean = this.listPresentLanguages().all { it.isNotNullOrEmpty() }
 
         /**
          * Checks if the given dates are in the correct chronological order.

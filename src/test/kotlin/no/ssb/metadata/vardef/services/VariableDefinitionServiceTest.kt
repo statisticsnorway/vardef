@@ -102,6 +102,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL),
             ),
         ).isTrue()
+
         assertThat(
             variableDefinitionService.hasRequiredFieldsForPublishing(
                 SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES,
@@ -118,12 +119,21 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 UpdateDraft(shortName = SAVED_INTERNAL_VARIABLE_DEFINITION.shortName),
             ),
         ).isFalse()
+
         assertThat(
             variableDefinitionService.isUpdatedShortNameDuplicate(
                 SAVED_INTERNAL_VARIABLE_DEFINITION,
                 UpdateDraft(shortName = "bus"),
             ),
         ).isTrue()
+
+        assertThat(
+            variableDefinitionService.isUpdatedShortNameDuplicate(
+                SAVED_INTERNAL_VARIABLE_DEFINITION,
+                UpdateDraft(shortName = "not_duplicate"),
+            ),
+        ).isFalse()
+
     }
 
     @Test
@@ -136,6 +146,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
             ),
         ).isTrue()
+
         assertThat(
             variableDefinitionService.isIllegalShortNameForPublishing(
                 SAVED_TO_PUBLISH,
@@ -145,6 +156,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
             ),
         ).isTrue()
+
         assertThat(
             variableDefinitionService.isIllegalShortNameForPublishing(
                 SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,

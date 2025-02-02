@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.services
 
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.utils.*
@@ -91,6 +92,48 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             )
         }
         assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
+    }
+
+    @Test
+    fun `check mandatory fields before publish`(){
+        assertThat(variableDefinitionService.hasRequiredFieldsForPublishing(
+            SAVED_TO_PUBLISH, UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL))
+        ).isTrue()
+        assertThat(variableDefinitionService.hasRequiredFieldsForPublishing(
+            SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES, UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL))
+        ).isFalse()
+    }
+
+    @Test
+    fun `check duplicate shortname update`(){
+        assertThat(variableDefinitionService.isUpdatedShortNameDuplicate(
+            SAVED_INTERNAL_VARIABLE_DEFINITION, UpdateDraft(shortName = SAVED_INTERNAL_VARIABLE_DEFINITION.shortName))
+        ).isFalse()
+        assertThat(variableDefinitionService.isUpdatedShortNameDuplicate(
+            SAVED_INTERNAL_VARIABLE_DEFINITION,
+            UpdateDraft(shortName = "bus"))).isTrue()
+    }
+
+    @Test
+    fun `check illegal shortname for publish`(){
+        assertThat(variableDefinitionService.isIllegalShortNameForPublishing(
+            SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,
+            UpdateDraft(
+                variableStatus = VariableStatus.PUBLISHED_INTERNAL
+            ))).isTrue()
+        assertThat(variableDefinitionService.isIllegalShortNameForPublishing(
+            SAVED_TO_PUBLISH,
+            UpdateDraft(
+                shortName = ILLEGAL_SHORTNAME_KEYWORD,
+                variableStatus = VariableStatus.PUBLISHED_INTERNAL
+            )
+        )).isTrue()
+        assertThat(variableDefinitionService.isIllegalShortNameForPublishing(
+            SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,
+            UpdateDraft(
+                shortName = "bydel",
+                variableStatus = VariableStatus.PUBLISHED_INTERNAL
+            ))).isFalse()
     }
 
     companion object {

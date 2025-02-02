@@ -307,8 +307,11 @@ class VariableDefinitionService(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
     ): Boolean {
-        logger.info("Checking ShortName $savedDraft, shortName $updateDraft contains illegal shortName")
-        return savedDraft.shortName.contains(ILLEGAL_SHORTNAME_KEYWORD) ||
-            updateDraft.shortName?.contains(ILLEGAL_SHORTNAME_KEYWORD) == true
+        if (updateDraft.variableStatus?.isPublished() == true) {
+            val currentShortName = updateDraft.shortName ?: savedDraft.shortName
+            logger.info("Checking if shortName $currentShortName contains illegal shortName")
+            return currentShortName.contains(ILLEGAL_SHORTNAME_KEYWORD)
+        }
+        return false
     }
 }

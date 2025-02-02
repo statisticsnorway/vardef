@@ -243,27 +243,6 @@ object TestUtils {
         }
 
     @JvmStatic
-    fun publishVariableDefinitionMandatoryFieldsRemoved(): Stream<Arguments> =
-        Stream.of(
-            "name",
-            "short_name",
-            "definition",
-            "valid_from",
-            "unit_types",
-            "subject_fields",
-            "contains_special_categories_of_personal_data",
-            "contact",
-        ).map {
-            argumentSet(
-                "$it removed",
-                jsonTestInput()
-                    .apply {
-                        remove(it)
-                    }.toString(),
-            )
-        }
-
-    @JvmStatic
     fun variableDefinitionsVariousVariableStatus(): Stream<Arguments.ArgumentSet> =
         VariableStatus.entries
             .map { it.name }

@@ -21,7 +21,6 @@ class ServiceUtils {
             when (this) {
                 is String -> this.isNotBlank()
                 is Collection<*> -> this.isNotEmpty() && this.any { it.isNotNullOrEmpty() }
-                is Map<*, *> -> this.isNotEmpty()
                 else -> this != null
             }
 

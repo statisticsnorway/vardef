@@ -269,7 +269,7 @@ class VariableDefinitionService(
 
                 logger.info(
                     "Checking if mandatory property $propertyName has either saved value: $savedValue or " +
-                        "update value: $updateValue",
+                        "updated value: $updateValue",
                 )
                 savedValue.isNotNullOrEmpty() || updateValue.isNotNullOrEmpty()
             }

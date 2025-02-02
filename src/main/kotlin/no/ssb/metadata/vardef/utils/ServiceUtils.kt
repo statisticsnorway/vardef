@@ -12,7 +12,6 @@ class ServiceUtils {
          *  - **String**: Returns `true` if the string is not blank.
          *  - **Collection**: Returns `true` if the collection is not empty and contains at least one
          *    non-null/non-empty element.
-         *  - **Map**: Returns `true` if the map is not empty.
          *  - **Any other type**: Returns `true` if the object is not null.
          *
          *  @return `true` if the object is not null or empty, `false` otherwise.

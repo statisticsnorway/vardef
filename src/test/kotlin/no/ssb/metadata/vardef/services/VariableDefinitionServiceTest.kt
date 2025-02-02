@@ -95,45 +95,65 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `check mandatory fields before publish`(){
-        assertThat(variableDefinitionService.hasRequiredFieldsForPublishing(
-            SAVED_TO_PUBLISH, UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL))
+    fun `check mandatory fields before publish`()  {
+        assertThat(
+            variableDefinitionService.hasRequiredFieldsForPublishing(
+                SAVED_TO_PUBLISH,
+                UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL),
+            ),
         ).isTrue()
-        assertThat(variableDefinitionService.hasRequiredFieldsForPublishing(
-            SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES, UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL))
+        assertThat(
+            variableDefinitionService.hasRequiredFieldsForPublishing(
+                SAVED_TO_PUBLISH_EMPTY_UNIT_TYPES,
+                UpdateDraft(variableStatus = VariableStatus.PUBLISHED_INTERNAL),
+            ),
         ).isFalse()
     }
 
     @Test
-    fun `check duplicate shortname update`(){
-        assertThat(variableDefinitionService.isUpdatedShortNameDuplicate(
-            SAVED_INTERNAL_VARIABLE_DEFINITION, UpdateDraft(shortName = SAVED_INTERNAL_VARIABLE_DEFINITION.shortName))
+    fun `check duplicate shortname update`()  {
+        assertThat(
+            variableDefinitionService.isUpdatedShortNameDuplicate(
+                SAVED_INTERNAL_VARIABLE_DEFINITION,
+                UpdateDraft(shortName = SAVED_INTERNAL_VARIABLE_DEFINITION.shortName),
+            ),
         ).isFalse()
-        assertThat(variableDefinitionService.isUpdatedShortNameDuplicate(
-            SAVED_INTERNAL_VARIABLE_DEFINITION,
-            UpdateDraft(shortName = "bus"))).isTrue()
+        assertThat(
+            variableDefinitionService.isUpdatedShortNameDuplicate(
+                SAVED_INTERNAL_VARIABLE_DEFINITION,
+                UpdateDraft(shortName = "bus"),
+            ),
+        ).isTrue()
     }
 
     @Test
-    fun `check illegal shortname for publish`(){
-        assertThat(variableDefinitionService.isIllegalShortNameForPublishing(
-            SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,
-            UpdateDraft(
-                variableStatus = VariableStatus.PUBLISHED_INTERNAL
-            ))).isTrue()
-        assertThat(variableDefinitionService.isIllegalShortNameForPublishing(
-            SAVED_TO_PUBLISH,
-            UpdateDraft(
-                shortName = ILLEGAL_SHORTNAME_KEYWORD,
-                variableStatus = VariableStatus.PUBLISHED_INTERNAL
-            )
-        )).isTrue()
-        assertThat(variableDefinitionService.isIllegalShortNameForPublishing(
-            SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,
-            UpdateDraft(
-                shortName = "bydel",
-                variableStatus = VariableStatus.PUBLISHED_INTERNAL
-            ))).isFalse()
+    fun `check illegal shortname for publish`()  {
+        assertThat(
+            variableDefinitionService.isIllegalShortNameForPublishing(
+                SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,
+                UpdateDraft(
+                    variableStatus = VariableStatus.PUBLISHED_INTERNAL,
+                ),
+            ),
+        ).isTrue()
+        assertThat(
+            variableDefinitionService.isIllegalShortNameForPublishing(
+                SAVED_TO_PUBLISH,
+                UpdateDraft(
+                    shortName = ILLEGAL_SHORTNAME_KEYWORD,
+                    variableStatus = VariableStatus.PUBLISHED_INTERNAL,
+                ),
+            ),
+        ).isTrue()
+        assertThat(
+            variableDefinitionService.isIllegalShortNameForPublishing(
+                SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME,
+                UpdateDraft(
+                    shortName = "bydel",
+                    variableStatus = VariableStatus.PUBLISHED_INTERNAL,
+                ),
+            ),
+        ).isFalse()
     }
 
     companion object {

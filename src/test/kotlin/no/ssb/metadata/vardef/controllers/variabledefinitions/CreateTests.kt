@@ -345,4 +345,22 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(httpStatus.code)
     }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#createDraftMandatoryFields")
+    fun `create variable definition empty mandatory fields`(
+        input: String,
+        httpStatus: HttpStatus,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(httpStatus.code)
+    }
 }

@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
+import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -27,11 +28,13 @@ import java.time.LocalDateTime
 @ValidDateOrder
 data class Draft(
     @Schema(description = NAME_FIELD_DESCRIPTION)
+    @NotEmptyLanguageStringType
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
     @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
     val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
+    @NotEmptyLanguageStringType
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable

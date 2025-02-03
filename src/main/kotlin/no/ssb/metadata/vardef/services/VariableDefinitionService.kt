@@ -5,6 +5,7 @@ import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
+import no.ssb.metadata.vardef.constants.ILLEGAL_KEYWORD
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -250,6 +251,49 @@ class VariableDefinitionService(
                 isCorrectDateOrder(updateDraft.validFrom, savedDraft.validUntil) &&
                     isCorrectDateOrder(savedDraft.validFrom, updateDraft.validUntil)
             )
+
+    /**
+     * Determines whether the short name in the saved or updated draft contains an illegal keyword,
+     * making it unsuitable for publishing.
+     *
+     * @param savedDraft The saved version of the variable definition.
+     * @param updateDraft The updated draft containing potential changes.
+     * @return `true` if either short name contains an illegal keyword, `false` otherwise.
+     */
+    fun isIllegalShortNameForPublishing(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): Boolean {
+        if (updateDraft.variableStatus?.isPublished() == true) {
+            val currentShortName = updateDraft.shortName ?: savedDraft.shortName
+            logger.info("Checking if shortName $currentShortName contains illegal shortName")
+            return currentShortName.contains(ILLEGAL_KEYWORD)
+        }
+        return false
+    }
+
+    /**
+     * Determines whether the short name in the saved or updated draft contains an illegal keyword,
+     * making it unsuitable for publishing.
+     *
+     * @param savedDraft The saved version of the variable definition.
+     * @param updateDraft The updated draft containing potential changes.
+     * @return `true` if either short name contains an illegal keyword, `false` otherwise.
+     */
+    fun isIllegalContactForPublishing(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): Boolean {
+        if (updateDraft.variableStatus?.isPublished() == true) {
+            val currentContact = updateDraft.contact ?: savedDraft.contact
+            logger.info("Checking if contact $currentContact contains illegal values")
+            SupportedLanguages.entries.any { language ->
+                val languageValue = currentContact.title.getValidLanguage(language)?.trim()
+                languageValue?.contains(ILLEGAL_KEYWORD) == true
+            } || currentContact.email.contains(ILLEGAL_KEYWORD)
+        }
+        return false
+    }
 
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
 }

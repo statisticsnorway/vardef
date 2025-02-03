@@ -13,6 +13,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -547,5 +548,37 @@ class UpdateTests : BaseVardefTest() {
                     errorMessage = errorMessage,
                 ),
             )
+    }
+
+    @Test
+    fun `publish variable definition illegal shortname`(
+        spec: RequestSpecification){
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body( JSONObject().apply {
+                put("variable_status", "PUBLISHED_INTERNAL")
+            }.toString(),)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+    }
+
+    @Test
+    fun `publish variable definition contact`(
+        spec: RequestSpecification){
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body( JSONObject().apply {
+                put("variable_status", "PUBLISHED_INTERNAL")
+            }.toString(),)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 }

@@ -556,3 +556,44 @@ val SAVED_TO_PUBLISH =
                 "",
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val PATCH_MANDATORY_FIELDS =
+    SavedVariableDefinition(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        patchId = 1,
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = null,
+                en = "Bus",
+            ),
+        shortName = "bus2",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(),
+        owner = Owner("my-team", listOf("my-team-developers", "other-group", TEST_DEVELOPERS_GROUP)),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "me@example.com",
+            ),
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = "me@example.com",
+        lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = "me@example.com",
+    )

@@ -42,7 +42,7 @@ class ReadTests : BaseVardefTest() {
         "2020-01-01, 2",
         "2024-06-05, $NUM_ALL_VARIABLE_DEFINITIONS",
         // Definitions without a validUntil date defined
-        "3000-12-31, 5",
+        "3000-12-31, 6",
         // All definitions
         "null, $NUM_ALL_VARIABLE_DEFINITIONS",
     )

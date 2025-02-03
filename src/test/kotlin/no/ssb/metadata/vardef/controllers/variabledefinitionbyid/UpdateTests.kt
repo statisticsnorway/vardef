@@ -525,7 +525,7 @@ class UpdateTests : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#updateMandatoryFields")
-    fun `update variable mandatory fields`(
+    fun `attempt to update variable mandatory fields`(
         definitionId: String,
         input: String,
         errorMessage: String?,

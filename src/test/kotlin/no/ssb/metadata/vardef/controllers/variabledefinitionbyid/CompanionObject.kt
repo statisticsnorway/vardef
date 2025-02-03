@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
 import no.ssb.metadata.vardef.utils.DRAFT_EXAMPLE_WITH_VALID_UNTIL
 import no.ssb.metadata.vardef.utils.SAVED_DRAFT_DEADWEIGHT_EXAMPLE
+import no.ssb.metadata.vardef.utils.SAVED_TO_PUBLISH
 import org.json.JSONObject
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
@@ -249,6 +250,66 @@ class CompanionObject {
                         }.toString(),
                     "valid_from",
                     DRAFT_EXAMPLE_WITH_VALID_UNTIL.validFrom.toString(),
+                ),
+            )
+
+        @JvmStatic
+        fun updateMandatoryFields(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "empty unit types list",
+                    SAVED_TO_PUBLISH.definitionId,
+                    JSONObject().apply {
+                        put("unit_types", listOf(null))
+                    }.toString(),
+                    "must not be empty",
+                ),
+                argumentSet(
+                    "blank values in unit types list",
+                    SAVED_TO_PUBLISH.definitionId,
+                    JSONObject().apply {
+                        put("unit_types", listOf(""))
+                    }.toString(),
+                    "Code  is not a member of classification with id 702",
+                ),
+                argumentSet(
+                    "blank values in subject fields list",
+                    SAVED_TO_PUBLISH.definitionId,
+                    JSONObject().apply {
+                        put("subject_fields", listOf("", " "))
+                    }.toString(),
+                    "Code  is not a member of classification with id 618",
+                ),
+                argumentSet(
+                    "empty subject fields list",
+                    SAVED_TO_PUBLISH.definitionId,
+                    JSONObject().apply {
+                        put("subject_fields", listOf(null))
+                    }.toString(),
+                    "must not be empty",
+                ),
+                argumentSet(
+                    "blank short name",
+                    SAVED_TO_PUBLISH.definitionId,
+                    JSONObject().apply {
+                        put("short_name", "")
+                    }.toString(),
+                    "must match \"^[a-z0-9_]{2,}\$\"",
+                ),
+                argumentSet(
+                    "empty values all languages name",
+                    SAVED_TO_PUBLISH.definitionId,
+                    JSONObject().apply {
+                        put(
+                            "name",
+                            JSONObject().apply {
+                                put("nb", "")
+                                put("nn", "")
+                                put("en", " ")
+                            },
+                        )
+                    }.toString(),
+                    "Must have value for at least one language",
                 ),
             )
     }

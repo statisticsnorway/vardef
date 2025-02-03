@@ -522,4 +522,30 @@ class UpdateTests : BaseVardefTest() {
         assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
         assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
     }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#updateMandatoryFields")
+    fun `attempt to update variable mandatory fields`(
+        definitionId: String,
+        input: String,
+        errorMessage: String?,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/$definitionId")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    true,
+                    null,
+                    errorMessage = errorMessage,
+                ),
+            )
+    }
 }

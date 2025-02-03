@@ -5,7 +5,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
-import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -128,7 +128,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .path<String>("id")
 
         val createdVariableDefinition = patches.latest(definitionId)
-        assertThat(createdVariableDefinition.shortName).startsWith(ILLEGAL_SHORNAME_KEYWORD)
+        assertThat(createdVariableDefinition.shortName).startsWith(ILLEGAL_SHORTNAME_KEYWORD)
     }
 
     @Test

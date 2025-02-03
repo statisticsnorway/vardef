@@ -225,8 +225,8 @@ class VariableDefinitionByIdController(
                     updateDraft.variableStatus == VariableStatus.PUBLISHED_EXTERNAL
             ) &&
                 (
-                    variable.shortName.contains(ILLEGAL_SHORNAME_KEYWORD) ||
-                        updateDraft.shortName?.contains(ILLEGAL_SHORNAME_KEYWORD) == true
+                    variable.shortName.contains(ILLEGAL_SHORTNAME_KEYWORD) ||
+                        updateDraft.shortName?.contains(ILLEGAL_SHORTNAME_KEYWORD) == true
                 ) -> {
                 throw HttpStatusException(
                     HttpStatus.BAD_REQUEST,

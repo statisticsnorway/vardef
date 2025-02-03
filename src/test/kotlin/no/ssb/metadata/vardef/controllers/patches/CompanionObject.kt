@@ -314,5 +314,69 @@ class CompanionObject {
                     HTTP_NOT_FOUND,
                 ),
             )
+
+        @JvmStatic
+        fun patchMandatoryFields(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "empty unit types list",
+                    JSONObject().apply {
+                        put("unit_types", listOf(null))
+                    }.toString(),
+                    "must not be empty",
+                ),
+                argumentSet(
+                    "blank values in unit types list",
+                    JSONObject().apply {
+                        put("unit_types", listOf(""))
+                    }.toString(),
+                    "Code  is not a member of classification with id 702",
+                ),
+                argumentSet(
+                    "blank values in subject fields list",
+                    JSONObject().apply {
+                        put("subject_fields", listOf("", " "))
+                    }.toString(),
+                    "Code  is not a member of classification with id 618",
+                ),
+                argumentSet(
+                    "empty subject fields list",
+                    JSONObject().apply {
+                        put("subject_fields", listOf(null))
+                    }.toString(),
+                    "must not be empty",
+                ),
+                argumentSet(
+                    "empty values all languages name",
+                    JSONObject().apply {
+                        put(
+                            "name",
+                            JSONObject().apply {
+                                put("nb", "")
+                                put("nn", "")
+                                put("en", " ")
+                            },
+                        )
+                    }.toString(),
+                    "Must have value for at least one language",
+                ),
+            )
+
+        @JvmStatic
+        fun patchValidMandatoryFields(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "unit types list",
+                    JSONObject().apply {
+                        put("unit_types", listOf("05"))
+                    }.toString(),
+                ),
+                argumentSet(
+                    "subject fields list",
+                    JSONObject().apply {
+                        put("subject_fields", listOf("al04"))
+                    }.toString(),
+                ),
+            )
     }
 }

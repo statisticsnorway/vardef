@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.integrations.vardok.services
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
-import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
 import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokComment
@@ -34,7 +34,7 @@ interface VardokService {
     fun isAlreadyMigrated(vardokId: String): Boolean
 
     companion object {
-        private fun generateShortName() = "${ILLEGAL_SHORNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
+        private fun generateShortName() = "${ILLEGAL_SHORTNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
 
         private fun isValidShortName(name: String) = name.matches(Regex(VARDEF_SHORT_NAME_PATTERN))
 

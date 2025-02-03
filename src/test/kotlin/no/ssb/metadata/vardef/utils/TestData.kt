@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef.utils
 
-import no.ssb.metadata.vardef.constants.ILLEGAL_SHORNAME_KEYWORD
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.bson.types.ObjectId
@@ -388,7 +388,7 @@ val SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME =
                 nn = null,
                 en = null,
             ),
-        shortName = ILLEGAL_SHORNAME_KEYWORD + "abcd",
+        shortName = ILLEGAL_SHORTNAME_KEYWORD + "abcd",
         definition =
             LanguageStringType(
                 nb = "Bydel",
@@ -524,3 +524,35 @@ val UPDATE_DRAFT_CLASSIFICATION_REFERENCE =
         owner = null,
         variableStatus = null,
     )
+
+val SAVED_TO_PUBLISH =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = null,
+                en = "Bus",
+            ),
+        shortName = "bus2",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)

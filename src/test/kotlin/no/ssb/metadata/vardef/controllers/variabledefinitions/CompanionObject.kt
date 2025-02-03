@@ -42,7 +42,7 @@ class CompanionObject {
         fun createDraftMandatoryFields(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
-                    "empty unit types",
+                    "blank values unit types",
                     jsonTestInput()
                         .apply {
                             put("unit_types", listOf(""))
@@ -50,10 +50,26 @@ class CompanionObject {
                     HttpStatus.BAD_REQUEST,
                 ),
                 argumentSet(
-                    "empty subject fields",
+                    "empty unit types",
+                    jsonTestInput()
+                        .apply {
+                            put("unit_types", listOf(null))
+                        }.toString(),
+                    HttpStatus.BAD_REQUEST,
+                ),
+                argumentSet(
+                    "blank values subject fields",
                     jsonTestInput()
                         .apply {
                             put("subject_fields", listOf(""))
+                        }.toString(),
+                    HttpStatus.BAD_REQUEST,
+                ),
+                argumentSet(
+                    "empty subject fields",
+                    jsonTestInput()
+                        .apply {
+                            put("subject_fields", listOf(null))
                         }.toString(),
                     HttpStatus.BAD_REQUEST,
                 ),

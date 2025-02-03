@@ -50,7 +50,8 @@ data class SavedVariableDefinition(
     var relatedVariableDefinitionUris: List<String>?,
     @NotNull
     var owner: Owner,
-    var contact: Contact?,
+    @NotNull
+    var contact: Contact,
     @DateCreated
     var createdAt: LocalDateTime,
     @Email

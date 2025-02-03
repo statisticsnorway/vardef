@@ -551,14 +551,15 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `publish variable definition illegal shortname`(
-        spec: RequestSpecification){
+    fun `publish variable definition illegal shortname`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body( JSONObject().apply {
-                put("variable_status", "PUBLISHED_INTERNAL")
-            }.toString(),)
+            .body(
+                JSONObject().apply {
+                    put("variable_status", "PUBLISHED_INTERNAL")
+                }.toString(),
+            )
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME.definitionId}")
@@ -567,18 +568,19 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `publish variable definition contact`(
-        spec: RequestSpecification){
+    fun `publish variable definition contact`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body( JSONObject().apply {
-                put("variable_status", "PUBLISHED_INTERNAL")
-            }.toString(),)
+            .body(
+                JSONObject().apply {
+                    put("variable_status", "PUBLISHED_INTERNAL")
+                }.toString(),
+            )
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
             .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .statusCode(HttpStatus.OK.code)
     }
 }

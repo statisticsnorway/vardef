@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef.utils
 
-import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
+import no.ssb.metadata.vardef.constants.ILLEGAL_KEYWORD
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.bson.types.ObjectId
@@ -388,7 +388,7 @@ val SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME =
                 nn = null,
                 en = null,
             ),
-        shortName = ILLEGAL_SHORTNAME_KEYWORD + "abcd",
+        shortName = ILLEGAL_KEYWORD + "abcd",
         definition =
             LanguageStringType(
                 nb = "Bydel",
@@ -552,8 +552,8 @@ val SAVED_TO_PUBLISH =
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
             Contact(
-                LanguageStringType("", "", ""),
-                "",
+                LanguageStringType("Seksjon matavfall", "", ""),
+                "matafv@ssb.no",
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 

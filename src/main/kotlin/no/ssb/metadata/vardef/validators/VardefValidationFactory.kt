@@ -44,7 +44,7 @@ class VardefValidationFactory {
                 _,
                 _,
             ->
-            value != null &&
+            value == null ||
                 SupportedLanguages.entries.any { language ->
                     val languageValue = value.getValidLanguage(language)?.trim()
                     !languageValue.isNullOrEmpty()

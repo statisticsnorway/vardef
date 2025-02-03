@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotEmpty
 import no.ssb.metadata.vardef.annotations.DaplaGroup
 import no.ssb.metadata.vardef.annotations.DaplaTeam
+import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.constants.KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
 import no.ssb.metadata.vardef.constants.OWNER_EXAMPLE
 import no.ssb.metadata.vardef.constants.RENDERED_CONTACT_EXAMPLE
@@ -59,8 +60,10 @@ data class KlassReference(
 
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Contact(
+    @NotEmptyLanguageStringType
     val title: LanguageStringType,
     @Email
+    @NotEmpty
     val email: String,
 )
 

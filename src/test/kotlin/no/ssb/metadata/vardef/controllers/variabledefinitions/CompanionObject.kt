@@ -74,6 +74,27 @@ class CompanionObject {
                     HttpStatus.BAD_REQUEST,
                 ),
                 argumentSet(
+                    "blank value shortname",
+                    jsonTestInput()
+                        .apply {
+                            put("short_name", "")
+                        }.toString(),
+                    HttpStatus.BAD_REQUEST,
+                ),
+                argumentSet(
+                    "blank value valid from",
+                    jsonTestInput()
+                        .apply {
+                            put("valid_from", "")
+                        }.toString(),
+                    HttpStatus.BAD_REQUEST,
+                ),
+                argumentSet(
+                    "null value valid from",
+                    """{"valid_from": null}""".trimIndent(),
+                    HttpStatus.BAD_REQUEST,
+                ),
+                argumentSet(
                     "empty name",
                     jsonTestInput()
                         .apply {

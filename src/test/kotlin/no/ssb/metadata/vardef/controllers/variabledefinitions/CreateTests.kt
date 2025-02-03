@@ -348,7 +348,7 @@ class CreateTests : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#createDraftMandatoryFields")
-    fun `create variable definition empty mandatory fields`(
+    fun `create variable definition missing mandatory fields`(
         input: String,
         httpStatus: HttpStatus,
         spec: RequestSpecification,

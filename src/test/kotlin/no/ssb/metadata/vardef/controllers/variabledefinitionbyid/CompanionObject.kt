@@ -289,6 +289,14 @@ class CompanionObject {
                     "must not be empty",
                 ),
                 argumentSet(
+                    "blank short name",
+                    SAVED_TO_PUBLISH.definitionId,
+                    JSONObject().apply {
+                        put("short_name", "")
+                    }.toString(),
+                    "must match \"^[a-z0-9_]{2,}\$\"",
+                ),
+                argumentSet(
                     "empty values all languages name",
                     SAVED_TO_PUBLISH.definitionId,
                     JSONObject().apply {

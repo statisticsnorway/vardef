@@ -285,7 +285,7 @@ class VariableDefinitionService(
      *
      * @param savedDraft The saved version of the variable definition.
      * @param updateDraft The updated draft containing potential changes.
-     * @return `true` if either short name contains an illegal keyword, `false` otherwise.
+     * @return `true` if either *Contact*  contains an illegal keyword, `false` otherwise.
      */
     fun isIllegalContactForPublishing(
         savedDraft: SavedVariableDefinition,

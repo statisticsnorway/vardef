@@ -1,0 +1,57 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2005-04-28" defaultValidFrom="2010-07-31" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1245" lastChangedDate="2018-04-06" otherLanguages="nn;en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for primærnæring</dc:contributor>
+        <dc:creator>Ole Rognstad</dc:creator>
+        <dcterms:modified>2018-04-06</dcterms:modified>
+        <dcterms:valid>2010-07-31 - </dcterms:valid>
+        <dc:description>Driftsformen fastsettes ut fra andelen som de ulike plante- og husdyrproduksjonene i jordbruksbedriften utgjør av bedriftens totale standard omsetning</dc:description>
+        <dcterms:abstract> Jordbrukstelling 1999 Eurostat-forordning</dcterms:abstract>
+        <dcterms:tableOfContents>Bedrift</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:1245</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>10.04.10 - Jordbruk, jakt, viltstell</dc:subject>
+        <dc:title>Driftsform for jordbruksbedriften</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Driftsform for jordbruksbedriften</Title>
+        <Description>Driftsformen fastsettes ut fra andelen som de ulike plante- og husdyrproduksjonene i jordbruksbedriften utgjør av bedriftens totale standard omsetning</Description>
+        <ContactPerson>
+            <CodeValue>oro</CodeValue>
+            <CodeText>Ole Rognstad</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>430</CodeValue>
+            <CodeText>Seksjon for primærnæring</CodeText>
+        </ContactDivision>
+        <Notes>Inndelingen i driftsformer er hierarkisk oppbygd med 3 nivå. Innenfor et nivå er produksjonen spesialisert dersom én produksjon utgjør mer enn 2/3 av den totale standard omsetningen. Ellers er produksjonen kombinert (blandet). I perioden 1999 - 2009 ble standard dekningsbidrag (SDB) brukt som felles størrelsesmål for de ulike plante- og husdyrproduksjonene. F.o.m. 2010 brukes standard omsetning (SO) som felles størrelsesmål. Samtidig ble det gjort noen andre mindre metodeendringer. Driftsforminndelingen f.o.m. 2010 er derfor ikke fullt ut sammenlignbar med tidligere inndeling.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Bedrift</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>10.04.10</CodeValue>
+            <CodeText>Jordbruk, jakt, viltstell</CodeText>
+        </SubjectArea>
+        <ExternalSource>Eurostat-forordning</ExternalSource>
+        <InternalSource>Jordbrukstelling 1999</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>Notater 2015/32 Klassifisering av jordbruksbedrifter etter driftsform og størrelse</ExternalDocument>
+        <DataElementName/>
+        <ShortNameWeb>
+            <CodeValue>stjord</CodeValue>
+            <CodeText>Strukturen i jordbruket</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/1246" xlink:type="simple"/>
+    </Relations>
+</FIMD>

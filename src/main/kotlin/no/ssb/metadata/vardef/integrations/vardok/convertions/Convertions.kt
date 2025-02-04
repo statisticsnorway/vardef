@@ -4,6 +4,8 @@ import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaExce
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import java.net.URI
+import java.net.URL
 
 fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     val dateString = vardokItem.dc?.valid?.split(" - ")
@@ -81,3 +83,15 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
     }
     return languageComments
 }
+
+/**
+ *
+ */
+fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? =
+    //vardokItem.variable?.externalDocument?.let { URI(it).toURL() }
+    vardokItem.variable?.externalDocument.takeIf {
+        it?.startsWith("http://") == true || it?.startsWith("https://") ?: false
+       }
+        ?.let { URI(it).toURL() }
+        //?.takeIf { it.host != null }
+

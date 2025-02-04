@@ -5,10 +5,7 @@ import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
-import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
-import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokComment
-import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokStatisticalUnitToUnitTypes
-import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokSubjectAreaToSubjectFiled
+import no.ssb.metadata.vardef.integrations.vardok.convertions.*
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.models.LanguageStringType
 
@@ -68,7 +65,7 @@ interface VardokService {
                 validFrom = getValidDates(vardokItemNb).first,
                 validUntil = getValidDates(vardokItemNb).second,
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
-                externalReferenceUri = vardokItemNb.variable?.externalDocument,
+                externalReferenceUri = mapExternalDocumentToUri(vardokItemNb),
                 comment =
                     LanguageStringType(
                         comment["nb"],

@@ -423,11 +423,11 @@ class CreateTests : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource(
-        "no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#validNewPeriodInvalidManadatoryFields"
+        "no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject#validNewPeriodInvalidManadatoryFields",
     )
     fun `create new validity period invalid mandatory fields`(
         input: String,
-        spec: RequestSpecification
+        spec: RequestSpecification,
     ) {
         spec
             .given()
@@ -438,6 +438,5 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-
     }
 }

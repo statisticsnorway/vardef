@@ -363,38 +363,56 @@ class CompanionObject {
                 argumentSet(
                     "imvalid contact",
                     JSONObject().apply {
-                        put("contact", JSONObject().apply {
-                            put("title", JSONObject().apply {
-                                put("nb", "")
-                                put("nn", "")
-                                put("en", "")
-                            })
-                            put("email", "")
-                        })
+                        put(
+                            "contact",
+                            JSONObject().apply {
+                                put(
+                                    "title",
+                                    JSONObject().apply {
+                                        put("nb", "")
+                                        put("nn", "")
+                                        put("en", "")
+                                    },
+                                )
+                                put("email", "")
+                            },
+                        )
                     }.toString(),
                     "Must have value for at least one language",
                 ),
                 argumentSet(
                     "contact invalid email",
                     JSONObject().apply {
-                        put("contact", JSONObject().apply {
-                            put("title", JSONObject().apply {
-                                put("nb", "Seksjon High end")
-                            })
-                            put("email", "chgjcgh")
-                        })
+                        put(
+                            "contact",
+                            JSONObject().apply {
+                                put(
+                                    "title",
+                                    JSONObject().apply {
+                                        put("nb", "Seksjon High end")
+                                    },
+                                )
+                                put("email", "chgjcgh")
+                            },
+                        )
                     }.toString(),
                     "must be a well-formed email address",
                 ),
                 argumentSet(
                     "contact missing email",
                     JSONObject().apply {
-                        put("contact", JSONObject().apply {
-                            put("title", JSONObject().apply {
-                                put("nb", "Seksjon High end")
-                            })
-                            put("email", "")
-                        })
+                        put(
+                            "contact",
+                            JSONObject().apply {
+                                put(
+                                    "title",
+                                    JSONObject().apply {
+                                        put("nb", "Seksjon High end")
+                                    },
+                                )
+                                put("email", "")
+                            },
+                        )
                     }.toString(),
                     "must be a well-formed email address",
                 ),
@@ -424,22 +442,31 @@ class CompanionObject {
                 argumentSet(
                     "name",
                     JSONObject().apply {
-                        put("name", JSONObject().apply {
-                            put("nn", "bussar")
-                        })
+                        put(
+                            "name",
+                            JSONObject().apply {
+                                put("nn", "bussar")
+                            },
+                        )
                     }.toString(),
                 ),
                 argumentSet(
                     "contact",
                     JSONObject().apply {
-                        put("contact", JSONObject().apply {
-                            put("title", JSONObject().apply {
-                                put("nb", "Sjefen")
-                            })
-                            put("email", "sjef@ssb.no")
-                        })
+                        put(
+                            "contact",
+                            JSONObject().apply {
+                                put(
+                                    "title",
+                                    JSONObject().apply {
+                                        put("nb", "Sjefen")
+                                    },
+                                )
+                                put("email", "sjef@ssb.no")
+                            },
+                        )
                     }.toString(),
-                )
+                ),
             )
     }
 }

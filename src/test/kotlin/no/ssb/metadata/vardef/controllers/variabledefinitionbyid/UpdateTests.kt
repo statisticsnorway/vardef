@@ -527,7 +527,6 @@ class UpdateTests : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitionbyid.CompanionObject#updateMandatoryFields")
     fun `attempt to update variable mandatory fields`(
-        definitionId: String,
         input: String,
         errorMessage: String?,
         spec: RequestSpecification,
@@ -538,7 +537,7 @@ class UpdateTests : BaseVardefTest() {
             .body(input)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .patch("/variable-definitions/$definitionId")
+            .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
             .spec(
@@ -582,5 +581,30 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
             .then()
             .statusCode(HttpStatus.OK.code)
+    }
+
+    @Test
+    fun `update containsSpecialCategoriesOfPersonalData`(spec: RequestSpecification) {
+
+        val body =
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                JSONObject().apply {
+                    put("contains_special_categories_of_personal_data","")
+                }.toString(),
+            )
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .extract()
+            .body()
+            .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.containsSpecialCategoriesOfPersonalData).isEqualTo(false)
     }
 }

@@ -63,7 +63,6 @@ data class Contact(
     @NotEmptyLanguageStringType
     val title: LanguageStringType,
     @Email
-    @NotEmpty
     val email: String,
 )
 

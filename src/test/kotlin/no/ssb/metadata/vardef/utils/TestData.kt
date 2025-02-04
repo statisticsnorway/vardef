@@ -589,7 +589,7 @@ val PATCH_MANDATORY_FIELDS =
         owner = Owner("my-team", listOf("my-team-developers", "other-group", TEST_DEVELOPERS_GROUP)),
         contact =
             Contact(
-                LanguageStringType("", "", ""),
+                LanguageStringType("Avdeling", "", ""),
                 "me@example.com",
             ),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),

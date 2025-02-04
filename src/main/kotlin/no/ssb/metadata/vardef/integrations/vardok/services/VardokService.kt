@@ -80,7 +80,11 @@ interface VardokService {
                 containsSpecialCategoriesOfPersonalData = false,
                 subjectFields = mapVardokSubjectAreaToSubjectFiled(vardokItemNb),
                 classificationReference = classificationRelation?.split("/")?.last(),
-                contact = Contact(LanguageStringType("$GENERATED_CONTACT_KEYWORD _tittel", null, null), "$GENERATED_CONTACT_KEYWORD@epost.com"),
+                contact =
+                    Contact(
+                        LanguageStringType("$GENERATED_CONTACT_KEYWORD _tittel", null, null),
+                        "$GENERATED_CONTACT_KEYWORD@epost.com",
+                    ),
                 measurementType = null,
                 relatedVariableDefinitionUris = emptyList(),
             )

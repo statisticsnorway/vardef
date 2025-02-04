@@ -41,9 +41,13 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     }
 
     @Test
-    fun `is generated contact`(){
-        assertThat(variableDefinitionService.isIllegalContactForPublishing(SAVED_TO_PUBLISH_ILLEGAL_CONTACT,
-            UpdateDraft(variableStatus = VariableStatus.PUBLISHED_EXTERNAL))).isTrue()
+    fun `is generated contact`() {
+        assertThat(
+            variableDefinitionService.isIllegalContactForPublishing(
+                SAVED_TO_PUBLISH_ILLEGAL_CONTACT,
+                UpdateDraft(variableStatus = VariableStatus.PUBLISHED_EXTERNAL),
+            ),
+        ).isTrue()
     }
 
     @ParameterizedTest

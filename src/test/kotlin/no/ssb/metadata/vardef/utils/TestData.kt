@@ -457,10 +457,11 @@ val COMPLETE_RESPONSE =
                 team = TEST_TEAM,
                 groups = listOf(TEST_DEVELOPERS_GROUP),
             ),
-        contact = Contact(
-            LanguageStringType("Avdeling for landstatistikk", null, null),
-            "landbal@ssb.no"
-        ),
+        contact =
+            Contact(
+                LanguageStringType("Avdeling for landstatistikk", null, null),
+                "landbal@ssb.no",
+            ),
         createdAt = LocalDateTime.now(),
         createdBy = TEST_USER,
         lastUpdatedAt = LocalDateTime.now(),
@@ -585,10 +586,11 @@ val SAVED_TO_PUBLISH_ILLEGAL_CONTACT =
         externalReferenceUri = URI("https://www.example.com").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
-        contact = Contact(
-            LanguageStringType("generert_tittel", null, null),
-            "generert@epost.com"
-        ),
+        contact =
+            Contact(
+                LanguageStringType("generert_tittel", null, null),
+                "generert@epost.com",
+            ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
 val PATCH_MANDATORY_FIELDS =
@@ -631,5 +633,3 @@ val PATCH_MANDATORY_FIELDS =
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
         lastUpdatedBy = "me@example.com",
     )
-
-

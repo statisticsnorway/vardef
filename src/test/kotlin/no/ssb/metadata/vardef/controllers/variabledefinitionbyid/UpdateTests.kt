@@ -584,7 +584,7 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `attempt to publish generated contact`(spec: RequestSpecification){
+    fun `attempt to publish generated contact`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -598,7 +598,6 @@ class UpdateTests : BaseVardefTest() {
             .patch("/variable-definitions/${SAVED_TO_PUBLISH_ILLEGAL_CONTACT.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
-
     }
 
     @Test

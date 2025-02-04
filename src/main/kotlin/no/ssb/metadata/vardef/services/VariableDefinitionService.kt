@@ -295,15 +295,17 @@ class VariableDefinitionService(
             val currentContact = updateDraft.contact ?: savedDraft.contact
             logger.info("Checking if contact $currentContact contains illegal values")
 
-            val titleContainsIllegalKeyword = SupportedLanguages.entries.any { language ->
-                val languageValue = currentContact.title.getValidLanguage(language)?.trim()
-                logger.info("contact title $languageValue contains illegal values")
-                languageValue?.contains(GENERATED_CONTACT_KEYWORD ) == true
-            }
+            val titleContainsIllegalKeyword =
+                SupportedLanguages.entries.any { language ->
+                    val languageValue = currentContact.title.getValidLanguage(language)?.trim()
+                    logger.info("contact title $languageValue contains illegal values")
+                    languageValue?.contains(GENERATED_CONTACT_KEYWORD) == true
+                }
 
-            val emailContainsIllegalKeyword = currentContact.email.contains(GENERATED_CONTACT_KEYWORD ).also {
-                logger.info("contact email ${currentContact.email} contains illegal values")
-            }
+            val emailContainsIllegalKeyword =
+                currentContact.email.contains(GENERATED_CONTACT_KEYWORD).also {
+                    logger.info("contact email ${currentContact.email} contains illegal values")
+                }
 
             return titleContainsIllegalKeyword || emailContainsIllegalKeyword
         }

@@ -3,7 +3,8 @@ package no.ssb.metadata.vardef.integrations.vardok.services
 import io.micronaut.context.annotation.Prototype
 import io.micronaut.core.annotation.Introspected
 import io.viascom.nanoid.NanoId
-import no.ssb.metadata.vardef.constants.ILLEGAL_KEYWORD
+import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
 import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokComment
@@ -35,7 +36,7 @@ interface VardokService {
     fun isAlreadyMigrated(vardokId: String): Boolean
 
     companion object {
-        private fun generateShortName() = "${ILLEGAL_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
+        private fun generateShortName() = "${ILLEGAL_SHORTNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
 
         private fun isValidShortName(name: String) = name.matches(Regex(VARDEF_SHORT_NAME_PATTERN))
 
@@ -79,7 +80,7 @@ interface VardokService {
                 containsSpecialCategoriesOfPersonalData = false,
                 subjectFields = mapVardokSubjectAreaToSubjectFiled(vardokItemNb),
                 classificationReference = classificationRelation?.split("/")?.last(),
-                contact = Contact(LanguageStringType("generert_tittel", null, null), "generert@epost.com"),
+                contact = Contact(LanguageStringType("$GENERATED_CONTACT_KEYWORD _tittel", null, null), "$GENERATED_CONTACT_KEYWORD@epost.com"),
                 measurementType = null,
                 relatedVariableDefinitionUris = emptyList(),
             )

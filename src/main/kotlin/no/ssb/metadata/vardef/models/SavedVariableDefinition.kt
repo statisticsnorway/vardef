@@ -88,7 +88,7 @@ data class SavedVariableDefinition(
             externalReferenceUri = externalReferenceUri,
             comment = comment?.getValidLanguage(language),
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
-            contact = RenderedContact(contact.title.getValidLanguage(language), contact.email),
+            contact = contact.title.getValidLanguage(language)?.let { RenderedContact(it, contact.email) },
             lastUpdatedAt = lastUpdatedAt,
         )
 

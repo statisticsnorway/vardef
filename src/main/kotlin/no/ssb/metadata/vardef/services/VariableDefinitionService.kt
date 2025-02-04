@@ -77,6 +77,12 @@ class VariableDefinitionService(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
             kv(DEFINITION_ID, updatedVariable.definitionId),
         )
+        if(updatedVariable.variableStatus.isPublished()){
+            logger.info(
+                "Successful published variable with id: ${updatedVariable.definitionId}",
+                kv(DEFINITION_ID, updatedVariable.definitionId),
+            )
+        }
         return updatedVariable
     }
 

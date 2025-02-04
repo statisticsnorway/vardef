@@ -11,7 +11,7 @@ plugins {
     id("jacoco")
 }
 
-version = "0.1.2"
+version = "0.6.0"
 group = "no.ssb.metadata.vardef"
 
 val kotlinVersion = project.properties["kotlinVersion"]
@@ -143,7 +143,7 @@ fun bumpVersion(type: String) {
         }
 
     versionFile.writeText(updatedContent)
-    println("Version bumped to $type! New version: $version")
+    println("Successfully updated version")
 }
 
 tasks.register("versionMajor") {

@@ -280,7 +280,7 @@ class VariableDefinitionService(
     }
 
     /**
-     * Determines whether the short name in the saved or updated draft contains an illegal keyword,
+     * Determines whether the *Contact* in the saved or updated draft contains an illegal keyword,
      * making it unsuitable for publishing.
      *
      * @param savedDraft The saved version of the variable definition.

@@ -584,6 +584,24 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
+    fun `attempt to publish generated contact`(spec: RequestSpecification){
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                JSONObject().apply {
+                    put("variable_status", "PUBLISHED_INTERNAL")
+                }.toString(),
+            )
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_TO_PUBLISH_ILLEGAL_CONTACT.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+
+    }
+
+    @Test
     fun `update containsSpecialCategoriesOfPersonalData`(spec: RequestSpecification) {
         val body =
             spec

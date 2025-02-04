@@ -457,7 +457,10 @@ val COMPLETE_RESPONSE =
                 team = TEST_TEAM,
                 groups = listOf(TEST_DEVELOPERS_GROUP),
             ),
-        contact = null,
+        contact = Contact(
+            LanguageStringType("Avdeling for landstatistikk", null, null),
+            "landbal@ssb.no"
+        ),
         createdAt = LocalDateTime.now(),
         createdBy = TEST_USER,
         lastUpdatedAt = LocalDateTime.now(),

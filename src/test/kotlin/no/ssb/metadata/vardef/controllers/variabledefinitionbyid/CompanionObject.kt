@@ -258,7 +258,6 @@ class CompanionObject {
             Stream.of(
                 argumentSet(
                     "empty unit types list",
-                    SAVED_TO_PUBLISH.definitionId,
                     JSONObject().apply {
                         put("unit_types", listOf(null))
                     }.toString(),
@@ -266,7 +265,6 @@ class CompanionObject {
                 ),
                 argumentSet(
                     "blank values in unit types list",
-                    SAVED_TO_PUBLISH.definitionId,
                     JSONObject().apply {
                         put("unit_types", listOf(""))
                     }.toString(),
@@ -274,7 +272,6 @@ class CompanionObject {
                 ),
                 argumentSet(
                     "blank values in subject fields list",
-                    SAVED_TO_PUBLISH.definitionId,
                     JSONObject().apply {
                         put("subject_fields", listOf("", " "))
                     }.toString(),
@@ -282,15 +279,51 @@ class CompanionObject {
                 ),
                 argumentSet(
                     "empty subject fields list",
-                    SAVED_TO_PUBLISH.definitionId,
                     JSONObject().apply {
                         put("subject_fields", listOf(null))
                     }.toString(),
                     "must not be empty",
                 ),
                 argumentSet(
+                    "imvalid contact",
+                    JSONObject().apply {
+                        put("contact", JSONObject().apply {
+                            put("title", JSONObject().apply {
+                                put("nb", "")
+                                put("nn", "")
+                                put("en", "")
+                            })
+                            put("email", "")
+                        })
+                    }.toString(),
+                    "Must have value for at least one language",
+                ),
+                argumentSet(
+                    "contact invalid email",
+                    JSONObject().apply {
+                        put("contact", JSONObject().apply {
+                            put("title", JSONObject().apply {
+                                put("nb", "Seksjon High end")
+                            })
+                            put("email", "chgjcgh")
+                        })
+                    }.toString(),
+                    "must be a well-formed email address",
+                ),
+                argumentSet(
+                    "contact missing email",
+                    JSONObject().apply {
+                        put("contact", JSONObject().apply {
+                            put("title", JSONObject().apply {
+                                put("nb", "Seksjon High end")
+                            })
+                            put("email", "")
+                        })
+                    }.toString(),
+                    "must be a well-formed email address",
+                ),
+                argumentSet(
                     "blank short name",
-                    SAVED_TO_PUBLISH.definitionId,
                     JSONObject().apply {
                         put("short_name", "")
                     }.toString(),
@@ -298,7 +331,6 @@ class CompanionObject {
                 ),
                 argumentSet(
                     "empty values all languages name",
-                    SAVED_TO_PUBLISH.definitionId,
                     JSONObject().apply {
                         put(
                             "name",

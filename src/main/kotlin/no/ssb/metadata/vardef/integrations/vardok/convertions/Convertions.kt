@@ -91,18 +91,21 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
  * Converts an external document URL from a [VardokResponse] into a [URL] if it is valid.
  *
  * The function extracts the `externalDocument` field from the given [vardokItem], which is a string.
- * It checks if the string is non-blank and starts with "http://" or "https://".
  * If valid, it converts the string into a [URL] object, ensuring that the resulting URL has a valid host.
  *
  * @param vardokItem The [VardokResponse] containing the external document URL as a string.
  * @return A valid [URL] if the `externalDocument` string is properly formatted, otherwise `null`.
  */
-fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? =
-    vardokItem.variable?.externalDocument?.trim()
-        ?.takeIf { it.isNotBlank() && (it.startsWith("http://") || it.startsWith("https://")) }
+fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? {
+    logger.info("Convert external document value: ${vardokItem.variable?.externalDocument} for ${vardokId(vardokItem)}.")
+    return vardokItem.variable?.externalDocument?.trim()
+        ?.takeIf {
+            it.isNotBlank() && (it.startsWith("http://") || it.startsWith("https://"))
+        }
         ?.let { urlString ->
             runCatching { URI(urlString).toURL() }
                 .onFailure { logger.error("Invalid URL: $urlString - Error: ${it.message}") }
                 .getOrNull()
         }
         ?.takeIf { it.host?.isNotBlank() == true }
+}

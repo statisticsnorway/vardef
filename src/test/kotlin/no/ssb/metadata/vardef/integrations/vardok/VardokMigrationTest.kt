@@ -14,6 +14,7 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
@@ -150,7 +151,7 @@ class VardokMigrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.integrations.vardok.VardokResponseTest#mapExternalDocument")
+    @MethodSource("mapExternalDocument")
     fun `externalReferenceUri field is set with value from externalDocument`(
         vardokId: String,
         expectedResult: URL?,
@@ -195,6 +196,31 @@ class VardokMigrationTest {
                 arguments(
                     "3246",
                     listOf("12", "13"),
+                ),
+            )
+
+        @JvmStatic
+        fun mapExternalDocument(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Vardok id 2 has external document",
+                    "2",
+                    "http://www.ssb.no/emner/05/90/notat_200372/notat_200372.pdf",
+                ),
+                argumentSet(
+                    "Vardok id 130 has not external document",
+                    "130",
+                    null,
+                ),
+                argumentSet(
+                    "Vardok id 123 has external document",
+                    "123",
+                    "http://www.ssb.no/emner/02/01/10/innvbef/om.html",
+                ),
+                argumentSet(
+                    "Vardok id 1245 has invalid external document",
+                    "1245",
+                    null,
                 ),
             )
     }

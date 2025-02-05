@@ -4,6 +4,11 @@ import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaExce
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import org.slf4j.LoggerFactory
+import java.net.URI
+import java.net.URL
+
+private val logger = LoggerFactory.getLogger("Convertions")
 
 fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     val dateString = vardokItem.dc?.valid?.split(" - ")
@@ -80,4 +85,23 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
             }
     }
     return languageComments
+}
+
+/**
+ * Converts an external document URL from a [VardokResponse] into a [URL] if it is valid.
+ *
+ * The function extracts the `externalDocument` field from the given [vardokItem], which is a string.
+ * If valid, it converts the string into a [URL] object, ensuring that the resulting URL has a valid host.
+ *
+ * @param vardokItem The [VardokResponse] containing the external document URL as a string.
+ * @return A valid [URL] if the `externalDocument` string is properly formatted, otherwise `null`.
+ */
+fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? {
+    logger.info("Convert external document value: ${vardokItem.variable?.externalDocument} for ${vardokId(vardokItem)}.")
+    return vardokItem.variable?.externalDocument?.trim()
+        ?.let { urlString ->
+            runCatching { URI(urlString).toURL() }
+                .onFailure { logger.error("Invalid URL: $urlString - Error: ${it.message}") }
+                .getOrNull()
+        }
 }

@@ -11,6 +11,8 @@ import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @Requires(env = ["integration-test"])
 @MicronautTest
@@ -30,6 +32,13 @@ class VardokClientTest {
     }
 
     @Test
+    fun`use xml mapper to read string http response with external document`() {
+        val result = xmlMapper.readValue(vardokClient.fetchVardokById("130"), VardokResponse::class.java)
+        assertThat(result).isInstanceOf(VardokResponse::class.java)
+        assertThat(result.variable?.externalDocument).isEqualTo("")
+    }
+
+    @Test
     fun `get vardok by valid id and not valid nn language returns nb language`() {
         val resultNN = xmlMapper.readValue(vardokClient.fetchVardokByIdAndLanguage("1466", "nn"), VardokResponse::class.java)
         val resultNB = xmlMapper.readValue(vardokClient.fetchVardokByIdAndLanguage("1466", "nb"), VardokResponse::class.java)
@@ -41,6 +50,28 @@ class VardokClientTest {
     fun `fetch multiple languages`() {
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage("476")
         assertThat(result).isInstanceOf(MutableMap::class.java)
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        ints = [
+            1245, 1248, 1755, 1756, 2320, 2321, 2464, 2468, 2469, 2470, 2471, 2485, 2502, 2503, 2634, 2635, 2689, 2798,
+            3119, 3330, 3354, 3359, 3360, 3428, 3431,
+        ],
+    )
+    fun `fetch vardok with invalid external document`(id: Int) {
+        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("$id")
+        assertThat(result).isInstanceOf(MutableMap::class.java)
+        val varDefInput = VardokService.extractVardefInput(result)
+        assertThat(varDefInput.externalReferenceUri).isNull()
+    }
+
+    @Test
+    fun `fetch vardok with null external document`() {
+        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("130")
+        assertThat(result).isInstanceOf(MutableMap::class.java)
+        val varDefInput = VardokService.extractVardefInput(result)
+        assertThat(varDefInput.externalReferenceUri).isNull()
     }
 
     @Test

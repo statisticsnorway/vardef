@@ -1,0 +1,57 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2005-04-28" defaultValidFrom="2010-07-31" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:1245" lastChangedDate="2018-04-06" otherLanguages="nb;nn" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for primary industry</dc:contributor>
+        <dc:creator>Ole Rognstad</dc:creator>
+        <dcterms:modified>2018-04-06</dcterms:modified>
+        <dcterms:valid>2010-07-31 - </dcterms:valid>
+        <dc:description>The type of farming is based on the relative contribution of different crop and livestock enterprises to the holding's total standard output</dc:description>
+        <dcterms:abstract> Jordbrukstelling 1999 Eurostat-forordning</dcterms:abstract>
+        <dcterms:tableOfContents>Establishment</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:1245</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>10.04.10 - Agriculture, hunting, wildlife conservation</dc:subject>
+        <dc:title>Type of farming of agricultural holdings</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Type of farming of agricultural holdings</Title>
+        <Description>The type of farming is based on the relative contribution of different crop and livestock enterprises to the holding's total standard output</Description>
+        <ContactPerson>
+            <CodeValue>oro</CodeValue>
+            <CodeText>Ole Rognstad</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>430</CodeValue>
+            <CodeText>Division for primary industry</CodeText>
+        </ContactDivision>
+        <Notes>The type of farming is hierarchic with three levels. Within each level the production is specialised if an enterprise contributes to more than 2/3 of the total standard output. Beyond that, the production is combined (mixed). In the period 1999 ¿ 2009, standard gross margin (SGM) was common measurement unit for the various crop and livestock enterprises within an agricultural holding. As from 2010, standard output is used as common measurement unit. At the same time, some other minor methodological changes were done. Due to this, the type of farming from 2010 and onwards is not fully comparable with the earlier type of farming.</Notes>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Establishment</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>10.04.10</CodeValue>
+            <CodeText>Agriculture, hunting, wildlife conservation</CodeText>
+        </SubjectArea>
+        <ExternalSource>Eurostat-forordning</ExternalSource>
+        <InternalSource>Jordbrukstelling 1999</InternalSource>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument>Documents 2015/32 Klassifisering av jordbruksbedrifter etter driftsform og størrelse</ExternalDocument>
+        <DataElementName/>
+        <ShortNameWeb>
+            <CodeValue>stjord</CodeValue>
+            <CodeText>Structure of Agriculture</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/1246" xlink:type="simple"/>
+    </Relations>
+</FIMD>

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.serde.annotation.Serdeable
-import java.net.URL
 
 @Serdeable
 @Introspected
@@ -104,7 +103,7 @@ data class Variable(
     @field:JacksonXmlProperty(localName = "Sensitivity")
     val sensitivity: String,
     @field:JacksonXmlProperty(localName = "ExternalDocument")
-    val externalDocument: URL? = null,
+    val externalDocument: String? = null,
     @field:JacksonXmlProperty(localName = "DataElementName")
     val dataElementName: String? = null,
     @field:JacksonXmlProperty(localName = "Calculation")

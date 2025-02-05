@@ -33,7 +33,7 @@ class MongockRunner(
                 .builder()
                 .setDriver(MongoReactiveDriver.withDefaultLock(mongoClient, MONGO_DB_NAME_VARDEF))
                 .addMigrationScanPackage("no.ssb.metadata.vardef.migrations")
-                .setTransactional(false)
+                .setTransactional(false) // Mongock crashes when transactional is true
                 .buildRunner()
 
         mongock.execute()

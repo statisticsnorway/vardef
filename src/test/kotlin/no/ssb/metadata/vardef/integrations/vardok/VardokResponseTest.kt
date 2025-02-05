@@ -9,7 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.MethodSource
-import java.net.URL
 import java.util.stream.Stream
 
 @MicronautTest
@@ -81,7 +80,7 @@ class VardokResponseTest {
     @MethodSource("mapExternalDocument")
     fun `external document field in Vardokresponse`(
         vardokId: String,
-        expectedResult: URL?,
+        expectedResult: String?,
     ) {
         val result = vardokService.getVardokItem(vardokId)
         assertThat(result?.variable?.externalDocument).isEqualTo(expectedResult)
@@ -147,7 +146,7 @@ class VardokResponseTest {
                 argumentSet(
                     "Vardok id 130 has not external document",
                     "130",
-                    null,
+                    "",
                 ),
                 argumentSet(
                     "Vardok id 123 has external document",

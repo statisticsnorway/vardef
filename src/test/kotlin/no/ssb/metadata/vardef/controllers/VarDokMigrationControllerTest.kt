@@ -15,10 +15,13 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.net.URL
 import java.time.LocalDate
+import java.util.stream.Stream
 
 class VarDokMigrationControllerTest : BaseVardefTest() {
     @Inject
@@ -169,6 +172,26 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeResponse.validUntil).isNotNull()
     }
 
+    @Test
+    fun `post vardok external reference`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/1245")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.externalReferenceUri).isNull()
+    }
+
     @ParameterizedTest
     @ValueSource(
         ints = [
@@ -276,7 +299,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.integrations.vardok.VardokResponseTest#mapExternalDocument")
+    @MethodSource("externalDocument")
     fun `create vardok externalreference uri`(
         id: Int,
         expectedResult: URL?,
@@ -340,5 +363,32 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
 
         assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeResponse.id)
+    }
+
+    companion object {
+        @JvmStatic
+        fun externalDocument(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Vardok id 2 has external document",
+                    "2",
+                    "http://www.ssb.no/emner/05/90/notat_200372/notat_200372.pdf",
+                ),
+                argumentSet(
+                    "Vardok id 130 has not external document",
+                    "130",
+                    null,
+                ),
+                argumentSet(
+                    "Vardok id 123 has external document",
+                    "123",
+                    "http://www.ssb.no/emner/02/01/10/innvbef/om.html",
+                ),
+                argumentSet(
+                    "Vardok id 123 has external document",
+                    "1245",
+                    null,
+                ),
+            )
     }
 }

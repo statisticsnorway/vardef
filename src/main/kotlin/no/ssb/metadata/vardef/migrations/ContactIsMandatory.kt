@@ -26,10 +26,11 @@ class ContactIsMandatory {
             mongoDatabase
                 .getCollection("SavedVariableDefinition")
                 .updateMany(
-                    filter, listOf(
+                    filter,
+                    listOf(
                         set("contact.email", "$GENERATED_CONTACT_KEYWORD@epost.com"),
-                        set("contact.title.nb", "$GENERATED_CONTACT_KEYWORD _tittel")
-                        )
+                        set("contact.title.nb", "$GENERATED_CONTACT_KEYWORD _tittel"),
+                    ),
                 )
         Mono.from(updater).block().also { updateResult ->
             if (updateResult != null) {

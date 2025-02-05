@@ -10,7 +10,7 @@ spec:
     - name: dapla-metadata
       rules:
         - alert: High number of errors
-          expr: (100 * sum by (app, namespace) (rate(log_messages_errors{app="vardef",level=~"Error"}[3m])) / sum by (app, namespace) (rate(log_messages_total{app="vardef"}[3m]))) > 10
+          expr: (100 * sum by (app, namespace) (rate(logback_events_total{app="vardef",level="error"}[3m])) / sum by (app, namespace) (rate(logback_events_total{app="vardef"}[3m]))) > 10
           for: 3m
           annotations:
             title: "High number of errors logged"
@@ -20,17 +20,20 @@ spec:
             service: vardef
             namespace: dapla-metadata
             severity: critical
+            environment: test
 
         - alert: A Vardef client is unavailable
-          expr: rate(http_client_requests_seconds_count{app="vardef", status!="200"}[15s]) > 0
+          expr: rate(http_client_requests_seconds_count{app="vardef", status!="200"}[1m]) > 0
           for: 1m
           annotations:
             title: "A Vardef client is unavailable "
             consequence: "The service may lack some functionality"
+            description: "Client {{ $labels.serviceId }} responded with {{ $labels.status }} causing {{ $labels.exception }}"
           labels:
             service: vardef
             namespace: dapla-metadata
             severity: critical
+            environment: test
 
         - alert: Vardef is unavailable
           expr: kube_deployment_status_replicas_available{deployment="vardef"} == 0
@@ -42,3 +45,4 @@ spec:
             service: vardef
             namespace: dapla-metadata
             severity: critical
+            environment: test

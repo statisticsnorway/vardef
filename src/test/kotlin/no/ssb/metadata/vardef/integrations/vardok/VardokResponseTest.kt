@@ -146,12 +146,17 @@ class VardokResponseTest {
                 argumentSet(
                     "Vardok id 130 has not external document",
                     "130",
-                    "",
+                    null,
                 ),
                 argumentSet(
                     "Vardok id 123 has external document",
                     "123",
                     "http://www.ssb.no/emner/02/01/10/innvbef/om.html",
+                ),
+                argumentSet(
+                    "Vardok id 123 has external document",
+                    "1245",
+                    null,
                 ),
             )
     }

@@ -5,8 +5,6 @@ import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
-import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
-import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -78,12 +76,6 @@ class VariableDefinitionService(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
             kv(DEFINITION_ID, updatedVariable.definitionId),
         )
-        if (updatedVariable.variableStatus.isPublished()) {
-            logger.info(
-                "Successful published variable with id: ${updatedVariable.definitionId}",
-                kv(DEFINITION_ID, updatedVariable.definitionId),
-            )
-        }
         return updatedVariable
     }
 
@@ -258,59 +250,6 @@ class VariableDefinitionService(
                 isCorrectDateOrder(updateDraft.validFrom, savedDraft.validUntil) &&
                     isCorrectDateOrder(savedDraft.validFrom, updateDraft.validUntil)
             )
-
-    /**
-     * Determines whether the short name in the saved or updated draft contains an illegal keyword,
-     * making it unsuitable for publishing.
-     *
-     * @param savedDraft The saved version of the variable definition.
-     * @param updateDraft The updated draft containing potential changes.
-     * @return `true` if either short name contains an illegal keyword, `false` otherwise.
-     */
-    fun isIllegalShortNameForPublishing(
-        savedDraft: SavedVariableDefinition,
-        updateDraft: UpdateDraft,
-    ): Boolean {
-        if (updateDraft.variableStatus?.isPublished() == true) {
-            val currentShortName = updateDraft.shortName ?: savedDraft.shortName
-            logger.info("Checking if shortName $currentShortName contains illegal shortName")
-            return currentShortName.contains(ILLEGAL_SHORTNAME_KEYWORD)
-        }
-        return false
-    }
-
-    /**
-     * Determines whether the *Contact* in the saved or updated draft contains an illegal keyword,
-     * making it unsuitable for publishing.
-     *
-     * @param savedDraft The saved version of the variable definition.
-     * @param updateDraft The updated draft containing potential changes.
-     * @return `true` if either *Contact*  contains an illegal keyword, `false` otherwise.
-     */
-    fun isIllegalContactForPublishing(
-        savedDraft: SavedVariableDefinition,
-        updateDraft: UpdateDraft,
-    ): Boolean {
-        if (updateDraft.variableStatus?.isPublished() == true) {
-            val currentContact = updateDraft.contact ?: savedDraft.contact
-            logger.info("Checking if contact $currentContact contains illegal values")
-
-            val titleContainsIllegalKeyword =
-                SupportedLanguages.entries.any { language ->
-                    val languageValue = currentContact.title.getValidLanguage(language)?.trim()
-                    logger.info("contact title $languageValue contains illegal values")
-                    languageValue?.contains(GENERATED_CONTACT_KEYWORD) == true
-                }
-
-            val emailContainsIllegalKeyword =
-                currentContact.email.contains(GENERATED_CONTACT_KEYWORD).also {
-                    logger.info("contact email ${currentContact.email} contains illegal values")
-                }
-
-            return titleContainsIllegalKeyword || emailContainsIllegalKeyword
-        }
-        return false
-    }
 
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
 }

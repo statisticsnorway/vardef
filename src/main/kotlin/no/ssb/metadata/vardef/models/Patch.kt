@@ -30,7 +30,6 @@ data class Patch(
     val name: LanguageStringType?,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     @Nullable
-    @NotEmptyLanguageStringType
     val definition: LanguageStringType?,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable

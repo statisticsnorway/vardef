@@ -4,8 +4,11 @@ import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaExce
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import org.slf4j.LoggerFactory
 import java.net.URI
 import java.net.URL
+
+private val logger = LoggerFactory.getLogger("Convertions")
 
 fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     val dateString = vardokItem.dc?.valid?.split(" - ")
@@ -95,7 +98,11 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
  * @return A valid [URL] if the `externalDocument` string is properly formatted, otherwise `null`.
  */
 fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? =
-    vardokItem.variable?.externalDocument.takeIf {
-        it?.isNotBlank() == true && it.startsWith("http://") || it?.startsWith("https://") ?: false
-    }
-        ?.let { URI(it).toURL() }.takeIf { it?.host != null }
+    vardokItem.variable?.externalDocument?.trim()
+        ?.takeIf { it.isNotBlank() && (it.startsWith("http://") || it.startsWith("https://")) }
+        ?.let { urlString ->
+            runCatching { URI(urlString).toURL() }
+                .onFailure { logger.error("Invalid URL: $urlString - Error: ${it.message}") }
+                .getOrNull()
+        }
+        ?.takeIf { it.host?.isNotBlank() == true }

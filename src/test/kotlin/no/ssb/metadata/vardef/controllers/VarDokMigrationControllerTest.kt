@@ -299,7 +299,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.integrations.vardok.VardokResponseTest#mapExternalDocument")
+    @MethodSource("mapExternalDocument")
     fun `create vardok externalreference uri`(
         id: Int,
         expectedResult: URL?,
@@ -363,5 +363,32 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
 
         assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeResponse.id)
+    }
+
+    companion object {
+        @JvmStatic
+        fun mapExternalDocument(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Vardok id 2 has external document",
+                    "2",
+                    "http://www.ssb.no/emner/05/90/notat_200372/notat_200372.pdf",
+                ),
+                argumentSet(
+                    "Vardok id 130 has not external document",
+                    "130",
+                    null,
+                ),
+                argumentSet(
+                    "Vardok id 123 has external document",
+                    "123",
+                    "http://www.ssb.no/emner/02/01/10/innvbef/om.html",
+                ),
+                argumentSet(
+                    "Vardok id 1245 has invalid external document",
+                    "1245",
+                    null,
+                ),
+            )
     }
 }

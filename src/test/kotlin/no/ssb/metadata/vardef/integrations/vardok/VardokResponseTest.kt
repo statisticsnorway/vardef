@@ -54,6 +54,22 @@ class VardokResponseTest {
         assertThat(response?.common?.notes).isEmpty()
     }
 
+    @Test
+    fun `invalid external document`() {
+        val response = vardokService.getVardokItem("1245")
+        assertThat(response?.variable?.externalDocument).isEqualTo(
+            "Notater 2015/32 Klassifisering av jordbruksbedrifter etter driftsform og størrelse",
+        )
+    }
+
+    @Test
+    fun `empty external document`() {
+        val response = vardokService.getVardokItem("130")
+        assertThat(response?.variable?.externalDocument).isEqualTo(
+            "",
+        )
+    }
+
     @ParameterizedTest
     @MethodSource("mapCommentField")
     fun `map Vardok notes and calculation to vardef comment`(
@@ -74,16 +90,6 @@ class VardokResponseTest {
         if (isConcatenated) {
             assertThat(vardokTransform.comment?.nb).containsSubsequence(notes, calculation)
         }
-    }
-
-    @ParameterizedTest
-    @MethodSource("mapExternalDocument")
-    fun `external document field in Vardokresponse`(
-        vardokId: String,
-        expectedResult: String?,
-    ) {
-        val result = vardokService.getVardokItem(vardokId)
-        assertThat(result?.variable?.externalDocument).isEqualTo(expectedResult)
     }
 
     companion object {
@@ -132,31 +138,6 @@ class VardokResponseTest {
                     null,
                     null,
                     true,
-                ),
-            )
-
-        @JvmStatic
-        fun mapExternalDocument(): Stream<Arguments> =
-            Stream.of(
-                argumentSet(
-                    "Vardok id 2 has external document",
-                    "2",
-                    "http://www.ssb.no/emner/05/90/notat_200372/notat_200372.pdf",
-                ),
-                argumentSet(
-                    "Vardok id 130 has not external document",
-                    "130",
-                    null,
-                ),
-                argumentSet(
-                    "Vardok id 123 has external document",
-                    "123",
-                    "http://www.ssb.no/emner/02/01/10/innvbef/om.html",
-                ),
-                argumentSet(
-                    "Vardok id 123 has external document",
-                    "1245",
-                    null,
                 ),
             )
     }

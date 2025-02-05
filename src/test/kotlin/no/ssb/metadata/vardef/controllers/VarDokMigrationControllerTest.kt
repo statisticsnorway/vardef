@@ -5,7 +5,6 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
-import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
@@ -59,8 +58,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse).isNotNull
-        assertThat(completeResponse.contact.title.nb).contains(GENERATED_CONTACT_KEYWORD)
-        assertThat(completeResponse.contact.email).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test

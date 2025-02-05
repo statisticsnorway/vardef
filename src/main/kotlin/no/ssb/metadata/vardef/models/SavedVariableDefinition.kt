@@ -50,8 +50,7 @@ data class SavedVariableDefinition(
     var relatedVariableDefinitionUris: List<String>?,
     @NotNull
     var owner: Owner,
-    @NotNull
-    var contact: Contact,
+    var contact: Contact?,
     @DateCreated
     var createdAt: LocalDateTime,
     @Email
@@ -88,7 +87,7 @@ data class SavedVariableDefinition(
             externalReferenceUri = externalReferenceUri,
             comment = comment?.getValidLanguage(language),
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
-            contact = contact.title.getValidLanguage(language)?.let { RenderedContact(it, contact.email) },
+            contact = contact?.let { RenderedContact(contact?.title?.getValidLanguage(language), it.email) },
             lastUpdatedAt = lastUpdatedAt,
         )
 

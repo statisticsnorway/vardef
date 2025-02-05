@@ -220,17 +220,17 @@ class VariableDefinitionByIdController(
         val variable = patches.latest(definitionId)
 
         when {
-            vardef.isIllegalShortNameForPublishing(variable, updateDraft) -> {
+            (
+                updateDraft.variableStatus == VariableStatus.PUBLISHED_INTERNAL ||
+                    updateDraft.variableStatus == VariableStatus.PUBLISHED_EXTERNAL
+            ) &&
+                (
+                    variable.shortName.contains(ILLEGAL_SHORTNAME_KEYWORD) ||
+                        updateDraft.shortName?.contains(ILLEGAL_SHORTNAME_KEYWORD) == true
+                ) -> {
                 throw HttpStatusException(
                     HttpStatus.BAD_REQUEST,
                     "The short name ${variable.shortName} is illegal and must be changed before it is published",
-                )
-            }
-
-            vardef.isIllegalContactForPublishing(variable, updateDraft) -> {
-                throw HttpStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "The contact ${variable.contact} is illegal and must be changed before it is published",
                 )
             }
 

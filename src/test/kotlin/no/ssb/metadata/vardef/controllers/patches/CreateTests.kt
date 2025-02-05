@@ -315,7 +315,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchInvalidMandatoryFields")
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchMandatoryFields")
     fun `attempt to create new patch with mandatory fields`(
         input: String,
         errorMessage: String,

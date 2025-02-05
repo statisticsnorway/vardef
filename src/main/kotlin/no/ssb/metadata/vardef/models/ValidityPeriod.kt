@@ -6,11 +6,9 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
-import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.constants.*
 import java.net.URL
 import java.time.LocalDate
@@ -27,7 +25,6 @@ import java.time.LocalDateTime
 data class ValidityPeriod(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
-    @NotEmptyLanguageStringType
     val name: LanguageStringType?,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     @NotNull
@@ -38,10 +35,10 @@ data class ValidityPeriod(
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @Nullable
-    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) @NotEmpty String>?,
+    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) String>?,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) @NotEmpty String>?,
+    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) String>?,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
     val containsSpecialCategoriesOfPersonalData: Boolean?,

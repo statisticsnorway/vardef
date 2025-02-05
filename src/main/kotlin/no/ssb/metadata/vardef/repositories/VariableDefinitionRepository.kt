@@ -6,7 +6,9 @@ import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.VariableStatus
 import org.bson.types.ObjectId
 
-@MongoRepository(databaseName = "vardef")
+const val MONGO_DB_NAME_VARDEF = "vardef"
+
+@MongoRepository(databaseName = MONGO_DB_NAME_VARDEF)
 interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition, ObjectId> {
     fun findByDefinitionIdOrderByPatchId(definitionId: String): List<SavedVariableDefinition>
 

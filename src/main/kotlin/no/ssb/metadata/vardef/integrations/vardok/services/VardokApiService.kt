@@ -25,10 +25,6 @@ open class VardokApiService(
             val response = vardokClient.fetchVardokById(id)
             return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
-            if (e.cause is IllegalArgumentException) {
-                logger.error("Could not serialise Vardok $id: ${e.message}", e)
-                throw e
-            }
             logger.warn("$id is not found. Exception message: ${e.message}")
             throw VardokNotFoundException(id)
         }

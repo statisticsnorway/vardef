@@ -99,13 +99,9 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
 fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? {
     logger.info("Convert external document value: ${vardokItem.variable?.externalDocument} for ${vardokId(vardokItem)}.")
     return vardokItem.variable?.externalDocument?.trim()
-        ?.takeIf {
-            it.isNotBlank() && (it.startsWith("http://") || it.startsWith("https://"))
-        }
         ?.let { urlString ->
             runCatching { URI(urlString).toURL() }
                 .onFailure { logger.error("Invalid URL: $urlString - Error: ${it.message}") }
                 .getOrNull()
         }
-        ?.takeIf { it.host?.isNotBlank() == true }
 }

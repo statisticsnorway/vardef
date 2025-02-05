@@ -6,9 +6,11 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
+import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -27,20 +29,22 @@ import java.time.LocalDateTime
 @ValidDateOrder
 data class Draft(
     @Schema(description = NAME_FIELD_DESCRIPTION)
+    @NotEmptyLanguageStringType
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
     @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
     val shortName: String,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
+    @NotEmptyLanguageStringType
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) String>,
+    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) @NotEmpty String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) String>,
+    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) @NotEmpty String>,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION, defaultValue = false.toString())
     val containsSpecialCategoriesOfPersonalData: Boolean = false,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
@@ -65,7 +69,7 @@ data class Draft(
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
-    val contact: Contact?,
+    val contact: Contact,
 ) {
     /**
      * Team name is a substring of group name

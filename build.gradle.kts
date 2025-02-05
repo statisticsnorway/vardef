@@ -11,7 +11,7 @@ plugins {
     id("jacoco")
 }
 
-version = "0.1.1"
+version = "0.1.2"
 group = "no.ssb.metadata.vardef"
 
 val kotlinVersion = project.properties["kotlinVersion"]
@@ -122,5 +122,52 @@ tasks.withType<JacocoReport> {
     dependsOn(tasks.withType<Test>())
     reports {
         xml.required = true
+    }
+}
+
+val versionFile = file("build.gradle.kts")
+
+fun bumpVersion(type: String) {
+    val versionRegex = """version\s*=\s*"(\d+)\.(\d+)\.(\d+)"""".toRegex()
+    val content = versionFile.readText()
+
+    val updatedContent =
+        versionRegex.replace(content) { matchResult ->
+            val (major, minor, patch) = matchResult.destructured
+            val newVersion =
+                when (type) {
+                    "major" -> "${major.toInt() + 1}.0.0"
+                    "minor" -> "$major.${minor.toInt() + 1}.0"
+                    "patch" -> "$major.$minor.${patch.toInt() + 1}"
+                    else -> throw IllegalArgumentException("Invalid version type: $type")
+                }
+            """version = "$newVersion""""
+        }
+
+    versionFile.writeText(updatedContent)
+    println("Successfully updated version")
+}
+
+tasks.register("versionMajor") {
+    group = "versioning"
+    description = "Bump the major version"
+    doLast {
+        bumpVersion("major")
+    }
+}
+
+tasks.register("versionMinor") {
+    group = "versioning"
+    description = "Bump the minor version"
+    doLast {
+        bumpVersion("minor")
+    }
+}
+
+tasks.register("versionPatch") {
+    group = "versioning"
+    description = "Bump the patch version"
+    doLast {
+        bumpVersion("patch")
     }
 }

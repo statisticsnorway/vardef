@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.NUM_ALL_VARIABLE_DEFINITIONS
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers
@@ -37,13 +38,13 @@ class ReadTests : BaseVardefTest() {
         // No definitions are valid on this date
         "1800-01-01, 0",
         // Specific definitions are valid on these dates
-        "2021-01-01, 6",
+        "2021-01-01, $NUM_ALL_VARIABLE_DEFINITIONS",
         "2020-01-01, 2",
-        "2024-06-05, 6",
+        "2024-06-05, $NUM_ALL_VARIABLE_DEFINITIONS",
         // Definitions without a validUntil date defined
-        "3000-12-31, 4",
+        "3000-12-31, 7",
         // All definitions
-        "null, 6",
+        "null, $NUM_ALL_VARIABLE_DEFINITIONS",
     )
     fun `filter variable definitions by date`(
         dateOfValidity: String,

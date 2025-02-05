@@ -313,4 +313,53 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(httpStatus)
     }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchInvalidMandatoryFields")
+    fun `attempt to create new patch with mandatory fields`(
+        input: String,
+        errorMessage: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    true,
+                    null,
+                    errorMessage = errorMessage,
+                ),
+            )
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchValidMandatoryFields")
+    fun `create valid patch with mandatory fields`(
+        input: String,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(input)
+                .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
+                .then()
+                .statusCode(HttpStatus.CREATED.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.patchId).isEqualTo(2)
+    }
 }

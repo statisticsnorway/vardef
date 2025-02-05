@@ -62,25 +62,15 @@ class CreateTests : BaseVardefTest() {
                     put("short_name", "landbak_copy")
                 }.toString()
 
-        val definitionId =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(201)
-                .body("contact", nullValue())
-                .extract()
-                .body()
-                .path<String>("id")
-
-        val createdVariableDefinition = patches.latest(definitionId)
-
-        assertThat(createdVariableDefinition.contact).isNull()
-        assertThat(createdVariableDefinition.shortName).isEqualTo("landbak_copy")
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 
     @Test
@@ -331,6 +321,24 @@ class CreateTests : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#validUntilInCreateDraft")
     fun `create variable definition valid until in request`(
+        input: String,
+        httpStatus: HttpStatus,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(httpStatus.code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#createDraftMandatoryFields")
+    fun `create variable definition missing mandatory fields`(
         input: String,
         httpStatus: HttpStatus,
         spec: RequestSpecification,

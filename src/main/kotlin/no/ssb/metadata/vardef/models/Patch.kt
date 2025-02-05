@@ -6,8 +6,10 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotEmpty
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
+import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.constants.*
 import java.net.URL
 import java.time.LocalDate
@@ -24,9 +26,11 @@ import java.time.LocalDateTime
 data class Patch(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
+    @NotEmptyLanguageStringType
     val name: LanguageStringType?,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     @Nullable
+    @NotEmptyLanguageStringType
     val definition: LanguageStringType?,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
@@ -36,12 +40,14 @@ data class Patch(
     @Nullable
     val unitTypes: List<
             @KlassCode(UNIT_TYPES_KLASS_CODE)
+            @NotEmpty
             String,
             >?,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
     val subjectFields: List<
             @KlassCode(SUBJECT_FIELDS_KLASS_CODE)
+            @NotEmpty
             String,
             >?,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)

@@ -30,7 +30,7 @@ spec:
         # Allow egress to auth
         - host: auth.ssb.no
         # Allow egress to mongodb
-        - host: metadata-prod-shard-00-01.9txq8.mongodb.net:2
+        - host: metadata-prod-shard-00-01.9txq8.mongodb.net
           ports:
             - port: 27016
             - port: 27017

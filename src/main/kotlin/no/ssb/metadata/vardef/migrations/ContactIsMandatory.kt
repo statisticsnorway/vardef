@@ -19,40 +19,44 @@ class ContactIsMandatory {
 
     @Execution
     fun execution(mongoDatabase: MongoDatabase) {
-
         // Step 1:  filter where contact is null and create a new document
-        val updateContact = Mono.from(
-            mongoDatabase.getCollection("SavedVariableDefinition")
-                .updateMany(
-                    eq("contact", null),
-                    set("contact", Document())
-                )
-        )
+        val updateContact =
+            Mono.from(
+                mongoDatabase.getCollection("SavedVariableDefinition")
+                    .updateMany(
+                        eq("contact", null),
+                        set("contact", Document()),
+                    ),
+            )
 
         // Step 2: filter title is null and create new document
-        val updateTitle = Mono.from(
-            mongoDatabase.getCollection("SavedVariableDefinition")
-                .updateMany(
-                    eq("contact.title", null),
-                    set("contact.title", Document())
-                )
-        )
+        val updateTitle =
+            Mono.from(
+                mongoDatabase.getCollection("SavedVariableDefinition")
+                    .updateMany(
+                        eq("contact.title", null),
+                        set("contact.title", Document()),
+                    ),
+            )
 
         // Step 3: set value to title and email
-        val updateFields = Mono.from(
-            mongoDatabase.getCollection("SavedVariableDefinition")
-                .updateMany(
-                    and(
-                        exists("contact", true),
-                        or(eq("contact.title", null),
-                            eq("contact.email", null))
+        val updateFields =
+            Mono.from(
+                mongoDatabase.getCollection("SavedVariableDefinition")
+                    .updateMany(
+                        and(
+                            exists("contact", true),
+                            or(
+                                eq("contact.title", null),
+                                eq("contact.email", null),
+                            ),
+                        ),
+                        combine(
+                            set("contact.title.nb", GENERATED_CONTACT_KEYWORD),
+                            set("contact.email", "${GENERATED_CONTACT_KEYWORD}@email.com"),
+                        ),
                     ),
-                    combine(
-                        set("contact.title.nb", GENERATED_CONTACT_KEYWORD),
-                        set("contact.email", "${GENERATED_CONTACT_KEYWORD}@email.com")
-                    )
-                )
-        )
+            )
 
         // All three updates
         updateContact

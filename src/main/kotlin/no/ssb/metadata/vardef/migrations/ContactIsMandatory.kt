@@ -48,14 +48,20 @@ class ContactIsMandatory {
                             exists("contact", true),
                             or(
                                 and(
-                                    or(eq("contact.title.en", null),
-                                        eq("contact.title.en", "")),
-                                    or(eq("contact.title.nb", null),
-                                        eq("contact.title.nb", "")),
-                                    or(eq("contact.title.nn", null),
-                                        eq("contact.title.nn", ""))
+                                    or(
+                                        eq("contact.title.en", null),
+                                        eq("contact.title.en", ""),
+                                    ),
+                                    or(
+                                        eq("contact.title.nb", null),
+                                        eq("contact.title.nb", ""),
+                                    ),
+                                    or(
+                                        eq("contact.title.nn", null),
+                                        eq("contact.title.nn", ""),
+                                    ),
                                 ),
-                                eq("contact.email", null)
+                                eq("contact.email", null),
                             ),
                         ),
                         combine(

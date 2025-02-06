@@ -13,7 +13,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 
-@ChangeUnit(id = "set-default-value-to-null-contact", order = "002", author = "cbi")
+@ChangeUnit(id = "set-default-value-contact", order = "002", author = "cbi")
 class ContactIsMandatory {
     private val logger: Logger = LoggerFactory.getLogger(ContactIsMandatory::class.java)
 
@@ -39,7 +39,7 @@ class ContactIsMandatory {
                     ),
             )
 
-        // Step 3: set value to title and email
+        // Step 3: set value to title (if all languages are either empty or null) and email
         val updateFields =
             Mono.from(
                 mongoDatabase.getCollection("SavedVariableDefinition")

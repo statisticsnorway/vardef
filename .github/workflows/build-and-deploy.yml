@@ -16,6 +16,8 @@
 name: Image Build and Deploy
 
 on:
+  # Temporary manual trigger for testing
+  workflow_dispatch:
   release:
     types: [ published ]
   push:

@@ -95,10 +95,20 @@ jobs:
       - name: Build and push Docker image
         run: >
           ./gradlew
+          cyclonedxBom
           jib
           --image=${{ env.DOCKER_IMAGE }}
           --daemon --parallel --build-cache
-          
+
+      - name: "Attest and sign"
+        uses: 'nais/attest-sign@v1.3.4'
+        with:
+          image_ref: ${{ env.DOCKER_IMAGE }}
+          # This SBOM includes all JVM dependencies (generated with cyclonedxBom) but does
+          # not include other software installed in the image (e.g. OS libraries, tools).
+          # A future improvement could be to generate this and merge the BOMs
+          sbom: build/reports/bom.json
+
   deploy:
     name: Deploy to NAIS
     needs: docker-build
@@ -109,4 +119,3 @@ jobs:
       nais-config-path:  ${{ needs.docker-build.outputs.nais-config-path }}
     secrets:
       registry-project: ${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}
-

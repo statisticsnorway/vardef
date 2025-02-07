@@ -18,6 +18,7 @@ on:
     secrets:
       registry-project:
         description: Artifact Registry project
+        required: true
 
 jobs:
   deploy:

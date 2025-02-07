@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.jib)
 
+    id("org.cyclonedx.bom") version "2.1.0"
     id("jacoco")
 }
 

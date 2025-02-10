@@ -269,7 +269,7 @@ class UpdateTests : BaseVardefTest() {
             .statusCode(200)
             .body("comment.nb", containsString("Legger til merknad"))
             .body("comment.nn", containsString("Endrer merknad"))
-            .body("comment.en", nullValue())
+            .body("comment.en", containsString("Adding comment"))
     }
 
     @Test
@@ -366,7 +366,7 @@ class UpdateTests : BaseVardefTest() {
                 comment =
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.comment?.copy(
                         nb = "Update",
-                        en = null,
+                        en = "Adding comment",
                         nn = "Updated comment",
                     ),
             )

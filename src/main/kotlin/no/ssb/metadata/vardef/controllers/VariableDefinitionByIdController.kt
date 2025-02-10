@@ -251,10 +251,10 @@ class VariableDefinitionByIdController(
                 HttpStatus.BAD_REQUEST,
                 "Invalid date order",
             )
-            !vardef.allLanguagesPresentForExternalPublication(updateDraft.variableStatus, updateDraft.definition, existingVariable) ->
+            !vardef.allLanguagesPresentForExternalPublication(updateDraft, existingVariable) ->
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
-                    "The variable must be defined in all languages before external publication.",
+                    "The variable must have translations for all languages for name, definition, comment before external publication.",
                 )
         }
         return vardef

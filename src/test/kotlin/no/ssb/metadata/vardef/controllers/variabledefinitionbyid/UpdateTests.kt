@@ -4,9 +4,7 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
-import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -493,7 +491,8 @@ class UpdateTests : BaseVardefTest() {
         spec
             .given()
             .contentType(ContentType.JSON)
-            .body(input).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .body(input)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
@@ -521,6 +520,76 @@ class UpdateTests : BaseVardefTest() {
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
         assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
+    }
+
+    @Test
+    fun `publish variable externally with missing languages`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                jsonMapper.writeValueAsString(UpdateDraft(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
+            .then()
+            .statusCode(HttpStatus.CONFLICT.code)
+    }
+
+    @Test
+    fun `publish variable externally with all languages`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                jsonMapper.writeValueAsString(
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                ),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+    }
+
+    @Test
+    fun `publish variable externally while filling out all languages`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                jsonMapper.writeValueAsString(
+                    UpdateDraft(
+                        definition = LanguageStringType(nb = "something", nn = "something", "something"),
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                ),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+    }
+
+    @Test
+    fun `publish variable externally while removing a language`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                jsonMapper.writeValueAsString(
+                    UpdateDraft(
+                        definition = LanguageStringType(nb = null, nn = "something", "something"),
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                ),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.CONFLICT.code)
     }
 
     @ParameterizedTest

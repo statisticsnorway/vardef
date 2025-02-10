@@ -3,12 +3,18 @@ package no.ssb.metadata.vardef.integrations.vardok
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Requires
+import io.micronaut.http.client.exceptions.HttpClientResponseException
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
+import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokStatisticalUnitToUnitTypes
+import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -86,5 +92,13 @@ class VardokClientTest {
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage("2216")
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.unitTypes).isEqualTo(listOf("01", "04", "05"))
+    }
+
+    @Test
+    fun `Vardok not found`() {
+        assertThatThrownBy {
+            vardokApiService.fetchMultipleVardokItemsByLanguage("21")
+        }.isInstanceOf(VardokNotFoundException::class.java)
+            .hasMessageContaining("Vardok id 21 not found")
     }
 }

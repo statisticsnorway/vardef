@@ -75,9 +75,9 @@ data class SavedVariableDefinition(
         RenderedVariableDefinition(
             id = definitionId,
             patchId = patchId,
-            name = name.getValidLanguage(language),
+            name = name.getValue(language),
             shortName = shortName,
-            definition = definition.getValidLanguage(language),
+            definition = definition.getValue(language),
             classificationUri = classificationReference?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
             unitTypes = unitTypes.map { klassService.renderCode(UNIT_TYPES_KLASS_CODE, it, language) },
             subjectFields = subjectFields.map { klassService.renderCode(SUBJECT_FIELDS_KLASS_CODE, it, language) },
@@ -86,9 +86,9 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            comment = comment?.getValidLanguage(language),
+            comment = comment?.getValue(language),
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
-            contact = contact.title.getValidLanguage(language)?.let { RenderedContact(it, contact.email) },
+            contact = contact.title.getValue(language)?.let { RenderedContact(it, contact.email) },
             lastUpdatedAt = lastUpdatedAt,
         )
 

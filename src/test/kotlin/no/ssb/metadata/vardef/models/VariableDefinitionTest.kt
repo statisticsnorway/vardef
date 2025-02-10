@@ -68,7 +68,7 @@ class VariableDefinitionTest {
         languageCode: SupportedLanguages,
         expectedName: String,
     ) {
-        val result = variableDefinition.name.getValidLanguage(languageCode)
+        val result = variableDefinition.name.getValue(languageCode)
         assertThat(result).isEqualTo(expectedName)
     }
 
@@ -82,7 +82,7 @@ class VariableDefinitionTest {
         languageCode: SupportedLanguages,
         expectedDefinition: String,
     ) {
-        val result = variableDefinition.definition.getValidLanguage(languageCode)
+        val result = variableDefinition.definition.getValue(languageCode)
         assertThat(result).isEqualTo(expectedDefinition)
     }
 

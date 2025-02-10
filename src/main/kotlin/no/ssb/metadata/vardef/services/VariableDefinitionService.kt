@@ -297,7 +297,7 @@ class VariableDefinitionService(
 
             val titleContainsIllegalKeyword =
                 SupportedLanguages.entries.any { language ->
-                    val languageValue = currentContact.title.getValidLanguage(language)?.trim()
+                    val languageValue = currentContact.title.getValue(language)?.trim()
                     logger.info("contact title $languageValue contains illegal values")
                     languageValue?.contains(GENERATED_CONTACT_KEYWORD) == true
                 }
@@ -313,4 +313,15 @@ class VariableDefinitionService(
     }
 
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
+
+    fun allLanguagesPresentForExternalPublication(
+        newVariableStatus: VariableStatus?,
+        newDefinition: LanguageStringType?,
+        existingVariable: SavedVariableDefinition,
+    ): Boolean =
+        newVariableStatus != VariableStatus.PUBLISHED_EXTERNAL ||
+            (
+                existingVariable.definition.allLanguagesPresent() &&
+                    (newDefinition == null || newDefinition.allLanguagesPresent())
+            )
 }

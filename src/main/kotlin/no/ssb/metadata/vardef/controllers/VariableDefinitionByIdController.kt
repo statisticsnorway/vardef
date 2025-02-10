@@ -217,44 +217,48 @@ class VariableDefinitionByIdController(
         updateDraft: UpdateDraft,
         authentication: Authentication,
     ): CompleteResponse {
-        val variable = patches.latest(definitionId)
+        val existingVariable = patches.latest(definitionId)
 
         when {
-            vardef.isIllegalShortNameForPublishing(variable, updateDraft) -> {
-                throw HttpStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "The short name ${variable.shortName} is illegal and must be changed before it is published",
-                )
-            }
-
-            vardef.isIllegalContactForPublishing(variable, updateDraft) -> {
-                throw HttpStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "The contact ${variable.contact} is illegal and must be changed before it is published",
-                )
-            }
-
-            variable.variableStatus.isPublished() -> throw HttpStatusException(
+            existingVariable.variableStatus.isPublished() -> throw HttpStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "The variable is published and cannot be updated with this method",
             )
+            vardef.isIllegalShortNameForPublishing(existingVariable, updateDraft) -> {
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The short name ${existingVariable.shortName} is illegal and must be changed before it is published",
+                )
+            }
+
+            vardef.isIllegalContactForPublishing(existingVariable, updateDraft) -> {
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The contact ${existingVariable.contact} is illegal and must be changed before it is published",
+                )
+            }
 
             (
                 updateDraft.shortName != null &&
-                    updateDraft.shortName != variable.shortName &&
+                    updateDraft.shortName != existingVariable.shortName &&
                     vardef.doesShortNameExist(updateDraft.shortName)
             ) ->
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
                 )
-            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, variable) -> throw HttpStatusException(
+            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, existingVariable) -> throw HttpStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Invalid date order",
             )
+            !vardef.allLanguagesPresentForExternalPublication(updateDraft.variableStatus, updateDraft.definition, existingVariable) ->
+                throw HttpStatusException(
+                    HttpStatus.CONFLICT,
+                    "The variable must be defined in all languages before external publication.",
+                )
         }
         return vardef
-            .update(variable, updateDraft, authentication.name)
+            .update(existingVariable, updateDraft, authentication.name)
             .toCompleteResponse()
     }
 }

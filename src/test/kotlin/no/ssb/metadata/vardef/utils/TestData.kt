@@ -302,7 +302,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         definition =
             LanguageStringType(
                 nb = "Dødvekt er den største vekt skipet kan bære av last og beholdninger.",
-                nn = null,
+                nn = "Dødvekt er den største vekta skipet kan bera av last og behaldningar.",
                 en = "Dead weight",
             ),
         classificationReference = "91",

@@ -87,7 +87,7 @@ class PublicControllerTest : BaseVardefTest() {
             .then()
             .statusCode(200)
             .body("[0].id", notNullValue())
-            .body("find { it.short_name == 'intskatt' }.name", equalTo(INCOME_TAX_VP2_P6.name.getValidLanguage(language)))
+            .body("find { it.short_name == 'intskatt' }.name", equalTo(INCOME_TAX_VP2_P6.name.getValue(language)))
             .header("Content-Language", language.toString())
     }
 

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.http.server.exceptions.HttpServerException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
@@ -46,10 +45,7 @@ open class VardokApiService(
             return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
             logger.warn("Error while fetching vardok by id and language", e)
-            if(e is HttpClientResponseException && e.response.status == HttpStatus.INTERNAL_SERVER_ERROR) {
-                throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
-            }
-            throw e
+            throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
         }
     }
 

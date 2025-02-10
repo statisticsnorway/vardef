@@ -17,12 +17,24 @@ data class LanguageStringType(
     val nn: String?,
     val en: String?,
 ) {
-    fun getValidLanguage(language: SupportedLanguages): String? =
+    fun getValue(language: SupportedLanguages): String? =
         when (language) {
             SupportedLanguages.NB -> nb
             SupportedLanguages.NN -> nn
             SupportedLanguages.EN -> en
         }
+
+    fun oneOrMoreLanguagesPresent(): Boolean =
+        SupportedLanguages.entries.any {
+            this.isLanguagePresent(it)
+        }
+
+    fun allLanguagesPresent(): Boolean =
+        SupportedLanguages.entries.all {
+            this.isLanguagePresent(it)
+        }
+
+    fun isLanguagePresent(language: SupportedLanguages): Boolean = this.getValue(language).let { !it?.trim().isNullOrEmpty() }
 
     /**
      * Returns a list of languages currently present in the object,
@@ -33,13 +45,7 @@ data class LanguageStringType(
      *
      * @return A list of language codes representing the present languages.
      */
-    fun listPresentLanguages(): List<SupportedLanguages> {
-        val presentLanguages = mutableListOf<SupportedLanguages>()
-        if (nb != null) presentLanguages.add(SupportedLanguages.NB)
-        if (nn != null) presentLanguages.add(SupportedLanguages.NN)
-        if (en != null) presentLanguages.add(SupportedLanguages.EN)
-        return presentLanguages
-    }
+    fun listPresentLanguages(): List<SupportedLanguages> = SupportedLanguages.entries.filter { this.isLanguagePresent(it) }
 
     fun update(updated: LanguageStringType): LanguageStringType =
         this.copy(
@@ -81,7 +87,7 @@ data class Owner(
     val groups: List<
         @NotEmpty @DaplaGroup
         String,
-        >,
+    >,
 )
 
 @Schema(example = RENDERED_CONTACT_EXAMPLE)

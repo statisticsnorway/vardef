@@ -301,17 +301,17 @@ class ValidityPeriodsService(
         newPeriod: ValidityPeriod,
     ): Boolean {
         val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        val allLanguagesPresent =
+        val newPeriodHasNoFewerLanguagesThanPrevious =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
                 newPeriod.definition.listPresentLanguages().contains(lang)
             }
-        if (!allLanguagesPresent) {
+        if (!newPeriodHasNoFewerLanguagesThanPrevious) {
             return false
         }
         val allDefinitionsChanged =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                val oldValue = lastValidityPeriod.definition.getValidLanguage(lang)
-                val newValue = newPeriod.definition.getValidLanguage(lang)
+                val oldValue = lastValidityPeriod.definition.getValue(lang)
+                val newValue = newPeriod.definition.getValue(lang)
                 val changed = !oldValue.equals(newValue, ignoreCase = true)
                 if (!changed) {
                     logger.warn(

@@ -359,7 +359,7 @@ class UpdateTests : BaseVardefTest() {
                 definition =
                     SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definition.copy(
                         en = "Update",
-                        nn = null,
+                        nn = "Dødvekt er den største vekta skipet kan bera av last og behaldningar.",
                         nb = "Dødvekt er den største vekt skipet kan bære av last og beholdninger.",
                     ),
                 comment =

@@ -8,7 +8,6 @@ import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.LanguageStringType
-import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 
@@ -20,9 +19,9 @@ class VardefValidationFactory {
     @Singleton
     fun draftDateOrderValidator(): ConstraintValidator<ValidDateOrder, Draft> =
         ConstraintValidator {
-                value,
-                _,
-                _,
+            value,
+            _,
+            _,
             ->
             value == null || variableDefinitionService.isCorrectDateOrder(value.validFrom, value.validUntil)
         }
@@ -30,9 +29,9 @@ class VardefValidationFactory {
     @Singleton
     fun updateDraftDateOrderValidator(): ConstraintValidator<ValidDateOrder, UpdateDraft> =
         ConstraintValidator {
-                value,
-                _,
-                _,
+            value,
+            _,
+            _,
             ->
             value == null || variableDefinitionService.isCorrectDateOrder(value.validFrom, value.validUntil)
         }
@@ -40,14 +39,11 @@ class VardefValidationFactory {
     @Singleton
     fun notEmptyLanguageStringType(): ConstraintValidator<NotEmptyLanguageStringType, LanguageStringType> =
         ConstraintValidator {
-                value,
-                _,
-                _,
+            value,
+            _,
+            _,
             ->
             value == null ||
-                SupportedLanguages.entries.any { language ->
-                    val languageValue = value.getValidLanguage(language)?.trim()
-                    !languageValue.isNullOrEmpty()
-                }
+                value.oneOrMoreLanguagesPresent()
         }
 }

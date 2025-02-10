@@ -252,4 +252,15 @@ class VariableDefinitionService(
             )
 
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
+
+    fun allLanguagesPresentForExternalPublication(
+        newVariableStatus: VariableStatus?,
+        newDefinition: LanguageStringType?,
+        existingVariable: SavedVariableDefinition,
+    ): Boolean =
+        newVariableStatus != VariableStatus.PUBLISHED_EXTERNAL ||
+            (
+                existingVariable.definition.allLanguagesPresent() &&
+                    (newDefinition == null || newDefinition.allLanguagesPresent())
+            )
 }

@@ -2,12 +2,29 @@ package no.ssb.metadata.vardef.models
 
 import io.micronaut.serde.annotation.Serdeable
 
+/**
+ * Language string type
+ *
+ * Represents one text, with translations for the languages in [SupportedLanguages]. All fields
+ * are nullable to allow for flexibility for maintainers.
+ *
+ * @property nb Norwegian Bokmål
+ * @property nn Norwegian Nynorsk
+ * @property en English
+ * @constructor Create empty Language string type
+ */
 @Serdeable
 data class LanguageStringType(
     val nb: String?,
     val nn: String?,
     val en: String?,
 ) {
+    /**
+     * Get value for language
+     *
+     * @param language the desired language
+     * @return the value for the desired language
+     */
     fun getValue(language: SupportedLanguages): String? =
         when (language) {
             SupportedLanguages.NB -> nb
@@ -15,33 +32,44 @@ data class LanguageStringType(
             SupportedLanguages.EN -> en
         }
 
+    /**
+     * Are one or more languages present?
+     */
     fun oneOrMoreLanguagesPresent(): Boolean =
         SupportedLanguages.entries.any {
             this.isLanguagePresent(it)
         }
 
+    /**
+     * Are all languages present?
+     */
     fun allLanguagesPresent(): Boolean =
         SupportedLanguages.entries.all {
             this.isLanguagePresent(it)
         }
 
+    /**
+     * Is the given language present?
+     */
     fun isLanguagePresent(language: SupportedLanguages): Boolean = this.getValue(language).let { !it?.trim().isNullOrEmpty() }
 
     /**
-     * Returns a list of languages currently present in the object,
-     * based on non-null *LanguageStringType* fields.
-     *
-     * This function checks each language field (e.g., "nb", "nn", "en")
-     * and adds the corresponding language code to the list if the field is not null.
-     *
-     * @return A list of language codes representing the present languages.
+     * List present languages
      */
     fun listPresentLanguages(): List<SupportedLanguages> = SupportedLanguages.entries.filter { this.isLanguagePresent(it) }
 
-    fun update(updated: LanguageStringType): LanguageStringType =
+    /**
+     * Update
+     *
+     * Merge with an update object, preferring non-null values
+     *
+     * @param updates the updates
+     * @return the merged object
+     */
+    fun update(updates: LanguageStringType): LanguageStringType =
         this.copy(
-            nb = updated.nb ?: nb,
-            nn = updated.nn ?: nn,
-            en = updated.en ?: en,
+            nb = updates.nb ?: nb,
+            nn = updates.nn ?: nn,
+            en = updates.en ?: en,
         )
 }

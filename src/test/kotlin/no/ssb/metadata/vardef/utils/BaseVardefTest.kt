@@ -51,5 +51,6 @@ open class BaseVardefTest {
         variableDefinitionRepository.save(SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME)
         variableDefinitionRepository.save(SAVED_TO_PUBLISH)
         variableDefinitionRepository.save(PATCH_MANDATORY_FIELDS)
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_ILLEGAL_CONTACT)
     }
 }

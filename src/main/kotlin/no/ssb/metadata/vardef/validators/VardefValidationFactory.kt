@@ -19,9 +19,9 @@ class VardefValidationFactory {
     @Singleton
     fun draftDateOrderValidator(): ConstraintValidator<ValidDateOrder, Draft> =
         ConstraintValidator {
-            value,
-            _,
-            _,
+                value,
+                _,
+                _,
             ->
             value == null || variableDefinitionService.isCorrectDateOrder(value.validFrom, value.validUntil)
         }
@@ -29,9 +29,9 @@ class VardefValidationFactory {
     @Singleton
     fun updateDraftDateOrderValidator(): ConstraintValidator<ValidDateOrder, UpdateDraft> =
         ConstraintValidator {
-            value,
-            _,
-            _,
+                value,
+                _,
+                _,
             ->
             value == null || variableDefinitionService.isCorrectDateOrder(value.validFrom, value.validUntil)
         }
@@ -39,9 +39,9 @@ class VardefValidationFactory {
     @Singleton
     fun notEmptyLanguageStringType(): ConstraintValidator<NotEmptyLanguageStringType, LanguageStringType> =
         ConstraintValidator {
-            value,
-            _,
-            _,
+                value,
+                _,
+                _,
             ->
             value == null ||
                 value.oneOrMoreLanguagesPresent()

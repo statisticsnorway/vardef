@@ -26,10 +26,10 @@ open class VardokApiService(
             val response = vardokClient.fetchVardokById(id)
             return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
-            if(e is HttpClientResponseException && e.response.status == HttpStatus.INTERNAL_SERVER_ERROR) {
-                    logger.warn("$id is not found. Exception message: ${e.message}")
-                    throw VardokNotFoundException(id)
-                }
+            if (e is HttpClientResponseException && e.response.status == HttpStatus.INTERNAL_SERVER_ERROR) {
+                logger.warn("$id is not found. Exception message: ${e.message}")
+                throw VardokNotFoundException(id)
+            }
             logger.warn("Unexpected exception for $id. Exception message: ${e.message}")
             throw e
         }

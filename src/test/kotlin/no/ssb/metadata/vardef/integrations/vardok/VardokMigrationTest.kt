@@ -194,7 +194,6 @@ class VardokMigrationTest {
         assertThat(vardokTransform.validFrom).isEqualTo("1003-90-81")
     }
 
-
     @ParameterizedTest
     @MethodSource("mapUnitTypes")
     fun `test unit types special cases`(

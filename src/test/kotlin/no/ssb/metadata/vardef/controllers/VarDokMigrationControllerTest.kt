@@ -127,7 +127,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Cannot construct instance of " +
+                    errorMessage =
+                        "Cannot construct instance of " +
                             "`no.ssb.metadata.vardef.integrations.vardok.models.Variable`",
                 ),
             )
@@ -148,14 +149,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Failed to convert argument [draft] for value [null] due to: " +
+                    errorMessage =
+                        "Failed to convert argument [draft] for value [null] due to: " +
                             "Error deserializing type: Draft draft",
                 ),
             )
     }
-
-
-
 
     @ParameterizedTest
     @ValueSource(ints = [100, 101])

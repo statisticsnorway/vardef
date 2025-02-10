@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
@@ -91,6 +92,71 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 ),
             )
     }
+
+    @Test
+    fun `Vardok exception invalid characters`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/vardok-migration/0001")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Unexpected character ')'",
+                ),
+            )
+    }
+
+    @Test
+    fun `Vardok exception missing fields`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/vardok-migration/0002")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Cannot construct instance of " +
+                            "`no.ssb.metadata.vardef.integrations.vardok.models.Variable`",
+                ),
+            )
+    }
+
+    @Test
+    fun `Vardok exception invalid valid from`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/vardok-migration/0003")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    false,
+                    null,
+                    errorMessage = "Failed to convert argument [draft] for value [null] due to: " +
+                            "Error deserializing type: Draft draft",
+                ),
+            )
+    }
+
+
+
 
     @ParameterizedTest
     @ValueSource(ints = [100, 101])

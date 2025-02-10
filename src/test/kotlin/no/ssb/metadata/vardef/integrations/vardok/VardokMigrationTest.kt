@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import com.fasterxml.jackson.databind.JsonMappingException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
@@ -169,6 +170,30 @@ class VardokMigrationTest {
         }.isInstanceOf(OutdatedUnitTypesException::class.java)
             .hasMessageContaining("Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved")
     }
+
+    @Test
+    fun `Vardokresponse exception invalid characters`() {
+        assertThatThrownBy {
+            vardokService.getVardokItem("0001")
+        }.isInstanceOf(JsonMappingException::class.java)
+            .hasMessageContaining("Unexpected character")
+    }
+
+    @Test
+    fun `Vardokresponse exception missing fields`() {
+        assertThatThrownBy {
+            vardokService.getVardokItem("0002")
+        }.isInstanceOf(JsonMappingException::class.java)
+            .hasMessageContaining("Cannot construct instance of `no.ssb.metadata.vardef.integrations.vardok.models.Variable`")
+    }
+
+    @Test
+    fun `Vardokresponse valid from is not valid date`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("0003")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.validFrom).isEqualTo("1003-90-81")
+    }
+
 
     @ParameterizedTest
     @MethodSource("mapUnitTypes")

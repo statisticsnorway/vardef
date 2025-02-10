@@ -571,7 +571,7 @@ class UpdateTests : BaseVardefTest() {
             .`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
-            .statusCode(HttpStatus.OK.code)
+            .statusCode(HttpStatus.CONFLICT.code)
     }
 
     @Test
@@ -624,11 +624,11 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                JSONObject().apply {
-                    put("variable_status", "PUBLISHED_INTERNAL")
-                }.toString(),
-            )
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                JSONObject()
+                    .apply {
+                        put("variable_status", "PUBLISHED_INTERNAL")
+                    }.toString(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME.definitionId}")
             .then()
@@ -641,11 +641,11 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                JSONObject().apply {
-                    put("variable_status", "PUBLISHED_INTERNAL")
-                }.toString(),
-            )
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                JSONObject()
+                    .apply {
+                        put("variable_status", "PUBLISHED_INTERNAL")
+                    }.toString(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
             .then()
@@ -658,11 +658,11 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                JSONObject().apply {
-                    put("variable_status", "PUBLISHED_INTERNAL")
-                }.toString(),
-            )
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                JSONObject()
+                    .apply {
+                        put("variable_status", "PUBLISHED_INTERNAL")
+                    }.toString(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${SAVED_TO_PUBLISH_ILLEGAL_CONTACT.definitionId}")
             .then()
@@ -676,11 +676,11 @@ class UpdateTests : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(
-                    JSONObject().apply {
-                        put("contains_special_categories_of_personal_data", "")
-                    }.toString(),
-                )
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                    JSONObject()
+                        .apply {
+                            put("contains_special_categories_of_personal_data", "")
+                        }.toString(),
+                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
                 .then()

@@ -297,7 +297,7 @@ class VariableDefinitionService(
 
             val titleContainsIllegalKeyword =
                 SupportedLanguages.entries.any { language ->
-                    val languageValue = currentContact.title.getValidLanguage(language)?.trim()
+                    val languageValue = currentContact.title.getValue(language)?.trim()
                     logger.info("contact title $languageValue contains illegal values")
                     languageValue?.contains(GENERATED_CONTACT_KEYWORD) == true
                 }

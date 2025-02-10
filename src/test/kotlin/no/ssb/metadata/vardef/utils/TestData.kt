@@ -317,8 +317,8 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         comment =
             LanguageStringType(
                 "Legger til merknad",
-                null,
-                null,
+                "Legger til merknad",
+                "Adding comment",
             ),
         relatedVariableDefinitionUris = listOf(),
         owner =

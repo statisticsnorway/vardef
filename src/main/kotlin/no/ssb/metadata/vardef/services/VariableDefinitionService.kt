@@ -273,7 +273,7 @@ class VariableDefinitionService(
     ): Boolean {
         if (updateDraft.variableStatus?.isPublished() == true) {
             val currentShortName = updateDraft.shortName ?: savedDraft.shortName
-            logger.info("Checking if shortName $currentShortName contains illegal shortName")
+            logger.debug("Checking if shortName $currentShortName contains illegal shortName")
             return currentShortName.contains(ILLEGAL_SHORTNAME_KEYWORD)
         }
         return false
@@ -293,18 +293,20 @@ class VariableDefinitionService(
     ): Boolean {
         if (updateDraft.variableStatus?.isPublished() == true) {
             val currentContact = updateDraft.contact ?: savedDraft.contact
-            logger.info("Checking if contact $currentContact contains illegal values")
+            logger.debug("Checking if contact {} contains illegal values", currentContact)
 
             val titleContainsIllegalKeyword =
-                SupportedLanguages.entries.any { language ->
-                    val languageValue = currentContact.title.getValue(language)?.trim()
-                    logger.info("contact title $languageValue contains illegal values")
-                    languageValue?.contains(GENERATED_CONTACT_KEYWORD) == true
-                }
+                SupportedLanguages.entries
+                    .any { language ->
+                        val languageValue = currentContact.title.getValue(language)?.trim()
+                        languageValue?.contains(GENERATED_CONTACT_KEYWORD) == true
+                    }.also {
+                        logger.debug("Does contact title contain illegal values: $it")
+                    }
 
             val emailContainsIllegalKeyword =
                 currentContact.email.contains(GENERATED_CONTACT_KEYWORD).also {
-                    logger.info("contact email ${currentContact.email} contains illegal values")
+                    logger.debug("Does contact email ${currentContact.email} contain illegal values: $it")
                 }
 
             return titleContainsIllegalKeyword || emailContainsIllegalKeyword
@@ -315,13 +317,16 @@ class VariableDefinitionService(
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
 
     fun allLanguagesPresentForExternalPublication(
-        newVariableStatus: VariableStatus?,
-        newDefinition: LanguageStringType?,
+        updates: UpdateDraft,
         existingVariable: SavedVariableDefinition,
     ): Boolean =
-        newVariableStatus != VariableStatus.PUBLISHED_EXTERNAL ||
-            (
-                existingVariable.definition.allLanguagesPresent() &&
-                    (newDefinition == null || newDefinition.allLanguagesPresent())
-            )
+        updates.variableStatus != VariableStatus.PUBLISHED_EXTERNAL ||
+            listOf(
+                existingVariable.name to updates.name,
+                existingVariable.definition to updates.definition,
+                existingVariable.comment to updates.comment,
+            ).all {
+                (it.first == null || it.first?.allLanguagesPresent() == true) &&
+                    (it.second == null || it.second?.allLanguagesPresent() == true)
+            }
 }

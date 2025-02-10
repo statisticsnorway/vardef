@@ -1,8 +1,7 @@
 package no.ssb.metadata.vardef.migrations
 
 import com.mongodb.client.model.Filters.*
-import com.mongodb.client.model.Updates.combine
-import com.mongodb.client.model.Updates.set
+import com.mongodb.client.model.Updates.*
 import com.mongodb.reactivestreams.client.MongoDatabase
 import io.mongock.api.annotations.ChangeUnit
 import io.mongock.api.annotations.Execution
@@ -70,7 +69,6 @@ class ContactIsMandatory {
                         ),
                     ),
             )
-
         // All three updates
         updateContact
             .then(updateTitle)
@@ -86,6 +84,29 @@ class ContactIsMandatory {
     }
 
     @RollbackExecution
-    fun rollback() {
+    fun rollback(mongoDatabase: MongoDatabase) {
+        val filter =
+            and(
+                exists("contact"),
+                eq("contact.title.nb", GENERATED_CONTACT_KEYWORD),
+            )
+
+        val updates =
+            combine(
+                unset("contact.title.nb"),
+                unset("contact.email"),
+            )
+
+        val updateResult =
+            mongoDatabase.getCollection("SavedVariableDefinition")
+                .updateMany(filter, updates)
+
+        Mono.from(updateResult).block().also { result ->
+            if (result != null) {
+                logger.info("Rollback executed: Removed ${result.modifiedCount} modified contact fields.")
+            } else {
+                logger.error("Rollback result was null!")
+            }
+        }
     }
 }

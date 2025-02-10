@@ -224,14 +224,17 @@ class VariableDefinitionByIdController(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "The variable is published and cannot be updated with this method",
             )
-            updateDraft.variableStatus?.isPublished() == true &&
-                (
-                    existingVariable.shortName.contains(ILLEGAL_SHORTNAME_KEYWORD) ||
-                        updateDraft.shortName?.contains(ILLEGAL_SHORTNAME_KEYWORD) == true
-                ) -> {
+            vardef.isIllegalShortNameForPublishing(existingVariable, updateDraft) -> {
                 throw HttpStatusException(
                     HttpStatus.BAD_REQUEST,
                     "The short name ${existingVariable.shortName} is illegal and must be changed before it is published",
+                )
+            }
+
+            vardef.isIllegalContactForPublishing(existingVariable, updateDraft) -> {
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The contact ${existingVariable.contact} is illegal and must be changed before it is published",
                 )
             }
 

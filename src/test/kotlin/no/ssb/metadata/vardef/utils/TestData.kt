@@ -457,7 +457,11 @@ val COMPLETE_RESPONSE =
                 team = TEST_TEAM,
                 groups = listOf(TEST_DEVELOPERS_GROUP),
             ),
-        contact = null,
+        contact =
+            Contact(
+                LanguageStringType("Avdeling for landstatistikk", null, null),
+                "landbal@ssb.no",
+            ),
         createdAt = LocalDateTime.now(),
         createdBy = TEST_USER,
         lastUpdatedAt = LocalDateTime.now(),
@@ -552,8 +556,40 @@ val SAVED_TO_PUBLISH =
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
             Contact(
-                LanguageStringType("", "", ""),
-                "",
+                LanguageStringType("Seksjon matavfall", "", ""),
+                "matafv@ssb.no",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val SAVED_TO_PUBLISH_ILLEGAL_CONTACT =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = null,
+                en = "Bus",
+            ),
+        shortName = "bus2",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("generert_tittel", null, null),
+                "generert@epost.com",
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
@@ -589,7 +625,7 @@ val PATCH_MANDATORY_FIELDS =
         owner = Owner("my-team", listOf("my-team-developers", "other-group", TEST_DEVELOPERS_GROUP)),
         contact =
             Contact(
-                LanguageStringType("", "", ""),
+                LanguageStringType("Avdeling", "", ""),
                 "me@example.com",
             ),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),

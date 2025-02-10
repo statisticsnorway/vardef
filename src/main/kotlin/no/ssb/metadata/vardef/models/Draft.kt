@@ -69,7 +69,7 @@ data class Draft(
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
-    val contact: Contact?,
+    val contact: Contact,
 ) {
     /**
      * Team name is a substring of group name

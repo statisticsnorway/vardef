@@ -52,7 +52,7 @@ data class CompleteResponse(
     @Schema(description = OWNER_DESCRIPTION)
     val owner: Owner,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
-    val contact: Contact?,
+    val contact: Contact,
     @Schema(description = CREATED_AT_FIELD_DESCRIPTION)
     var createdAt: LocalDateTime,
     @Schema(description = CREATED_BY_FIELD_DESCRIPTION)

@@ -31,6 +31,7 @@ data class ValidityPeriod(
     val name: LanguageStringType?,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     @NotNull
+    @NotEmptyLanguageStringType
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
@@ -58,6 +59,7 @@ data class ValidityPeriod(
     val externalReferenceUri: URL?,
     @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
+    @NotEmptyLanguageStringType
     val comment: LanguageStringType?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable

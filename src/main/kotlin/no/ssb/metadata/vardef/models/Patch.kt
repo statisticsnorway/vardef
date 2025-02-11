@@ -27,63 +27,63 @@ data class Patch(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
-    val name: LanguageStringType?,
+    val name: LanguageStringType? = null,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
-    val definition: LanguageStringType?,
+    val definition: LanguageStringType? = null,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @KlassId
-    val classificationReference: String?,
+    val classificationReference: String? = null,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @Nullable
     val unitTypes: List<
             @KlassCode(UNIT_TYPES_KLASS_CODE)
             @NotEmpty
             String,
-            >?,
+            >? = null,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
     val subjectFields: List<
             @KlassCode(SUBJECT_FIELDS_KLASS_CODE)
             @NotEmpty
             String,
-            >?,
+            >? = null,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
-    val containsSpecialCategoriesOfPersonalData: Boolean?,
+    val containsSpecialCategoriesOfPersonalData: Boolean? = null,
     @Schema(
         description = VARIABLE_STATUS_FIELD_DESCRIPTION,
         accessMode = Schema.AccessMode.READ_ONLY,
     )
     @Nullable
-    val variableStatus: VariableStatus?,
+    val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
-    val measurementType: String?,
+    val measurementType: String? = null,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable
     @Format(DATE_FORMAT)
-    val validUntil: LocalDate?,
+    val validUntil: LocalDate? = null,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
-    val externalReferenceUri: URL?,
+    val externalReferenceUri: URL? = null,
     @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
-    val comment: LanguageStringType?,
+    val comment: LanguageStringType? = null,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
-    val relatedVariableDefinitionUris: List<URL>?,
+    val relatedVariableDefinitionUris: List<URL>? = null,
     @Schema(description = OWNER_DESCRIPTION)
     @Nullable
     @Valid
-    val owner: Owner?,
+    val owner: Owner? = null,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
     @Nullable
-    val contact: Contact?,
+    val contact: Contact? = null,
 ) {
     fun toSavedVariableDefinition(
         highestPatchId: Int,

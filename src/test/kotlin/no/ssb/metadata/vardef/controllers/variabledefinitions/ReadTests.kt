@@ -38,7 +38,7 @@ class ReadTests : BaseVardefTest() {
         // No definitions are valid on this date
         "1800-01-01, 0",
         // Specific definitions are valid on these dates
-        "2021-01-01, $NUM_ALL_VARIABLE_DEFINITIONS",
+        "2021-01-01, 9",
         "2020-01-01, 2",
         "2024-06-05, $NUM_ALL_VARIABLE_DEFINITIONS",
         // Definitions without a validUntil date defined

@@ -320,100 +320,108 @@ class CompanionObject {
             Stream.of(
                 argumentSet(
                     "empty unit types list",
-                    JSONObject().apply {
-                        put("unit_types", listOf(null))
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("unit_types", listOf(null))
+                        }.toString(),
                     "must not be empty",
                 ),
                 argumentSet(
                     "blank values in unit types list",
-                    JSONObject().apply {
-                        put("unit_types", listOf(""))
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("unit_types", listOf(""))
+                        }.toString(),
                     "Code  is not a member of classification with id 702",
                 ),
                 argumentSet(
                     "blank values in subject fields list",
-                    JSONObject().apply {
-                        put("subject_fields", listOf("", " "))
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("subject_fields", listOf("", " "))
+                        }.toString(),
                     "Code  is not a member of classification with id 618",
                 ),
                 argumentSet(
                     "empty subject fields list",
-                    JSONObject().apply {
-                        put("subject_fields", listOf(null))
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("subject_fields", listOf(null))
+                        }.toString(),
                     "must not be empty",
                 ),
                 argumentSet(
                     "empty values all languages name",
-                    JSONObject().apply {
-                        put(
-                            "name",
-                            JSONObject().apply {
-                                put("nb", "")
-                                put("nn", "")
-                                put("en", " ")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "name",
+                                JSONObject().apply {
+                                    put("nb", "")
+                                    put("nn", "")
+                                    put("en", " ")
+                                },
+                            )
+                        }.toString(),
                     "Must have value for at least one language",
                 ),
                 argumentSet(
                     "imvalid contact",
-                    JSONObject().apply {
-                        put(
-                            "contact",
-                            JSONObject().apply {
-                                put(
-                                    "title",
-                                    JSONObject().apply {
-                                        put("nb", "")
-                                        put("nn", "")
-                                        put("en", "")
-                                    },
-                                )
-                                put("email", "")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "contact",
+                                JSONObject().apply {
+                                    put(
+                                        "title",
+                                        JSONObject().apply {
+                                            put("nb", "")
+                                            put("nn", "")
+                                            put("en", "")
+                                        },
+                                    )
+                                    put("email", "")
+                                },
+                            )
+                        }.toString(),
                     "Must have value for at least one language",
                 ),
                 argumentSet(
                     "contact invalid email",
-                    JSONObject().apply {
-                        put(
-                            "contact",
-                            JSONObject().apply {
-                                put(
-                                    "title",
-                                    JSONObject().apply {
-                                        put("nb", "Seksjon High end")
-                                    },
-                                )
-                                put("email", "chgjcgh")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "contact",
+                                JSONObject().apply {
+                                    put(
+                                        "title",
+                                        JSONObject().apply {
+                                            put("nb", "Seksjon High end")
+                                        },
+                                    )
+                                    put("email", "chgjcgh")
+                                },
+                            )
+                        }.toString(),
                     "must be a well-formed email address",
                 ),
                 argumentSet(
                     "contact missing email",
-                    JSONObject().apply {
-                        put(
-                            "contact",
-                            JSONObject().apply {
-                                put(
-                                    "title",
-                                    JSONObject().apply {
-                                        put("nb", "Seksjon High end")
-                                    },
-                                )
-                                put("email", "")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "contact",
+                                JSONObject().apply {
+                                    put(
+                                        "title",
+                                        JSONObject().apply {
+                                            put("nb", "Seksjon High end")
+                                        },
+                                    )
+                                    put("email", "")
+                                },
+                            )
+                        }.toString(),
                     "must be a well-formed email address",
                 ),
             )
@@ -423,49 +431,71 @@ class CompanionObject {
             Stream.of(
                 argumentSet(
                     "unit types list",
-                    JSONObject().apply {
-                        put("unit_types", listOf("05"))
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("unit_types", listOf("05"))
+                        }.toString(),
                 ),
                 argumentSet(
                     "subject fields list",
-                    JSONObject().apply {
-                        put("subject_fields", listOf("al04"))
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("subject_fields", listOf("al04"))
+                        }.toString(),
                 ),
                 argumentSet(
                     "contains special categories of personal data",
-                    JSONObject().apply {
-                        put("contains_special_categories_of_personal_data", true)
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("contains_special_categories_of_personal_data", true)
+                        }.toString(),
                 ),
                 argumentSet(
                     "name",
-                    JSONObject().apply {
-                        put(
-                            "name",
-                            JSONObject().apply {
-                                put("nn", "bussar")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "name",
+                                JSONObject().apply {
+                                    put("nn", "bussar")
+                                },
+                            )
+                        }.toString(),
                 ),
                 argumentSet(
                     "contact",
-                    JSONObject().apply {
-                        put(
-                            "contact",
-                            JSONObject().apply {
-                                put(
-                                    "title",
-                                    JSONObject().apply {
-                                        put("nb", "Sjefen")
-                                    },
-                                )
-                                put("email", "sjef@ssb.no")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "contact",
+                                JSONObject().apply {
+                                    put(
+                                        "title",
+                                        JSONObject().apply {
+                                            put("nb", "Sjefen")
+                                        },
+                                    )
+                                    put("email", "sjef@ssb.no")
+                                },
+                            )
+                        }.toString(),
+                ),
+            )
+
+        @JvmStatic
+        fun internalVariablesMissingLanguages(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "name",
+                    SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_NAME.definitionId,
+                ),
+                argumentSet(
+                    "definition",
+                    SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_DEFINITION.definitionId,
+                ),
+                argumentSet(
+                    "comment",
+                    SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_COMMENT.definitionId,
                 ),
             )
     }

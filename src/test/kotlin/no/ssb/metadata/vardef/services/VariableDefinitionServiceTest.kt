@@ -103,7 +103,158 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
     }
 
+    @ParameterizedTest
+    @MethodSource("languagesForExternalPublicationWithUpdateDraft")
+    fun `languages for external publication (UpdateDraft)`(
+        updates: UpdateDraft,
+        existingVariable: SavedVariableDefinition,
+        expected: Boolean,
+    ) {
+        assertThat(
+            variableDefinitionService.allLanguagesPresentForExternalPublication(updates, existingVariable),
+        ).isEqualTo(expected)
+    }
+
+    @ParameterizedTest
+    @MethodSource("languagesForExternalPublicationWithPatch")
+    fun `languages for external publication (Patch)`(
+        updates: Patch,
+        existingVariable: SavedVariableDefinition,
+        expected: Boolean,
+    ) {
+        assertThat(
+            variableDefinitionService.allLanguagesPresentForExternalPublication(updates, existingVariable),
+        ).isEqualTo(expected)
+    }
+
     companion object {
+        private val allLanguagesPresent =
+            LanguageStringType(
+                nb = "Norwegian Bokmål",
+                nn = "Norwegian Nynorsk",
+                en = "English",
+            )
+        private val allLanguagesNull =
+            LanguageStringType(
+                nb = null,
+                nn = null,
+                en = null,
+            )
+        private val allLanguagesEmpty =
+            LanguageStringType(
+                nb = "",
+                nn = "",
+                en = "",
+            )
+
+        @JvmStatic
+        fun languagesForExternalPublicationWithPatch(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "All languages present",
+                    Patch(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesPresent,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    true,
+                ),
+                argumentSet(
+                    "One field all languages empty",
+                    Patch(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesEmpty,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    false,
+                ),
+            )
+
+        @JvmStatic
+        fun languagesForExternalPublicationWithUpdateDraft(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "All languages present",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesPresent,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    true,
+                ),
+                argumentSet(
+                    "One field all languages empty",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesEmpty,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    false,
+                ),
+                argumentSet(
+                    "Variable status not PUBLISHED_EXTERNAL",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.DRAFT,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesNull,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    true,
+                ),
+                argumentSet(
+                    "Update includes languages set to null",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                        name = allLanguagesNull,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesPresent,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    false,
+                ),
+                argumentSet(
+                    "Update attempts to fill languages set to null",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                        name = allLanguagesPresent,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesNull,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    false,
+                ),
+                argumentSet(
+                    "Optional field set to null",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesPresent,
+                        definition = allLanguagesPresent,
+                        comment = null,
+                    ),
+                    true,
+                ),
+            )
+
         @JvmStatic
         fun invalidOwnerUpdate(): Stream<Arguments> =
             Stream.of(

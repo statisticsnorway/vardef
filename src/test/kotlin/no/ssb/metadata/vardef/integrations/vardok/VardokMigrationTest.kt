@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.JsonMappingException
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
@@ -172,7 +173,23 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `Vardokresponse exception invalid characters`() {
+    fun `Vardok not found`() {
+        assertThatThrownBy {
+            vardokService.getVardokItem("21")
+        }.isInstanceOf(VardokNotFoundException::class.java)
+            .hasMessageContaining( "Vardok id 21 not found")
+    }
+
+    @Test
+    fun `Vardok not found by language`() {
+        assertThatThrownBy {
+            vardokService.getVardokByIdAndLanguage("0002", "en")
+        }.isInstanceOf(HttpStatusException::class.java)
+            .hasMessageContaining( "Id 0002 in language: en not found")
+    }
+
+    @Test
+    fun `Vardokresponse invalid characters`() {
         assertThatThrownBy {
             vardokService.getVardokItem("0001")
         }.isInstanceOf(JsonMappingException::class.java)
@@ -180,7 +197,15 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `Vardokresponse exception missing fields`() {
+    fun `Vardokresponse invalid characters by language`() {
+        assertThatThrownBy {
+            vardokService.getVardokByIdAndLanguage("0001", "en")
+        }.isInstanceOf(JsonMappingException::class.java)
+            .hasMessageContaining("Unexpected character")
+    }
+
+    @Test
+    fun `Vardokresponse missing fields`() {
         assertThatThrownBy {
             vardokService.getVardokItem("0002")
         }.isInstanceOf(JsonMappingException::class.java)
@@ -188,10 +213,14 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `Vardokresponse valid from is not valid date`() {
+    fun `Vardokresponse creative dates`() {
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("0003")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
-        assertThat(vardokTransform.validFrom).isEqualTo("1003-90-81")
+        assertThat(vardokTransform.validFrom).isEqualTo("10039081")
+
+        val varDefInput2 = vardokService.fetchMultipleVardokItemsByLanguage("0004")
+        val vardokTransform2 = VardokService.extractVardefInput(varDefInput2)
+        assertThat(vardokTransform2.validFrom).isEqualTo("1003-90-81")
     }
 
     @ParameterizedTest

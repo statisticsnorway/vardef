@@ -69,11 +69,15 @@ interface VardokService {
                 unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
                 externalReferenceUri = mapExternalDocumentToUri(vardokItemNb),
                 comment =
-                    LanguageStringType(
-                        comment["nb"],
-                        comment["nn"],
-                        comment["en"],
-                    ),
+                    if (comment.values.any { !it.isNullOrEmpty() }) {
+                        LanguageStringType(
+                            comment["nb"],
+                            comment["nn"],
+                            comment["en"],
+                        )
+                    } else {
+                        null
+                    },
                 containsSpecialCategoriesOfPersonalData = false,
                 subjectFields = mapVardokSubjectAreaToSubjectFiled(vardokItemNb),
                 classificationReference = classificationRelation?.split("/")?.last(),

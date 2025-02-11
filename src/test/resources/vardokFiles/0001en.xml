@@ -1,4 +1,4 @@
-<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2012-10-29" defaultValidFrom="" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:0001" lastChangedDate="2012-10-29" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2012-10-29" defaultValidFrom="" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:0001" lastChangedDate="2012-10-29" otherLanguages="nb" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
     <DC>
         <dc:contributor>Seksjon for transport-, reiselivs- og IKT-statistikk</dc:contributor>
         <dc:creator>Permisjon/Sluttet</dc:creator>
@@ -18,7 +18,7 @@
         <dc:type>Variabeldefinisjon</dc:type>
     </DC>
     <Common>
-        <Title>Sjøulykke@;;;+&))</Title>
+        <Title>Seacrash@;;;+&))</Title>
         <Description>En hendelse på, eller i tilknytning til, et eller flere skip, som resulterer i skade på skip eller person.</Description>
         <ContactPerson>
             <CodeValue>tgj</CodeValue>

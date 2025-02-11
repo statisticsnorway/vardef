@@ -142,7 +142,6 @@ class PatchesServiceTest : BaseVardefTest() {
                             en = "name",
                         ),
                 ).toPatch()
-                .copy(variableStatus = null)
 
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6, TEST_USER)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
@@ -170,7 +169,6 @@ class PatchesServiceTest : BaseVardefTest() {
                             ),
                         ),
                 ).toPatch()
-                .copy(variableStatus = null)
 
         patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6, TEST_USER)
         val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)

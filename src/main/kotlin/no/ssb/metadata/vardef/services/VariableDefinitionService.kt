@@ -316,16 +316,68 @@ class VariableDefinitionService(
 
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
 
+    /**
+     * Are all languages present?
+     *
+     * Checks whether:
+     *   - The variable status is changing to [VariableStatus.PUBLISHED_EXTERNAL]
+     *   - All fields with user-provided translations are either
+     *      - `null` (to allow for optional fields)
+     *      - filled with non-empty values for all supported languages
+     *
+     * Function overload for [Patch]
+     *
+     * @param updates
+     * @param existingVariable
+     * @return `true` if the variable is being published and all translation fields are filled
+     */
     fun allLanguagesPresentForExternalPublication(
-        updates: UpdateDraft,
+        updates: Patch,
         existingVariable: SavedVariableDefinition,
     ): Boolean =
-        updates.variableStatus != VariableStatus.PUBLISHED_EXTERNAL ||
+        allLanguagesPresentForExternalPublication(
+            updates.variableStatus,
             listOf(
                 existingVariable.name to updates.name,
                 existingVariable.definition to updates.definition,
                 existingVariable.comment to updates.comment,
-            ).all {
+            ),
+        )
+
+    /**
+     * Are all languages present?
+     *
+     * Checks whether:
+     *   - The variable status is changing to [VariableStatus.PUBLISHED_EXTERNAL]
+     *   - All fields with user-provided translations are either
+     *      - `null` (to allow for optional fields)
+     *      - filled with non-empty values for all supported languages
+     *
+     * Function overload for [UpdateDraft]
+     *
+     * @param updates
+     * @param existingVariable
+     * @return `true` if the variable is being published and all translation fields are filled
+     */
+    fun allLanguagesPresentForExternalPublication(
+        updates: UpdateDraft,
+        existingVariable: SavedVariableDefinition,
+    ): Boolean =
+        allLanguagesPresentForExternalPublication(
+            updates.variableStatus,
+            listOf(
+                existingVariable.name to updates.name,
+                existingVariable.definition to updates.definition,
+                existingVariable.comment to updates.comment,
+            ),
+        )
+
+    private fun allLanguagesPresentForExternalPublication(
+        updatedVariableStatus: VariableStatus?,
+        translationFields: List<Pair<LanguageStringType?, LanguageStringType?>>,
+    ): Boolean =
+        updatedVariableStatus != VariableStatus.PUBLISHED_EXTERNAL ||
+            translationFields.all {
                 (it.first == null || it.first?.allLanguagesPresent() == true) &&
                     (it.second == null || it.second?.allLanguagesPresent() == true)
             }

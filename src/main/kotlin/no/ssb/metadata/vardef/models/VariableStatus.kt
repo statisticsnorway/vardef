@@ -18,7 +18,7 @@ fun VariableStatus.isPublic(): Boolean = this == VariableStatus.PUBLISHED_EXTERN
 
 fun VariableStatus.canTransitionTo(targetStatus: VariableStatus): Boolean =
     when (targetStatus) {
-        VariableStatus.DRAFT -> this == VariableStatus.DRAFT
+        VariableStatus.DRAFT -> false
         VariableStatus.PUBLISHED_INTERNAL -> this == VariableStatus.DRAFT
         VariableStatus.PUBLISHED_EXTERNAL -> this == VariableStatus.DRAFT || this == VariableStatus.PUBLISHED_INTERNAL
     }

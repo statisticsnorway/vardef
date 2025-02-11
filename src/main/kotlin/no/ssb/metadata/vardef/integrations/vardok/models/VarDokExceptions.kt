@@ -13,7 +13,7 @@ class VardokNotFoundException(
     message: String,
 ) : VardokException(message)
 
-//"Vardok id $id not found"
+// "Vardok id $id not found"
 
 class OutdatedUnitTypesException(
     id: String,

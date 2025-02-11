@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.JsonMappingException
-import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
@@ -177,7 +176,7 @@ class VardokMigrationTest {
         assertThatThrownBy {
             vardokService.getVardokItem("21")
         }.isInstanceOf(VardokNotFoundException::class.java)
-            .hasMessageContaining( "Vardok id 21 not found")
+            .hasMessageContaining("Vardok id 21 not found")
     }
 
     @Test
@@ -185,7 +184,7 @@ class VardokMigrationTest {
         assertThatThrownBy {
             vardokService.getVardokByIdAndLanguage("0002", "en")
         }.isInstanceOf(VardokNotFoundException::class.java)
-            .hasMessageContaining( "Id 0002 in language: en not found")
+            .hasMessageContaining("Id 0002 in language: en not found")
     }
 
     @Test

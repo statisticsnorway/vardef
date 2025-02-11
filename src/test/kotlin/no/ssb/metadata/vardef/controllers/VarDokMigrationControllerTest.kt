@@ -141,34 +141,33 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     fun `Vardok creative valid from`(spec: RequestSpecification) {
         val body =
             spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/0003")
-            .then()
-            .statusCode(HttpStatus.CREATED.code)
-            .extract()
-            .body()
-            .asString()
-
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(+29456,1,27))
-    }
-
-    @Test
-    fun `Vardok exception invalid date`(spec: RequestSpecification) {
-            spec
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
                 .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
-                .post("/vardok-migration/0004")
+                .post("/vardok-migration/0003")
                 .then()
-                .statusCode(HttpStatus.BAD_REQUEST.code)
+                .statusCode(HttpStatus.CREATED.code)
+                .extract()
+                .body()
+                .asString()
 
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(+29456, 1, 27))
+    }
+
+    @Test
+    fun `Vardok exception invalid date`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body("")
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/vardok-migration/0004")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 
     @ParameterizedTest

@@ -34,8 +34,7 @@ class StaticVardokService(
             val xmlFile = File("src/test/resources/vardokFiles/$id.xml")
             val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
             return varDokResponse
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             if (e is FileNotFoundException) {
                 throw VardokNotFoundException("Vardok id $id not found")
             }
@@ -51,8 +50,7 @@ class StaticVardokService(
             val xmlFile = File("src/test/resources/vardokFiles/${id}$language.xml")
             val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
             return varDokResponse
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             if (e is FileNotFoundException) {
                 throw (VardokNotFoundException("Id $id in language: $language not found"))
             }

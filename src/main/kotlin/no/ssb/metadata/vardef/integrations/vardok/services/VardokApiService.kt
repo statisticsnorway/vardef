@@ -2,9 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok.services
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.exceptions.HttpClientResponseException
-import io.micronaut.http.exceptions.HttpStatusException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*

@@ -1,10 +1,12 @@
 package no.ssb.metadata.vardef.services
 
+import jakarta.inject.Inject
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.ValidityPeriod
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.AssertionsForClassTypes
@@ -19,6 +21,9 @@ import java.util.stream.Stream
 
 class ValidityPeriodsServiceTest : BaseVardefTest() {
     private val savedVariableDefinitionId = INCOME_TAX_VP1_P1.definitionId
+
+    @Inject
+    private lateinit var validityPeriodsService: ValidityPeriodsService
 
     @Test
     fun `end validity period`() {
@@ -137,6 +142,39 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         assertThat(lastPatchInSecondToLastValidityPeriod?.validUntil).isEqualTo(
             newValidityPeriod.validFrom.minusDays(1),
         )
+    }
+
+    @Test
+    fun `update status on all validity periods except current`() {
+        variableDefinitionRepository.save(
+            SAVED_INTERNAL_VARIABLE_DEFINITION.copy(validFrom = LocalDate.of(2020, 1, 1), validUntil = LocalDate.of(2023, 12, 31)),
+        )
+        variableDefinitionRepository.save(
+            SAVED_INTERNAL_VARIABLE_DEFINITION.copy(validFrom = LocalDate.of(2010, 1, 1), validUntil = LocalDate.of(2019, 12, 31)),
+        )
+
+        validityPeriodsService.updateStatusOnOtherPeriods(
+            SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+            VariableStatus.PUBLISHED_EXTERNAL,
+            SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom,
+            "testuser",
+        )
+
+        validityPeriodsService
+            .listLatestByValidityPeriod(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
+            .filter {
+                it.validFrom !=
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom
+            }.forEach {
+                assertThat(it.variableStatus).isEqualTo(VariableStatus.PUBLISHED_EXTERNAL)
+            }
+
+        assertThat(
+            validityPeriodsService
+                .listLatestByValidityPeriod(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
+                .firstOrNull { it.validFrom == SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom }
+                ?.variableStatus,
+        ).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
     }
 
     @Test

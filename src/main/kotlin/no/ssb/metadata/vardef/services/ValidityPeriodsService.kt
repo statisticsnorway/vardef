@@ -375,4 +375,23 @@ class ValidityPeriodsService(
                     ),
                 )
             }
+
+    fun updateStatusOnOtherPeriods(
+        definitionId: String,
+        variableStatus: VariableStatus,
+        validFrom: LocalDate,
+        userName: String,
+    ): Unit =
+        listLatestByValidityPeriod(definitionId)
+            .filter { it.validFrom != validFrom }
+            .forEach { period ->
+                val patchStatus = period.copy(variableStatus = variableStatus).toPatch()
+                variableDefinitionRepository.save(
+                    patchStatus.toSavedVariableDefinition(
+                        list(definitionId).last().patchId,
+                        period,
+                        userName,
+                    ),
+                )
+            }
 }

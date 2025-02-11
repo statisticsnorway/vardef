@@ -122,4 +122,18 @@ class UpdateTests : BaseVardefTest() {
         assertThat(savedVariableDefinition?.owner?.groups?.all { it.isNotBlank() })
         assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())
     }
+
+    @Test
+    fun `update status to illegal value`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSONObject().apply { put("variable_status", "DRAFT") }.toString())
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(buildProblemJsonResponseSpec(false, null, "Changing the status from PUBLISHED_INTERNAL to DRAFT is not allowed."))
+    }
 }

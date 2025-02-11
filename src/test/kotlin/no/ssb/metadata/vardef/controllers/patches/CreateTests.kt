@@ -7,14 +7,12 @@ import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.controllers.patches.CompanionObject.Companion.patchBody
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 
 class CreateTests : BaseVardefTest() {
@@ -215,35 +213,6 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(201)
             .body("comment.en", equalTo("This is the reason"))
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
-    fun `create new patch with invalid status`(
-        variableStatus: VariableStatus,
-        spec: RequestSpecification,
-    ) {
-        val id =
-            patches
-                .create(
-                    DRAFT_BUS_EXAMPLE
-                        .copy()
-                        .apply {
-                            this.variableStatus = variableStatus
-                        }.toPatch(),
-                    DRAFT_BUS_EXAMPLE.definitionId,
-                    DRAFT_BUS_EXAMPLE,
-                    TEST_USER,
-                ).definitionId
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(patchBody().toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/variable-definitions/$id/patches")
-            .then()
-            .statusCode(405)
     }
 
     @Test

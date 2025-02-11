@@ -26,9 +26,9 @@ open class VardokApiService(
             val response = vardokClient.fetchVardokById(id)
             return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
-            if (e is HttpClientResponseException && e.response.status == HttpStatus.INTERNAL_SERVER_ERROR) {
+            if (e is HttpClientResponseException) {
                 logger.warn("$id is not found. Exception message: ${e.message}")
-                throw VardokNotFoundException(id)
+                throw VardokNotFoundException("Vardok id $id not found")
             }
             logger.warn("Unexpected exception for $id. Exception message: ${e.message}")
             throw e
@@ -44,8 +44,12 @@ open class VardokApiService(
             val response = vardokClient.fetchVardokByIdAndLanguage(id, language)
             return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
-            logger.warn("Error while fetching vardok by id and language", e)
-            throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
+            if (e is HttpClientResponseException) {
+                logger.warn("Error while fetching vardok by id and language", e)
+                throw (VardokNotFoundException("Id $id in language: $language not found"))
+            }
+            logger.warn("Unexpected exception for $id in language $language. Exception message: ${e.message}")
+            throw e
         }
     }
 

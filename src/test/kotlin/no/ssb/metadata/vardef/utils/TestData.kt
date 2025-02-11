@@ -149,7 +149,6 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
         containsSpecialCategoriesOfPersonalData = false,
-        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://www.example.com").toURL(),

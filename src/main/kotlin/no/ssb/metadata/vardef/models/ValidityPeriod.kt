@@ -45,12 +45,6 @@ data class ValidityPeriod(
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
     val containsSpecialCategoriesOfPersonalData: Boolean?,
-    @Schema(
-        description = VARIABLE_STATUS_FIELD_DESCRIPTION,
-        accessMode = Schema.AccessMode.READ_ONLY,
-    )
-    @Nullable
-    val variableStatus: VariableStatus?,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
@@ -87,7 +81,7 @@ data class ValidityPeriod(
             subjectFields = subjectFields ?: previousPatch.subjectFields,
             containsSpecialCategoriesOfPersonalData =
             containsSpecialCategoriesOfPersonalData ?: previousPatch.containsSpecialCategoriesOfPersonalData,
-            variableStatus = variableStatus ?: previousPatch.variableStatus,
+            variableStatus = previousPatch.variableStatus,
             measurementType = measurementType ?: previousPatch.measurementType,
             validFrom = validFrom,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,

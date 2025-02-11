@@ -125,10 +125,53 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL =
     SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
         validUntil = null,
     )
+
+val SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_NAME =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        shortName = "missing_language_name",
+        name =
+            LanguageStringType(
+                nb = null,
+                nn = "Intern",
+                en = "Internal",
+            ),
+    )
+
+val SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_DEFINITION =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        shortName = "missing_language_definition",
+        definition =
+            LanguageStringType(
+                nb = "En variabeldefinisjon som er publisert for intern bruk",
+                nn = null,
+                en = "A variable definition published for internal use",
+            ),
+    )
+
+val SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_COMMENT =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        shortName = "missing_language_comment",
+        comment =
+            LanguageStringType(
+                nb = "Merknad",
+                nn = "Merknad",
+                en = null,
+            ),
+    )
+
 val ALL_SAVED_INTERNAL_PATCHES =
     listOf(
         SAVED_INTERNAL_VARIABLE_DEFINITION,
         SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_BEFORE,
+        SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_NAME,
+        SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_DEFINITION,
+        SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_COMMENT,
     )
 
 val VALIDITY_PERIOD_TAX_EXAMPLE =
@@ -149,7 +192,6 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
         containsSpecialCategoriesOfPersonalData = false,
-        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://www.example.com").toURL(),

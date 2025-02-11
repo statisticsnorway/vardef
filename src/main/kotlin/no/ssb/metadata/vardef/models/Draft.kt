@@ -63,6 +63,7 @@ data class Draft(
     val externalReferenceUri: URL?,
     @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
+    @NotEmptyLanguageStringType
     val comment: LanguageStringType?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable

@@ -94,7 +94,7 @@ class VardokServiceTest : BaseVardokTest() {
         every {
             vardokMockkClient.fetchVardokById("1")
         } throws
-            HttpStatusException(HttpStatus.NOT_FOUND, "Vardok id 1 not found")
+            VardokNotFoundException("Vardok id 1 not found")
         val exception: Exception =
             assertThrows(VardokNotFoundException::class.java) {
                 vardokApiService.getVardokItem("1")

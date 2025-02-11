@@ -7,6 +7,7 @@ import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.controllers.patches.CompanionObject.Companion.patchBody
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
@@ -330,5 +331,23 @@ class CreateTests : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.patchId).isEqualTo(2)
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#internalVariablesMissingLanguages")
+    fun `publish variable externally with missing languages`(
+        definitionId: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                jsonMapper.writeValueAsString(Patch(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/$definitionId/patches")
+            .then()
+            .statusCode(HttpStatus.CONFLICT.code)
     }
 }

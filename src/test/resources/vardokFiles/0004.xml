@@ -1,0 +1,57 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2006-01-03" defaultValidFrom="1994-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:0003" lastChangedDate="2010-05-06" otherLanguages="" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for regnskapsstatistikk</dc:contributor>
+        <dc:creator>Janne Therese Utkilen</dc:creator>
+        <dcterms:modified>2010-05-06</dcterms:modified>
+        <dcterms:valid>1003-90-81 - </dcterms:valid>
+        <dc:description>Skattemessig verdi på driftsmidler ved utgangen av inntektsåret, overføres til inngående saldo påfølgende inntektsår.</dc:description>
+        <dcterms:abstract> Intektsstatistikk for aksjeselskaper SKD - Skattedirektoratet</dcterms:abstract>
+        <dcterms:tableOfContents>Foretak</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:0003</dc:identifier>
+        <dc:language>nb</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>10.02 - Skatt næringsvirksomhet</dc:subject>
+        <dc:title>Utgående saldo</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Utgående saldo</Title>
+        <Description>Skattemessig verdi på driftsmidler ved utgangen av inntektsåret, overføres til inngående saldo påfølgende inntektsår.</Description>
+        <ContactPerson>
+            <CodeValue>jtu</CodeValue>
+            <CodeText>Janne Therese Utkilen</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>970</CodeValue>
+            <CodeText>Seksjon for regnskapsstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Foretak</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>10.02</CodeValue>
+            <CodeText>Skatt næringsvirksomhet</CodeText>
+        </SubjectArea>
+        <ExternalSource>SKD - Skattedirektoratet</ExternalSource>
+        <InternalSource>Intektsstatistikk for aksjeselskaper</InternalSource>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName>ss111</DataElementName>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11182" xlink:title="11182: Saldostatistikk for selskaper. Skattemessige verdier, etter saldogrupper" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/11126" xlink:title="11126: Saldostatistikk for enkeltpersonforetak, etter saldogruppe og hovedinntektens art" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/10335" xlink:title="10335: Saldostatistikk for selskaper. Skattemessige verdier, etter saldogrupper" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/06899" xlink:title="06899: Saldostatistikk for aksjeselskaper. Skattemessige verdier, etter saldogrupper (avslutta serie)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

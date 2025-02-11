@@ -2,8 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok.services
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.exceptions.HttpStatusException
+import io.micronaut.http.client.exceptions.HttpClientResponseException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
@@ -25,8 +24,12 @@ open class VardokApiService(
             val response = vardokClient.fetchVardokById(id)
             return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
-            logger.warn("$id is not found. Exception message: ${e.message}")
-            throw VardokNotFoundException(id)
+            if (e is HttpClientResponseException) {
+                logger.warn("$id is not found. Exception message: ${e.message}")
+                throw VardokNotFoundException("Vardok id $id not found")
+            }
+            logger.warn("Unexpected exception for $id. Exception message: ${e.message}")
+            throw e
         }
     }
 
@@ -39,8 +42,12 @@ open class VardokApiService(
             val response = vardokClient.fetchVardokByIdAndLanguage(id, language)
             return xmlMapper.readValue(response, VardokResponse::class.java)
         } catch (e: Exception) {
-            logger.warn("Error while fetching vardok by id and language", e)
-            throw (HttpStatusException(HttpStatus.NOT_FOUND, "Id $id in language: $language not found"))
+            if (e is HttpClientResponseException) {
+                logger.warn("Error while fetching vardok by id and language", e)
+                throw (VardokNotFoundException("Id $id in language: $language not found"))
+            }
+            logger.warn("Unexpected exception for $id in language $language. Exception message: ${e.message}")
+            throw e
         }
     }
 

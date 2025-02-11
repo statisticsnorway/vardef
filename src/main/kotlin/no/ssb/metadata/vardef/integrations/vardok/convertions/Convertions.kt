@@ -105,3 +105,9 @@ fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? {
                 .getOrNull()
         }
 }
+
+fun mapConceptVariableRelations(vardokItem: VardokResponse): List<String>? =
+    vardokItem.relations
+        ?.conceptVariableRelations
+        ?.mapNotNull { it?.href }
+

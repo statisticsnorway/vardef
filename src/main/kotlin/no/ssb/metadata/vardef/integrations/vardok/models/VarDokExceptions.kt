@@ -10,8 +10,10 @@ class MissingNbLanguageException :
     )
 
 class VardokNotFoundException(
-    id: String,
-) : VardokException("Vardok id $id not found")
+    message: String,
+) : VardokException(message)
+
+//"Vardok id $id not found"
 
 class OutdatedUnitTypesException(
     id: String,

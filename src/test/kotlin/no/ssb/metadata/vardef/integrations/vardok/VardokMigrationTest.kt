@@ -163,6 +163,32 @@ class VardokMigrationTest {
     }
 
     @Test
+    fun `concept variables 3`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("948")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.relatedVariableDefinitionUris).isEmpty()
+    }
+
+    @Test
+    fun `concept variables`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.relatedVariableDefinitionUris?.size).isEqualTo(5)
+        assertThat(vardokTransform.relatedVariableDefinitionUris?.last())
+            .isEqualTo("http://www.ssb.no/conceptvariable/vardok/11")
+        assertThat(vardokTransform.relatedVariableDefinitionUris is List<String>)
+    }
+
+    @Test
+    fun `concept variables 2`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("1245")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.relatedVariableDefinitionUris?.first()).isEqualTo(
+            "http://www.ssb.no/conceptvariable/vardok/1246",
+        )
+    }
+
+    @Test
     fun `vardokresponse statistical unit incorrect input`() {
         assertThatThrownBy {
             val vardokresponse = vardokService.getVardokItem("0000")

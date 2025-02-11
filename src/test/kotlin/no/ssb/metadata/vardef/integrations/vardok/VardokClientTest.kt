@@ -91,6 +91,13 @@ class VardokClientTest {
     }
 
     @Test
+    fun `speci n`() {
+        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("1245")
+        val varDefInput = VardokService.extractVardefInput(result)
+        assertThat(varDefInput.relatedVariableDefinitionUris).isEqualTo(listOf("http://www.ssb.no/conceptvariable/vardok/1246"))
+    }
+
+    @Test
     fun `Vardok not found`() {
         assertThatThrownBy {
             vardokApiService.fetchMultipleVardokItemsByLanguage("21")

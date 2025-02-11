@@ -199,7 +199,7 @@ class PatchesController(
         when {
             !latestPatchOnValidityPeriod.variableStatus.isPublished() ->
                 throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
-            !vardef.allLanguagesPresentForExternalPublication(patch.toUpdateDraft(), latestPatchOnValidityPeriod) ->
+            !vardef.allLanguagesPresentForExternalPublication(patch, latestPatchOnValidityPeriod) ->
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The variable must be defined in all languages before external publication.",

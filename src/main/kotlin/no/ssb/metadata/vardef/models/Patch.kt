@@ -111,25 +111,4 @@ data class Patch(
             lastUpdatedAt = LocalDateTime.now(),
             lastUpdatedBy = userName,
         )
-
-    /**
-     * This exists solely for type compatibility in utility functions
-     */
-    fun toUpdateDraft(): UpdateDraft =
-        UpdateDraft(
-            name = name,
-            definition = definition,
-            classificationReference = classificationReference,
-            unitTypes = unitTypes,
-            subjectFields = subjectFields,
-            containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData,
-            variableStatus = variableStatus,
-            measurementType = measurementType,
-            validUntil = validUntil,
-            externalReferenceUri = externalReferenceUri,
-            comment = comment,
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
-            owner = owner,
-            contact = contact,
-            )
 }

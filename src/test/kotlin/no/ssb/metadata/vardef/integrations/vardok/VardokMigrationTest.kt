@@ -184,7 +184,7 @@ class VardokMigrationTest {
     fun `Vardok not found by language`() {
         assertThatThrownBy {
             vardokService.getVardokByIdAndLanguage("0002", "en")
-        }.isInstanceOf(HttpStatusException::class.java)
+        }.isInstanceOf(VardokNotFoundException::class.java)
             .hasMessageContaining( "Id 0002 in language: en not found")
     }
 

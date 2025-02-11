@@ -10,7 +10,10 @@ import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.utils.*
+import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
+import no.ssb.metadata.vardef.utils.TEST_TEAM
+import no.ssb.metadata.vardef.utils.buildProblemJsonResponseSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.BeforeEach
@@ -135,8 +138,9 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `Vardok exception invalid valid from`(spec: RequestSpecification) {
-        spec
+    fun `Vardok creative valid from`(spec: RequestSpecification) {
+        val body =
+            spec
             .given()
             .contentType(ContentType.JSON)
             .body("")
@@ -144,16 +148,27 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .post("/vardok-migration/0003")
             .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage =
-                        "Failed to convert argument [draft] for value [null] due to: " +
-                            "Error deserializing type: Draft draft",
-                ),
-            )
+            .statusCode(HttpStatus.CREATED.code)
+            .extract()
+            .body()
+            .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(+29456,1,27))
+    }
+
+    @Test
+    fun `Vardok exception invalid date`(spec: RequestSpecification) {
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/0004")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
+
     }
 
     @ParameterizedTest

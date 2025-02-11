@@ -383,7 +383,7 @@ class ValidityPeriodsService(
         userName: String,
     ): Unit =
         listLatestByValidityPeriod(definitionId)
-            .filter { it.validFrom != validFrom }
+            .filter { it.validFrom != validFrom && it.variableStatus != variableStatus }
             .forEach { period ->
                 val patchStatus = period.copy(variableStatus = variableStatus).toPatch()
                 variableDefinitionRepository.save(

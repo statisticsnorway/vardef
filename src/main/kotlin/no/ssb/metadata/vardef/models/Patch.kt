@@ -38,18 +38,10 @@ data class Patch(
     val classificationReference: String? = null,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @Nullable
-    val unitTypes: List<
-            @KlassCode(UNIT_TYPES_KLASS_CODE)
-            @NotEmpty
-            String,
-            >? = null,
+    val unitTypes: List<@KlassCode(UNIT_TYPES_KLASS_CODE) @NotEmpty String>? = null,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<
-            @KlassCode(SUBJECT_FIELDS_KLASS_CODE)
-            @NotEmpty
-            String,
-            >? = null,
+    val subjectFields: List<@KlassCode(SUBJECT_FIELDS_KLASS_CODE) @NotEmpty String>? = null,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
     val containsSpecialCategoriesOfPersonalData: Boolean? = null,
@@ -72,6 +64,7 @@ data class Patch(
     val externalReferenceUri: URL? = null,
     @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
+    @NotEmptyLanguageStringType
     val comment: LanguageStringType? = null,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable

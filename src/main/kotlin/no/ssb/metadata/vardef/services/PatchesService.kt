@@ -5,12 +5,14 @@ import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
+import no.ssb.metadata.vardef.exceptions.IllegalStatusChangeException
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.canTransitionTo
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.slf4j.LoggerFactory
 
@@ -85,6 +87,20 @@ class PatchesService(
             logger.info(
                 "Creating patch and updating owner to ${patch.owner} on other periods for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
+            )
+        }
+
+        if (patch.variableStatus != null) {
+            if (!latestPatch.variableStatus.canTransitionTo(patch.variableStatus)) {
+                throw IllegalStatusChangeException(
+                    "Changing the status from ${latestPatch.variableStatus} to ${patch.variableStatus} is not allowed.",
+                )
+            }
+            validityPeriodsService.updateStatusOnOtherPeriods(
+                definitionId,
+                patch.variableStatus,
+                latestPatch.validFrom,
+                userName,
             )
         }
         // For the selected validity period create a patch with the provided values

@@ -30,15 +30,15 @@ fun vardokId(vardokItem: VardokResponse): String = vardokItem.id.substringAfterL
  * @returns list with string value(s) except if result is null then
  * @throws OutdatedUnitTypesException
  */
-fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String> =
-    // Handle Vardok id 3125 which does not conform to neither 'converUnitTypes' nor 'specialCaseUnitMapping'
-    if (vardokId(vardokItem) == "3125") {
-        listOf("21")
-    } else {
-        vardokItem.variable?.statisticalUnit?.let { statUnit ->
-            convertUnitTypes(statUnit) ?: specialCaseUnitMapping(vardokId(vardokItem))
-        } ?: specialCaseUnitMapping(vardokId(vardokItem))
-    } ?: throw OutdatedUnitTypesException(vardokId(vardokItem))
+fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String> {
+    val id = vardokId(vardokItem)
+
+    specialCaseUnitMapping(id)?.let { return it }
+
+    return vardokItem.variable?.statisticalUnit?.let { statUnit ->
+        convertUnitTypes(statUnit)
+    } ?: throw OutdatedUnitTypesException(id)
+}
 
 /**
  *

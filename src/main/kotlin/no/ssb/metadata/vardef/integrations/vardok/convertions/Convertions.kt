@@ -116,4 +116,3 @@ fun mapConceptVariableRelations(vardokItem: VardokResponse): List<String>? =
     vardokItem.relations
         ?.conceptVariableRelations
         ?.mapNotNull { it?.href }
-

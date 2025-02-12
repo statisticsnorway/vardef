@@ -87,7 +87,7 @@ interface VardokService {
                         "$GENERATED_CONTACT_KEYWORD@epost.com",
                     ),
                 measurementType = null,
-                relatedVariableDefinitionUris = emptyList(),
+                relatedVariableDefinitionUris = mapConceptVariableRelations(vardokItemNb),
             )
         }
     }

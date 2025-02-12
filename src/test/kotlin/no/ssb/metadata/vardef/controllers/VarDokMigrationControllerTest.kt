@@ -23,6 +23,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.net.URI
 import java.net.URL
 import java.time.LocalDate
 import java.util.stream.Stream
@@ -274,6 +275,31 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
+    @MethodSource("mapConceptVariableRelations")
+    fun `create vardok related variable uris`(
+        id: String,
+        expectedResult: List<String?>,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.relatedVariableDefinitionUris).isEqualTo(expectedResult)
+    }
+
+    @ParameterizedTest
     @ValueSource(
         ints = [
             141, 2590,
@@ -469,6 +495,34 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     "Vardok id 1245 has invalid external document",
                     "1245",
                     null,
+                ),
+            )
+
+        @JvmStatic
+        fun mapConceptVariableRelations(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Vardok id 2 has several ConceptVariableRelations",
+                    "2",
+                    listOf(
+                        "http://www.ssb.no/conceptvariable/vardok/571",
+                        "http://www.ssb.no/conceptvariable/vardok/49",
+                        "http://www.ssb.no/conceptvariable/vardok/10",
+                        "http://www.ssb.no/conceptvariable/vardok/12",
+                        "http://www.ssb.no/conceptvariable/vardok/11",
+                    ).map { URI(it).toURL() },
+                ),
+                argumentSet(
+                    "Vardok id 948 has none ConceptVariableRelations",
+                    "948",
+                    listOf<URL?>(),
+                ),
+                argumentSet(
+                    "Vardok id 1245 has one ConceptVariableRelation",
+                    "1245",
+                    listOf(
+                        "http://www.ssb.no/conceptvariable/vardok/1246",
+                    ).map { URI(it).toURL() },
                 ),
             )
     }

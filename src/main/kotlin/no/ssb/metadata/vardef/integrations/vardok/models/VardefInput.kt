@@ -20,7 +20,7 @@ data class VardefInput(
     val classificationReference: String?,
     val contact: Contact,
     val measurementType: String?,
-    val relatedVariableDefinitionUris: List<String?>,
+    val relatedVariableDefinitionUris: List<String>?,
 ) {
     override fun toString(): String {
         val mapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)

@@ -105,3 +105,14 @@ fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? {
                 .getOrNull()
         }
 }
+
+/**
+ * Extracts a list of URL strings from the `conceptVariableRelations` of a `VardokResponse` object.
+ *
+ * @param vardokItem The `VardokResponse` object containing the relations data.
+ * @return A list of non-null `href` strings, or `null` if `conceptVariableRelations` is null.
+ */
+fun mapConceptVariableRelations(vardokItem: VardokResponse): List<String>? =
+    vardokItem.relations
+        ?.conceptVariableRelations
+        ?.mapNotNull { it?.href }

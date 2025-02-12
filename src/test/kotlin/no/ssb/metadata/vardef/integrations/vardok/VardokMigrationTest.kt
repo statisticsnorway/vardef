@@ -163,14 +163,14 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `concept variables 3`() {
+    fun `map ConceptVariableRelations none`() {
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("948")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.relatedVariableDefinitionUris).isEmpty()
     }
 
     @Test
-    fun `concept variables`() {
+    fun `map ConceptVariableRelations several`() {
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.relatedVariableDefinitionUris?.size).isEqualTo(5)
@@ -180,7 +180,7 @@ class VardokMigrationTest {
     }
 
     @Test
-    fun `concept variables 2`() {
+    fun `map single ConceptVariableRelation`() {
         val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("1245")
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.relatedVariableDefinitionUris?.first()).isEqualTo(

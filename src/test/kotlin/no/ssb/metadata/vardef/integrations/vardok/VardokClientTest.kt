@@ -91,7 +91,7 @@ class VardokClientTest {
     }
 
     @Test
-    fun `speci n`() {
+    fun `map single ConceptVariableRelation to relatedVariableDefinitionUris`() {
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage("1245")
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.relatedVariableDefinitionUris).isEqualTo(listOf("http://www.ssb.no/conceptvariable/vardok/1246"))

@@ -502,7 +502,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         fun mapConceptVariableRelations(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
-                    "Vardok id 2 has several",
+                    "Vardok id 2 has several ConceptVariableRelations",
                     "2",
                     listOf(
                         "http://www.ssb.no/conceptvariable/vardok/571",
@@ -513,12 +513,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     ).map { URI(it).toURL() },
                 ),
                 argumentSet(
-                    "Vardok id 948 has not",
+                    "Vardok id 948 has none ConceptVariableRelations",
                     "948",
                     listOf<URL?>(),
                 ),
                 argumentSet(
-                    "Vardok id 1245 has one",
+                    "Vardok id 1245 has one ConceptVariableRelation",
                     "1245",
                     listOf(
                         "http://www.ssb.no/conceptvariable/vardok/1246",

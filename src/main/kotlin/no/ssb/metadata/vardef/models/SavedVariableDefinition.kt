@@ -20,6 +20,9 @@ import java.time.LocalDateTime
  * Saved variable definition
  *
  * The object which is persisted to the data store. This should not be exposed externally.
+ *
+ * WARNING: Changes to field names or data types in this class are likely
+ *      to break the app. In most cases a database migration will need to be performed.
  */
 @Serdeable
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)

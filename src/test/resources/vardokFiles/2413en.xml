@@ -1,0 +1,63 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2008-01-14" defaultValidFrom="1997-01-01" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:2413" lastChangedDate="2008-02-06" otherLanguages="nn" type="ConceptVariable" xml:lang="en" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Division for public finance</dc:contributor>
+        <dc:creator>Leave of absence/Working conditions terminated</dc:creator>
+        <dcterms:modified>2008-02-06</dcterms:modified>
+        <dcterms:valid>1997-01-01 - </dcterms:valid>
+        <dc:description>Sum of expenses for wages, purchasing, refunds and transfers.</dc:description>
+        <dcterms:abstract> Kultur- og kirkedepartementet</dcterms:abstract>
+        <dcterms:tableOfContents>Establishment</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:2413</dc:identifier>
+        <dc:language>en</dc:language>
+        <dc:publisher>Statistics Norway</dc:publisher>
+        <dc:rights>Statistical Metadata, produced by Statistics Norway for production of statistics and other universal use.</dc:rights>
+        <dc:source/>
+        <dc:subject>12.01.20 - Municipal finances</dc:subject>
+        <dc:title>Operating expenses</dc:title>
+        <dc:type>Concept variable</dc:type>
+    </DC>
+    <Common>
+        <Title>Operating expenses</Title>
+        <Description>Sum of expenses for wages, purchasing, refunds and transfers.</Description>
+        <ContactPerson>
+            <CodeValue>rss</CodeValue>
+            <CodeText>Leave of absence/Working conditions terminated</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>950</CodeValue>
+            <CodeText>Division for public finance</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Establishment</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>12.01.20</CodeValue>
+            <CodeText>Municipal finances</CodeText>
+        </SubjectArea>
+        <ExternalSource>Kultur- og kirkedepartementet</ExternalSource>
+        <InternalSource/>
+        <Sensitivity>Ordinary</Sensitivity>
+        <ExternalDocument/>
+        <DataElementName/>
+        <ShortNameWeb>
+            <CodeValue>kirkeregn</CodeValue>
+            <CodeText>Church account statistics</CodeText>
+        </ShortNameWeb>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/2414" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/2415" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/2416" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/2417" xlink:type="simple"/>
+        <ConceptVariableRelation xlink:href="http://www.ssb.no/conceptvariable/vardok/2418" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/11234" xlink:title="11234: Joint parish councils. Operational accounts (NOK million)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/en/table/05937" xlink:title="05937: Joint parish councils. Income statement (NOK million) (closed series)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

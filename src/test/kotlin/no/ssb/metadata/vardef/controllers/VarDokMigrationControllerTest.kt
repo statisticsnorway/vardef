@@ -472,9 +472,13 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeResponse.id)
     }
 
-    @Test
-    fun `create vardok has has new norwegian as primarly language`(spec: RequestSpecification) {
-        val id = 2413
+    @ParameterizedTest
+    @MethodSource("newNorwegian")
+    fun `create vardok has has nn as primarly language`(
+        id: Int,
+        expectedUnitType: String,
+        spec: RequestSpecification
+    ) {
         val body =
             spec
                 .given()
@@ -490,10 +494,25 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.unitTypes).isEqualTo(listOf("13"))
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf(expectedUnitType))
     }
 
     companion object {
+        @JvmStatic
+        fun newNorwegian(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Verksemd",
+                    2413,
+                    "13"
+                ),
+                argumentSet(
+                    "Hushald",
+                    3135,
+                    "10"
+                ),
+            )
+
         @JvmStatic
         fun mapExternalDocument(): Stream<Arguments> =
             Stream.of(

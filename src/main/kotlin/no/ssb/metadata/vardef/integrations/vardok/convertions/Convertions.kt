@@ -23,10 +23,16 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
 }
 
 /**
- * When null response from method [convertUnitTypes] identifier is checked in method [specialCaseUnitMapping]
+ * Maps a *StatisticalUnit* field to a valid Klass code
+ *
+ * Maps a *StatisticalUnit* text field to a valid Klass code from codelist 702
+ * For some special cases the mapping is based on the id and not the *StatisticalUnit* field
+ * according to @link https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4128276501/Migreringsplan+fra+Vardok+til+Vardef#Enhetstyper
+ * and defined in [specialCaseUnitMapping]
  *
  * @returns list with string value(s) except if result is null then
  * @throws OutdatedUnitTypesException
+ *
  */
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String> {
     specialCaseUnitMapping(vardokItem.parseId())?.let { return it }

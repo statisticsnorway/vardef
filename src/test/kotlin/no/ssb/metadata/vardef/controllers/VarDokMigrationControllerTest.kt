@@ -477,7 +477,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     fun `create vardok has has nn as primarly language`(
         id: Int,
         expectedUnitType: String,
-        spec: RequestSpecification
+        spec: RequestSpecification,
     ) {
         val body =
             spec
@@ -504,12 +504,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 argumentSet(
                     "Verksemd",
                     2413,
-                    "13"
+                    "13",
                 ),
                 argumentSet(
                     "Hushald",
                     3135,
-                    "10"
+                    "10",
                 ),
             )
 

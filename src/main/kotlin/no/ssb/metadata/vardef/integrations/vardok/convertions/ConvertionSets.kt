@@ -26,7 +26,7 @@ val unitTypesMapping =
         setOf(
             "Husholdning",
             "Hushald",
-            ) to listOf("10"),
+        ) to listOf("10"),
         setOf("Juridisk enhet") to listOf("11"),
         setOf("Foretak") to listOf("12"),
         setOf(

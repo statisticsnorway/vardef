@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.vardef.integrations.vardok.convertions.convertUnitTypes
+import no.ssb.metadata.vardef.integrations.vardok.convertions.specialCaseUnitMapping
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
@@ -58,6 +59,55 @@ class ConvertionsTest : BaseVardokTest() {
                     "Offentlig forvaltning",
                     listOf("22"),
                 ),
+                arguments(
+                    "Verksemd",
+                    listOf("13"),
+                ),
+                arguments(
+                    "Hushald",
+                    listOf("10"),
+                ),
+            )
+
+        @JvmStatic
+        fun specialUnitTypes(): Stream<Arguments> =
+            Stream.of(
+                arguments(
+                    "2142",
+                    listOf("04"),
+                ),
+                arguments(
+                    "2206",
+                    listOf("05"),
+                ),
+                arguments(
+                    "1943",
+                    listOf("12", "13"),
+                ),
+                arguments(
+                    "1320",
+                    listOf("16"),
+                ),
+                arguments(
+                    "2190",
+                    listOf("20"),
+                ),
+                arguments(
+                    "1997",
+                    listOf("29"),
+                ),
+                arguments(
+                    "2218",
+                    listOf("01", "04", "05"),
+                ),
+                arguments(
+                    "2182",
+                    listOf("12", "20"),
+                ),
+                arguments(
+                    "3125",
+                    listOf("21"),
+                ),
             )
     }
 
@@ -68,5 +118,14 @@ class ConvertionsTest : BaseVardokTest() {
         code: List<String?>,
     ) {
         assertThat(convertUnitTypes(name)).isEqualTo(code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("specialUnitTypes")
+    fun `map special cases statistical unit to unit types`(
+        id: String,
+        code: List<String?>,
+    ) {
+        assertThat(specialCaseUnitMapping(id)).isEqualTo(code)
     }
 }

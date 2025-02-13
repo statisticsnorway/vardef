@@ -322,7 +322,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
+                    errorMessage = "Vardok ID $id: StatisticalUnit is either missing or contains outdated unit types",
                 ),
             )
     }
@@ -357,7 +357,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved",
+                    errorMessage = "Vardok ID 0000: StatisticalUnit is either missing or contains outdated unit types.",
                 ),
             )
     }
@@ -472,7 +472,47 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeResponse.id)
     }
 
+    @ParameterizedTest
+    @MethodSource("newNorwegianUnitTypes")
+    fun `create vardok has has nn unit type`(
+        id: Int,
+        expectedUnitType: String,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf(expectedUnitType))
+    }
+
     companion object {
+        @JvmStatic
+        fun newNorwegianUnitTypes(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Verksemd",
+                    "2413",
+                    "13",
+                ),
+                argumentSet(
+                    "Hushald",
+                    "3135",
+                    "10",
+                ),
+            )
+
         @JvmStatic
         fun mapExternalDocument(): Stream<Arguments> =
             Stream.of(

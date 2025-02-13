@@ -23,18 +23,21 @@ val unitTypesMapping =
         setOf("Fylke (forvaltning)") to listOf("07"),
         setOf("Fylke (geografisk)") to listOf("08"),
         setOf("Havneanløp") to listOf("09"),
-        setOf("Husholdning") to listOf("10"),
+        setOf(
+            "Husholdning",
+            "Hushald",
+        ) to listOf("10"),
         setOf("Juridisk enhet") to listOf("11"),
         setOf("Foretak") to listOf("12"),
         setOf(
             "Bedrift",
             "Virksomhet",
+            "Verksemd",
         ) to listOf("13"),
         setOf("Bransjeenhet") to listOf("14"),
         setOf("Kjøretøy") to listOf("15"),
-        setOf("Kommune (forvaltning)") to listOf("15"),
         setOf("Kommune (forvaltning)") to listOf("16"),
-        setOf("Fylke (geografisk)") to listOf("17"),
+        setOf("Kommune (geografisk)") to listOf("17"),
         setOf("Kurs") to listOf("18"),
         setOf("Lovbrudd") to listOf("19"),
         setOf(
@@ -93,6 +96,7 @@ fun specialCaseUnitMapping(vardokId: String): List<String>? =
         "1997", "2129", "2130", "2133", "2192", "2193" -> listOf("29")
         "2216", "2217", "2210", "2218" -> listOf("01", "04", "05")
         "2182" -> listOf("12", "20")
+        "3125" -> listOf("21")
         else -> null
     }
 

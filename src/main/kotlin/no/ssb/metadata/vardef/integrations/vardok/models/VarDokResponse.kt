@@ -150,4 +150,6 @@ data class VardokResponse(
     val variable: Variable? = null,
     @field:JacksonXmlProperty(localName = "Relations", isAttribute = false)
     val relations: Relations? = null,
-)
+) {
+    fun parseId() = id.substringAfterLast(":")
+}

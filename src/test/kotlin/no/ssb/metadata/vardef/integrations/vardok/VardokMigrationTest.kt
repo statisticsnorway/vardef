@@ -201,8 +201,8 @@ class VardokMigrationTest {
         assertThatThrownBy {
             val vardokresponse = vardokService.getVardokItem("0000")
             vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
-        }.isInstanceOf(OutdatedUnitTypesException::class.java)
-            .hasMessageContaining("Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved")
+        }.isInstanceOf(StatisticalUnitException::class.java)
+            .hasMessageContaining("Vardok ID 0000: StatisticalUnit is either missing or contains outdated unit types.")
     }
 
     @Test

@@ -322,7 +322,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
+                    errorMessage = "Vardok ID $id: StatisticalUnit is either missing or contains outdated unit types",
                 ),
             )
     }
@@ -357,7 +357,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved",
+                    errorMessage = "Vardok ID 0000: StatisticalUnit is either missing or contains outdated unit types.",
                 ),
             )
     }

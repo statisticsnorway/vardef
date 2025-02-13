@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok.convertions
 
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaException
-import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
+import no.ssb.metadata.vardef.integrations.vardok.models.StatisticalUnitException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
@@ -31,7 +31,7 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
  * and defined in [specialCaseUnitMapping]
  *
  * @returns list with string value(s) except if result is null then
- * @throws OutdatedUnitTypesException
+ * @throws StatisticalUnitException
  *
  */
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String> {
@@ -39,7 +39,7 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
 
     return vardokItem.variable?.statisticalUnit?.let { statUnit ->
         convertUnitTypes(statUnit)
-    } ?: throw OutdatedUnitTypesException(vardokItem.parseId())
+    } ?: throw StatisticalUnitException(vardokItem.parseId())
 }
 
 /**

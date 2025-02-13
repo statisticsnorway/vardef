@@ -137,7 +137,7 @@ class VardokMigrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = ["2413"])
-    fun `vardokresponse statistical units is in language nn`(vardokId: String) {
+    fun `vardokresponse statistical unit is in language nn`(vardokId: String) {
         val vardokresponse = vardokService.getVardokItem(vardokId)
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("13"))

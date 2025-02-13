@@ -108,10 +108,6 @@ class ConvertionsTest : BaseVardokTest() {
                     "3125",
                     listOf("21"),
                 ),
-                arguments(
-                    "2413",
-                    listOf("13"),
-                ),
             )
     }
 

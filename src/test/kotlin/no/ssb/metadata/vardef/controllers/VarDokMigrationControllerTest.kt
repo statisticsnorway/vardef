@@ -473,8 +473,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("newNorwegian")
-    fun `create vardok has has nn as primarly language`(
+    @MethodSource("newNorwegianUnitTypes")
+    fun `create vardok has has nn unit type`(
         id: Int,
         expectedUnitType: String,
         spec: RequestSpecification,
@@ -499,16 +499,16 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
     companion object {
         @JvmStatic
-        fun newNorwegian(): Stream<Arguments> =
+        fun newNorwegianUnitTypes(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
                     "Verksemd",
-                    2413,
+                    "2413",
                     "13",
                 ),
                 argumentSet(
                     "Hushald",
-                    3135,
+                    "3135",
                     "10",
                 ),
             )

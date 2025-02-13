@@ -29,6 +29,7 @@ val unitTypesMapping =
         setOf(
             "Bedrift",
             "Virksomhet",
+            "Verksemd",
         ) to listOf("13"),
         setOf("Bransjeenhet") to listOf("14"),
         setOf("Kjøretøy") to listOf("15"),

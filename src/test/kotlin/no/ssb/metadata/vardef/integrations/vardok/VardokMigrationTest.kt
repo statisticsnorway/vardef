@@ -137,12 +137,10 @@ class VardokMigrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = ["2413"])
-    fun `vardokresponse statistical units are not valid`(vardokId: String) {
-        assertThatThrownBy {
-            val vardokresponse = vardokService.getVardokItem(vardokId)
-            vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
-        }.isInstanceOf(OutdatedUnitTypesException::class.java)
-            .hasMessageContaining("Vardok id 2413 StatisticalUnit has outdated unit types and can not be saved")
+    fun `vardokresponse statistical units is in language nn`(vardokId: String) {
+        val vardokresponse = vardokService.getVardokItem(vardokId)
+        val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
+        assertThat(result).isEqualTo(listOf("13"))
     }
 
     @Test

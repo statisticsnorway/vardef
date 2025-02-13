@@ -472,6 +472,27 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeResponse.id)
     }
 
+    @Test
+    fun `create vardok has has new norwegian as primarly language`(spec: RequestSpecification) {
+        val id = 2413
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf("13"))
+    }
+
     companion object {
         @JvmStatic
         fun mapExternalDocument(): Stream<Arguments> =

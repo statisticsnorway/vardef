@@ -106,7 +106,7 @@ class VardokClientTest {
     }
 
     @Test
-    fun `statistical unit nn`(){
+    fun `statistical unit nn`() {
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage("3135")
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.unitTypes).isEqualTo(listOf("10"))

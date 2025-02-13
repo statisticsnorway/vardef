@@ -59,6 +59,14 @@ class ConvertionsTest : BaseVardokTest() {
                     "Offentlig forvaltning",
                     listOf("22"),
                 ),
+                arguments(
+                    "Verksemd",
+                    listOf("13"),
+                ),
+                arguments(
+                    "Hushald",
+                    listOf("10"),
+                ),
             )
 
         @JvmStatic

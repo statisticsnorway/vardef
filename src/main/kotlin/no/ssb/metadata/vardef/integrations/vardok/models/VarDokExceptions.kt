@@ -13,7 +13,6 @@ class VardokNotFoundException(
     message: String,
 ) : VardokException(message)
 
-
 class StatisticalUnitException(
     id: String,
 ) : VardokException(

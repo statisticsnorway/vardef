@@ -22,8 +22,6 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     return Pair(firstDate, secondDate)
 }
 
-fun vardokId(vardokItem: VardokResponse): String = vardokItem.id.substringAfterLast(":")
-
 /**
  * When null response from method [convertUnitTypes] identifier is checked in method [specialCaseUnitMapping]
  *
@@ -31,13 +29,11 @@ fun vardokId(vardokItem: VardokResponse): String = vardokItem.id.substringAfterL
  * @throws OutdatedUnitTypesException
  */
 fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String> {
-    val id = vardokId(vardokItem)
-
-    specialCaseUnitMapping(id)?.let { return it }
+    specialCaseUnitMapping(vardokItem.parseId())?.let { return it }
 
     return vardokItem.variable?.statisticalUnit?.let { statUnit ->
         convertUnitTypes(statUnit)
-    } ?: throw OutdatedUnitTypesException(id)
+    } ?: throw OutdatedUnitTypesException(vardokItem.parseId())
 }
 
 /**
@@ -51,7 +47,7 @@ fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String>
             ?: return emptyList()
 
     return convertSubjectArea(code)?.let { listOf(it) }
-        ?: throw OutdatedSubjectAreaException(vardokItem.id.substringAfterLast(":"))
+        ?: throw OutdatedSubjectAreaException(vardokItem.parseId())
 }
 
 /**
@@ -97,7 +93,7 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
  * @return A valid [URL] if the `externalDocument` string is properly formatted, otherwise `null`.
  */
 fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? {
-    logger.info("Convert external document value: ${vardokItem.variable?.externalDocument} for ${vardokId(vardokItem)}.")
+    logger.info("Convert external document value: ${vardokItem.variable?.externalDocument} for ${vardokItem.parseId()}.")
     return vardokItem.variable?.externalDocument?.trim()
         ?.let { urlString ->
             runCatching { URI(urlString).toURL() }

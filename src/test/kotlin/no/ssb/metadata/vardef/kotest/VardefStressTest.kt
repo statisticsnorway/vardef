@@ -4,6 +4,7 @@ import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
+import io.micronaut.context.annotation.Requires
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.security.authentication.Authentication
@@ -33,6 +34,7 @@ object KotestConfig : AbstractProjectConfig() {
 }
 
 @MicronautTest
+@Requires(env = ["integration-test"])
 class VardefStressTest(
     private val variableDefinitionsController: VariableDefinitionsController,
 ) : ShouldSpec({

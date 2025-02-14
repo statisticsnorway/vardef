@@ -54,6 +54,10 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.json)
+    testImplementation("io.kotest:kotest-assertions-core:5.9")
+    testImplementation("io.micronaut.test:micronaut-test-kotest5:4.5.0")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.9")
+    testImplementation("io.micronaut.testresources:micronaut-test-resources-extensions-junit-platform")
     testImplementation(libs.logback.classic)
     aotPlugins(platform(libs.micronaut.platform))
 }

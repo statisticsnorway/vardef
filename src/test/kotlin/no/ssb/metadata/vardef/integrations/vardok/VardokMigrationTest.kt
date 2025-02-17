@@ -283,6 +283,10 @@ class VardokMigrationTest {
                     "3246",
                     listOf("12", "13"),
                 ),
+                arguments(
+                    "590",
+                    listOf("12", "13", "20"),
+                ),
             )
 
         @JvmStatic

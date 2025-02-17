@@ -74,7 +74,7 @@ class ConvertionsTest : BaseVardokTest() {
             Stream.of(
                 arguments(
                     "2183",
-                    listOf("01")
+                    listOf("01"),
                 ),
                 arguments(
                     "2142",
@@ -114,7 +114,7 @@ class ConvertionsTest : BaseVardokTest() {
                 ),
                 arguments(
                     "1326",
-                    listOf("16","17")
+                    listOf("16", "17"),
                 ),
                 arguments(
                     "3125",
@@ -122,7 +122,7 @@ class ConvertionsTest : BaseVardokTest() {
                 ),
                 arguments(
                     "590",
-                    listOf("12","13","20"),
+                    listOf("12", "13", "20"),
                 ),
             )
     }

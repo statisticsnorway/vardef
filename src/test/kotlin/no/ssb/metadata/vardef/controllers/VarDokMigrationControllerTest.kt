@@ -403,9 +403,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `create vardok unit types`(
-        spec: RequestSpecification,
-    ) {
+    fun `create vardok unit types`(spec: RequestSpecification) {
         val body =
             spec
                 .given()
@@ -421,7 +419,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.unitTypes).isEqualTo(listOf("12","13","20"))
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf("12", "13", "20"))
     }
 
     @Test

@@ -94,9 +94,9 @@ class VardefStressTest(
                                     }
                                 }.awaitAll()
 
-                                val successCount = result.count { it is CompleteResponse }
-                                val conflictCount = result.count { it == HttpStatus.CONFLICT }
-                                successCount shouldBe (numOfDefinitions - conflictCount)
+                            val successCount = result.count { it is CompleteResponse }
+                            val conflictCount = result.count { it == HttpStatus.CONFLICT }
+                            successCount shouldBe (numOfDefinitions - conflictCount)
                         }
                     }.awaitAll()
                 }

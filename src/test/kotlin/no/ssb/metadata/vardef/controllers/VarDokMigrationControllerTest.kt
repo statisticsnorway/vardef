@@ -299,34 +299,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeResponse.relatedVariableDefinitionUris).isEqualTo(expectedResult)
     }
 
-    @ParameterizedTest
-    @ValueSource(
-        ints = [
-            141, 2590,
-        ],
-    )
-    fun `post vardok missing updated statistical unit`(
-        id: Int,
-        spec: RequestSpecification,
-    ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(400)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Vardok ID $id: StatisticalUnit is either missing or contains outdated unit types",
-                ),
-            )
-    }
-
     @Test
     fun `create vardok return owner`(spec: RequestSpecification) {
         spec
@@ -428,6 +400,28 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.externalReferenceUri).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `create vardok unit types`(
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/590")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf("12","13","20"))
     }
 
     @Test

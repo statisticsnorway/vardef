@@ -73,11 +73,19 @@ class ConvertionsTest : BaseVardokTest() {
         fun specialUnitTypes(): Stream<Arguments> =
             Stream.of(
                 arguments(
+                    "2183",
+                    listOf("01")
+                ),
+                arguments(
                     "2142",
                     listOf("04"),
                 ),
                 arguments(
                     "2206",
+                    listOf("05"),
+                ),
+                arguments(
+                    "1704",
                     listOf("05"),
                 ),
                 arguments(
@@ -105,8 +113,16 @@ class ConvertionsTest : BaseVardokTest() {
                     listOf("12", "20"),
                 ),
                 arguments(
+                    "1326",
+                    listOf("16","17")
+                ),
+                arguments(
                     "3125",
                     listOf("21"),
+                ),
+                arguments(
+                    "590",
+                    listOf("12","13","20"),
                 ),
             )
     }

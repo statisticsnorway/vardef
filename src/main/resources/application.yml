@@ -68,8 +68,10 @@ micronaut:
   caches:
     classifications:
       maximumSize: 3600
+      expire-after-write: 1d
     codes:
       maximumSize: 3600
+      expire-after-write: 1d
 
   server:
     cors:

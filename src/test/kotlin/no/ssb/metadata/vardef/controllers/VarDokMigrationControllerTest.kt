@@ -423,6 +423,26 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `create vardok with new unit type`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/2194")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf("29"))
+    }
+
+    @Test
     fun `post vardok incorrect updated subject area`(spec: RequestSpecification) {
         val id = 99999
         spec

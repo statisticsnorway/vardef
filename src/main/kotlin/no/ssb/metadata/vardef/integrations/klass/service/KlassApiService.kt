@@ -60,8 +60,8 @@ open class KlassApiService(
     ): HttpResponse<T> {
         when (response.status.code) {
             500 -> {
-                logger.error(Companion.STATUS_500_MESSAGE)
-                throw HttpServerException(Companion.STATUS_500_MESSAGE)
+                logger.error(STATUS_500_MESSAGE)
+                throw HttpServerException(STATUS_500_MESSAGE)
             }
 
             404 -> {

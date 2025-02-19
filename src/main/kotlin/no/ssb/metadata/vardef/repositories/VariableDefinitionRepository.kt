@@ -22,4 +22,6 @@ interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition,
     fun findDistinctDefinitionIdByVariableStatusInList(variableStatus: List<VariableStatus>): Set<String>
 
     fun findByShortName(shortName: String): SavedVariableDefinition?
+
+    fun findDistinctDefinitionIdByShortName(shortName: String): String
 }

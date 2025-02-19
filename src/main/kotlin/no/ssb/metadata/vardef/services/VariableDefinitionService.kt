@@ -153,19 +153,30 @@ class VariableDefinitionService(
     }
 
     /**
-     * List *Variable Definitions* which are valid on the given date.
+     * List *Variable Definitions* which are valid on the given date and shortname.
      *
-     * If no date is given, list all variable definitions. These are the
+     * If no date and shortname is given, list all variable definitions. These are the
      * [CompleteResponse] and are suitable for internal use.
      *
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
+     * @param shortName The shortname which one wants a variable definition for.
      * @return [List<CompleteResponse>] valid at the date.
      */
-    fun listCompleteForDate(dateOfValidity: LocalDate?): List<CompleteResponse> {
+    fun listCompleteForDate(
+        dateOfValidity: LocalDate?,
+        shortName: String?,
+    ): List<CompleteResponse> {
         val results =
-            uniqueDefinitionIds()
-                .mapNotNull { getCompleteByDate(it, dateOfValidity) }
-        logger.info("Found ${results.size} valid variable definitions at date $dateOfValidity.")
+            if (shortName != null) {
+                variableDefinitionRepository
+                    .findDistinctDefinitionIdByShortName(shortName)
+                    .let { id -> listOfNotNull(getCompleteByDate(id, dateOfValidity)) }
+            } else {
+                uniqueDefinitionIds()
+                    .mapNotNull { getCompleteByDate(it, dateOfValidity) }
+            }
+
+        logger.info("Found ${results.size} valid variable definitions at date $dateOfValidity with shortName=$shortName.")
         return results
     }
 

@@ -69,7 +69,15 @@ class VariableDefinitionsController(
             ],
         )
         dateOfValidity: LocalDate? = null,
-    ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity)
+        @QueryValue("short_name")
+        @Parameter(
+            description = SHORT_NAME_QUERY_PARAM_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "landbak", value = SHORT_NAME_EXAMPLE),
+            ],
+        )
+        shortName: String? = null,
+    ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
 
     /**
      * Create a variable definition.

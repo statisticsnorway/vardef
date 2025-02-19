@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.annotation.Primary
-import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
@@ -15,6 +14,7 @@ import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @MicronautTest
@@ -25,8 +25,7 @@ class KlassApiServiceCacheTest {
     @Inject
     private lateinit var klassApiMockkClient: KlassApiClient
 
-    @Property(name = "micronaut.http.services.klass.codes-at")
-    private lateinit var codesAt: String
+    private val codesAt = LocalDate.now().toString()
 
     private val classificationId = 1
     private val language = SupportedLanguages.NB

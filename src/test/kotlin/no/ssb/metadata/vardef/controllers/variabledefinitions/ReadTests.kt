@@ -9,8 +9,7 @@ import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers
-import org.hamcrest.Matchers.hasKey
-import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -123,6 +122,35 @@ class ReadTests : BaseVardefTest() {
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
         val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
         assertThat(actualStatuses).containsAll(expectedStatuses)
+    }
+
+    @Test
+    fun `get variable definition by short name that does not exist`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions?short_name=nonexistent_shortname")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("", empty<List<Any>>())
+    }
+
+    @Test
+    fun `get variable definition by similar short names`(spec: RequestSpecification) {
+        variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE.copy(shortName = "bussrute"))
+        val body =
+            spec
+                .`when`()
+                .get("/variable-definitions?short_name=${DRAFT_BUS_EXAMPLE.shortName}")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
+        assertThat(variableDefinitions.size).isEqualTo(1)
+        assertThat(variableDefinitions[0].shortName).isEqualTo(DRAFT_BUS_EXAMPLE.shortName)
+        assertThat(variableDefinitions[0].patchId).isEqualTo(1)
     }
 
     @ParameterizedTest

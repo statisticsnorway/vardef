@@ -170,7 +170,7 @@ class VariableDefinitionService(
             if (shortName != null) {
                 variableDefinitionRepository
                     .findDistinctDefinitionIdByShortName(shortName)
-                    .let { id -> listOfNotNull(getCompleteByDate(id, dateOfValidity)) }
+                    .let { id -> listOfNotNull(id?.let { getCompleteByDate(it, dateOfValidity) }) }
             } else {
                 uniqueDefinitionIds()
                     .mapNotNull { getCompleteByDate(it, dateOfValidity) }

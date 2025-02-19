@@ -23,5 +23,5 @@ interface VariableDefinitionRepository : CrudRepository<SavedVariableDefinition,
 
     fun findByShortName(shortName: String): SavedVariableDefinition?
 
-    fun findDistinctDefinitionIdByShortName(shortName: String): String
+    fun findDistinctDefinitionIdByShortName(shortName: String): String?
 }

@@ -91,7 +91,6 @@ micronaut:
     services:
       klass:
         url: https://data.ssb.no/api/klass/v1/
-        codes-at: 2025-01-01
         health-check: true
         health-check-interval: 15s
       vardok:

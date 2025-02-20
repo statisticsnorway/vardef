@@ -104,4 +104,11 @@ class VardokClientTest {
         }.isInstanceOf(VardokNotFoundException::class.java)
             .hasMessageContaining("Vardok id 21 not found")
     }
+
+    @Test
+    fun `statistical unit nn`() {
+        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("3135")
+        val varDefInput = VardokService.extractVardefInput(result)
+        assertThat(varDefInput.unitTypes).isEqualTo(listOf("10"))
+    }
 }

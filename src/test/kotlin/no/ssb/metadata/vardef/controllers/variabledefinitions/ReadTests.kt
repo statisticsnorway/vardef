@@ -5,17 +5,18 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.VariableStatus
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
-import no.ssb.metadata.vardef.utils.NUM_ALL_VARIABLE_DEFINITIONS
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers
-import org.hamcrest.Matchers.hasKey
-import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.MethodSource
+import java.util.stream.Stream
 
 class ReadTests : BaseVardefTest() {
     @Test
@@ -121,5 +122,77 @@ class ReadTests : BaseVardefTest() {
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
         val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
         assertThat(actualStatuses).containsAll(expectedStatuses)
+    }
+
+    @Test
+    fun `get variable definition by short name that does not exist`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("/variable-definitions?short_name=nonexistent_shortname")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("", empty<List<Any>>())
+    }
+
+    @Test
+    fun `get variable definition by similar short names`(spec: RequestSpecification) {
+        variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE.copy(shortName = "bussrute"))
+        val body =
+            spec
+                .`when`()
+                .get("/variable-definitions?short_name=${DRAFT_BUS_EXAMPLE.shortName}")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
+        assertThat(variableDefinitions.size).isEqualTo(1)
+        assertThat(variableDefinitions[0].shortName).isEqualTo(DRAFT_BUS_EXAMPLE.shortName)
+        assertThat(variableDefinitions[0].patchId).isEqualTo(1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("getByShortnames")
+    fun `get variable definition by short name with or without date`(
+        url: String,
+        expectedPatchId: Int,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .`when`()
+                .get(url)
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
+        assertThat(variableDefinitions[0].patchId).isEqualTo(expectedPatchId)
+    }
+
+    companion object {
+        @JvmStatic
+        fun getByShortnames(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Short name and no date",
+                    "/variable-definitions?short_name=${INCOME_TAX_VP2_P6.shortName}",
+                    6,
+                ),
+                argumentSet(
+                    "Shortname and date",
+                    "/variable-definitions?date_of_validity=1990-01-01&short_name=${INCOME_TAX_VP2_P6.shortName}",
+                    7,
+                ),
+                argumentSet(
+                    "No patches",
+                    "/variable-definitions?short_name=${DRAFT_BUS_EXAMPLE.shortName}",
+                    1,
+                ),
+            )
     }
 }

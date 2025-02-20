@@ -13,10 +13,10 @@ class VardokNotFoundException(
     message: String,
 ) : VardokException(message)
 
-class OutdatedUnitTypesException(
+class StatisticalUnitException(
     id: String,
 ) : VardokException(
-        "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
+        "Vardok ID $id: StatisticalUnit is either missing or contains outdated unit types.",
     )
 
 class OutdatedSubjectAreaException(

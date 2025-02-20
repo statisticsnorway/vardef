@@ -299,34 +299,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeResponse.relatedVariableDefinitionUris).isEqualTo(expectedResult)
     }
 
-    @ParameterizedTest
-    @ValueSource(
-        ints = [
-            141, 2590,
-        ],
-    )
-    fun `post vardok missing updated statistical unit`(
-        id: Int,
-        spec: RequestSpecification,
-    ) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(400)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Vardok id $id StatisticalUnit has outdated unit types and can not be saved",
-                ),
-            )
-    }
-
     @Test
     fun `create vardok return owner`(spec: RequestSpecification) {
         spec
@@ -357,7 +329,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved",
+                    errorMessage = "Vardok ID 0000: StatisticalUnit is either missing or contains outdated unit types.",
                 ),
             )
     }
@@ -431,6 +403,46 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `create vardok unit types`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/590")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf("12", "13", "20"))
+    }
+
+    @Test
+    fun `create vardok with new unit type`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/2194")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf("29"))
+    }
+
+    @Test
     fun `post vardok incorrect updated subject area`(spec: RequestSpecification) {
         val id = 99999
         spec
@@ -472,7 +484,47 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeResponse.id)
     }
 
+    @ParameterizedTest
+    @MethodSource("newNorwegianUnitTypes")
+    fun `create vardok has has nn unit type`(
+        id: Int,
+        expectedUnitType: String,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.unitTypes).isEqualTo(listOf(expectedUnitType))
+    }
+
     companion object {
+        @JvmStatic
+        fun newNorwegianUnitTypes(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Verksemd",
+                    "2413",
+                    "13",
+                ),
+                argumentSet(
+                    "Hushald",
+                    "3135",
+                    "10",
+                ),
+            )
+
         @JvmStatic
         fun mapExternalDocument(): Stream<Arguments> =
             Stream.of(

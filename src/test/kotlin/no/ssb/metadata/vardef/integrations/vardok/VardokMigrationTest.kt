@@ -128,11 +128,19 @@ class VardokMigrationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["130", "69"])
+    @ValueSource(strings = ["130", "69", "1416"])
     fun `vardokresponse statistical units are values in UnitTypes PERSON`(vardokId: String) {
         val vardokresponse = vardokService.getVardokItem(vardokId)
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["2413"])
+    fun `vardokresponse statistical unit is in language nn`(vardokId: String) {
+        val vardokresponse = vardokService.getVardokItem(vardokId)
+        val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
+        assertThat(result).isEqualTo(listOf("13"))
     }
 
     @Test
@@ -193,8 +201,8 @@ class VardokMigrationTest {
         assertThatThrownBy {
             val vardokresponse = vardokService.getVardokItem("0000")
             vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
-        }.isInstanceOf(OutdatedUnitTypesException::class.java)
-            .hasMessageContaining("Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved")
+        }.isInstanceOf(StatisticalUnitException::class.java)
+            .hasMessageContaining("Vardok ID 0000: StatisticalUnit is either missing or contains outdated unit types.")
     }
 
     @Test
@@ -274,6 +282,10 @@ class VardokMigrationTest {
                 arguments(
                     "3246",
                     listOf("12", "13"),
+                ),
+                arguments(
+                    "590",
+                    listOf("12", "13", "20"),
                 ),
             )
 

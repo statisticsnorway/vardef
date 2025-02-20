@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.annotation.Primary
-import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.server.exceptions.HttpServerException
 import io.micronaut.test.annotation.MockBean
@@ -22,6 +21,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @MicronautTest(startApplication = false)
@@ -32,8 +32,7 @@ class KlassApiServiceTest {
     @Inject
     private lateinit var klassApiMockkClient: KlassApiClient
 
-    @Property(name = "micronaut.http.services.klass.codes-at")
-    private lateinit var codesAt: String
+    private val codesAt = LocalDate.now().toString()
 
     @Primary
     @Singleton

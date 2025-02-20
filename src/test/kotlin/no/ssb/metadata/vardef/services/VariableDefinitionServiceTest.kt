@@ -28,16 +28,31 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             }
     }
 
-    @Test
-    fun `list all variable definitions`() {
-        variableDefinitionService
-            .listCompleteForDate(
-                LocalDate.now(),
-            ).let {
-                assertThat(it.size).isEqualTo(
-                    NUM_ALL_VARIABLE_DEFINITIONS,
+    @ParameterizedTest
+    @MethodSource("listAllVariablesAtDifferentTimes")
+    fun `list variable definitions at different times`(
+        date: LocalDate?,
+        result: Int,
+    ) {
+        val variableDefinitions =
+            variableDefinitionService
+                .listCompleteForDate(
+                    date,
+                    null,
                 )
-            }
+
+        assertThat(variableDefinitions.size).isEqualTo(result)
+    }
+
+    @ParameterizedTest
+    @MethodSource("variableByShortNameCases")
+    fun `list variable definition by shortName`(
+        date: LocalDate?,
+        patchId: Int?,
+        shortName: String?,
+    ) {
+        assertThat(variableDefinitionService.listCompleteForDate(date, shortName).first().patchId)
+            .isEqualTo(patchId)
     }
 
     @Test
@@ -382,6 +397,49 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     VariableStatus.PUBLISHED_INTERNAL,
                     SAVED_INTERNAL_VARIABLE_DEFINITION.toCompleteResponse(),
+                ),
+            )
+
+        @JvmStatic
+        fun variableByShortNameCases(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Fist validity period",
+                    LocalDate.of(1980, 1, 1),
+                    7,
+                    INCOME_TAX_VP1_P1.shortName,
+                ),
+                argumentSet(
+                    "Second validity period",
+                    LocalDate.of(2021, 1, 1),
+                    6,
+                    INCOME_TAX_VP2_P6.shortName,
+                ),
+                argumentSet(
+                    "No date",
+                    null,
+                    6,
+                    INCOME_TAX_VP2_P6.shortName,
+                ),
+            )
+
+        @JvmStatic
+        fun listAllVariablesAtDifferentTimes(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "All variables",
+                    LocalDate.now(),
+                    NUM_ALL_VARIABLE_DEFINITIONS,
+                ),
+                argumentSet(
+                    "Variables from year 100",
+                    LocalDate.of(100, 1, 1),
+                    0,
+                ),
+                argumentSet(
+                    "No date input",
+                    null,
+                    NUM_ALL_VARIABLE_DEFINITIONS,
                 ),
             )
     }

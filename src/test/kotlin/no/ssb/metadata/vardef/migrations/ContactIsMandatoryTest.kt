@@ -24,6 +24,7 @@ class ContactIsMandatoryTest {
         mongoDatabase = mongoClient.getDatabase(MONGO_DB_NAME_VARDEF)
     }
 
+    @BeforeEach
     @AfterEach
     fun resetDatabase() {
         Mono.from(mongoDatabase.drop()).block()

@@ -64,20 +64,7 @@ class ManagementEndpointsTest {
             .none()
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/docs/swagger")
-            .then()
-            .statusCode(200)
-    }
-
-    @Test
-    fun `redoc docs`(spec: RequestSpecification) {
-        spec
-            .given()
-            .auth()
-            .none()
-            .`when`()
-            .contentType(ContentType.JSON)
-            .get("/docs/redoc")
+            .get("/swagger-ui")
             .then()
             .statusCode(200)
     }

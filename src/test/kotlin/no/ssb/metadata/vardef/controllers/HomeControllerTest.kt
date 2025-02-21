@@ -19,7 +19,7 @@ internal class HomeControllerTest : BaseVardefTest() {
             .get("/")
             .then()
             .statusCode(HttpStatus.SEE_OTHER.code)
-            .header(HttpHeaders.LOCATION, "/docs/redoc")
+            .header(HttpHeaders.LOCATION, "/swagger-ui")
     }
 
     @Test

@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.controllers
+package no.ssb.metadata.vardef.controllers.public_
 
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.tags.Tag
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
@@ -23,7 +22,6 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
-@Tag(name = PUBLIC)
 @Validated
 @Controller("/public")
 @Secured(SecurityRule.IS_ANONYMOUS)
@@ -53,7 +51,6 @@ class PublicController(
             ),
         ],
     )
-    @Tag(name = VARIABLE_DEFINITIONS)
     @Get("/variable-definitions")
     fun listPublicVariableDefinitions(
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
@@ -77,7 +74,6 @@ class PublicController(
      *
      * This is rendered in the given language, with the default being Norwegian Bokmål.
      */
-    @Tag(name = VARIABLE_DEFINITIONS)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(
         responseCode = "200",
@@ -147,7 +143,6 @@ class PublicController(
      */
     @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
     @Produces(MediaType.APPLICATION_JSON)
-    @Tag(name = VALIDITY_PERIODS)
     @ApiResponse(
         responseCode = "200",
         content = [

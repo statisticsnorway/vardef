@@ -16,13 +16,13 @@ import java.net.URI
  *
  * Redirect GET requests to the root path to the API docs. This makes the API docs more discoverable from a browser.
  */
+@Hidden
 @Controller
 @Secured(SecurityRule.IS_ANONYMOUS)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class HomeController {
-    private val docsUri: URI = UriBuilder.of("/docs").path("redoc").build()
+    private val docsUri: URI = UriBuilder.of("/swagger-ui").build()
 
     @Get
-    @Hidden
     fun redirectToDocs(): HttpResponse<Any> = HttpResponse.seeOther(docsUri)
 }

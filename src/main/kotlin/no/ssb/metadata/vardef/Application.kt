@@ -4,6 +4,7 @@ import io.micronaut.health.HealthStatus
 import io.micronaut.management.health.indicator.HealthIndicator
 import io.micronaut.management.health.indicator.HealthResult
 import io.micronaut.management.health.indicator.annotation.Liveness
+import io.micronaut.openapi.annotation.OpenAPIGroupInfo
 import io.micronaut.runtime.Micronaut
 import io.swagger.v3.oas.annotations.ExternalDocumentation
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
@@ -20,12 +21,34 @@ import org.reactivestreams.Publisher
 import reactor.core.publisher.Mono
 
 @Suppress("ktlint:standard:max-line-length")
-@OpenAPIDefinition(
+@OpenAPIGroupInfo(
+    names = ["public"],
     info =
-        Info(
-            title = "Variable Definitions",
-            description =
-                """## Introduction
+        OpenAPIDefinition(
+            info =
+                Info(
+                    title = "Public Variable Definitions API",
+                    description = """Public Variable Definitions""",
+                    version = "0.1",
+                    license = License(name = "CC BY 4.0", url = "https://creativecommons.org/licenses/by/4.0/deed.no"),
+                    contact = Contact(email = "metadata@ssb.no", name = "Team Metadata"),
+                ),
+            servers = [
+                Server(url = "https://metadata.ssb.no", description = "Public server"),
+                Server(url = "https://metadata.test.ssb.no", description = "Public test server"),
+                Server(url = "https://localhost:8080", description = "Local development"),
+            ],
+        ),
+)
+@OpenAPIGroupInfo(
+    names = ["internal"],
+    info =
+        OpenAPIDefinition(
+            info =
+                Info(
+                    title = "Internal Variable Definitions Administration API",
+                    description = """
+## Introduction
 
 Variable Definitions are centralized definitions of concrete variables which are typically present in multiple datasets. Variable Definitions support standardization of data and metadata and facilitate sharing and joining of data by clarifying when variables have an identical definition.
 
@@ -37,7 +60,7 @@ Creation and maintenance of variables may only be performed by Statistics Norway
 
 ### Status
 All Variable Definitions have an associated status. The possible values for status are `DRAFT`, `PUBLISHED_INTERNAL` and `PUBLISHED_EXTERNAL`.
- 
+
 #### Draft
 When a Variable Definition is created it is assigned the status `DRAFT`. Under this status the Variable Definition is:
 
@@ -76,47 +99,50 @@ Patches are for changes which do not affect the fundamental meaning of the Varia
 Validity Periods are versions with a period defined by a `valid_from` date and optionally a `valid_until` date. If the fundamental meaning of a Variable Definition is to be changed, it should be done by creating a new Validity Period.
 
 """,
-            version = "0.1",
-            license = License(name = "CC BY 4.0", url = "https://creativecommons.org/licenses/by/4.0/deed.no"),
-            contact = Contact(email = "metadata@ssb.no", name = "Team Metadata"),
-        ),
-    servers = [Server(url = "https://metadata.intern.test.ssb.no", description = "Internal test server")],
-    tags = [
-        Tag(
-            name = PUBLIC,
-            description = "Operations which are available to the general public without authentication.",
-        ),
-        Tag(
-            name = VALIDITY_PERIODS,
-            description = "Create and access Validity Periods.",
-        ),
-        Tag(
-            name = PATCHES,
-            description = "Create and access Patches.",
-        ),
-        Tag(
-            name = DATA_MIGRATION,
-            description = "Create variable definitions from existing definitions in Vardok.",
-            externalDocs =
-                ExternalDocumentation(
-                    description = "Vardok website",
-                    url = "https://www.ssb.no/a/metadata/definisjoner/variabler/main.html",
+                    version = "0.1",
+                    license = License(name = "CC BY 4.0", url = "https://creativecommons.org/licenses/by/4.0/deed.no"),
+                    contact = Contact(email = "metadata@ssb.no", name = "Team Metadata"),
                 ),
+            servers = [
+                Server(
+                    url = "https://metadata.intern.ssb.no",
+                    description = "Internal server",
+                ),
+                Server(
+                    url = "https://metadata.intern.test.ssb.no",
+                    description = "Internal test server",
+                ),
+                Server(url = "https://localhost:8080", description = "Local development"),
+            ],
+            tags = [
+                Tag(name = VALIDITY_PERIODS, description = "Create and access Validity Periods."),
+                Tag(
+                    name = PATCHES,
+                    description = "Create and access Patches.",
+                ),
+                Tag(
+                    name = DATA_MIGRATION,
+                    description = "Create variable definitions from existing definitions in Vardok.",
+                    externalDocs =
+                        ExternalDocumentation(
+                            description = "Vardok website",
+                            url = "https://www.ssb.no/a/metadata/definisjoner/variabler/main.html",
+                        ),
+                ),
+                Tag(name = DRAFT, description = "Create, update and delete variable definitions with DRAFT status."),
+            ],
         ),
-        Tag(
-            name = DRAFT,
-            description = "Create, update and delete variable definitions with DRAFT status.",
+    securitySchemes = [
+        SecurityScheme(
+            name = KEYCLOAK_TOKEN_SCHEME,
+            description =
+                "A token granted by Statistics Norway's Keycloak instance. May be obtained " +
+                    "from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service.",
+            type = SecuritySchemeType.HTTP,
+            bearerFormat = "JWT",
+            scheme = "bearer",
         ),
     ],
-)
-@SecurityScheme(
-    name = KEYCLOAK_TOKEN_SCHEME,
-    description =
-        "A token granted by Statistics Norway's Keycloak instance. May be obtained " +
-            "from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service.",
-    type = SecuritySchemeType.HTTP,
-    bearerFormat = "JWT",
-    scheme = "bearer",
 )
 object Api
 

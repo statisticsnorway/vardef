@@ -1,6 +1,18 @@
 micronaut:
   application:
     name: vardef
+  server:
+    cors:
+      enabled: true
+    netty:
+      access-logger:
+        enabled: true
+        exclusions:
+          - /health/.+
+          - /metrics
+          - /prometheus
+          - /docs/.+
+          - /favicon.ico
   security:
     jwks:
       # Token signature verification is performed by the gateway
@@ -78,20 +90,6 @@ micronaut:
       maximumSize: 3600
       expire-after-write: 24h
 
-  server:
-    cors:
-      enabled: true
-
-    netty:
-      access-logger:
-        enabled: true
-        exclusions:
-          - /health/.+
-          - /metrics
-          - /prometheus
-          - /docs/.+
-          - /favicon.ico
-
   http:
     services:
       klass:
@@ -128,7 +126,6 @@ micronaut:
         descriptions: true
         step: PT1M
 
-# Allow unauthenticated access
 endpoints:
   all:
     port: 8090

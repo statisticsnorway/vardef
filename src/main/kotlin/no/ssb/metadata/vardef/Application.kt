@@ -36,7 +36,7 @@ import reactor.core.publisher.Mono
             servers = [
                 Server(url = "https://metadata.ssb.no", description = "Public server"),
                 Server(url = "https://metadata.test.ssb.no", description = "Public test server"),
-                Server(url = "https://localhost:8080", description = "Local development"),
+                Server(url = "http://localhost:8080", description = "Local development"),
             ],
         ),
 )
@@ -112,7 +112,7 @@ Validity Periods are versions with a period defined by a `valid_from` date and o
                     url = "https://metadata.intern.test.ssb.no",
                     description = "Internal test server",
                 ),
-                Server(url = "https://localhost:8080", description = "Local development"),
+                Server(url = "http://localhost:8080", description = "Local development"),
             ],
             tags = [
                 Tag(name = VALIDITY_PERIODS, description = "Create and access Validity Periods."),

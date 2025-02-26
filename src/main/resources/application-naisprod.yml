@@ -15,12 +15,6 @@ micronaut:
         url: https://auth.ssb.no/
         clientId: vardef-to-dapla-team-api-m2m
         clientSecret: ${KEYCLOAK_CLIENT_SECRET}
-  server:
-    cors:
-      configurations:
-        docs:
-          allowed-origins:
-            - https://metadata.ssb.no
 logger:
   config: logback-kubernetes.xml
 

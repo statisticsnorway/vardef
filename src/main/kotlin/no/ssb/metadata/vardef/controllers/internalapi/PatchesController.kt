@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.controllers.internal
+package no.ssb.metadata.vardef.controllers.internalapi
 
 import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpStatus

@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.controllers.public_
+package no.ssb.metadata.vardef.controllers.publicapi
 
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*

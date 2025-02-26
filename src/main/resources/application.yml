@@ -48,11 +48,11 @@ micronaut:
   openapi:
     groups:
       public:
-        packages: no.ssb.metadata.vardef.controllers.public_
+        packages: no.ssb.metadata.vardef.controllers.publicapi
         filename: variable-definitions/variable-definitions-public
         primary: true
       internal:
-        packages: no.ssb.metadata.vardef.controllers.internal
+        packages: no.ssb.metadata.vardef.controllers.internalapi
         filename: variable-definitions/variable-definitions-internal
     property:
       naming:

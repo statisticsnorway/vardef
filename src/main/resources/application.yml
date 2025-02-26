@@ -39,26 +39,28 @@ micronaut:
     static-resources:
       swagger:
         paths: classpath:META-INF/swagger
+        # TODO We map on /swagger because OpenAPI groups doesn't respect mapping.path
+        # Ideally this would be hosted on /docs/openapi/variable-definitions/**
         mapping: /swagger/**
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
-        mapping: /docs/swagger/**
+        mapping: /docs/swagger/variable-definitions/**
   openapi:
     groups:
       public:
         packages: no.ssb.metadata.vardef.controllers.public_
-        filename: variable-definitions-public
+        filename: variable-definitions/variable-definitions-public
         primary: true
       internal:
         packages: no.ssb.metadata.vardef.controllers.internal
-        filename: variable-definitions-internal
+        filename: variable-definitions/variable-definitions-internal
     property:
       naming:
         strategy: SNAKE_CASE
     views:
       spec: |
         swagger-ui.enabled=true,
-        swagger-ui.js.url=/docs/swagger/res/,
+        swagger-ui.js.url=/docs/swagger/variable-definitions/res/,
         swagger-ui.tagsSorter=Function=(a => a),
   serde:
     deserialization:

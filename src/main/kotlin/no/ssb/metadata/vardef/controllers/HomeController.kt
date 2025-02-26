@@ -21,7 +21,12 @@ import java.net.URI
 @Secured(SecurityRule.IS_ANONYMOUS)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class HomeController {
-    private val docsUri: URI = UriBuilder.of("/swagger-ui").build()
+    private val docsUri: URI =
+        UriBuilder
+            .of("/docs")
+            .path("swagger")
+            .path("variable-definitions")
+            .build()
 
     @Get
     fun redirectToDocs(): HttpResponse<Any> = HttpResponse.seeOther(docsUri)

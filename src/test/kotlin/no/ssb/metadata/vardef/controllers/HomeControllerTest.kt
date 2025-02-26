@@ -7,6 +7,11 @@ import no.ssb.metadata.vardef.utils.BaseVardefTest
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.argumentSet
+import org.junit.jupiter.params.provider.MethodSource
+import java.util.stream.Stream
 
 internal class HomeControllerTest : BaseVardefTest() {
     @Test
@@ -19,15 +24,35 @@ internal class HomeControllerTest : BaseVardefTest() {
             .get("/")
             .then()
             .statusCode(HttpStatus.SEE_OTHER.code)
-            .header(HttpHeaders.LOCATION, "/docs/redoc")
+            .header(HttpHeaders.LOCATION, "/docs/swagger/variable-definitions")
     }
 
-    @Test
-    fun `home controller not included in API docs`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("openapiGroupDefinitionFiles")
+    fun `home controller not included in API docs`(
+        file: String,
+        spec: RequestSpecification,
+    ) {
         spec
             .given()
-            .get("/swagger/openapi.yaml")
+            .get("/swagger/$file.yml")
             .then()
+            .statusCode(200)
             .body(not(containsString("operationId: redirectToDocs")))
+    }
+
+    companion object {
+        @JvmStatic
+        fun openapiGroupDefinitionFiles(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Public",
+                    "variable-definitions/variable-definitions-public",
+                ),
+                argumentSet(
+                    "Internal",
+                    "variable-definitions/variable-definitions-internal",
+                ),
+            )
     }
 }

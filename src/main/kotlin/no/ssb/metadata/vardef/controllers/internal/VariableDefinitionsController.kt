@@ -48,6 +48,9 @@ class VariableDefinitionsController(
                         name = "Specific date",
                         value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ), ExampleObject(
+                        name = "Specific short_name",
+                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
+                    ), ExampleObject(
                         name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
@@ -73,7 +76,7 @@ class VariableDefinitionsController(
         @Parameter(
             description = SHORT_NAME_QUERY_PARAM_DESCRIPTION,
             examples = [
-                ExampleObject(name = "landbak", value = SHORT_NAME_EXAMPLE),
+                ExampleObject(name = "Specific short_name", value = SHORT_NAME_EXAMPLE),
             ],
         )
         shortName: String? = null,

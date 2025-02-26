@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
@@ -35,6 +36,7 @@ class PublicController(
      *
      * These are rendered in the given language, with the default being Norwegian Bokmål.
      */
+    @Tag(name = VARIABLE_DEFINITIONS)
     @ApiResponse(
         content = [
             Content(
@@ -75,6 +77,7 @@ class PublicController(
      * This is rendered in the given language, with the default being Norwegian Bokmål.
      */
     @Produces(MediaType.APPLICATION_JSON)
+    @Tag(name = VARIABLE_DEFINITIONS)
     @ApiResponse(
         responseCode = "200",
         content = [
@@ -143,6 +146,7 @@ class PublicController(
      */
     @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
     @Produces(MediaType.APPLICATION_JSON)
+    @Tag(name = VALIDITY_PERIODS)
     @ApiResponse(
         responseCode = "200",
         content = [

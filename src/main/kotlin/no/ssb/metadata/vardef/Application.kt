@@ -38,6 +38,10 @@ import reactor.core.publisher.Mono
                 Server(url = "https://metadata.test.ssb.no", description = "Public test server"),
                 Server(url = "http://localhost:8080", description = "Local development"),
             ],
+            tags = [
+                Tag(name = VARIABLE_DEFINITIONS, description = "Read Public Variable Definitions."),
+                Tag(name = VALIDITY_PERIODS, description = "Read Validity Periods for Public Variable Definitions."),
+            ],
         ),
 )
 @OpenAPIGroupInfo(

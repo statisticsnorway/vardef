@@ -64,7 +64,7 @@ class ManagementEndpointsTest {
             .none()
             .`when`()
             .contentType(ContentType.JSON)
-            .get("/swagger-ui")
+            .get("/docs/swagger/variable-definitions")
             .then()
             .statusCode(200)
     }

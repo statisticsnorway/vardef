@@ -1,18 +1,6 @@
 micronaut:
   application:
     name: vardef
-  server:
-    cors:
-      enabled: true
-    netty:
-      access-logger:
-        enabled: true
-        exclusions:
-          - /health/.+
-          - /metrics
-          - /prometheus
-          - /docs/.+
-          - /favicon.ico
   security:
     jwks:
       # Token signature verification is performed by the gateway
@@ -45,9 +33,6 @@ micronaut:
       - pattern: /swagger/**
         http-method: GET
         access: isAnonymous()
-      - pattern: /swagger-ui/**
-        http-method: GET
-        access: isAnonymous()
       - pattern: /**
         access: isAuthenticated()
   router:
@@ -57,12 +42,13 @@ micronaut:
         mapping: /swagger/**
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
-        mapping: /swagger-ui/**
+        mapping: /docs/swagger/**
   openapi:
     groups:
       public:
         packages: no.ssb.metadata.vardef.controllers.public_
         filename: variable-definitions-public
+        primary: true
       internal:
         packages: no.ssb.metadata.vardef.controllers.internal
         filename: variable-definitions-internal
@@ -72,6 +58,7 @@ micronaut:
     views:
       spec: |
         swagger-ui.enabled=true,
+        swagger-ui.js.url=/docs/swagger/res/,
         swagger-ui.tagsSorter=Function=(a => a),
   serde:
     deserialization:
@@ -82,6 +69,27 @@ micronaut:
   logger:
     config: logback.xml
 
+  server:
+    netty:
+      access-logger:
+        enabled: true
+        exclusions:
+          - /health/.+
+          - /metrics
+          - /prometheus
+          - /docs/.+
+          - /favicon.ico
+        log-format: '{
+          "requestMethod":"%m",
+          "requestUrl":"%x",
+          "status":%s,
+          "responseSize":"%B",
+          "userAgent":"%{User-Agent}i",
+          "remoteIp":"%a",
+          "serverIp":"%A",
+          "referer":"%i",
+          "latency":"%Dms",
+          "protocol":"%H"}'
   caches:
     classifications:
       maximumSize: 3600

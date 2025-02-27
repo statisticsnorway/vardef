@@ -15,18 +15,20 @@ ksp = "2.1.10-1.0.30"
 ktlint = "12.1.2"
 logback = "1.5.16"
 logstash = "8.0"
-micronaut = "4.6.1"
+micronaut = "4.7.6"
 micronautCache = "5.2.0"
 micronautData = "4.11.1"
 micronautGradle = "4.4.5"
-micronautManagement = "4.8.4"
+micronautManagement = "4.7.12"
 micronautMicrometer = "5.9.3"
 micronautMongoDb = "5.5.0"
 micronautOpenapi = "6.13.2"
+micronautPlatform = "4.7.6"
 micronautProblem = "3.7.0"
 micronautSecurity = "4.12.0"
 micronautSerde = "2.14.0"
 micronautTest = "4.7.0"
+micronautXml = "4.6.0"
 mockk = "1.13.16"
 mongock = "5.5.0"
 nanoid = "1.0.1"
@@ -53,14 +55,14 @@ micronaut-micrometer-registry-prometheus = { module = "io.micronaut.micrometer:m
 micronaut-mongo-reactive = { module = "io.micronaut.mongodb:micronaut-mongo-reactive", version.ref = "micronautMongoDb" }
 micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi", version.ref = "micronautOpenapi" }
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronautOpenapi" }
-micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronaut" }
+micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronautPlatform" }
 micronaut-problem-json = { module = "io.micronaut.problem:micronaut-problem-json", version.ref = "micronautProblem" }
 micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt", version.ref = "micronautSecurity" }
 micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson", version.ref = "micronautSerde" }
 micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor", version.ref = "micronautSerde" }
 micronaut-test-rest-assured = { module = "io.micronaut.test:micronaut-test-rest-assured", version.ref = "micronautTest"}
 micronaut-validation-processor = { module = "io.micronaut.validation:micronaut-validation-processor", version.ref = "micronaut" }
-micronaut-jackson-xml = {module = "io.micronaut.xml:micronaut-jackson-xml", version.ref = "jackson"}
+micronaut-jackson-xml = {module = "io.micronaut.xml:micronaut-jackson-xml", version.ref = "micronautXml"}
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mongock-standalone = { module = "io.mongock:mongock-standalone", version.ref = "mongock" }
 mongock-mongodb-reactive-driver = { module = "io.mongock:mongodb-reactive-driver", version.ref = "mongock" }

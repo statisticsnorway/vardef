@@ -30,7 +30,7 @@ class VardokServiceTest : BaseVardokTest() {
     lateinit var vardokMockkApiService: VardokApiService
 
     @MockK
-    lateinit var vardokIdMappingRepository: VardokIdMappingRepository
+    lateinit var vardokIdMappingRepository: VardokIdMappingRepository //is necessary dependency
 
     @MockK
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
@@ -118,7 +118,7 @@ class VardokServiceTest : BaseVardokTest() {
         every {
             variableDefinitionRepository.existsByShortName("fnr")
         } returns
-                true
+            true
         val result = vardokApiService.isDuplicate("fnr")
         assertThat(result).isTrue()
     }
@@ -134,14 +134,13 @@ class VardokServiceTest : BaseVardokTest() {
         every {
             vardokMockkClient.fetchVardokById("100")
         } returns
-                vardokId100NoValidDates
+            vardokId100NoValidDates
         every {
             vardokApiService.isDuplicate("Adressenavn")
         } returns
-                true
+            true
         val result = vardokApiService.fetchMultipleVardokItemsByLanguage("100")
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.shortName).contains("generert_")
-
     }
 }

@@ -32,6 +32,7 @@ import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 @Tag(name = PATCHES)
@@ -45,6 +46,8 @@ class PatchesController(
     private val patches: PatchesService,
     private val vardef: VariableDefinitionService,
 ) {
+    private val logger = LoggerFactory.getLogger(PatchesService::class.java)
+
     /**
      * List all patches for the given variable definition.
      *
@@ -195,6 +198,7 @@ class PatchesController(
         activeGroup: String,
         authentication: Authentication,
     ): CompleteResponse {
+        logger.debug("Received patch {}", patch)
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
         when {
             !latestPatchOnValidityPeriod.variableStatus.isPublished() ->

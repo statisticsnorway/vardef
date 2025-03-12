@@ -86,7 +86,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
         assertThat(completeResponse.shortName).contains(GENERATED_CONTACT_KEYWORD)
     }
 

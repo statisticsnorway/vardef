@@ -270,6 +270,7 @@ class VardokMigrationTest : BaseVardefTest() {
     @Test
     fun `duplicate short name`() {
         assertThat(vardokService.isDuplicate("bus")).isTrue()
+        assertThat(vardokService.isDuplicate("non_existing_name")).isFalse()
     }
 
     @Test

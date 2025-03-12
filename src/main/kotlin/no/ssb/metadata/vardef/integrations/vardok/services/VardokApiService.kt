@@ -72,8 +72,8 @@ open class VardokApiService(
         if (result?.variable?.dataElementName?.let { isDuplicate(it) } == true) {
             result.variable.dataElementName = VardokService.generateShortName()
             logger.info(
-                "Shortname for vardok id ${result.id.split(":").last()} was duplicate and new shortname " +
-                    "${result.variable.dataElementName} generated",
+                "Shortname for vardok id ${result.id.split(":").last()} exists and new shortname " +
+                    "${result.variable.dataElementName} was generated",
             )
         }
         return responseMap

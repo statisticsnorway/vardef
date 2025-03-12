@@ -22,7 +22,6 @@ class StaticVardokService(
     private val vardokIdMappingRepository: VardokIdMappingRepository,
 ) : VardokService {
     private val xmlMapper = XmlMapper().registerKotlinModule()
-    private val logger = LoggerFactory.getLogger(StaticVardokService::class.java)
 
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
@@ -80,10 +79,6 @@ class StaticVardokService(
         }
         if (result.variable?.dataElementName?.let { isDuplicate(it) } == true) {
             result.variable.dataElementName = VardokService.generateShortName()
-            logger.info(
-                "Shortname for vardok id ${result.id.split(":").last()} was duplicate and new shortname " +
-                    "${result.variable.dataElementName} generated",
-            )
         }
 
         return responseMap

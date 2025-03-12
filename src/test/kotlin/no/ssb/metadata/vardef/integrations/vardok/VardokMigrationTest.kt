@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.JsonMappingException
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokStatisticalUnitToUnitTypes
@@ -23,8 +22,8 @@ import org.junit.jupiter.params.provider.ValueSource
 import java.net.URL
 import java.util.stream.Stream
 
-//@MicronautTest
-class VardokMigrationTest: BaseVardefTest() {
+// @MicronautTest
+class VardokMigrationTest : BaseVardefTest() {
     @Inject
     lateinit var vardokService: VardokService
 

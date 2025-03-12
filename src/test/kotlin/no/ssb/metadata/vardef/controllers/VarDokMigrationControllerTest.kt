@@ -71,9 +71,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `post request duplicate shortname`(
-        spec: RequestSpecification,
-    ) {
+    fun `post request duplicate shortname`(spec: RequestSpecification) {
         val body =
             spec
                 .given()

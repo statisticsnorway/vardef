@@ -59,6 +59,7 @@ open class VardokApiService(
             throw e
         }
     }
+
     override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
@@ -68,10 +69,12 @@ open class VardokApiService(
         result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
             getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
         }
-        if(result?.variable?.dataElementName?.let { isDuplicate(it) } == true){
+        if (result?.variable?.dataElementName?.let { isDuplicate(it) } == true) {
             result.variable.dataElementName = VardokService.generateShortName()
-            logger.info("Shortname for vardok id ${result.id.split(":").last()} was duplicate and new shortname " +
-                    "${result.variable.dataElementName} generated")
+            logger.info(
+                "Shortname for vardok id ${result.id.split(":").last()} was duplicate and new shortname " +
+                    "${result.variable.dataElementName} generated",
+            )
         }
         return responseMap
     }

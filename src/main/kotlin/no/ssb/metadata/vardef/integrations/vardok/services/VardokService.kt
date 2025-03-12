@@ -35,8 +35,8 @@ interface VardokService {
     fun isDuplicate(name: String): Boolean
 
     companion object {
-
         fun generateShortName() = "${ILLEGAL_SHORTNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
+
         private fun isValidShortName(name: String) = name.matches(Regex(VARDEF_SHORT_NAME_PATTERN))
 
         private fun processShortName(name: String?) =

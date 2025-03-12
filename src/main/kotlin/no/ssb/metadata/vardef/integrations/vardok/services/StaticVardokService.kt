@@ -4,11 +4,14 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requires
+import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
+import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -19,6 +22,14 @@ class StaticVardokService(
     private val vardokIdMappingRepository: VardokIdMappingRepository,
 ) : VardokService {
     private val xmlMapper = XmlMapper().registerKotlinModule()
+    private val logger = LoggerFactory.getLogger(StaticVardokService::class.java)
+
+    @Inject
+    lateinit var variableDefinitionRepository: VariableDefinitionRepository
+
+    override fun isDuplicate(name: String): Boolean {
+        return variableDefinitionRepository.existsByShortName(name)
+    }
 
     override fun createVardokVardefIdMapping(
         vardokId: String,
@@ -66,6 +77,11 @@ class StaticVardokService(
         }
         result.otherLanguages.split(";").filter { it.isNotEmpty() }.forEach { l ->
             getVardokByIdAndLanguage(id, l).let { responseMap[l] = it }
+        }
+        if(result.variable?.dataElementName?.let { isDuplicate(it) } == true){
+            result.variable.dataElementName = VardokService.generateShortName()
+            logger.info("Shortname for vardok id ${result.id.split(":").last()} was duplicate and new shortname " +
+                    "${result.variable.dataElementName} generated")
         }
 
         return responseMap

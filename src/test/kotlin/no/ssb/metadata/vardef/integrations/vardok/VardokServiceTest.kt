@@ -30,7 +30,7 @@ class VardokServiceTest : BaseVardokTest() {
     lateinit var vardokMockkApiService: VardokApiService
 
     @MockK
-    lateinit var vardokIdMappingRepository: VardokIdMappingRepository //is necessary dependency
+    lateinit var vardokIdMappingRepository: VardokIdMappingRepository // is necessary dependency
 
     @MockK
     lateinit var variableDefinitionRepository: VariableDefinitionRepository

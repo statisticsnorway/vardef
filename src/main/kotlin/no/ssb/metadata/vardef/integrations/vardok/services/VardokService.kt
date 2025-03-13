@@ -51,10 +51,14 @@ interface VardokService {
             val comment = mapVardokComment(vardokItem)
             val classificationRelation = vardokItemPrimary.relations?.classificationRelation?.href
             val vardokShortName = processShortName(vardokItemPrimary.variable?.dataElementName)
-            val title = LanguageStringType(null, null, null).apply {
-                if (vardokItemPrimary.xmlLang == "nb") nb = "${GENERATED_CONTACT_KEYWORD}_tittel"
-                else if (vardokItemPrimary.xmlLang == "nn") nn = "${GENERATED_CONTACT_KEYWORD}_tittel"
-            }
+            val title =
+                LanguageStringType(null, null, null).apply {
+                    if (vardokItemPrimary.xmlLang == "nb") {
+                        nb = "${GENERATED_CONTACT_KEYWORD}_tittel"
+                    } else if (vardokItemPrimary.xmlLang == "nn") {
+                        nn = "${GENERATED_CONTACT_KEYWORD}_tittel"
+                    }
+                }
             return VardefInput(
                 name =
                     LanguageStringType(

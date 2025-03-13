@@ -584,14 +584,14 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     "2413",
                     "Sum utgifter",
                     "Sum av utgifter til løn, innkjøp, refusjon og overføringar.",
-                    "${GENERATED_CONTACT_KEYWORD}_tittel"
+                    "${GENERATED_CONTACT_KEYWORD}_tittel",
                 ),
                 argumentSet(
                     "Id 3135",
                     "3135",
                     "Egenbetaling, barnehagar",
                     "Hushalds utgifter til barnehageplass i kommunale og private barnehagar",
-                    "${GENERATED_CONTACT_KEYWORD}_tittel"
+                    "${GENERATED_CONTACT_KEYWORD}_tittel",
                 ),
             )
 

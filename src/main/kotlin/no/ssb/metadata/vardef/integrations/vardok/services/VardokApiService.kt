@@ -65,10 +65,9 @@ open class VardokApiService(
         val responseMap = mutableMapOf<String, VardokResponse>()
         // if xml:lang="nb" == nb
         result?.let {
-            if(result.xmlLang == "nn"){
+            if (result.xmlLang == "nn") {
                 responseMap["nn"] = it
-            }
-            else {
+            } else {
                 responseMap["nb"] = it
             }
         }

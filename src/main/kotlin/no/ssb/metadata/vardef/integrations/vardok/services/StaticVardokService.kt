@@ -71,10 +71,9 @@ class StaticVardokService(
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
         result.let {
-            if(result.xmlLang == "nn"){
+            if (result.xmlLang == "nn") {
                 responseMap["nn"] = it
-            }
-            else {
+            } else {
                 responseMap["nb"] = it
             }
         }

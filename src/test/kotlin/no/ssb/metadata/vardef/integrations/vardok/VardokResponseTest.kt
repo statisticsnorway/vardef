@@ -113,14 +113,14 @@ class VardokResponseTest {
     }
 
     @Test
-    fun `nb language is primary language`(){
+    fun `nb language is primary language`() {
         val response = vardokService.getVardokItem("948")
         assertThat(response?.xmlLang).isEqualTo("nb")
         assertThat(response?.xmlLang).isNotEqualTo("nn")
     }
 
     @Test
-    fun `nn language is primary language`(){
+    fun `nn language is primary language`() {
         val response = vardokService.getVardokItem("2413")
         assertThat(response?.xmlLang).isEqualTo("nn")
         assertThat(response?.xmlLang).isNotEqualTo("nb")

@@ -505,7 +505,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("newNorwegianUnitTypes")
-    fun `create vardok has has nn unit type`(
+    fun `create vardok has nn unit type`(
         id: Int,
         expectedUnitType: String,
         spec: RequestSpecification,
@@ -526,6 +526,30 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.unitTypes).isEqualTo(listOf(expectedUnitType))
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [2413, 3135])
+    fun `create vardok with nn as primary language`(
+        id: Int,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.name.nn).isNotNull()
     }
 
     companion object {

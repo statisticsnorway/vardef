@@ -6,8 +6,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import no.ssb.metadata.vardef.constants.*
-
-const val PROBLEM_JSON_SCHEMA_REF = "https://opensource.zalando.com/restful-api-guidelines/models/problem-1.0.1.yaml#/Problem"
+import org.zalando.problem.Problem
 
 @ApiResponse(
     responseCode = "400",
@@ -15,8 +14,7 @@ const val PROBLEM_JSON_SCHEMA_REF = "https://opensource.zalando.com/restful-api-
     content = [
         Content(
             mediaType = APPLICATION_PROBLEM_JSON,
-            schema =
-                Schema(ref = PROBLEM_JSON_SCHEMA_REF),
+            schema = Schema(implementation = Problem::class),
             examples = [
                 ExampleObject(
                     name = BAD_REQUEST_EXAMPLE_NAME,
@@ -38,8 +36,7 @@ annotation class BadRequestApiResponse
     content = [
         Content(
             mediaType = APPLICATION_PROBLEM_JSON,
-            schema =
-                Schema(ref = PROBLEM_JSON_SCHEMA_REF),
+            schema = Schema(implementation = Problem::class),
             examples = [
                 ExampleObject(
                     name = CONFLICT_EXAMPLE_NAME,
@@ -57,8 +54,7 @@ annotation class ConflictApiResponse
     content = [
         Content(
             mediaType = APPLICATION_PROBLEM_JSON,
-            schema =
-                Schema(ref = PROBLEM_JSON_SCHEMA_REF),
+            schema = Schema(implementation = Problem::class),
             examples = [
                 ExampleObject(
                     name = METHOD_NOT_ALLOWED_EXAMPLE_NAME,
@@ -76,8 +72,7 @@ annotation class MethodNotAllowedApiResponse
     content = [
         Content(
             mediaType = APPLICATION_PROBLEM_JSON,
-            schema =
-                Schema(ref = PROBLEM_JSON_SCHEMA_REF),
+            schema = Schema(implementation = Problem::class),
             examples = [
                 ExampleObject(
                     name = NOT_FOUND_EXAMPLE_NAME,

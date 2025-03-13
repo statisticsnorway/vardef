@@ -47,29 +47,37 @@ interface VardokService {
                 ?: generateShortName()
 
         fun extractVardefInput(vardokItem: Map<String, VardokResponse>): VardefInput {
-            val vardokItemNb = vardokItem["nb"] ?: throw MissingNbLanguageException()
+            val vardokItemPrimary = vardokItem["nb"] ?: vardokItem["nn"] ?: throw MissingPrimaryLanguageException()
             val comment = mapVardokComment(vardokItem)
-            val classificationRelation = vardokItemNb.relations?.classificationRelation?.href
-            val vardokShortName = processShortName(vardokItemNb.variable?.dataElementName)
-
+            val classificationRelation = vardokItemPrimary.relations?.classificationRelation?.href
+            val vardokShortName = processShortName(vardokItemPrimary.variable?.dataElementName)
+            // Add title value to primary language field
+            val title =
+                LanguageStringType(null, null, null).apply {
+                    if (vardokItemPrimary.xmlLang == "nb") {
+                        nb = "${GENERATED_CONTACT_KEYWORD}_tittel"
+                    } else if (vardokItemPrimary.xmlLang == "nn") {
+                        nn = "${GENERATED_CONTACT_KEYWORD}_tittel"
+                    }
+                }
             return VardefInput(
                 name =
                     LanguageStringType(
-                        vardokItemNb.common?.title,
+                        vardokItem["nb"]?.common?.title,
                         vardokItem["nn"]?.common?.title,
                         vardokItem["en"]?.common?.title,
                     ),
                 shortName = vardokShortName,
                 definition =
                     LanguageStringType(
-                        vardokItemNb.common?.description,
+                        vardokItem["nb"]?.common?.description,
                         vardokItem["nn"]?.common?.description,
                         vardokItem["en"]?.common?.description,
                     ),
-                validFrom = getValidDates(vardokItemNb).first,
-                validUntil = getValidDates(vardokItemNb).second,
-                unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemNb),
-                externalReferenceUri = mapExternalDocumentToUri(vardokItemNb),
+                validFrom = getValidDates(vardokItemPrimary).first,
+                validUntil = getValidDates(vardokItemPrimary).second,
+                unitTypes = mapVardokStatisticalUnitToUnitTypes(vardokItemPrimary),
+                externalReferenceUri = mapExternalDocumentToUri(vardokItemPrimary),
                 comment =
                     if (comment.values.any { !it.isNullOrEmpty() }) {
                         LanguageStringType(
@@ -81,15 +89,15 @@ interface VardokService {
                         null
                     },
                 containsSpecialCategoriesOfPersonalData = false,
-                subjectFields = mapVardokSubjectAreaToSubjectFiled(vardokItemNb),
+                subjectFields = mapVardokSubjectAreaToSubjectFiled(vardokItemPrimary),
                 classificationReference = classificationRelation?.split("/")?.last(),
                 contact =
                     Contact(
-                        LanguageStringType("${GENERATED_CONTACT_KEYWORD}_tittel", null, null),
-                        "$GENERATED_CONTACT_KEYWORD@epost.com",
+                        title = title,
+                        email = "$GENERATED_CONTACT_KEYWORD@epost.com",
                     ),
                 measurementType = null,
-                relatedVariableDefinitionUris = mapConceptVariableRelations(vardokItemNb),
+                relatedVariableDefinitionUris = mapConceptVariableRelations(vardokItemPrimary),
             )
         }
     }

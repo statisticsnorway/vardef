@@ -71,7 +71,7 @@ class StaticVardokService(
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
         result.let {
-            responseMap["nb"] = it
+            responseMap[result.xmlLang.takeIf { it == "nn" }?.let { "nn" } ?: "nb"] = it
         }
         result.otherLanguages.split(";").filter { it.isNotEmpty() }.forEach { l ->
             getVardokByIdAndLanguage(id, l).let { responseMap[l] = it }

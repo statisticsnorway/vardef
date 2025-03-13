@@ -505,7 +505,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("newNorwegianUnitTypes")
-    fun `create vardok has has nn unit type`(
+    fun `create vardok has nn unit type`(
         id: Int,
         expectedUnitType: String,
         spec: RequestSpecification,
@@ -528,6 +528,38 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeResponse.unitTypes).isEqualTo(listOf(expectedUnitType))
     }
 
+    @ParameterizedTest
+    @MethodSource("newNorwegianMultilanguageFields")
+    fun `create vardok with nn as primary language`(
+        id: Int,
+        name: String,
+        description: String,
+        contactTitle: String,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.name.nn).isEqualTo(name)
+        assertThat(completeResponse.name.nb).isNull()
+        assertThat(completeResponse.definition.nn).isEqualTo(description)
+        assertThat(completeResponse.definition.nb).isNull()
+        assertThat(completeResponse.contact.title.nn).isEqualTo(contactTitle)
+        assertThat(completeResponse.contact.title.nb).isNull()
+    }
+
     companion object {
         @JvmStatic
         fun newNorwegianUnitTypes(): Stream<Arguments> =
@@ -541,6 +573,25 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     "Hushald",
                     "3135",
                     "10",
+                ),
+            )
+
+        @JvmStatic
+        fun newNorwegianMultilanguageFields(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Id 2413",
+                    "2413",
+                    "Sum utgifter",
+                    "Sum av utgifter til løn, innkjøp, refusjon og overføringar.",
+                    "${GENERATED_CONTACT_KEYWORD}_tittel",
+                ),
+                argumentSet(
+                    "Id 3135",
+                    "3135",
+                    "Egenbetaling, barnehagar",
+                    "Hushalds utgifter til barnehageplass i kommunale og private barnehagar",
+                    "${GENERATED_CONTACT_KEYWORD}_tittel",
                 ),
             )
 

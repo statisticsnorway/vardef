@@ -15,9 +15,9 @@ import io.micronaut.serde.annotation.Serdeable
  */
 @Serdeable
 data class LanguageStringType(
-    val nb: String?,
-    val nn: String?,
-    val en: String?,
+    var nb: String?,
+    var nn: String?,
+    var en: String?,
 ) {
     /**
      * Get value for language

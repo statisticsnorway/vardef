@@ -4,9 +4,9 @@ open class VardokException(
     override val message: String,
 ) : Exception()
 
-class MissingNbLanguageException :
+class MissingPrimaryLanguageException :
     VardokException(
-        "The VarDok definition is missing the Norwegian Bokmål language and can not be migrated.",
+        "The VarDok definition is missing both Norwegian languages and can not be migrated.",
     )
 
 class VardokNotFoundException(

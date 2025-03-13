@@ -529,9 +529,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = [2413, 3135])
+    @MethodSource("newNorwegianMultilanguageFields")
     fun `create vardok with nn as primary language`(
         id: Int,
+        name: String,
+        description: String,
+        contactTitle: String,
         spec: RequestSpecification,
     ) {
         val body =
@@ -549,7 +552,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .asString()
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.name.nn).isNotNull()
+        assertThat(completeResponse.name.nn).isEqualTo(name)
+        assertThat(completeResponse.name.nb).isNull()
+        assertThat(completeResponse.definition.nn).isEqualTo(description)
+        assertThat(completeResponse.definition.nb).isNull()
+        assertThat(completeResponse.contact.title.nn).isEqualTo(contactTitle)
+        assertThat(completeResponse.contact.title.nb).isNull()
     }
 
     companion object {
@@ -565,6 +573,25 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                     "Hushald",
                     "3135",
                     "10",
+                ),
+            )
+
+        @JvmStatic
+        fun newNorwegianMultilanguageFields(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Id 2413",
+                    "2413",
+                    "Sum utgifter",
+                    "Sum av utgifter til løn, innkjøp, refusjon og overføringar.",
+                    "${GENERATED_CONTACT_KEYWORD}_tittel"
+                ),
+                argumentSet(
+                    "Id 3135",
+                    "3135",
+                    "Egenbetaling, barnehagar",
+                    "Hushalds utgifter til barnehageplass i kommunale og private barnehagar",
+                    "${GENERATED_CONTACT_KEYWORD}_tittel"
                 ),
             )
 

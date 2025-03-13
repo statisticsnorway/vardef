@@ -1,13 +1,13 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.JsonMappingException
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokStatisticalUnitToUnitTypes
 import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokSubjectAreaToSubjectFiled
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
+import no.ssb.metadata.vardef.utils.BaseVardefTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.AssertionsForClassTypes
@@ -22,8 +22,8 @@ import org.junit.jupiter.params.provider.ValueSource
 import java.net.URL
 import java.util.stream.Stream
 
-@MicronautTest
-class VardokMigrationTest {
+// @MicronautTest
+class VardokMigrationTest : BaseVardefTest() {
     @Inject
     lateinit var vardokService: VardokService
 
@@ -265,6 +265,19 @@ class VardokMigrationTest {
         val result = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
         val varDefInput = VardokService.extractVardefInput(result)
         AssertionsForClassTypes.assertThat(varDefInput.unitTypes).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `duplicate short name`() {
+        assertThat(vardokService.isDuplicate("bus")).isTrue()
+        assertThat(vardokService.isDuplicate("non_existing_name")).isFalse()
+    }
+
+    @Test
+    fun `set generated short name if duplicate short name exists`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("0005")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.shortName).contains("generert")
     }
 
     companion object {

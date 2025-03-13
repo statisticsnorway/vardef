@@ -70,7 +70,7 @@ class StaticVardokService(
     override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
-        result.let { it ->
+        result.let {
             responseMap[result.xmlLang.takeIf { it == "nn" }?.let { "nn" } ?: "nb"] = it
         }
         result.otherLanguages.split(";").filter { it.isNotEmpty() }.forEach { l ->

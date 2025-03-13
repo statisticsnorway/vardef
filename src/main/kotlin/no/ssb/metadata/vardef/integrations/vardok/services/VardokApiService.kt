@@ -70,7 +70,7 @@ open class VardokApiService(
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
 
-        result?.let { it ->
+        result?.let {
             // Add primary language (nn or nb) to the map
             responseMap[result.xmlLang.takeIf { it == "nn" }?.let { "nn" } ?: "nb"] = it
         }

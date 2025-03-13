@@ -280,6 +280,13 @@ class VardokMigrationTest : BaseVardefTest() {
         assertThat(vardokTransform.shortName).contains("generert")
     }
 
+    @Test
+    fun `new norwegian is primary language`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2413")
+        assertThat(varDefInput["nn"]?.common?.title).isEqualTo("Sum utgifter")
+        assertThat(varDefInput["nb"]?.common?.title).isNull()
+    }
+
     companion object {
         @JvmStatic
         fun mapUnitTypes(): Stream<Arguments> =

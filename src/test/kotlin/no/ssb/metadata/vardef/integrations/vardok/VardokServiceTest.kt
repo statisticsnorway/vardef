@@ -2,16 +2,19 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
+import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokApiService
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.integrations.vardok.utils.*
+import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -20,19 +23,24 @@ import org.junit.jupiter.api.Test
 
 @MockK
 class VardokServiceTest : BaseVardokTest() {
-    private lateinit var vardokMockkClient: VardokClient
-    private lateinit var vardokApiService: VardokApiService
-    private lateinit var vardokMockkService: VardokApiService
+    @MockK
+    lateinit var vardokMockkClient: VardokClient
 
-    @Inject
-    private lateinit var vardokIdMappingRepository: VardokIdMappingRepository
+    @MockK
+    lateinit var vardokMockkApiService: VardokApiService
+
+    @MockK
+    lateinit var vardokIdMappingRepository: VardokIdMappingRepository // is necessary dependency
+
+    @MockK
+    lateinit var variableDefinitionRepository: VariableDefinitionRepository
+
+    @InjectMockKs
+    lateinit var vardokApiService: VardokApiService
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
-        vardokMockkClient = mockk<VardokClient>(relaxed = true)
-        vardokApiService = VardokApiService(vardokMockkClient, vardokIdMappingRepository)
-        vardokMockkService = mockk<VardokApiService>(relaxed = true)
+    fun setup() {
+        MockKAnnotations.init(this)
     }
 
     @AfterEach
@@ -103,5 +111,36 @@ class VardokServiceTest : BaseVardokTest() {
         val actualMessage = exception.message
 
         assertThat(actualMessage).contains(expectedMessage)
+    }
+
+    @Test
+    fun `short name exist`() {
+        every {
+            variableDefinitionRepository.existsByShortName("fnr")
+        } returns
+            true
+        val result = vardokApiService.isDuplicate("fnr")
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `duplicate short name`() {
+        val variableMock = mockk<Variable>(relaxed = true)
+        every { variableMock.dataElementName } returns "Adressenavn"
+        every { variableMock.dataElementName = any() } answers { callOriginal() }
+        val vardokResponse = mockk<VardokResponse>(relaxed = true)
+        every { vardokResponse.variable } returns variableMock
+        every { vardokMockkApiService.getVardokItem("100") } returns vardokResponse
+        every {
+            vardokMockkClient.fetchVardokById("100")
+        } returns
+            vardokId100NoValidDates
+        every {
+            vardokApiService.isDuplicate("Adressenavn")
+        } returns
+            true
+        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("100")
+        val varDefInput = VardokService.extractVardefInput(result)
+        assertThat(varDefInput.shortName).contains("generert_")
     }
 }

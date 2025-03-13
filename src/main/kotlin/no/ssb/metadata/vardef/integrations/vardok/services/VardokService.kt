@@ -32,8 +32,10 @@ interface VardokService {
 
     fun isAlreadyMigrated(vardokId: String): Boolean
 
+    fun isDuplicate(name: String): Boolean
+
     companion object {
-        private fun generateShortName() = "${ILLEGAL_SHORTNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
+        fun generateShortName() = "${ILLEGAL_SHORTNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")
 
         private fun isValidShortName(name: String) = name.matches(Regex(VARDEF_SHORT_NAME_PATTERN))
 
@@ -83,7 +85,7 @@ interface VardokService {
                 classificationReference = classificationRelation?.split("/")?.last(),
                 contact =
                     Contact(
-                        LanguageStringType("$GENERATED_CONTACT_KEYWORD _tittel", null, null),
+                        LanguageStringType("${GENERATED_CONTACT_KEYWORD}_tittel", null, null),
                         "$GENERATED_CONTACT_KEYWORD@epost.com",
                     ),
                 measurementType = null,

@@ -51,6 +51,7 @@ interface VardokService {
             val comment = mapVardokComment(vardokItem)
             val classificationRelation = vardokItemPrimary.relations?.classificationRelation?.href
             val vardokShortName = processShortName(vardokItemPrimary.variable?.dataElementName)
+            // Add title value to primary language field
             val title =
                 LanguageStringType(null, null, null).apply {
                     if (vardokItemPrimary.xmlLang == "nb") {

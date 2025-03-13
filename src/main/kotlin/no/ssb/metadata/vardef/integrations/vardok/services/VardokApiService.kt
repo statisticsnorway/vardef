@@ -60,16 +60,28 @@ open class VardokApiService(
         }
     }
 
+    /**
+     * Fetches multiple Vardok items by language, including primary and other languages.
+     *
+     * @param id The ID of the Vardok item.
+     * @return A map of language codes to their respective Vardok responses.
+     */
     override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
+
         result?.let { it ->
+            // Add primary language (nn or nb) to the map
             responseMap[result.xmlLang.takeIf { it == "nn" }?.let { "nn" } ?: "nb"] = it
         }
         logger.info("Primary language for vardok id ${result?.parseId()} is ${result?.xmlLang}.")
+
+        // Add other languages to the map
         result?.otherLanguages?.split(";")?.filter { it.isNotEmpty() }?.forEach { l ->
             getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
         }
+
+        // Handle duplicate shortnames
         if (result?.variable?.dataElementName?.let { isDuplicate(it) } == true) {
             result.variable.dataElementName = VardokService.generateShortName()
             logger.info(

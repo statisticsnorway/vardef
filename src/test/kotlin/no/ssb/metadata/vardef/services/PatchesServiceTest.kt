@@ -56,11 +56,11 @@ class PatchesServiceTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("VardokVardefMapping")
+    @MethodSource("vardokVardefMapping")
     fun `check vardok  mapping`(
         definitionId: String,
         isMapped: Boolean,
-    )  {
+    ) {
         assertThat(patches.existsVardokMapping(definitionId)).isEqualTo(isMapped)
     }
 
@@ -280,7 +280,7 @@ class PatchesServiceTest : BaseVardefTest() {
             )
 
         @JvmStatic
-        fun VardokVardefMapping(): Stream<Arguments> =
+        fun vardokVardefMapping(): Stream<Arguments> =
             Stream.of(
                 Arguments.argumentSet(
                     "Is migrated from Vardok",

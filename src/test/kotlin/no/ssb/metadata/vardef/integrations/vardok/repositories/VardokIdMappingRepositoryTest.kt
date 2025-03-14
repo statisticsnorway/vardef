@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test
 
 class VardokIdMappingRepositoryTest : BaseVardefTest() {
     @Test
-    fun `check vardef id exists`()  {
+    fun `check vardef id exists`() {
         assertThat(vardokIdMappingRepository.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isTrue()
     }
 
     @Test
-    fun `delete mapping by vardef id`()  {
+    fun `delete mapping by vardef id`() {
         assertThat(vardokIdMappingRepository.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isTrue()
         vardokIdMappingRepository.deleteByVardefId(DRAFT_BUS_EXAMPLE.definitionId)
         assertThat(vardokIdMappingRepository.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isFalse()

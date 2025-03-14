@@ -171,7 +171,9 @@ class PatchesService(
         if (vardokIdMappingRepository.existsByVardefId(definitionId)) {
             vardokIdMappingRepository.deleteByVardefId(definitionId)
             logger.info(
-                "Vardok vardef mapping was deleted for definition: $definitionId", kv(DEFINITION_ID, definitionId))
+                "Vardok vardef mapping was deleted for definition: $definitionId",
+                kv(DEFINITION_ID, definitionId),
+            )
         }
         logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
     }

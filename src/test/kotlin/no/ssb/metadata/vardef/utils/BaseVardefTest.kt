@@ -7,6 +7,8 @@ import io.restassured.RestAssured.oauth2
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
+import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
@@ -28,6 +30,9 @@ open class BaseVardefTest {
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
     @Inject
+    lateinit var vardokIdMappingRepository: VardokIdMappingRepository
+
+    @Inject
     lateinit var variableDefinitionService: VariableDefinitionService
 
     @Inject
@@ -42,6 +47,7 @@ open class BaseVardefTest {
     @BeforeEach
     fun setUp() {
         variableDefinitionRepository.deleteAll()
+        vardokIdMappingRepository.deleteAll()
 
         ALL_INCOME_TAX_PATCHES.forEach { variableDefinitionRepository.save(it) }
         variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE)
@@ -52,5 +58,7 @@ open class BaseVardefTest {
         variableDefinitionRepository.save(SAVED_TO_PUBLISH)
         variableDefinitionRepository.save(PATCH_MANDATORY_FIELDS)
         variableDefinitionRepository.save(SAVED_TO_PUBLISH_ILLEGAL_CONTACT)
+
+        vardokIdMappingRepository.save(VardokVardefIdPair("005", DRAFT_BUS_EXAMPLE.definitionId))
     }
 }

@@ -168,7 +168,7 @@ class PatchesService(
         list(definitionId).forEach { item ->
             variableDefinitionRepository.deleteById(item.id)
         }
-        if (vardokIdMappingRepository.existsByVardefId(definitionId)) {
+        if (existsVardokMapping(definitionId)) {
             vardokIdMappingRepository.deleteByVardefId(definitionId)
             logger.info(
                 "Vardok vardef mapping was deleted for definition: $definitionId",
@@ -177,4 +177,12 @@ class PatchesService(
         }
         logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
     }
+
+    /**
+     * Checks whether the given *variable definition* is mapped as a Vardok vardef pair.
+     *
+     * @param definitionId The ID of the variable definition to check.
+     * @return `true` if the variable definition has a Vardok vardef mapping, otherwise `false`.
+     */
+    fun existsVardokMapping(definitionId: String): Boolean = vardokIdMappingRepository.existsByVardefId(definitionId)
 }

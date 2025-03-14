@@ -217,7 +217,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch with invalid status`(spec: RequestSpecification) {
+    fun `create new patch on draft variable`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -227,6 +227,20 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(405)
+    }
+
+    @Test
+    fun `publish internal variable externally`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSONObject("""{"variable_status": "PUBLISHED_EXTERNAL"}""").toString())
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+            .body("variable_status", equalTo("PUBLISHED_EXTERNAL"))
     }
 
     @Test

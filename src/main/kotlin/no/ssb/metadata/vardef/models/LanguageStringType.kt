@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.models
 
 import io.micronaut.serde.annotation.Serdeable
+import io.micronaut.serde.config.naming.SnakeCaseStrategy
 
 /**
  * Language string type
@@ -13,7 +14,7 @@ import io.micronaut.serde.annotation.Serdeable
  * @property en English
  * @constructor Create empty Language string type
  */
-@Serdeable
+@Serdeable(naming = SnakeCaseStrategy::class)
 data class LanguageStringType(
     var nb: String?,
     var nn: String?,

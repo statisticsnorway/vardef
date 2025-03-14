@@ -45,10 +45,7 @@ data class Patch(
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
     val containsSpecialCategoriesOfPersonalData: Boolean? = null,
-    @Schema(
-        description = VARIABLE_STATUS_FIELD_DESCRIPTION,
-        accessMode = Schema.AccessMode.READ_ONLY,
-    )
+    @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
     @Nullable
     val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)

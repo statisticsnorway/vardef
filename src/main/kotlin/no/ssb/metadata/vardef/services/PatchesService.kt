@@ -109,6 +109,7 @@ class PatchesService(
                 patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch, userName),
             )
         logger.info("Successfully saved patch for definition: $definitionId", kv(DEFINITION_ID, definitionId))
+        logger.debug("New patch {}", savedVariableDefinition)
         return savedVariableDefinition
     }
 

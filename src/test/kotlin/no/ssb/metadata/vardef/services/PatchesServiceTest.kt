@@ -59,8 +59,8 @@ class PatchesServiceTest : BaseVardefTest() {
     @MethodSource("VardokVardefMapping")
     fun `check vardok  mapping`(
         definitionId: String,
-        isMapped: Boolean
-    ){
+        isMapped: Boolean,
+    )  {
         assertThat(patches.existsVardokMapping(definitionId)).isEqualTo(isMapped)
     }
 
@@ -292,7 +292,6 @@ class PatchesServiceTest : BaseVardefTest() {
                     DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId,
                     false,
                 ),
-
             )
     }
 }

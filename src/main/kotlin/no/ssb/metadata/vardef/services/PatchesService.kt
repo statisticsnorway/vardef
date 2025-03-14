@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
     private val validityPeriodsService: ValidityPeriodsService,
-    private val vardokIdMappingRepository: VardokIdMappingRepository
+    private val vardokIdMappingRepository: VardokIdMappingRepository,
 ) {
     private val logger = LoggerFactory.getLogger(PatchesService::class.java)
 

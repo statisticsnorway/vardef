@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
+import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
@@ -10,6 +11,7 @@ import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
+import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.canTransitionTo
@@ -31,6 +33,9 @@ class PatchesService(
     private val validityPeriodsService: ValidityPeriodsService,
 ) {
     private val logger = LoggerFactory.getLogger(PatchesService::class.java)
+
+    @Inject
+    lateinit var vardokIdMappingRepository: VardokIdMappingRepository
 
     /**
      * Creates new *Patch* or *Patches*.
@@ -162,6 +167,13 @@ class PatchesService(
         list(definitionId).forEach { item ->
             variableDefinitionRepository.deleteById(item.id)
         }
+        if (existsByVardefId(definitionId)) {
+            vardokIdMappingRepository.deleteByVardefId(definitionId)
+            logger.info("Vardok vardef mapping was deleted for definition: $definitionId", kv(DEFINITION_ID, definitionId))
+        }
         logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
     }
+
+    fun existsByVardefId(vardefId: String): Boolean = vardokIdMappingRepository.existsByVardefId(vardefId)
+
 }

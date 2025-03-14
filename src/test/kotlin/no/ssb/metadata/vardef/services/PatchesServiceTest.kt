@@ -55,6 +55,22 @@ class PatchesServiceTest : BaseVardefTest() {
         ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
     }
 
+    @Test
+    fun `vardef is migrated from vardok`(){
+        assertThat(patches.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isTrue()
+    }
+
+    @Test
+    fun `vardef is not migrated from vardok`(){
+        assertThat(patches.existsByVardefId(DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId)).isFalse()
+    }
+
+    @Test
+    fun `delete patches for migrated variable`() {
+        patches.deleteAllForDefinitionId(DRAFT_BUS_EXAMPLE.definitionId)
+        assertThat(patches.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isFalse()
+    }
+
     @ParameterizedTest
     @MethodSource("getValidUntilTestCases")
     fun `create patch with valid until`(

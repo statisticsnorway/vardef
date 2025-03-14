@@ -10,4 +10,9 @@ interface VardokIdMappingRepository : CrudRepository<VardokVardefIdPair, ObjectI
     fun getVardefIdByVardokId(vardokId: String): String?
 
     fun existsByVardokId(vardokId: String): Boolean
+
+    fun existsByVardefId(vardefId: String): Boolean
+
+    fun deleteByVardefId(vardefId: String)
+
 }

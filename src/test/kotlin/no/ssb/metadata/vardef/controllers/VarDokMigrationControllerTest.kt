@@ -32,14 +32,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @Inject
     lateinit var vardokService: VardokService
 
-    @Inject
-    lateinit var vardokIdMappingRepository: VardokIdMappingRepository
-
-    @BeforeEach
-    fun resetVardokIdMappingRepository() {
-        vardokIdMappingRepository.deleteAll()
-    }
-
     @ParameterizedTest
     @ValueSource(
         ints = [

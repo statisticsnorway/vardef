@@ -160,6 +160,7 @@ class PatchesService(
 
     /**
      * Delete all *Patches* in a *Variable Definition*
+     * This includes deleting the patches and any associated Vardok vardef mappings.
      *
      * @param definitionId The ID of the Variable Definition.
      */
@@ -167,13 +168,11 @@ class PatchesService(
         list(definitionId).forEach { item ->
             variableDefinitionRepository.deleteById(item.id)
         }
-        if (existsByVardefId(definitionId)) {
+        if (vardokIdMappingRepository.existsByVardefId(definitionId)) {
             vardokIdMappingRepository.deleteByVardefId(definitionId)
-            logger.info("Vardok vardef mapping was deleted for definition: $definitionId", kv(DEFINITION_ID, definitionId))
+            logger.info(
+                "Vardok vardef mapping was deleted for definition: $definitionId", kv(DEFINITION_ID, definitionId))
         }
         logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
     }
-
-    fun existsByVardefId(vardefId: String): Boolean = vardokIdMappingRepository.existsByVardefId(vardefId)
-
 }

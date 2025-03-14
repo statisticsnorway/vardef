@@ -56,6 +56,21 @@ class PatchesServiceTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
+    @MethodSource("vardokVardefMapping")
+    fun `check vardok  mapping`(
+        definitionId: String,
+        isMapped: Boolean,
+    ) {
+        assertThat(patches.existsVardokMapping(definitionId)).isEqualTo(isMapped)
+    }
+
+    @Test
+    fun `delete patches for migrated variable`() {
+        patches.deleteAllForDefinitionId(DRAFT_BUS_EXAMPLE.definitionId)
+        assertThat(vardokIdMappingRepository.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isFalse()
+    }
+
+    @ParameterizedTest
     @MethodSource("getValidUntilTestCases")
     fun `create patch with valid until`(
         validUntil: LocalDate,
@@ -261,6 +276,21 @@ class PatchesServiceTest : BaseVardefTest() {
                     LocalDate.of(2021, 1, 1),
                     false,
                     true,
+                ),
+            )
+
+        @JvmStatic
+        fun vardokVardefMapping(): Stream<Arguments> =
+            Stream.of(
+                Arguments.argumentSet(
+                    "Is migrated from Vardok",
+                    DRAFT_BUS_EXAMPLE.definitionId,
+                    true,
+                ),
+                Arguments.argumentSet(
+                    "Is not migrated from Vardok",
+                    DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId,
+                    false,
                 ),
             )
     }

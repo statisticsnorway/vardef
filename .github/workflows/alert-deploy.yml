@@ -9,6 +9,7 @@ on:
     paths:
       - '.nais/test/alerts.yaml'
       - '.github/workflows/alert-deploy.yml'
+  workflow_dispatch:
 permissions:
   id-token: write
 env:

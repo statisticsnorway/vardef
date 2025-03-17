@@ -1,6 +1,6 @@
 
 name: Deploy alerts
-run-name: Deploy alerts for vardef to test
+run-name: Deploy alerts for vardef to test and prod
 
 on:
   push:

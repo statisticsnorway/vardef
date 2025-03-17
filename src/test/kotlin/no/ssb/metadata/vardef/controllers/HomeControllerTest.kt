@@ -35,7 +35,7 @@ internal class HomeControllerTest : BaseVardefTest() {
     ) {
         spec
             .given()
-            .get("/swagger/$file.yml")
+            .get("/docs/openapi/variable-definitions/$file.yml")
             .then()
             .statusCode(200)
             .body(not(containsString("operationId: redirectToDocs")))
@@ -47,11 +47,11 @@ internal class HomeControllerTest : BaseVardefTest() {
             Stream.of(
                 argumentSet(
                     "Public",
-                    "variable-definitions/variable-definitions-public",
+                    "variable-definitions-public",
                 ),
                 argumentSet(
                     "Internal",
-                    "variable-definitions/variable-definitions-internal",
+                    "variable-definitions-internal",
                 ),
             )
     }

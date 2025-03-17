@@ -30,18 +30,13 @@ micronaut:
       - pattern: /docs/**
         http-method: GET
         access: isAnonymous()
-      - pattern: /swagger/**
-        http-method: GET
-        access: isAnonymous()
       - pattern: /**
         access: isAuthenticated()
   router:
     static-resources:
       swagger:
         paths: classpath:META-INF/swagger
-        # TODO We map on /swagger because OpenAPI groups doesn't respect mapping.path
-        # Ideally this would be hosted on /docs/openapi/variable-definitions/**
-        mapping: /swagger/**
+        mapping: /docs/openapi/variable-definitions/**
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /docs/swagger/variable-definitions/**
@@ -49,16 +44,17 @@ micronaut:
     groups:
       public:
         packages: no.ssb.metadata.vardef.controllers.publicapi
-        filename: variable-definitions/variable-definitions-public
+        filename: variable-definitions-public
         primary: true
       internal:
         packages: no.ssb.metadata.vardef.controllers.internalapi
-        filename: variable-definitions/variable-definitions-internal
+        filename: variable-definitions-internal
     property:
       naming:
         strategy: SNAKE_CASE
     views:
       spec: |
+        mapping.path=/docs/openapi/variable-definitions/,
         swagger-ui.enabled=true,
         swagger-ui.js.url=/docs/swagger/variable-definitions/res/,
         swagger-ui.tagsSorter=Function=(a => a),

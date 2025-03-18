@@ -257,3 +257,10 @@ fun convertSubjectArea(name: String): String? =
     SubjectAreaMapping.entries
         .firstOrNull { entry -> name in entry.key }
         ?.value
+
+fun specialSubjectFieldsMapping(vardokId: String): List<String>? =
+    when (vardokId) {
+        "2303", "2310" -> listOf("bf")
+        "3380", "3397" -> listOf("ei")
+        else -> null
+    }

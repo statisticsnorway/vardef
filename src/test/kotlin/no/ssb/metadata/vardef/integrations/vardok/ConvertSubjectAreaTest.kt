@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
 import no.ssb.metadata.vardef.integrations.vardok.convertions.convertSubjectArea
+import no.ssb.metadata.vardef.integrations.vardok.convertions.specialSubjectFieldsMapping
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
@@ -51,6 +52,19 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
                     null,
                 ),
             )
+
+        @JvmStatic
+        fun specialSubjectFields(): Stream<Arguments> =
+            Stream.of(
+                arguments(
+                    "2303",
+                    listOf("bf"),
+                ),
+                arguments(
+                    "3397",
+                    listOf("ei"),
+                ),
+            )
     }
 
     @ParameterizedTest
@@ -60,5 +74,14 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
         code: String?,
     ) {
         assertThat(convertSubjectArea(name)).isEqualTo(code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("specialSubjectFields")
+    fun `map special cases statistical unit to unit types`(
+        id: String,
+        code: List<String?>,
+    ) {
+        assertThat(specialSubjectFieldsMapping(id)).isEqualTo(code)
     }
 }

@@ -50,6 +50,8 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @throws OutdatedSubjectAreaException
  */
 fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String> {
+    specialSubjectFieldsMapping(vardokItem.parseId())?.let { return it }
+
     val code =
         vardokItem.variable?.subjectArea?.codeText
             ?: return emptyList()
@@ -102,7 +104,9 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
  */
 fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? {
     logger.info("Convert external document value: ${vardokItem.variable?.externalDocument} for ${vardokItem.parseId()}.")
-    return vardokItem.variable?.externalDocument?.trim()
+    return vardokItem.variable
+        ?.externalDocument
+        ?.trim()
         ?.let { urlString ->
             runCatching { URI(urlString).toURL() }
                 .onFailure { logger.error("Invalid URL: $urlString - Error: ${it.message}") }

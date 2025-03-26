@@ -320,7 +320,6 @@ class CompanionObject {
                     "1980-01-01",
                     HTTP_NOT_FOUND,
                 ),
-
             )
 
         @JvmStatic

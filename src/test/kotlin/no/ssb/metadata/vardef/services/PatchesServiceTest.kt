@@ -97,6 +97,10 @@ class PatchesServiceTest : BaseVardefTest() {
                 null,
             )
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(definitionId, validityPeriod)
+        if (!isClosedValidityPeriodException && !isInvalidDateException) {
+            val result = patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+            assertThat(result.validUntil).isEqualTo(latestPatchOnValidityPeriod.validUntil)
+        }
 
         if (isClosedValidityPeriodException) {
             assertThrows<ClosedValidityPeriodException> {
@@ -276,6 +280,14 @@ class PatchesServiceTest : BaseVardefTest() {
                     LocalDate.of(2021, 1, 1),
                     false,
                     true,
+                ),
+                Arguments.argumentSet(
+                    "Valid until is unchanged",
+                    LocalDate.of(2030, 1, 1),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    null,
+                    false,
+                    false,
                 ),
             )
 

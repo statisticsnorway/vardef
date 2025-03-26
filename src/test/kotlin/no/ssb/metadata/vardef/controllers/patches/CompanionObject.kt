@@ -286,6 +286,13 @@ class CompanionObject {
                     HTTP_BAD_REQUEST,
                 ),
                 argumentSet(
+                    "validity period is closed, but valid until is unchanged",
+                    patchBody().apply { put("valid_until", "2030-01-01") }.toString(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    null,
+                    HTTP_CREATED,
+                ),
+                argumentSet(
                     "validity period is open",
                     patchBody().apply { put("valid_until", "2030-06-30") }.toString(),
                     INCOME_TAX_VP1_P1.definitionId,

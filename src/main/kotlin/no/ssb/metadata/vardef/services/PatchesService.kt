@@ -58,7 +58,7 @@ class PatchesService(
         userName: String,
     ): SavedVariableDefinition {
         if (patch.validUntil != null) {
-            if (latestPatch.validUntil != null) {
+            if (latestPatch.validUntil != null && patch.validUntil.compareTo(latestPatch.validUntil) != 0) {
                 logger.error(
                     "Attempt to patch 'validUntil' on closed 'validityPeriod' for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),

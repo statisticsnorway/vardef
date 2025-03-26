@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
+import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.Owner
 import no.ssb.metadata.vardef.models.Patch
@@ -97,6 +98,11 @@ class PatchesServiceTest : BaseVardefTest() {
                 null,
             )
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(definitionId, validityPeriod)
+        if (!isClosedValidityPeriodException && !isInvalidDateException){
+           val result = patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+            assertThat(result).isInstanceOf(CompleteResponse::class.java)
+
+        }
 
         if (isClosedValidityPeriodException) {
             assertThrows<ClosedValidityPeriodException> {
@@ -276,6 +282,14 @@ class PatchesServiceTest : BaseVardefTest() {
                     LocalDate.of(2021, 1, 1),
                     false,
                     true,
+                ),
+                Arguments.argumentSet(
+                    "Valid until is unchanged",
+                    LocalDate.of(2031, 1, 1),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    null,
+                    false,
+                    false,
                 ),
             )
 

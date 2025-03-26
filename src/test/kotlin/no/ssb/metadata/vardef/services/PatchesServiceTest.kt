@@ -3,7 +3,6 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
-import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.Owner
 import no.ssb.metadata.vardef.models.Patch

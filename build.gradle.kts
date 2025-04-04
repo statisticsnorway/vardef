@@ -7,8 +7,7 @@ plugins {
     alias(libs.plugins.micronaut.aot)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.jib)
-
-    id("org.cyclonedx.bom") version "2.1.0"
+    alias(libs.plugins.cyclonedx)
     id("jacoco")
 }
 
@@ -84,6 +83,11 @@ micronaut {
         optimizeNetty = true
         replaceLogbackXml = true
     }
+}
+
+tasks.cyclonedxBom {
+    setIncludeConfigs(listOf("runtimeClasspath"))
+    setProjectType("application")
 }
 
 jib {

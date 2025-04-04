@@ -5,6 +5,7 @@
 
 [versions]
 assertj = "3.27.3"
+cyclonedx = "2.1.0"
 jackson = "2.18.3"
 jib = "3.4.5"
 json = "20250107"
@@ -72,6 +73,7 @@ snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 
 [plugins]
 allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }
 jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

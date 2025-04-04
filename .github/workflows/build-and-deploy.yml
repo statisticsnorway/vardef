@@ -28,6 +28,8 @@ env:
   REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/vardef
   IMAGE: vardef
   TAG: ${{ github.sha }}
+  DOCKER_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/vardef/vardef:${{ github.sha }}
+  DOCKER_IMAGE_WITHOUT_TAG: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/vardef/vardef
 
 jobs:
   docker-build:
@@ -65,11 +67,6 @@ jobs:
             echo "cluster=test" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/test/nais.yaml" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Set docker image env var
-        run: |
-          echo "DOCKER_IMAGE=${REGISTRY}/${IMAGE}:${TAG}" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_WITHOUT_TAG=${REGISTRY}/${IMAGE}" >> $GITHUB_ENV
 
       - name: "Authenticate to Google Cloud"
         id: "auth"
@@ -121,6 +118,7 @@ jobs:
     needs: docker-build
     uses: ./.github/workflows/deploy-to-nais.yml
     with:
-      image-tag: ${{ needs.docker-build.outputs.image-tag }}
       cluster: ${{ needs.docker-build.outputs.nais-cluster }}
       nais-config-path:  ${{ needs.docker-build.outputs.nais-config-path }}
+    secrets:
+      image-tag: ${{ env.DOCKER_IMAGE }}

@@ -3,10 +3,6 @@ name: Deploy to NAIS
 on:
   workflow_call:
     inputs:
-      image-tag:
-        description: Tag for the image
-        required: true
-        type: string
       cluster:
         description: NAIS cluster environment
         required: true
@@ -15,6 +11,10 @@ on:
         description: Path to the NAIS configuration file
         required: true
         type: string
+    secrets:
+      image-tag:
+        description: Tag for the image
+        required: true
 
 jobs:
   deploy:
@@ -29,5 +29,5 @@ jobs:
         env:
           CLUSTER: ${{ inputs.cluster }}
           RESOURCE: ${{ inputs.nais-config-path }}
-          VAR: image=${{ inputs.image-tag }}
+          VAR: image=${{ secrets.image-tag }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

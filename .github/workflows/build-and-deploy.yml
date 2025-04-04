@@ -25,7 +25,7 @@ on:
       - main
 
 env:
-  REGISTRY: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-metadata-docker/vardef
+  REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/vardef
   IMAGE: vardef
   TAG: ${{ github.sha }}
 
@@ -75,8 +75,8 @@ jobs:
         id: "auth"
         uses: "google-github-actions/auth@v2.1.8"
         with:
-          workload_identity_provider: "projects/848539402404/locations/global/workloadIdentityPools/gh-actions/providers/gh-actions"
-          service_account: "gh-actions-dapla-metadata@artifact-registry-5n.iam.gserviceaccount.com"
+          workload_identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # Provided as Organization Secret
+          service_account: "gh-ssb@${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}.iam.gserviceaccount.com"
           token_format: "access_token"
 
       - name: Login to registry
@@ -124,5 +124,3 @@ jobs:
       image-tag: ${{ needs.docker-build.outputs.image-tag }}
       cluster: ${{ needs.docker-build.outputs.nais-cluster }}
       nais-config-path:  ${{ needs.docker-build.outputs.nais-config-path }}
-    secrets:
-      registry-project: ${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}

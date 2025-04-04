@@ -15,10 +15,6 @@ on:
         description: Path to the NAIS configuration file
         required: true
         type: string
-    secrets:
-      registry-project:
-        description: Artifact Registry project
-        required: true
 
 jobs:
   deploy:

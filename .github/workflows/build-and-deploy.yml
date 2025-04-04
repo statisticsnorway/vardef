@@ -114,11 +114,18 @@ jobs:
           sbom: build/reports/bom.json
 
   deploy:
-    name: Deploy to NAIS
-    needs: docker-build
-    uses: ./.github/workflows/deploy-to-nais.yml
-    with:
-      cluster: ${{ needs.docker-build.outputs.nais-cluster }}
-      nais-config-path:  ${{ needs.docker-build.outputs.nais-config-path }}
-    secrets:
-      image-tag: ${{ env.DOCKER_IMAGE }}
+    name: Deploy to NAIS cluster
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      DOCKER_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/vardef/vardef:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: ${{ needs.docker-build.outputs.nais-cluster }}
+          RESOURCE: ${{ needs.docker-build.outputs.nais-config-path }}
+          VAR: image=${{ env.DOCKER_IMAGE }}
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

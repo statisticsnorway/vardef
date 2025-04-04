@@ -39,9 +39,8 @@ jobs:
       id-token: "write"
     runs-on: ubuntu-latest
     outputs:
-      image-tag: ${{ env.DOCKER_IMAGE }}
-      nais-cluster: ${{ steps.nais-deploy-vars.outputs.cluster }}
-      nais-config-path: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
+      nais_cluster: ${{ steps.nais-deploy-vars.outputs.nais_cluster }}
+      nais_config_path: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
 
     steps:
       - name: Checkout
@@ -59,12 +58,10 @@ jobs:
         id: nais-deploy-vars
         run: |
           if [[ ${{ github.event_name }} == "release" ]]; then
-            echo "nais_tag=${{ steps.version-tag.outputs.version_tag }}" >> "$GITHUB_OUTPUT"
-            echo "cluster=prod" >> "$GITHUB_OUTPUT"
+            echo "nais_cluster=prod" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/prod/nais.yaml" >> "$GITHUB_OUTPUT"
           else
-            echo "nais_tag=" >> "$GITHUB_OUTPUT"
-            echo "cluster=test" >> "$GITHUB_OUTPUT"
+            echo "nais_cluster=test" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/test/nais.yaml" >> "$GITHUB_OUTPUT"
           fi
 
@@ -119,13 +116,11 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
-    env:
-      DOCKER_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/vardef/vardef:${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: ${{ needs.docker-build.outputs.nais-cluster }}
-          RESOURCE: ${{ needs.docker-build.outputs.nais-config-path }}
+          CLUSTER: ${{ needs.docker-build.outputs.nais_cluster }}
+          RESOURCE: ${{ needs.docker-build.outputs.nais_config_path }}
           VAR: image=${{ env.DOCKER_IMAGE }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

@@ -93,6 +93,7 @@ jobs:
       id-token: "write"
     needs: docker-build
     steps:
+      - uses: actions/checkout@v4  # Needed for access to manifests
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: ${{ needs.docker-build.outputs.nais_cluster }}

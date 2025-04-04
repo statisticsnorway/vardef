@@ -5,12 +5,15 @@ import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
+import no.ssb.metadata.vardef.exceptions.IllegalStatusChangeException
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
+import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
+import no.ssb.metadata.vardef.models.canTransitionTo
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.slf4j.LoggerFactory
 
@@ -27,6 +30,7 @@ import org.slf4j.LoggerFactory
 class PatchesService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
     private val validityPeriodsService: ValidityPeriodsService,
+    private val vardokIdMappingRepository: VardokIdMappingRepository,
 ) {
     private val logger = LoggerFactory.getLogger(PatchesService::class.java)
 
@@ -54,7 +58,7 @@ class PatchesService(
         userName: String,
     ): SavedVariableDefinition {
         if (patch.validUntil != null) {
-            if (latestPatch.validUntil != null) {
+            if (latestPatch.validUntil != null && patch.validUntil.compareTo(latestPatch.validUntil) != 0) {
                 logger.error(
                     "Attempt to patch 'validUntil' on closed 'validityPeriod' for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
@@ -87,12 +91,27 @@ class PatchesService(
                 kv(DEFINITION_ID, definitionId),
             )
         }
+
+        if (patch.variableStatus != null) {
+            if (!latestPatch.variableStatus.canTransitionTo(patch.variableStatus)) {
+                throw IllegalStatusChangeException(
+                    "Changing the status from ${latestPatch.variableStatus} to ${patch.variableStatus} is not allowed.",
+                )
+            }
+            validityPeriodsService.updateStatusOnOtherPeriods(
+                definitionId,
+                patch.variableStatus,
+                latestPatch.validFrom,
+                userName,
+            )
+        }
         // For the selected validity period create a patch with the provided values
         val savedVariableDefinition =
             variableDefinitionRepository.save(
                 patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch, userName),
             )
         logger.info("Successfully saved patch for definition: $definitionId", kv(DEFINITION_ID, definitionId))
+        logger.debug("New patch {}", savedVariableDefinition)
         return savedVariableDefinition
     }
 
@@ -138,6 +157,7 @@ class PatchesService(
 
     /**
      * Delete all *Patches* in a *Variable Definition*
+     * This includes deleting the patches and any associated Vardok vardef mappings.
      *
      * @param definitionId The ID of the Variable Definition.
      */
@@ -145,6 +165,21 @@ class PatchesService(
         list(definitionId).forEach { item ->
             variableDefinitionRepository.deleteById(item.id)
         }
+        if (existsVardokMapping(definitionId)) {
+            vardokIdMappingRepository.deleteByVardefId(definitionId)
+            logger.info(
+                "Vardok vardef mapping was deleted for definition: $definitionId",
+                kv(DEFINITION_ID, definitionId),
+            )
+        }
         logger.info("Successfully deleted all patches for definition: $definitionId", kv(DEFINITION_ID, definitionId))
     }
+
+    /**
+     * Checks whether the given *variable definition* is mapped as a Vardok vardef pair.
+     *
+     * @param definitionId The ID of the variable definition to check.
+     * @return `true` if the variable definition has a Vardok vardef mapping, otherwise `false`.
+     */
+    fun existsVardokMapping(definitionId: String): Boolean = vardokIdMappingRepository.existsByVardefId(definitionId)
 }

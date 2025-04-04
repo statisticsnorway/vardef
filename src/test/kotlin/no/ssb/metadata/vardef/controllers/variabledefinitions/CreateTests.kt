@@ -62,25 +62,15 @@ class CreateTests : BaseVardefTest() {
                     put("short_name", "landbak_copy")
                 }.toString()
 
-        val definitionId =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(updatedJsonString)
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
-                .post("/variable-definitions")
-                .then()
-                .statusCode(201)
-                .body("contact", nullValue())
-                .extract()
-                .body()
-                .path<String>("id")
-
-        val createdVariableDefinition = patches.latest(definitionId)
-
-        assertThat(createdVariableDefinition.contact).isNull()
-        assertThat(createdVariableDefinition.shortName).isEqualTo("landbak_copy")
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 
     @Test

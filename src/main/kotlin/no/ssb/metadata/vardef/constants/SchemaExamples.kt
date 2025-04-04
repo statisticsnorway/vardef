@@ -5,6 +5,7 @@ const val ID_INVALID_EXAMPLE = "invalid id"
 const val EMPTY_LIST_EXAMPLE = """[]"""
 const val DATE_EXAMPLE = "1970-01-01"
 const val ACTIVE_GROUP_EXAMPLE = "dapla-felles-developers"
+const val SHORT_NAME_EXAMPLE = "landbak"
 
 // The following should be used to ensure that example names match
 const val NOT_FOUND_EXAMPLE_NAME = "Not found"

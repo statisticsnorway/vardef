@@ -307,6 +307,17 @@
       "validFrom": null,
       "validTo": null,
       "notes": "Verdipapir er et dokument som representerer et pengekrav, f.eks.  aksjer, obligasjoner og kontrakter."
+    },
+    {
+      "code": "29",
+      "parentCode": null,
+      "level": "1",
+      "name": "Rettsstiftelse",
+      "shortName": "",
+      "presentationName": "",
+      "validFrom": null,
+      "validTo": null,
+      "notes": "En rettsstiftelse er en bestemmelse i et dokument som stifter, forandrer, overdrar, behefter, anerkjenner eller opphever en rettighet i en registerenhet"
     }
   ]
 }

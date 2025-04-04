@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import io.micronaut.core.annotation.Introspected
@@ -66,6 +67,9 @@ data class Common(
 data class Relations(
     @field:JacksonXmlProperty(localName = "ClassificationRelation")
     val classificationRelation: ClassificationRelation? = null,
+    @field:JacksonXmlProperty(localName = "ConceptVariableRelation")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    val conceptVariableRelations: List<ConceptVariableRelation?> = emptyList(),
 )
 
 @Serdeable
@@ -73,6 +77,15 @@ data class Relations(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JacksonXmlRootElement(localName = "ClassificationRelation")
 data class ClassificationRelation(
+    val href: String?,
+    val type: String?,
+)
+
+@Serdeable
+@Introspected
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JacksonXmlRootElement(localName = "ConceptVariableRelation")
+data class ConceptVariableRelation(
     val href: String?,
     val type: String?,
 )
@@ -105,7 +118,7 @@ data class Variable(
     @field:JacksonXmlProperty(localName = "ExternalDocument")
     val externalDocument: String? = null,
     @field:JacksonXmlProperty(localName = "DataElementName")
-    val dataElementName: String? = null,
+    var dataElementName: String? = null,
     @field:JacksonXmlProperty(localName = "Calculation")
     val calculation: String? = null,
     val internalDocument: String? = null,
@@ -137,4 +150,6 @@ data class VardokResponse(
     val variable: Variable? = null,
     @field:JacksonXmlProperty(localName = "Relations", isAttribute = false)
     val relations: Relations? = null,
-)
+) {
+    fun parseId() = id.substringAfterLast(":")
+}

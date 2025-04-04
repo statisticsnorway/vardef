@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.controllers
+package no.ssb.metadata.vardef.controllers.internalapi
 
 import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpStatus
@@ -31,6 +31,8 @@ import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
+import no.ssb.metadata.vardef.services.VariableDefinitionService
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 @Tag(name = PATCHES)
@@ -42,7 +44,10 @@ import java.time.LocalDate
 class PatchesController(
     private val validityPeriods: ValidityPeriodsService,
     private val patches: PatchesService,
+    private val vardef: VariableDefinitionService,
 ) {
+    private val logger = LoggerFactory.getLogger(PatchesService::class.java)
+
     /**
      * List all patches for the given variable definition.
      *
@@ -193,10 +198,16 @@ class PatchesController(
         activeGroup: String,
         authentication: Authentication,
     ): CompleteResponse {
+        logger.debug("Received patch {}", patch)
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
         when {
             !latestPatchOnValidityPeriod.variableStatus.isPublished() ->
                 throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
+            !vardef.allLanguagesPresentForExternalPublication(patch, latestPatchOnValidityPeriod) ->
+                throw HttpStatusException(
+                    HttpStatus.CONFLICT,
+                    "The variable must be defined in all languages before external publication.",
+                )
         }
         return patches
             .create(

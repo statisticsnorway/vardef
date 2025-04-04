@@ -81,4 +81,17 @@ class DeleteTests : BaseVardefTest() {
             .then()
             .statusCode(401)
     }
+
+    @Test
+    fun `delete draft variable migrated from vardok`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .delete("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(204)
+            .header("Content-Type", nullValue())
+
+        assertThat(vardokIdMappingRepository.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isFalse()
+    }
 }

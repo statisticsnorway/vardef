@@ -50,6 +50,15 @@ spec:
     - name: MICRONAUT_ENVIRONMENTS
       value: naisprod
 
+  replicas:
+    # Always have at least two for seamless deploy
+    min: 2
+    max: 6
+  resources:
+    requests:
+      cpu: 20m
+      memory: 400Mi
+
   prometheus:
     enabled: true
     path: /prometheus

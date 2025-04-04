@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.controllers
+package no.ssb.metadata.vardef.controllers.publicapi
 
 import io.micronaut.http.*
 import io.micronaut.http.annotation.*
@@ -23,7 +23,6 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
-@Tag(name = PUBLIC)
 @Validated
 @Controller("/public")
 @Secured(SecurityRule.IS_ANONYMOUS)
@@ -37,6 +36,7 @@ class PublicController(
      *
      * These are rendered in the given language, with the default being Norwegian Bokmål.
      */
+    @Tag(name = VARIABLE_DEFINITIONS)
     @ApiResponse(
         content = [
             Content(
@@ -53,7 +53,6 @@ class PublicController(
             ),
         ],
     )
-    @Tag(name = VARIABLE_DEFINITIONS)
     @Get("/variable-definitions")
     fun listPublicVariableDefinitions(
         @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
@@ -77,8 +76,8 @@ class PublicController(
      *
      * This is rendered in the given language, with the default being Norwegian Bokmål.
      */
-    @Tag(name = VARIABLE_DEFINITIONS)
     @Produces(MediaType.APPLICATION_JSON)
+    @Tag(name = VARIABLE_DEFINITIONS)
     @ApiResponse(
         responseCode = "200",
         content = [

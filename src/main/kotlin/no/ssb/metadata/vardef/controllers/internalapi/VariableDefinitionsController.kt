@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.controllers
+package no.ssb.metadata.vardef.controllers.internalapi
 
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
@@ -48,6 +48,9 @@ class VariableDefinitionsController(
                         name = "Specific date",
                         value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
                     ), ExampleObject(
+                        name = "Specific short_name",
+                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
+                    ), ExampleObject(
                         name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
@@ -69,7 +72,15 @@ class VariableDefinitionsController(
             ],
         )
         dateOfValidity: LocalDate? = null,
-    ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity)
+        @QueryValue("short_name")
+        @Parameter(
+            description = SHORT_NAME_QUERY_PARAM_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Specific short_name", value = SHORT_NAME_EXAMPLE),
+            ],
+        )
+        shortName: String? = null,
+    ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
 
     /**
      * Create a variable definition.

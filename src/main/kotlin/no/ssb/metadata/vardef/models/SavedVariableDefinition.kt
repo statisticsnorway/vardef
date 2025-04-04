@@ -20,6 +20,9 @@ import java.time.LocalDateTime
  * Saved variable definition
  *
  * The object which is persisted to the data store. This should not be exposed externally.
+ *
+ * WARNING: Changes to field names or data types in this class are likely
+ *      to break the app. In most cases a database migration will need to be performed.
  */
 @Serdeable
 @MappedEntity(namingStrategy = NamingStrategies.Raw::class)
@@ -50,7 +53,8 @@ data class SavedVariableDefinition(
     var relatedVariableDefinitionUris: List<String>?,
     @NotNull
     var owner: Owner,
-    var contact: Contact?,
+    @NotNull
+    var contact: Contact,
     @DateCreated
     var createdAt: LocalDateTime,
     @Email
@@ -74,9 +78,9 @@ data class SavedVariableDefinition(
         RenderedVariableDefinition(
             id = definitionId,
             patchId = patchId,
-            name = name.getValidLanguage(language),
+            name = name.getValue(language),
             shortName = shortName,
-            definition = definition.getValidLanguage(language),
+            definition = definition.getValue(language),
             classificationUri = classificationReference?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
             unitTypes = unitTypes.map { klassService.renderCode(UNIT_TYPES_KLASS_CODE, it, language) },
             subjectFields = subjectFields.map { klassService.renderCode(SUBJECT_FIELDS_KLASS_CODE, it, language) },
@@ -85,9 +89,9 @@ data class SavedVariableDefinition(
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
-            comment = comment?.getValidLanguage(language),
+            comment = comment?.getValue(language),
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
-            contact = contact?.let { RenderedContact(contact?.title?.getValidLanguage(language), it.email) },
+            contact = contact.title.getValue(language)?.let { RenderedContact(it, contact.email) },
             lastUpdatedAt = lastUpdatedAt,
         )
 

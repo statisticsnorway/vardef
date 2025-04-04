@@ -11,6 +11,7 @@ import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
 
 const val CODES_CACHE = "codes"
 const val CLASSIFICATIONS_CACHE = "classifications"
@@ -18,8 +19,6 @@ const val CLASSIFICATIONS_CACHE = "classifications"
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
-    @Property(name = "micronaut.http.services.klass.codes-at")
-    private val codesAt: String,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
 
@@ -46,7 +45,7 @@ open class KlassApiService(
         language: SupportedLanguages,
     ): List<Code> {
         logger.info("Fetching codes for $classificationId")
-        val response = klassApiClient.listCodes(classificationId, codesAt, language)
+        val response = klassApiClient.listCodes(classificationId, LocalDate.now().toString(), language)
         handleErrorCodes(classificationId, response)
         return response.body().codes.ifEmpty {
             throw NoSuchElementException(
@@ -61,8 +60,8 @@ open class KlassApiService(
     ): HttpResponse<T> {
         when (response.status.code) {
             500 -> {
-                logger.error(Companion.STATUS_500_MESSAGE)
-                throw HttpServerException(Companion.STATUS_500_MESSAGE)
+                logger.error(STATUS_500_MESSAGE)
+                throw HttpServerException(STATUS_500_MESSAGE)
             }
 
             404 -> {

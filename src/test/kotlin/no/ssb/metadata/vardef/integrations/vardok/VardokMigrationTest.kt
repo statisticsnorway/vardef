@@ -1,12 +1,13 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import com.fasterxml.jackson.databind.JsonMappingException
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokStatisticalUnitToUnitTypes
 import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokSubjectAreaToSubjectFiled
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
+import no.ssb.metadata.vardef.utils.BaseVardefTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.AssertionsForClassTypes
@@ -21,8 +22,8 @@ import org.junit.jupiter.params.provider.ValueSource
 import java.net.URL
 import java.util.stream.Stream
 
-@MicronautTest
-class VardokMigrationTest {
+// @MicronautTest
+class VardokMigrationTest : BaseVardefTest() {
     @Inject
     lateinit var vardokService: VardokService
 
@@ -127,11 +128,19 @@ class VardokMigrationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["130", "69"])
+    @ValueSource(strings = ["130", "69", "1416"])
     fun `vardokresponse statistical units are values in UnitTypes PERSON`(vardokId: String) {
         val vardokresponse = vardokService.getVardokItem(vardokId)
         val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
         assertThat(result).isEqualTo(listOf("20"))
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["2413"])
+    fun `vardokresponse statistical unit is in language nn`(vardokId: String) {
+        val vardokresponse = vardokService.getVardokItem(vardokId)
+        val result = vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
+        assertThat(result).isEqualTo(listOf("13"))
     }
 
     @Test
@@ -162,12 +171,89 @@ class VardokMigrationTest {
     }
 
     @Test
+    fun `map ConceptVariableRelations none`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("948")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.relatedVariableDefinitionUris).isEmpty()
+    }
+
+    @Test
+    fun `map ConceptVariableRelations several`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.relatedVariableDefinitionUris?.size).isEqualTo(5)
+        assertThat(vardokTransform.relatedVariableDefinitionUris?.last())
+            .isEqualTo("http://www.ssb.no/conceptvariable/vardok/11")
+        assertThat(vardokTransform.relatedVariableDefinitionUris is List<String>)
+    }
+
+    @Test
+    fun `map single ConceptVariableRelation`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("1245")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.relatedVariableDefinitionUris?.first()).isEqualTo(
+            "http://www.ssb.no/conceptvariable/vardok/1246",
+        )
+    }
+
+    @Test
     fun `vardokresponse statistical unit incorrect input`() {
         assertThatThrownBy {
             val vardokresponse = vardokService.getVardokItem("0000")
             vardokresponse?.let { mapVardokStatisticalUnitToUnitTypes(it) }
-        }.isInstanceOf(OutdatedUnitTypesException::class.java)
-            .hasMessageContaining("Vardok id 0000 StatisticalUnit has outdated unit types and can not be saved")
+        }.isInstanceOf(StatisticalUnitException::class.java)
+            .hasMessageContaining("Vardok ID 0000: StatisticalUnit is either missing or contains outdated unit types.")
+    }
+
+    @Test
+    fun `Vardok not found`() {
+        assertThatThrownBy {
+            vardokService.getVardokItem("21")
+        }.isInstanceOf(VardokNotFoundException::class.java)
+            .hasMessageContaining("Vardok id 21 not found")
+    }
+
+    @Test
+    fun `Vardok not found by language`() {
+        assertThatThrownBy {
+            vardokService.getVardokByIdAndLanguage("0002", "en")
+        }.isInstanceOf(VardokNotFoundException::class.java)
+            .hasMessageContaining("Id 0002 in language: en not found")
+    }
+
+    @Test
+    fun `Vardokresponse invalid characters`() {
+        assertThatThrownBy {
+            vardokService.getVardokItem("0001")
+        }.isInstanceOf(JsonMappingException::class.java)
+            .hasMessageContaining("Unexpected character")
+    }
+
+    @Test
+    fun `Vardokresponse invalid characters by language`() {
+        assertThatThrownBy {
+            vardokService.getVardokByIdAndLanguage("0001", "en")
+        }.isInstanceOf(JsonMappingException::class.java)
+            .hasMessageContaining("Unexpected character")
+    }
+
+    @Test
+    fun `Vardokresponse missing fields`() {
+        assertThatThrownBy {
+            vardokService.getVardokItem("0002")
+        }.isInstanceOf(JsonMappingException::class.java)
+            .hasMessageContaining("Cannot construct instance of `no.ssb.metadata.vardef.integrations.vardok.models.Variable`")
+    }
+
+    @Test
+    fun `Vardokresponse creative dates`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("0003")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.validFrom).isEqualTo("10039081")
+
+        val varDefInput2 = vardokService.fetchMultipleVardokItemsByLanguage("0004")
+        val vardokTransform2 = VardokService.extractVardefInput(varDefInput2)
+        assertThat(vardokTransform2.validFrom).isEqualTo("1003-90-81")
     }
 
     @ParameterizedTest
@@ -179,6 +265,26 @@ class VardokMigrationTest {
         val result = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
         val varDefInput = VardokService.extractVardefInput(result)
         AssertionsForClassTypes.assertThat(varDefInput.unitTypes).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `duplicate short name`() {
+        assertThat(vardokService.isDuplicate("bus")).isTrue()
+        assertThat(vardokService.isDuplicate("non_existing_name")).isFalse()
+    }
+
+    @Test
+    fun `set generated short name if duplicate short name exists`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("0005")
+        val vardokTransform = VardokService.extractVardefInput(varDefInput)
+        assertThat(vardokTransform.shortName).contains("generert")
+    }
+
+    @Test
+    fun `new norwegian is primary language`() {
+        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2413")
+        assertThat(varDefInput["nn"]?.common?.title).isEqualTo("Sum utgifter")
+        assertThat(varDefInput["nb"]?.common?.title).isNull()
     }
 
     companion object {
@@ -196,6 +302,10 @@ class VardokMigrationTest {
                 arguments(
                     "3246",
                     listOf("12", "13"),
+                ),
+                arguments(
+                    "590",
+                    listOf("12", "13", "20"),
                 ),
             )
 

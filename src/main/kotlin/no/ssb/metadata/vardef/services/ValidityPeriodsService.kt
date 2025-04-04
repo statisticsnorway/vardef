@@ -301,17 +301,17 @@ class ValidityPeriodsService(
         newPeriod: ValidityPeriod,
     ): Boolean {
         val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        val allLanguagesPresent =
+        val newPeriodHasNoFewerLanguagesThanPrevious =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
                 newPeriod.definition.listPresentLanguages().contains(lang)
             }
-        if (!allLanguagesPresent) {
+        if (!newPeriodHasNoFewerLanguagesThanPrevious) {
             return false
         }
         val allDefinitionsChanged =
             lastValidityPeriod.definition.listPresentLanguages().all { lang ->
-                val oldValue = lastValidityPeriod.definition.getValidLanguage(lang)
-                val newValue = newPeriod.definition.getValidLanguage(lang)
+                val oldValue = lastValidityPeriod.definition.getValue(lang)
+                val newValue = newPeriod.definition.getValue(lang)
                 val changed = !oldValue.equals(newValue, ignoreCase = true)
                 if (!changed) {
                     logger.warn(
@@ -369,6 +369,25 @@ class ValidityPeriodsService(
                 val patchOwner = period.copy(owner = owner).toPatch()
                 variableDefinitionRepository.save(
                     patchOwner.toSavedVariableDefinition(
+                        list(definitionId).last().patchId,
+                        period,
+                        userName,
+                    ),
+                )
+            }
+
+    fun updateStatusOnOtherPeriods(
+        definitionId: String,
+        variableStatus: VariableStatus,
+        validFrom: LocalDate,
+        userName: String,
+    ): Unit =
+        listLatestByValidityPeriod(definitionId)
+            .filter { it.validFrom != validFrom && it.variableStatus != variableStatus }
+            .forEach { period ->
+                val patchStatus = period.copy(variableStatus = variableStatus).toPatch()
+                variableDefinitionRepository.save(
+                    patchStatus.toSavedVariableDefinition(
                         list(definitionId).last().patchId,
                         period,
                         userName,

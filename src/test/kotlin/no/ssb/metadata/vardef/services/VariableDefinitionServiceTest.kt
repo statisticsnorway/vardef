@@ -28,16 +28,41 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             }
     }
 
-    @Test
-    fun `list all variable definitions`() {
-        variableDefinitionService
-            .listCompleteForDate(
-                LocalDate.now(),
-            ).let {
-                assertThat(it.size).isEqualTo(
-                    NUM_ALL_VARIABLE_DEFINITIONS,
+    @ParameterizedTest
+    @MethodSource("listAllVariablesAtDifferentTimes")
+    fun `list variable definitions at different times`(
+        date: LocalDate?,
+        result: Int,
+    ) {
+        val variableDefinitions =
+            variableDefinitionService
+                .listCompleteForDate(
+                    date,
+                    null,
                 )
-            }
+
+        assertThat(variableDefinitions.size).isEqualTo(result)
+    }
+
+    @ParameterizedTest
+    @MethodSource("variableByShortNameCases")
+    fun `list variable definition by shortName`(
+        date: LocalDate?,
+        patchId: Int?,
+        shortName: String?,
+    ) {
+        assertThat(variableDefinitionService.listCompleteForDate(date, shortName).first().patchId)
+            .isEqualTo(patchId)
+    }
+
+    @Test
+    fun `is generated contact`() {
+        assertThat(
+            variableDefinitionService.isIllegalContactForPublishing(
+                SAVED_TO_PUBLISH_ILLEGAL_CONTACT,
+                UpdateDraft(variableStatus = VariableStatus.PUBLISHED_EXTERNAL),
+            ),
+        ).isTrue()
     }
 
     @ParameterizedTest
@@ -93,7 +118,158 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
     }
 
+    @ParameterizedTest
+    @MethodSource("languagesForExternalPublicationWithUpdateDraft")
+    fun `languages for external publication (UpdateDraft)`(
+        updates: UpdateDraft,
+        existingVariable: SavedVariableDefinition,
+        expected: Boolean,
+    ) {
+        assertThat(
+            variableDefinitionService.allLanguagesPresentForExternalPublication(updates, existingVariable),
+        ).isEqualTo(expected)
+    }
+
+    @ParameterizedTest
+    @MethodSource("languagesForExternalPublicationWithPatch")
+    fun `languages for external publication (Patch)`(
+        updates: Patch,
+        existingVariable: SavedVariableDefinition,
+        expected: Boolean,
+    ) {
+        assertThat(
+            variableDefinitionService.allLanguagesPresentForExternalPublication(updates, existingVariable),
+        ).isEqualTo(expected)
+    }
+
     companion object {
+        private val allLanguagesPresent =
+            LanguageStringType(
+                nb = "Norwegian Bokmål",
+                nn = "Norwegian Nynorsk",
+                en = "English",
+            )
+        private val allLanguagesNull =
+            LanguageStringType(
+                nb = null,
+                nn = null,
+                en = null,
+            )
+        private val allLanguagesEmpty =
+            LanguageStringType(
+                nb = "",
+                nn = "",
+                en = "",
+            )
+
+        @JvmStatic
+        fun languagesForExternalPublicationWithPatch(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "All languages present",
+                    Patch(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesPresent,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    true,
+                ),
+                argumentSet(
+                    "One field all languages empty",
+                    Patch(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesEmpty,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    false,
+                ),
+            )
+
+        @JvmStatic
+        fun languagesForExternalPublicationWithUpdateDraft(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "All languages present",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesPresent,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    true,
+                ),
+                argumentSet(
+                    "One field all languages empty",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesEmpty,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    false,
+                ),
+                argumentSet(
+                    "Variable status not PUBLISHED_EXTERNAL",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.DRAFT,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesNull,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    true,
+                ),
+                argumentSet(
+                    "Update includes languages set to null",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                        name = allLanguagesNull,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesPresent,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    false,
+                ),
+                argumentSet(
+                    "Update attempts to fill languages set to null",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                        name = allLanguagesPresent,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesNull,
+                        definition = allLanguagesPresent,
+                        comment = allLanguagesPresent,
+                    ),
+                    false,
+                ),
+                argumentSet(
+                    "Optional field set to null",
+                    UpdateDraft(
+                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
+                    ),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                        name = allLanguagesPresent,
+                        definition = allLanguagesPresent,
+                        comment = null,
+                    ),
+                    true,
+                ),
+            )
+
         @JvmStatic
         fun invalidOwnerUpdate(): Stream<Arguments> =
             Stream.of(
@@ -221,6 +397,49 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     VariableStatus.PUBLISHED_INTERNAL,
                     SAVED_INTERNAL_VARIABLE_DEFINITION.toCompleteResponse(),
+                ),
+            )
+
+        @JvmStatic
+        fun variableByShortNameCases(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Fist validity period",
+                    LocalDate.of(1980, 1, 1),
+                    7,
+                    INCOME_TAX_VP1_P1.shortName,
+                ),
+                argumentSet(
+                    "Second validity period",
+                    LocalDate.of(2021, 1, 1),
+                    6,
+                    INCOME_TAX_VP2_P6.shortName,
+                ),
+                argumentSet(
+                    "No date",
+                    null,
+                    6,
+                    INCOME_TAX_VP2_P6.shortName,
+                ),
+            )
+
+        @JvmStatic
+        fun listAllVariablesAtDifferentTimes(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "All variables",
+                    LocalDate.now(),
+                    NUM_ALL_VARIABLE_DEFINITIONS,
+                ),
+                argumentSet(
+                    "Variables from year 100",
+                    LocalDate.of(100, 1, 1),
+                    0,
+                ),
+                argumentSet(
+                    "No date input",
+                    null,
+                    NUM_ALL_VARIABLE_DEFINITIONS,
                 ),
             )
     }

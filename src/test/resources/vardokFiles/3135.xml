@@ -1,0 +1,55 @@
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2013-01-10" defaultValidFrom="1999-08-15" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:3135" lastChangedDate="2023-03-16" otherLanguages="en" type="ConceptVariable" xml:lang="nn" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+    <DC>
+        <dc:contributor>Seksjon for prisstatistikk</dc:contributor>
+        <dc:creator>Permisjon/Sluttet</dc:creator>
+        <dcterms:modified>2023-03-16</dcterms:modified>
+        <dcterms:valid>1999-08-15 - </dcterms:valid>
+        <dc:description>Hushalds utgifter til barnehageplass i kommunale og private barnehagar</dc:description>
+        <dcterms:abstract/>
+        <dcterms:tableOfContents>Hushald</dcterms:tableOfContents>
+        <dc:format>text/xml</dc:format>
+        <dc:identifier>urn:ssb:conceptvariable:vardok:3135</dc:identifier>
+        <dc:language>nn</dc:language>
+        <dc:publisher>Statistisk sentralbyrï¿½</dc:publisher>
+        <dc:rights>Statistiske metadata, produsert av Statistisk sentralbyrï¿½ (SSB) til produksjon av statistikk og annen alminnelig bruk.</dc:rights>
+        <dc:source/>
+        <dc:subject>04.02.10 - Barnehager, førskoler</dc:subject>
+        <dc:title>Egenbetaling, barnehagar</dc:title>
+        <dc:type>Variabeldefinisjon</dc:type>
+    </DC>
+    <Common>
+        <Title>Egenbetaling, barnehagar</Title>
+        <Description>Hushalds utgifter til barnehageplass i kommunale og private barnehagar</Description>
+        <ContactPerson>
+            <CodeValue>car</CodeValue>
+            <CodeText>Permisjon/Sluttet</CodeText>
+        </ContactPerson>
+        <ContactDivision>
+            <CodeValue>240</CodeValue>
+            <CodeText>Seksjon for prisstatistikk</CodeText>
+        </ContactDivision>
+        <Notes/>
+    </Common>
+    <Variable>
+        <InternalNotes/>
+        <StatisticalUnit>Hushald</StatisticalUnit>
+        <SubjectArea>
+            <CodeValue>04.02.10</CodeValue>
+            <CodeText>Barnehager, førskoler</CodeText>
+        </SubjectArea>
+        <ExternalSource/>
+        <InternalSource/>
+        <Sensitivity>Ordinï¿½r</Sensitivity>
+        <ExternalDocument>http://www.ssb.no/emner/04/02/10/barnegenend/</ExternalDocument>
+        <DataElementName/>
+        <ShortNameWeb/>
+        <Calculation/>
+        <InternalDocument/>
+        <ExternalComment/>
+        <InternalReference/>
+    </Variable>
+    <Relations>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/09573" xlink:title="09573: Gjennomsnittleg månadleg eigenbetaling i kommunale barnehagar, etter hushaldets samla bruttoinntekt. Januar (avslutta serie)" xlink:type="simple"/>
+        <StatbankTableRelation xlink:href="http://www.ssb.no/tabell/08488" xlink:title="08488: Egenbetaling i barnehager. Endringstall (prosent) (avslutta serie)" xlink:type="simple"/>
+    </Relations>
+</FIMD>

@@ -72,6 +72,7 @@ data class UpdateDraft(
     val externalReferenceUri: URL? = null,
     @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
+    @NotEmptyLanguageStringType
     val comment: LanguageStringType? = null,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable

@@ -56,6 +56,21 @@ class PatchesServiceTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
+    @MethodSource("vardokVardefMapping")
+    fun `check vardok  mapping`(
+        definitionId: String,
+        isMapped: Boolean,
+    ) {
+        assertThat(patches.existsVardokMapping(definitionId)).isEqualTo(isMapped)
+    }
+
+    @Test
+    fun `delete patches for migrated variable`() {
+        patches.deleteAllForDefinitionId(DRAFT_BUS_EXAMPLE.definitionId)
+        assertThat(vardokIdMappingRepository.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isFalse()
+    }
+
+    @ParameterizedTest
     @MethodSource("getValidUntilTestCases")
     fun `create patch with valid until`(
         validUntil: LocalDate,
@@ -82,6 +97,10 @@ class PatchesServiceTest : BaseVardefTest() {
                 null,
             )
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(definitionId, validityPeriod)
+        if (!isClosedValidityPeriodException && !isInvalidDateException) {
+            val result = patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+            assertThat(result.validUntil).isEqualTo(latestPatchOnValidityPeriod.validUntil)
+        }
 
         if (isClosedValidityPeriodException) {
             assertThrows<ClosedValidityPeriodException> {
@@ -261,6 +280,29 @@ class PatchesServiceTest : BaseVardefTest() {
                     LocalDate.of(2021, 1, 1),
                     false,
                     true,
+                ),
+                Arguments.argumentSet(
+                    "Valid until is unchanged",
+                    LocalDate.of(2030, 1, 1),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                    null,
+                    false,
+                    false,
+                ),
+            )
+
+        @JvmStatic
+        fun vardokVardefMapping(): Stream<Arguments> =
+            Stream.of(
+                Arguments.argumentSet(
+                    "Is migrated from Vardok",
+                    DRAFT_BUS_EXAMPLE.definitionId,
+                    true,
+                ),
+                Arguments.argumentSet(
+                    "Is not migrated from Vardok",
+                    DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId,
+                    false,
                 ),
             )
     }

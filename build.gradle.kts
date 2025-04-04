@@ -12,7 +12,7 @@ plugins {
     id("jacoco")
 }
 
-version = "0.1.2"
+version = "0.1.3"
 group = "no.ssb.metadata.vardef"
 
 val kotlinVersion = project.properties["kotlinVersion"]
@@ -49,7 +49,6 @@ dependencies {
     compileOnly(libs.micronaut.openapi.annotations)
     runtimeOnly(libs.jackson.module.kotlin)
     runtimeOnly(libs.snakeyaml)
-    testImplementation(libs.micronaut.http.client)
     testImplementation(libs.assertj.core)
     testImplementation(libs.micronaut.test.rest.assured)
     testImplementation(libs.mockk)

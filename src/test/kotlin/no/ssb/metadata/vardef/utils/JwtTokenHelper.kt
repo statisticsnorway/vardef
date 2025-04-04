@@ -4,6 +4,7 @@ import com.nimbusds.jose.Header
 import com.nimbusds.jose.util.Base64URL
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
+import org.json.JSONObject
 
 /**
  * Build a JWT token based on the format from Dapla Lab
@@ -60,69 +61,63 @@ class JwtTokenHelper {
             daplaGroups: List<String>?,
             includeDaplaStructure: Boolean,
             includeUsername: Boolean,
-        ) = JWTClaimsSet.parse(
-            """
-            {
-            "exp": 1726609866,
-            "iat": 1726573866,
-            "auth_time": 1726556500,
-            "jti": "dc6c5c13-a3ff-42e1-b11c-d93233725ace",
-            "iss": "https://auth.ssb.no/realms/ssb",
-            "aud": $audienceClaim,
-            "sub": "d7532b1f-d5aa-43c1-acd1-ed12d4020455",
-            "typ": "Bearer",
-            "azp": "onyxia-api",
-            "session_state": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
-            "acr": "0",
-            "allowed-origins": [
-              "https://lab.dapla.ssb.no"
-            ],
-            "realm_access": {
-              "roles": [
-                "offline_access",
-                "uma_authorization",
-                "default-roles-ssb"
-              ]
-            },
-            "resource_access": {
-              "broker": {
-                "roles": [
-                  "read-token"
-                ]
-              },
-              "account": {
-                "roles": [
-                  "manage-account",
-                  "manage-account-links",
-                  "view-profile"
-                ]
-              }
-            },
-            "scope": "openid profile email",
-            "sid": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
-            "email_verified": true,
-            ${ if (includeDaplaStructure) {
-                """"dapla": {
-                    "teams": $daplaTeams,
-                    "groups": $daplaGroups
-                },"""
-            } else {
-                ""
+        ): JWTClaimsSet {
+            val claims =
+                JSONObject(
+                    """{
+                                "exp": 1726609866,
+                                "iat": 1726573866,
+                                "auth_time": 1726556500,
+                                "jti": "dc6c5c13-a3ff-42e1-b11c-d93233725ace",
+                                "iss": "https://auth.ssb.no/realms/ssb",
+                                "sub": "d7532b1f-d5aa-43c1-acd1-ed12d4020455",
+                                "typ": "Bearer",
+                                "azp": "onyxia-api",
+                                "session_state": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
+                                "acr": "0",
+                                "allowed-origins": [
+                                  "https://lab.dapla.ssb.no"
+                                ],
+                                "realm_access": {
+                                  "roles": [
+                                    "offline_access",
+                                    "uma_authorization",
+                                    "default-roles-ssb"
+                                  ]
+                                },
+                                "resource_access": {
+                                  "broker": {
+                                    "roles": [
+                                      "read-token"
+                                    ]
+                                  },
+                                  "account": {
+                                    "roles": [
+                                      "manage-account",
+                                      "manage-account-links",
+                                      "view-profile"
+                                    ]
+                                  }
+                                },
+                                "scope": "openid profile email",
+                                "sid": "43d9f23c-2d2f-4d3b-b519-7cf655ff8230",
+                                "email_verified": true,
+                                "name": "Ola Nordmann",
+                                "short_username": "ssb-ano",
+                                "given_name": "Ola",
+                                "family_name": "Nordmann",
+                                "email": "$TEST_USER"
+                            }
+                        """,
+                )
+            claims.put("aud", audienceClaim)
+            if (includeDaplaStructure && daplaGroups != null) {
+                claims.put("dapla", mapOf("teams" to daplaTeams, "groups" to daplaGroups))
             }
+            if (includeUsername) {
+                claims.put("preferred_username", TEST_USER)
             }
-            "name": "Ola Nordmann",
-            "short_username": "ssb-ano",
-            ${ if (includeUsername) {
-                """"preferred_username": $TEST_USER,"""
-            } else {
-                ""
-            }
-            }
-            "given_name": "Ola",
-            "family_name": "Nordmann",
-            "email": $TEST_USER
-                  }
-            """.trimIndent(),
-        )
+            return JWTClaimsSet.parse(claims.toString())
+        }
     }
 }

@@ -36,26 +36,28 @@ micronaut:
     static-resources:
       swagger:
         paths: classpath:META-INF/swagger
-        mapping: /docs/openapi/**
+        mapping: /docs/openapi/variable-definitions/**
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
-        mapping: /docs/swagger/**
-      redoc:
-        paths: classpath:META-INF/swagger/views/redoc
-        mapping: /docs/redoc/**
+        mapping: /docs/swagger/variable-definitions/**
   openapi:
+    groups:
+      public:
+        packages: no.ssb.metadata.vardef.controllers.publicapi
+        filename: variable-definitions-public
+        primary: true
+      internal:
+        packages: no.ssb.metadata.vardef.controllers.internalapi
+        filename: variable-definitions-internal
     property:
       naming:
         strategy: SNAKE_CASE
     views:
       spec: |
-        mapping.path=docs/openapi,
+        mapping.path=/docs/openapi/variable-definitions/,
         swagger-ui.enabled=true,
-        swagger-ui.js.url=/docs/swagger/res/,
+        swagger-ui.js.url=/docs/swagger/variable-definitions/res/,
         swagger-ui.tagsSorter=Function=(a => a),
-        redoc.enabled=true,
-        redoc.js.url=/docs/redoc/res/,
-        redoc.sort-tags-alphabetically=false,
   serde:
     deserialization:
       ignore-unknown: false
@@ -65,16 +67,7 @@ micronaut:
   logger:
     config: logback.xml
 
-  caches:
-    classifications:
-      maximumSize: 3600
-    codes:
-      maximumSize: 3600
-
   server:
-    cors:
-      enabled: true
-
     netty:
       access-logger:
         enabled: true
@@ -84,12 +77,29 @@ micronaut:
           - /prometheus
           - /docs/.+
           - /favicon.ico
+        log-format: '{
+          "requestMethod":"%m",
+          "requestUrl":"%x",
+          "status":%s,
+          "responseSize":"%B",
+          "userAgent":"%{User-Agent}i",
+          "remoteIp":"%a",
+          "serverIp":"%A",
+          "referer":"%i",
+          "latency":"%Dms",
+          "protocol":"%H"}'
+  caches:
+    classifications:
+      maximumSize: 3600
+      expire-after-write: 24h
+    codes:
+      maximumSize: 3600
+      expire-after-write: 24h
 
   http:
     services:
       klass:
         url: https://data.ssb.no/api/klass/v1/
-        codes-at: 2024-08-01
         health-check: true
         health-check-interval: 15s
       vardok:
@@ -122,7 +132,6 @@ micronaut:
         descriptions: true
         step: PT1M
 
-# Allow unauthenticated access
 endpoints:
   all:
     port: 8090

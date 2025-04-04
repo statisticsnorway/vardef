@@ -5,16 +5,15 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.controllers.patches.CompanionObject.Companion.patchBody
+import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 
 class CreateTests : BaseVardefTest() {
@@ -217,33 +216,31 @@ class CreateTests : BaseVardefTest() {
             .body("comment.en", equalTo("This is the reason"))
     }
 
-    @ParameterizedTest
-    @EnumSource(value = VariableStatus::class, names = ["PUBLISHED.*"], mode = EnumSource.Mode.MATCH_NONE)
-    fun `create new patch with invalid status`(
-        variableStatus: VariableStatus,
-        spec: RequestSpecification,
-    ) {
-        val id =
-            patches
-                .create(
-                    DRAFT_BUS_EXAMPLE
-                        .copy()
-                        .apply {
-                            this.variableStatus = variableStatus
-                        }.toPatch(),
-                    DRAFT_BUS_EXAMPLE.definitionId,
-                    DRAFT_BUS_EXAMPLE,
-                    TEST_USER,
-                ).definitionId
+    @Test
+    fun `create new patch on draft variable`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().toString())
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
-            .post("/variable-definitions/$id/patches")
+            .post("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}/patches")
             .then()
             .statusCode(405)
+    }
+
+    @Test
+    fun `publish internal variable externally`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(JSONObject("""{"variable_status": "PUBLISHED_EXTERNAL"}""").toString())
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+            .body("variable_status", equalTo("PUBLISHED_EXTERNAL"))
     }
 
     @Test
@@ -315,7 +312,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchMandatoryFields")
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#patchInvalidMandatoryFields")
     fun `attempt to create new patch with mandatory fields`(
         input: String,
         errorMessage: String,
@@ -361,5 +358,23 @@ class CreateTests : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.patchId).isEqualTo(2)
+    }
+
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.patches.CompanionObject#internalVariablesMissingLanguages")
+    fun `publish variable externally with missing languages`(
+        definitionId: String,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                jsonMapper.writeValueAsString(Patch(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/$definitionId/patches")
+            .then()
+            .statusCode(HttpStatus.CONFLICT.code)
     }
 }

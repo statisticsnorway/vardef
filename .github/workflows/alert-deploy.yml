@@ -1,12 +1,13 @@
 
 name: Deploy alerts
-run-name: Deploy alerts for vardef to test
+run-name: Deploy alerts for vardef to test and prod
 
 on:
   push:
     branches:
       - main
     paths:
+      - '.nais/prod/alerts.yaml'
       - '.nais/test/alerts.yaml'
       - '.github/workflows/alert-deploy.yml'
 permissions:
@@ -27,4 +28,20 @@ jobs:
         env:
           CLUSTER: test
           RESOURCE: .nais/test/alerts.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+
+  prod-deploy:
+    name: Deploy alerts to prod
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Deploy to prod
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod
+          RESOURCE: .nais/prod/alerts.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

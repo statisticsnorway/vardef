@@ -5,6 +5,8 @@ import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
+import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
+import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
@@ -76,6 +78,12 @@ class VariableDefinitionService(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
             kv(DEFINITION_ID, updatedVariable.definitionId),
         )
+        if (updatedVariable.variableStatus.isPublished()) {
+            logger.info(
+                "Successful published variable with id: ${updatedVariable.definitionId}",
+                kv(DEFINITION_ID, updatedVariable.definitionId),
+            )
+        }
         return updatedVariable
     }
 
@@ -145,19 +153,30 @@ class VariableDefinitionService(
     }
 
     /**
-     * List *Variable Definitions* which are valid on the given date.
+     * List *Variable Definitions* which are valid on the given date and shortname.
      *
-     * If no date is given, list all variable definitions. These are the
+     * If no date and shortname is given, list all variable definitions. These are the
      * [CompleteResponse] and are suitable for internal use.
      *
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
+     * @param shortName The shortname which one wants a variable definition for.
      * @return [List<CompleteResponse>] valid at the date.
      */
-    fun listCompleteForDate(dateOfValidity: LocalDate?): List<CompleteResponse> {
+    fun listCompleteForDate(
+        dateOfValidity: LocalDate?,
+        shortName: String?,
+    ): List<CompleteResponse> {
         val results =
-            uniqueDefinitionIds()
-                .mapNotNull { getCompleteByDate(it, dateOfValidity) }
-        logger.info("Found ${results.size} valid variable definitions at date $dateOfValidity.")
+            if (shortName != null) {
+                variableDefinitionRepository
+                    .findDistinctDefinitionIdByShortName(shortName)
+                    .let { id -> listOfNotNull(id?.let { getCompleteByDate(it, dateOfValidity) }) }
+            } else {
+                uniqueDefinitionIds()
+                    .mapNotNull { getCompleteByDate(it, dateOfValidity) }
+            }
+
+        logger.info("Found ${results.size} valid variable definitions at date $dateOfValidity with shortName=$shortName.")
         return results
     }
 
@@ -251,5 +270,126 @@ class VariableDefinitionService(
                     isCorrectDateOrder(savedDraft.validFrom, updateDraft.validUntil)
             )
 
+    /**
+     * Determines whether the short name in the saved or updated draft contains an illegal keyword,
+     * making it unsuitable for publishing.
+     *
+     * @param savedDraft The saved version of the variable definition.
+     * @param updateDraft The updated draft containing potential changes.
+     * @return `true` if either short name contains an illegal keyword, `false` otherwise.
+     */
+    fun isIllegalShortNameForPublishing(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): Boolean {
+        if (updateDraft.variableStatus?.isPublished() == true) {
+            val currentShortName = updateDraft.shortName ?: savedDraft.shortName
+            logger.debug("Checking if shortName $currentShortName contains illegal shortName")
+            return currentShortName.contains(ILLEGAL_SHORTNAME_KEYWORD)
+        }
+        return false
+    }
+
+    /**
+     * Determines whether the *Contact* in the saved or updated draft contains an illegal keyword,
+     * making it unsuitable for publishing.
+     *
+     * @param savedDraft The saved version of the variable definition.
+     * @param updateDraft The updated draft containing potential changes.
+     * @return `true` if either *Contact*  contains an illegal keyword, `false` otherwise.
+     */
+    fun isIllegalContactForPublishing(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraft,
+    ): Boolean {
+        if (updateDraft.variableStatus?.isPublished() == true) {
+            val currentContact = updateDraft.contact ?: savedDraft.contact
+            logger.debug("Checking if contact {} contains illegal values", currentContact)
+
+            val titleContainsIllegalKeyword =
+                SupportedLanguages.entries
+                    .any { language ->
+                        val languageValue = currentContact.title.getValue(language)?.trim()
+                        languageValue?.contains(GENERATED_CONTACT_KEYWORD) == true
+                    }.also {
+                        logger.debug("Does contact title contain illegal values: $it")
+                    }
+
+            val emailContainsIllegalKeyword =
+                currentContact.email.contains(GENERATED_CONTACT_KEYWORD).also {
+                    logger.debug("Does contact email ${currentContact.email} contain illegal values: $it")
+                }
+
+            return titleContainsIllegalKeyword || emailContainsIllegalKeyword
+        }
+        return false
+    }
+
     fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
+
+    /**
+     * Are all languages present?
+     *
+     * Checks whether:
+     *   - The variable status is changing to [VariableStatus.PUBLISHED_EXTERNAL]
+     *   - All fields with user-provided translations are either
+     *      - `null` (to allow for optional fields)
+     *      - filled with non-empty values for all supported languages
+     *
+     * Function overload for [Patch]
+     *
+     * @param updates
+     * @param existingVariable
+     * @return `true` if the variable is being published and all translation fields are filled
+     */
+    fun allLanguagesPresentForExternalPublication(
+        updates: Patch,
+        existingVariable: SavedVariableDefinition,
+    ): Boolean =
+        allLanguagesPresentForExternalPublication(
+            updates.variableStatus,
+            listOf(
+                existingVariable.name to updates.name,
+                existingVariable.definition to updates.definition,
+                existingVariable.comment to updates.comment,
+            ),
+        )
+
+    /**
+     * Are all languages present?
+     *
+     * Checks whether:
+     *   - The variable status is changing to [VariableStatus.PUBLISHED_EXTERNAL]
+     *   - All fields with user-provided translations are either
+     *      - `null` (to allow for optional fields)
+     *      - filled with non-empty values for all supported languages
+     *
+     * Function overload for [UpdateDraft]
+     *
+     * @param updates
+     * @param existingVariable
+     * @return `true` if the variable is being published and all translation fields are filled
+     */
+    fun allLanguagesPresentForExternalPublication(
+        updates: UpdateDraft,
+        existingVariable: SavedVariableDefinition,
+    ): Boolean =
+        allLanguagesPresentForExternalPublication(
+            updates.variableStatus,
+            listOf(
+                existingVariable.name to updates.name,
+                existingVariable.definition to updates.definition,
+                existingVariable.comment to updates.comment,
+            ),
+        )
+
+    private fun allLanguagesPresentForExternalPublication(
+        updatedVariableStatus: VariableStatus?,
+        translationFields: List<Pair<LanguageStringType?, LanguageStringType?>>,
+    ): Boolean =
+        updatedVariableStatus != VariableStatus.PUBLISHED_EXTERNAL ||
+            translationFields.all {
+                (it.first == null || it.first?.allLanguagesPresent() == true) &&
+                    (it.second == null || it.second?.allLanguagesPresent() == true)
+            }
 }

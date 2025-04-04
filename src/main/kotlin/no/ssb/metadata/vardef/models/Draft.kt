@@ -63,13 +63,14 @@ data class Draft(
     val externalReferenceUri: URL?,
     @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
+    @NotEmptyLanguageStringType
     val comment: LanguageStringType?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
     val relatedVariableDefinitionUris: List<URL>?,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
-    val contact: Contact?,
+    val contact: Contact,
 ) {
     /**
      * Team name is a substring of group name

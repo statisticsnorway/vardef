@@ -125,10 +125,53 @@ val SAVED_INTERNAL_VARIABLE_DEFINITION_NO_VALID_UNTIL =
     SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
         validUntil = null,
     )
+
+val SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_NAME =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        shortName = "missing_language_name",
+        name =
+            LanguageStringType(
+                nb = null,
+                nn = "Intern",
+                en = "Internal",
+            ),
+    )
+
+val SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_DEFINITION =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        shortName = "missing_language_definition",
+        definition =
+            LanguageStringType(
+                nb = "En variabeldefinisjon som er publisert for intern bruk",
+                nn = null,
+                en = "A variable definition published for internal use",
+            ),
+    )
+
+val SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_COMMENT =
+    SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+        id = ObjectId(),
+        definitionId = VariableDefinitionService.generateId(),
+        shortName = "missing_language_comment",
+        comment =
+            LanguageStringType(
+                nb = "Merknad",
+                nn = "Merknad",
+                en = null,
+            ),
+    )
+
 val ALL_SAVED_INTERNAL_PATCHES =
     listOf(
         SAVED_INTERNAL_VARIABLE_DEFINITION,
         SAVED_VARIABLE_INTERNAL_VALIDITY_PERIOD_BEFORE,
+        SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_NAME,
+        SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_DEFINITION,
+        SAVED_INTERNAL_VARIABLE_DEFINITION_MISSING_LANGUAGE_COMMENT,
     )
 
 val VALIDITY_PERIOD_TAX_EXAMPLE =
@@ -149,7 +192,6 @@ val VALIDITY_PERIOD_TAX_EXAMPLE =
         unitTypes = listOf("", ""),
         subjectFields = listOf("", ""),
         containsSpecialCategoriesOfPersonalData = false,
-        variableStatus = VariableStatus.PUBLISHED_INTERNAL,
         measurementType = "",
         validFrom = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://www.example.com").toURL(),
@@ -302,7 +344,7 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         definition =
             LanguageStringType(
                 nb = "Dødvekt er den største vekt skipet kan bære av last og beholdninger.",
-                nn = null,
+                nn = "Dødvekt er den største vekta skipet kan bera av last og behaldningar.",
                 en = "Dead weight",
             ),
         classificationReference = "91",
@@ -317,8 +359,8 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         comment =
             LanguageStringType(
                 "Legger til merknad",
-                null,
-                null,
+                "Legger til merknad",
+                "Adding comment",
             ),
         relatedVariableDefinitionUris = listOf(),
         owner =
@@ -457,7 +499,11 @@ val COMPLETE_RESPONSE =
                 team = TEST_TEAM,
                 groups = listOf(TEST_DEVELOPERS_GROUP),
             ),
-        contact = null,
+        contact =
+            Contact(
+                LanguageStringType("Avdeling for landstatistikk", null, null),
+                "landbal@ssb.no",
+            ),
         createdAt = LocalDateTime.now(),
         createdBy = TEST_USER,
         lastUpdatedAt = LocalDateTime.now(),
@@ -552,8 +598,40 @@ val SAVED_TO_PUBLISH =
         relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
         contact =
             Contact(
-                LanguageStringType("", "", ""),
-                "",
+                LanguageStringType("Seksjon matavfall", "", ""),
+                "matafv@ssb.no",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
+
+val SAVED_TO_PUBLISH_ILLEGAL_CONTACT =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = null,
+                en = "Bus",
+            ),
+        shortName = "bus2",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("03", "04"),
+        subjectFields = listOf("al"),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2021, 1, 1),
+        validUntil = null,
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("generert_tittel", null, null),
+                "generert@epost.com",
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
@@ -589,7 +667,7 @@ val PATCH_MANDATORY_FIELDS =
         owner = Owner("my-team", listOf("my-team-developers", "other-group", TEST_DEVELOPERS_GROUP)),
         contact =
             Contact(
-                LanguageStringType("", "", ""),
+                LanguageStringType("Avdeling", "", ""),
                 "me@example.com",
             ),
         createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),

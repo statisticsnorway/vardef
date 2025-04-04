@@ -8,7 +8,6 @@ import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.LanguageStringType
-import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 
@@ -45,9 +44,6 @@ class VardefValidationFactory {
                 _,
             ->
             value == null ||
-                SupportedLanguages.entries.any { language ->
-                    val languageValue = value.getValidLanguage(language)?.trim()
-                    !languageValue.isNullOrEmpty()
-                }
+                value.oneOrMoreLanguagesPresent()
         }
 }

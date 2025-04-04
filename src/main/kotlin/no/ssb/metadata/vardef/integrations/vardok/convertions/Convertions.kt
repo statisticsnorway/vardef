@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok.convertions
 
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaException
-import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedUnitTypesException
+import no.ssb.metadata.vardef.integrations.vardok.models.StatisticalUnitException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
@@ -22,23 +22,27 @@ fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     return Pair(firstDate, secondDate)
 }
 
-fun vardokId(vardokItem: VardokResponse): String = vardokItem.id.substringAfterLast(":")
-
 /**
- * When null response from method [convertUnitTypes] identifier is checked in method [specialCaseUnitMapping]
+ * Maps a *StatisticalUnit* field to a valid Klass code
  *
- * @returns list with string value(s) except if result is null then
- * @throws OutdatedUnitTypesException
+ * This function converts a *StatisticalUnit* text field to a valid Klass code from codelist 702.
+ * For some special cases, the mapping is determined by the ID rather than the *StatisticalUnit* field.
+ *
+ * The mapping follows [Migreringsplan fra Vardok til Vardef](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4128276501/Migreringsplan+fra+Vardok+til+Vardef#Enhetstyper)
+ * and includes identifiers handled in [specialCaseUnitMapping]
+ *
+ * @returns list with string values representing the mapped Klass codes
+ * If result is null then neither [specialCaseUnitMapping] nor [convertUnitTypes] produced a valid code
+ * @throws StatisticalUnitException if mapping fails due to a missing or unrecognized *StatisticalUnit*.
+ *
  */
-fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String> =
-    // Handle Vardok id 3125 which does not conform to neither 'converUnitTypes' nor 'specialCaseUnitMapping'
-    if (vardokId(vardokItem) == "3125") {
-        listOf("21")
-    } else {
-        vardokItem.variable?.statisticalUnit?.let { statUnit ->
-            convertUnitTypes(statUnit) ?: specialCaseUnitMapping(vardokId(vardokItem))
-        } ?: specialCaseUnitMapping(vardokId(vardokItem))
-    } ?: throw OutdatedUnitTypesException(vardokId(vardokItem))
+fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String> {
+    specialCaseUnitMapping(vardokItem.parseId())?.let { return it }
+
+    return vardokItem.variable?.statisticalUnit?.let { statUnit ->
+        convertUnitTypes(statUnit)
+    } ?: throw StatisticalUnitException(vardokItem.parseId())
+}
 
 /**
  *
@@ -46,12 +50,14 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @throws OutdatedSubjectAreaException
  */
 fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String> {
+    specialSubjectFieldsMapping(vardokItem.parseId())?.let { return it }
+
     val code =
         vardokItem.variable?.subjectArea?.codeText
             ?: return emptyList()
 
     return convertSubjectArea(code)?.let { listOf(it) }
-        ?: throw OutdatedSubjectAreaException(vardokItem.id.substringAfterLast(":"))
+        ?: throw OutdatedSubjectAreaException(vardokItem.parseId())
 }
 
 /**
@@ -97,11 +103,24 @@ fun mapVardokComment(vardokItem: Map<String, VardokResponse>): MutableMap<String
  * @return A valid [URL] if the `externalDocument` string is properly formatted, otherwise `null`.
  */
 fun mapExternalDocumentToUri(vardokItem: VardokResponse): URL? {
-    logger.info("Convert external document value: ${vardokItem.variable?.externalDocument} for ${vardokId(vardokItem)}.")
-    return vardokItem.variable?.externalDocument?.trim()
+    logger.info("Convert external document value: ${vardokItem.variable?.externalDocument} for ${vardokItem.parseId()}.")
+    return vardokItem.variable
+        ?.externalDocument
+        ?.trim()
         ?.let { urlString ->
             runCatching { URI(urlString).toURL() }
                 .onFailure { logger.error("Invalid URL: $urlString - Error: ${it.message}") }
                 .getOrNull()
         }
 }
+
+/**
+ * Extracts a list of URL strings from the `conceptVariableRelations` of a `VardokResponse` object.
+ *
+ * @param vardokItem The `VardokResponse` object containing the relations data.
+ * @return A list of non-null `href` strings, or `null` if `conceptVariableRelations` is null.
+ */
+fun mapConceptVariableRelations(vardokItem: VardokResponse): List<String>? =
+    vardokItem.relations
+        ?.conceptVariableRelations
+        ?.mapNotNull { it?.href }

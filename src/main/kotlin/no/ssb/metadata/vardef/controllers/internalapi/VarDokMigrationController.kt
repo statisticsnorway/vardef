@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.controllers
+package no.ssb.metadata.vardef.controllers.internalapi
 
 import io.micronaut.http.*
 import io.micronaut.http.HttpHeaders.AUTHORIZATION

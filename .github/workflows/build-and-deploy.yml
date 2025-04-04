@@ -116,6 +116,7 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
+    needs: docker-build
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2

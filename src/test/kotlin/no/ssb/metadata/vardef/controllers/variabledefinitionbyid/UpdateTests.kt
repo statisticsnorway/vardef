@@ -711,39 +711,23 @@ class UpdateTests : BaseVardefTest() {
             .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 
-    @Test
-    fun `update contact title trailing whitespace`(spec: RequestSpecification) {
-        val contactTitleTrailingWhitespace = "Seksjonsleder      "
-        val expectedResult = "Seksjonsleder"
-        val body =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(
-                    JSONObject().apply {
-                        put(
-                            "contact",
-                            JSONObject().apply {
-                                put(
-                                    "title",
-                                    JSONObject().apply {
-                                        put("nb", contactTitleTrailingWhitespace)
-                                    },
-                                )
-                                put("email", "me@ssb.no")
-                            },
-                        )
-                    }.toString(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
-                .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
-                .then()
-                .statusCode(HttpStatus.OK.code)
-                .extract()
-                .body()
-                .asString()
-
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.contact.title.nb).isEqualTo(expectedResult)
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.controllers.variabledefinitions.CompanionObject#createLanguageStringType")
+    fun `update contact title trailing whitespace`(
+        input: String,
+        field: String,
+        expectedString: String,
+        spec: RequestSpecification
+    ) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(input)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body(field, equalTo(expectedString))
     }
 }

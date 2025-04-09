@@ -39,6 +39,78 @@ class CompanionObject {
             )
 
         @JvmStatic
+        fun createLanguageStringType(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Contact",
+                    jsonTestInput()
+                        .apply {
+                            put(
+                                "contact",
+                                JSONObject().apply {
+                                    put(
+                                        "title",
+                                        JSONObject().apply {
+                                            put("nb", "  spion  ")
+                                            put("nn", "")
+                                            put("en", "")
+                                        },
+                                    )
+                                    put("email", "spy@ssb.no")
+                                },
+                            )
+                        }.toString(),
+                    "contact.title.nb",
+                    "spion",
+                ),
+                argumentSet(
+                    "Definition",
+                    jsonTestInput()
+                        .apply {
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put(
+                                        "nb", ""
+                                    )
+                                    put(
+                                        "nn", ""
+                                    )
+                                    put(
+                                        "en", "Oh my unicorn   "
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "definition.en",
+                    "Oh my unicorn",
+                ),
+                argumentSet(
+                    "Name",
+                    jsonTestInput()
+                        .apply {
+                            put(
+                                "name",
+                                JSONObject().apply {
+                                    put(
+                                        "nb", ""
+                                    )
+                                    put(
+                                        "nn", "superlongs "
+                                    )
+                                    put(
+                                        "en", ""
+                                    )
+                                },
+                            )
+                        }.toString(),
+                    "name.nn",
+                    "superlongs",
+                ),
+            )
+
+
+        @JvmStatic
         fun createDraftMandatoryFields(): Stream<Arguments> =
             Stream.of(
                 argumentSet(
@@ -258,4 +330,5 @@ class CompanionObject {
                 ),
             )
     }
+
 }

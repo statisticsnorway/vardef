@@ -32,11 +32,8 @@ class MongockExampleMigration {
         logger.info("Number of documents = $numberDocuments")
     }
 
-    /**
-     * Currently we're not making any changes so nothing to do for rollback
-     */
     @RollbackExecution
     fun rollback() {
-        // Intentionally left blank: no state changes to undo in current implementation
+        // Currently we're not making any changes so nothing to do for rollback
     }
 }

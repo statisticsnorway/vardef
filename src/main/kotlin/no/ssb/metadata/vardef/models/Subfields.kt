@@ -26,7 +26,20 @@ data class Contact(
     val title: LanguageStringType,
     @Email
     val email: String,
-)
+) {
+    fun update(updates: Contact): Contact =
+        Contact(
+            title = updates.title.let { title.update(it) },
+            email = updates.email.ifBlank { this.email }
+        )
+    companion object {
+        fun from(contact: Contact): Contact =
+            Contact(
+                title = LanguageStringType.from(contact.title),
+                email = contact.email
+            )
+    }
+}
 
 /**
  * Owner

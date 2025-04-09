@@ -377,4 +377,29 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
     }
+
+    @Test
+    fun `create new patch string trailing whitespace`(spec: RequestSpecification) {
+        val commentTrailingWhiteSpace = "This is the reason and then som extra space  "
+        val expectedResult = "This is the reason and then som extra space"
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                patchBody()
+                    .apply {
+                        put(
+                            "comment",
+                            JSONObject().apply {
+                                put("en", commentTrailingWhiteSpace)
+                            },
+                        )
+                    }.toString(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+            .body("comment.en", equalTo(expectedResult))
+    }
 }

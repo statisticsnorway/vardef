@@ -439,4 +439,38 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
     }
+
+    @Test
+    fun `create new validity period trailing whitespace`(spec: RequestSpecification) {
+        val definitionTrailingWhitespace = "So lang kan ein utgreiing koma seg ut       "
+        val expectedDefinition = "So lang kan ein utgreiing koma seg ut"
+        val addData =
+            JSONObject(allMandatoryFieldsChanged())
+                .apply {
+                    put(
+                        "definition",
+                        JSONObject().apply {
+                            put("nn", definitionTrailingWhitespace)
+                        },
+                    )
+                }.toString()
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(addData)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(HttpStatus.CREATED.code)
+
+        assertThat(
+            patches
+                .latest(
+                    INCOME_TAX_VP1_P1.definitionId,
+                ).definition
+                .nn,
+        ).isEqualTo(expectedDefinition)
+    }
 }

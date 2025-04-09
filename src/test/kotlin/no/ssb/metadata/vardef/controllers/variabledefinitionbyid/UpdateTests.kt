@@ -692,4 +692,22 @@ class UpdateTests : BaseVardefTest() {
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.containsSpecialCategoriesOfPersonalData).isEqualTo(false)
     }
+
+    @Test
+    fun `update short name trailing whitespace`(spec: RequestSpecification) {
+        val shortNameTrailingWhitespace = "super_woman "
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                JSONObject()
+                    .apply {
+                        put("shortName", shortNameTrailingWhitespace)
+                    }.toString(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+    }
 }

@@ -353,4 +353,39 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(httpStatus.code)
     }
+
+    @Test
+    fun `create variable definition string trailing whitespace`(spec: RequestSpecification) {
+        val nameTrailingWhiteSpace = "Dette navnet har fått mellomrom etter teksten     "
+        val expectedResult = "Dette navnet har fått mellomrom etter teksten"
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put(
+                        "name",
+                        JSONObject().apply {
+                            put("nb", nameTrailingWhiteSpace)
+                        },
+                    )
+                }.toString()
+
+        val definitionId =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(updatedJsonString)
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/variable-definitions")
+                .then()
+                .statusCode(201)
+                .body("name.nb", equalTo(expectedResult))
+                .extract()
+                .body()
+                .path<String>("id")
+
+        val createdVariableDefinition = patches.latest(definitionId)
+
+        assertThat(createdVariableDefinition.name.nb).isEqualTo(expectedResult)
+    }
 }

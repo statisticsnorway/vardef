@@ -37,5 +37,6 @@ class MongockExampleMigration {
      */
     @RollbackExecution
     fun rollback() {
+        // Intentionally left blank: no state changes to undo in current implementation
     }
 }

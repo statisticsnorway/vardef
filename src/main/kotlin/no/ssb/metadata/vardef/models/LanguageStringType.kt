@@ -75,7 +75,6 @@ data class LanguageStringType(
         )
 
     companion object {
-
         /**
          * Creates a new [LanguageStringType] instance by copying and trimming values
          * from the provided [obj] parameter.

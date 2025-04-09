@@ -27,27 +27,25 @@ data class Contact(
     @Email
     val email: String,
 ) {
-
     /**
      * Returns a new [Contact] instance by updating the current object's fields
-     * with values from the provided [updates] object.
+     * with values from the provided [updatedContact] object.
      *
      * - The `title` field is updated using [LanguageStringType] `update(...)` method,
      *   preserving existing values if not overridden.
-     * - The `email` field is updated only if [updates.email] is not blank; otherwise,
+     * - The `email` field is updated only if [email] is not blank; otherwise,
      *   the existing email is retained.
      *
-     * @param updates A [Contact] object containing potential new values.
+     * @param updatedContact A [Contact] object containing potential new values.
      * @return A new [Contact] instance with selectively updated fields.
      */
-    fun update(updates: Contact): Contact =
+    fun update(updatedContact: Contact): Contact =
         Contact(
-            title = updates.title.let { title.update(it) },
-            email = updates.email.ifBlank { this.email },
+            title = updatedContact.title.let { title.update(it) },
+            email = updatedContact.email.ifBlank { this.email },
         )
 
     companion object {
-
         /**
          * Creates a new [Contact] instance by copying values from the given [contact],
          * trimming and sanitizing the `title` field using [LanguageStringType.from].

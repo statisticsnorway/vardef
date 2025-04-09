@@ -96,7 +96,7 @@ data class Patch(
             comment = comment?.let { previousPatch.comment?.update(comment) } ?: previousPatch.comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             owner = owner ?: previousPatch.owner,
-            contact = contact ?: previousPatch.contact,
+            contact = contact?.let { previousPatch.contact.update(it) } ?: previousPatch.contact,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
             lastUpdatedBy = userName,

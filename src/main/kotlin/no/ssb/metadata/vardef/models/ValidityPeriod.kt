@@ -77,7 +77,7 @@ data class ValidityPeriod(
         previousPatch.copy(
             patchId = highestPatchId + 1,
             name = name?.let { previousPatch.name.update(it) } ?: previousPatch.name,
-            definition = definition,
+            definition = LanguageStringType.from(definition),
             classificationReference = classificationReference ?: previousPatch.classificationReference,
             unitTypes = unitTypes ?: previousPatch.unitTypes,
             subjectFields = subjectFields ?: previousPatch.subjectFields,
@@ -87,9 +87,9 @@ data class ValidityPeriod(
             measurementType = measurementType ?: previousPatch.measurementType,
             validFrom = validFrom,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
-            comment = comment,
+            comment = comment?.let { LanguageStringType.from(it) },
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
-            contact = contact ?: previousPatch.contact,
+            contact = contact?.let { previousPatch.contact.update(it) } ?: previousPatch.contact,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
             lastUpdatedBy = userName,

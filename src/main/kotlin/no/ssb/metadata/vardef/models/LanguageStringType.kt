@@ -20,6 +20,7 @@ data class LanguageStringType(
     var nn: String?,
     var en: String?,
 ) {
+
     /**
      * Get value for language
      *
@@ -69,8 +70,16 @@ data class LanguageStringType(
      */
     fun update(updates: LanguageStringType): LanguageStringType =
         this.copy(
-            nb = updates.nb ?: nb,
-            nn = updates.nn ?: nn,
-            en = updates.en ?: en,
+            nb = updates.nb?.trim() ?: nb?.trim(),
+            nn = updates.nn?.trim() ?: nn?.trim(),
+            en = updates.en?.trim() ?: en?.trim(),
         )
+    companion object {
+        fun from(obj: LanguageStringType): LanguageStringType = LanguageStringType(
+            obj.nb?.trim(),
+            obj.nn?.trim(),
+            obj.en?.trim()
+        )
+    }
+
 }

@@ -379,8 +379,8 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch string trailing whitespace`(spec: RequestSpecification) {
-        val commentTrailingWhiteSpace = "This is the reason and then som extra space  "
+    fun `create new patch string leading whitespace`(spec: RequestSpecification) {
+        val commentTrailingWhiteSpace = "   This is the reason and then som extra space"
         val expectedResult = "This is the reason and then som extra space"
         spec
             .given()

@@ -378,7 +378,7 @@ class CreateTests : BaseVardefTest() {
                 .`when`()
                 .post("/variable-definitions")
                 .then()
-                .statusCode(201)
+                .statusCode(HttpStatus.CREATED.code)
                 .body("name.nb", equalTo(expectedResult))
                 .extract()
                 .body()

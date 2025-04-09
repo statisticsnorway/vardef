@@ -710,4 +710,40 @@ class UpdateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
     }
+
+    @Test
+    fun `update contact title trailing whitespace`(spec: RequestSpecification) {
+        val contactTitleTrailingWhitespace = "Seksjonsleder      "
+        val expectedResult = "Seksjonsleder"
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    JSONObject().apply {
+                        put(
+                            "contact",
+                            JSONObject().apply {
+                                put(
+                                    "title",
+                                    JSONObject().apply {
+                                        put("nb", contactTitleTrailingWhitespace)
+                                    },
+                                )
+                                put("email", "me@ssb.no")
+                            },
+                        )
+                    }.toString(),
+                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.contact.title.nb).isEqualTo(expectedResult)
+    }
 }

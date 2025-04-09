@@ -75,6 +75,16 @@ data class LanguageStringType(
         )
 
     companion object {
+
+        /**
+         * Creates a new [LanguageStringType] instance by copying and trimming values
+         * from the provided [obj] parameter.
+         *
+         * Useful for sanitizing input by removing leading/trailing whitespace.
+         *
+         * @param obj The source [LanguageStringType] to copy values from.
+         * @return A new [LanguageStringType] instance with trimmed values.
+         */
         fun from(obj: LanguageStringType): LanguageStringType =
             LanguageStringType(
                 obj.nb?.trim(),

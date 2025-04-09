@@ -30,13 +30,14 @@ data class Contact(
     fun update(updates: Contact): Contact =
         Contact(
             title = updates.title.let { title.update(it) },
-            email = updates.email.ifBlank { this.email }
+            email = updates.email.ifBlank { this.email },
         )
+
     companion object {
         fun from(contact: Contact): Contact =
             Contact(
                 title = LanguageStringType.from(contact.title),
-                email = contact.email
+                email = contact.email,
             )
     }
 }

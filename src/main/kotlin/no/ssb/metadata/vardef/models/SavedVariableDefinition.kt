@@ -161,7 +161,7 @@ data class SavedVariableDefinition(
             relatedVariableDefinitionUris =
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             owner = varDefUpdates.owner ?: owner,
-            contact = varDefUpdates.contact?.let{contact.update(it)} ?: contact,
+            contact = varDefUpdates.contact?.let { contact.update(it) } ?: contact,
             lastUpdatedBy = userName,
         )
 }

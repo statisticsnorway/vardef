@@ -717,7 +717,7 @@ class UpdateTests : BaseVardefTest() {
         input: String,
         field: String,
         expectedString: String,
-        spec: RequestSpecification
+        spec: RequestSpecification,
     ) {
         spec
             .given()

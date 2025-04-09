@@ -71,13 +71,16 @@ class CompanionObject {
                                 "definition",
                                 JSONObject().apply {
                                     put(
-                                        "nb", ""
+                                        "nb",
+                                        "",
                                     )
                                     put(
-                                        "nn", ""
+                                        "nn",
+                                        "",
                                     )
                                     put(
-                                        "en", "Oh my unicorn   "
+                                        "en",
+                                        "Oh my unicorn   ",
                                     )
                                 },
                             )
@@ -93,13 +96,16 @@ class CompanionObject {
                                 "name",
                                 JSONObject().apply {
                                     put(
-                                        "nb", ""
+                                        "nb",
+                                        "",
                                     )
                                     put(
-                                        "nn", "superlongs "
+                                        "nn",
+                                        "superlongs ",
                                     )
                                     put(
-                                        "en", ""
+                                        "en",
+                                        "",
                                     )
                                 },
                             )
@@ -108,7 +114,6 @@ class CompanionObject {
                     "superlongs",
                 ),
             )
-
 
         @JvmStatic
         fun createDraftMandatoryFields(): Stream<Arguments> =
@@ -330,5 +335,4 @@ class CompanionObject {
                 ),
             )
     }
-
 }

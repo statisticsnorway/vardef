@@ -144,9 +144,9 @@ data class SavedVariableDefinition(
         userName: String,
     ): SavedVariableDefinition =
         copy(
-            name = varDefUpdates.name?.let { name.update(it) } ?: name,
+            name = name.update(varDefUpdates.name),
             shortName = varDefUpdates.shortName ?: shortName,
-            definition = varDefUpdates.definition?.let { definition.update(it) } ?: definition,
+            definition = definition.update(varDefUpdates.definition),
             classificationReference = varDefUpdates.classificationReference ?: classificationReference,
             unitTypes = varDefUpdates.unitTypes ?: unitTypes,
             subjectFields = varDefUpdates.subjectFields ?: subjectFields,
@@ -157,7 +157,7 @@ data class SavedVariableDefinition(
             validFrom = varDefUpdates.validFrom ?: validFrom,
             validUntil = varDefUpdates.validUntil ?: validUntil,
             externalReferenceUri = varDefUpdates.externalReferenceUri ?: externalReferenceUri,
-            comment = varDefUpdates.comment?.let { comment?.update(it) } ?: comment,
+            comment = comment?.update(varDefUpdates.comment) ?: varDefUpdates.comment,
             relatedVariableDefinitionUris =
                 varDefUpdates.relatedVariableDefinitionUris?.map { it.toString() } ?: relatedVariableDefinitionUris,
             owner = varDefUpdates.owner ?: owner,

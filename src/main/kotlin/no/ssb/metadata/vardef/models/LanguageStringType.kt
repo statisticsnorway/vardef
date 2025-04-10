@@ -67,10 +67,12 @@ data class LanguageStringType(
      * @param updates the updates
      * @return the merged object
      */
-    fun update(updates: LanguageStringType): LanguageStringType =
-        this.copy(
+    fun update(updates: LanguageStringType?): LanguageStringType {
+        if (updates == null) return this
+        return this.copy(
             nb = updates.nb ?: nb,
             nn = updates.nn ?: nn,
             en = updates.en ?: en,
         )
+    }
 }

@@ -250,7 +250,7 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `update draft variable definition add comment`(spec: RequestSpecification) {
+    fun `update draft variable definition add new languages to comment`(spec: RequestSpecification) {
         spec
             .given()
             .contentType(ContentType.JSON)
@@ -270,6 +270,29 @@ class UpdateTests : BaseVardefTest() {
             .body("comment.nb", containsString("Legger til merknad"))
             .body("comment.nn", containsString("Endrer merknad"))
             .body("comment.en", containsString("Adding comment"))
+    }
+
+    @Test
+    fun `update draft variable definition add comment existing comment is null`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {"comment": {
+                    "nb": "Legger til merknad",
+                    "nn": "Endrer merknad",
+                    "en": null
+                }}
+                """.trimIndent(),
+            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(200)
+            .body("comment.nb", containsString("Legger til merknad"))
+            .body("comment.nn", containsString("Endrer merknad"))
+            .body("comment.en", equalTo(null))
     }
 
     @Test

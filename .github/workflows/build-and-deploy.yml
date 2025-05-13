@@ -3,9 +3,11 @@ name: Image Build and Deploy
 on:
   release:
     types: [ published ]
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
+  pull_request:
+
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata
@@ -26,6 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for what-changed action
 
       - name: Set nais environment variables
         id: nais-deploy-vars
@@ -38,6 +42,12 @@ jobs:
             echo "nais_config_path=.nais/test/nais.yaml" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Determine what to do
+        id: changed-files
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/test/nais.yaml .nais/test/alerts.yaml
+
       - name: "Authenticate to Google Cloud"
         id: "auth"
         uses: "google-github-actions/auth@v2.1.10"
@@ -47,6 +57,7 @@ jobs:
           token_format: "access_token"
 
       - name: Login to registry
+        if: steps.changed-files.outputs.changed != 'only-inputs'
         uses: docker/login-action@v3
         with:
           registry: ${{env.REGISTRY}}
@@ -54,15 +65,18 @@ jobs:
           password: "${{ steps.auth.outputs.access_token }}"
 
       - name: Set up Java
+        if: steps.changed-files.outputs.changed != 'only-inputs'
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'zulu'
 
       - name: Set up gradle
+        if: steps.changed-files.outputs.changed != 'only-inputs'
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build and push Docker image
+        if: steps.changed-files.outputs.changed != 'only-inputs'
         run: >
           ./gradlew
           cyclonedxBom
@@ -71,10 +85,12 @@ jobs:
           --daemon --parallel --build-cache
 
       - name: Set docker image env var
+        if: steps.changed-files.outputs.changed != 'only-inputs'
         run: |
           echo "DOCKER_IMAGE_DIGEST=$(cat build/jib-image.digest)" >> $GITHUB_ENV
 
       - name: "Attest and sign"
+        if: steps.changed-files.outputs.changed != 'only-inputs'
         uses: 'nais/attest-sign@v1.5.13'
         with:
           image_ref: ${{ env.DOCKER_IMAGE_WITHOUT_TAG }}@${{ env.DOCKER_IMAGE_DIGEST }}
@@ -83,18 +99,10 @@ jobs:
           # A future improvement could be to generate this and merge the BOMs
           sbom: build/reports/bom.json
 
-  deploy:
-    name: Deploy to NAIS cluster
-    runs-on: ubuntu-latest
-    permissions:
-      contents: "read"
-      id-token: "write"
-    needs: docker-build
-    steps:
-      - uses: actions/checkout@v4  # Needed for access to manifests
-      - uses: nais/deploy/actions/deploy@v2
+      - name: Deploy to Nais
+        uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: ${{ needs.docker-build.outputs.nais_cluster }}
-          RESOURCE: ${{ needs.docker-build.outputs.nais_config_path }}
-          VAR: image=${{ env.DOCKER_IMAGE }}
+          CLUSTER: ${{ steps.nais-deploy-vars.outputs.nais_cluster }}
+          RESOURCE: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
+          WORKLOAD_IMAGE: ${{ env.DOCKER_IMAGE  }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

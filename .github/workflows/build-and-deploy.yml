@@ -102,7 +102,7 @@ jobs:
       - name: Deploy to Nais
         uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: ${{ steps.docker-build.outputs.nais_cluster }}
-          RESOURCE: ${{ steps.docker-build.outputs.nais_config_path }}
+          CLUSTER: ${{ steps.nais-deploy-vars.outputs.nais_cluster }}
+          RESOURCE: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
           WORKLOAD_IMAGE: ${{ env.DOCKER_IMAGE  }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

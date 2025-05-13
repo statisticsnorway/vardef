@@ -50,7 +50,7 @@ jobs:
 
       - name: "Authenticate to Google Cloud"
         id: "auth"
-        uses: "google-github-actions/auth@v2.1.8"
+        uses: "google-github-actions/auth@v2.1.10"
         with:
           workload_identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # Provided as Organization Secret
           service_account: "gh-ssb@${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}.iam.gserviceaccount.com"
@@ -91,7 +91,7 @@ jobs:
 
       - name: "Attest and sign"
         if: steps.changed-files.outputs.changed != 'only-inputs'
-        uses: 'nais/attest-sign@v1.3.4'
+        uses: 'nais/attest-sign@v1.5.13'
         with:
           image_ref: ${{ env.DOCKER_IMAGE_WITHOUT_TAG }}@${{ env.DOCKER_IMAGE_DIGEST }}
           # This SBOM includes all JVM dependencies (generated with cyclonedxBom) but does

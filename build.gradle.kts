@@ -1,3 +1,5 @@
+import com.google.devtools.ksp.KspExperimental
+
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.allopen)
@@ -61,6 +63,13 @@ application {
     mainClass = "no.ssb.metadata.vardef.ApplicationKt"
 }
 kotlin { jvmToolchain(21) }
+
+ksp {
+    // TODO @mmwinther: We can't use KSP2 until Micronaut supports it
+    // https://github.com/micronaut-projects/micronaut-core/issues/11553
+    @OptIn(KspExperimental::class)
+    useKsp2 = false
+}
 
 graalvmNative.toolchainDetection = false
 micronaut {

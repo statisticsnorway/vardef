@@ -27,6 +27,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.slf4j.LoggerFactory
@@ -34,7 +35,7 @@ import org.slf4j.LoggerFactory
 @Tag(name = DATA_MIGRATION)
 @Validated
 @Controller("/vardok-migration")
-@Secured(VARIABLE_CREATOR)
+@Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController(
@@ -67,6 +68,7 @@ class VarDokMigrationController(
             ],
     )
     @BadRequestApiResponse
+    @Secured(VARIABLE_CREATOR)
     fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",
@@ -232,19 +234,6 @@ class VarDokMigrationController(
      */
     @Produces(MediaType.APPLICATION_JSON)
     @Get()
-    fun getCorrespondingVariableDefinitions(
-        @Parameter(
-            name = ACTIVE_GROUP,
-            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
-            examples = [
-                ExampleObject(
-                    name = "Migrate Vardok",
-                    value = ACTIVE_GROUP_EXAMPLE,
-                ),
-            ],
-        )
-        @QueryValue(ACTIVE_GROUP)
-        activeGroup: String,
-        httpRequest: HttpRequest<*>,
-    ): MutableHttpResponse<*> = HttpResponse.ok(vardokService.getVardokVardefIdMapping())
+    fun getCorrespondingVariableDefinitions(httpRequest: HttpRequest<*>): MutableHttpResponse<*> =
+        HttpResponse.ok(vardokService.getVardokVardefIdMapping())
 }

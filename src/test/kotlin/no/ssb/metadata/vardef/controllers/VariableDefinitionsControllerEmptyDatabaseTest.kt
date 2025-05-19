@@ -43,4 +43,15 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
             .statusCode(200)
             .body("", empty<List<Any>>())
     }
+
+    @Test
+    fun `access empty vardok vardef mapping `(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .contentType(ContentType.JSON)
+            .get("/vardok-migration")
+            .then()
+            .statusCode(200)
+            .body("", empty<List<Any>>())
+    }
 }

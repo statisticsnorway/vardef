@@ -28,7 +28,11 @@ interface VardokService {
         vardefId: String,
     ): VardokVardefIdPair
 
+    fun getVardokVardefIdMapping(): List<VardokVardefIdPairResponse>
+
     fun getVardefIdByVardokId(vardokId: String): String?
+
+    fun getVardokIdByVardefId(vardokId: String): String?
 
     fun isAlreadyMigrated(vardokId: String): Boolean
 

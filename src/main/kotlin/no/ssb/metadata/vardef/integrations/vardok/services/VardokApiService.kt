@@ -21,9 +21,7 @@ open class VardokApiService(
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
-    override fun isDuplicate(name: String): Boolean {
-        return variableDefinitionRepository.existsByShortName(name)
-    }
+    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name)
 
     private val xmlMapper = XmlMapper().registerKotlinModule()
 
@@ -97,7 +95,14 @@ open class VardokApiService(
         vardefId: String,
     ): VardokVardefIdPair = vardokIdMappingRepository.save(VardokVardefIdPair(vardokId, vardefId))
 
+    override fun getVardokVardefIdMapping(): List<VardokVardefIdPairResponse> =
+        vardokIdMappingRepository.findAll().map {
+            it.toVardokVardefIdPairResponse()
+        }
+
     override fun getVardefIdByVardokId(vardokId: String): String? = vardokIdMappingRepository.getVardefIdByVardokId(vardokId)
+
+    override fun getVardokIdByVardefId(vardokId: String): String? = vardokIdMappingRepository.getVardokIdByVardefId(vardokId)
 
     override fun isAlreadyMigrated(vardokId: String): Boolean = vardokIdMappingRepository.existsByVardokId(vardokId)
 }

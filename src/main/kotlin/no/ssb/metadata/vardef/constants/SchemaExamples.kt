@@ -281,6 +281,8 @@ const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
 
+const val VARDOK_ID_RESPONSE_EXAMPLE = """{vardok_id: 25}"""
+
 const val PROBLEM_JSON_NOT_FOUND_EXAMPLE = """{
     "type": "about:blank",
     "title": null,

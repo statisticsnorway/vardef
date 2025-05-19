@@ -22,6 +22,7 @@ import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardefInput
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory
 
 @Tag(name = DATA_MIGRATION)
 @Validated
-@Controller("/vardok-migration/{vardok-id}")
+@Controller("/vardok-migration")
 @Secured(VARIABLE_CREATOR)
 @SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
@@ -45,7 +46,7 @@ class VarDokMigrationController(
     /**
      * Create a variable definition from a VarDok variable definition.
      */
-    @Post
+    @Post("/{vardok-id}")
     @Status(HttpStatus.CREATED)
     @ApiResponse(
         responseCode = "201",
@@ -141,4 +142,107 @@ class VarDokMigrationController(
 
         return response
     }
+
+    /**
+     * Get one variable definition by vardok id or get the vardok id by vardef id.
+     */
+    @Get("/{id}")
+    @ApiResponse(
+        responseCode = "200",
+        description = "Successfully created.",
+        content =
+            [
+                Content(
+                    schema = Schema(implementation = CompleteResponse::class),
+                    mediaType = MediaType.APPLICATION_JSON,
+                    examples = [
+                        ExampleObject(
+                            name = "Vardok id",
+                            value = COMPLETE_RESPONSE_EXAMPLE,
+                        ),
+                        ExampleObject(
+                            name = "Vardef id",
+                            value = VARDOK_ID_RESPONSE_EXAMPLE,
+                        ),
+                    ],
+                ),
+            ],
+    )
+    fun getCorrespodingVariableDefinitionById(
+        @Parameter(
+            name = "vardok-or-vardef-id",
+            description = "The ID of the definition in Vardok or vardef.",
+            examples = [
+                ExampleObject(
+                    name = "Vardok id",
+                    value = "1607",
+                ),
+                ExampleObject(
+                    name = "Vardef id",
+                    value = "DKJcm_E2",
+                ),
+            ],
+        )
+        @PathVariable("id")
+        id: String,
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "Migrate Vardok",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
+        @QueryValue(ACTIVE_GROUP)
+        activeGroup: String,
+        httpRequest: HttpRequest<*>,
+    ): MutableHttpResponse<*> {
+        val vardefIdRegex = VARDEF_ID_PATTERN.toRegex()
+        if (!vardefIdRegex.containsMatchIn(id)) {
+            val vardefId = vardokService.getVardefIdByVardokId(id)
+
+            val getVariableDefinitionResponse =
+                httpClient.proxy(
+                    HttpRequest
+                        .GET<String>("/variable-definitions/$vardefId?$ACTIVE_GROUP=$activeGroup")
+                        .headers { entries: MutableHttpHeaders ->
+                            entries.set(AUTHORIZATION, httpRequest.headers.get(AUTHORIZATION))
+                        },
+                )
+
+            val response: MutableHttpResponse<*>
+            runBlocking {
+                response = getVariableDefinitionResponse.awaitFirst()
+            }
+            return response
+        } else {
+            return vardokService
+                .getVardokIdByVardefId(id)
+                ?.let { HttpResponse.ok(VardokIdResponse(it)) }
+                ?: HttpResponse.notFound(HttpStatus.NOT_FOUND)
+        }
+    }
+
+    /**
+     * Get a list of all vardok and vardef id mappings
+     */
+    @Produces(MediaType.APPLICATION_JSON)
+    @Get()
+    fun getCorrespondingVariableDefinitions(
+        @Parameter(
+            name = ACTIVE_GROUP,
+            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(
+                    name = "Migrate Vardok",
+                    value = ACTIVE_GROUP_EXAMPLE,
+                ),
+            ],
+        )
+        @QueryValue(ACTIVE_GROUP)
+        activeGroup: String,
+        httpRequest: HttpRequest<*>,
+    ): MutableHttpResponse<*> = HttpResponse.ok(vardokService.getVardokVardefIdMapping())
 }

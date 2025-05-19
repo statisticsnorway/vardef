@@ -1,0 +1,10 @@
+package no.ssb.metadata.vardef.integrations.vardok.models
+
+import io.micronaut.serde.annotation.Serdeable
+import io.micronaut.serde.config.naming.SnakeCaseStrategy
+
+@Serdeable(naming = SnakeCaseStrategy::class)
+data class VardokVardefIdPairResponse(
+    val vardokId: String,
+    val vardefId: String,
+)

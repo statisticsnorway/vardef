@@ -585,6 +585,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     fun `get vardok id by vardok id that is not migrated`(spec: RequestSpecification) {
         val vardokId = "555"
         spec
+            .given()
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .get("/vardok-migration/$vardokId")
             .then()
@@ -628,13 +630,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val vardefId = "vardefid"
 
         spec
+            .given()
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .get("/vardok-migration/$vardefId")
             .then()
             .statusCode(HttpStatus.NOT_FOUND.code)
-            .extract()
-            .body()
-            .asString()
     }
 
     @Test

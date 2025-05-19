@@ -15,7 +15,6 @@ data class VardokVardefIdPair(
     @field:Id @GeneratedValue
     var id: ObjectId? = null,
 ) {
-
     fun toVardokVardefIdPairResponse(): VardokVardefIdPairResponse =
         VardokVardefIdPairResponse(
             vardokId = vardokId,

@@ -582,6 +582,16 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `get vardok id by vardok id that is not migrated`(spec: RequestSpecification) {
+        val vardokId = "555"
+        spec
+            .`when`()
+            .get("/vardok-migration/$vardokId")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+    }
+
+    @Test
     fun `get vardok id by vardef id`(spec: RequestSpecification) {
         val vardokId = "2"
 
@@ -611,6 +621,20 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
         val vardokIdResponse = jsonMapper.readValue(body, VardokIdResponse::class.java)
         assertThat(vardokIdResponse.vardokId).isEqualTo(vardokId)
+    }
+
+    @Test
+    fun `get vardef complete response by invalid vardef id`(spec: RequestSpecification) {
+        val vardefId = "vardefid"
+
+        spec
+            .`when`()
+            .get("/vardok-migration/$vardefId")
+            .then()
+            .statusCode(HttpStatus.NOT_FOUND.code)
+            .extract()
+            .body()
+            .asString()
     }
 
     @Test

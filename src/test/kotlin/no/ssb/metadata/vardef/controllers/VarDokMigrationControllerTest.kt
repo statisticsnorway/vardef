@@ -590,7 +590,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .`when`()
             .get("/vardok-migration/$vardokId")
             .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .statusCode(HttpStatus.NOT_FOUND.code)
     }
 
     @Test

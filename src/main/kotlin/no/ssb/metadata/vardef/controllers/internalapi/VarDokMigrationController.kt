@@ -151,8 +151,6 @@ class VarDokMigrationController(
      */
     @Get("/{id}")
     @ApiResponse(
-        responseCode = "200",
-        description = "Successfully created.",
         content =
             [
                 Content(

@@ -9,6 +9,8 @@ import org.bson.types.ObjectId
 interface VardokIdMappingRepository : CrudRepository<VardokVardefIdPair, ObjectId> {
     fun getVardefIdByVardokId(vardokId: String): String?
 
+    fun getVardokIdByVardefId(vardokId: String): String?
+
     fun existsByVardokId(vardokId: String): Boolean
 
     fun existsByVardefId(vardefId: String): Boolean

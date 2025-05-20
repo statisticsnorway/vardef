@@ -8,6 +8,7 @@ import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.*
@@ -21,9 +22,13 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
+    @Inject
+    lateinit var vardokIdMappingRepository: VardokIdMappingRepository
+
     @BeforeEach
     fun setUp() {
         variableDefinitionRepository.deleteAll()
+        vardokIdMappingRepository.deleteAll()
     }
 
     init {
@@ -39,6 +44,17 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
             .`when`()
             .contentType(ContentType.JSON)
             .get("/variable-definitions")
+            .then()
+            .statusCode(200)
+            .body("", empty<List<Any>>())
+    }
+
+    @Test
+    fun `access empty vardok vardef mapping `(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .contentType(ContentType.JSON)
+            .get("/vardok-migration")
             .then()
             .statusCode(200)
             .body("", empty<List<Any>>())

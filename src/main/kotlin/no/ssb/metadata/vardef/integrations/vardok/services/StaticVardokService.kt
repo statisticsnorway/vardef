@@ -9,6 +9,7 @@ import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.io.File
@@ -25,16 +26,21 @@ class StaticVardokService(
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
-    override fun isDuplicate(name: String): Boolean {
-        return variableDefinitionRepository.existsByShortName(name)
-    }
+    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name)
 
     override fun createVardokVardefIdMapping(
         vardokId: String,
         vardefId: String,
     ): VardokVardefIdPair = vardokIdMappingRepository.save(VardokVardefIdPair(vardokId, vardefId))
 
+    override fun getVardokVardefIdMapping(): List<VardokVardefIdPairResponse> =
+        vardokIdMappingRepository.findAll().map {
+            it.toVardokVardefIdPairResponse()
+        }
+
     override fun getVardefIdByVardokId(vardokId: String): String? = vardokIdMappingRepository.getVardefIdByVardokId(vardokId)
+
+    override fun getVardokIdByVardefId(vardokId: String): String? = vardokIdMappingRepository.getVardokIdByVardefId(vardokId)
 
     override fun isAlreadyMigrated(vardokId: String): Boolean = vardokIdMappingRepository.existsByVardokId(vardokId)
 

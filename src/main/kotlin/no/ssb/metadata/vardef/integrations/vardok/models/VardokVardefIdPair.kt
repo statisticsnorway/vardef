@@ -14,4 +14,10 @@ data class VardokVardefIdPair(
     var vardefId: String,
     @field:Id @GeneratedValue
     var id: ObjectId? = null,
-)
+) {
+    fun toVardokVardefIdPairResponse(): VardokVardefIdPairResponse =
+        VardokVardefIdPairResponse(
+            vardokId = vardokId,
+            vardefId = vardefId,
+        )
+}

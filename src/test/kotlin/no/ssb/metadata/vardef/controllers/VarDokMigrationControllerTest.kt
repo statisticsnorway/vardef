@@ -11,10 +11,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.utils.BaseVardefTest
-import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
-import no.ssb.metadata.vardef.utils.TEST_TEAM
-import no.ssb.metadata.vardef.utils.buildProblemJsonResponseSpec
+import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -554,20 +551,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
     @Test
     fun `get vardef complete response by vardok id`(spec: RequestSpecification) {
-        val vardokId = "2"
-
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/$vardokId")
-            .then()
-            .statusCode(HttpStatus.CREATED.code)
-
+        val vardokId = "005"
         val body =
             spec
+                .given()
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .get("/vardok-migration/$vardokId")
                 .then()
@@ -578,11 +566,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
         val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
         assertThat(completeResponse.shortName)
-            .isEqualTo("wies")
+            .isEqualTo("bus")
     }
 
     @Test
-    fun `get vardok id by vardok id that is not migrated`(spec: RequestSpecification) {
+    fun `not migrated vardok id`(spec: RequestSpecification) {
         val vardokId = "555"
         spec
             .given()
@@ -595,24 +583,13 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
     @Test
     fun `get vardok id by vardef id`(spec: RequestSpecification) {
-        val vardokId = "2"
-
-        val definitionId =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
-                .post("/vardok-migration/$vardokId")
-                .then()
-                .statusCode(HttpStatus.CREATED.code)
-                .extract()
-                .body()
-                .path<String>("id")
+        val vardokId = "005"
+        val definitionId = DRAFT_BUS_EXAMPLE.definitionId
 
         val body =
             spec
+                .given()
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .get("/vardok-migration/$definitionId")
                 .then()
@@ -626,7 +603,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `get vardef complete response by invalid vardef id`(spec: RequestSpecification) {
+    fun `get vardef complete response by nonexistent vardef id`(spec: RequestSpecification) {
         val vardefId = "vardefid"
 
         spec
@@ -640,24 +617,12 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
 
     @Test
     fun `get id correspondence list when no id is supplied`(spec: RequestSpecification) {
-        val vardokId = "2"
-
-        val definitionId =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
-                .post("/vardok-migration/$vardokId")
-                .then()
-                .statusCode(HttpStatus.CREATED.code)
-                .extract()
-                .body()
-                .path<String>("id")
+        val definitionId = DRAFT_BUS_EXAMPLE.definitionId
 
         val body =
             spec
+                .given()
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .get("/vardok-migration")
                 .then()
@@ -667,8 +632,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .asString()
 
         val vardokVardefIdPairResponse = jsonMapper.readValue(body, Array<VardokVardefIdPairResponse>::class.java)
-        assertThat(vardokVardefIdPairResponse.size).isEqualTo(2)
-        assertThat(vardokVardefIdPairResponse[1].vardefId).isEqualTo(definitionId)
+        assertThat(vardokVardefIdPairResponse.size).isEqualTo(1)
+        assertThat(vardokVardefIdPairResponse[0].vardefId).isEqualTo(definitionId)
     }
 
     companion object {

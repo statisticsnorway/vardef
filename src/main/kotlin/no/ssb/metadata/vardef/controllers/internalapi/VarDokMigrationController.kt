@@ -200,32 +200,25 @@ class VarDokMigrationController(
         @QueryValue(ACTIVE_GROUP)
         activeGroup: String,
         httpRequest: HttpRequest<*>,
-    ): MutableHttpResponse<*> {
-        val vardefIdRegex = VARDEF_ID_PATTERN.toRegex()
-        if (!vardefIdRegex.containsMatchIn(id)) {
+    ): MutableHttpResponse<*> =
+        if (!VARDEF_ID_PATTERN.toRegex().containsMatchIn(id)) {
             val vardefId = vardokService.getVardefIdByVardokId(id)
+            val request =
+                HttpRequest
+                    .GET<String>("/variable-definitions/$vardefId?$ACTIVE_GROUP=$activeGroup")
+                    .headers {
+                        it[AUTHORIZATION] = httpRequest.headers[AUTHORIZATION]
+                    }
 
-            val getVariableDefinitionResponse =
-                httpClient.proxy(
-                    HttpRequest
-                        .GET<String>("/variable-definitions/$vardefId?$ACTIVE_GROUP=$activeGroup")
-                        .headers { entries: MutableHttpHeaders ->
-                            entries.set(AUTHORIZATION, httpRequest.headers.get(AUTHORIZATION))
-                        },
-                )
-
-            val response: MutableHttpResponse<*>
             runBlocking {
-                response = getVariableDefinitionResponse.awaitFirst()
+                httpClient.proxy(request).awaitFirst()
             }
-            return response
         } else {
-            return vardokService
+            vardokService
                 .getVardokIdByVardefId(id)
                 ?.let { HttpResponse.ok(VardokIdResponse(it)) }
                 ?: HttpResponse.notFound(HttpStatus.NOT_FOUND)
         }
-    }
 
     /**
      * Get a list of all vardok and vardef id mappings

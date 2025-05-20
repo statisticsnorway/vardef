@@ -585,7 +585,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     fun `get vardok id by vardef id`(spec: RequestSpecification) {
         val vardokId = "005"
         val definitionId = DRAFT_BUS_EXAMPLE.definitionId
-
         val body =
             spec
                 .given()
@@ -603,9 +602,20 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `variable has no mapping to vardef`(spec: RequestSpecification) {
+        val definitionId = DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId
+        spec
+            .given()
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+            .`when`()
+            .get("/vardok-migration/$definitionId")
+            .then()
+            .statusCode(HttpStatus.NOT_FOUND.code)
+    }
+
+    @Test
     fun `get vardef complete response by nonexistent vardef id`(spec: RequestSpecification) {
         val vardefId = "vardefid"
-
         spec
             .given()
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
@@ -616,9 +626,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `get id correspondence list when no id is supplied`(spec: RequestSpecification) {
+    fun `get vardok vardef mapping`(spec: RequestSpecification) {
         val definitionId = DRAFT_BUS_EXAMPLE.definitionId
-
         val body =
             spec
                 .given()

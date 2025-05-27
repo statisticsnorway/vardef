@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
-import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardefInput
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
@@ -169,7 +168,6 @@ class VarDokMigrationController(
                 ),
             ],
     )
-    @NotFoundApiResponse
     fun getCorrespodingVariableDefinitionById(
         @Parameter(
             name = "vardok-or-vardef-id",

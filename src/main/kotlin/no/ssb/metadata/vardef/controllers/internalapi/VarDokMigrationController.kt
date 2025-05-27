@@ -170,7 +170,7 @@ class VarDokMigrationController(
                 ),
             ],
     )
-    fun getCorrespodingVariableDefinitionById(
+    fun getVardokVardefMappingById(
         @Parameter(
             name = "id",
             description = "The ID of the definition in Vardok or Vardef.",

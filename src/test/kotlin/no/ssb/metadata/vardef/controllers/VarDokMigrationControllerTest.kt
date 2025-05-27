@@ -641,6 +641,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .asString()
 
         val vardokVardefIdPairResponse = jsonMapper.readValue(body, Array<VardokVardefIdPairResponse>::class.java)
+        println("Hello ${vardokVardefIdPairResponse[0]}")
         assertThat(vardokVardefIdPairResponse.size).isEqualTo(1)
         assertThat(vardokVardefIdPairResponse[0].vardefId).isEqualTo(definitionId)
     }

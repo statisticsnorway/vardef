@@ -281,7 +281,18 @@ const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
     $COMPLETE_RESPONSE_EXAMPLE
 ]"""
 
-const val VARDOK_ID_RESPONSE_EXAMPLE = """{vardok_id: 25}"""
+const val VARDOK_ID_RESPONSE_EXAMPLE = """{
+    "vardok_id": "25"
+}"""
+
+const val VARDOK_VARDEF_ID_RESPONSE_EXAMPLE = """{
+    "vardok_id": "25",
+    "vardef_id": "A1699WWE"
+}"""
+
+const val VARDOK_VARDEF_ID_LIST_RESPONSE_EXAMPLE = """[
+    $VARDOK_VARDEF_ID_RESPONSE_EXAMPLE
+]"""
 
 const val PROBLEM_JSON_NOT_FOUND_EXAMPLE = """{
     "type": "about:blank",

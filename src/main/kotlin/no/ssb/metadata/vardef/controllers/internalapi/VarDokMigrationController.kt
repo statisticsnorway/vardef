@@ -11,6 +11,7 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
@@ -24,6 +25,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardefInput
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
+import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
@@ -153,7 +155,7 @@ class VarDokMigrationController(
         content =
             [
                 Content(
-                    schema = Schema(implementation = CompleteResponse::class),
+                    schema = Schema(oneOf = [CompleteResponse::class, VardokIdResponse::class]),
                     mediaType = MediaType.APPLICATION_JSON,
                     examples = [
                         ExampleObject(
@@ -170,40 +172,24 @@ class VarDokMigrationController(
     )
     fun getCorrespodingVariableDefinitionById(
         @Parameter(
-            name = "vardok-or-vardef-id",
+            name = "id",
             description = "The ID of the definition in Vardok or Vardef.",
             examples = [
                 ExampleObject(
                     name = "Vardok id",
                     value = "1607",
                 ),
-                ExampleObject(
-                    name = "Vardef id",
-                    value = "DKJcm_E2",
-                ),
             ],
         )
         @PathVariable("id")
         id: String,
-        @Parameter(
-            name = ACTIVE_GROUP,
-            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
-            examples = [
-                ExampleObject(
-                    name = "Migrate Vardok",
-                    value = ACTIVE_GROUP_EXAMPLE,
-                ),
-            ],
-        )
-        @QueryValue(ACTIVE_GROUP)
-        activeGroup: String,
         httpRequest: HttpRequest<*>,
     ): MutableHttpResponse<*> =
         if (!VARDEF_ID_PATTERN.toRegex().containsMatchIn(id)) {
             val vardefId = vardokService.getVardefIdByVardokId(id)
             val request =
                 HttpRequest
-                    .GET<String>("/variable-definitions/$vardefId?$ACTIVE_GROUP=$activeGroup")
+                    .GET<String>("/variable-definitions/$vardefId")
                     .headers {
                         it[AUTHORIZATION] = httpRequest.headers[AUTHORIZATION]
                     }
@@ -223,6 +209,19 @@ class VarDokMigrationController(
      */
     @Produces(MediaType.APPLICATION_JSON)
     @Get()
-    fun getCorrespondingVariableDefinitions(httpRequest: HttpRequest<*>): MutableHttpResponse<*> =
+    @ApiResponse(
+        content = [
+            Content(
+                examples = [
+                    ExampleObject(
+                        name = "Vardef vardok id list",
+                        value = VARDOK_VARDEF_ID_LIST_RESPONSE_EXAMPLE,
+                    ),
+                ],
+                array = ArraySchema(schema = Schema(implementation = VardokVardefIdPairResponse::class)),
+            ),
+        ],
+    )
+    fun getVardokVardefMapping(httpRequest: HttpRequest<*>): MutableHttpResponse<*> =
         HttpResponse.ok(vardokService.getVardokVardefIdMapping())
 }

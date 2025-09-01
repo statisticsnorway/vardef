@@ -21,7 +21,8 @@ class ContactIsMandatory {
         // Step 1:  filter where contact is null and create a new document
         val updateContact =
             Mono.from(
-                mongoDatabase.getCollection("SavedVariableDefinition")
+                mongoDatabase
+                    .getCollection("SavedVariableDefinition")
                     .updateMany(
                         eq("contact", null),
                         set("contact", Document()),
@@ -31,7 +32,8 @@ class ContactIsMandatory {
         // Step 2: filter title is null and create new document
         val updateTitle =
             Mono.from(
-                mongoDatabase.getCollection("SavedVariableDefinition")
+                mongoDatabase
+                    .getCollection("SavedVariableDefinition")
                     .updateMany(
                         eq("contact.title", null),
                         set("contact.title", Document()),
@@ -41,7 +43,8 @@ class ContactIsMandatory {
         // Step 3: set value to title (if all languages are either empty or null) and email
         val updateFields =
             Mono.from(
-                mongoDatabase.getCollection("SavedVariableDefinition")
+                mongoDatabase
+                    .getCollection("SavedVariableDefinition")
                     .updateMany(
                         and(
                             exists("contact", true),
@@ -98,7 +101,8 @@ class ContactIsMandatory {
             )
 
         val updateResult =
-            mongoDatabase.getCollection("SavedVariableDefinition")
+            mongoDatabase
+                .getCollection("SavedVariableDefinition")
                 .updateMany(filter, updates)
 
         Mono.from(updateResult).block().also { result ->

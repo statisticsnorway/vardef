@@ -86,8 +86,13 @@ class VardokResponseTest {
     fun `conceptvariable single in response`() {
         val response = vardokService.getVardokItem("1245")
         assertThat(response?.relations?.conceptVariableRelations).isNotEmpty
-        assertThat(response?.relations?.conceptVariableRelations?.get(0)?.href)
-            .isEqualTo("http://www.ssb.no/conceptvariable/vardok/1246")
+        assertThat(
+            response
+                ?.relations
+                ?.conceptVariableRelations
+                ?.get(0)
+                ?.href,
+        ).isEqualTo("http://www.ssb.no/conceptvariable/vardok/1246")
     }
 
     @ParameterizedTest

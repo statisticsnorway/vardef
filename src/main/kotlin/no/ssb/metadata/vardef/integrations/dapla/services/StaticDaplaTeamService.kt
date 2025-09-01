@@ -29,7 +29,7 @@ const val DAPLA_PROPERTY = "dapla"
 @EachProperty(DAPLA_TEAM_PROPERTY_NAME)
 class StaticDaplaTeam(
     @param:Parameter val uniformName: String,
-    @Property(name = "dapla-teams.static-data-path")
+    @param:Property(name = "dapla-teams.static-data-path")
     private val path: Path,
     private val jsonMapper: JsonMapper,
 ) {
@@ -60,7 +60,7 @@ class StaticDaplaTeam(
 @EachProperty(DAPLA_GROUP_PROPERTY_NAME)
 class StaticDaplaGroup(
     @param:Parameter val uniformName: String,
-    @Property(name = "dapla-groups.static-data-path")
+    @param:Property(name = "dapla-groups.static-data-path")
     private val path: Path,
     private val jsonMapper: JsonMapper,
 ) {

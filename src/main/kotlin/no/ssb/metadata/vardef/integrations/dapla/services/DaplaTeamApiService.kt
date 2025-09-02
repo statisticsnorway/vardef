@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory
  * @property keycloakService The service used to request authorization tokens from Keycloak.
  */
 @Singleton
-open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClient) : DaplaTeamService {
+open class DaplaTeamApiService(
+    private val daplaTeamApiClient: DaplaTeamApiClient,
+) : DaplaTeamService {
     private val logger = LoggerFactory.getLogger(DaplaTeamService::class.java)
 
     @Inject
@@ -54,13 +56,12 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
      * @param teamName The name of the team to be fetched.
      * @return The `Team` object if found, or `null` if an error occurs or if the team is not found.
      */
-    override fun getTeam(teamName: String): Team? {
-        return runCatching {
+    override fun getTeam(teamName: String): Team? =
+        runCatching {
             daplaTeamApiClient.fetchTeam(teamName, getAuthToken()).body()
         }.onFailure { e ->
             logger.error("Error fetching team with name '$teamName': ${e.message}", e)
         }.getOrNull()
-    }
 
     /**
      * Checks if a team with the specified name exists and is valid.
@@ -84,13 +85,12 @@ open class DaplaTeamApiService(private val daplaTeamApiClient: DaplaTeamApiClien
      * @param groupName The name of the group to be fetched.
      * @return The `Group` object if found, or `null` if an error occurs or if the group is not found.
      */
-    override fun getGroup(groupName: String): Group? {
-        return runCatching {
+    override fun getGroup(groupName: String): Group? =
+        runCatching {
             daplaTeamApiClient.fetchGroup(groupName, getAuthToken()).body()
         }.onFailure { e ->
             logger.error("Error fetching group with name '$groupName': ${e.message}", e)
         }.getOrNull()
-    }
 
     /**
      * Checks if a group with the specified name exists and is valid.

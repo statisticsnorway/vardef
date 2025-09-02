@@ -29,7 +29,7 @@ const val DAPLA_PROPERTY = "dapla"
 @EachProperty(DAPLA_TEAM_PROPERTY_NAME)
 class StaticDaplaTeam(
     @param:Parameter val uniformName: String,
-    @Property(name = "dapla-teams.static-data-path")
+    @param:Property(name = "dapla-teams.static-data-path")
     private val path: Path,
     private val jsonMapper: JsonMapper,
 ) {
@@ -60,7 +60,7 @@ class StaticDaplaTeam(
 @EachProperty(DAPLA_GROUP_PROPERTY_NAME)
 class StaticDaplaGroup(
     @param:Parameter val uniformName: String,
-    @Property(name = "dapla-groups.static-data-path")
+    @param:Property(name = "dapla-groups.static-data-path")
     private val path: Path,
     private val jsonMapper: JsonMapper,
 ) {
@@ -88,7 +88,9 @@ class StaticDaplaGroup(
 @Primary
 @Requires(env = ["test"], notEnv = ["integration-test"], property = DAPLA_PROPERTY)
 @Singleton
-class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamService {
+class StaticDaplaTeamService(
+    private val beanContext: BeanContext,
+) : DaplaTeamService {
     private val logger = LoggerFactory.getLogger(StaticDaplaTeamService::class.java)
 
     /**
@@ -97,8 +99,8 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
      * @param teamName The name of the team to retrieve.
      * @return The `Team` bean corresponding to the given team name.
      */
-    override fun getTeam(teamName: String): Team? {
-        return runCatching {
+    override fun getTeam(teamName: String): Team? =
+        runCatching {
             val team: StaticDaplaTeam = beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName(teamName))
             Team(
                 uniformName = team.uniformName,
@@ -106,7 +108,6 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
         }.onFailure { e ->
             logger.error("Error fetching static team with name '$teamName': ${e.message}", e)
         }.getOrNull()
-    }
 
     /**
      * Retrieves a `Group` instance based on the specified group name.
@@ -114,8 +115,8 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
      * @param groupName The name of the group to retrieve.
      * @return The `Group` bean corresponding to the given group name.
      */
-    override fun getGroup(groupName: String): Group? {
-        return runCatching {
+    override fun getGroup(groupName: String): Group? =
+        runCatching {
             val group: StaticDaplaGroup =
                 beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName(groupName))
             Group(
@@ -124,7 +125,6 @@ class StaticDaplaTeamService(private val beanContext: BeanContext) : DaplaTeamSe
         }.onFailure { e ->
             logger.error("Error fetching static group with name '$groupName': ${e.message}", e)
         }.getOrNull()
-    }
 
     /**
      * Checks if a team with the specified name exists.

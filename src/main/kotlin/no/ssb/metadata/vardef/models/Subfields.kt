@@ -22,9 +22,9 @@ data class KlassReference(
 
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Contact(
-    @NotEmptyLanguageStringType
+    @param:NotEmptyLanguageStringType
     val title: LanguageStringType,
-    @Email
+    @param:Email
     val email: String,
 )
 
@@ -38,14 +38,14 @@ data class Contact(
 @Schema(example = OWNER_EXAMPLE)
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Owner(
-    @NotEmpty
-    @DaplaTeam
+    @param:NotEmpty
+    @param:DaplaTeam
     val team: String,
-    @NotEmpty
+    @param:NotEmpty
     val groups: List<
         @NotEmpty @DaplaGroup
         String,
-        >,
+    >,
 )
 
 @Schema(example = RENDERED_CONTACT_EXAMPLE)

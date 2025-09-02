@@ -181,7 +181,7 @@ object TestUtils {
                 jsonTestInput().apply { put("valid_from", "2024-20-11") }.toString(),
                 false,
                 null,
-                "Error deserializing type",
+                "Error decoding property [LocalDate validFrom]",
             ),
             argumentSet(
                 "external_reference_uri invalid",

@@ -31,83 +31,87 @@ class CompanionObject {
             Stream.of(
                 argumentSet(
                     "empty unit types list",
-                    JSONObject().apply {
-                        put("unit_types", listOf(null))
-                        put("valid_from", "2024-01-11")
-                        put(
-                            "definition",
-                            JSONObject().apply {
-                                put("nb", "Intektsskatt atter ny definisjon")
-                                put("nn", "Intektsskatt atter ny definisjon")
-                                put("en", "Yet another definition")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("unit_types", listOf(null))
+                            put("valid_from", "2024-01-11")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
                 ),
                 argumentSet(
                     "empty subject fields list",
-                    JSONObject().apply {
-                        put("subject_fields", listOf(null))
-                        put("valid_from", "2024-01-11")
-                        put(
-                            "definition",
-                            JSONObject().apply {
-                                put("nb", "Intektsskatt atter ny definisjon")
-                                put("nn", "Intektsskatt atter ny definisjon")
-                                put("en", "Yet another definition")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put("subject_fields", listOf(null))
+                            put("valid_from", "2024-01-11")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
                 ),
                 argumentSet(
                     "empty name",
-                    JSONObject().apply {
-                        put(
-                            "name",
-                            JSONObject().apply {
-                                put("nb", "")
-                                put("nn", "")
-                                put("en", " ")
-                            },
-                        )
-                        put("valid_from", "2024-01-11")
-                        put(
-                            "definition",
-                            JSONObject().apply {
-                                put("nb", "Intektsskatt atter ny definisjon")
-                                put("nn", "Intektsskatt atter ny definisjon")
-                                put("en", "Yet another definition")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "name",
+                                JSONObject().apply {
+                                    put("nb", "")
+                                    put("nn", "")
+                                    put("en", " ")
+                                },
+                            )
+                            put("valid_from", "2024-01-11")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
                 ),
                 argumentSet(
                     "empty contact",
-                    JSONObject().apply {
-                        put(
-                            "contact",
-                            JSONObject().apply {
-                                put(
-                                    "title",
-                                    JSONObject().apply {
-                                        put("nb", "")
-                                        put("nn", "")
-                                        put("en", "")
-                                    },
-                                )
-                                put("email", "")
-                            },
-                        )
-                        put("valid_from", "2024-01-11")
-                        put(
-                            "definition",
-                            JSONObject().apply {
-                                put("nb", "Intektsskatt atter ny definisjon")
-                                put("nn", "Intektsskatt atter ny definisjon")
-                                put("en", "Yet another definition")
-                            },
-                        )
-                    }.toString(),
+                    JSONObject()
+                        .apply {
+                            put(
+                                "contact",
+                                JSONObject().apply {
+                                    put(
+                                        "title",
+                                        JSONObject().apply {
+                                            put("nb", "")
+                                            put("nn", "")
+                                            put("en", "")
+                                        },
+                                    )
+                                    put("email", "")
+                                },
+                            )
+                            put("valid_from", "2024-01-11")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                        }.toString(),
                 ),
             )
 

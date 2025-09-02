@@ -28,13 +28,13 @@ class VardokClientTest {
     private val xmlMapper = XmlMapper().registerKotlinModule()
 
     @Test
-    fun`use xml mapper to read string http response vardok by id`() {
+    fun `use xml mapper to read string http response vardok by id`() {
         val result = xmlMapper.readValue(vardokClient.fetchVardokById("90"), VardokResponse::class.java)
         assertThat(result).isInstanceOf(VardokResponse::class.java)
     }
 
     @Test
-    fun`use xml mapper to read string http response with external document`() {
+    fun `use xml mapper to read string http response with external document`() {
         val result = xmlMapper.readValue(vardokClient.fetchVardokById("130"), VardokResponse::class.java)
         assertThat(result).isInstanceOf(VardokResponse::class.java)
         assertThat(result.variable?.externalDocument).isEqualTo("")

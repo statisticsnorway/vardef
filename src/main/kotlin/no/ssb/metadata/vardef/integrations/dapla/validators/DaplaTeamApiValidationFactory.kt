@@ -16,9 +16,9 @@ class DaplaTeamApiValidationFactory {
     @Singleton
     fun daplaTeamValidator(): ConstraintValidator<DaplaTeam, String> =
         ConstraintValidator {
-                value,
-                _,
-                _,
+            value,
+            _,
+            _,
             ->
             value == null || daplaTeamApiService.isValidTeam(value)
         }
@@ -26,9 +26,9 @@ class DaplaTeamApiValidationFactory {
     @Singleton
     fun daplaGroupValidator(): ConstraintValidator<DaplaGroup, String> =
         ConstraintValidator {
-                value,
-                _,
-                _,
+            value,
+            _,
+            _,
             ->
             value == null || daplaTeamApiService.isValidGroup(value)
         }

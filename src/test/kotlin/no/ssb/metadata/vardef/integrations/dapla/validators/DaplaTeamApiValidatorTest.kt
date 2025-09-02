@@ -18,13 +18,13 @@ class DaplaTeamApiValidatorTest(
     lateinit var daplaTeamService: DaplaTeamService
 
     @Test
-    fun`validate team name`() {
+    fun `validate team name`() {
         assertThat(daplaTeamService.isValidTeam("bon")).isFalse()
         assertThat(daplaTeamService.isValidTeam("dapla-felles")).isTrue()
     }
 
     @Test
-    fun`validate group name`() {
+    fun `validate group name`() {
         assertThat(daplaTeamService.isValidGroup("bon")).isFalse()
         assertThat(daplaTeamService.isValidGroup("dapla-felles-developers")).isTrue()
     }

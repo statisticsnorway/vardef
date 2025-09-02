@@ -15,9 +15,9 @@ class KlassValidationFactory(
     @Singleton
     fun klassCodeValidator(): ConstraintValidator<KlassCode, String> =
         ConstraintValidator {
-                value,
-                annotationMetadata,
-                _,
+            value,
+            annotationMetadata,
+            _,
             ->
             value == null ||
                 value in
@@ -31,9 +31,9 @@ class KlassValidationFactory(
     @Singleton
     fun klassIdValidator(): ConstraintValidator<KlassId, String> =
         ConstraintValidator {
-                value,
-                _,
-                _,
+            value,
+            _,
+            _,
             ->
             value == null || klassService.doesClassificationExist(value)
         }

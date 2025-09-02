@@ -65,10 +65,8 @@ application {
 kotlin { jvmToolchain(21) }
 
 ksp {
-    // TODO @mmwinther: We can't use KSP2 until Micronaut supports it
-    // https://github.com/micronaut-projects/micronaut-core/issues/11553
     @OptIn(KspExperimental::class)
-    useKsp2 = false
+    useKsp2 = true
 }
 
 graalvmNative.toolchainDetection = false

@@ -25,7 +25,7 @@ jobs:
           private-key: ${{ secrets.DAPLA_BOT_PRIVATE_KEY }}
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2 # Fetch last 2 commits to compare
 

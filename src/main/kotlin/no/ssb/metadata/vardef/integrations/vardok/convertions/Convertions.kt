@@ -57,7 +57,7 @@ fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String>
             ?: return emptyList()
 
     return convertSubjectArea(code)?.let { listOf(it) }
-        ?: throw OutdatedSubjectAreaException(vardokItem.parseId())
+        ?: throw OutdatedSubjectAreaException(vardokItem.parseId(), code)
 }
 
 /**

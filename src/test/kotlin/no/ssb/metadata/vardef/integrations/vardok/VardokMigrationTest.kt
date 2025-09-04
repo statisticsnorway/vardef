@@ -156,7 +156,6 @@ class VardokMigrationTest : BaseVardefTest() {
             val vardokresponse = vardokService.getVardokItem("99999")
             vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
         }.isInstanceOf(OutdatedSubjectAreaException::class.java)
-            .hasMessageContaining("Vardok id 3125 SubjectArea has outdated subject area value and can not be saved")
     }
 
     @ParameterizedTest

@@ -21,6 +21,9 @@ class StatisticalUnitException(
 
 class OutdatedSubjectAreaException(
     id: String,
+    subjectAreaName: String,
 ) : VardokException(
-        "Vardok id $id SubjectArea has outdated subject area value and can not be saved",
+        "VarDok variable with ID '$id' SubjectArea '$subjectAreaName' is unknown and could not be " +
+            "transformed to a Statistical Subject compatible with Vardef. " +
+            "Please update the SubjectArea for this variable in VarDok and try again.",
     )

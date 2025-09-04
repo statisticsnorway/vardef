@@ -466,7 +466,11 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     false,
                     null,
-                    errorMessage = "Vardok id 3125 SubjectArea has outdated subject area value and can not be saved",
+                    errorMessage =
+                        "VarDok variable with ID '3125' SubjectArea 'Feil kode' is " +
+                            "unknown and could not be transformed to a Statistical Subject " +
+                            "compatible with Vardef. Please update the SubjectArea for this " +
+                            "variable in VarDok and try again.",
                 ),
             )
     }

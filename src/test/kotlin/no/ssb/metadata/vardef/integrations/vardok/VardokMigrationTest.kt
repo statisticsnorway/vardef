@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.JsonMappingException
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.vardok.conversions.StatisticalSubjects
 import no.ssb.metadata.vardef.integrations.vardok.conversions.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.conversions.mapVardokStatisticalUnitToUnitTypes
 import no.ssb.metadata.vardef.integrations.vardok.conversions.mapVardokSubjectAreaToSubjectField
@@ -147,7 +148,7 @@ class VardokMigrationTest : BaseVardefTest() {
     fun `vardokresponse subject area are values in SubjectFields`() {
         val vardokresponse = vardokService.getVardokItem("130")
         val result = vardokresponse?.let { mapVardokSubjectAreaToSubjectField(it) }
-        assertThat(result).isEqualTo(listOf("sk"))
+        assertThat(result).isEqualTo(listOf(StatisticalSubjects.SOCIAL_CONDITIONS_WELFARE_AND_CRIME))
     }
 
     @Test

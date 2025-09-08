@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import no.ssb.metadata.vardef.integrations.vardok.conversions.StatisticalSubjects
 import no.ssb.metadata.vardef.integrations.vardok.conversions.convertSubjectArea
 import no.ssb.metadata.vardef.integrations.vardok.conversions.specialSubjectFieldsMapping
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
@@ -17,39 +18,39 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
             Stream.of(
                 arguments(
                     "Regionale",
-                    "be",
+                    StatisticalSubjects.POPULATION,
                 ),
                 arguments(
                     "region",
-                    "be",
+                    StatisticalSubjects.POPULATION,
                 ),
                 arguments(
                     "Valg",
-                    "va",
+                    StatisticalSubjects.ELECTIONS,
                 ),
                 arguments(
                     "Vann",
-                    "nm",
+                    StatisticalSubjects.NATURE_AND_THE_ENVIRONMENT,
                 ),
                 arguments(
                     "Barnevern",
-                    "sk",
+                    StatisticalSubjects.SOCIAL_CONDITIONS_WELFARE_AND_CRIME,
                 ),
                 arguments(
                     "Skatt",
-                    "if",
+                    StatisticalSubjects.INCOME_AND_CONSUMPTION,
                 ),
                 arguments(
                     "Sosiale tjenester, trygd og sosialhjelp",
-                    "sk",
+                    StatisticalSubjects.SOCIAL_CONDITIONS_WELFARE_AND_CRIME,
                 ),
                 arguments(
                     "Elektrisitets-, gass-, damp- og varmtvannsforsyning",
-                    "ei",
+                    StatisticalSubjects.ENERGY_AND_MANUFACTURING,
                 ),
                 arguments(
                     "Arbeidsledighet",
-                    "al",
+                    StatisticalSubjects.LABOUR_MARKET_AND_EARNINGS,
                 ),
                 arguments(
                     "Hubba hubba",
@@ -62,11 +63,11 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
             Stream.of(
                 arguments(
                     "2303",
-                    listOf("bf"),
+                    listOf(StatisticalSubjects.BANKING_AND_FINANCIAL_MARKETS),
                 ),
                 arguments(
                     "3397",
-                    listOf("ei"),
+                    listOf(StatisticalSubjects.ENERGY_AND_MANUFACTURING),
                 ),
             )
     }
@@ -75,7 +76,7 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
     @MethodSource("subjectArea")
     fun `map subject area to subject fields`(
         name: String,
-        code: String?,
+        code: StatisticalSubjects?,
     ) {
         assertThat(convertSubjectArea(name)).isEqualTo(code)
     }
@@ -84,7 +85,7 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
     @MethodSource("specialSubjectFields")
     fun `map special cases statistical unit to unit types`(
         id: String,
-        code: List<String?>,
+        code: List<StatisticalSubjects?>,
     ) {
         assertThat(specialSubjectFieldsMapping(id)).isEqualTo(code)
     }

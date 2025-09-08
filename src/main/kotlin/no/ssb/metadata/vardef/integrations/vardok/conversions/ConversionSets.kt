@@ -109,159 +109,204 @@ fun specialCaseUnitMapping(vardokId: String): List<String>? =
         else -> null
     }
 
+enum class StatisticalSubjects(
+    val code: String,
+) {
+    LABOUR_MARKET_AND_EARNINGS("al"),
+    CONSTRUCTION_HOUSING_AND_PROPERTY("bb"),
+    POPULATION("be"),
+    BANKING_AND_FINANCIAL_MARKETS("bf"),
+    ENERGY_AND_MANUFACTURING("ei"),
+    HEALTH("he"),
+    INCOME_AND_CONSUMPTION("if"),
+    AGRICULTURE_FORESTRY_HUNTING_AND_FISHING("js"),
+    CULTURE_AND_RECREATION("kf"),
+    NATIONAL_ACCOUNTS_AND_BUSINESS_CYCLES("nk"),
+    NATURE_AND_THE_ENVIRONMENT("nm"),
+    PUBLIC_SECTOR("os"),
+    PRICES_AND_PRICE_INDICES("pp"),
+    SOCIAL_CONDITIONS_WELFARE_AND_CRIME("sk"),
+    TECHNOLOGY_AND_INNOVATION("ti"),
+    TRANSPORT_AND_TOURISM("tr"),
+    EDUCATION("ud"),
+    EXTERNAL_ECONOMY("ut"),
+    ELECTIONS("va"),
+    ESTABLISHMENTS_ENTERPRISES_AND_ACCOUNTS("vf"),
+    WHOLESALE_AND_RETAIL_TRADE_AND_SERVICE_ACTIVITIES("vt"),
+}
+
 /**
- * Set of string values which maps to the subject field value
+ * Map of the Statistical Subject as used in Vardef to the various SubjectArea names as used in VarDok.
  *
  * For more information about subject area mapping from Vardok to Vardef see
  * [Migreringsplan- Statistikkområde](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4128276501/Migreringsplan+fra+Vardok+til+Vardef#Statistikkomr%C3%A5de)
  */
-val SubjectAreaMapping =
+val SubjectAreaMapping: Map<StatisticalSubjects, Set<String>> =
     mapOf(
-        setOf(
-            "Regionale",
-            "Befolkning",
-            "Befolkningsstruktur",
-            "Folkemengde",
-            "Familier, husholdninger",
-            "Befolkningsendringer",
-            "Region -",
-            "region",
-        ) to "be",
-        setOf(
-            "Valg",
-            "Stortingsvalg",
-            "Fylkestings- og kommunestyrevalg",
-        ) to "va",
-        setOf(
-            "Tidsbruk",
-        ) to "kf",
-        setOf(
-            "Arealbruk",
-            "Luft",
-            "Vann",
-            "Avfall",
-            "Miljøvernkostnader",
-            "Miljøregnskap",
-        ) to "nm",
-        setOf(
-            "Energi",
-            "Ordretilgang, ordrereserver",
-            "Omsetning og produksjon",
-            "Investering",
-            "Produksjonsindekser",
-            "Utvinning av råolje og naturgass",
-            "Produksjon av nærings- og nytelsesmidler",
-            "Elektrisitets-, gass-, damp- og varmtvannsforsyning",
-        ) to "ei",
-        setOf(
-            "Helse, sosiale forhold og kriminalitet",
-            "Helsetjenester",
-            "Sykehustjenester",
-            "Legetjenester",
-            "Andre helsetjenester",
-        ) to "he",
-        setOf(
-            "Barnevern",
-            "Sosiale tjenester, trygd og sosialhjelp",
-            "Trygd og sosialhjelp",
-            "Kriminalitet og rettsvesen",
-        ) to "sk",
-        setOf(
-            "Utdanning",
-            "Utdanningsnivå",
-            "Utdanningsinstitusjoner",
-            "Barnehager, førskoler",
-            "Universitet og høgskoler",
-            "Voksenopplæring og annen undervisning",
-        ) to "ud",
-        setOf(
-            "Personlig økonomi og boforhold",
-            "Inntekt, formue, skatt",
-            "Inntekt",
-            "Formue",
-            "Skatt",
-            "Forbruk",
-        ) to "if",
-        setOf(
-            "Bolig, boforhold",
-            "Bygge- og anleggsvirksomhet",
-            "Omsetning og drift av fast eiendom",
-        ) to "bb",
-        setOf(
-            "Arbeidsliv, yrkesdeltaking og lønn",
-            "Yrkesdeltaking",
-            "Arbeidsmiljø, sykefravær",
-            "Arbeidsledighet",
-            "Arbeidskonflikter",
-            "Lønn, arbeidskraftkostnader",
-        ) to "al",
-        setOf(
-            "Fritidsvirksomhet, kulturell tjenesteyting og sport",
-            "Medlemskap i organisasjoner, tros- og livssynssamfunn",
-        ) to "kf",
-        setOf(
-            "Priser, prisindekser og konjunkturindikatorer",
-            "Pris- og kostnadsindekser, prisnivåsammenligninger",
-            "Konsumprisindeks",
-            "Produsentprisindekser - varer og tjenester",
-            "Boligprisindekser",
-        ) to "pp",
-        setOf(
-            "Nasjonalregnskap og utenrikshandel",
-            "Nasjonalregnskap",
-            "Finansielle sektorbalanser",
-        ) to "nk",
-        setOf(
-            "Utenriksregnskap",
-            "Fordringer og gjeld overfor utlandet, direkteinvesteringer, SIFON",
-            "Utenrikshandel",
-        ) to "ut",
-        setOf(
-            "Næringsvirksomhet",
-            "Struktur, bedriftregister",
-            "Skatt næringsvirksomhet",
-        ) to "vf",
-        setOf(
-            "Teknologiske indikatorer, inkl. IKT",
-        ) to "ti",
-        setOf(
-            "Jordbruk, jakt, viltstell",
-            "Jordbruk og skogbruk",
-            "Skogbruk",
-            "Fiske og fiskeoppdrett",
-        ) to "js",
-        setOf(
-            "Varehandel",
-        ) to "vt",
-        setOf(
-            "Hotell- og restaurantvirksomhet",
-            "Transport og kommunikasjon",
-            "Veitransport",
-            "Sjøtransport",
-            "Lufttransport",
-            "Tjenester tilknyttet transport og reisevirksomhet",
-        ) to "tr",
-        setOf(
-            "Finansielle foretak",
-            "Finansinstitusjoner",
-            "Andre finansieller foretak",
-            "Fonds- og aksjemegling, aksje- og obligasjonsfond, børser, legater",
-            "Aksjer, obligasjoner, seritfikater og øvrig kredittmarked",
-        ) to "bf",
-        setOf(
-            "Offentlige finanser",
-            "Kommunale finanser",
-        ) to "os",
+        StatisticalSubjects.POPULATION to
+            setOf(
+                "Regionale",
+                "Befolkning",
+                "Befolkningsstruktur",
+                "Folkemengde",
+                "Familier, husholdninger",
+                "Befolkningsendringer",
+                "Region -",
+                "region",
+            ),
+        StatisticalSubjects.ELECTIONS to
+            setOf(
+                "Valg",
+                "Stortingsvalg",
+                "Fylkestings- og kommunestyrevalg",
+            ),
+        StatisticalSubjects.CULTURE_AND_RECREATION to
+            setOf(
+                "Tidsbruk",
+                "Fritidsvirksomhet, kulturell tjenesteyting og sport",
+                "Medlemskap i organisasjoner, tros- og livssynssamfunn",
+            ),
+        StatisticalSubjects.NATURE_AND_THE_ENVIRONMENT to
+            setOf(
+                "Arealbruk",
+                "Luft",
+                "Vann",
+                "Avfall",
+                "Miljøvernkostnader",
+                "Miljøregnskap",
+            ),
+        StatisticalSubjects.ENERGY_AND_MANUFACTURING to
+            setOf(
+                "Energi",
+                "Ordretilgang, ordrereserver",
+                "Omsetning og produksjon",
+                "Investering",
+                "Produksjonsindekser",
+                "Utvinning av råolje og naturgass",
+                "Produksjon av nærings- og nytelsesmidler",
+                "Elektrisitets-, gass-, damp- og varmtvannsforsyning",
+            ),
+        StatisticalSubjects.HEALTH to
+            setOf(
+                "Helse, sosiale forhold og kriminalitet",
+                "Helsetjenester",
+                "Sykehustjenester",
+                "Legetjenester",
+                "Andre helsetjenester",
+            ),
+        StatisticalSubjects.SOCIAL_CONDITIONS_WELFARE_AND_CRIME to
+            setOf(
+                "Barnevern",
+                "Sosiale tjenester, trygd og sosialhjelp",
+                "Trygd og sosialhjelp",
+                "Kriminalitet og rettsvesen",
+            ),
+        StatisticalSubjects.EDUCATION to
+            setOf(
+                "Utdanning",
+                "Utdanningsnivå",
+                "Utdanningsinstitusjoner",
+                "Barnehager, førskoler",
+                "Universitet og høgskoler",
+                "Voksenopplæring og annen undervisning",
+            ),
+        StatisticalSubjects.INCOME_AND_CONSUMPTION to
+            setOf(
+                "Personlig økonomi og boforhold",
+                "Inntekt, formue, skatt",
+                "Inntekt",
+                "Formue",
+                "Skatt",
+                "Forbruk",
+            ),
+        StatisticalSubjects.CONSTRUCTION_HOUSING_AND_PROPERTY to
+            setOf(
+                "Bolig, boforhold",
+                "Bygge- og anleggsvirksomhet",
+                "Omsetning og drift av fast eiendom",
+            ),
+        StatisticalSubjects.LABOUR_MARKET_AND_EARNINGS to
+            setOf(
+                "Arbeidsliv, yrkesdeltaking og lønn",
+                "Yrkesdeltaking",
+                "Arbeidsmiljø, sykefravær",
+                "Arbeidsledighet",
+                "Arbeidskonflikter",
+                "Lønn, arbeidskraftkostnader",
+            ),
+        StatisticalSubjects.PRICES_AND_PRICE_INDICES to
+            setOf(
+                "Priser, prisindekser og konjunkturindikatorer",
+                "Pris- og kostnadsindekser, prisnivåsammenligninger",
+                "Konsumprisindeks",
+                "Produsentprisindekser - varer og tjenester",
+                "Boligprisindekser",
+            ),
+        StatisticalSubjects.NATIONAL_ACCOUNTS_AND_BUSINESS_CYCLES to
+            setOf(
+                "Nasjonalregnskap og utenrikshandel",
+                "Nasjonalregnskap",
+                "Finansielle sektorbalanser",
+            ),
+        StatisticalSubjects.EXTERNAL_ECONOMY to
+            setOf(
+                "Utenriksregnskap",
+                "Fordringer og gjeld overfor utlandet, direkteinvesteringer, SIFON",
+                "Utenrikshandel",
+            ),
+        StatisticalSubjects.ESTABLISHMENTS_ENTERPRISES_AND_ACCOUNTS to
+            setOf(
+                "Næringsvirksomhet",
+                "Struktur, bedriftregister",
+                "Skatt næringsvirksomhet",
+            ),
+        StatisticalSubjects.TECHNOLOGY_AND_INNOVATION to
+            setOf(
+                "Teknologiske indikatorer, inkl. IKT",
+            ),
+        StatisticalSubjects.AGRICULTURE_FORESTRY_HUNTING_AND_FISHING to
+            setOf(
+                "Jordbruk, jakt, viltstell",
+                "Jordbruk og skogbruk",
+                "Skogbruk",
+                "Fiske og fiskeoppdrett",
+            ),
+        StatisticalSubjects.WHOLESALE_AND_RETAIL_TRADE_AND_SERVICE_ACTIVITIES to
+            setOf(
+                "Varehandel",
+            ),
+        StatisticalSubjects.TRANSPORT_AND_TOURISM to
+            setOf(
+                "Hotell- og restaurantvirksomhet",
+                "Transport og kommunikasjon",
+                "Veitransport",
+                "Sjøtransport",
+                "Lufttransport",
+                "Tjenester tilknyttet transport og reisevirksomhet",
+            ),
+        StatisticalSubjects.BANKING_AND_FINANCIAL_MARKETS to
+            setOf(
+                "Finansielle foretak",
+                "Finansinstitusjoner",
+                "Andre finansieller foretak",
+                "Fonds- og aksjemegling, aksje- og obligasjonsfond, børser, legater",
+                "Aksjer, obligasjoner, seritfikater og øvrig kredittmarked",
+            ),
+        StatisticalSubjects.PUBLIC_SECTOR to
+            setOf(
+                "Offentlige finanser",
+                "Kommunale finanser",
+            ),
     )
 
-fun convertSubjectArea(name: String): String? =
+fun convertSubjectArea(name: String): StatisticalSubjects? =
     SubjectAreaMapping.entries
-        .firstOrNull { entry -> name in entry.key }
-        ?.value
+        .firstOrNull { entry -> name in entry.value }
+        ?.key
 
-fun specialSubjectFieldsMapping(vardokId: String): List<String>? =
+fun specialSubjectFieldsMapping(vardokId: String): List<StatisticalSubjects>? =
     when (vardokId) {
-        "2303", "2310" -> listOf("bf")
-        "3380", "3397" -> listOf("ei")
+        "2303", "2310" -> listOf(StatisticalSubjects.BANKING_AND_FINANCIAL_MARKETS)
+        "3380", "3397" -> listOf(StatisticalSubjects.ENERGY_AND_MANUFACTURING)
         else -> null
     }

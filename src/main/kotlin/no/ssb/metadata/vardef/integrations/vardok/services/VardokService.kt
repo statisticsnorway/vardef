@@ -93,7 +93,7 @@ interface VardokService {
                         null
                     },
                 containsSpecialCategoriesOfPersonalData = false,
-                subjectFields = mapVardokSubjectAreaToSubjectField(vardokItemPrimary),
+                subjectFields = mapVardokSubjectAreaToSubjectField(vardokItemPrimary).map { it.code },
                 classificationReference = classificationRelation?.split("/")?.last(),
                 contact =
                     Contact(

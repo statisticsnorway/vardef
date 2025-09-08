@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import no.ssb.metadata.vardef.integrations.vardok.convertions.convertUnitTypes
-import no.ssb.metadata.vardef.integrations.vardok.convertions.specialCaseUnitMapping
+import no.ssb.metadata.vardef.integrations.vardok.conversions.convertUnitTypes
+import no.ssb.metadata.vardef.integrations.vardok.conversions.specialCaseUnitMapping
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
-class ConvertionsTest : BaseVardokTest() {
+class ConversionsTest : BaseVardokTest() {
     companion object {
         @JvmStatic
         fun unitTypes(): Stream<Arguments> =

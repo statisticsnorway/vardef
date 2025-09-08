@@ -125,6 +125,7 @@ val SubjectAreaMapping =
             "Familier, husholdninger",
             "Befolkningsendringer",
             "Region -",
+            "region",
         ) to "be",
         setOf(
             "Valg",

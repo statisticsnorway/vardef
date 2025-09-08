@@ -6,7 +6,7 @@ import io.viascom.nanoid.NanoId
 import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.constants.VARDEF_SHORT_NAME_PATTERN
-import no.ssb.metadata.vardef.integrations.vardok.convertions.*
+import no.ssb.metadata.vardef.integrations.vardok.conversions.*
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.models.Contact
 import no.ssb.metadata.vardef.models.LanguageStringType

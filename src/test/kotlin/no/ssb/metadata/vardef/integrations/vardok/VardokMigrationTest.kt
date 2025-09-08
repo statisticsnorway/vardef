@@ -2,9 +2,9 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.JsonMappingException
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.integrations.vardok.convertions.getValidDates
-import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokStatisticalUnitToUnitTypes
-import no.ssb.metadata.vardef.integrations.vardok.convertions.mapVardokSubjectAreaToSubjectFiled
+import no.ssb.metadata.vardef.integrations.vardok.conversions.getValidDates
+import no.ssb.metadata.vardef.integrations.vardok.conversions.mapVardokStatisticalUnitToUnitTypes
+import no.ssb.metadata.vardef.integrations.vardok.conversions.mapVardokSubjectAreaToSubjectFiled
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.utils.BaseVardefTest

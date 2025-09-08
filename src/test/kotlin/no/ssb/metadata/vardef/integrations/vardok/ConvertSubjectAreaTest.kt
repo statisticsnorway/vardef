@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import no.ssb.metadata.vardef.integrations.vardok.convertions.convertSubjectArea
-import no.ssb.metadata.vardef.integrations.vardok.convertions.specialSubjectFieldsMapping
+import no.ssb.metadata.vardef.integrations.vardok.conversions.convertSubjectArea
+import no.ssb.metadata.vardef.integrations.vardok.conversions.specialSubjectFieldsMapping
 import no.ssb.metadata.vardef.integrations.vardok.utils.BaseVardokTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
@@ -17,6 +17,10 @@ class ConvertSubjectAreaTest : BaseVardokTest() {
             Stream.of(
                 arguments(
                     "Regionale",
+                    "be",
+                ),
+                arguments(
+                    "region",
                     "be",
                 ),
                 arguments(

@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.vardok.convertions
+package no.ssb.metadata.vardef.integrations.vardok.conversions
 
 import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaException
 import no.ssb.metadata.vardef.integrations.vardok.models.StatisticalUnitException
@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 import java.net.URI
 import java.net.URL
 
-private val logger = LoggerFactory.getLogger("Convertions")
+private val logger = LoggerFactory.getLogger("Conversions")
 
 fun getValidDates(vardokItem: VardokResponse): Pair<String, String?> {
     val dateString = vardokItem.dc?.valid?.split(" - ")

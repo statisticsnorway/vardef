@@ -1,4 +1,4 @@
-package no.ssb.metadata.vardef.integrations.vardok.convertions
+package no.ssb.metadata.vardef.integrations.vardok.conversions
 
 /**
  * Set of string values which maps from *StatisticalUnit* in Vardok to unittypes list

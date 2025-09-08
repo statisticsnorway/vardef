@@ -49,7 +49,7 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
  * @returns list except if result is null then
  * @throws OutdatedSubjectAreaException
  */
-fun mapVardokSubjectAreaToSubjectFiled(vardokItem: VardokResponse): List<String> {
+fun mapVardokSubjectAreaToSubjectField(vardokItem: VardokResponse): List<String> {
     specialSubjectFieldsMapping(vardokItem.parseId())?.let { return it }
 
     val code =

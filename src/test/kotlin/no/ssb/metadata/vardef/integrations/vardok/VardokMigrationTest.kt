@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.conversions.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.conversions.mapVardokStatisticalUnitToUnitTypes
-import no.ssb.metadata.vardef.integrations.vardok.conversions.mapVardokSubjectAreaToSubjectFiled
+import no.ssb.metadata.vardef.integrations.vardok.conversions.mapVardokSubjectAreaToSubjectField
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
@@ -146,7 +146,7 @@ class VardokMigrationTest : BaseVardefTest() {
     @Test
     fun `vardokresponse subject area are values in SubjectFields`() {
         val vardokresponse = vardokService.getVardokItem("130")
-        val result = vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
+        val result = vardokresponse?.let { mapVardokSubjectAreaToSubjectField(it) }
         assertThat(result).isEqualTo(listOf("sk"))
     }
 
@@ -154,7 +154,7 @@ class VardokMigrationTest : BaseVardefTest() {
     fun `vardokresponse subject area incorrect input`() {
         assertThatThrownBy {
             val vardokresponse = vardokService.getVardokItem("99999")
-            vardokresponse?.let { mapVardokSubjectAreaToSubjectFiled(it) }
+            vardokresponse?.let { mapVardokSubjectAreaToSubjectField(it) }
         }.isInstanceOf(OutdatedSubjectAreaException::class.java)
     }
 

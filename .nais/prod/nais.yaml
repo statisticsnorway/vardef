@@ -51,9 +51,9 @@ spec:
       value: naisprod
 
   replicas:
-    # Always have at least two for seamless deploy
+    # Always have at least two for uptime
     min: 2
-    max: 6
+    max: 2
   resources:
     requests:
       cpu: 20m

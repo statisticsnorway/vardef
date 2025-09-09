@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.conversions
 
-import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaException
 import no.ssb.metadata.vardef.integrations.vardok.models.StatisticalUnitException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages

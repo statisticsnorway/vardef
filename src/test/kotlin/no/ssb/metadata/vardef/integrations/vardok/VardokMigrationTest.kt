@@ -153,10 +153,9 @@ class VardokMigrationTest : BaseVardefTest() {
 
     @Test
     fun `vardokresponse subject area incorrect input`() {
-        assertThatThrownBy {
-            val vardokresponse = vardokService.getVardokItem("99999")
-            vardokresponse?.let { mapVardokSubjectAreaToSubjectField(it) }
-        }.isInstanceOf(OutdatedSubjectAreaException::class.java)
+        assertThat(
+            vardokService.getVardokItem("99999")?.let { mapVardokSubjectAreaToSubjectField(it) },
+        ).isEqualTo(emptyList<StatisticalSubjects>())
     }
 
     @ParameterizedTest

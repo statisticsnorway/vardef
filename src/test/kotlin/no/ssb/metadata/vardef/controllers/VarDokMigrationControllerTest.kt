@@ -24,6 +24,7 @@ import java.net.URI
 import java.net.URL
 import java.time.LocalDate
 import java.util.stream.Stream
+import kotlin.collections.emptyList
 
 class VarDokMigrationControllerTest : BaseVardefTest() {
     @Inject
@@ -453,26 +454,22 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     @Test
     fun `post vardok incorrect updated subject area`(spec: RequestSpecification) {
         val id = 99999
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .post("/vardok-migration/$id")
-            .then()
-            .statusCode(HttpStatus.BAD_REQUEST.code)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage =
-                        "VarDok variable with ID '3125' SubjectArea 'Feil kode' is " +
-                            "unknown and could not be transformed to a Statistical Subject " +
-                            "compatible with Vardef. Please update the SubjectArea for this " +
-                            "variable in VarDok and try again.",
-                ),
-            )
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/$id")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.subjectFields).isEqualTo(emptyList<String>())
     }
 
     @Test

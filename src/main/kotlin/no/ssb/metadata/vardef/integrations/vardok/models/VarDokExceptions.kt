@@ -18,12 +18,3 @@ class StatisticalUnitException(
 ) : VardokException(
         "Vardok ID $id: StatisticalUnit is either missing or contains outdated unit types.",
     )
-
-class OutdatedSubjectAreaException(
-    id: String,
-    subjectAreaName: String,
-) : VardokException(
-        "VarDok variable with ID '$id' SubjectArea '$subjectAreaName' is unknown and could not be " +
-            "transformed to a Statistical Subject compatible with Vardef. " +
-            "Please update the SubjectArea for this variable in VarDok and try again.",
-    )

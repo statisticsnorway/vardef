@@ -145,7 +145,7 @@ class VariableDefinitionByIdController(
 
         patches.deleteAllForDefinitionId(definitionId)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
-        return HttpResponse.noContent<Unit?>().contentType(null)
+        return HttpResponse.noContent<Unit>().contentType(null)
     }
 
     /**

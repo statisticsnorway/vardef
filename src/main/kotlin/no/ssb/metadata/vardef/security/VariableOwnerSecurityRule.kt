@@ -1,7 +1,6 @@
 package no.ssb.metadata.vardef.security
 
 import io.micronaut.core.annotation.AnnotationValue
-import io.micronaut.http.HttpAttributes
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.security.annotation.Secured
@@ -11,6 +10,7 @@ import io.micronaut.security.rules.SecuredAnnotationRule
 import io.micronaut.security.rules.SecurityRuleResult
 import io.micronaut.security.token.RolesFinder
 import io.micronaut.web.router.MethodBasedRouteMatch
+import io.micronaut.web.router.RouteAttributes
 import io.micronaut.web.router.RouteMatch
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
@@ -110,11 +110,8 @@ class VariableOwnerSecurityRule(
     ): Publisher<SecurityRuleResult> {
         if (request == null || authentication == null) return Mono.just(SecurityRuleResult.UNKNOWN)
         return Mono
-            .justOrEmpty<RouteMatch<*>?>(
-                request
-                    .getAttribute(HttpAttributes.ROUTE_MATCH, RouteMatch::class.java)
-                    ?.orElse(null),
-            ).filter { doesOperationRequireVariableOwnerRole(it) }
+            .justOrEmpty(RouteAttributes.getRouteMatch(request))
+            .filter { doesOperationRequireVariableOwnerRole(it) }
             .filter { VARIABLE_DEFINITION_ID_PATH_VARIABLE in it.variableValues }
             .filter { ACTIVE_GROUP in request.parameters }
             .map { extractDefinitionIdFromUri(it) }

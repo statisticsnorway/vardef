@@ -1,6 +1,6 @@
 package no.ssb.metadata.vardef.annotations
 
-import io.micronaut.problem.ProblemErrorResponseProcessor.APPLICATION_PROBLEM_JSON
+import io.micronaut.problem.ProblemJsonErrorResponseBodyProvider.APPLICATION_PROBLEM_JSON
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema

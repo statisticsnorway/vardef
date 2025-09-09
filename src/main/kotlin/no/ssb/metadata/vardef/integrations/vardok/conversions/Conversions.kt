@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.conversions
 
-import no.ssb.metadata.vardef.integrations.vardok.models.OutdatedSubjectAreaException
 import no.ssb.metadata.vardef.integrations.vardok.models.StatisticalUnitException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -45,19 +44,24 @@ fun mapVardokStatisticalUnitToUnitTypes(vardokItem: VardokResponse): List<String
 }
 
 /**
+ * Convert the VarDok SubjectArea field to a StatisticalSubject in Vardef.
  *
- * @returns list except if result is null then
- * @throws OutdatedSubjectAreaException
+ * VarDok has a single value while Vardef supports multiple, which is why we convert to alist
+ *
+ * @returns a list of the mapped StatisticalSubject or an empty list if it fails
  */
 fun mapVardokSubjectAreaToSubjectField(vardokItem: VardokResponse): List<StatisticalSubjects> {
+    // Certain variables must be mapped by ID because reasons? Check for these first.
     specialSubjectFieldsMapping(vardokItem.parseId())?.let { return it }
 
-    val code =
-        vardokItem.variable?.subjectArea?.codeText
-            ?: return emptyList()
-
-    return convertSubjectArea(code)?.let { listOf(it) }
-        ?: throw OutdatedSubjectAreaException(vardokItem.parseId(), code)
+    // Attempt to convert the SubjectArea. If this isn't possible we supply an empty list to allow
+    // the user to fix this in their draft variable in Vardef.
+    return vardokItem.variable
+        ?.subjectArea
+        ?.codeText
+        ?.let { convertSubjectArea(it) }
+        ?.let { listOf(it) }
+        ?: emptyList()
 }
 
 /**

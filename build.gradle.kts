@@ -62,7 +62,11 @@ dependencies {
 application {
     mainClass = "no.ssb.metadata.vardef.ApplicationKt"
 }
-kotlin { jvmToolchain(21) }
+kotlin {
+    jvmToolchain(21)
+    // See https://youtrack.jetbrains.com/issue/KT-73255
+    compilerOptions.freeCompilerArgs.add("-Xannotation-default-target=param-property")
+}
 
 ksp {
     @OptIn(KspExperimental::class)

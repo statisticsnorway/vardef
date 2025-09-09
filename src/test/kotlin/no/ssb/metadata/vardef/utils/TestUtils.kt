@@ -2,7 +2,7 @@ package no.ssb.metadata.vardef.utils
 
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.AppenderBase
-import io.micronaut.problem.ProblemErrorResponseProcessor.APPLICATION_PROBLEM_JSON
+import io.micronaut.problem.ProblemJsonErrorResponseBodyProvider.APPLICATION_PROBLEM_JSON
 import io.restassured.builder.ResponseSpecBuilder
 import io.restassured.specification.ResponseSpecification
 import no.ssb.metadata.vardef.models.VariableStatus

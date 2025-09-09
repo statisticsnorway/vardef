@@ -7,7 +7,6 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
-import no.ssb.metadata.vardef.integrations.vardok.conversions.StatisticalSubjects
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService

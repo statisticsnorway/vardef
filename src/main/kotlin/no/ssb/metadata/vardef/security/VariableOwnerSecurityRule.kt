@@ -110,11 +110,8 @@ class VariableOwnerSecurityRule(
     ): Publisher<SecurityRuleResult> {
         if (request == null || authentication == null) return Mono.just(SecurityRuleResult.UNKNOWN)
         return Mono
-            .justOrEmpty<RouteMatch<*>?>(
-                RouteAttributes
-                    .getRouteMatch(request)
-                    ?.orElse(null),
-            ).filter { doesOperationRequireVariableOwnerRole(it) }
+            .justOrEmpty(RouteAttributes.getRouteMatch(request))
+            .filter { doesOperationRequireVariableOwnerRole(it) }
             .filter { VARIABLE_DEFINITION_ID_PATH_VARIABLE in it.variableValues }
             .filter { ACTIVE_GROUP in request.parameters }
             .map { extractDefinitionIdFromUri(it) }

@@ -16,7 +16,7 @@ plugins {
 version = "0.1.7"
 group = "no.ssb.metadata.vardef"
 
-val kotlinVersion = project.properties["kotlinVersion"]
+val kotlinVersion: String = libs.versions.kotlin.toString()
 repositories {
     mavenCentral()
 }

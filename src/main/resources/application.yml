@@ -124,6 +124,10 @@ micronaut:
   metrics:
     sensitive: false
     enabled: true
+    custom:
+      # Used for exporting custom business metrics
+      update-frequency: 1h
+      initial-delay: 1h
     tags:
       application: ${micronaut.application.name}
     export:

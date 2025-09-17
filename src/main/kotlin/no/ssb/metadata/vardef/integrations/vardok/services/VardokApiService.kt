@@ -2,7 +2,9 @@ package no.ssb.metadata.vardef.integrations.vardok.services
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import io.micrometer.core.instrument.MeterRegistry
 import io.micronaut.http.client.exceptions.HttpClientResponseException
+import io.micronaut.scheduling.annotation.Scheduled
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
@@ -10,13 +12,22 @@ import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.slf4j.LoggerFactory
+import java.util.concurrent.atomic.AtomicInteger
 
 @Singleton
 open class VardokApiService(
     private val vardokClient: VardokClient,
     private val vardokIdMappingRepository: VardokIdMappingRepository,
+    meterRegistry: MeterRegistry,
 ) : VardokService {
     private val logger = LoggerFactory.getLogger(VardokApiService::class.java)
+
+    private lateinit var totalMigrated: AtomicInteger
+
+    init {
+        totalMigrated.set(vardokIdMappingRepository.count().toInt())
+        meterRegistry.gauge("ssb.variable-definitions.migrated.count", totalMigrated)
+    }
 
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
@@ -105,4 +116,12 @@ open class VardokApiService(
     override fun getVardokIdByVardefId(vardokId: String): String? = vardokIdMappingRepository.getVardokIdByVardefId(vardokId)
 
     override fun isAlreadyMigrated(vardokId: String): Boolean = vardokIdMappingRepository.existsByVardokId(vardokId)
+
+    @Scheduled(
+        fixedRate = $$"${micronaut.metrics.custom.update-frequency:1h}",
+        initialDelay = $$"${micronaut.metrics.custom.initial-delay:1h}",
+    )
+    open fun exportMetrics() {
+        totalMigrated.set(vardokIdMappingRepository.count().toInt())
+    }
 }

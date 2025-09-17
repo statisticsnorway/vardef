@@ -18,19 +18,17 @@ import java.util.concurrent.atomic.AtomicInteger
 open class VardokApiService(
     private val vardokClient: VardokClient,
     private val vardokIdMappingRepository: VardokIdMappingRepository,
+    private val variableDefinitionRepository: VariableDefinitionRepository,
     meterRegistry: MeterRegistry,
 ) : VardokService {
     private val logger = LoggerFactory.getLogger(VardokApiService::class.java)
 
-    private lateinit var totalMigrated: AtomicInteger
+    private var totalMigrated: AtomicInteger = AtomicInteger()
 
     init {
         totalMigrated.set(vardokIdMappingRepository.count().toInt())
         meterRegistry.gauge("ssb.variable-definitions.migrated.count", totalMigrated)
     }
-
-    @Inject
-    lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
     override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name)
 

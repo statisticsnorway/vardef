@@ -133,8 +133,19 @@ Authorization: Bearer {{OIDC_TOKEN}}
 %}
 
 ### Vardok migration
-@vardok-id = 130
+@vardok-id = 134
 POST {{HOST}}/vardok-migration/{{vardok-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+Content-Type: application/json
+Authorization: Bearer {{OIDC_TOKEN}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Request failed");
+    });
+%}
+
+###
+GET {{HOST}}/vardok-migration?active_group={{DAPLA_GROUP_CONTEXT}}
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 

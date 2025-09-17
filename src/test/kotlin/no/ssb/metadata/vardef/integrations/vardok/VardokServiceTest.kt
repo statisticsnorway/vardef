@@ -6,7 +6,6 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient

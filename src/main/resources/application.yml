@@ -127,7 +127,7 @@ micronaut:
     custom:
       # Used for exporting custom business metrics
       update-frequency: 1h
-      initial-delay: 1h
+      initial-delay: 30s
     tags:
       application: ${micronaut.application.name}
     export:

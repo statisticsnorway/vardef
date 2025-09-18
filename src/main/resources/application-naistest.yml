@@ -15,6 +15,11 @@ micronaut:
         url: https://auth.test.ssb.no/
         clientId: vardef-to-dapla-team-api-m2m
         clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+  metrics:
+    custom:
+      # Used for exporting custom business metrics
+      update-frequency: 1m
+      initial-delay: 0s
 logger:
   config: logback-kubernetes.xml
 

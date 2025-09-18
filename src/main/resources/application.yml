@@ -139,11 +139,9 @@ micronaut:
 endpoints:
   all:
     port: 8090
-  environments:
     enabled: true
     sensitive: false
   health:
-    sensitive: false
     details-visible: ANONYMOUS
     service-http-client:
       enabled: true

@@ -1,11 +1,11 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
+import io.micrometer.core.instrument.MeterRegistry
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
@@ -22,7 +22,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @MockK
-class VardokServiceTest : BaseVardokTest() {
+class VardokServiceTest(
+    private val meterRegistry: MeterRegistry,
+) : BaseVardokTest() {
     @MockK
     lateinit var vardokMockkClient: VardokClient
 
@@ -35,12 +37,19 @@ class VardokServiceTest : BaseVardokTest() {
     @MockK
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
-    @InjectMockKs
     lateinit var vardokApiService: VardokApiService
 
     @BeforeEach
     fun setup() {
         MockKAnnotations.init(this)
+        every { vardokIdMappingRepository.count() } returns 0
+        vardokApiService =
+            VardokApiService(
+                vardokMockkClient,
+                vardokIdMappingRepository = vardokIdMappingRepository,
+                variableDefinitionRepository = variableDefinitionRepository,
+                meterRegistry = meterRegistry,
+            )
     }
 
     @AfterEach

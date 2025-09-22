@@ -140,7 +140,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 > {%
     client.test("Request executed successfully", function() {
-        client.assert(response.status === 200, "Request failed");
+        client.assert(response.status === 201, "Request failed");
     });
 %}
 

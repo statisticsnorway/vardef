@@ -31,7 +31,7 @@ class DaplaTeamApiMockkServiceTest {
 
     @Test
     fun `valid team request`() {
-        val expectedTeam = Team("dapla-felles")
+        val expectedTeam = Team("dapla-felles", sectionName = "Dapla", sectionCode = "724")
         val mockResponse: HttpResponse<Team?> = mockk()
         every { mockResponse.status } returns HttpStatus.OK
         every { mockResponse.body() } returns expectedTeam

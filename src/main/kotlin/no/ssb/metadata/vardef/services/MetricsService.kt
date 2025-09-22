@@ -53,12 +53,10 @@ class MetricsService(
     )
     fun exportMetrics() {
         totalMigrated.set(vardokIdMappingRepository.count().toInt())
-        logger.info("Updating metrics.")
-        logger.info("Meters: ${meterRegistry.meters.filter { it.id.name.contains("ssb") }.map { it.id }}")
-        logger.info("Total migrated = $totalMigrated.")
+        logger.debug("Updating metrics.")
         migrated.register(
             countMigratedVariablesBySection()
-                .also { logger.info(it.toString()) }
+                .also { logger.debug(it.toString()) }
                 .map {
                     MultiGauge.Row.of(Tags.of(SECTION_TAG_KEY, it.key), it.value)
                 }.toList(),

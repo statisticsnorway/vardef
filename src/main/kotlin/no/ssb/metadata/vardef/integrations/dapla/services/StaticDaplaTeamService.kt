@@ -29,6 +29,8 @@ const val DAPLA_PROPERTY = "dapla"
 @EachProperty(DAPLA_TEAM_PROPERTY_NAME)
 class StaticDaplaTeam(
     @param:Parameter val uniformName: String,
+    @param:Parameter val sectionCode: String,
+    @param:Parameter val sectionName: String,
     @param:Property(name = "dapla-teams.static-data-path")
     private val path: Path,
     private val jsonMapper: JsonMapper,
@@ -104,6 +106,8 @@ class StaticDaplaTeamService(
             val team: StaticDaplaTeam = beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName(teamName))
             Team(
                 uniformName = team.uniformName,
+                sectionCode = team.sectionCode,
+                sectionName = team.sectionName,
             )
         }.onFailure { e ->
             logger.error("Error fetching static team with name '$teamName': ${e.message}", e)

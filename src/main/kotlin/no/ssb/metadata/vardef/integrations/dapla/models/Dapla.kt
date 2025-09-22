@@ -11,6 +11,8 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Team(
     val uniformName: String,
+    val sectionCode: String,
+    val sectionName: String,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -4,8 +4,8 @@
 # Each block is sorted alphabetically.
 
 [versions]
-assertj = "3.27.4"
-cyclonedx = "2.3.1"
+assertj = "3.27.5"
+cyclonedx = "2.4.0"
 jackson = "2.20.0"
 jib = "3.4.5"
 json = "20250517"
@@ -23,9 +23,9 @@ micronautGradle = "4.5.4"
 micronautManagement = "4.9.11"
 micronautMicrometer = "5.12.0"
 micronautMongoDb = "5.7.0"
-micronautOpenapi = "6.18.0"
+micronautOpenapi = "6.18.1"
 micronautProblem = "3.8.0"
-micronautSecurity = "4.13.1"
+micronautSecurity = "4.15.0"
 micronautSerde = "2.15.1"
 micronautTest = "4.8.1"
 micronautValidation = "4.10.0"

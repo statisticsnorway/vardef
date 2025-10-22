@@ -96,9 +96,9 @@ micronaut {
     }
 }
 
-tasks.cyclonedxBom {
-    setIncludeConfigs(listOf("runtimeClasspath"))
-    setProjectType("application")
+tasks.cyclonedxDirectBom {
+    includeConfigs = listOf("runtimeClasspath")
+    projectType = org.cyclonedx.model.Component.Type.APPLICATION
 }
 
 jib {

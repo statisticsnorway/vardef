@@ -1,4 +1,4 @@
-<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2011-07-06" defaultValidFrom="2011-07-06" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:0006" lastChangedDate="2014-03-12" otherLanguages="en" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
+<FIMD xmlns="http://www.ssb.no/ns/fimd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http//purl.org/dc/terms/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instanse" createdOn="2011-07-06" defaultValidFrom="2011-07-06" defaultValidTo="" id="urn:ssb:conceptvariable:vardok:0006" lastChangedDate="2014-03-12" otherLanguages="" type="ConceptVariable" xml:lang="nb" xsi:schemaLocation="http://www.ssb.no/ns/fimd Q:\DOK\FIMD\IT-analyse\Schemas\fimdv3.xsd">
     <DC>
         <dc:contributor>Seksjon for inntekts- og lønnsstatistikk</dc:contributor>
         <dc:creator>Gunnar Claus</dc:creator>
@@ -41,7 +41,7 @@
         <InternalSource/>
         <Sensitivity>Ordinï¿½r</Sensitivity>
         <ExternalDocument/>
-        <DataElementName>LONN</DataElementName>
+        <DataElementName>BUS</DataElementName>
         <ShortNameWeb>
             <CodeValue>agrl</CodeValue>
             <CodeText>Grunnlag for arbeidsgiveravgift</CodeText>

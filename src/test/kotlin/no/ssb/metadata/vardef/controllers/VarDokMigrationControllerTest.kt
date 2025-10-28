@@ -80,6 +80,25 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
+    fun `post request duplicate shortname when source is uppercase`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
+                .`when`()
+                .post("/vardok-migration/0006")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asString()
+        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        assertThat(completeResponse.shortName).contains(GENERATED_CONTACT_KEYWORD)
+    }
+
+    @Test
     fun `migrate twice`(spec: RequestSpecification) {
         spec
             .given()

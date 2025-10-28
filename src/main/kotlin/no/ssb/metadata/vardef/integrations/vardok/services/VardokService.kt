@@ -43,7 +43,7 @@ interface VardokService {
 
         private fun isValidShortName(name: String) = name.matches(Regex(VARDEF_SHORT_NAME_PATTERN))
 
-        private fun processShortName(name: String?) =
+        fun processShortName(name: String?) =
             name
                 ?.lowercase()
                 ?.replace("""[-\s]""".toRegex(), "_")

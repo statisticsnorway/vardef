@@ -9,6 +9,37 @@ import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+val DRAFT_COMPLEX_SHORT_NAME =
+    Draft(
+        name =
+            LanguageStringType(
+                nb = "Buss",
+                nn = "Buss",
+                en = "Bus",
+            ),
+        shortName = "bus_car",
+        definition =
+            LanguageStringType(
+                nb = "En buss er en bil for persontransport med over 8 sitteplasser i tillegg til førersetet.",
+                nn = null,
+                en = "A bus is",
+            ),
+        classificationReference = "91",
+        unitTypes = listOf("", ""),
+        subjectFields = listOf("", ""),
+        containsSpecialCategoriesOfPersonalData = false,
+        measurementType = "",
+        validFrom = LocalDate.of(2025, 1, 1),
+        validUntil = LocalDate.of(2029, 1, 1),
+        externalReferenceUri = URI("https://www.example.com").toURL(),
+        comment = null,
+        relatedVariableDefinitionUris = listOf(URI("https://www.example.com").toURL()),
+        contact =
+            Contact(
+                LanguageStringType("", "", ""),
+                "",
+            ),
+    ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 val DRAFT_BUS_EXAMPLE =
     Draft(
         name =

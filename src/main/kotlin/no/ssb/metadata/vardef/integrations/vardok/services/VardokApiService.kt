@@ -7,6 +7,7 @@ import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService.Companion.processShortName
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.slf4j.LoggerFactory
 
@@ -77,12 +78,14 @@ open class VardokApiService(
         }
 
         // Handle duplicate shortnames
-        if (result?.variable?.dataElementName?.let { isDuplicate(it) } == true) {
-            result.variable.dataElementName = VardokService.generateShortName()
+        var shortName = processShortName(result?.variable?.dataElementName)
+        if (isDuplicate(shortName)) {
+            shortName = VardokService.generateShortName()
             logger.info(
-                "Shortname for vardok id ${result.parseId()} exists and new shortname " +
-                    "${result.variable.dataElementName} was generated",
+                "Shortname for vardok id ${result?.parseId()} exists and new shortname " +
+                    "${result?.variable?.dataElementName} was generated",
             )
+            result?.variable?.dataElementName = shortName
         }
         return responseMap
     }

@@ -11,6 +11,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
+import no.ssb.metadata.vardef.integrations.vardok.services.VardokService.Companion.processShortName
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.io.File
 import java.io.FileNotFoundException
@@ -82,8 +83,10 @@ class StaticVardokService(
         result.otherLanguages.split(";").filter { it.isNotEmpty() }.forEach { l ->
             getVardokByIdAndLanguage(id, l).let { responseMap[l] = it }
         }
-        if (result.variable?.dataElementName?.let { isDuplicate(it) } == true) {
-            result.variable.dataElementName = VardokService.generateShortName()
+        // Handle duplicate shortnames
+        val shortName = processShortName(result.variable?.dataElementName)
+        if (isDuplicate(shortName)) {
+            result.variable?.dataElementName = VardokService.generateShortName()
         }
 
         return responseMap

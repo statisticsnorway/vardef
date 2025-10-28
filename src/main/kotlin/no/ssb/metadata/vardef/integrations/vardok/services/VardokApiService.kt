@@ -18,7 +18,7 @@ open class VardokApiService(
 ) : VardokService {
     private val logger = LoggerFactory.getLogger(VardokApiService::class.java)
 
-    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name)
+    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name.lowercase())
 
     private val xmlMapper = XmlMapper().registerKotlinModule()
 

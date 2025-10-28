@@ -26,7 +26,7 @@ class StaticVardokService(
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
-    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name)
+    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name.lowercase())
 
     override fun createVardokVardefIdMapping(
         vardokId: String,

@@ -11,7 +11,6 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
-import no.ssb.metadata.vardef.integrations.vardok.services.VardokService.Companion.processShortName
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import java.io.File
 import java.io.FileNotFoundException
@@ -27,7 +26,7 @@ class StaticVardokService(
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
-    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name.lowercase())
+    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
 
     override fun createVardokVardefIdMapping(
         vardokId: String,
@@ -84,9 +83,8 @@ class StaticVardokService(
             getVardokByIdAndLanguage(id, l).let { responseMap[l] = it }
         }
         // Handle duplicate shortnames
-        val shortName = processShortName(result.variable?.dataElementName)
-        if (isDuplicate(shortName)) {
-            result.variable?.dataElementName = VardokService.generateShortName()
+        if (result.variable?.dataElementName?.let { isDuplicate(it) } == true) {
+            result.variable.dataElementName = VardokService.generateShortName()
         }
 
         return responseMap

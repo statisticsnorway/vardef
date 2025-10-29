@@ -7,7 +7,6 @@ import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
-import no.ssb.metadata.vardef.integrations.vardok.services.VardokService.Companion.processShortName
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.slf4j.LoggerFactory
 
@@ -19,7 +18,7 @@ open class VardokApiService(
 ) : VardokService {
     private val logger = LoggerFactory.getLogger(VardokApiService::class.java)
 
-    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name.lowercase())
+    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
 
     private val xmlMapper = XmlMapper().registerKotlinModule()
 
@@ -78,14 +77,12 @@ open class VardokApiService(
         }
 
         // Handle duplicate shortnames
-        var shortName = processShortName(result?.variable?.dataElementName)
-        if (isDuplicate(shortName)) {
-            shortName = VardokService.generateShortName()
+        if (result?.variable?.dataElementName?.let { isDuplicate(it) } == true) {
             logger.info(
-                "Shortname for vardok id ${result?.parseId()} exists and new shortname " +
-                    "${result?.variable?.dataElementName} was generated",
+                "Shortname for vardok id ${result.parseId()} exists and new shortname " +
+                    "${result.variable.dataElementName} was generated",
             )
-            result?.variable?.dataElementName = shortName
+            result.variable.dataElementName = VardokService.generateShortName()
         }
         return responseMap
     }

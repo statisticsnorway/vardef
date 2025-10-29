@@ -79,7 +79,8 @@ open class VardokApiService(
             getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
         }
 
-        // Handle duplicate shortnames
+        // If we are attempting to migrate a variable with a short name which already exists in Vardef,
+        // generate a new short name so that other metadata may be migrated.
         if (result?.variable?.dataElementName?.let { isDuplicate(it) } == true) {
             logger.info(
                 "Shortname for vardok id ${result.parseId()} exists and new shortname " +

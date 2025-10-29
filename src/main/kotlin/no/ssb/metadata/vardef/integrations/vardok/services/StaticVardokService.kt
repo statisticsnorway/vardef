@@ -26,7 +26,10 @@ class StaticVardokService(
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
-    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name)
+    // Normalize the name (lowercase, replace hyphens/spaces with underscores) for comparison
+    // to match how names are stored
+    override fun isDuplicate(name: String): Boolean =
+        variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
 
     override fun createVardokVardefIdMapping(
         vardokId: String,
@@ -82,6 +85,8 @@ class StaticVardokService(
         result.otherLanguages.split(";").filter { it.isNotEmpty() }.forEach { l ->
             getVardokByIdAndLanguage(id, l).let { responseMap[l] = it }
         }
+        // If we are attempting to migrate a variable with a short name which already exists in Vardef,
+        // generate a new short name so that other metadata may be migrated.
         if (result.variable?.dataElementName?.let { isDuplicate(it) } == true) {
             result.variable.dataElementName = VardokService.generateShortName()
         }

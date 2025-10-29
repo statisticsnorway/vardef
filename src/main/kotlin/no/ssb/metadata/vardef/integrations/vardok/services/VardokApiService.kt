@@ -18,7 +18,10 @@ open class VardokApiService(
 ) : VardokService {
     private val logger = LoggerFactory.getLogger(VardokApiService::class.java)
 
-    override fun isDuplicate(name: String): Boolean = variableDefinitionRepository.existsByShortName(name)
+    // Normalize the name (lowercase, replace hyphens/spaces with underscores) for comparison
+    // to match how names are stored
+    override fun isDuplicate(name: String): Boolean =
+        variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
 
     private val xmlMapper = XmlMapper().registerKotlinModule()
 
@@ -76,13 +79,14 @@ open class VardokApiService(
             getVardokByIdAndLanguage(id, l)?.let { responseMap[l] = it }
         }
 
-        // Handle duplicate shortnames
+        // If we are attempting to migrate a variable with a short name which already exists in Vardef,
+        // generate a new short name so that other metadata may be migrated.
         if (result?.variable?.dataElementName?.let { isDuplicate(it) } == true) {
-            result.variable.dataElementName = VardokService.generateShortName()
             logger.info(
                 "Shortname for vardok id ${result.parseId()} exists and new shortname " +
                     "${result.variable.dataElementName} was generated",
             )
+            result.variable.dataElementName = VardokService.generateShortName()
         }
         return responseMap
     }

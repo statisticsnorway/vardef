@@ -83,7 +83,8 @@ class StaticVardokService(
         result.otherLanguages.split(";").filter { it.isNotEmpty() }.forEach { l ->
             getVardokByIdAndLanguage(id, l).let { responseMap[l] = it }
         }
-        // Handle duplicate shortnames
+        // If we are attempting to migrate a variable with a short name which already exists in Vardef,
+        // generate a new short name so that other metadata may be migrated.
         if (result.variable?.dataElementName?.let { isDuplicate(it) } == true) {
             result.variable.dataElementName = VardokService.generateShortName()
         }

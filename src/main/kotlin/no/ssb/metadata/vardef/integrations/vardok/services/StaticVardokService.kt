@@ -26,6 +26,8 @@ class StaticVardokService(
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository
 
+    // Normalize the name (lowercase, replace hyphens/spaces with underscores) for comparison
+    // to match how names are stored
     override fun isDuplicate(name: String): Boolean =
         variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
 

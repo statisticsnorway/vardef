@@ -149,7 +149,7 @@ class VariableDefinitionsController(
         }
 
         val resolvedActiveGroup = activeGroup
-            ?: authentication.attributes["active_group"] as? String
+            ?: authentication.attributes[LABID_ACTIVE_GROUP] as? String
             ?: throw HttpStatusException(
                 HttpStatus.BAD_REQUEST,
                 "No active_group provided"

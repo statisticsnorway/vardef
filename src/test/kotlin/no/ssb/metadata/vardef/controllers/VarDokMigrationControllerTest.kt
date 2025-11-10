@@ -4,7 +4,6 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
@@ -45,7 +44,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -67,7 +65,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/0005")
                 .then()
@@ -86,7 +83,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/0006")
                 .then()
@@ -105,7 +101,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/0007")
                 .then()
@@ -123,7 +118,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/vardok-migration/2")
             .then()
@@ -149,7 +143,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/vardok-migration/0001")
             .then()
@@ -169,7 +162,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/vardok-migration/0002")
             .then()
@@ -192,7 +184,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/0003")
                 .then()
@@ -211,7 +202,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/vardok-migration/0004")
             .then()
@@ -229,7 +219,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -250,7 +239,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/123")
                 .then()
@@ -269,7 +257,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/vardok-migration/130")
             .then()
@@ -287,7 +274,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -308,7 +294,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/1245")
                 .then()
@@ -333,7 +318,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -352,7 +336,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/vardok-migration/948")
             .then()
@@ -367,7 +350,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/vardok-migration/0000")
             .then()
@@ -388,7 +370,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/566")
                 .then()
@@ -411,7 +392,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -436,7 +416,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -456,7 +435,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/590")
                 .then()
@@ -476,7 +454,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/2194")
                 .then()
@@ -497,7 +474,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -517,7 +493,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/2")
                 .then()
@@ -543,7 +518,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -570,7 +544,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body("")
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/vardok-migration/$id")
                 .then()
@@ -594,7 +567,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val body =
             spec
                 .given()
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .get("/vardok-migration/$vardokId")
                 .then()
@@ -613,7 +585,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val vardokId = "555"
         spec
             .given()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .get("/vardok-migration/$vardokId")
             .then()
@@ -627,7 +598,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val body =
             spec
                 .given()
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .get("/vardok-migration/$definitionId")
                 .then()
@@ -645,7 +615,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val definitionId = DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId
         spec
             .given()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .get("/vardok-migration/$definitionId")
             .then()
@@ -657,7 +626,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val vardefId = "vardefid"
         spec
             .given()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .get("/vardok-migration/$vardefId")
             .then()
@@ -670,7 +638,6 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         val body =
             spec
                 .given()
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .get("/vardok-migration")
                 .then()

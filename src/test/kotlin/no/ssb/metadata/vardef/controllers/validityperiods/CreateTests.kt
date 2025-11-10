@@ -46,7 +46,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -77,7 +76,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(newValidityPeriodBeforeAll)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -102,7 +100,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(definitionNotChanged)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -114,9 +111,9 @@ class CreateTests : BaseVardefTest() {
     fun `create new validity period invalid active group`(spec: RequestSpecification) {
         spec
             .given()
+            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString)
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
-            .queryParam(ACTIVE_GROUP, "invalid-developers")
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -127,6 +124,7 @@ class CreateTests : BaseVardefTest() {
     fun `create new validity period no active group`(spec: RequestSpecification) {
         spec
             .given()
+            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
             .`when`()
@@ -147,7 +145,7 @@ class CreateTests : BaseVardefTest() {
                         daplaTeams = listOf("some-other-team"),
                         daplaGroups = listOf("some-other-team-developers"),
                     ).parsedString,
-            ).queryParam(ACTIVE_GROUP, "some-other-team-developers")
+            )//.queryParam(ACTIVE_GROUP, "some-other-team-developers")
             .body(allMandatoryFieldsChanged())
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
@@ -161,7 +159,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(noneMandatoryFieldsChanged())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()

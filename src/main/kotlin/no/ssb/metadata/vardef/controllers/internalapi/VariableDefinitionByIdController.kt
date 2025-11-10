@@ -126,6 +126,7 @@ class VariableDefinitionByIdController(
         @Parameter(
             name = ACTIVE_GROUP,
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            required = false,
             examples = [
                 ExampleObject(
                     name = "Delete",
@@ -134,7 +135,7 @@ class VariableDefinitionByIdController(
             ],
         )
         @QueryValue(ACTIVE_GROUP)
-        activeGroup: String,
+        activeGroup: String?,
     ): MutableHttpResponse<Unit> {
         if (patches.latest(definitionId).variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
@@ -186,6 +187,7 @@ class VariableDefinitionByIdController(
         @Parameter(
             name = ACTIVE_GROUP,
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            required = false,
             examples = [
                 ExampleObject(
                     name = "Update",
@@ -194,7 +196,7 @@ class VariableDefinitionByIdController(
             ],
         )
         @QueryValue(ACTIVE_GROUP)
-        activeGroup: String,
+        activeGroup: String?,
         @RequestBody(
             content = [
                 Content(

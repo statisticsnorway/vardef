@@ -38,8 +38,7 @@ class UpdateTests : BaseVardefTest() {
                         "en": "Update"
                     }}
                     """.trimIndent(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
+                ).`when`()
                 .patch("/variable-definitions/${expected.definitionId}")
                 .then()
                 .statusCode(200)
@@ -73,8 +72,7 @@ class UpdateTests : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
@@ -90,8 +88,7 @@ class UpdateTests : BaseVardefTest() {
                     """
                     {"short_name":"hoppebek"}
                     """.trimIndent(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
+                ).`when`()
                 .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
                 .then()
                 .statusCode(200)
@@ -111,7 +108,6 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("""{"short_name": "${INCOME_TAX_VP1_P1.shortName}"}""")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
@@ -131,7 +127,6 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body("""{"short_name": "${DRAFT_BUS_EXAMPLE.shortName}"}""")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
@@ -171,8 +166,7 @@ class UpdateTests : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(HttpStatus.NOT_FOUND.code)
@@ -191,8 +185,7 @@ class UpdateTests : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
             .statusCode(404)
@@ -219,8 +212,7 @@ class UpdateTests : BaseVardefTest() {
                     "en": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(400)
@@ -262,8 +254,7 @@ class UpdateTests : BaseVardefTest() {
                     "en": null
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(200)
@@ -285,8 +276,7 @@ class UpdateTests : BaseVardefTest() {
                     "en": null
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(200)
@@ -305,8 +295,7 @@ class UpdateTests : BaseVardefTest() {
                     """
                     {"short_name": "nothing"}
                     """.trimIndent(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
+                ).`when`()
                 .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
                 .then()
                 .statusCode(200)
@@ -332,8 +321,7 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 jsonInput,
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.OK.code)
@@ -353,8 +341,7 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 jsonInput,
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
@@ -410,8 +397,7 @@ class UpdateTests : BaseVardefTest() {
                         "nn": "Updated comment"
                     }}
                     """.trimIndent(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
+                ).`when`()
                 .patch("/variable-definitions/${expected.definitionId}")
                 .then()
                 .statusCode(200)
@@ -438,8 +424,7 @@ class UpdateTests : BaseVardefTest() {
                     """
                     {"short_name": "nothing"}
                     """.trimIndent(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
+                ).`when`()
                 .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
                 .then()
                 .statusCode(200)
@@ -462,8 +447,7 @@ class UpdateTests : BaseVardefTest() {
                 """
                 {"variable_status": "PUBLISHED_INTERNAL"}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME.definitionId}")
             .then()
             .log()
@@ -490,8 +474,7 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 input,
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
@@ -516,7 +499,6 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(input)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
@@ -532,8 +514,7 @@ class UpdateTests : BaseVardefTest() {
                 .contentType(ContentType.JSON)
                 .body(
                     """{"variable_status": "PUBLISHED_INTERNAL"}""".trimIndent(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
+                ).`when`()
                 .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
                 .then()
                 .statusCode(200)
@@ -553,8 +534,7 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 jsonMapper.writeValueAsString(UpdateDraft(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
@@ -571,8 +551,7 @@ class UpdateTests : BaseVardefTest() {
                         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                     ),
                 ),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.OK.code)
@@ -590,8 +569,7 @@ class UpdateTests : BaseVardefTest() {
                         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                     ),
                 ),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
@@ -609,8 +587,7 @@ class UpdateTests : BaseVardefTest() {
                         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                     ),
                 ),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
@@ -627,7 +604,6 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(input)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
             .then()
@@ -651,8 +627,7 @@ class UpdateTests : BaseVardefTest() {
                     .apply {
                         put("variable_status", "PUBLISHED_INTERNAL")
                     }.toString(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
@@ -668,8 +643,7 @@ class UpdateTests : BaseVardefTest() {
                     .apply {
                         put("variable_status", "PUBLISHED_INTERNAL")
                     }.toString(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
             .then()
             .statusCode(HttpStatus.OK.code)
@@ -685,8 +659,7 @@ class UpdateTests : BaseVardefTest() {
                     .apply {
                         put("variable_status", "PUBLISHED_INTERNAL")
                     }.toString(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .patch("/variable-definitions/${SAVED_TO_PUBLISH_ILLEGAL_CONTACT.definitionId}")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
@@ -703,8 +676,7 @@ class UpdateTests : BaseVardefTest() {
                         .apply {
                             put("contains_special_categories_of_personal_data", "")
                         }.toString(),
-                ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-                .`when`()
+                ).`when`()
                 .patch("/variable-definitions/${SAVED_TO_PUBLISH.definitionId}")
                 .then()
                 .statusCode(HttpStatus.OK.code)

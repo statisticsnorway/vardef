@@ -23,7 +23,7 @@ open class BaseVardefTest {
         if (RestAssured.filters() == null) {
             RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
         }
-        RestAssured.authentication = oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
+        RestAssured.authentication = oauth2(LabIdTokenHelper.labIdTokenSigned().parsedString)
     }
 
     @Inject

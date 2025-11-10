@@ -86,6 +86,7 @@ class VarDokMigrationController(
         @Parameter(
             name = ACTIVE_GROUP,
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            required = false,
             examples = [
                 ExampleObject(
                     name = "Migrate Vardok",
@@ -94,7 +95,7 @@ class VarDokMigrationController(
             ],
         )
         @QueryValue(ACTIVE_GROUP)
-        activeGroup: String,
+        activeGroup: String?,
         httpRequest: HttpRequest<*>,
     ): MutableHttpResponse<*> {
         if (vardokService.isAlreadyMigrated(id)) {

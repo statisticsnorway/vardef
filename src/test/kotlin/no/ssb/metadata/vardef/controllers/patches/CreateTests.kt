@@ -73,6 +73,7 @@ class CreateTests : BaseVardefTest() {
     fun `create new patch invalid active group`(spec: RequestSpecification) {
         spec
             .given()
+            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString)
             .contentType(ContentType.JSON)
             .body(
                 patchBody()
@@ -81,7 +82,7 @@ class CreateTests : BaseVardefTest() {
                             put("nb", "Bybakgrunn")
                         }
                     }.toString(),
-            ).queryParam(ACTIVE_GROUP, "invalid-group")
+            )
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -92,6 +93,7 @@ class CreateTests : BaseVardefTest() {
     fun `create new patch no active group `(spec: RequestSpecification) {
         spec
             .given()
+            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .contentType(ContentType.JSON)
             .body(
                 patchBody()

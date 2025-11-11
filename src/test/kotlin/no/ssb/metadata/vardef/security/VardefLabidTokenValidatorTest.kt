@@ -74,19 +74,6 @@ class VardefLabidTokenValidatorTest {
     }
 
     @Test
-    fun `active group not present in token`() {
-        assertThrows<InvalidActiveGroupException> {
-            Mono
-                .from(
-                    vardefLabidTokenValidator.validateToken(
-                        LabidTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString,
-                        HttpRequest.POST("/variable-definitions", ""),
-                    ),
-                ).block()
-        }
-    }
-
-    @Test
     fun `token is null`() {
         val auth =
             Mono

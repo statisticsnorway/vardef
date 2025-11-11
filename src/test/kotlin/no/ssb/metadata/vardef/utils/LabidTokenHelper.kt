@@ -12,9 +12,7 @@ class LabidTokenHelper {
         fun labIdTokenSigned(
             audienceClaim: List<String> =
                 listOf(
-                    "onyxia-api",
-                    "broker",
-                    "account",
+                    "vardef",
                 ),
             activeGroup: String = TEST_DEVELOPERS_GROUP,
             daplaGroups: List<String>? =

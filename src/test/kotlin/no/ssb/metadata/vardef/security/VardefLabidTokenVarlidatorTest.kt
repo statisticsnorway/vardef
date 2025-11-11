@@ -5,7 +5,7 @@ import io.micronaut.http.MutableHttpRequest
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
-import no.ssb.metadata.vardef.utils.LabIdTokenHelper
+import no.ssb.metadata.vardef.utils.LabidTokenHelper
 import no.ssb.metadata.vardef.utils.TEST_USER
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -38,7 +38,7 @@ class VardefLabidTokenValidatorTest {
             Mono
                 .from(
                     vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned().parsedString,
+                        LabidTokenHelper.labIdTokenSigned().parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -51,7 +51,7 @@ class VardefLabidTokenValidatorTest {
             Mono
                 .from(
                     vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("blah")).parsedString,
+                        LabidTokenHelper.labIdTokenSigned(audienceClaim = listOf("blah")).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -66,7 +66,7 @@ class VardefLabidTokenValidatorTest {
             Mono
                 .from(
                     vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("blah", allowedAudience)).parsedString,
+                        LabidTokenHelper.labIdTokenSigned(audienceClaim = listOf("blah", allowedAudience)).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -79,7 +79,7 @@ class VardefLabidTokenValidatorTest {
             Mono
                 .from(
                     vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString,
+                        LabidTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -106,7 +106,7 @@ class VardefLabidTokenValidatorTest {
             Mono
                 .from(
                     vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(daplaGroups = null).parsedString,
+                        LabidTokenHelper.labIdTokenSigned(daplaGroups = null).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -120,7 +120,7 @@ class VardefLabidTokenValidatorTest {
             Mono
                 .from(
                     vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned().parsedString,
+                        LabidTokenHelper.labIdTokenSigned().parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -133,7 +133,7 @@ class VardefLabidTokenValidatorTest {
             Mono
                 .from(
                     vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(includeUsername = false).parsedString,
+                        LabidTokenHelper.labIdTokenSigned(includeUsername = false).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()

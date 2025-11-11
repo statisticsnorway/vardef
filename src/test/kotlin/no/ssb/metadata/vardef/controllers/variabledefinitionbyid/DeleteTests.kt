@@ -63,7 +63,7 @@ class DeleteTests : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .oauth2(LabidTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .`when`()
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
@@ -75,7 +75,7 @@ class DeleteTests : BaseVardefTest() {
         spec
             .`when`()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "invalid group").parsedString)
+            .oauth2(LabidTokenHelper.labIdTokenSigned(activeGroup = "invalid group").parsedString)
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(401)

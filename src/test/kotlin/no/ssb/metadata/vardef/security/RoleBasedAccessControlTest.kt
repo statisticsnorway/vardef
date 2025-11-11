@@ -85,7 +85,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .oauth2(LabidTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .`when`()
             .request(method, path)
             .then()
@@ -110,7 +110,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "invalid-group").parsedString)
+            .oauth2(LabidTokenHelper.labIdTokenSigned(activeGroup = "invalid-group").parsedString)
             .`when`()
             .request(method, path)
             .then()
@@ -136,7 +136,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                LabIdTokenHelper.labIdTokenSigned(daplaGroups = listOf(group), activeGroup = group).parsedString,
+                LabidTokenHelper.labIdTokenSigned(daplaGroups = listOf(group), activeGroup = group).parsedString,
             ).`when`()
             .request(method, path)
             .then()
@@ -161,7 +161,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                LabIdTokenHelper.labIdTokenSigned(activeGroup = "play-foeniks-a-developers").parsedString,
+                LabidTokenHelper.labIdTokenSigned(activeGroup = "play-foeniks-a-developers").parsedString,
             ).`when`()
             .request(method, path)
             .then()
@@ -185,7 +185,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
+            .oauth2(LabidTokenHelper.labIdTokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
             .`when`()
             .request(method, path)
             .then()

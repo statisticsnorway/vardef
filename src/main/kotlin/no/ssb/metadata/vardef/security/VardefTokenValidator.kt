@@ -132,20 +132,16 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         if (token == null) {
             return Mono.empty()
         }
-
         return Mono
             .from(validate(token, request))
-            .flatMap { jwt ->
-                jwt.jwtClaimsSet
-                    .getStringClaim(issuerClaim)
-                    .takeIf { it in allowedIssuers } ?: return@flatMap Mono.empty<Authentication>()
-
-                Mono.just(
-                    Authentication.build(
-                        jwt.jwtClaimsSet.getStringClaim(usernameClaim),
-                        assignRoles(jwt, request),
-                        jwt.jwtClaimsSet.claims,
-                    ),
+            .filter {
+                it.jwtClaimsSet.getStringClaim(issuerClaim) in allowedIssuers
+            }
+            .map {
+                Authentication.build(
+                    it.jwtClaimsSet.getStringClaim(usernameClaim),
+                    assignRoles(it, request),
+                    it.jwtClaimsSet.claims,
                 )
             }
     }

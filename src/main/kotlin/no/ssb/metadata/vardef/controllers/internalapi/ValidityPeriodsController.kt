@@ -86,6 +86,7 @@ class ValidityPeriodsController(
         @Parameter(
             name = ACTIVE_GROUP,
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            required = false,
             examples = [
                 ExampleObject(
                     name = "Create validity period",
@@ -94,7 +95,7 @@ class ValidityPeriodsController(
             ],
         )
         @QueryValue(ACTIVE_GROUP)
-        activeGroup: String,
+        activeGroup: String?,
         authentication: Authentication,
     ): CompleteResponse {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)

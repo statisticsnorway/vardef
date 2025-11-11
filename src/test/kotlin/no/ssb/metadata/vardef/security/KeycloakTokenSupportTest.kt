@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.security
 
 import io.micronaut.http.HttpStatus
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.http.ContentType
 import io.restassured.http.Method
 import io.restassured.specification.RequestSpecification
@@ -14,34 +15,8 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
-class RoleBasedAccessControlTest : BaseVardefTest() {
-    @ParameterizedTest
-    @MethodSource("variableCreatorOperations")
-    @MethodSource("variableOwnerOperations")
-    @MethodSource("variableConsumerOperations")
-    fun `request unauthenticated`(
-        method: Method,
-        path: String,
-        body: String?,
-        spec: RequestSpecification,
-    ) {
-        if (body != null) {
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(body)
-        }
-        spec
-            .given()
-            .auth()
-            .none()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
-            .request(method, path)
-            .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
-    }
-
+@MicronautTest
+class KeycloakTokenSupportTest {
     @ParameterizedTest
     @MethodSource("variableCreatorOperations")
     @MethodSource("variableOwnerOperations")
@@ -60,6 +35,8 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         }
         spec
             .given()
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .request(method, path)
@@ -85,11 +62,37 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
             .`when`()
             .request(method, path)
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
+    }
+
+    @ParameterizedTest
+    @MethodSource("variableCreatorOperations")
+    @MethodSource("variableOwnerOperations")
+    fun `request with invalid active group`(
+        method: Method,
+        path: String,
+        body: String?,
+        spec: RequestSpecification,
+    ) {
+        if (body != null) {
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(body)
+        }
+        spec
+            .given()
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
+            .queryParam(ACTIVE_GROUP, "invalid-group")
+            .`when`()
+            .request(method, path)
+            .then()
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     @ParameterizedTest
@@ -111,8 +114,9 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                LabidTokenHelper.labIdTokenSigned(daplaGroups = listOf(group), activeGroup = group).parsedString,
-            ).`when`()
+                JwtTokenHelper.jwtTokenSigned(daplaGroups = listOf(group)).parsedString,
+            ).queryParam(ACTIVE_GROUP, group)
+            .`when`()
             .request(method, path)
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
@@ -134,10 +138,8 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         }
         spec
             .given()
-            .auth()
-            .oauth2(
-                LabidTokenHelper.labIdTokenSigned(activeGroup = "play-foeniks-a-developers").parsedString,
-            ).`when`()
+            .queryParam(ACTIVE_GROUP, "play-foeniks-a-developers")
+            .`when`()
             .request(method, path)
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
@@ -160,7 +162,8 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
+            .oauth2(JwtTokenHelper.jwtTokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
+            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .request(method, path)
             .then()

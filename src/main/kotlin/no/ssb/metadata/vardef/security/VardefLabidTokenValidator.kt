@@ -9,29 +9,29 @@ import io.micronaut.security.token.Claims
 import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
+import no.ssb.metadata.vardef.constants.SSB_EMAIL
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 
-class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JWT, R> {
-    private val logger = LoggerFactory.getLogger(VardefTokenValidator::class.java)
+class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JWT, R> {
+    private val logger = LoggerFactory.getLogger(VardefLabidTokenValidator::class.java)
 
-    @Property(name = "micronaut.auth.issuers.keycloak")
+    @Property(name = "micronaut.auth.issuers.labid")
     lateinit var allowedIssuers: List<String>
 
     @Property(name = "micronaut.security.token.jwt.claims.values.allowed-audiences")
     private lateinit var allowedAudiences: Set<String>
 
-    @Property(name = "micronaut.security.token.jwt.claims.keys.dapla")
-    private lateinit var daplaClaim: String
+    @Property(name = "micronaut.security.token.jwt.claims.keys.labid-dapla-group")
+    private lateinit var activeGroupClaim: String
 
-    @Property(name = "micronaut.security.token.jwt.claims.keys.dapla-groups")
+    @Property(name = "micronaut.security.token.jwt.claims.keys.labid-dapla-groups")
     private lateinit var daplaGroupsClaim: String
 
-    @Property(name = "micronaut.security.token.jwt.claims.keys.username")
+    @Property(name = "micronaut.security.token.jwt.claims.keys.labid-username")
     private lateinit var usernameClaim: String
 
     @Property(name = "micronaut.security.token.jwt.claims.keys.issuer")
@@ -41,19 +41,15 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     private lateinit var jsonWebTokenParser: JsonWebTokenParser<JWT>
 
     @Suppress("UNCHECKED_CAST")
-    private fun getDaplaGroups(token: JWT) =
+    private fun getDaplaGroups(token: JWT): List<String> =
         token
             .jwtClaimsSet
-            .getJSONObjectClaim(daplaClaim)[daplaGroupsClaim]
+            .getClaim(daplaGroupsClaim)
             as? List<String> ?: emptyList()
 
-    /**
-     * @return `true` if the principal has specified a group which is not present in their token.
-     */
-    private fun activeGroupSpoofed(
-        activeGroup: String,
-        token: JWT,
-    ): Boolean = activeGroup !in getDaplaGroups(token)
+    private fun getActiveGroup(token: JWT): String? = token.jwtClaimsSet.getClaim(activeGroupClaim) as? String
+
+    private fun usernameFromToken(token: JWT): String? = (token.jwtClaimsSet.getClaim(usernameClaim) as? String)?.plus(SSB_EMAIL)
 
     /**
      * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.
@@ -78,8 +74,8 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         token: JWT,
         request: R,
     ): Boolean =
-        ACTIVE_GROUP in request.parameters &&
-            daplaClaim in token.jwtClaimsSet.claims &&
+        activeGroupClaim in token.jwtClaimsSet.claims &&
+            daplaGroupsClaim in token.jwtClaimsSet.claims &&
             getDaplaGroups(token).isNotEmpty()
 
     /**
@@ -106,11 +102,8 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
 
         val roles = mutableSetOf(VARIABLE_CONSUMER)
         val claimsSet = token.jwtClaimsSet
+        val activeGroup = getActiveGroup(token) ?: return roles.toSet()
         if (tokenAndRequestContainExpectedFields(token, request)) {
-            val activeGroup = request.parameters.get(ACTIVE_GROUP)
-            if (activeGroupSpoofed(activeGroup, token)) {
-                throw InvalidActiveGroupException("The specified active_group is not present in the token")
-            }
             if (isVariableOwner(claimsSet)) roles.add(VARIABLE_OWNER)
             if (isVariableCreator(activeGroup, claimsSet)) roles.add(VARIABLE_CREATOR)
         }
@@ -138,7 +131,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                 it.jwtClaimsSet.getStringClaim(issuerClaim) in allowedIssuers
             }.map {
                 Authentication.build(
-                    it.jwtClaimsSet.getStringClaim(usernameClaim),
+                    usernameFromToken(it),
                     assignRoles(it, request),
                     it.jwtClaimsSet.claims,
                 )

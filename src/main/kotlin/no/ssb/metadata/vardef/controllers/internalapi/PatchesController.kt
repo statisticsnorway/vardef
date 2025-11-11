@@ -187,6 +187,7 @@ class PatchesController(
         @Parameter(
             name = ACTIVE_GROUP,
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            required = false,
             examples = [
                 ExampleObject(
                     name = "Create patch",
@@ -195,7 +196,7 @@ class PatchesController(
             ],
         )
         @QueryValue(ACTIVE_GROUP)
-        activeGroup: String,
+        activeGroup: String?,
         authentication: Authentication,
     ): CompleteResponse {
         logger.debug("Received patch {}", patch)

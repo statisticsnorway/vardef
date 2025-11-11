@@ -28,13 +28,12 @@ class CreateTests : BaseVardefTest() {
             .body(allMandatoryFieldsChanged())
             .auth()
             .oauth2(
-                JwtTokenHelper
-                    .jwtTokenSigned(
-                        daplaTeams = listOf("play-enhjoern-b"),
+                LabidTokenHelper
+                    .labIdTokenSigned(
+                        activeGroup = "play-enhjoern-b-developers",
                         daplaGroups = listOf("play-enhjoern-b-developers"),
                     ).parsedString,
-            ).queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
@@ -46,7 +45,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -77,7 +75,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(newValidityPeriodBeforeAll)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -102,7 +99,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(definitionNotChanged)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -111,22 +107,11 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new validity period invalid active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(allMandatoryFieldsChanged())
-            .queryParam(ACTIVE_GROUP, "invalid-developers")
-            .`when`()
-            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
-            .then()
-            .statusCode(401)
-    }
-
-    @Test
     fun `create new validity period no active group`(spec: RequestSpecification) {
         spec
             .given()
+            .auth()
+            .oauth2(LabidTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
             .`when`()
@@ -142,13 +127,12 @@ class CreateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .auth()
             .oauth2(
-                JwtTokenHelper
-                    .jwtTokenSigned(
-                        daplaTeams = listOf("some-other-team"),
+                LabidTokenHelper
+                    .labIdTokenSigned(
+                        activeGroup = "some-other-team-developers",
                         daplaGroups = listOf("some-other-team-developers"),
                     ).parsedString,
-            ).queryParam(ACTIVE_GROUP, "some-other-team-developers")
-            .body(allMandatoryFieldsChanged())
+            ).body(allMandatoryFieldsChanged())
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
@@ -161,7 +145,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(noneMandatoryFieldsChanged())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()

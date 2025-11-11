@@ -3,7 +3,6 @@ package no.ssb.metadata.vardef.controllers.patches
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.controllers.patches.CompanionObject.Companion.patchBody
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -29,8 +28,7 @@ class CreateTests : BaseVardefTest() {
                             put("nb", "Bybakgrunn")
                         }
                     }.toString(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -57,41 +55,23 @@ class CreateTests : BaseVardefTest() {
                     }.toString(),
             ).auth()
             .oauth2(
-                JwtTokenHelper
-                    .jwtTokenSigned(
-                        daplaTeams = listOf("play-enhjoern-b"),
+                LabidTokenHelper
+                    .labIdTokenSigned(
+                        activeGroup = "play-enhjoern-b-developers",
                         daplaGroups = listOf("play-enhjoern-b-developers"),
                     ).parsedString,
-            ).queryParam(ACTIVE_GROUP, "play-enhjoern-b-developers")
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
     }
 
     @Test
-    fun `create new patch invalid active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .contentType(ContentType.JSON)
-            .body(
-                patchBody()
-                    .apply {
-                        getJSONObject("name").apply {
-                            put("nb", "Bybakgrunn")
-                        }
-                    }.toString(),
-            ).queryParam(ACTIVE_GROUP, "invalid-group")
-            .`when`()
-            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
-            .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
-    }
-
-    @Test
     fun `create new patch no active group `(spec: RequestSpecification) {
         spec
             .given()
+            .auth()
+            .oauth2(LabidTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .contentType(ContentType.JSON)
             .body(
                 patchBody()
@@ -119,7 +99,6 @@ class CreateTests : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(testCase)
-                .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
                 .then()
@@ -143,7 +122,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(testCase)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -159,7 +137,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("short_name", "vry-shrt-nm") }.toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -179,7 +156,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().apply { put("valid_from", "2030-06-30") }.toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -208,8 +184,7 @@ class CreateTests : BaseVardefTest() {
                             },
                         )
                     }.toString(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -222,7 +197,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(patchBody().toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}/patches")
             .then()
@@ -235,7 +209,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(JSONObject("""{"variable_status": "PUBLISHED_EXTERNAL"}""").toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
@@ -277,8 +250,7 @@ class CreateTests : BaseVardefTest() {
                     "nn": "Update"
                 }}
                 """.trimIndent(),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -304,7 +276,7 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(input)
-            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP, "valid_from", validityPeriod)
+            .apply { validityPeriod?.let { queryParam("valid_from", it) } }
             .`when`()
             .post("/variable-definitions/$vardefId/patches")
             .then()
@@ -322,7 +294,6 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(input)
-            .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
             .then()
@@ -347,7 +318,6 @@ class CreateTests : BaseVardefTest() {
                 .given()
                 .contentType(ContentType.JSON)
                 .body(input)
-                .queryParams(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
                 .`when`()
                 .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
                 .then()
@@ -371,8 +341,7 @@ class CreateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 jsonMapper.writeValueAsString(Patch(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/$definitionId/patches")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)

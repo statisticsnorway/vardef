@@ -10,6 +10,7 @@ micronaut:
             allowed-audiences:
               - dapla-cli
               - onyxia-api
+              - vardef
   http:
     services:
       keycloak:

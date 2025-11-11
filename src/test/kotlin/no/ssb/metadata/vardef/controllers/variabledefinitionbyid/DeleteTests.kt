@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
 import io.micronaut.http.HttpStatus
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +13,6 @@ class DeleteTests : BaseVardefTest() {
     fun `delete request draft variable`(spec: RequestSpecification) {
         spec
             .`when`()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(204)
@@ -27,7 +25,6 @@ class DeleteTests : BaseVardefTest() {
     fun `delete request published variable`(spec: RequestSpecification) {
         spec
             .`when`()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
             .then()
             .statusCode(405)
@@ -39,7 +36,6 @@ class DeleteTests : BaseVardefTest() {
     fun `delete request malformed id`(spec: RequestSpecification) {
         spec
             .`when`()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/MALFORMED_ID")
             .then()
             .statusCode(HttpStatus.NOT_FOUND.code)
@@ -49,7 +45,6 @@ class DeleteTests : BaseVardefTest() {
     fun `delete request unknown id`(spec: RequestSpecification) {
         spec
             .given()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .delete("/variable-definitions/${VariableDefinitionService.generateId()}")
             .then()
@@ -66,6 +61,9 @@ class DeleteTests : BaseVardefTest() {
     @Test
     fun `delete request draft variable without active group`(spec: RequestSpecification) {
         spec
+            .given()
+            .auth()
+            .oauth2(LabidTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .`when`()
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
@@ -73,20 +71,9 @@ class DeleteTests : BaseVardefTest() {
     }
 
     @Test
-    fun `delete request draft variable invalid active group`(spec: RequestSpecification) {
-        spec
-            .`when`()
-            .queryParam(ACTIVE_GROUP, "invalid group")
-            .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(401)
-    }
-
-    @Test
     fun `delete draft variable migrated from vardok`(spec: RequestSpecification) {
         spec
             .`when`()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .delete("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()
             .statusCode(204)

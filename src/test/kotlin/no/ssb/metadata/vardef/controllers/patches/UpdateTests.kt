@@ -3,7 +3,6 @@ package no.ssb.metadata.vardef.controllers.patches
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -22,7 +21,6 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(JSONObject().apply { put("classification_reference", MEASUREMENT_TYPE_KLASS_CODE) }.toString())
             .queryParams("valid_from", "3030-12-31")
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -61,7 +59,6 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(JSONObject().apply { put("classification_reference", MEASUREMENT_TYPE_KLASS_CODE) }.toString())
             .queryParams("valid_from", validFrom)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
@@ -85,8 +82,7 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 jsonInput,
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -107,8 +103,7 @@ class UpdateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 jsonInput,
-            ).queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
@@ -129,7 +124,6 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(JSONObject().apply { put("variable_status", "DRAFT") }.toString())
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
             .then()

@@ -129,6 +129,7 @@ class VariableDefinitionsController(
         @Parameter(
             name = ACTIVE_GROUP,
             description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
+            required = false,
             examples = [
                 ExampleObject(
                     name = "Create draft",
@@ -137,7 +138,7 @@ class VariableDefinitionsController(
             ],
         )
         @QueryValue(ACTIVE_GROUP)
-        activeGroup: String,
+        activeGroup: String?,
         authentication: Authentication,
     ): CompleteResponse {
         if (vardef.doesShortNameExist(draft.shortName)) {
@@ -146,6 +147,17 @@ class VariableDefinitionsController(
                 "Short name ${draft.shortName} already exists.",
             )
         }
-        return vardef.create(draft.toSavedVariableDefinition(activeGroup, authentication.name)).toCompleteResponse()
+
+        val resolvedActiveGroup =
+            activeGroup?.takeUnless { it == "null" }
+                ?: authentication.attributes[LABID_ACTIVE_GROUP] as? String
+                ?: throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "No active_group provided",
+                )
+
+        return vardef
+            .create(draft.toSavedVariableDefinition(resolvedActiveGroup, authentication.name))
+            .toCompleteResponse()
     }
 }

@@ -11,12 +11,17 @@ micronaut:
           keys:
             dapla: dapla
             dapla-groups: groups
+            labid-dapla-groups: dapla.groups
+            labid-dapla-group: dapla.group
+            issuer: iss
+            labid-username: sub
             dapla-teams: teams
             username: preferred_username
           values:
             allowed-audiences:
               - onyxia-api
               - dapla-cli
+              - vardef
     intercept-url-map:
       - pattern: /health/**
         http-method: GET
@@ -95,7 +100,15 @@ micronaut:
     codes:
       maximumSize: 3600
       expire-after-write: 24h
-
+  auth:
+    issuers:
+      labid:
+        - https://labid.lab.dapla-external.ssb.no
+        - https://labid.lab.dapla-test-external.ssb.no/
+      keycloak:
+        - https://auth.ssb.no/realms/ssb
+        - https://auth-play.test.ssb.no/realms/ssb
+        - https://auth.test.ssb.no/realms/ssb
   http:
     services:
       klass:

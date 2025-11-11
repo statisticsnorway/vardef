@@ -21,6 +21,7 @@ micronaut:
             allowed-audiences:
               - onyxia-api
               - dapla-cli
+              - vardef
     intercept-url-map:
       - pattern: /health/**
         http-method: GET

@@ -52,13 +52,6 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
         (token.jwtClaimsSet.getClaim(usernameClaim) as? String)
             ?.let { "$it@ssb.no" } // TODO: make constant or something so its not hardoceded here
 
-    /**
-     * @return `true` if the principal has specified a group which is not present in their token.
-     */
-    private fun activeGroupSpoofed(
-        activeGroup: String,
-        token: JWT,
-    ): Boolean = activeGroup !in getDaplaGroups(token)
 
     /**
      * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.

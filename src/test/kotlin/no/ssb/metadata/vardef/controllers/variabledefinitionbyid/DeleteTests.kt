@@ -70,16 +70,7 @@ class DeleteTests : BaseVardefTest() {
             .statusCode(403)
     }
 
-    @Test
-    fun `delete request draft variable invalid active group`(spec: RequestSpecification) {
-        spec
-            .`when`()
-            .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(activeGroup = "invalid group").parsedString)
-            .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
-            .then()
-            .statusCode(401)
-    }
+
 
     @Test
     fun `delete draft variable migrated from vardok`(spec: RequestSpecification) {

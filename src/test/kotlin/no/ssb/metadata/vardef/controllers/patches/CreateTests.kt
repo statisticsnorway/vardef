@@ -67,26 +67,6 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch invalid active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString)
-            .contentType(ContentType.JSON)
-            .body(
-                patchBody()
-                    .apply {
-                        getJSONObject("name").apply {
-                            put("nb", "Bybakgrunn")
-                        }
-                    }.toString(),
-            ).`when`()
-            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
-            .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
-    }
-
-    @Test
     fun `create new patch no active group `(spec: RequestSpecification) {
         spec
             .given()

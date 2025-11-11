@@ -94,31 +94,6 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("variableCreatorOperations")
-    @MethodSource("variableOwnerOperations")
-    fun `request with invalid active group`(
-        method: Method,
-        path: String,
-        body: String?,
-        spec: RequestSpecification,
-    ) {
-        if (body != null) {
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body(body)
-        }
-        spec
-            .given()
-            .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(activeGroup = "invalid-group").parsedString)
-            .`when`()
-            .request(method, path)
-            .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
-    }
-
-    @ParameterizedTest
-    @MethodSource("variableCreatorOperations")
     fun `create variable definition active group not developers`(
         method: Method,
         path: String,

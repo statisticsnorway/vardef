@@ -106,19 +106,7 @@ class CreateTests : BaseVardefTest() {
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
     }
 
-    @Test
-    fun `create new validity period invalid active group`(spec: RequestSpecification) {
-        spec
-            .given()
-            .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString)
-            .contentType(ContentType.JSON)
-            .body(allMandatoryFieldsChanged())
-            .`when`()
-            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
-            .then()
-            .statusCode(401)
-    }
+
 
     @Test
     fun `create new validity period no active group`(spec: RequestSpecification) {

@@ -5,3 +5,4 @@ const val VARDEF_SHORT_NAME_PATTERN = "^[a-z0-9_]{2,}$"
 const val VARDEF_ID_PATTERN = "^[a-zA-Z0-9-_]{8}$"
 
 const val DATE_FORMAT = "yyyy-MM-dd"
+const val SSB_EMAIL = "@ssb.no"

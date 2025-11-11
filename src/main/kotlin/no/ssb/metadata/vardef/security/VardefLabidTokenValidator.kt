@@ -9,6 +9,7 @@ import io.micronaut.security.token.Claims
 import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.constants.SSB_EMAIL
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import org.reactivestreams.Publisher
@@ -49,8 +50,7 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
     private fun getActiveGroup(token: JWT): String? = token.jwtClaimsSet.getClaim(activeGroupClaim) as? String
 
     private fun usernameFromToken(token: JWT): String? =
-        (token.jwtClaimsSet.getClaim(usernameClaim) as? String)
-            ?.let { "$it@ssb.no" } // TODO: make constant or something so its not hardoceded here
+        (token.jwtClaimsSet.getClaim(usernameClaim) as? String)?.plus(SSB_EMAIL)
 
 
     /**

@@ -106,9 +106,6 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
         val claimsSet = token.jwtClaimsSet
         val activeGroup = getActiveGroup(token) ?: return roles.toSet()
         if (tokenAndRequestContainExpectedFields(token, request)) {
-            if (activeGroupSpoofed(activeGroup, token)) {
-                throw InvalidActiveGroupException("The specified active_group is not present in the token")
-            }
             if (isVariableOwner(claimsSet)) roles.add(VARIABLE_OWNER)
             if (isVariableCreator(activeGroup, claimsSet)) roles.add(VARIABLE_CREATOR)
         }

@@ -119,15 +119,16 @@ class VariableOwnerSecurityRule(
             .publishOn(Schedulers.boundedElastic())
             .map { definitionId ->
                 // Get active group from either query params or authentication claims
-                val activeGroup = request.parameters.getFirst(ACTIVE_GROUP)
-                    .orElseGet { authentication.attributes[LABID_ACTIVE_GROUP] as? String }
+                val activeGroup =
+                    request.parameters
+                        .getFirst(ACTIVE_GROUP)
+                        .orElseGet { authentication.attributes[LABID_ACTIVE_GROUP] as? String }
                 if (activeGroup == null) {
                     logger.info("No active group found in request or authentication claims. Request: $request")
                     return@map false
                 }
                 variableDefinitionService.groupIsOwner(activeGroup, definitionId)
-            }
-            .handle { isOwner, sink ->
+            }.handle { isOwner, sink ->
                 if (VARIABLE_OWNER !in authentication.roles) {
                     logger.info("Rejected access. Principal does not have $VARIABLE_OWNER role. Request: $request")
                     sink.next(SecurityRuleResult.REJECTED)

@@ -84,7 +84,8 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         }
         spec
             .given()
-            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .auth()
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .`when`()
             .request(method, path)
             .then()
@@ -108,7 +109,8 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         }
         spec
             .given()
-            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "invalid-group").parsedString)
+            .auth()
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "invalid-group").parsedString)
             .`when`()
             .request(method, path)
             .then()
@@ -135,8 +137,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .auth()
             .oauth2(
                 LabIdTokenHelper.labIdTokenSigned(daplaGroups = listOf(group), activeGroup = group).parsedString,
-            )
-            .`when`()
+            ).`when`()
             .request(method, path)
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
@@ -160,9 +161,8 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                LabIdTokenHelper.labIdTokenSigned(activeGroup = "play-foeniks-a-developers").parsedString
-            )
-            .`when`()
+                LabIdTokenHelper.labIdTokenSigned(activeGroup = "play-foeniks-a-developers").parsedString,
+            ).`when`()
             .request(method, path)
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)

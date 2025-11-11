@@ -33,8 +33,7 @@ class CreateTests : BaseVardefTest() {
                         activeGroup = "play-enhjoern-b-developers",
                         daplaGroups = listOf("play-enhjoern-b-developers"),
                     ).parsedString,
-            )
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
@@ -111,7 +110,8 @@ class CreateTests : BaseVardefTest() {
     fun `create new validity period invalid active group`(spec: RequestSpecification) {
         spec
             .given()
-            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString)
+            .auth()
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString)
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
             .`when`()
@@ -124,7 +124,8 @@ class CreateTests : BaseVardefTest() {
     fun `create new validity period no active group`(spec: RequestSpecification) {
         spec
             .given()
-            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .auth()
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
             .`when`()
@@ -145,8 +146,7 @@ class CreateTests : BaseVardefTest() {
                         activeGroup = "some-other-team-developers",
                         daplaGroups = listOf("some-other-team-developers"),
                     ).parsedString,
-            )
-            .body(allMandatoryFieldsChanged())
+            ).body(allMandatoryFieldsChanged())
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()

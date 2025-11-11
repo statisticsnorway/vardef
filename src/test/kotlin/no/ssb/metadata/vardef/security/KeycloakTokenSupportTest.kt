@@ -17,7 +17,6 @@ import java.util.stream.Stream
 
 @MicronautTest
 class KeycloakTokenSupportTest {
-
     @ParameterizedTest
     @MethodSource("variableCreatorOperations")
     @MethodSource("variableOwnerOperations")
@@ -36,7 +35,8 @@ class KeycloakTokenSupportTest {
         }
         spec
             .given()
-            .auth().oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
             .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .request(method, path)
@@ -61,7 +61,8 @@ class KeycloakTokenSupportTest {
         }
         spec
             .given()
-            .auth().oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
             .`when`()
             .request(method, path)
             .then()
@@ -85,7 +86,8 @@ class KeycloakTokenSupportTest {
         }
         spec
             .given()
-            .auth().oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
             .queryParam(ACTIVE_GROUP, "invalid-group")
             .`when`()
             .request(method, path)

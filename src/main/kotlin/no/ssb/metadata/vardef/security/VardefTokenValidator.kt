@@ -104,8 +104,6 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
     ): Set<String> {
         // If we arrive here the principal is authenticated. Give all principals a default role.
 
-
-
         val roles = mutableSetOf(VARIABLE_CONSUMER)
         val claimsSet = token.jwtClaimsSet
         if (tokenAndRequestContainExpectedFields(token, request)) {
@@ -135,9 +133,11 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             return Mono.empty()
         }
 
-        return Mono.from(validate(token, request))
+        return Mono
+            .from(validate(token, request))
             .flatMap { jwt ->
-                jwt.jwtClaimsSet.getStringClaim(issuerClaim)
+                jwt.jwtClaimsSet
+                    .getStringClaim(issuerClaim)
                     .takeIf { it in allowedIssuers } ?: return@flatMap Mono.empty<Authentication>()
 
                 Mono.just(
@@ -145,11 +145,10 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
                         jwt.jwtClaimsSet.getStringClaim(usernameClaim),
                         assignRoles(jwt, request),
                         jwt.jwtClaimsSet.claims,
-                    )
+                    ),
                 )
             }
     }
-
 
     /**
      *  Parse the JWT token

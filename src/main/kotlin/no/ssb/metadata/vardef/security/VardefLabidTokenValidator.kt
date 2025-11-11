@@ -40,20 +40,17 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
     private lateinit var jsonWebTokenParser: JsonWebTokenParser<JWT>
 
     @Suppress("UNCHECKED_CAST")
-    private fun getDaplaGroups(token: JWT): List<String> = token
+    private fun getDaplaGroups(token: JWT): List<String> =
+        token
             .jwtClaimsSet
             .getClaim(daplaGroupsClaim)
-                as? List<String> ?: emptyList()
+            as? List<String> ?: emptyList()
 
-
-    private fun getActiveGroup(token: JWT): String? =
-        token.jwtClaimsSet.getClaim(activeGroupClaim) as? String
-
+    private fun getActiveGroup(token: JWT): String? = token.jwtClaimsSet.getClaim(activeGroupClaim) as? String
 
     private fun usernameFromToken(token: JWT): String? =
         (token.jwtClaimsSet.getClaim(usernameClaim) as? String)
-            ?.let { "$it@ssb.no" } //TODO: make constant or something so its not hardoceded here
-
+            ?.let { "$it@ssb.no" } // TODO: make constant or something so its not hardoceded here
 
     /**
      * @return `true` if the principal has specified a group which is not present in their token.
@@ -61,9 +58,7 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
     private fun activeGroupSpoofed(
         activeGroup: String,
         token: JWT,
-    ): Boolean =
-        activeGroup !in getDaplaGroups(token)
-
+    ): Boolean = activeGroup !in getDaplaGroups(token)
 
     /**
      * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.
@@ -88,9 +83,9 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
         token: JWT,
         request: R,
     ): Boolean =
-        activeGroupClaim in token.jwtClaimsSet.claims  &&
-                daplaGroupsClaim in token.jwtClaimsSet.claims &&
-                getDaplaGroups(token).isNotEmpty()
+        activeGroupClaim in token.jwtClaimsSet.claims &&
+            daplaGroupsClaim in token.jwtClaimsSet.claims &&
+            getDaplaGroups(token).isNotEmpty()
 
     /**
      * Assign roles
@@ -113,8 +108,6 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
         request: R,
     ): Set<String> {
         // If we arrive here the principal is authenticated. Give all principals a default role.
-
-
 
         val roles = mutableSetOf(VARIABLE_CONSUMER)
         val claimsSet = token.jwtClaimsSet
@@ -144,16 +137,18 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
         if (token == null) {
             return Mono.empty()
         }
-        return Mono.from(validate(token, request))
+        return Mono
+            .from(validate(token, request))
             .flatMap { jwt ->
-                jwt.jwtClaimsSet.getStringClaim(issuerClaim)
+                jwt.jwtClaimsSet
+                    .getStringClaim(issuerClaim)
                     .takeIf { it in allowedIssuers } ?: return@flatMap Mono.empty<Authentication>()
                 Mono.just(
                     Authentication.build(
                         usernameFromToken(jwt),
                         assignRoles(jwt, request),
                         jwt.jwtClaimsSet.claims,
-                    )
+                    ),
                 )
             }
     }

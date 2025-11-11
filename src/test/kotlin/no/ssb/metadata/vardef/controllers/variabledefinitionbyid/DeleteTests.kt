@@ -2,7 +2,6 @@ package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
 import io.micronaut.http.HttpStatus
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -63,7 +62,8 @@ class DeleteTests : BaseVardefTest() {
     fun `delete request draft variable without active group`(spec: RequestSpecification) {
         spec
             .given()
-            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .auth()
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .`when`()
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
@@ -74,7 +74,8 @@ class DeleteTests : BaseVardefTest() {
     fun `delete request draft variable invalid active group`(spec: RequestSpecification) {
         spec
             .`when`()
-            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "invalid group").parsedString)
+            .auth()
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "invalid group").parsedString)
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
             .statusCode(401)

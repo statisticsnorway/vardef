@@ -14,10 +14,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import reactor.core.publisher.Mono
 
-
 @MicronautTest
 class VardefLabidTokenValidatorTest {
-
     @Inject
     lateinit var vardefLabidTokenValidator: VardefLabidTokenValidator<MutableHttpRequest<*>>
 
@@ -115,7 +113,6 @@ class VardefLabidTokenValidatorTest {
 
         assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
     }
-
 
     @Test
     fun `authentication object contains username`() {

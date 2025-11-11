@@ -28,8 +28,7 @@ class CreateTests : BaseVardefTest() {
                             put("nb", "Bybakgrunn")
                         }
                     }.toString(),
-            )
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -61,8 +60,7 @@ class CreateTests : BaseVardefTest() {
                         activeGroup = "play-enhjoern-b-developers",
                         daplaGroups = listOf("play-enhjoern-b-developers"),
                     ).parsedString,
-            )
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.FORBIDDEN.code)
@@ -72,7 +70,8 @@ class CreateTests : BaseVardefTest() {
     fun `create new patch invalid active group`(spec: RequestSpecification) {
         spec
             .given()
-            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString)
+            .auth()
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(activeGroup = "unknown-group").parsedString)
             .contentType(ContentType.JSON)
             .body(
                 patchBody()
@@ -81,8 +80,7 @@ class CreateTests : BaseVardefTest() {
                             put("nb", "Bybakgrunn")
                         }
                     }.toString(),
-            )
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(HttpStatus.UNAUTHORIZED.code)
@@ -92,7 +90,8 @@ class CreateTests : BaseVardefTest() {
     fun `create new patch no active group `(spec: RequestSpecification) {
         spec
             .given()
-            .auth().oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .auth()
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .contentType(ContentType.JSON)
             .body(
                 patchBody()
@@ -205,8 +204,7 @@ class CreateTests : BaseVardefTest() {
                             },
                         )
                     }.toString(),
-            )
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -272,8 +270,7 @@ class CreateTests : BaseVardefTest() {
                     "nn": "Update"
                 }}
                 """.trimIndent(),
-            )
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
             .statusCode(201)
@@ -364,8 +361,7 @@ class CreateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(
                 jsonMapper.writeValueAsString(Patch(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
-            )
-            .`when`()
+            ).`when`()
             .post("/variable-definitions/$definitionId/patches")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)

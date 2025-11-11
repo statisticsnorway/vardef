@@ -140,12 +140,12 @@ class CreateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .auth()
             .oauth2(
-                JwtTokenHelper
-                    .jwtTokenSigned(
-                        daplaTeams = listOf("some-other-team"),
+                LabIdTokenHelper
+                    .labIdTokenSigned(
+                        activeGroup = "some-other-team-developers",
                         daplaGroups = listOf("some-other-team-developers"),
                     ).parsedString,
-            )//.queryParam(ACTIVE_GROUP, "some-other-team-developers")
+            )
             .body(allMandatoryFieldsChanged())
             .`when`()
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")

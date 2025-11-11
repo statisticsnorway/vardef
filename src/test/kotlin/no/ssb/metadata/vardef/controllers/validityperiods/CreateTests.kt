@@ -106,8 +106,6 @@ class CreateTests : BaseVardefTest() {
             .body(containsString("Definition text for all languages must be changed when creating a new validity period."))
     }
 
-
-
     @Test
     fun `create new validity period no active group`(spec: RequestSpecification) {
         spec

@@ -4,12 +4,10 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.MutableHttpRequest
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.utils.LabidTokenHelper
 import no.ssb.metadata.vardef.utils.TEST_USER
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import reactor.core.publisher.Mono

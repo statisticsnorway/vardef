@@ -136,8 +136,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .from(validate(token, request))
             .filter {
                 it.jwtClaimsSet.getStringClaim(issuerClaim) in allowedIssuers
-            }
-            .map {
+            }.map {
                 Authentication.build(
                     it.jwtClaimsSet.getStringClaim(usernameClaim),
                     assignRoles(it, request),

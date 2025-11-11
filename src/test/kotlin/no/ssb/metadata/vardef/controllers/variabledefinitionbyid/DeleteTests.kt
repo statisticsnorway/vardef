@@ -70,8 +70,6 @@ class DeleteTests : BaseVardefTest() {
             .statusCode(403)
     }
 
-
-
     @Test
     fun `delete draft variable migrated from vardok`(spec: RequestSpecification) {
         spec

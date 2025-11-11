@@ -49,9 +49,7 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
 
     private fun getActiveGroup(token: JWT): String? = token.jwtClaimsSet.getClaim(activeGroupClaim) as? String
 
-    private fun usernameFromToken(token: JWT): String? =
-        (token.jwtClaimsSet.getClaim(usernameClaim) as? String)?.plus(SSB_EMAIL)
-
+    private fun usernameFromToken(token: JWT): String? = (token.jwtClaimsSet.getClaim(usernameClaim) as? String)?.plus(SSB_EMAIL)
 
     /**
      * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.
@@ -131,8 +129,7 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
             .from(validate(token, request))
             .filter {
                 it.jwtClaimsSet.getStringClaim(issuerClaim) in allowedIssuers
-            }
-            .map {
+            }.map {
                 Authentication.build(
                     usernameFromToken(it),
                     assignRoles(it, request),

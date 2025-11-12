@@ -104,7 +104,7 @@ micronaut:
     issuers:
       labid:
         - https://labid.lab.dapla-external.ssb.no
-        - https://labid.lab.dapla-test-external.ssb.no/
+        - https://labid.lab.dapla-test-external.ssb.no
       keycloak:
         - https://auth.ssb.no/realms/ssb
         - https://auth-play.test.ssb.no/realms/ssb

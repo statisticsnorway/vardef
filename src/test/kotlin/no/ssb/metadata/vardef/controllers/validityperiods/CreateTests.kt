@@ -422,4 +422,30 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.code)
     }
+
+    @Test
+    fun `create new validity period with active group as paramater and labid token`(spec: RequestSpecification) {
+
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(allMandatoryFieldsChanged())
+            .queryParam(ACTIVE_GROUP, "other-group-developers")
+            .`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(201)
+        val lastPatchInSecondToLastValidityPeriod =
+            validityPeriods
+                .getAsMap(INCOME_TAX_VP1_P1.definitionId)
+                .let { it.values.elementAt(it.values.size - 2) }
+                ?.last()
+        val lastPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)
+        assertThat(
+            lastPatch.validUntil,
+        ).isNull()
+        assertThat(
+            lastPatchInSecondToLastValidityPeriod?.validUntil,
+        ).isEqualTo(lastPatch.validFrom.minusDays(1))
+    }
 }

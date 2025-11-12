@@ -118,11 +118,8 @@ class VariableOwnerSecurityRule(
             // The next call is blocking, so we need to run it on another thread
             .publishOn(Schedulers.boundedElastic())
             .map { definitionId ->
-                // Get active group from either query params or authentication claims
-                val activeGroup =
-                    request.parameters
-                        .getFirst(ACTIVE_GROUP)
-                        .orElseGet { authentication.attributes[LABID_ACTIVE_GROUP] as? String }
+                // Get active group from authentication attributes
+                val activeGroup = authentication.attributes[ACTIVE_GROUP] as String?
                 if (activeGroup == null) {
                     logger.info("No active group found in request or authentication claims. Request: $request")
                     return@map false

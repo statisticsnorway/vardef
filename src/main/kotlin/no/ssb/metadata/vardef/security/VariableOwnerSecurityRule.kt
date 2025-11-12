@@ -14,7 +14,6 @@ import io.micronaut.web.router.RouteAttributes
 import io.micronaut.web.router.RouteMatch
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
-import no.ssb.metadata.vardef.constants.LABID_ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.VARIABLE_DEFINITION_ID_PATH_VARIABLE
 import no.ssb.metadata.vardef.models.Owner
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
@@ -118,11 +117,8 @@ class VariableOwnerSecurityRule(
             // The next call is blocking, so we need to run it on another thread
             .publishOn(Schedulers.boundedElastic())
             .map { definitionId ->
-                // Get active group from either query params or authentication claims
-                val activeGroup =
-                    request.parameters
-                        .getFirst(ACTIVE_GROUP)
-                        .orElseGet { authentication.attributes[LABID_ACTIVE_GROUP] as? String }
+                // Get active group from authentication attributes
+                val activeGroup = authentication.attributes[ACTIVE_GROUP] as String?
                 if (activeGroup == null) {
                     logger.info("No active group found in request or authentication claims. Request: $request")
                     return@map false

@@ -16,7 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 @MicronautTest
-class KeycloakTokenSupportTest {
+class KeycloakTokenSupportTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("variableCreatorOperations")
     @MethodSource("variableOwnerOperations")
@@ -138,6 +138,8 @@ class KeycloakTokenSupportTest {
         }
         spec
             .given()
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
             .queryParam(ACTIVE_GROUP, "play-foeniks-a-developers")
             .`when`()
             .request(method, path)

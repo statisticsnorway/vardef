@@ -7,6 +7,7 @@ micronaut:
             allowed-audiences:
               - dapla-cli
               - onyxia-api
+              - vardef
   http:
     services:
       dapla-team-api:

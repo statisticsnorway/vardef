@@ -102,12 +102,30 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
 
         val roles = mutableSetOf(VARIABLE_CONSUMER)
         val claimsSet = token.jwtClaimsSet
-        val activeGroup = getActiveGroup(token) ?: return roles.toSet()
-        if (tokenAndRequestContainExpectedFields(token, request)) {
-            if (isVariableOwner(claimsSet)) roles.add(VARIABLE_OWNER)
-            if (isVariableCreator(activeGroup, claimsSet)) roles.add(VARIABLE_CREATOR)
+        val username = usernameFromToken(token)
+        val activeGroup = getActiveGroup(token)
+
+        logger.debug("Assigning roles for user=$username activeGroup=$activeGroup")
+
+        if (activeGroup == null) {
+            logger.debug("No active group claim found for user=$username")
+            return roles
         }
 
+        if (tokenAndRequestContainExpectedFields(token, request)) {
+            if (isVariableOwner(claimsSet)) {
+                roles.add(VARIABLE_OWNER)
+                logger.debug("User=$username assigned role=$VARIABLE_OWNER")
+            }
+            if (isVariableCreator(activeGroup, claimsSet)) {
+                roles.add(VARIABLE_CREATOR)
+                logger.debug("User=$username assigned role=$VARIABLE_CREATOR")
+            }
+        } else {
+            logger.debug("Token missing expected claims for user=$username")
+        }
+
+        logger.info("User=$username assigned roles=$roles")
         return roles.toSet()
     }
 
@@ -130,8 +148,10 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
             .filter {
                 it.jwtClaimsSet.getStringClaim(issuerClaim) in allowedIssuers
             }.map {
+                val username = usernameFromToken(it)
+                logger.info("Validated LabID token for user=$username")
                 Authentication.build(
-                    usernameFromToken(it),
+                    username,
                     assignRoles(it, request),
                     it.jwtClaimsSet.claims,
                 )
@@ -150,5 +170,8 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
             .filter { it.isPresent }
             .map { it.get() }
             .doOnError { logger.error("Error parsing token for $request", it) }
-            .onErrorResume { Mono.empty() }
+            .onErrorResume {
+                logger.warn("Token parsing failed for request=$request: ${it.message}")
+                Mono.empty()
+            }
 }

@@ -425,7 +425,6 @@ class CreateTests : BaseVardefTest() {
 
     @Test
     fun `create new validity period with active group as paramater and labid token`(spec: RequestSpecification) {
-
         spec
             .given()
             .contentType(ContentType.JSON)

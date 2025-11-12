@@ -9,7 +9,6 @@ import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
@@ -17,7 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 @MicronautTest
-class KeycloakTokenSupportTest : BaseVardefTest(){
+class KeycloakTokenSupportTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("variableCreatorOperations")
     @MethodSource("variableOwnerOperations")

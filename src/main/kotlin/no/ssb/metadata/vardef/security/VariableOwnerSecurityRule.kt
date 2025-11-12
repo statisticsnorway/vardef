@@ -14,7 +14,6 @@ import io.micronaut.web.router.RouteAttributes
 import io.micronaut.web.router.RouteMatch
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
-import no.ssb.metadata.vardef.constants.LABID_ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.VARIABLE_DEFINITION_ID_PATH_VARIABLE
 import no.ssb.metadata.vardef.models.Owner
 import no.ssb.metadata.vardef.models.SavedVariableDefinition

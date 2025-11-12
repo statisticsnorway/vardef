@@ -9,6 +9,7 @@ import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
@@ -16,7 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 @MicronautTest
-class KeycloakTokenSupportTest {
+class KeycloakTokenSupportTest : BaseVardefTest(){
     @ParameterizedTest
     @MethodSource("variableCreatorOperations")
     @MethodSource("variableOwnerOperations")
@@ -138,6 +139,8 @@ class KeycloakTokenSupportTest {
         }
         spec
             .given()
+            .auth()
+            .oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
             .queryParam(ACTIVE_GROUP, "play-foeniks-a-developers")
             .`when`()
             .request(method, path)

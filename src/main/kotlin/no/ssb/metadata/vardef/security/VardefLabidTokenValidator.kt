@@ -9,6 +9,7 @@ import io.micronaut.security.token.Claims
 import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.constants.LABID_ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.SSB_EMAIL
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
@@ -134,7 +135,7 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
      *
      * @param token
      * @param request
-     * @return an [Authentication] containing the principals username and the assigned roles.
+     * @return an [Authentication] containing the principals username, the assigned roles, the claims, and the active group.
      */
     override fun validateToken(
         token: String?,
@@ -150,10 +151,12 @@ class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
             }.map {
                 val username = usernameFromToken(it)
                 logger.info("Validated LabID token for user=$username")
+                val attributes = it.jwtClaimsSet.claims.toMutableMap()
+                attributes["active_group"] = it.jwtClaimsSet.getStringClaim(LABID_ACTIVE_GROUP)
                 Authentication.build(
                     username,
                     assignRoles(it, request),
-                    it.jwtClaimsSet.claims,
+                    attributes,
                 )
             }
     }

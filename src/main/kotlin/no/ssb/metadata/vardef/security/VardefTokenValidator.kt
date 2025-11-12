@@ -123,7 +123,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
      *
      * @param token
      * @param request
-     * @return an [Authentication] containing the principals username and the assigned roles.
+     * @return an [Authentication] containing the principals username, the assigned roles, the claims, and the active group.
      */
     override fun validateToken(
         token: String?,
@@ -137,10 +137,12 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
             .filter {
                 it.jwtClaimsSet.getStringClaim(issuerClaim) in allowedIssuers
             }.map {
+                val attributes = it.jwtClaimsSet.claims.toMutableMap()
+                attributes["active_group"] = request.parameters.get(ACTIVE_GROUP)
                 Authentication.build(
                     it.jwtClaimsSet.getStringClaim(usernameClaim),
                     assignRoles(it, request),
-                    it.jwtClaimsSet.claims,
+                    attributes,
                 )
             }
     }

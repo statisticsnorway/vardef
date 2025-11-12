@@ -148,11 +148,12 @@ class VariableDefinitionsController(
             )
         }
 
-        val resolvedActiveGroup = (authentication.attributes[ACTIVE_GROUP] as? String)
-            ?: throw HttpStatusException(
-                HttpStatus.BAD_REQUEST,
-                "No active_group provided",
-            )
+        val resolvedActiveGroup =
+            (authentication.attributes[ACTIVE_GROUP] as? String)
+                ?: throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "No active_group provided",
+                )
 
         return vardef
             .create(draft.toSavedVariableDefinition(resolvedActiveGroup, authentication.name))

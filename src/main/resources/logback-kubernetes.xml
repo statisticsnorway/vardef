@@ -24,12 +24,6 @@
         <appender-ref ref="HTTP_ACCESS_LOGGER_STDOUT"/>
     </logger>
 
-    <!-- Debug Micronaut Security internals -->
-    <logger name="io.micronaut.security" level="DEBUG"/>
-    <logger name="io.micronaut.security.token.jwt" level="DEBUG"/>
-    <logger name="io.micronaut.security.token.validator" level="DEBUG"/>
-    <logger name="no.ssb.metadata.vardef.security" level="DEBUG"/>
-
     <logger name="io.micronaut.management.health.monitor.HealthMonitorTask" level="DEBUG">
         <appender-ref ref="STDOUT"/>
     </logger>

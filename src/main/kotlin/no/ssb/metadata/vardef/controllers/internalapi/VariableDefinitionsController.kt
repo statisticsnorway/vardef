@@ -133,7 +133,6 @@ class VariableDefinitionsController(
             examples = [
                 ExampleObject(
                     name = "Create draft",
-                    value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
         )

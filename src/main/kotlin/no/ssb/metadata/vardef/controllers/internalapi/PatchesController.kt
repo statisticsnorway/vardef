@@ -191,7 +191,6 @@ class PatchesController(
             examples = [
                 ExampleObject(
                     name = "Create patch",
-                    value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
         )

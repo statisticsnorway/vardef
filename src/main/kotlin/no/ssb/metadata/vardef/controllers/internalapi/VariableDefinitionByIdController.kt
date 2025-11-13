@@ -130,7 +130,6 @@ class VariableDefinitionByIdController(
             examples = [
                 ExampleObject(
                     name = "Delete",
-                    value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
         )
@@ -191,7 +190,6 @@ class VariableDefinitionByIdController(
             examples = [
                 ExampleObject(
                     name = "Update",
-                    value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
         )

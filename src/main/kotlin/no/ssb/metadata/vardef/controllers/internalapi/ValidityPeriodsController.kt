@@ -90,7 +90,6 @@ class ValidityPeriodsController(
             examples = [
                 ExampleObject(
                     name = "Create validity period",
-                    value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
         )

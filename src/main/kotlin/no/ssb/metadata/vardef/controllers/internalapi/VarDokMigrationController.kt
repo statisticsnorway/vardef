@@ -90,7 +90,6 @@ class VarDokMigrationController(
             examples = [
                 ExampleObject(
                     name = "Migrate Vardok",
-                    value = ACTIVE_GROUP_EXAMPLE,
                 ),
             ],
         )

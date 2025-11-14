@@ -35,7 +35,7 @@ class VariableDefinitionsControllerEmptyDatabaseTest {
         if (RestAssured.filters() == null) {
             RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
         }
-        RestAssured.authentication = oauth2(LabidTokenHelper.labIdTokenSigned().parsedString)
+        RestAssured.authentication = oauth2(JwtTokenHelper.jwtTokenSigned().parsedString)
     }
 
     @Test

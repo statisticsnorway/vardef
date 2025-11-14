@@ -38,7 +38,7 @@ import java.time.LocalDate
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
+@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController(
     private val vardef: VariableDefinitionService,
@@ -123,18 +123,6 @@ class VariableDefinitionByIdController(
             ],
         )
         definitionId: String,
-        @Parameter(
-            name = ACTIVE_GROUP,
-            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
-            required = false,
-            examples = [
-                ExampleObject(
-                    name = "Delete",
-                ),
-            ],
-        )
-        @QueryValue(ACTIVE_GROUP)
-        activeGroup: String?,
     ): MutableHttpResponse<Unit> {
         if (patches.latest(definitionId).variableStatus != VariableStatus.DRAFT) {
             throw HttpStatusException(
@@ -183,18 +171,6 @@ class VariableDefinitionByIdController(
         )
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         definitionId: String,
-        @Parameter(
-            name = ACTIVE_GROUP,
-            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
-            required = false,
-            examples = [
-                ExampleObject(
-                    name = "Update",
-                ),
-            ],
-        )
-        @QueryValue(ACTIVE_GROUP)
-        activeGroup: String?,
         @RequestBody(
             content = [
                 Content(

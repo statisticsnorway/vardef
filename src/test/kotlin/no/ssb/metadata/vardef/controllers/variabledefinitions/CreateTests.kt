@@ -290,7 +290,7 @@ class CreateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(includeUsername = false).parsedString)
+            .oauth2(JwtTokenHelper.jwtTokenSigned(includeUsername = false).parsedString)
             .`when`()
             .post("/variable-definitions")
             .then()

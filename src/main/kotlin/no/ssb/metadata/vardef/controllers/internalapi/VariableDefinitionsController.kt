@@ -31,7 +31,7 @@ import java.time.LocalDate
 @Validated
 @Controller("/variable-definitions")
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
+@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionsController(
     private val vardef: VariableDefinitionService,
@@ -126,18 +126,6 @@ class VariableDefinitionsController(
         )
         @Body
         @Valid draft: Draft,
-        @Parameter(
-            name = ACTIVE_GROUP,
-            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
-            required = false,
-            examples = [
-                ExampleObject(
-                    name = "Create draft",
-                ),
-            ],
-        )
-        @QueryValue(ACTIVE_GROUP)
-        activeGroup: String?,
         authentication: Authentication,
     ): CompleteResponse {
         if (vardef.doesShortNameExist(draft.shortName)) {

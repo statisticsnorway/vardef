@@ -140,7 +140,7 @@ Validity Periods are versions with a period defined by a `valid_from` date and o
         SecurityScheme(
             name = LABID_TOKEN_SCHEME,
             description =
-                "A token granted by Statistics Norway's Labid instance. May be obtained " +
+                "A token granted by Statistics Norway's LabID instance. May be obtained " +
                     "from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service.",
             type = SecuritySchemeType.HTTP,
             bearerFormat = "JWT",

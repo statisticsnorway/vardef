@@ -55,8 +55,8 @@ class CreateTests : BaseVardefTest() {
                     }.toString(),
             ).auth()
             .oauth2(
-                JwtTokenHelper
-                    .jwtTokenSigned(
+                LabIdTokenHelper
+                    .labIdTokenSigned(
                         activeGroup = "play-enhjoern-b-developers",
                         daplaGroups = listOf("play-enhjoern-b-developers"),
                     ).parsedString,
@@ -71,7 +71,7 @@ class CreateTests : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(JwtTokenHelper.jwtTokenSigned(includeActiveGroup = false).parsedString)
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .contentType(ContentType.JSON)
             .body(
                 patchBody()

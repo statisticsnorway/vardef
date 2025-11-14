@@ -7,6 +7,9 @@ micronaut:
       enabled: false
     token:
       jwt:
+        claims-validators:
+          audience:
+            - vardef
         claims:
           keys:
             dapla: dapla
@@ -17,11 +20,6 @@ micronaut:
             labid-username: sub
             dapla-teams: teams
             username: preferred_username
-          values:
-            allowed-audiences:
-              - onyxia-api
-              - dapla-cli
-              - vardef
     intercept-url-map:
       - pattern: /health/**
         http-method: GET
@@ -100,6 +98,11 @@ micronaut:
     codes:
       maximumSize: 3600
       expire-after-write: 24h
+  auth:
+    issuers:
+      labid:
+        - https://labid.lab.dapla-external.ssb.no
+        - https://labid.lab.dapla-test-external.ssb.no
   http:
     services:
       klass:

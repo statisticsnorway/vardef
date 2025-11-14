@@ -4,25 +4,23 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.MutableHttpRequest
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.utils.JwtTokenHelper
+import no.ssb.metadata.vardef.utils.LabIdTokenHelper
 import no.ssb.metadata.vardef.utils.TEST_USER
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import reactor.core.publisher.Mono
 
 @MicronautTest
-class VardefTokenValidatorTest {
+class VardefLabIdTokenValidatorTest {
     @Inject
-    lateinit var vardefTokenValidator: VardefTokenValidator<MutableHttpRequest<*>>
+    lateinit var vardefLabidTokenValidator: VardefLabIdTokenValidator<MutableHttpRequest<*>>
 
     @Test
     fun `request with malformed token`() {
         val auth =
             Mono
                 .from(
-                    vardefTokenValidator.validateToken(
+                    vardefLabidTokenValidator.validateToken(
                         "not a token",
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
@@ -35,8 +33,8 @@ class VardefTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefTokenValidator.validateToken(
-                        JwtTokenHelper.jwtTokenSigned().parsedString,
+                    vardefLabidTokenValidator.validateToken(
+                        LabIdTokenHelper.labIdTokenSigned().parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -48,8 +46,8 @@ class VardefTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefTokenValidator.validateToken(
-                        JwtTokenHelper.jwtTokenSigned(audienceClaim = listOf("blah")).parsedString,
+                    vardefLabidTokenValidator.validateToken(
+                        LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("blah")).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -57,14 +55,13 @@ class VardefTokenValidatorTest {
         assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = ["onyxia-api", "dapla-cli"])
-    fun `request token contains allowed audience`(allowedAudience: String) {
+    @Test
+    fun `request token contains allowed audience`() {
         val auth =
             Mono
                 .from(
-                    vardefTokenValidator.validateToken(
-                        JwtTokenHelper.jwtTokenSigned(audienceClaim = listOf("blah", allowedAudience)).parsedString,
+                    vardefLabidTokenValidator.validateToken(
+                        LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("blah", "vardef")).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -76,7 +73,7 @@ class VardefTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefTokenValidator.validateToken(
+                    vardefLabidTokenValidator.validateToken(
                         null,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
@@ -90,8 +87,8 @@ class VardefTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefTokenValidator.validateToken(
-                        JwtTokenHelper.jwtTokenSigned(daplaGroups = null).parsedString,
+                    vardefLabidTokenValidator.validateToken(
+                        LabIdTokenHelper.labIdTokenSigned(daplaGroups = null).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -104,8 +101,8 @@ class VardefTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefTokenValidator.validateToken(
-                        JwtTokenHelper.jwtTokenSigned().parsedString,
+                    vardefLabidTokenValidator.validateToken(
+                        LabIdTokenHelper.labIdTokenSigned().parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -117,8 +114,8 @@ class VardefTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefTokenValidator.validateToken(
-                        JwtTokenHelper.jwtTokenSigned(includeUsername = false).parsedString,
+                    vardefLabidTokenValidator.validateToken(
+                        LabIdTokenHelper.labIdTokenSigned(includeUsername = false).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()

@@ -20,9 +20,6 @@ import reactor.core.publisher.Mono
 class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JWT, R> {
     private val logger = LoggerFactory.getLogger(VardefTokenValidator::class.java)
 
-    @Property(name = "micronaut.auth.issuers.labid")
-    lateinit var allowedIssuers: List<String>
-
     @Property(name = "micronaut.security.token.jwt.claims.values.allowed-audiences")
     private lateinit var allowedAudiences: Set<String>
 
@@ -34,9 +31,6 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
 
     @Property(name = "micronaut.security.token.jwt.claims.keys.labid-username")
     private lateinit var usernameClaim: String
-
-    @Property(name = "micronaut.security.token.jwt.claims.keys.issuer")
-    private lateinit var issuerClaim: String
 
     @Inject
     private lateinit var jsonWebTokenParser: JsonWebTokenParser<JWT>
@@ -146,9 +140,7 @@ class VardefTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<J
         }
         return Mono
             .from(validate(token, request))
-            .filter {
-                it.jwtClaimsSet.getStringClaim(issuerClaim) in allowedIssuers
-            }.map {
+            .map {
                 val username = usernameFromToken(it)
                 logger.info("Validated LabID token for user=$username")
                 val attributes = it.jwtClaimsSet.claims.toMutableMap()

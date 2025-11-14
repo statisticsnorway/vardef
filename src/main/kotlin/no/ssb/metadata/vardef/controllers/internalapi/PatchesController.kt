@@ -39,7 +39,7 @@ import java.time.LocalDate
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
+@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController(
     private val validityPeriods: ValidityPeriodsService,
@@ -184,18 +184,6 @@ class PatchesController(
         @Body
         @Valid
         patch: Patch,
-        @Parameter(
-            name = ACTIVE_GROUP,
-            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
-            required = false,
-            examples = [
-                ExampleObject(
-                    name = "Create patch",
-                ),
-            ],
-        )
-        @QueryValue(ACTIVE_GROUP)
-        activeGroup: String?,
         authentication: Authentication,
     ): CompleteResponse {
         logger.debug("Received patch {}", patch)

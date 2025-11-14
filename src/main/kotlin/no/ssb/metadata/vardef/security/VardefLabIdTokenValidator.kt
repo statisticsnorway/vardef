@@ -17,13 +17,13 @@ import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 
-class VardefLabidTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JWT, R> {
-    private val logger = LoggerFactory.getLogger(VardefLabidTokenValidator::class.java)
+class VardefLabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JWT, R> {
+    private val logger = LoggerFactory.getLogger(VardefLabIdTokenValidator::class.java)
 
     @Property(name = "micronaut.auth.issuers.labid")
     lateinit var allowedIssuers: List<String>
 
-    @Property(name = "micronaut.security.token.jwt.claims.values.allowed-audiences")
+    @Property(name = "micronaut.security.token.jwt.claims-validators.audience")
     private lateinit var allowedAudiences: Set<String>
 
     @Property(name = "micronaut.security.token.jwt.claims.keys.labid-dapla-group")

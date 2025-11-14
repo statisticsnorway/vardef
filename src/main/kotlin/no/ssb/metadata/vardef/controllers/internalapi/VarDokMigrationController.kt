@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory
 @Validated
 @Controller("/vardok-migration")
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
+@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController(
     private val vardokService: VardokService,
@@ -83,18 +83,6 @@ class VarDokMigrationController(
         )
         @PathVariable("vardok-id")
         id: String,
-        @Parameter(
-            name = ACTIVE_GROUP,
-            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
-            required = false,
-            examples = [
-                ExampleObject(
-                    name = "Migrate Vardok",
-                ),
-            ],
-        )
-        @QueryValue(ACTIVE_GROUP)
-        activeGroup: String?,
         httpRequest: HttpRequest<*>,
     ): MutableHttpResponse<*> {
         if (vardokService.isAlreadyMigrated(id)) {
@@ -121,7 +109,7 @@ class VarDokMigrationController(
         val createVariableDefinitionResponse =
             httpClient.proxy(
                 HttpRequest
-                    .POST("/variable-definitions?$ACTIVE_GROUP=$activeGroup", vardefInput.toString())
+                    .POST("/variable-definitions", vardefInput.toString())
                     .headers { entries: MutableHttpHeaders ->
                         entries.set(AUTHORIZATION, httpRequest.headers.get(AUTHORIZATION))
                     },

@@ -3,7 +3,6 @@ package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
@@ -145,7 +144,6 @@ class UpdateTests : BaseVardefTest() {
         spec
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .patch("/variable-definitions/${DRAFT_BUS_EXAMPLE.definitionId}")
             .then()

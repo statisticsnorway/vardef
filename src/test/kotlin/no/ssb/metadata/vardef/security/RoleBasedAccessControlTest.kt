@@ -4,7 +4,6 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.http.Method
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
@@ -35,7 +34,6 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .none()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .request(method, path)
             .then()
@@ -60,7 +58,6 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         }
         spec
             .given()
-            .queryParam(ACTIVE_GROUP, TEST_DEVELOPERS_GROUP)
             .`when`()
             .request(method, path)
             .then()
@@ -85,7 +82,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
             .`when`()
             .request(method, path)
             .then()
@@ -111,7 +108,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                LabidTokenHelper.labIdTokenSigned(daplaGroups = listOf(group), activeGroup = group).parsedString,
+                LabIdTokenHelper.labIdTokenSigned(daplaGroups = listOf(group), activeGroup = group).parsedString,
             ).`when`()
             .request(method, path)
             .then()
@@ -136,7 +133,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                LabidTokenHelper.labIdTokenSigned(activeGroup = "play-foeniks-a-developers").parsedString,
+                LabIdTokenHelper.labIdTokenSigned(activeGroup = "play-foeniks-a-developers").parsedString,
             ).`when`()
             .request(method, path)
             .then()
@@ -160,7 +157,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabidTokenHelper.labIdTokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
+            .oauth2(LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
             .`when`()
             .request(method, path)
             .then()

@@ -7,7 +7,7 @@ import com.nimbusds.jwt.SignedJWT
 import org.json.JSONObject
 import java.time.Instant
 
-class LabidTokenHelper {
+class LabIdTokenHelper {
     companion object {
         fun labIdTokenSigned(
             audienceClaim: List<String> =

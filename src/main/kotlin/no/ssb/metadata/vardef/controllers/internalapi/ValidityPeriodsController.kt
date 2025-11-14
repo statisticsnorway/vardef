@@ -34,7 +34,7 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = KEYCLOAK_TOKEN_SCHEME)
+@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 class ValidityPeriodsController(
     private val validityPeriods: ValidityPeriodsService,
 ) {
@@ -83,18 +83,6 @@ class ValidityPeriodsController(
             ],
         )
         newPeriod: ValidityPeriod,
-        @Parameter(
-            name = ACTIVE_GROUP,
-            description = ACTIVE_GROUP_QUERY_PARAMETER_DESCRIPTION,
-            required = false,
-            examples = [
-                ExampleObject(
-                    name = "Create validity period",
-                ),
-            ],
-        )
-        @QueryValue(ACTIVE_GROUP)
-        activeGroup: String?,
         authentication: Authentication,
     ): CompleteResponse {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)

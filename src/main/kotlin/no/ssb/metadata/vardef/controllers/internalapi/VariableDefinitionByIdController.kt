@@ -26,6 +26,9 @@ import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.RenderedOrComplete
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.models.isPublished
@@ -56,8 +59,9 @@ class VariableDefinitionByIdController(
                 examples = [
                     ExampleObject(name = "Date not specified", value = COMPLETE_RESPONSE_EXAMPLE),
                     ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
+                    ExampleObject(name = "Rendered", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
+                oneOf = [Schema(implementation = CompleteResponse::class), Schema(implementation = RenderedVariableDefinition::class)],
             ),
         ],
     )
@@ -70,6 +74,7 @@ class VariableDefinitionByIdController(
             examples = [
                 ExampleObject(name = "Date not specified", value = ID_EXAMPLE),
                 ExampleObject(name = "Specific date", value = ID_EXAMPLE),
+                ExampleObject(name = "Rendered", value = ID_EXAMPLE),
                 ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
             ],
         )
@@ -77,21 +82,40 @@ class VariableDefinitionByIdController(
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
+                ExampleObject(name = "Date not specified", value = ""),
                 ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
+                ExampleObject(name = "Rendered", value = ""),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ""),
             ],
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
-    ): CompleteResponse =
-        vardef
-            .getCompleteByDate(
-                definitionId = definitionId,
-                dateOfValidity = dateOfValidity,
-            )
-            ?: throw HttpStatusException(
-                HttpStatus.NOT_FOUND,
-                "Variable with ID $definitionId not found${if (dateOfValidity == null) "" else " for date $dateOfValidity"}",
-            )
+        @Parameter(
+            description = "Render the Variable Definition for presentation in a frontend",
+            examples = [
+                ExampleObject(name = "Date not specified", value = "false"),
+                ExampleObject(name = "Specific date", value = "false"),
+                ExampleObject(name = "Rendered", value = "true"),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = "false"),
+            ],
+        )
+        @QueryValue("render")
+        render: Boolean?,
+    ): RenderedOrComplete =
+        if (render == true) {
+            vardef
+                .getRenderedByDateAndStatus(
+                    language = SupportedLanguages.NB,
+                    definitionId = definitionId,
+                    dateOfValidity = dateOfValidity,
+                ).let { RenderedOrComplete.SealedRenderedVariableDefinition(it) }
+        } else {
+            vardef
+                .getCompleteByDate(
+                    definitionId = definitionId,
+                    dateOfValidity = dateOfValidity,
+                ).let { RenderedOrComplete.SealedCompleteResponse(it) }
+        }
 
     /**
      * Delete a variable definition.

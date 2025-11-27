@@ -146,7 +146,12 @@ class VariableDefinitionService(
         val results =
             uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
                 .map {
-                    getPublicByDate(language, it, dateOfValidity)
+                    getRenderedByDateAndStatus(
+                        language,
+                        it,
+                        dateOfValidity,
+                        VariableStatus.PUBLISHED_EXTERNAL,
+                    )
                 }
         logger.info("Found ${results.size} valid public variable definitions at date $dateOfValidity.")
         return results
@@ -192,12 +197,13 @@ class VariableDefinitionService(
      * @return The [RenderedVariableDefinition]
      * @throws [EmptyResultException] If nothing is found
      */
-    fun getPublicByDate(
+    fun getRenderedByDateAndStatus(
         language: SupportedLanguages,
         definitionId: String,
         dateOfValidity: LocalDate?,
+        variableStatus: VariableStatus? = null,
     ): RenderedVariableDefinition =
-        getByDateAndStatus(definitionId, dateOfValidity, VariableStatus.PUBLISHED_EXTERNAL)
+        getByDateAndStatus(definitionId, dateOfValidity, variableStatus)
             ?.render(language, klassService)
             ?: throw EmptyResultException()
 
@@ -233,7 +239,9 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfValidity: LocalDate? = null,
         variableStatus: VariableStatus? = null,
-    ): CompleteResponse? = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
+    ): CompleteResponse =
+        getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
+            ?: throw EmptyResultException()
 
     companion object {
         fun generateId(): String = NanoId.generate(8)

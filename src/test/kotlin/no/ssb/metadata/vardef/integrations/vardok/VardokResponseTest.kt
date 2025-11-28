@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -107,7 +108,7 @@ class VardokResponseTest {
         val vardok = vardokService.getVardokItem(vardokId)
         val notes = vardok?.common?.notes
         val calculation = vardok?.variable?.calculation
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage(vardokId) }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.comment?.nb).isEqualTo(expectedCommentNB)
         assertThat(vardokTransform.comment?.nn).isEqualTo(expectedCommentNN)

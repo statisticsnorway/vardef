@@ -2,6 +2,9 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.reactive.awaitLast
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
@@ -40,9 +43,11 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the Variable Definition.
      * @return An ordered list of all Patches for this Variable Definition.
      */
-    private fun list(definitionId: String): List<SavedVariableDefinition> =
+    private suspend fun list(definitionId: String): List<SavedVariableDefinition> =
         variableDefinitionRepository
             .findByDefinitionIdOrderByPatchId(definitionId)
+            .asFlow()
+            .toList()
             .ifEmpty { throw EmptyResultException() }
 
     /**
@@ -51,7 +56,7 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the Variable Definition.
      * @return An ordered list.
      */
-    fun listLatestByValidityPeriod(definitionId: String): List<SavedVariableDefinition> =
+    suspend fun listLatestByValidityPeriod(definitionId: String): List<SavedVariableDefinition> =
         getAsMap(definitionId)
             .values
             .mapNotNull { it.maxByOrNull { patch -> patch.patchId } }
@@ -67,7 +72,7 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The list of rendered *Validity Periods*
      */
-    fun listPublic(
+    suspend fun listPublic(
         language: SupportedLanguages,
         definitionId: String,
     ): List<RenderedVariableDefinition> =
@@ -83,7 +88,7 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The list of *Validity Periods*
      */
-    fun listComplete(definitionId: String): List<CompleteResponse> =
+    suspend fun listComplete(definitionId: String): List<CompleteResponse> =
         listLatestByValidityPeriod(definitionId)
             .map { it.toCompleteResponse() }
 
@@ -96,7 +101,7 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The map over *Validity Periods*
      */
-    fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
+    suspend fun getAsMap(definitionId: String): SortedMap<LocalDate, List<SavedVariableDefinition>> =
         list(definitionId)
             .groupBy { it.validFrom }
             .toSortedMap()
@@ -107,7 +112,7 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The *Patch*
      */
-    fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
+    suspend fun getLatestPatchInLastValidityPeriod(definitionId: String): SavedVariableDefinition =
         getAsMap(definitionId)
             .lastEntry()
             .value
@@ -120,7 +125,7 @@ class ValidityPeriodsService(
      * @param dateOfValidity The date at which we are interested in the definition.
      * @return The latest *Patch* for the *Validity Period* valid at the given [dateOfValidity]
      */
-    fun getForDate(
+    suspend fun getForDate(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): SavedVariableDefinition? =
@@ -146,7 +151,7 @@ class ValidityPeriodsService(
      * @param validFrom The Valid From date for the desired validity Period
      * @return the latest Patch
      */
-    fun getMatchingOrLatest(
+    suspend fun getMatchingOrLatest(
         definitionId: String,
         validFrom: LocalDate?,
     ): SavedVariableDefinition =
@@ -173,7 +178,7 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the existing variable definition whose validity period will be updated.
      * @return The newly saved variable definition with the updated validity period.
      */
-    fun create(
+    suspend fun create(
         definitionId: String,
         newPeriod: ValidityPeriod,
         userName: String,
@@ -197,13 +202,13 @@ class ValidityPeriodsService(
                 // The user can Patch any values after creation.
                 .toSavedVariableDefinition(list(definitionId).last().patchId, lastValidityPeriod, userName)
                 .apply { validUntil = firstValidityPeriod.validFrom.minusDays(1) }
-                .let { variableDefinitionRepository.save(it) }
+                .let { variableDefinitionRepository.save(it).awaitLast() }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom, userName)
                 .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it, userName) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
-                .let { variableDefinitionRepository.save(it) }
+                .let { variableDefinitionRepository.save(it).awaitLast() }
         }
     }
 
@@ -214,7 +219,7 @@ class ValidityPeriodsService(
      * @throws InvalidValidDateException validFrom is invalid
      * @throws DefinitionTextUnchangedException definition text in all present languages has not changed
      */
-    private fun checkValidityPeriodInput(
+    private suspend fun checkValidityPeriodInput(
         definitionId: String,
         newPeriod: ValidityPeriod,
     ) {
@@ -234,6 +239,7 @@ class ValidityPeriodsService(
                 )
                 throw DefinitionTextUnchangedException()
             }
+
             else -> {
                 logger.info(
                     "Validity period input is valid for definition: $definitionId",
@@ -256,7 +262,7 @@ class ValidityPeriodsService(
      * @param dateOfValidity the new date supplied.
      * @return True if the date is valid, false otherwise.
      */
-    private fun isValidValidFromValue(
+    private suspend fun isValidValidFromValue(
         definitionId: String,
         dateOfValidity: LocalDate,
     ): Boolean {
@@ -279,6 +285,7 @@ class ValidityPeriodsService(
             lastValidPeriod.second == null -> {
                 dateOfValidity.isBefore(firstValidFrom) || dateOfValidity.isAfter(upperBoundary)
             }
+
             else -> {
                 dateOfValidity.isBefore(firstValidFrom) || dateOfValidity == upperBoundary.plusDays(1)
             }
@@ -296,7 +303,7 @@ class ValidityPeriodsService(
      * @return Returns `true` if all values for all languages are changed compared to the previous patch,
      * `false` otherwise
      */
-    private fun isNewDefinition(
+    private suspend fun isNewDefinition(
         definitionId: String,
         newPeriod: ValidityPeriod,
     ): Boolean {
@@ -336,21 +343,22 @@ class ValidityPeriodsService(
      * @param newPeriodValidFrom The starting date of the new *Validity Period*.
      *
      */
-    fun endLastValidityPeriod(
+    suspend fun endLastValidityPeriod(
         definitionId: String,
         newPeriodValidFrom: LocalDate,
         userName: String,
     ): SavedVariableDefinition {
         val latestPatchInLastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
-        return variableDefinitionRepository.save(
-            latestPatchInLastValidityPeriod
-                .copy(validUntil = newPeriodValidFrom.minusDays(1))
-                .toPatch()
-                .toSavedVariableDefinition(list(definitionId).last().patchId, latestPatchInLastValidityPeriod, userName),
-        )
+        return variableDefinitionRepository
+            .save(
+                latestPatchInLastValidityPeriod
+                    .copy(validUntil = newPeriodValidFrom.minusDays(1))
+                    .toPatch()
+                    .toSavedVariableDefinition(list(definitionId).last().patchId, latestPatchInLastValidityPeriod, userName),
+            ).awaitLast()
     }
 
-    fun updateOwnerOnOtherPeriods(
+    suspend fun updateOwnerOnOtherPeriods(
         definitionId: String,
         owner: Owner,
         validFrom: LocalDate,
@@ -376,7 +384,7 @@ class ValidityPeriodsService(
                 )
             }
 
-    fun updateStatusOnOtherPeriods(
+    suspend fun updateStatusOnOtherPeriods(
         definitionId: String,
         variableStatus: VariableStatus,
         validFrom: LocalDate,

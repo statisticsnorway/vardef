@@ -6,8 +6,6 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.validation.Validated
@@ -39,7 +37,6 @@ import java.time.LocalDate
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = LABID_TOKEN_SCHEME)
-@ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController(
     private val vardef: VariableDefinitionService,
     private val patches: PatchesService,
@@ -63,7 +60,7 @@ class VariableDefinitionByIdController(
     )
     @NotFoundApiResponse
     @Get
-    fun getVariableDefinitionById(
+    suspend fun getVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
@@ -113,7 +110,7 @@ class VariableDefinitionByIdController(
     @Status(HttpStatus.NO_CONTENT)
     @Delete
     @Secured(VARIABLE_OWNER)
-    fun deleteVariableDefinitionById(
+    suspend fun deleteVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
@@ -161,7 +158,7 @@ class VariableDefinitionByIdController(
     @ConflictApiResponse
     @Patch
     @Secured(VARIABLE_OWNER)
-    fun updateVariableDefinitionById(
+    suspend fun updateVariableDefinitionById(
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
             examples = [
@@ -196,10 +193,13 @@ class VariableDefinitionByIdController(
         val existingVariable = patches.latest(definitionId)
 
         when {
-            existingVariable.variableStatus.isPublished() -> throw HttpStatusException(
-                HttpStatus.METHOD_NOT_ALLOWED,
-                "The variable is published and cannot be updated with this method",
-            )
+            existingVariable.variableStatus.isPublished() -> {
+                throw HttpStatusException(
+                    HttpStatus.METHOD_NOT_ALLOWED,
+                    "The variable is published and cannot be updated with this method",
+                )
+            }
+
             vardef.isIllegalShortNameForPublishing(existingVariable, updateDraft) -> {
                 throw HttpStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -218,20 +218,26 @@ class VariableDefinitionByIdController(
                 updateDraft.shortName != null &&
                     updateDraft.shortName != existingVariable.shortName &&
                     vardef.doesShortNameExist(updateDraft.shortName)
-            ) ->
+            ) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
                 )
-            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, existingVariable) -> throw HttpStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Invalid date order",
-            )
-            !vardef.allLanguagesPresentForExternalPublication(updateDraft, existingVariable) ->
+            }
+
+            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, existingVariable) -> {
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid date order",
+                )
+            }
+
+            !vardef.allLanguagesPresentForExternalPublication(updateDraft, existingVariable) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The variable must have translations for all languages for name, definition, comment before external publication.",
                 )
+            }
         }
         return vardef
             .update(existingVariable, updateDraft, authentication.name)

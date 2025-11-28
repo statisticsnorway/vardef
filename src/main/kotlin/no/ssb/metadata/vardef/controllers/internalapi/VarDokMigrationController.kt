@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory
 @Controller("/vardok-migration")
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = LABID_TOKEN_SCHEME)
-@ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController(
     private val vardokService: VardokService,
     private val vardefService: VariableDefinitionService,
@@ -70,7 +69,7 @@ class VarDokMigrationController(
     )
     @BadRequestApiResponse
     @Secured(VARIABLE_CREATOR)
-    fun createVariableDefinitionFromVarDok(
+    suspend fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",
             description = "The ID of the definition in Vardok.",
@@ -158,7 +157,7 @@ class VarDokMigrationController(
                 ),
             ],
     )
-    fun getVardokVardefMappingById(
+    suspend fun getVardokVardefMappingById(
         @Parameter(
             name = "id",
             description = "The ID of the definition in Vardok or Vardef.",
@@ -210,6 +209,6 @@ class VarDokMigrationController(
             ),
         ],
     )
-    fun getVardokVardefMapping(httpRequest: HttpRequest<*>): MutableHttpResponse<*> =
+    suspend fun getVardokVardefMapping(httpRequest: HttpRequest<*>): MutableHttpResponse<*> =
         HttpResponse.ok(vardokService.getVardokVardefIdMapping())
 }

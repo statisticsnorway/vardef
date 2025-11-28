@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers.patches
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -110,9 +111,11 @@ class UpdateTests : BaseVardefTest() {
             .spec(buildProblemJsonResponseSpec(constraintViolation, null, expectedErrorMessage))
 
         val savedVariableDefinition =
-            variableDefinitionService.getCompleteByDate(
-                SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-            )
+            runBlocking {
+                variableDefinitionService.getCompleteByDate(
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                )
+            }
         assertThat(savedVariableDefinition?.owner?.team).isNotBlank()
         assertThat(savedVariableDefinition?.owner?.groups?.all { it.isNotBlank() })
         assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())

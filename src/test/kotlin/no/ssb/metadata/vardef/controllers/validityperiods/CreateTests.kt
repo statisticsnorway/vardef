@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers.validityperiods
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.allMandatoryFieldsChanged
 import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.noneMandatoryFieldsChanged
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -49,11 +50,12 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(201)
         val lastPatchInSecondToLastValidityPeriod =
-            validityPeriods
-                .getAsMap(INCOME_TAX_VP1_P1.definitionId)
-                .let { it.values.elementAt(it.values.size - 2) }
+            runBlocking {
+                validityPeriods
+                    .getAsMap(INCOME_TAX_VP1_P1.definitionId)
+            }.let { it.values.elementAt(it.values.size - 2) }
                 ?.last()
-        val lastPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)
+        val lastPatch = runBlocking { patches.latest(INCOME_TAX_VP1_P1.definitionId) }
         assertThat(
             lastPatch.validUntil,
         ).isNull()
@@ -79,10 +81,12 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(201)
         assertThat(
-            patches
-                .latest(
-                    INCOME_TAX_VP1_P1.definitionId,
-                ).validUntil,
+            runBlocking {
+                patches
+                    .latest(
+                        INCOME_TAX_VP1_P1.definitionId,
+                    )
+            }.validUntil,
         ).isEqualTo(LocalDate.of(1979, 12, 31))
     }
 
@@ -278,10 +282,12 @@ class CreateTests : BaseVardefTest() {
             .body("$", hasKey("comment"))
 
         assertThat(
-            patches
-                .latest(
-                    INCOME_TAX_VP1_P1.definitionId,
-                ).comment
+            runBlocking {
+                patches
+                    .latest(
+                        INCOME_TAX_VP1_P1.definitionId,
+                    )
+            }.comment
                 ?.nb,
         ).isEqualTo("Vi endrer etter lovverket")
     }
@@ -423,11 +429,12 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(201)
         val lastPatchInSecondToLastValidityPeriod =
-            validityPeriods
-                .getAsMap(INCOME_TAX_VP1_P1.definitionId)
-                .let { it.values.elementAt(it.values.size - 2) }
+            runBlocking {
+                validityPeriods
+                    .getAsMap(INCOME_TAX_VP1_P1.definitionId)
+            }.let { it.values.elementAt(it.values.size - 2) }
                 ?.last()
-        val lastPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)
+        val lastPatch = runBlocking { patches.latest(INCOME_TAX_VP1_P1.definitionId) }
         assertThat(
             lastPatch.validUntil,
         ).isNull()

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import jakarta.inject.Singleton
+import kotlinx.coroutines.reactor.awaitSingle
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
@@ -20,8 +21,10 @@ open class VardokApiService(
 
     // Normalize the name (lowercase, replace hyphens/spaces with underscores) for comparison
     // to match how names are stored
-    override fun isDuplicate(name: String): Boolean =
-        variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
+    override suspend fun isDuplicate(name: String): Boolean =
+        variableDefinitionRepository
+            .existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
+            .awaitSingle()
 
     private val xmlMapper = XmlMapper().registerKotlinModule()
 
@@ -64,7 +67,7 @@ open class VardokApiService(
      * @param id The ID of the Vardok item.
      * @return A map of language codes to their respective Vardok responses.
      */
-    override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
+    override suspend fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
 

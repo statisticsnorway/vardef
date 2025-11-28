@@ -5,8 +5,6 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.scheduling.TaskExecutors
-import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.validation.Validated
@@ -40,7 +38,6 @@ import java.time.LocalDate
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = LABID_TOKEN_SCHEME)
-@ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController(
     private val validityPeriods: ValidityPeriodsService,
     private val patches: PatchesService,
@@ -70,7 +67,7 @@ class PatchesController(
         ],
     )
     @Get
-    fun listPatches(
+    suspend fun listPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
@@ -107,7 +104,7 @@ class PatchesController(
     )
     @NotFoundApiResponse
     @Get("/{patch-id}")
-    fun getPatch(
+    suspend fun getPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
@@ -156,7 +153,7 @@ class PatchesController(
     @BadRequestApiResponse
     @MethodNotAllowedApiResponse
     @Secured(VARIABLE_OWNER)
-    fun createPatch(
+    suspend fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
@@ -189,13 +186,16 @@ class PatchesController(
         logger.debug("Received patch {}", patch)
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
         when {
-            !latestPatchOnValidityPeriod.variableStatus.isPublished() ->
+            !latestPatchOnValidityPeriod.variableStatus.isPublished() -> {
                 throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
-            !vardef.allLanguagesPresentForExternalPublication(patch, latestPatchOnValidityPeriod) ->
+            }
+
+            !vardef.allLanguagesPresentForExternalPublication(patch, latestPatchOnValidityPeriod) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The variable must be defined in all languages before external publication.",
                 )
+            }
         }
         return patches
             .create(

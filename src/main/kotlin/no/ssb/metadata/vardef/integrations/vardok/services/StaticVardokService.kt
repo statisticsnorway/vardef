@@ -6,6 +6,7 @@ import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requires
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import kotlinx.coroutines.reactor.awaitSingle
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
@@ -28,8 +29,8 @@ class StaticVardokService(
 
     // Normalize the name (lowercase, replace hyphens/spaces with underscores) for comparison
     // to match how names are stored
-    override fun isDuplicate(name: String): Boolean =
-        variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
+    override suspend fun isDuplicate(name: String): Boolean =
+        variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_")).awaitSingle()
 
     override fun createVardokVardefIdMapping(
         vardokId: String,
@@ -76,7 +77,7 @@ class StaticVardokService(
         }
     }
 
-    override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
+    override suspend fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {
         val result = getVardokItem(id)
         val responseMap = mutableMapOf<String, VardokResponse>()
         result.let {

@@ -32,7 +32,6 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 @Tag(name = VALIDITY_PERIODS)
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
-@ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = LABID_TOKEN_SCHEME)
 class ValidityPeriodsController(
@@ -62,7 +61,7 @@ class ValidityPeriodsController(
     @BadRequestApiResponse
     @MethodNotAllowedApiResponse
     @Secured(VARIABLE_OWNER)
-    fun createValidityPeriod(
+    suspend fun createValidityPeriod(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
@@ -113,7 +112,7 @@ class ValidityPeriodsController(
         ],
     )
     @NotFoundApiResponse
-    fun listValidityPeriods(
+    suspend fun listValidityPeriods(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,

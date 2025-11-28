@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.services
 
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.exceptions.InvalidOwnerStructureError
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.utils.*
@@ -17,15 +18,17 @@ import java.util.stream.Stream
 class VariableDefinitionServiceTest : BaseVardefTest() {
     @Test
     fun `list public variable definitions`() {
-        variableDefinitionService
-            .listPublicForDate(
-                SupportedLanguages.EN,
-                LocalDate.now(),
-            ).let {
-                assertThat(it.size).isEqualTo(
-                    NUM_PUBLISHED_EXTERNAL_VARIABLE_DEFINITIONS,
-                )
-            }
+        runBlocking {
+            variableDefinitionService
+                .listPublicForDate(
+                    SupportedLanguages.EN,
+                    LocalDate.now(),
+                ).let {
+                    assertThat(it.size).isEqualTo(
+                        NUM_PUBLISHED_EXTERNAL_VARIABLE_DEFINITIONS,
+                    )
+                }
+        }
     }
 
     @ParameterizedTest
@@ -34,14 +37,16 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         date: LocalDate?,
         result: Int,
     ) {
-        val variableDefinitions =
-            variableDefinitionService
-                .listCompleteForDate(
-                    date,
-                    null,
-                )
+        runBlocking {
+            val variableDefinitions =
+                variableDefinitionService
+                    .listCompleteForDate(
+                        date,
+                        null,
+                    )
 
-        assertThat(variableDefinitions.size).isEqualTo(result)
+            assertThat(variableDefinitions.size).isEqualTo(result)
+        }
     }
 
     @ParameterizedTest
@@ -51,8 +56,10 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         patchId: Int?,
         shortName: String?,
     ) {
-        assertThat(variableDefinitionService.listCompleteForDate(date, shortName).first().patchId)
-            .isEqualTo(patchId)
+        runBlocking {
+            assertThat(variableDefinitionService.listCompleteForDate(date, shortName).first().patchId)
+                .isEqualTo(patchId)
+        }
     }
 
     @Test
@@ -72,12 +79,14 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         status: VariableStatus?,
         expectedResult: CompleteResponse?,
     ) {
-        assertThat(
-            variableDefinitionService
-                .getCompleteByDate(definitionId, null, status),
-        ).usingRecursiveComparison()
-            .ignoringFields("createdAt", "lastUpdatedAt")
-            .isEqualTo(expectedResult)
+        runBlocking {
+            assertThat(
+                variableDefinitionService
+                    .getCompleteByDate(definitionId, null, status),
+            ).usingRecursiveComparison()
+                .ignoringFields("createdAt", "lastUpdatedAt")
+                .isEqualTo(expectedResult)
+        }
     }
 
     @ParameterizedTest
@@ -89,7 +98,9 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         shortName: String,
         expectedResult: Boolean,
     ) {
-        assertThat(variableDefinitionService.doesShortNameExist(shortName)).isEqualTo(expectedResult)
+        runBlocking {
+            assertThat(variableDefinitionService.doesShortNameExist(shortName)).isEqualTo(expectedResult)
+        }
     }
 
     @ParameterizedTest
@@ -98,8 +109,10 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         updateDraft: UpdateDraft,
         valueBefore: Owner,
     ) {
-        val updatedSavedVariable = variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft, TEST_USER)
-        assertThat(updatedSavedVariable.owner).isNotEqualTo(valueBefore)
+        runBlocking {
+            val updatedSavedVariable = variableDefinitionService.update(SAVED_DRAFT_DEADWEIGHT_EXAMPLE, updateDraft, TEST_USER)
+            assertThat(updatedSavedVariable.owner).isNotEqualTo(valueBefore)
+        }
     }
 
     @ParameterizedTest
@@ -108,14 +121,16 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
         updateDraft: UpdateDraft,
         valueBefore: Owner,
     ) {
-        assertThrows<InvalidOwnerStructureError> {
-            variableDefinitionService.update(
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE,
-                updateDraft,
-                TEST_USER,
-            )
+        runBlocking {
+            assertThrows<InvalidOwnerStructureError> {
+                variableDefinitionService.update(
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE,
+                    updateDraft,
+                    TEST_USER,
+                )
+            }
+            assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
         }
-        assertThat(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.owner).isEqualTo(valueBefore)
     }
 
     @ParameterizedTest

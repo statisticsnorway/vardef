@@ -3,6 +3,11 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.toSet
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.reactive.awaitLast
+import kotlinx.coroutines.reactor.awaitSingle
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
@@ -39,8 +44,8 @@ class VariableDefinitionService(
      * @param draft The *Draft* to create.
      * @return The created *Draft*
      */
-    fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
-        val savedVariableDefinition = variableDefinitionRepository.save(draft)
+    suspend fun create(draft: SavedVariableDefinition): SavedVariableDefinition {
+        val savedVariableDefinition = variableDefinitionRepository.save(draft).awaitLast()
         logger.info(
             "Successful saved draft variable: ${savedVariableDefinition.shortName} for definition: ${savedVariableDefinition.definitionId}",
             kv(DEFINITION_ID, savedVariableDefinition.definitionId),
@@ -63,7 +68,7 @@ class VariableDefinitionService(
      * @throws InvalidOwnerStructureError
      *
      */
-    fun update(
+    suspend fun update(
         savedDraft: SavedVariableDefinition,
         updateDraft: UpdateDraft,
         userName: String,
@@ -73,7 +78,10 @@ class VariableDefinitionService(
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
         }
-        val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft, userName))
+        val updatedVariable =
+            variableDefinitionRepository
+                .update(savedDraft.copyAndUpdate(updateDraft, userName))
+                .awaitLast()
         logger.info(
             "Successful updated variable with id: ${updatedVariable.definitionId}",
             kv(DEFINITION_ID, updatedVariable.definitionId),
@@ -90,7 +98,7 @@ class VariableDefinitionService(
     /**
      * List all objects in the repository
      */
-    fun list(): List<SavedVariableDefinition> = variableDefinitionRepository.findAll()
+    suspend fun list(): List<SavedVariableDefinition> = variableDefinitionRepository.findAll().asFlow().toList()
 
     /**
      * Does the given short name already exist?
@@ -98,8 +106,8 @@ class VariableDefinitionService(
      * @param shortName The value to check
      * @return `true` if the [shortName] exists, otherwise `false`
      */
-    fun doesShortNameExist(shortName: String): Boolean {
-        if (variableDefinitionRepository.existsByShortName(shortName)) {
+    suspend fun doesShortNameExist(shortName: String): Boolean {
+        if (variableDefinitionRepository.existsByShortName(shortName).awaitSingle()) {
             logger.info("Shortname exists: $shortName")
             return true
         }
@@ -109,7 +117,7 @@ class VariableDefinitionService(
     /**
      * @return `true` if [group] is an owner of the *Variable Definition*
      */
-    fun groupIsOwner(
+    suspend fun groupIsOwner(
         group: String,
         definitionId: String,
     ) = group in validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).owner.groups
@@ -119,15 +127,20 @@ class VariableDefinitionService(
      *
      * @param definitionId The ID of the *Variable Definition* of interest.
      */
-    fun isPublic(definitionId: String): Boolean = validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).variableStatus.isPublic()
+    suspend fun isPublic(definitionId: String): Boolean =
+        validityPeriods.getLatestPatchInLastValidityPeriod(definitionId).variableStatus.isPublic()
 
-    private fun uniqueDefinitionIds(): Set<String> =
+    private suspend fun uniqueDefinitionIds(): Set<String> =
         variableDefinitionRepository
             .findDistinctDefinitionIdByVariableStatusInList(VariableStatus.entries.toList())
+            .asFlow()
+            .toSet()
 
-    private fun uniqueDefinitionIdsByStatus(variableStatus: VariableStatus): Set<String> =
+    private suspend fun uniqueDefinitionIdsByStatus(variableStatus: VariableStatus): Set<String> =
         variableDefinitionRepository
             .findDistinctDefinitionIdByVariableStatusInList(listOf(variableStatus))
+            .asFlow()
+            .toSet()
 
     /**
      * List *Variable Definitions* which are valid on the given date.
@@ -139,7 +152,7 @@ class VariableDefinitionService(
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
      * @return [List<RenderedVariableDefinition>] with status [VariableStatus.PUBLISHED_EXTERNAL] valid at the date.
      */
-    fun listPublicForDate(
+    suspend fun listPublicForDate(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
     ): List<RenderedVariableDefinition> {
@@ -162,7 +175,7 @@ class VariableDefinitionService(
      * @param shortName The shortname which one wants a variable definition for.
      * @return [List<CompleteResponse>] valid at the date.
      */
-    fun listCompleteForDate(
+    suspend fun listCompleteForDate(
         dateOfValidity: LocalDate?,
         shortName: String?,
     ): List<CompleteResponse> {
@@ -170,7 +183,7 @@ class VariableDefinitionService(
             if (shortName != null) {
                 variableDefinitionRepository
                     .findDistinctDefinitionIdByShortName(shortName)
-                    .let { id -> listOfNotNull(id?.let { getCompleteByDate(it, dateOfValidity) }) }
+                    .let { id -> listOfNotNull(getCompleteByDate(id.awaitSingle(), dateOfValidity)) }
             } else {
                 uniqueDefinitionIds()
                     .mapNotNull { getCompleteByDate(it, dateOfValidity) }
@@ -192,7 +205,7 @@ class VariableDefinitionService(
      * @return The [RenderedVariableDefinition]
      * @throws [EmptyResultException] If nothing is found
      */
-    fun getPublicByDate(
+    suspend fun getPublicByDate(
         language: SupportedLanguages,
         definitionId: String,
         dateOfValidity: LocalDate?,
@@ -201,7 +214,7 @@ class VariableDefinitionService(
             ?.render(language, klassService)
             ?: throw EmptyResultException()
 
-    private fun getByDateAndStatus(
+    private suspend fun getByDateAndStatus(
         definitionId: String,
         dateOfValidity: LocalDate? = null,
         variableStatus: VariableStatus? = null,
@@ -212,7 +225,7 @@ class VariableDefinitionService(
                     it?.variableStatus == variableStatus
             }
 
-    private fun getByDate(
+    private suspend fun getByDate(
         definitionId: String,
         dateOfValidity: LocalDate? = null,
     ): SavedVariableDefinition? =
@@ -229,7 +242,7 @@ class VariableDefinitionService(
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
      * @return [CompleteResponse] suitable for internal use.
      */
-    fun getCompleteByDate(
+    suspend fun getCompleteByDate(
         definitionId: String,
         dateOfValidity: LocalDate? = null,
         variableStatus: VariableStatus? = null,
@@ -325,7 +338,8 @@ class VariableDefinitionService(
         return false
     }
 
-    fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
+    suspend fun getByShortName(shortName: String): CompleteResponse =
+        variableDefinitionRepository.findByShortName(shortName).awaitSingle().toCompleteResponse()
 
     /**
      * Are all languages present?

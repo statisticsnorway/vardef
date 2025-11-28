@@ -5,6 +5,7 @@ import io.micrometer.core.instrument.MultiGauge
 import io.micrometer.core.instrument.Tags
 import io.micronaut.context.annotation.Requires
 import io.micronaut.scheduling.annotation.Scheduled
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamApiService
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import org.slf4j.LoggerFactory
@@ -34,7 +35,7 @@ class MetricsService(
         meterRegistry.gauge(MIGRATED_COUNT_METRIC, Tags.of(SECTION_TAG_KEY, "total"), totalMigrated)
     }
 
-    private fun countMigratedVariablesBySection(): Map<String, Int> =
+    private suspend fun countMigratedVariablesBySection(): Map<String, Int> =
         vardokIdMappingRepository
             .findAll()
             .map { (_, vardefId, _) ->
@@ -55,11 +56,13 @@ class MetricsService(
         totalMigrated.set(vardokIdMappingRepository.count().toInt())
         logger.debug("Updating metrics.")
         migrated.register(
-            countMigratedVariablesBySection()
-                .also { logger.debug(it.toString()) }
-                .map {
-                    MultiGauge.Row.of(Tags.of(SECTION_TAG_KEY, it.key), it.value)
-                }.toList(),
+            runBlocking {
+                countMigratedVariablesBySection()
+                    .also { logger.debug(it.toString()) }
+                    .map {
+                        MultiGauge.Row.of(Tags.of(SECTION_TAG_KEY, it.key), it.value)
+                    }.toList()
+            },
             true,
         )
     }

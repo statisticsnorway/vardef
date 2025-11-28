@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
 import io.micronaut.http.HttpStatus
 import io.restassured.specification.RequestSpecification
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -18,7 +19,7 @@ class DeleteTests : BaseVardefTest() {
             .statusCode(204)
             .header("Content-Type", nullValue())
 
-        assertThat(variableDefinitionService.list().none { it.definitionId == SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId })
+        assertThat(runBlocking { variableDefinitionService.list() }.none { it.definitionId == SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId })
     }
 
     @Test
@@ -29,7 +30,7 @@ class DeleteTests : BaseVardefTest() {
             .then()
             .statusCode(405)
 
-        assertThat(variableDefinitionService.list().none { it.definitionId == INCOME_TAX_VP1_P1.definitionId })
+        assertThat(runBlocking { variableDefinitionService.list() }.none { it.definitionId == INCOME_TAX_VP1_P1.definitionId })
     }
 
     @Test

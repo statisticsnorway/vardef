@@ -13,6 +13,10 @@ import io.micronaut.web.router.MethodBasedRouteMatch
 import io.micronaut.web.router.RouteAttributes
 import io.micronaut.web.router.RouteMatch
 import jakarta.inject.Singleton
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.reactor.awaitSingle
+import kotlinx.coroutines.reactor.mono
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.VARIABLE_DEFINITION_ID_PATH_VARIABLE
 import no.ssb.metadata.vardef.models.Owner
@@ -122,7 +126,10 @@ class VariableOwnerSecurityRule(
                     logger.info("No active group found in request or authentication claims. Request: $request")
                     return@map false
                 }
-                variableDefinitionService.groupIsOwner(activeGroup, definitionId)
+                runBlocking {
+                    variableDefinitionService
+                        .groupIsOwner(activeGroup, definitionId)
+                }
             }.handle { isOwner, sink ->
                 if (VARIABLE_OWNER !in authentication.roles) {
                     logger.info("Rejected access. Principal does not have $VARIABLE_OWNER role. Request: $request")

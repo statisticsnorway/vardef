@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.models.LanguageStringType
@@ -19,18 +20,20 @@ import java.util.stream.Stream
 class PatchesServiceTest : BaseVardefTest() {
     @Test
     fun `get latest patch`() {
-        assertThat(patches.latest(INCOME_TAX_VP1_P1.definitionId).patchId)
+        assertThat(runBlocking { patches.latest(INCOME_TAX_VP1_P1.definitionId) }.patchId)
             .isEqualTo(numIncomeTaxPatches)
     }
 
     @Test
     fun `list patches`() {
-        assertThat(patches.list(INCOME_TAX_VP1_P1.definitionId).map { it.patchId }).isEqualTo((1..numIncomeTaxPatches).toList())
+        assertThat(
+            runBlocking { patches.list(INCOME_TAX_VP1_P1.definitionId) }.map { it.patchId },
+        ).isEqualTo((1..numIncomeTaxPatches).toList())
     }
 
     @Test
     fun `list patches unknown id`() {
-        assertThrows<EmptyResultException> { patches.list("unknown id") }
+        assertThrows<EmptyResultException> { runBlocking { patches.list("unknown id") } }
     }
 
     @ParameterizedTest
@@ -41,18 +44,20 @@ class PatchesServiceTest : BaseVardefTest() {
         expectSuccess: Boolean,
     ) {
         if (expectSuccess) {
-            assertThat(patches.get(definitionId, patchId).patchId).isEqualTo(patchId)
+            assertThat(runBlocking { patches.get(definitionId, patchId) }.patchId).isEqualTo(patchId)
         } else {
-            assertThrows<EmptyResultException> { patches.get(definitionId, patchId) }
+            assertThrows<EmptyResultException> { runBlocking { patches.get(definitionId, patchId) } }
         }
     }
 
     @Test
     fun `delete patches`() {
-        patches.deleteAllForDefinitionId(INCOME_TAX_VP1_P1.definitionId)
-        assertThat(
-            variableDefinitionService.list().map { it.definitionId },
-        ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
+        runBlocking {
+            patches.deleteAllForDefinitionId(INCOME_TAX_VP1_P1.definitionId)
+            assertThat(
+                variableDefinitionService.list().map { it.definitionId },
+            ).doesNotContain(INCOME_TAX_VP1_P1.definitionId)
+        }
     }
 
     @ParameterizedTest
@@ -66,7 +71,7 @@ class PatchesServiceTest : BaseVardefTest() {
 
     @Test
     fun `delete patches for migrated variable`() {
-        patches.deleteAllForDefinitionId(DRAFT_BUS_EXAMPLE.definitionId)
+        runBlocking { patches.deleteAllForDefinitionId(DRAFT_BUS_EXAMPLE.definitionId) }
         assertThat(vardokIdMappingRepository.existsByVardefId(DRAFT_BUS_EXAMPLE.definitionId)).isFalse()
     }
 
@@ -96,20 +101,22 @@ class PatchesServiceTest : BaseVardefTest() {
                 null,
                 null,
             )
-        val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(definitionId, validityPeriod)
-        if (!isClosedValidityPeriodException && !isInvalidDateException) {
-            val result = patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
-            assertThat(result.validUntil).isEqualTo(latestPatchOnValidityPeriod.validUntil)
-        }
-
-        if (isClosedValidityPeriodException) {
-            assertThrows<ClosedValidityPeriodException> {
-                patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+        runBlocking {
+            val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(definitionId, validityPeriod)
+            if (!isClosedValidityPeriodException && !isInvalidDateException) {
+                val result = patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+                assertThat(result.validUntil).isEqualTo(latestPatchOnValidityPeriod.validUntil)
             }
-        }
-        if (isInvalidDateException) {
-            assertThrows<InvalidValidDateException> {
-                patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+
+            if (isClosedValidityPeriodException) {
+                assertThrows<ClosedValidityPeriodException> {
+                    patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+                }
+            }
+            if (isInvalidDateException) {
+                assertThrows<InvalidValidDateException> {
+                    patches.create(patch, definitionId, latestPatchOnValidityPeriod, TEST_USER)
+                }
             }
         }
     }
@@ -141,11 +148,13 @@ class PatchesServiceTest : BaseVardefTest() {
                 ),
                 null,
             )
-        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7, TEST_USER)
-        val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
-        validityPeriodList.forEach { period ->
-            assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP1_P7.owner)
-            assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP2_P6.owner)
+        runBlocking {
+            patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP1_P7, TEST_USER)
+            val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
+            validityPeriodList.forEach { period ->
+                assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP1_P7.owner)
+                assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP2_P6.owner)
+            }
         }
     }
 
@@ -161,15 +170,16 @@ class PatchesServiceTest : BaseVardefTest() {
                             en = "name",
                         ),
                 ).toPatch()
-
-        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6, TEST_USER)
-        val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
-        // Only one patch created in selected period
-        validityPeriodList
-            .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
-            .forEach { period ->
-                assertThat(period.name).isNotEqualTo(INCOME_TAX_VP2_P6.name)
-            }
+        runBlocking {
+            patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6, TEST_USER)
+            val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
+            // Only one patch created in selected period
+            validityPeriodList
+                .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
+                .forEach { period ->
+                    assertThat(period.name).isNotEqualTo(INCOME_TAX_VP2_P6.name)
+                }
+        }
     }
 
     @Test
@@ -188,26 +198,27 @@ class PatchesServiceTest : BaseVardefTest() {
                             ),
                         ),
                 ).toPatch()
+        runBlocking {
+            patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6, TEST_USER)
+            val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
 
-        patches.create(patch, INCOME_TAX_VP1_P1.definitionId, INCOME_TAX_VP2_P6, TEST_USER)
-        val validityPeriodList = validityPeriods.listLatestByValidityPeriod(INCOME_TAX_VP1_P1.definitionId)
+            // For selected validity period
+            validityPeriodList
+                .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
+                .forEach { period ->
 
-        // For selected validity period
-        validityPeriodList
-            .filter { it.validFrom == INCOME_TAX_VP2_P6.validFrom }
-            .forEach { period ->
+                    assertThat(period.unitTypes).isNotEqualTo(INCOME_TAX_VP2_P6.unitTypes)
+                    assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP2_P6.owner)
+                }
+            // For all other validity periods
+            validityPeriodList
+                .filter { it.validFrom != INCOME_TAX_VP2_P6.validFrom }
+                .forEach { period ->
 
-                assertThat(period.unitTypes).isNotEqualTo(INCOME_TAX_VP2_P6.unitTypes)
-                assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP2_P6.owner)
-            }
-        // For all other validity periods
-        validityPeriodList
-            .filter { it.validFrom != INCOME_TAX_VP2_P6.validFrom }
-            .forEach { period ->
-
-                assertThat(period.unitTypes).isEqualTo(INCOME_TAX_VP1_P7.unitTypes)
-                assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP1_P7.owner)
-            }
+                    assertThat(period.unitTypes).isEqualTo(INCOME_TAX_VP1_P7.unitTypes)
+                    assertThat(period.owner).isNotEqualTo(INCOME_TAX_VP1_P7.owner)
+                }
+        }
     }
 
     companion object {

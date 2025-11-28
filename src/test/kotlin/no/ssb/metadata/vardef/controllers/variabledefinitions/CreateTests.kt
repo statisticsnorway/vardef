@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers.variabledefinitions
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -43,7 +44,7 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .path<String>("id")
 
-        val createdVariableDefinition = patches.latest(definitionId)
+        val createdVariableDefinition = runBlocking { patches.latest(definitionId) }
 
         assertThat(createdVariableDefinition.shortName).isEqualTo("blah")
         assertThat(createdVariableDefinition.createdAt).isCloseTo(startTime, within(1, ChronoUnit.MINUTES))
@@ -272,7 +273,7 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .path<String>("id")
 
-        val createdVariableDefinition = patches.latest(definitionId)
+        val createdVariableDefinition = runBlocking { patches.latest(definitionId) }
         assertThat(createdVariableDefinition.createdBy).isEqualTo(TEST_USER)
         assertThat(createdVariableDefinition.lastUpdatedBy).isEqualTo(TEST_USER)
     }

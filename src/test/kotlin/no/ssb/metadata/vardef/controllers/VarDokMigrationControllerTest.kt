@@ -4,6 +4,7 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
@@ -247,7 +248,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .path<String>("id")
 
-        val createdVariableDefinition = patches.latest(definitionId)
+        val createdVariableDefinition = runBlocking { patches.latest(definitionId) }
         assertThat(createdVariableDefinition.shortName).startsWith(ILLEGAL_SHORTNAME_KEYWORD)
     }
 

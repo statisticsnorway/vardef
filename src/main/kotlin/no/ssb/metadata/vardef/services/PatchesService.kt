@@ -2,6 +2,11 @@ package no.ssb.metadata.vardef.services
 
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.reactive.awaitLast
+import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.reactor.awaitSingle
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
@@ -51,7 +56,7 @@ class PatchesService(
      * @throws InvalidValidDateException if valid until date is equal or before valid from
      * @throws ClosedValidityPeriodException if attempt tp patch valid until on closed validity period
      */
-    fun create(
+    suspend fun create(
         patch: Patch,
         definitionId: String,
         latestPatch: SavedVariableDefinition,
@@ -107,9 +112,10 @@ class PatchesService(
         }
         // For the selected validity period create a patch with the provided values
         val savedVariableDefinition =
-            variableDefinitionRepository.save(
-                patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch, userName),
-            )
+            variableDefinitionRepository
+                .save(
+                    patch.toSavedVariableDefinition(latest(definitionId).patchId, latestPatch, userName),
+                ).awaitLast()
         logger.info("Successfully saved patch for definition: $definitionId", kv(DEFINITION_ID, definitionId))
         logger.debug("New patch {}", savedVariableDefinition)
         return savedVariableDefinition
@@ -123,9 +129,11 @@ class PatchesService(
      * @param definitionId The ID of the Variable Definition.
      * @return An ordered list of all Patches for this Variable Definition.
      */
-    fun list(definitionId: String): List<SavedVariableDefinition> =
+    suspend fun list(definitionId: String): List<SavedVariableDefinition> =
         variableDefinitionRepository
             .findByDefinitionIdOrderByPatchId(definitionId)
+            .asFlow()
+            .toList()
             .ifEmpty { throw EmptyResultException() }
 
     /**
@@ -135,7 +143,7 @@ class PatchesService(
      * @param patchId The ID of the Patch.
      * @return The specified Patch.
      */
-    fun get(
+    suspend fun get(
         definitionId: String,
         patchId: Int,
     ): SavedVariableDefinition =
@@ -143,7 +151,7 @@ class PatchesService(
             .findByDefinitionIdAndPatchId(
                 definitionId,
                 patchId,
-            )
+            ).awaitSingle()
 
     /**
      * Get the latest Patch for a specific Variable Definition.
@@ -151,7 +159,7 @@ class PatchesService(
      * @param definitionId The ID of the Variable Definition.
      * @return The Patch with the highest Patch ID.
      */
-    fun latest(definitionId: String): SavedVariableDefinition =
+    suspend fun latest(definitionId: String): SavedVariableDefinition =
         list(definitionId)
             .last()
 
@@ -161,9 +169,9 @@ class PatchesService(
      *
      * @param definitionId The ID of the Variable Definition.
      */
-    fun deleteAllForDefinitionId(definitionId: String) {
+    suspend fun deleteAllForDefinitionId(definitionId: String) {
         list(definitionId).forEach { item ->
-            variableDefinitionRepository.deleteById(item.id)
+            variableDefinitionRepository.deleteById(item.id).awaitSingle()
         }
         if (existsVardokMapping(definitionId)) {
             vardokIdMappingRepository.deleteByVardefId(definitionId)

@@ -19,7 +19,6 @@ import java.net.URI
 @Hidden
 @Controller
 @Secured(SecurityRule.IS_ANONYMOUS)
-@ExecuteOn(TaskExecutors.BLOCKING)
 class HomeController {
     private val docsUri: URI =
         UriBuilder
@@ -29,5 +28,5 @@ class HomeController {
             .build()
 
     @Get
-    fun redirectToDocs(): HttpResponse<Any> = HttpResponse.seeOther(docsUri)
+    suspend fun redirectToDocs(): HttpResponse<Any> = HttpResponse.seeOther(docsUri)
 }

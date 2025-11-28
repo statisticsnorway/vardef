@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers.patches
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.controllers.patches.CompanionObject.Companion.patchBody
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.models.CompleteResponse
@@ -33,8 +34,8 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(201)
             .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
-        val createdPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)
-        val previousPatch = patches.get(INCOME_TAX_VP2_P6.definitionId, INCOME_TAX_VP2_P6.patchId)
+        val createdPatch = runBlocking { patches.latest(INCOME_TAX_VP1_P1.definitionId) }
+        val previousPatch = runBlocking { patches.get(INCOME_TAX_VP2_P6.definitionId, INCOME_TAX_VP2_P6.patchId) }
         assertThat(createdPatch.shortName).isEqualTo(previousPatch.shortName)
         assertThat(createdPatch.validFrom).isEqualTo(previousPatch.validFrom)
         assertThat(createdPatch.name.nb).isNotEqualTo(previousPatch.name.nb)
@@ -256,7 +257,7 @@ class CreateTests : BaseVardefTest() {
             .statusCode(201)
             .body("id", equalTo(INCOME_TAX_VP1_P1.definitionId))
 
-        val createdPatch = patches.latest(INCOME_TAX_VP1_P1.definitionId)
+        val createdPatch = runBlocking { patches.latest(INCOME_TAX_VP1_P1.definitionId) }
 
         assertThat(createdPatch.name).isEqualTo(expected.name)
         assertThat(createdPatch.definition).isEqualTo(expected.definition)

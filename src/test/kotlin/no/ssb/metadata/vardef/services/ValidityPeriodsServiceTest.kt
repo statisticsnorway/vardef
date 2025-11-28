@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.services
 
 import jakarta.inject.Inject
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.models.LanguageStringType
@@ -27,18 +28,20 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
 
     @Test
     fun `end validity period`() {
-        val newValidityPeriodValidFrom = LocalDate.of(2024, 9, 2)
-        val latestPatch = patches.latest(savedVariableDefinitionId)
-        val patchEndValidityPeriod =
-            validityPeriods.endLastValidityPeriod(
-                savedVariableDefinitionId,
-                newValidityPeriodValidFrom,
-                TEST_USER,
-            )
+        runBlocking {
+            val newValidityPeriodValidFrom = LocalDate.of(2024, 9, 2)
+            val latestPatch = patches.latest(savedVariableDefinitionId)
+            val patchEndValidityPeriod =
+                validityPeriods.endLastValidityPeriod(
+                    savedVariableDefinitionId,
+                    newValidityPeriodValidFrom,
+                    TEST_USER,
+                )
 
-        assertThat(patchEndValidityPeriod.validUntil).isAfter(patchEndValidityPeriod.validFrom)
-        assertThat(patchEndValidityPeriod.patchId).isEqualTo(latestPatch.patchId + 1)
-        assertThat(patchEndValidityPeriod.validUntil).isEqualTo(newValidityPeriodValidFrom.minusDays(1))
+            assertThat(patchEndValidityPeriod.validUntil).isAfter(patchEndValidityPeriod.validFrom)
+            assertThat(patchEndValidityPeriod.patchId).isEqualTo(latestPatch.patchId + 1)
+            assertThat(patchEndValidityPeriod.validUntil).isEqualTo(newValidityPeriodValidFrom.minusDays(1))
+        }
     }
 
     @ParameterizedTest
@@ -52,13 +55,15 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         year: Int,
         patchId: Int?,
     ) {
-        assertThat(
-            validityPeriods
-                .getForDate(
-                    INCOME_TAX_VP1_P1.definitionId,
-                    LocalDate.of(year, 1, 1),
-                )?.patchId,
-        ).isEqualTo(patchId)
+        runBlocking {
+            assertThat(
+                validityPeriods
+                    .getForDate(
+                        INCOME_TAX_VP1_P1.definitionId,
+                        LocalDate.of(year, 1, 1),
+                    )?.patchId,
+            ).isEqualTo(patchId)
+        }
     }
 
     @ParameterizedTest
@@ -68,23 +73,25 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         inputObject: ValidityPeriod,
         expectSuccess: Boolean,
     ) {
-        if (!expectSuccess) {
-            assertThrows<InvalidValidDateException> {
-                validityPeriods.create(
-                    definitionId,
-                    inputObject,
-                    TEST_USER,
-                )
-            }
-        } else {
-            AssertionsForClassTypes
-                .assertThat(
+        runBlocking {
+            if (!expectSuccess) {
+                assertThrows<InvalidValidDateException> {
                     validityPeriods.create(
                         definitionId,
                         inputObject,
                         TEST_USER,
-                    ),
-                ).isInstanceOf(SavedVariableDefinition::class.java)
+                    )
+                }
+            } else {
+                AssertionsForClassTypes
+                    .assertThat(
+                        validityPeriods.create(
+                            definitionId,
+                            inputObject,
+                            TEST_USER,
+                        ),
+                    ).isInstanceOf(SavedVariableDefinition::class.java)
+            }
         }
     }
 
@@ -94,113 +101,121 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
         inputObject: ValidityPeriod,
         expectSuccess: Boolean,
     ) {
-        if (!expectSuccess) {
-            assertThrows<DefinitionTextUnchangedException> {
-                validityPeriods.create(
-                    INCOME_TAX_VP1_P1.definitionId,
-                    inputObject,
-                    TEST_USER,
-                )
-            }
-        } else {
-            AssertionsForClassTypes
-                .assertThat(
+        runBlocking {
+            if (!expectSuccess) {
+                assertThrows<DefinitionTextUnchangedException> {
                     validityPeriods.create(
                         INCOME_TAX_VP1_P1.definitionId,
                         inputObject,
                         TEST_USER,
-                    ),
-                ).isInstanceOf(SavedVariableDefinition::class.java)
+                    )
+                }
+            } else {
+                AssertionsForClassTypes
+                    .assertThat(
+                        validityPeriods.create(
+                            INCOME_TAX_VP1_P1.definitionId,
+                            inputObject,
+                            TEST_USER,
+                        ),
+                    ).isInstanceOf(SavedVariableDefinition::class.java)
+            }
         }
     }
 
     @ParameterizedTest
     @MethodSource("createValidityPeriodsTestCases")
     fun `save new validity period`(inputData: ValidityPeriod) {
-        val patchesBefore = patches.list(savedVariableDefinitionId)
-        val newValidityPeriod =
-            validityPeriods.create(
-                savedVariableDefinitionId,
-                inputData,
-                TEST_USER,
-            )
-        val patchesAfter =
-            patches.list(
-                savedVariableDefinitionId,
-            )
+        runBlocking {
+            val patchesBefore = patches.list(savedVariableDefinitionId)
+            val newValidityPeriod =
+                validityPeriods.create(
+                    savedVariableDefinitionId,
+                    inputData,
+                    TEST_USER,
+                )
+            val patchesAfter =
+                patches.list(
+                    savedVariableDefinitionId,
+                )
 
-        val lastPatchInSecondToLastValidityPeriod =
-            validityPeriods
-                .getAsMap(savedVariableDefinitionId)
-                .let { it.values.elementAt(it.values.size - 2) }
-                ?.last()
+            val lastPatchInSecondToLastValidityPeriod =
+                validityPeriods
+                    .getAsMap(savedVariableDefinitionId)
+                    .let { it.values.elementAt(it.values.size - 2) }
+                    ?.last()
 
-        assertThat(patchesAfter.size).isEqualTo(patchesBefore.size + 2)
-        assertThat(newValidityPeriod.patchId).isEqualTo(patchesBefore.last().patchId + 2)
-        assertThat(newValidityPeriod.patchId).isEqualTo(patchesAfter.last().patchId)
-        assertThat(newValidityPeriod.validFrom).isEqualTo(inputData.validFrom)
-        assertThat(lastPatchInSecondToLastValidityPeriod?.validUntil).isEqualTo(
-            newValidityPeriod.validFrom.minusDays(1),
-        )
+            assertThat(patchesAfter.size).isEqualTo(patchesBefore.size + 2)
+            assertThat(newValidityPeriod.patchId).isEqualTo(patchesBefore.last().patchId + 2)
+            assertThat(newValidityPeriod.patchId).isEqualTo(patchesAfter.last().patchId)
+            assertThat(newValidityPeriod.validFrom).isEqualTo(inputData.validFrom)
+            assertThat(lastPatchInSecondToLastValidityPeriod?.validUntil).isEqualTo(
+                newValidityPeriod.validFrom.minusDays(1),
+            )
+        }
     }
 
     @Test
     fun `update status on all validity periods except current`() {
-        variableDefinitionRepository.save(
-            SAVED_INTERNAL_VARIABLE_DEFINITION.copy(validFrom = LocalDate.of(2020, 1, 1), validUntil = LocalDate.of(2023, 12, 31)),
-        )
-        variableDefinitionRepository.save(
-            SAVED_INTERNAL_VARIABLE_DEFINITION.copy(validFrom = LocalDate.of(2010, 1, 1), validUntil = LocalDate.of(2019, 12, 31)),
-        )
+        runBlocking {
+            variableDefinitionRepository.save(
+                SAVED_INTERNAL_VARIABLE_DEFINITION.copy(validFrom = LocalDate.of(2020, 1, 1), validUntil = LocalDate.of(2023, 12, 31)),
+            )
+            variableDefinitionRepository.save(
+                SAVED_INTERNAL_VARIABLE_DEFINITION.copy(validFrom = LocalDate.of(2010, 1, 1), validUntil = LocalDate.of(2019, 12, 31)),
+            )
 
-        validityPeriodsService.updateStatusOnOtherPeriods(
-            SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
-            VariableStatus.PUBLISHED_EXTERNAL,
-            SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom,
-            "testuser",
-        )
+            validityPeriodsService.updateStatusOnOtherPeriods(
+                SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
+                VariableStatus.PUBLISHED_EXTERNAL,
+                SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom,
+                "testuser",
+            )
 
-        validityPeriodsService
-            .listLatestByValidityPeriod(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
-            .filter {
-                it.validFrom !=
-                    SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom
-            }.forEach {
-                assertThat(it.variableStatus).isEqualTo(VariableStatus.PUBLISHED_EXTERNAL)
-            }
-
-        assertThat(
             validityPeriodsService
                 .listLatestByValidityPeriod(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
-                .firstOrNull { it.validFrom == SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom }
-                ?.variableStatus,
-        ).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
+                .filter {
+                    it.validFrom !=
+                        SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom
+                }.forEach {
+                    assertThat(it.variableStatus).isEqualTo(VariableStatus.PUBLISHED_EXTERNAL)
+                }
+
+            assertThat(
+                validityPeriodsService
+                    .listLatestByValidityPeriod(SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId)
+                    .firstOrNull { it.validFrom == SAVED_INTERNAL_VARIABLE_DEFINITION.validFrom }
+                    ?.variableStatus,
+            ).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
+        }
     }
 
     @Test
     fun `save new validity period before all valid from`() {
-        val allPatches = patches.list(savedVariableDefinitionId)
-        val saveNewValidityPeriod =
-            validityPeriods.create(
-                INCOME_TAX_VP1_P1.definitionId,
-                VALIDITY_PERIOD_TAX_EXAMPLE.copy(
-                    validFrom = LocalDate.of(1796, 1, 1),
-                    definition =
-                        LanguageStringType(
-                            nb = "Ny def",
-                            nn = "Ny def",
-                            en = "New def",
-                        ),
-                ),
-                TEST_USER,
-            )
-        val patchesAfterSave = patches.list(savedVariableDefinitionId)
+        runBlocking {
+            val allPatches = patches.list(savedVariableDefinitionId)
+            val saveNewValidityPeriod =
+                validityPeriods.create(
+                    INCOME_TAX_VP1_P1.definitionId,
+                    VALIDITY_PERIOD_TAX_EXAMPLE.copy(
+                        validFrom = LocalDate.of(1796, 1, 1),
+                        definition =
+                            LanguageStringType(
+                                nb = "Ny def",
+                                nn = "Ny def",
+                                en = "New def",
+                            ),
+                    ),
+                    TEST_USER,
+                )
+            val patchesAfterSave = patches.list(savedVariableDefinitionId)
 
-        assertThat(saveNewValidityPeriod.patchId).isEqualTo(allPatches.last().patchId + 1)
-        assertThat(saveNewValidityPeriod.validUntil).isEqualTo(
-            patchesAfterSave.first().validFrom.minusDays(1),
-        )
-        assertThat(saveNewValidityPeriod.validFrom).isBefore(patchesAfterSave.first().validFrom)
+            assertThat(saveNewValidityPeriod.patchId).isEqualTo(allPatches.last().patchId + 1)
+            assertThat(saveNewValidityPeriod.validUntil).isEqualTo(
+                patchesAfterSave.first().validFrom.minusDays(1),
+            )
+            assertThat(saveNewValidityPeriod.validFrom).isBefore(patchesAfterSave.first().validFrom)
+        }
     }
 
     companion object {

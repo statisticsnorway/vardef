@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
@@ -50,7 +51,7 @@ class VardokClientTest {
 
     @Test
     fun `fetch multiple languages`() {
-        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("476")
+        val result = runBlocking { vardokApiService.fetchMultipleVardokItemsByLanguage("476") }
         assertThat(result).isInstanceOf(MutableMap::class.java)
     }
 
@@ -62,7 +63,7 @@ class VardokClientTest {
         ],
     )
     fun `fetch vardok with invalid external document`(id: Int) {
-        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("$id")
+        val result = runBlocking { vardokApiService.fetchMultipleVardokItemsByLanguage("$id") }
         assertThat(result).isInstanceOf(MutableMap::class.java)
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.externalReferenceUri).isNull()
@@ -70,7 +71,7 @@ class VardokClientTest {
 
     @Test
     fun `fetch vardok with null external document`() {
-        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("130")
+        val result = runBlocking { vardokApiService.fetchMultipleVardokItemsByLanguage("130") }
         assertThat(result).isInstanceOf(MutableMap::class.java)
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.externalReferenceUri).isNull()
@@ -78,21 +79,21 @@ class VardokClientTest {
 
     @Test
     fun `special unit types convertion`() {
-        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("1416")
+        val result = runBlocking { vardokApiService.fetchMultipleVardokItemsByLanguage("1416") }
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.unitTypes).isEqualTo(listOf("20"))
     }
 
     @Test
     fun `special case unit types convertion list of multiple unit types`() {
-        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("2216")
+        val result = runBlocking { vardokApiService.fetchMultipleVardokItemsByLanguage("2216") }
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.unitTypes).isEqualTo(listOf("01", "04", "05"))
     }
 
     @Test
     fun `map single ConceptVariableRelation to relatedVariableDefinitionUris`() {
-        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("1245")
+        val result = runBlocking { vardokApiService.fetchMultipleVardokItemsByLanguage("1245") }
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.relatedVariableDefinitionUris).isEqualTo(listOf("http://www.ssb.no/conceptvariable/vardok/1246"))
     }
@@ -100,14 +101,14 @@ class VardokClientTest {
     @Test
     fun `Vardok not found`() {
         assertThatThrownBy {
-            vardokApiService.fetchMultipleVardokItemsByLanguage("21")
+            runBlocking { vardokApiService.fetchMultipleVardokItemsByLanguage("21") }
         }.isInstanceOf(VardokNotFoundException::class.java)
             .hasMessageContaining("Vardok id 21 not found")
     }
 
     @Test
     fun `statistical unit nn`() {
-        val result = vardokApiService.fetchMultipleVardokItemsByLanguage("3135")
+        val result = runBlocking { vardokApiService.fetchMultipleVardokItemsByLanguage("3135") }
         val varDefInput = VardokService.extractVardefInput(result)
         assertThat(varDefInput.unitTypes).isEqualTo(listOf("10"))
     }

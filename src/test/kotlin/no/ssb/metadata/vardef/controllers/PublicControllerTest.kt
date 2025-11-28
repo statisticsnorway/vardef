@@ -7,6 +7,7 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
 import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
 import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
@@ -68,7 +69,7 @@ class PublicControllerTest : BaseVardefTest() {
                 .asString()
 
         jsonMapper.readValue(body, Array<RenderedVariableDefinition>::class.java).forEach {
-            assertThat(validityPeriods.getLatestPatchInLastValidityPeriod(it.id).variableStatus)
+            assertThat(runBlocking { validityPeriods.getLatestPatchInLastValidityPeriod(it.id) }.variableStatus)
                 .isEqualTo(VariableStatus.PUBLISHED_EXTERNAL)
         }
     }
@@ -104,10 +105,12 @@ class PublicControllerTest : BaseVardefTest() {
             .body(
                 "definition",
                 equalTo(
-                    validityPeriods
-                        .getLatestPatchInLastValidityPeriod(
-                            INCOME_TAX_VP1_P1.definitionId,
-                        ).definition.nb,
+                    runBlocking {
+                        validityPeriods
+                            .getLatestPatchInLastValidityPeriod(
+                                INCOME_TAX_VP1_P1.definitionId,
+                            )
+                    }.definition.nb,
                 ),
             ).header(
                 "Content-Language",

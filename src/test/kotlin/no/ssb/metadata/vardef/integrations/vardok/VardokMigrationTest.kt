@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok
 
 import com.fasterxml.jackson.databind.JsonMappingException
 import jakarta.inject.Inject
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.integrations.vardok.conversions.StatisticalSubjects
 import no.ssb.metadata.vardef.integrations.vardok.conversions.getValidDates
 import no.ssb.metadata.vardef.integrations.vardok.conversions.mapVardokStatisticalUnitToUnitTypes
@@ -72,7 +73,7 @@ class VardokMigrationTest : BaseVardefTest() {
 
     @Test
     fun `map vardok missing valid from date but has valid to date`() {
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("134")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("134") }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.validFrom).isEqualTo("1900-01-01")
         assertThat(vardokTransform.validUntil).isEqualTo("2005-12-31")
@@ -112,7 +113,7 @@ class VardokMigrationTest : BaseVardefTest() {
     fun `vardok item has not valid dates`() {
         val result = vardokService.getVardokItem("100")
         assertThat(result?.dc?.valid).isNullOrEmpty()
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("100")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("100") }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.validFrom).isEqualTo("1900-01-01")
         assertThat(vardokTransform.validUntil).isNull()
@@ -122,7 +123,7 @@ class VardokMigrationTest : BaseVardefTest() {
     fun `data element name with uppercase`() {
         val vardok = vardokService.getVardokItem("130")
         assertThat(vardok?.variable?.dataElementName).isEqualTo("Ufg")
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("130")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("130") }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         val afterMigration = JSONObject(vardokTransform)
         assertThat(afterMigration["shortName"]).isEqualTo("ufg")
@@ -164,21 +165,21 @@ class VardokMigrationTest : BaseVardefTest() {
         vardokId: String,
         expectedResult: URL?,
     ) {
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage(vardokId) }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.externalReferenceUri).isEqualTo(expectedResult)
     }
 
     @Test
     fun `map ConceptVariableRelations none`() {
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("948")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("948") }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.relatedVariableDefinitionUris).isEmpty()
     }
 
     @Test
     fun `map ConceptVariableRelations several`() {
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("2") }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.relatedVariableDefinitionUris?.size).isEqualTo(5)
         assertThat(vardokTransform.relatedVariableDefinitionUris?.last())
@@ -188,7 +189,7 @@ class VardokMigrationTest : BaseVardefTest() {
 
     @Test
     fun `map single ConceptVariableRelation`() {
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("1245")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("1245") }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.relatedVariableDefinitionUris?.first()).isEqualTo(
             "http://www.ssb.no/conceptvariable/vardok/1246",
@@ -246,11 +247,11 @@ class VardokMigrationTest : BaseVardefTest() {
 
     @Test
     fun `Vardokresponse creative dates`() {
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("0003")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("0003") }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.validFrom).isEqualTo("10039081")
 
-        val varDefInput2 = vardokService.fetchMultipleVardokItemsByLanguage("0004")
+        val varDefInput2 = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("0004") }
         val vardokTransform2 = VardokService.extractVardefInput(varDefInput2)
         assertThat(vardokTransform2.validFrom).isEqualTo("1003-90-81")
     }
@@ -261,27 +262,27 @@ class VardokMigrationTest : BaseVardefTest() {
         vardokId: String,
         expectedResult: List<String>,
     ) {
-        val result = vardokService.fetchMultipleVardokItemsByLanguage(vardokId)
+        val result = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage(vardokId) }
         val varDefInput = VardokService.extractVardefInput(result)
         AssertionsForClassTypes.assertThat(varDefInput.unitTypes).isEqualTo(expectedResult)
     }
 
     @Test
     fun `duplicate short name`() {
-        assertThat(vardokService.isDuplicate("bus")).isTrue()
-        assertThat(vardokService.isDuplicate("non_existing_name")).isFalse()
+        assertThat(runBlocking { vardokService.isDuplicate("bus") }).isTrue()
+        assertThat(runBlocking { vardokService.isDuplicate("non_existing_name") }).isFalse()
     }
 
     @Test
     fun `set generated short name if duplicate short name exists`() {
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("0005")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("0005") }
         val vardokTransform = VardokService.extractVardefInput(varDefInput)
         assertThat(vardokTransform.shortName).contains("generert")
     }
 
     @Test
     fun `new norwegian is primary language`() {
-        val varDefInput = vardokService.fetchMultipleVardokItemsByLanguage("2413")
+        val varDefInput = runBlocking { vardokService.fetchMultipleVardokItemsByLanguage("2413") }
         assertThat(varDefInput["nn"]?.common?.title).isEqualTo("Sum utgifter")
         assertThat(varDefInput["nb"]?.common?.title).isNull()
     }

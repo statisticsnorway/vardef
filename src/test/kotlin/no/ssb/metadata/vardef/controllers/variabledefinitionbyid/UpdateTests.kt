@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.models.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
@@ -51,7 +52,7 @@ class UpdateTests : BaseVardefTest() {
         assertThat(body.name).isEqualTo(expected.name)
         assertThat(body.definition).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definition)
 
-        val updated: SavedVariableDefinition = patches.latest(expected.definitionId)
+        val updated: SavedVariableDefinition = runBlocking { patches.latest(expected.definitionId) }
         assertThat(updated.definitionId).isEqualTo(expected.definitionId)
         assertThat(updated.createdAt).isCloseTo(expected.createdAt, within(1, ChronoUnit.SECONDS))
         assertThat(updated.name).isEqualTo(expected.name)
@@ -222,11 +223,12 @@ class UpdateTests : BaseVardefTest() {
                 ),
             )
         assertThat(
-            variableDefinitionService
-                .list()
-                .map { it.definitionId },
+            runBlocking {
+                variableDefinitionService
+                    .list()
+            }.map { it.definitionId },
         ).contains(INCOME_TAX_VP1_P1.definitionId)
-        assertThat(variableDefinitionService.list().map { it.name }).contains(INCOME_TAX_VP1_P1.name)
+        assertThat(runBlocking { variableDefinitionService.list() }.map { it.name }).contains(INCOME_TAX_VP1_P1.name)
     }
 
     @Test
@@ -352,9 +354,11 @@ class UpdateTests : BaseVardefTest() {
             )
 
         val savedVariableDefinition =
-            variableDefinitionService.getCompleteByDate(
-                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
-            )
+            runBlocking {
+                variableDefinitionService.getCompleteByDate(
+                    SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                )
+            }
         assertThat(savedVariableDefinition?.owner?.team).isNotBlank()
         assertThat(savedVariableDefinition?.owner?.groups?.all { it.isNotBlank() })
         assertThat(savedVariableDefinition?.owner?.groups?.isNotEmpty())

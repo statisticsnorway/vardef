@@ -32,7 +32,6 @@ import java.time.LocalDate
 @Controller("/variable-definitions")
 @Secured(VARIABLE_CONSUMER)
 @SecurityRequirement(name = LABID_TOKEN_SCHEME)
-@ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionsController(
     private val vardef: VariableDefinitionService,
 ) {
@@ -60,7 +59,7 @@ class VariableDefinitionsController(
         ],
     )
     @Get
-    fun listVariableDefinitions(
+    suspend fun listVariableDefinitions(
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -110,7 +109,7 @@ class VariableDefinitionsController(
     @BadRequestApiResponse
     @ConflictApiResponse
     @Secured(VARIABLE_CREATOR)
-    fun createVariableDefinition(
+    suspend fun createVariableDefinition(
         @RequestBody(
             content = [
                 Content(

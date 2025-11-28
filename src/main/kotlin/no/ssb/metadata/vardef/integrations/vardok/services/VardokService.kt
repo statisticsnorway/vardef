@@ -21,7 +21,7 @@ interface VardokService {
         language: String,
     ): VardokResponse?
 
-    fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
+    suspend fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse>
 
     fun createVardokVardefIdMapping(
         vardokId: String,
@@ -36,7 +36,7 @@ interface VardokService {
 
     fun isAlreadyMigrated(vardokId: String): Boolean
 
-    fun isDuplicate(name: String): Boolean
+    suspend fun isDuplicate(name: String): Boolean
 
     companion object {
         fun generateShortName() = "${ILLEGAL_SHORTNAME_KEYWORD}${NanoId.generate(8)}".lowercase().replace("-", "_")

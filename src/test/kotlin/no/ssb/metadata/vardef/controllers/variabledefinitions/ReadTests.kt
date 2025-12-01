@@ -1,10 +1,12 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitions
 
-import com.google.common.reflect.TypeToken
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -16,9 +18,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
-import kotlin.math.exp
 
 class ReadTests : BaseVardefTest() {
     @Test
@@ -97,6 +99,30 @@ class ReadTests : BaseVardefTest() {
 
         assertThat(variableDefinitions.size).isEqualTo(NUM_ALL_VARIABLE_DEFINITIONS)
         assertThat(variableDefinitions[0]).isInstanceOf(expectedClass.componentType)
+    }
+
+    @ParameterizedTest
+    @EnumSource(SupportedLanguages::class)
+    fun `list variable definitions in supported languages`(
+        language: SupportedLanguages,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.ACCEPT_LANGUAGE, language.toString())
+                .queryParam("render", true)
+                .`when`()
+                .get("/variable-definitions")
+                .then()
+                .statusCode(200)
+                .header("Content-Language", language.toString())
+                .extract()
+                .body()
+                .asString()
+
+        assertThat(jsonMapper.readValue(body, Array<RenderedVariableDefinition>::class.java)).isNotNull
     }
 
     @Test

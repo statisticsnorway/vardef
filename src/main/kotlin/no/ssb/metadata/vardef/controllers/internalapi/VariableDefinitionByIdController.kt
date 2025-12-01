@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
@@ -68,6 +69,9 @@ class VariableDefinitionByIdController(
     @NotFoundApiResponse
     @Get
     fun getVariableDefinitionById(
+        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
+        language: SupportedLanguages,
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
@@ -101,11 +105,11 @@ class VariableDefinitionByIdController(
         )
         @QueryValue("render")
         render: Boolean?,
-    ): RenderedOrCompleteUnion =
+    ): MutableHttpResponse<RenderedOrCompleteUnion> =
         if (render == true) {
             vardef
                 .getRenderedByDateAndStatus(
-                    language = SupportedLanguages.NB,
+                    language = language,
                     definitionId = definitionId,
                     dateOfValidity = dateOfValidity,
                 ).let { RenderedOrCompleteUnion.Rendered(it) }
@@ -115,6 +119,11 @@ class VariableDefinitionByIdController(
                     definitionId = definitionId,
                     dateOfValidity = dateOfValidity,
                 )?.let { RenderedOrCompleteUnion.Complete(it) }
+        }?.let {
+            HttpResponse
+                .ok(it)
+                .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+                .contentType(MediaType.APPLICATION_JSON)
         } ?: throw HttpStatusException(
             HttpStatus.NOT_FOUND,
             "Variable with ID $definitionId not found${if (dateOfValidity == null) "" else " for date $dateOfValidity"}",

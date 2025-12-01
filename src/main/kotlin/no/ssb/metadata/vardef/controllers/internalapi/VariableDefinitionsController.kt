@@ -1,6 +1,10 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
+import io.micronaut.http.HttpHeaders
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
+import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
@@ -63,6 +67,9 @@ class VariableDefinitionsController(
     )
     @Get
     fun listVariableDefinitions(
+        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
+        language: SupportedLanguages,
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -93,15 +100,20 @@ class VariableDefinitionsController(
         )
         @QueryValue("render")
         render: Boolean?,
-    ): List<RenderedOrCompleteUnion> =
+    ): MutableHttpResponse<List<RenderedOrCompleteUnion>> =
         if (render == true) {
             vardef
-                .listRenderedForDate(language = SupportedLanguages.NB, dateOfValidity = dateOfValidity, shortName = shortName)
+                .listRenderedForDate(language = language, dateOfValidity = dateOfValidity, shortName = shortName)
                 .map { RenderedOrCompleteUnion.Rendered(it) }
         } else {
             vardef
                 .listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
                 .map { RenderedOrCompleteUnion.Complete(it) }
+        }.let {
+            HttpResponse
+                .ok(it)
+                .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+                .contentType(MediaType.APPLICATION_JSON)
         }
 
     /**

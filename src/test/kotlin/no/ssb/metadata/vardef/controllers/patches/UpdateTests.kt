@@ -110,7 +110,7 @@ class UpdateTests : BaseVardefTest() {
             .spec(buildProblemJsonResponseSpec(constraintViolation, null, expectedErrorMessage))
 
         val savedVariableDefinition =
-            variableDefinitionService.getCompleteByDate(
+            variableDefinitionService.getCompleteByDateAndStatus(
                 SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
             )
         assertThat(savedVariableDefinition?.owner?.team).isNotBlank()

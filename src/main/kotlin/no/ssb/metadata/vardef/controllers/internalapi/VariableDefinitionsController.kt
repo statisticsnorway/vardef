@@ -23,6 +23,8 @@ import no.ssb.metadata.vardef.annotations.ConflictApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -80,7 +82,27 @@ class VariableDefinitionsController(
             ],
         )
         shortName: String? = null,
-    ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
+        @Parameter(
+            description = "Render the Variable Definition for presentation in a frontend",
+            examples = [
+                ExampleObject(name = "Date not specified", value = "false"),
+                ExampleObject(name = "Specific date", value = "false"),
+                ExampleObject(name = "Rendered", value = "true"),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = "false"),
+            ],
+        )
+        @QueryValue("render")
+        render: Boolean?,
+    ): List<RenderedOrCompleteUnion> =
+        if (render == true) {
+            vardef
+                .listRenderedForDate(language = SupportedLanguages.NB, dateOfValidity = dateOfValidity, shortName = shortName)
+                .map { RenderedOrCompleteUnion.Rendered(it) }
+        } else {
+            vardef
+                .listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
+                .map { RenderedOrCompleteUnion.Complete(it) }
+        }
 
     /**
      * Create a variable definition.

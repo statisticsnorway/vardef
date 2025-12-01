@@ -94,6 +94,10 @@ micronaut {
         optimizeNetty = true
         replaceLogbackXml = true
     }
+    testResources {
+        // Prevent timeout when pulling/starting Docker images
+        clientTimeout = 720
+    }
 }
 
 tasks.cyclonedxDirectBom {

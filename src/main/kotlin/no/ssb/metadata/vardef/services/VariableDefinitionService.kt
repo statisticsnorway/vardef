@@ -175,15 +175,39 @@ class VariableDefinitionService(
             if (shortName != null) {
                 variableDefinitionRepository
                     .findDistinctDefinitionIdByShortName(shortName)
-                    .let { id -> listOfNotNull(id?.let { getCompleteByDate(it, dateOfValidity) }) }
+                    .let { id -> listOfNotNull(id?.let { getCompleteByDateAndStatus(it, dateOfValidity) }) }
             } else {
                 uniqueDefinitionIds()
-                    .mapNotNull { getCompleteByDate(it, dateOfValidity) }
+                    .mapNotNull { getCompleteByDateAndStatus(it, dateOfValidity) }
             }
 
         logger.info("Found ${results.size} valid variable definitions at date $dateOfValidity with shortName=$shortName.")
         return results
     }
+
+    /**
+     * List *Variable Definitions* which are valid on the given date and shortname.
+     *
+     * If no date and shortname is given, list all variable definitions. These are the
+     * [RenderedVariableDefinition].
+     *
+     * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
+     * @param shortName The shortname which one wants a variable definition for.
+     * @return [List<RenderedVariableDefinition>] valid at the date.
+     */
+    fun listRenderedForDate(
+        language: SupportedLanguages,
+        dateOfValidity: LocalDate?,
+        shortName: String?,
+    ): List<RenderedVariableDefinition> =
+        if (shortName != null) {
+            variableDefinitionRepository
+                .findDistinctDefinitionIdByShortName(shortName)
+                .let { id -> listOfNotNull(id?.let { getRenderedByDateAndStatus(language, it, dateOfValidity) }) }
+        } else {
+            uniqueDefinitionIds()
+                .map { getRenderedByDateAndStatus(language, it, dateOfValidity) }
+        }.also { logger.info("Found ${it.size} valid variable definitions at date $dateOfValidity with shortName=$shortName.") }
 
     /**
      * One rendered *Variable Definition*, valid at the given date.
@@ -235,13 +259,11 @@ class VariableDefinitionService(
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
      * @return [CompleteResponse] suitable for internal use.
      */
-    fun getCompleteByDate(
+    fun getCompleteByDateAndStatus(
         definitionId: String,
         dateOfValidity: LocalDate? = null,
         variableStatus: VariableStatus? = null,
-    ): CompleteResponse =
-        getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
-            ?: throw EmptyResultException()
+    ): CompleteResponse? = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
 
     companion object {
         fun generateId(): String = NanoId.generate(8)

@@ -113,6 +113,17 @@ object TestUtils {
         )
 
     /**
+     * Formats for controller methods which have a `render` query parameter
+     */
+    @JvmStatic
+    fun returnFormatsArrays(): Stream<Arguments> =
+        Stream.of(
+            argumentSet("Rendered", true, Array<RenderedVariableDefinition>::class.java),
+            argumentSet("Not rendered", false, Array<CompleteResponse>::class.java),
+            argumentSet("Null", null, Array<CompleteResponse>::class.java),
+        )
+
+    /**
      * Invalid variable definitions.
      *
      * Some fields are not included in these test cases because they're covered by other tests. They include:

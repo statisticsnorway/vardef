@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitions
 
+import com.google.common.reflect.TypeToken
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
@@ -17,6 +18,7 @@ import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
+import kotlin.math.exp
 
 class ReadTests : BaseVardefTest() {
     @Test
@@ -74,18 +76,27 @@ class ReadTests : BaseVardefTest() {
             .body("find { it.short_name == 'intskatt' }.comment", notNullValue())
     }
 
-    @Test
-    fun `list variable definitions return type`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#returnFormatsArrays")
+    fun <T> `list variable definitions return type`(
+        render: Boolean?,
+        expectedClass: Class<Array<T>>,
+        spec: RequestSpecification,
+    ) {
         val body =
             spec
                 .`when`()
+                .queryParam("render", render)
                 .get("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.OK.code)
                 .extract()
                 .body()
                 .asString()
-        assertThat(jsonMapper.readValue(body, Array<CompleteResponse>::class.java)).isNotNull
+        val variableDefinitions: Array<T> = jsonMapper.readValue(body, expectedClass) as Array<T>
+
+        assertThat(variableDefinitions.size).isEqualTo(NUM_ALL_VARIABLE_DEFINITIONS)
+        assertThat(variableDefinitions[0]).isInstanceOf(expectedClass.componentType)
     }
 
     @Test

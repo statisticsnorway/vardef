@@ -111,11 +111,14 @@ class VariableDefinitionByIdController(
                 ).let { RenderedOrCompleteUnion.Rendered(it) }
         } else {
             vardef
-                .getCompleteByDate(
+                .getCompleteByDateAndStatus(
                     definitionId = definitionId,
                     dateOfValidity = dateOfValidity,
-                ).let { RenderedOrCompleteUnion.Complete(it) }
-        }
+                )?.let { RenderedOrCompleteUnion.Complete(it) }
+        } ?: throw HttpStatusException(
+            HttpStatus.NOT_FOUND,
+            "Variable with ID $definitionId not found${if (dateOfValidity == null) "" else " for date $dateOfValidity"}",
+        )
 
     /**
      * Delete a variable definition.

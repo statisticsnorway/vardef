@@ -4,7 +4,6 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService

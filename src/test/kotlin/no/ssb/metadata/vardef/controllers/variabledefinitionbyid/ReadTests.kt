@@ -68,18 +68,24 @@ class ReadTests : BaseVardefTest() {
             .body("valid_until", equalTo(expectedValidUntil))
     }
 
-    @Test
-    fun `get request return type`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#returnFormats")
+    fun `get request return type`(
+        render: Boolean?,
+        expectedClass: Class<*>,
+        spec: RequestSpecification,
+    ) {
         val body =
             spec
                 .`when`()
+                .queryParam("render", render)
                 .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
                 .then()
                 .statusCode(HttpStatus.OK.code)
                 .extract()
                 .body()
                 .asString()
-        assertThat(jsonMapper.readValue(body, CompleteResponse::class.java)).isNotNull
+        assertThat(jsonMapper.readValue(body, expectedClass)).isNotNull
     }
 
     @ParameterizedTest

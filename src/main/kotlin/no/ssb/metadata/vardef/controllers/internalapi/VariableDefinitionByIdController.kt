@@ -26,7 +26,7 @@ import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.RenderedOrComplete
+import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
@@ -101,20 +101,20 @@ class VariableDefinitionByIdController(
         )
         @QueryValue("render")
         render: Boolean?,
-    ): RenderedOrComplete =
+    ): RenderedOrCompleteUnion =
         if (render == true) {
             vardef
                 .getRenderedByDateAndStatus(
                     language = SupportedLanguages.NB,
                     definitionId = definitionId,
                     dateOfValidity = dateOfValidity,
-                ).let { RenderedOrComplete.SealedRenderedVariableDefinition(it) }
+                ).let { RenderedOrCompleteUnion.Rendered(it) }
         } else {
             vardef
                 .getCompleteByDate(
                     definitionId = definitionId,
                     dateOfValidity = dateOfValidity,
-                ).let { RenderedOrComplete.SealedCompleteResponse(it) }
+                ).let { RenderedOrCompleteUnion.Complete(it) }
         }
 
     /**
@@ -220,10 +220,13 @@ class VariableDefinitionByIdController(
         val existingVariable = patches.latest(definitionId)
 
         when {
-            existingVariable.variableStatus.isPublished() -> throw HttpStatusException(
-                HttpStatus.METHOD_NOT_ALLOWED,
-                "The variable is published and cannot be updated with this method",
-            )
+            existingVariable.variableStatus.isPublished() -> {
+                throw HttpStatusException(
+                    HttpStatus.METHOD_NOT_ALLOWED,
+                    "The variable is published and cannot be updated with this method",
+                )
+            }
+
             vardef.isIllegalShortNameForPublishing(existingVariable, updateDraft) -> {
                 throw HttpStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -242,20 +245,26 @@ class VariableDefinitionByIdController(
                 updateDraft.shortName != null &&
                     updateDraft.shortName != existingVariable.shortName &&
                     vardef.doesShortNameExist(updateDraft.shortName)
-            ) ->
+            ) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
                 )
-            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, existingVariable) -> throw HttpStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Invalid date order",
-            )
-            !vardef.allLanguagesPresentForExternalPublication(updateDraft, existingVariable) ->
+            }
+
+            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, existingVariable) -> {
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid date order",
+                )
+            }
+
+            !vardef.allLanguagesPresentForExternalPublication(updateDraft, existingVariable) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The variable must have translations for all languages for name, definition, comment before external publication.",
                 )
+            }
         }
         return vardef
             .update(existingVariable, updateDraft, authentication.name)

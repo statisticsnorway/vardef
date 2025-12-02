@@ -98,7 +98,7 @@ object TestUtils {
         Stream.of(
             argumentSet("Published external", INCOME_TAX_VP1_P1.definitionId, "PUBLISHED_EXTERNAL"),
             argumentSet("Published internal", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, "PUBLISHED_INTERNAL"),
-            argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
+            argumentSet("CreateDraft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
         )
 
     /**

@@ -18,8 +18,8 @@ class VariableDefinitionTest {
     private lateinit var renderedView: RenderedView
     private lateinit var completeViewVariableDefinition: CompleteView
 
-    private val draftExample =
-        Draft(
+    private val createDraftExample =
+        CreateDraft(
             name =
                 LanguageStringType(
                     nb = "Fly",
@@ -118,7 +118,7 @@ class VariableDefinitionTest {
         group: String,
         expectedteam: String,
     ) {
-        val savedVariableDefinition = draftExample.toSavedVariableDefinition(group, TEST_USER)
+        val savedVariableDefinition = createDraftExample.toSavedVariableDefinition(group, TEST_USER)
         assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
     }
 }

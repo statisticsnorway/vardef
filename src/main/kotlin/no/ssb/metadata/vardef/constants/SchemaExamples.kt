@@ -29,7 +29,7 @@ const val OWNER_EXAMPLE = """{
     "groups": ["play-obr-b-developers"]
 }"""
 
-const val DRAFT_EXAMPLE = """{
+const val CREATE_DRAFT_EXAMPLE = """{
     "name": {
         "en": "Country Background",
         "nb": "Landbakgrunn",

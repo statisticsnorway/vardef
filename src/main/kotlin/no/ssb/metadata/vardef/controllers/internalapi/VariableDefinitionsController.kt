@@ -26,7 +26,7 @@ import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.ConflictApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
-import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.models.CreateDraft
 import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
@@ -133,7 +133,7 @@ class VariableDefinitionsController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "Create draft",
+                        name = "Create Draft",
                         value = COMPLETE_VIEW_EXAMPLE,
                     ),
                 ],
@@ -150,22 +150,22 @@ class VariableDefinitionsController(
                 Content(
                     examples = [
                         ExampleObject(
-                            name = "Create draft",
-                            value = DRAFT_EXAMPLE,
+                            name = "Create Draft",
+                            value = CREATE_DRAFT_EXAMPLE,
                         ),
                     ],
-                    schema = Schema(implementation = Draft::class),
+                    schema = Schema(implementation = CreateDraft::class),
                 ),
             ],
         )
         @Body
-        @Valid draft: Draft,
+        @Valid createDraft: CreateDraft,
         authentication: Authentication,
     ): CompleteView {
-        if (vardef.doesShortNameExist(draft.shortName)) {
+        if (vardef.doesShortNameExist(createDraft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
-                "Short name ${draft.shortName} already exists.",
+                "Short name ${createDraft.shortName} already exists.",
             )
         }
 
@@ -177,7 +177,7 @@ class VariableDefinitionsController(
                 )
 
         return vardef
-            .create(draft.toSavedVariableDefinition(resolvedActiveGroup, authentication.name))
+            .create(createDraft.toSavedVariableDefinition(resolvedActiveGroup, authentication.name))
             .toCompleteView()
     }
 }

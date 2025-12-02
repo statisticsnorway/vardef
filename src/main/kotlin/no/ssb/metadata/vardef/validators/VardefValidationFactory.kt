@@ -6,7 +6,7 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.annotations.ValidDateOrder
-import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.models.CreateDraft
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -17,7 +17,7 @@ class VardefValidationFactory {
     private lateinit var variableDefinitionService: VariableDefinitionService
 
     @Singleton
-    fun draftDateOrderValidator(): ConstraintValidator<ValidDateOrder, Draft> =
+    fun draftDateOrderValidator(): ConstraintValidator<ValidDateOrder, CreateDraft> =
         ConstraintValidator {
             value,
             _,

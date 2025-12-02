@@ -375,7 +375,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     INCOME_TAX_VP2_P6.toCompleteView(),
                 ),
                 argumentSet(
-                    "Published External on Draft",
+                    "Published External on CreateDraft",
                     DRAFT_BUS_EXAMPLE.definitionId,
                     VariableStatus.PUBLISHED_EXTERNAL,
                     null,
@@ -387,7 +387,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     null,
                 ),
                 argumentSet(
-                    "Draft matching",
+                    "CreateDraft matching",
                     DRAFT_BUS_EXAMPLE.definitionId,
                     VariableStatus.DRAFT,
                     DRAFT_BUS_EXAMPLE.toCompleteView(),

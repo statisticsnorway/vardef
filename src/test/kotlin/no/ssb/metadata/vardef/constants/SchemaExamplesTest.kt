@@ -31,9 +31,9 @@ class SchemaExamplesTest {
                     listOf(Owner::class.java),
                 ),
                 argumentSet(
-                    "Draft example validates",
-                    DRAFT_EXAMPLE,
-                    listOf(Draft::class.java, UpdateDraft::class.java),
+                    "CreateDraft example validates",
+                    CREATE_DRAFT_EXAMPLE,
+                    listOf(CreateDraft::class.java, UpdateDraft::class.java),
                 ),
                 argumentSet(
                     "CompleteView example validates",

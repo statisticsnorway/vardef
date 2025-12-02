@@ -24,7 +24,7 @@ import java.time.LocalDate
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = DRAFT_EXAMPLE,
+    example = CREATE_DRAFT_EXAMPLE,
 )
 @ValidDateOrder
 data class UpdateDraft(

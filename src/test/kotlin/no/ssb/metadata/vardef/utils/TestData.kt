@@ -10,7 +10,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 val DRAFT_COMPLEX_SHORT_NAME =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Buss",
@@ -41,7 +41,7 @@ val DRAFT_COMPLEX_SHORT_NAME =
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 val DRAFT_BUS_EXAMPLE =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Buss",
@@ -73,7 +73,7 @@ val DRAFT_BUS_EXAMPLE =
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
 val DRAFT_EXAMPLE_WITH_VALID_UNTIL =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Tog",
@@ -615,7 +615,7 @@ val UPDATE_DRAFT_CLASSIFICATION_REFERENCE =
     )
 
 val SAVED_TO_PUBLISH =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Buss",
@@ -647,7 +647,7 @@ val SAVED_TO_PUBLISH =
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
 val SAVED_TO_PUBLISH_ILLEGAL_CONTACT =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Buss",

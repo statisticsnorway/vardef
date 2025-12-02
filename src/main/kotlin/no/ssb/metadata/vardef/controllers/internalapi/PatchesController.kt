@@ -25,7 +25,7 @@ import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
-import no.ssb.metadata.vardef.models.Patch
+import no.ssb.metadata.vardef.models.CreatePatch
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
@@ -177,23 +177,23 @@ class PatchesController(
             content = [
                 Content(
                     examples = [ExampleObject(name = "Create patch", value = PATCH_EXAMPLE)],
-                    schema = Schema(implementation = Patch::class),
+                    schema = Schema(implementation = CreatePatch::class),
                 ),
             ],
         )
         @Body
         @Valid
-        patch: Patch,
+        createPatch: CreatePatch,
         authentication: Authentication,
     ): CompleteView {
-        logger.debug("Received patch {}", patch)
+        logger.debug("Received patch {}", createPatch)
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
         when {
             !latestPatchOnValidityPeriod.variableStatus.isPublished() -> {
                 throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
             }
 
-            !vardef.allLanguagesPresentForExternalPublication(patch, latestPatchOnValidityPeriod) -> {
+            !vardef.allLanguagesPresentForExternalPublication(createPatch, latestPatchOnValidityPeriod) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The variable must be defined in all languages before external publication.",
@@ -202,7 +202,7 @@ class PatchesController(
         }
         return patches
             .create(
-                patch,
+                createPatch,
                 variableDefinitionId,
                 latestPatchOnValidityPeriod,
                 authentication.name,

@@ -340,7 +340,7 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                jsonMapper.writeValueAsString(Patch(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
+                jsonMapper.writeValueAsString(CreatePatch(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
             ).`when`()
             .post("/variable-definitions/$definitionId/patches")
             .then()

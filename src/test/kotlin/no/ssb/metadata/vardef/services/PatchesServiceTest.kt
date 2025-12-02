@@ -3,9 +3,9 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import no.ssb.metadata.vardef.exceptions.ClosedValidityPeriodException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
+import no.ssb.metadata.vardef.models.CreatePatch
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.Owner
-import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -80,7 +80,7 @@ class PatchesServiceTest : BaseVardefTest() {
         isInvalidDateException: Boolean,
     ) {
         val patch =
-            Patch(
+            CreatePatch(
                 null,
                 null,
                 null,
@@ -117,7 +117,7 @@ class PatchesServiceTest : BaseVardefTest() {
     @Test
     fun `create patch owner field updated across all periods`() {
         val patch =
-            Patch(
+            CreatePatch(
                 null,
                 null,
                 null,

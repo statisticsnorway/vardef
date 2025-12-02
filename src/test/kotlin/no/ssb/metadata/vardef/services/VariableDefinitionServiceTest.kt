@@ -133,7 +133,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("languagesForExternalPublicationWithPatch")
     fun `languages for external publication (Patch)`(
-        updates: Patch,
+        updates: CreatePatch,
         existingVariable: SavedVariableDefinition,
         expected: Boolean,
     ) {
@@ -167,7 +167,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             Stream.of(
                 argumentSet(
                     "All languages present",
-                    Patch(
+                    CreatePatch(
                         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                     ),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
@@ -179,7 +179,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
                 argumentSet(
                     "One field all languages empty",
-                    Patch(
+                    CreatePatch(
                         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                     ),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.copy(

@@ -40,7 +40,7 @@ class SchemaExamplesTest {
                     COMPLETE_VIEW_EXAMPLE,
                     listOf(CompleteView::class.java),
                 ),
-                argumentSet("Patch example validates", PATCH_EXAMPLE, listOf(Patch::class.java)),
+                argumentSet("Patch example validates", PATCH_EXAMPLE, listOf(CreatePatch::class.java)),
                 argumentSet(
                     "ValidityPeriod example validates",
                     VALIDITY_PERIOD_EXAMPLE,

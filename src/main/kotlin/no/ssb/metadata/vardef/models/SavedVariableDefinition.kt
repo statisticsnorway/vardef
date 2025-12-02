@@ -100,8 +100,8 @@ data class SavedVariableDefinition(
             createdBy = createdBy,
         )
 
-    fun toPatch(): Patch =
-        Patch(
+    fun toPatch(): CreatePatch =
+        CreatePatch(
             name = name,
             definition = definition,
             classificationReference = classificationReference,

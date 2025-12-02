@@ -366,14 +366,14 @@ class VariableDefinitionService(
      *      - `null` (to allow for optional fields)
      *      - filled with non-empty values for all supported languages
      *
-     * Function overload for [Patch]
+     * Function overload for [CreatePatch]
      *
      * @param updates
      * @param existingVariable
      * @return `true` if the variable is being published and all translation fields are filled
      */
     fun allLanguagesPresentForExternalPublication(
-        updates: Patch,
+        updates: CreatePatch,
         existingVariable: SavedVariableDefinition,
     ): Boolean =
         allLanguagesPresentForExternalPublication(

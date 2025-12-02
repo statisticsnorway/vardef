@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 @Schema(
     example = PATCH_EXAMPLE,
 )
-data class Patch(
+data class CreatePatch(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType

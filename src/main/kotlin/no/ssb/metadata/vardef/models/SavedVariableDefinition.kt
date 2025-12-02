@@ -74,8 +74,8 @@ data class SavedVariableDefinition(
     fun render(
         language: SupportedLanguages,
         klassService: KlassService,
-    ): RenderedVariableDefinition =
-        RenderedVariableDefinition(
+    ): RenderedView =
+        RenderedView(
             id = definitionId,
             patchId = patchId,
             name = name.getValue(language),

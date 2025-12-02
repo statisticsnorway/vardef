@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
 class VariableDefinitionTest {
     private lateinit var variableDefinition: SavedVariableDefinition
     private var nanoIdSize by Delegates.notNull<Int>()
-    private lateinit var renderedVariableDefinition: RenderedVariableDefinition
+    private lateinit var renderedView: RenderedView
     private lateinit var completeViewVariableDefinition: CompleteView
 
     private val draftExample =
@@ -54,7 +54,7 @@ class VariableDefinitionTest {
     fun setUp() {
         variableDefinition = INCOME_TAX_VP1_P1
         nanoIdSize = 8
-        renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
+        renderedView = RENDERED_VIEW_NULL_CONTACT
         completeViewVariableDefinition = COMPLETE_VIEW
     }
 
@@ -99,8 +99,8 @@ class VariableDefinitionTest {
 
     @Test
     fun `rendered variable without contact information`() {
-        assertThat(renderedVariableDefinition.contact).isNull()
-        assertThat(renderedVariableDefinition.name).isEqualTo("Landbakgrunn")
+        assertThat(renderedView.contact).isNull()
+        assertThat(renderedView.name).isEqualTo("Landbakgrunn")
     }
 
     @Test

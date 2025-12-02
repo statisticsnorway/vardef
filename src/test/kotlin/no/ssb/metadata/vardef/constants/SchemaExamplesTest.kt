@@ -47,9 +47,9 @@ class SchemaExamplesTest {
                     listOf(ValidityPeriod::class.java),
                 ),
                 argumentSet(
-                    "RenderedVariableDefinition example validates",
-                    RENDERED_VARIABLE_DEFINITION_EXAMPLE,
-                    listOf(RenderedVariableDefinition::class.java),
+                    "RenderedView example validates",
+                    RENDERED_VIEW_EXAMPLE,
+                    listOf(RenderedView::class.java),
                 ),
             )
     }

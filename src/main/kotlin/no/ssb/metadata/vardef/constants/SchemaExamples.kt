@@ -244,7 +244,7 @@ const val VALIDITY_PERIOD_EXAMPLE = """
     }
 }
 """
-const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
+const val RENDERED_VIEW_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
     "name": "Landbakgrunn",
     "short_name": "string",
@@ -280,8 +280,8 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "last_updated_by": "ano@ssb.no"
 }"""
 
-const val LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE = """[
-    $RENDERED_VARIABLE_DEFINITION_EXAMPLE
+const val LIST_OF_RENDERED_VIEWS_EXAMPLE = """[
+    $RENDERED_VIEW_EXAMPLE
 ]"""
 
 const val LIST_OF_COMPLETE_VIEW_EXAMPLE = """[

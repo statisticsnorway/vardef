@@ -137,12 +137,12 @@ class VariableDefinitionService(
      *
      * @param language The language to render in.
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
-     * @return [List<RenderedVariableDefinition>] with status [VariableStatus.PUBLISHED_EXTERNAL] valid at the date.
+     * @return [List<RenderedView>] with status [VariableStatus.PUBLISHED_EXTERNAL] valid at the date.
      */
     fun listPublicForDate(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
-    ): List<RenderedVariableDefinition> {
+    ): List<RenderedView> {
         val results =
             uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
                 .map {
@@ -189,17 +189,17 @@ class VariableDefinitionService(
      * List *Variable Definitions* which are valid on the given date and shortname.
      *
      * If no date and shortname is given, list all variable definitions. These are the
-     * [RenderedVariableDefinition].
+     * [RenderedView].
      *
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
      * @param shortName The shortname which one wants a variable definition for.
-     * @return [List<RenderedVariableDefinition>] valid at the date.
+     * @return [List<RenderedView>] valid at the date.
      */
     fun listRenderedForDate(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
         shortName: String?,
-    ): List<RenderedVariableDefinition> =
+    ): List<RenderedView> =
         if (shortName != null) {
             variableDefinitionRepository
                 .findDistinctDefinitionIdByShortName(shortName)
@@ -218,7 +218,7 @@ class VariableDefinitionService(
      * @param language The language to render in.
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
-     * @return The [RenderedVariableDefinition]
+     * @return The [RenderedView]
      * @throws [EmptyResultException] If nothing is found
      */
     fun getRenderedByDateAndStatus(
@@ -226,7 +226,7 @@ class VariableDefinitionService(
         definitionId: String,
         dateOfValidity: LocalDate?,
         variableStatus: VariableStatus? = null,
-    ): RenderedVariableDefinition =
+    ): RenderedView =
         getByDateAndStatus(definitionId, dateOfValidity, variableStatus)
             ?.render(language, klassService)
             ?: throw EmptyResultException()

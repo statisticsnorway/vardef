@@ -17,7 +17,7 @@ sealed class RenderedOrCompleteUnion {
     @Serdeable
     data class Rendered(
         @JsonUnwrapped
-        val value: RenderedVariableDefinition,
+        val value: RenderedView,
     ) : RenderedOrCompleteUnion()
 
     @Serdeable

@@ -28,7 +28,7 @@ import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
@@ -60,9 +60,9 @@ class VariableDefinitionByIdController(
                 examples = [
                     ExampleObject(name = "Date not specified", value = COMPLETE_VIEW_EXAMPLE),
                     ExampleObject(name = "Specific date", value = COMPLETE_VIEW_EXAMPLE),
-                    ExampleObject(name = "Rendered", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
+                    ExampleObject(name = "Rendered", value = RENDERED_VIEW_EXAMPLE),
                 ],
-                oneOf = [Schema(implementation = CompleteView::class), Schema(implementation = RenderedVariableDefinition::class)],
+                oneOf = [Schema(implementation = CompleteView::class), Schema(implementation = RenderedView::class)],
             ),
         ],
     )

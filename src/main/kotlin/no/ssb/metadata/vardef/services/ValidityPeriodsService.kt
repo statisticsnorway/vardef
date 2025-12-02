@@ -70,7 +70,7 @@ class ValidityPeriodsService(
     fun listPublic(
         language: SupportedLanguages,
         definitionId: String,
-    ): List<RenderedVariableDefinition> =
+    ): List<RenderedView> =
         listLatestByValidityPeriod(definitionId)
             .map { it.render(language, klassService) }
 

@@ -407,8 +407,8 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         lastUpdatedBy = "me@example.com",
     )
 
-val RENDERED_VARIABLE_DEFINITION =
-    RenderedVariableDefinition(
+val RENDERED_VIEW =
+    RenderedView(
         id = "",
         patchId = 1,
         name = "Landbakgrunn",
@@ -435,8 +435,8 @@ val RENDERED_VARIABLE_DEFINITION =
         lastUpdatedBy = "me@example.com",
     )
 
-val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
-    RenderedVariableDefinition(
+val RENDERED_VIEW_NULL_CONTACT =
+    RenderedView(
         id = "",
         patchId = 1,
         name = "Landbakgrunn",

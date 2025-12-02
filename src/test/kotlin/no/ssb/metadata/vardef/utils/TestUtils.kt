@@ -6,7 +6,7 @@ import io.micronaut.problem.ProblemJsonErrorResponseBodyProvider.APPLICATION_PRO
 import io.restassured.builder.ResponseSpecBuilder
 import io.restassured.specification.ResponseSpecification
 import no.ssb.metadata.vardef.models.CompleteView
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.VariableStatus
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.params.provider.Arguments
@@ -107,7 +107,7 @@ object TestUtils {
     @JvmStatic
     fun returnFormats(): Stream<Arguments> =
         Stream.of(
-            argumentSet("Rendered", true, RenderedVariableDefinition::class.java),
+            argumentSet("Rendered", true, RenderedView::class.java),
             argumentSet("Not rendered", false, CompleteView::class.java),
             argumentSet("Null", null, CompleteView::class.java),
         )
@@ -118,7 +118,7 @@ object TestUtils {
     @JvmStatic
     fun returnFormatsArrays(): Stream<Arguments> =
         Stream.of(
-            argumentSet("Rendered", true, Array<RenderedVariableDefinition>::class.java),
+            argumentSet("Rendered", true, Array<RenderedView>::class.java),
             argumentSet("Not rendered", false, Array<CompleteView>::class.java),
             argumentSet("Null", null, Array<CompleteView>::class.java),
         )

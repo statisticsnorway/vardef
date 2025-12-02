@@ -4,7 +4,7 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
@@ -113,7 +113,7 @@ class ReadTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        assertThat(jsonMapper.readValue(body, RenderedVariableDefinition::class.java)).isNotNull
+        assertThat(jsonMapper.readValue(body, RenderedView::class.java)).isNotNull
     }
 
     @ParameterizedTest

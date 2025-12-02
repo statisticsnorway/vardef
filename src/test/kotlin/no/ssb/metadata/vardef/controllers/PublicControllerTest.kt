@@ -10,7 +10,7 @@ import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
 import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
 import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -67,7 +67,7 @@ class PublicControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        jsonMapper.readValue(body, Array<RenderedVariableDefinition>::class.java).forEach {
+        jsonMapper.readValue(body, Array<RenderedView>::class.java).forEach {
             assertThat(validityPeriods.getLatestPatchInLastValidityPeriod(it.id).variableStatus)
                 .isEqualTo(VariableStatus.PUBLISHED_EXTERNAL)
         }

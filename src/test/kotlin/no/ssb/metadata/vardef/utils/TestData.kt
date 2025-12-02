@@ -418,15 +418,21 @@ val RENDERED_VARIABLE_DEFINITION =
         unitTypes = emptyList(),
         subjectFields = emptyList(),
         containsSpecialCategoriesOfPersonalData = false,
+        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = null,
         validFrom = LocalDate.of(1960, 1, 1),
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(),
+        owner =
+            Owner("skip-stat", listOf("skip-stat-developers", TEST_DEVELOPERS_GROUP)),
         contact =
             RenderedContact("", "me@example.com"),
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = "me@example.com",
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = "me@example.com",
     )
 
 val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
@@ -440,14 +446,20 @@ val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
         unitTypes = emptyList(),
         subjectFields = emptyList(),
         containsSpecialCategoriesOfPersonalData = false,
+        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
         measurementType = null,
         validFrom = LocalDate.of(2021, 1, 1),
         validUntil = LocalDate.of(2021, 1, 1),
         externalReferenceUri = URI("https://example.com/").toURL(),
         comment = null,
         relatedVariableDefinitionUris = listOf(),
+        owner =
+            Owner("skip-stat", listOf("skip-stat-developers", TEST_DEVELOPERS_GROUP)),
         contact = null,
+        createdAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        createdBy = "me@example.com",
         lastUpdatedAt = LocalDateTime.parse("2024-06-11T08:15:19"),
+        lastUpdatedBy = "me@example.com",
     )
 
 val SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME =

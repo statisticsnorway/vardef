@@ -118,8 +118,8 @@ data class SavedVariableDefinition(
             contact = contact,
         )
 
-    fun toCompleteResponse(): CompleteResponse =
-        CompleteResponse(
+    fun toCompleteView(): CompleteView =
+        CompleteView(
             id = definitionId,
             patchId = patchId,
             name = name,

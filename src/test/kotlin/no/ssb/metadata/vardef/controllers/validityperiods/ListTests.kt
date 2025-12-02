@@ -2,7 +2,7 @@ package no.ssb.metadata.vardef.controllers.validityperiods
 
 import io.micronaut.http.HttpStatus
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
 import org.assertj.core.api.Assertions.assertThat
@@ -38,7 +38,7 @@ class ListTests : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        assertThat(jsonMapper.readValue(body, Array<CompleteResponse>::class.java)).isNotNull
+        assertThat(jsonMapper.readValue(body, Array<CompleteView>::class.java)).isNotNull
     }
 
     @Test

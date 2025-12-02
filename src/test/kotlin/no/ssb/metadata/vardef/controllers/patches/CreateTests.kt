@@ -5,7 +5,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.controllers.patches.CompanionObject.Companion.patchBody
 import no.ssb.metadata.vardef.models.*
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -87,7 +87,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new patch return complete response`(spec: RequestSpecification) {
+    fun `create new patch return complete view`(spec: RequestSpecification) {
         val testCase =
             jsonTestInput()
                 .apply {
@@ -106,8 +106,8 @@ class CreateTests : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView).isNotNull
     }
 
     @Test
@@ -326,8 +326,8 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.patchId).isEqualTo(2)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.patchId).isEqualTo(2)
     }
 
     @ParameterizedTest

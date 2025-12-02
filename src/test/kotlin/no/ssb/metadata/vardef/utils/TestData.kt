@@ -509,8 +509,8 @@ val SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME =
         lastUpdatedBy = "me@example.com",
     )
 
-val COMPLETE_RESPONSE =
-    CompleteResponse(
+val COMPLETE_VIEW =
+    CompleteView(
         id = "",
         patchId = 1,
         name =

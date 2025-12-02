@@ -25,7 +25,7 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.ConflictApiResponse
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.Draft
 import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -52,16 +52,16 @@ class VariableDefinitionsController(
                 examples = [
                     ExampleObject(
                         name = "Specific date",
-                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
+                        value = LIST_OF_COMPLETE_VIEW_EXAMPLE,
                     ), ExampleObject(
                         name = "Specific short_name",
-                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
+                        value = LIST_OF_COMPLETE_VIEW_EXAMPLE,
                     ), ExampleObject(
                         name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
                 ],
-                array = ArraySchema(schema = Schema(implementation = CompleteResponse::class)),
+                array = ArraySchema(schema = Schema(implementation = CompleteView::class)),
             ),
         ],
     )
@@ -134,10 +134,10 @@ class VariableDefinitionsController(
                 examples = [
                     ExampleObject(
                         name = "Create draft",
-                        value = COMPLETE_RESPONSE_EXAMPLE,
+                        value = COMPLETE_VIEW_EXAMPLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
+                schema = Schema(implementation = CompleteView::class),
             ),
         ],
     )
@@ -161,7 +161,7 @@ class VariableDefinitionsController(
         @Body
         @Valid draft: Draft,
         authentication: Authentication,
-    ): CompleteResponse {
+    ): CompleteView {
         if (vardef.doesShortNameExist(draft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
@@ -178,6 +178,6 @@ class VariableDefinitionsController(
 
         return vardef
             .create(draft.toSavedVariableDefinition(resolvedActiveGroup, authentication.name))
-            .toCompleteResponse()
+            .toCompleteView()
     }
 }

@@ -183,7 +183,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
 
     @Test
     fun `toCompleteResponse include classificationReference with expected value`() {
-        val savedVariableCompleteResponse = DRAFT_BUS_EXAMPLE.toCompleteResponse()
+        val savedVariableCompleteResponse = DRAFT_BUS_EXAMPLE.toCompleteView()
         assertThat(savedVariableCompleteResponse.classificationReference).isEqualTo("91")
     }
 

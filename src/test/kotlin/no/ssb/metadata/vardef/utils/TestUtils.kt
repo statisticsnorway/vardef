@@ -5,7 +5,7 @@ import ch.qos.logback.core.AppenderBase
 import io.micronaut.problem.ProblemJsonErrorResponseBodyProvider.APPLICATION_PROBLEM_JSON
 import io.restassured.builder.ResponseSpecBuilder
 import io.restassured.specification.ResponseSpecification
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.VariableStatus
 import org.hamcrest.Matchers.*
@@ -108,8 +108,8 @@ object TestUtils {
     fun returnFormats(): Stream<Arguments> =
         Stream.of(
             argumentSet("Rendered", true, RenderedVariableDefinition::class.java),
-            argumentSet("Not rendered", false, CompleteResponse::class.java),
-            argumentSet("Null", null, CompleteResponse::class.java),
+            argumentSet("Not rendered", false, CompleteView::class.java),
+            argumentSet("Null", null, CompleteView::class.java),
         )
 
     /**
@@ -119,8 +119,8 @@ object TestUtils {
     fun returnFormatsArrays(): Stream<Arguments> =
         Stream.of(
             argumentSet("Rendered", true, Array<RenderedVariableDefinition>::class.java),
-            argumentSet("Not rendered", false, Array<CompleteResponse>::class.java),
-            argumentSet("Null", null, Array<CompleteResponse>::class.java),
+            argumentSet("Not rendered", false, Array<CompleteView>::class.java),
+            argumentSet("Null", null, Array<CompleteView>::class.java),
         )
 
     /**

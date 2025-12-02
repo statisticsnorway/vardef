@@ -9,12 +9,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 /**
- * Complete response
+ * Complete view
  *
  * For internal users who need all details while maintaining variable definitions.
  */
 @Serdeable(naming = SnakeCaseStrategy::class)
-data class CompleteResponse(
+data class CompleteView(
     @Schema(description = ID_FIELD_DESCRIPTION, format = VARDEF_ID_PATTERN)
     var id: String,
     @Schema(description = PATCH_ID_FIELD_DESCRIPTION, example = "1")

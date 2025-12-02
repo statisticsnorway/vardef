@@ -70,7 +70,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     fun `get by variable status`(
         definitionId: String,
         status: VariableStatus?,
-        expectedResult: CompleteResponse?,
+        expectedResult: CompleteView?,
     ) {
         assertThat(
             variableDefinitionService
@@ -372,7 +372,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Published External matching",
                     INCOME_TAX_VP2_P6.definitionId,
                     VariableStatus.PUBLISHED_EXTERNAL,
-                    INCOME_TAX_VP2_P6.toCompleteResponse(),
+                    INCOME_TAX_VP2_P6.toCompleteView(),
                 ),
                 argumentSet(
                     "Published External on Draft",
@@ -390,13 +390,13 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Draft matching",
                     DRAFT_BUS_EXAMPLE.definitionId,
                     VariableStatus.DRAFT,
-                    DRAFT_BUS_EXAMPLE.toCompleteResponse(),
+                    DRAFT_BUS_EXAMPLE.toCompleteView(),
                 ),
                 argumentSet(
                     "Published Internal matching",
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     VariableStatus.PUBLISHED_INTERNAL,
-                    SAVED_INTERNAL_VARIABLE_DEFINITION.toCompleteResponse(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.toCompleteView(),
                 ),
             )
 

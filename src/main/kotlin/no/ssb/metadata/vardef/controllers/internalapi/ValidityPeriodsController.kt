@@ -22,7 +22,7 @@ import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
@@ -51,10 +51,10 @@ class ValidityPeriodsController(
                 examples = [
                     ExampleObject(
                         name = "Create validity period",
-                        value = COMPLETE_RESPONSE_EXAMPLE,
+                        value = COMPLETE_VIEW_EXAMPLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
+                schema = Schema(implementation = CompleteView::class),
             ),
         ],
     )
@@ -84,14 +84,14 @@ class ValidityPeriodsController(
         )
         newPeriod: ValidityPeriod,
         authentication: Authentication,
-    ): CompleteResponse {
+    ): CompleteView {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
-        return validityPeriods.create(variableDefinitionId, newPeriod, authentication.name).toCompleteResponse()
+        return validityPeriods.create(variableDefinitionId, newPeriod, authentication.name).toCompleteView()
     }
 
     /**
@@ -105,10 +105,10 @@ class ValidityPeriodsController(
                 examples = [
                     ExampleObject(
                         name = "Validity periods",
-                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
+                        value = LIST_OF_COMPLETE_VIEW_EXAMPLE,
                     ),
                 ],
-                array = ArraySchema(schema = Schema(implementation = CompleteResponse::class)),
+                array = ArraySchema(schema = Schema(implementation = CompleteView::class)),
             ),
         ],
     )
@@ -123,5 +123,5 @@ class ValidityPeriodsController(
             ],
         )
         variableDefinitionId: String,
-    ): List<CompleteResponse> = validityPeriods.listComplete(variableDefinitionId)
+    ): List<CompleteView> = validityPeriods.listComplete(variableDefinitionId)
 }

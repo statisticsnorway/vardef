@@ -23,6 +23,6 @@ sealed class RenderedOrCompleteUnion {
     @Serdeable
     data class Complete(
         @JsonUnwrapped
-        val value: CompleteResponse,
+        val value: CompleteView,
     ) : RenderedOrCompleteUnion()
 }

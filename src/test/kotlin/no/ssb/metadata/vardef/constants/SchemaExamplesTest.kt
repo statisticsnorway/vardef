@@ -36,9 +36,9 @@ class SchemaExamplesTest {
                     listOf(Draft::class.java, UpdateDraft::class.java),
                 ),
                 argumentSet(
-                    "CompleteResponse example validates",
-                    COMPLETE_RESPONSE_EXAMPLE,
-                    listOf(CompleteResponse::class.java),
+                    "CompleteView example validates",
+                    COMPLETE_VIEW_EXAMPLE,
+                    listOf(CompleteView::class.java),
                 ),
                 argumentSet("Patch example validates", PATCH_EXAMPLE, listOf(Patch::class.java)),
                 argumentSet(

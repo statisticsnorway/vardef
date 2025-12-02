@@ -9,7 +9,7 @@ import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -52,10 +52,10 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
-        assertThat(completeResponse.contact.title.nb).contains(GENERATED_CONTACT_KEYWORD)
-        assertThat(completeResponse.contact.email).contains(GENERATED_CONTACT_KEYWORD)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView).isNotNull
+        assertThat(completeView.contact.title.nb).contains(GENERATED_CONTACT_KEYWORD)
+        assertThat(completeView.contact.email).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test
@@ -72,8 +72,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.shortName).contains(GENERATED_CONTACT_KEYWORD)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.shortName).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test
@@ -90,8 +90,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.shortName).contains(GENERATED_CONTACT_KEYWORD)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.shortName).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test
@@ -108,8 +108,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.shortName).contains(GENERATED_CONTACT_KEYWORD)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.shortName).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test
@@ -192,8 +192,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(+29456, 1, 27))
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.validFrom).isEqualTo(LocalDate.of(+29456, 1, 27))
     }
 
     @Test
@@ -227,9 +227,9 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
-        assertThat(completeResponse.validUntil).isNull()
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
+        assertThat(completeView.validUntil).isNull()
     }
 
     @Test
@@ -282,9 +282,9 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
-        assertThat(completeResponse.validUntil).isNotNull()
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
+        assertThat(completeView.validUntil).isNotNull()
     }
 
     @Test
@@ -302,8 +302,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.externalReferenceUri).isNull()
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.externalReferenceUri).isNull()
     }
 
     @ParameterizedTest
@@ -326,8 +326,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.relatedVariableDefinitionUris).isEqualTo(expectedResult)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.relatedVariableDefinitionUris).isEqualTo(expectedResult)
     }
 
     @Test
@@ -378,10 +378,10 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.comment?.nb).isNotNull
-        assertThat(completeResponse.comment?.en).isNotNull
-        assertThat(completeResponse.comment?.nn).isNull()
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.comment?.nb).isNotNull
+        assertThat(completeView.comment?.en).isNotNull
+        assertThat(completeView.comment?.nn).isNull()
     }
 
     @Test
@@ -400,8 +400,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2001, 12, 31))
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.validUntil).isEqualTo(LocalDate.of(2001, 12, 31))
     }
 
     @ParameterizedTest
@@ -424,8 +424,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.externalReferenceUri).isEqualTo(expectedResult)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.externalReferenceUri).isEqualTo(expectedResult)
     }
 
     @Test
@@ -443,8 +443,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.unitTypes).isEqualTo(listOf("12", "13", "20"))
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.unitTypes).isEqualTo(listOf("12", "13", "20"))
     }
 
     @Test
@@ -462,8 +462,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.unitTypes).isEqualTo(listOf("29"))
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.unitTypes).isEqualTo(listOf("29"))
     }
 
     @Test
@@ -482,8 +482,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.subjectFields).isEqualTo(emptyList<String>())
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.subjectFields).isEqualTo(emptyList<String>())
     }
 
     @Test
@@ -501,9 +501,9 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
 
-        assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeResponse.id)
+        assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeView.id)
     }
 
     @ParameterizedTest
@@ -526,8 +526,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.unitTypes).isEqualTo(listOf(expectedUnitType))
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.unitTypes).isEqualTo(listOf(expectedUnitType))
     }
 
     @ParameterizedTest
@@ -552,17 +552,17 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.name.nn).isEqualTo(name)
-        assertThat(completeResponse.name.nb).isNull()
-        assertThat(completeResponse.definition.nn).isEqualTo(description)
-        assertThat(completeResponse.definition.nb).isNull()
-        assertThat(completeResponse.contact.title.nn).isEqualTo(contactTitle)
-        assertThat(completeResponse.contact.title.nb).isNull()
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.name.nn).isEqualTo(name)
+        assertThat(completeView.name.nb).isNull()
+        assertThat(completeView.definition.nn).isEqualTo(description)
+        assertThat(completeView.definition.nb).isNull()
+        assertThat(completeView.contact.title.nn).isEqualTo(contactTitle)
+        assertThat(completeView.contact.title.nb).isNull()
     }
 
     @Test
-    fun `get vardef complete response by vardok id`(spec: RequestSpecification) {
+    fun `get vardef complete view by vardok id`(spec: RequestSpecification) {
         val vardokId = "005"
         val body =
             spec
@@ -575,8 +575,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.shortName)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.shortName)
             .isEqualTo("bus")
     }
 
@@ -622,7 +622,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @Test
-    fun `get vardef complete response by nonexistent vardef id`(spec: RequestSpecification) {
+    fun `get vardef complete view by nonexistent vardef id`(spec: RequestSpecification) {
         val vardefId = "vardefid"
         spec
             .given()

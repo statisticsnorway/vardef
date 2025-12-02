@@ -161,16 +161,16 @@ class VariableDefinitionService(
      * List *Variable Definitions* which are valid on the given date and shortname.
      *
      * If no date and shortname is given, list all variable definitions. These are the
-     * [CompleteResponse] and are suitable for internal use.
+     * [CompleteView] and are suitable for internal use.
      *
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
      * @param shortName The shortname which one wants a variable definition for.
-     * @return [List<CompleteResponse>] valid at the date.
+     * @return [List<CompleteView>] valid at the date.
      */
     fun listCompleteForDate(
         dateOfValidity: LocalDate?,
         shortName: String?,
-    ): List<CompleteResponse> {
+    ): List<CompleteView> {
         val results =
             if (shortName != null) {
                 variableDefinitionRepository
@@ -257,13 +257,13 @@ class VariableDefinitionService(
      *
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @param dateOfValidity The date which the *Variable Definition* shall be valid at.
-     * @return [CompleteResponse] suitable for internal use.
+     * @return [CompleteView] suitable for internal use.
      */
     fun getCompleteByDateAndStatus(
         definitionId: String,
         dateOfValidity: LocalDate? = null,
         variableStatus: VariableStatus? = null,
-    ): CompleteResponse? = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteResponse()
+    ): CompleteView? = getByDateAndStatus(definitionId, dateOfValidity, variableStatus)?.toCompleteView()
 
     companion object {
         fun generateId(): String = NanoId.generate(8)
@@ -355,7 +355,7 @@ class VariableDefinitionService(
         return false
     }
 
-    fun getByShortName(shortName: String): CompleteResponse? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteResponse()
+    fun getByShortName(shortName: String): CompleteView? = variableDefinitionRepository.findByShortName(shortName)?.toCompleteView()
 
     /**
      * Are all languages present?

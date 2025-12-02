@@ -45,7 +45,7 @@ class UpdateTests : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteView::class.java)
 
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
         assertThat(body.name).isEqualTo(expected.name)
@@ -96,7 +96,7 @@ class UpdateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteView::class.java)
         assertThat(body.shortName).isNotEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.shortName)
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
     }
@@ -284,7 +284,7 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `update draft variable definition return complete response`(spec: RequestSpecification) {
+    fun `update draft variable definition return complete view`(spec: RequestSpecification) {
         val body =
             spec
                 .given()
@@ -302,8 +302,8 @@ class UpdateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView).isNotNull
     }
 
     @ParameterizedTest
@@ -403,7 +403,7 @@ class UpdateTests : BaseVardefTest() {
                 .extract()
                 .body()
                 .asString()
-        val body = jsonMapper.readValue(bodyString, CompleteResponse::class.java)
+        val body = jsonMapper.readValue(bodyString, CompleteView::class.java)
 
         assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
         assertThat(body.name).isEqualTo(expected.name)
@@ -430,10 +430,10 @@ class UpdateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.createdBy).isEqualTo(createdBy)
-        assertThat(completeResponse.lastUpdatedBy).isNotEqualTo(createdBy)
-        assertThat(completeResponse.lastUpdatedBy).isEqualTo(TEST_USER)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.createdBy).isEqualTo(createdBy)
+        assertThat(completeView.lastUpdatedBy).isNotEqualTo(createdBy)
+        assertThat(completeView.lastUpdatedBy).isEqualTo(TEST_USER)
     }
 
     @Test
@@ -520,9 +520,9 @@ class UpdateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
-        assertThat(completeResponse.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
+        assertThat(completeView.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
     }
 
     @Test
@@ -682,7 +682,7 @@ class UpdateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse.containsSpecialCategoriesOfPersonalData).isEqualTo(false)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.containsSpecialCategoriesOfPersonalData).isEqualTo(false)
     }
 }

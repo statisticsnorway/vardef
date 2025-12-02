@@ -70,7 +70,7 @@ const val UPDATE_DRAFT_EXAMPLE = """{"classification_reference": $UNIT_TYPES_KLA
 
 const val UPDATE_DRAFT_CONSTRAINT_VIOLATION_EXAMPLE = """{"classification_reference": "incorrect"}"""
 
-const val COMPLETE_RESPONSE_EXAMPLE = """{
+const val COMPLETE_VIEW_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
     "patch_id": 1,
     "name": {
@@ -120,7 +120,7 @@ const val COMPLETE_RESPONSE_EXAMPLE = """{
 }
 """
 
-const val COMPLETE_RESPONSE_EXAMPLE_PUBLISHED_VARIABLE = """{
+const val COMPLETE_VIEW_EXAMPLE_PUBLISHED_VARIABLE = """{
     "id": "$ID_EXAMPLE",
     "patch_id": 2,
     "name": {
@@ -284,8 +284,8 @@ const val LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE = """[
     $RENDERED_VARIABLE_DEFINITION_EXAMPLE
 ]"""
 
-const val LIST_OF_COMPLETE_RESPONSE_EXAMPLE = """[
-    $COMPLETE_RESPONSE_EXAMPLE
+const val LIST_OF_COMPLETE_VIEW_EXAMPLE = """[
+    $COMPLETE_VIEW_EXAMPLE
 ]"""
 
 const val VARDOK_ID_RESPONSE_EXAMPLE = """{

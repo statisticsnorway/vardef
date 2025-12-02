@@ -77,15 +77,15 @@ class ValidityPeriodsService(
     /**
      * List complete *Validity Periods*.
      *
-     * A list of the latest *Patch* in each *Validity Period*. These are the [CompleteResponse] and suitable
+     * A list of the latest *Patch* in each *Validity Period*. These are the [CompleteView] and suitable
      * for internal use.
      *
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The list of *Validity Periods*
      */
-    fun listComplete(definitionId: String): List<CompleteResponse> =
+    fun listComplete(definitionId: String): List<CompleteView> =
         listLatestByValidityPeriod(definitionId)
-            .map { it.toCompleteResponse() }
+            .map { it.toCompleteView() }
 
     /**
      * Get a map over *Validity Periods*.
@@ -234,6 +234,7 @@ class ValidityPeriodsService(
                 )
                 throw DefinitionTextUnchangedException()
             }
+
             else -> {
                 logger.info(
                     "Validity period input is valid for definition: $definitionId",
@@ -279,6 +280,7 @@ class ValidityPeriodsService(
             lastValidPeriod.second == null -> {
                 dateOfValidity.isBefore(firstValidFrom) || dateOfValidity.isAfter(upperBoundary)
             }
+
             else -> {
                 dateOfValidity.isBefore(firstValidFrom) || dateOfValidity == upperBoundary.plusDays(1)
             }

@@ -24,7 +24,7 @@ import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.Patch
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
@@ -62,10 +62,10 @@ class PatchesController(
                 examples = [
                     ExampleObject(
                         name = "Patches",
-                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
+                        value = LIST_OF_COMPLETE_VIEW_EXAMPLE,
                     ),
                 ],
-                array = ArraySchema(schema = Schema(implementation = CompleteResponse::class)),
+                array = ArraySchema(schema = Schema(implementation = CompleteView::class)),
             ),
         ],
     )
@@ -80,10 +80,10 @@ class PatchesController(
             ],
         )
         variableDefinitionId: String,
-    ): List<CompleteResponse> =
+    ): List<CompleteView> =
         patches
             .list(definitionId = variableDefinitionId)
-            .map { it.toCompleteResponse() }
+            .map { it.toCompleteView() }
 
     /**
      * Get one concrete patch for the given variable definition.
@@ -98,10 +98,10 @@ class PatchesController(
                 examples = [
                     ExampleObject(
                         name = "Patch",
-                        value = COMPLETE_RESPONSE_EXAMPLE,
+                        value = COMPLETE_VIEW_EXAMPLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
+                schema = Schema(implementation = CompleteView::class),
             ),
         ],
     )
@@ -126,10 +126,10 @@ class PatchesController(
             ],
         )
         patchId: Int,
-    ): CompleteResponse =
+    ): CompleteView =
         patches
             .get(variableDefinitionId, patchId = patchId)
-            .toCompleteResponse()
+            .toCompleteView()
 
     /**
      * Create a new patch for a variable definition.
@@ -145,10 +145,10 @@ class PatchesController(
                 examples = [
                     ExampleObject(
                         name = "Create patch",
-                        value = COMPLETE_RESPONSE_EXAMPLE_PUBLISHED_VARIABLE,
+                        value = COMPLETE_VIEW_EXAMPLE_PUBLISHED_VARIABLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
+                schema = Schema(implementation = CompleteView::class),
             ),
         ],
     )
@@ -185,17 +185,20 @@ class PatchesController(
         @Valid
         patch: Patch,
         authentication: Authentication,
-    ): CompleteResponse {
+    ): CompleteView {
         logger.debug("Received patch {}", patch)
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
         when {
-            !latestPatchOnValidityPeriod.variableStatus.isPublished() ->
+            !latestPatchOnValidityPeriod.variableStatus.isPublished() -> {
                 throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
-            !vardef.allLanguagesPresentForExternalPublication(patch, latestPatchOnValidityPeriod) ->
+            }
+
+            !vardef.allLanguagesPresentForExternalPublication(patch, latestPatchOnValidityPeriod) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The variable must be defined in all languages before external publication.",
                 )
+            }
         }
         return patches
             .create(
@@ -203,6 +206,6 @@ class PatchesController(
                 variableDefinitionId,
                 latestPatchOnValidityPeriod,
                 authentication.name,
-            ).toCompleteResponse()
+            ).toCompleteView()
     }
 }

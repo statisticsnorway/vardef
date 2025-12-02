@@ -16,7 +16,7 @@ class VariableDefinitionTest {
     private lateinit var variableDefinition: SavedVariableDefinition
     private var nanoIdSize by Delegates.notNull<Int>()
     private lateinit var renderedVariableDefinition: RenderedVariableDefinition
-    private lateinit var completeResponseVariableDefinition: CompleteResponse
+    private lateinit var completeViewVariableDefinition: CompleteView
 
     private val draftExample =
         Draft(
@@ -55,7 +55,7 @@ class VariableDefinitionTest {
         variableDefinition = INCOME_TAX_VP1_P1
         nanoIdSize = 8
         renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
-        completeResponseVariableDefinition = COMPLETE_RESPONSE
+        completeViewVariableDefinition = COMPLETE_VIEW
     }
 
     @ParameterizedTest
@@ -104,8 +104,8 @@ class VariableDefinitionTest {
     }
 
     @Test
-    fun `complete response include owner`() {
-        assertThat(completeResponseVariableDefinition).hasFieldOrProperty("owner")
+    fun `complete view include owner`() {
+        assertThat(completeViewVariableDefinition).hasFieldOrProperty("owner")
     }
 
     @ParameterizedTest

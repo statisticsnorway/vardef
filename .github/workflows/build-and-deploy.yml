@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set nais environment variables
         id: nais-deploy-vars
@@ -75,7 +75,7 @@ jobs:
           echo "DOCKER_IMAGE_DIGEST=$(cat build/jib-image.digest)" >> $GITHUB_ENV
 
       - name: "Attest and sign"
-        uses: 'nais/attest-sign@v1.5.20'
+        uses: 'nais/attest-sign@v1.5.22'
         with:
           image_ref: ${{ env.DOCKER_IMAGE_WITHOUT_TAG }}@${{ env.DOCKER_IMAGE_DIGEST }}
           # This SBOM includes all JVM dependencies (generated with cyclonedxBom) but does
@@ -91,7 +91,7 @@ jobs:
       id-token: "write"
     needs: docker-build
     steps:
-      - uses: actions/checkout@v5  # Needed for access to manifests
+      - uses: actions/checkout@v6  # Needed for access to manifests
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: ${{ needs.docker-build.outputs.nais_cluster }}

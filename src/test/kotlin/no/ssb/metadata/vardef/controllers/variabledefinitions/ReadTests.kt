@@ -1,9 +1,12 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitions
 
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -15,6 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
@@ -74,18 +78,51 @@ class ReadTests : BaseVardefTest() {
             .body("find { it.short_name == 'intskatt' }.comment", notNullValue())
     }
 
-    @Test
-    fun `list variable definitions return type`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#returnFormatsArrays")
+    fun <T> `list variable definitions return type`(
+        render: Boolean?,
+        expectedClass: Class<Array<T>>,
+        spec: RequestSpecification,
+    ) {
         val body =
             spec
                 .`when`()
+                .queryParam("render", render)
                 .get("/variable-definitions")
                 .then()
                 .statusCode(HttpStatus.OK.code)
                 .extract()
                 .body()
                 .asString()
-        assertThat(jsonMapper.readValue(body, Array<CompleteResponse>::class.java)).isNotNull
+        val variableDefinitions: Array<T> = jsonMapper.readValue(body, expectedClass) as Array<T>
+
+        assertThat(variableDefinitions.size).isEqualTo(NUM_ALL_VARIABLE_DEFINITIONS)
+        assertThat(variableDefinitions[0]).isInstanceOf(expectedClass.componentType)
+    }
+
+    @ParameterizedTest
+    @EnumSource(SupportedLanguages::class)
+    fun `list variable definitions in supported languages`(
+        language: SupportedLanguages,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.ACCEPT_LANGUAGE, language.toString())
+                .queryParam("render", true)
+                .`when`()
+                .get("/variable-definitions")
+                .then()
+                .statusCode(200)
+                .header("Content-Language", language.toString())
+                .extract()
+                .body()
+                .asString()
+
+        assertThat(jsonMapper.readValue(body, Array<RenderedVariableDefinition>::class.java)).isNotNull
     }
 
     @Test

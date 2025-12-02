@@ -1,8 +1,11 @@
 package no.ssb.metadata.vardef.controllers.variabledefinitionbyid
 
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
+import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.BaseVardefTest
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
@@ -12,6 +15,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 
 class ReadTests : BaseVardefTest() {
@@ -68,18 +72,48 @@ class ReadTests : BaseVardefTest() {
             .body("valid_until", equalTo(expectedValidUntil))
     }
 
-    @Test
-    fun `get request return type`(spec: RequestSpecification) {
+    @ParameterizedTest
+    @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#returnFormats")
+    fun `get request return type`(
+        render: Boolean?,
+        expectedClass: Class<*>,
+        spec: RequestSpecification,
+    ) {
         val body =
             spec
                 .`when`()
+                .queryParam("render", render)
                 .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
                 .then()
                 .statusCode(HttpStatus.OK.code)
                 .extract()
                 .body()
                 .asString()
-        assertThat(jsonMapper.readValue(body, CompleteResponse::class.java)).isNotNull
+        assertThat(jsonMapper.readValue(body, expectedClass)).isNotNull
+    }
+
+    @ParameterizedTest
+    @EnumSource(SupportedLanguages::class)
+    fun `get variable definition in supported languages`(
+        language: SupportedLanguages,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.ACCEPT_LANGUAGE, language.toString())
+                .queryParam("render", true)
+                .`when`()
+                .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}")
+                .then()
+                .statusCode(200)
+                .header("Content-Language", language.toString())
+                .extract()
+                .body()
+                .asString()
+
+        assertThat(jsonMapper.readValue(body, RenderedVariableDefinition::class.java)).isNotNull
     }
 
     @ParameterizedTest

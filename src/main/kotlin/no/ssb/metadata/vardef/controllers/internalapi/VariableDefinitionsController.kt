@@ -1,6 +1,10 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
+import io.micronaut.http.HttpHeaders
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
+import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
@@ -23,6 +27,8 @@ import no.ssb.metadata.vardef.annotations.ConflictApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
 import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -61,6 +67,9 @@ class VariableDefinitionsController(
     )
     @Get
     fun listVariableDefinitions(
+        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
+        language: SupportedLanguages,
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -80,7 +89,32 @@ class VariableDefinitionsController(
             ],
         )
         shortName: String? = null,
-    ): List<CompleteResponse> = vardef.listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
+        @Parameter(
+            description = "Render the Variable Definition for presentation in a frontend",
+            examples = [
+                ExampleObject(name = "Date not specified", value = "false"),
+                ExampleObject(name = "Specific date", value = "false"),
+                ExampleObject(name = "Rendered", value = "true"),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = "false"),
+            ],
+        )
+        @QueryValue("render")
+        render: Boolean?,
+    ): MutableHttpResponse<List<RenderedOrCompleteUnion>> =
+        if (render == true) {
+            vardef
+                .listRenderedForDate(language = language, dateOfValidity = dateOfValidity, shortName = shortName)
+                .map { RenderedOrCompleteUnion.Rendered(it) }
+        } else {
+            vardef
+                .listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
+                .map { RenderedOrCompleteUnion.Complete(it) }
+        }.let {
+            HttpResponse
+                .ok(it)
+                .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+        }
 
     /**
      * Create a variable definition.

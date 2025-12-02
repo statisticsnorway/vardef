@@ -19,6 +19,7 @@ import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.SupportedLanguages
+import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
@@ -130,10 +131,11 @@ class PublicController(
             HttpResponse
                 .ok(
                     varDefService
-                        .getPublicByDate(
+                        .getRenderedByDateAndStatus(
                             definitionId = definitionId,
                             language = language,
                             dateOfValidity = dateOfValidity,
+                            variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                         ),
                 ).header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
                 .contentType(MediaType.APPLICATION_JSON)

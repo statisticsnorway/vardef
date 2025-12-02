@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
@@ -26,6 +27,9 @@ import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.models.isPublished
@@ -56,20 +60,25 @@ class VariableDefinitionByIdController(
                 examples = [
                     ExampleObject(name = "Date not specified", value = COMPLETE_RESPONSE_EXAMPLE),
                     ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
+                    ExampleObject(name = "Rendered", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
+                oneOf = [Schema(implementation = CompleteResponse::class), Schema(implementation = RenderedVariableDefinition::class)],
             ),
         ],
     )
     @NotFoundApiResponse
     @Get
     fun getVariableDefinitionById(
+        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
+        language: SupportedLanguages,
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
             examples = [
                 ExampleObject(name = "Date not specified", value = ID_EXAMPLE),
                 ExampleObject(name = "Specific date", value = ID_EXAMPLE),
+                ExampleObject(name = "Rendered", value = ID_EXAMPLE),
                 ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
             ],
         )
@@ -77,21 +86,48 @@ class VariableDefinitionByIdController(
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
+                ExampleObject(name = "Date not specified", value = ""),
                 ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
+                ExampleObject(name = "Rendered", value = ""),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ""),
             ],
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
-    ): CompleteResponse =
-        vardef
-            .getCompleteByDate(
-                definitionId = definitionId,
-                dateOfValidity = dateOfValidity,
-            )
-            ?: throw HttpStatusException(
-                HttpStatus.NOT_FOUND,
-                "Variable with ID $definitionId not found${if (dateOfValidity == null) "" else " for date $dateOfValidity"}",
-            )
+        @Parameter(
+            description = "Render the Variable Definition for presentation in a frontend",
+            examples = [
+                ExampleObject(name = "Date not specified", value = "false"),
+                ExampleObject(name = "Specific date", value = "false"),
+                ExampleObject(name = "Rendered", value = "true"),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = "false"),
+            ],
+        )
+        @QueryValue("render")
+        render: Boolean?,
+    ): MutableHttpResponse<RenderedOrCompleteUnion> =
+        if (render == true) {
+            vardef
+                .getRenderedByDateAndStatus(
+                    language = language,
+                    definitionId = definitionId,
+                    dateOfValidity = dateOfValidity,
+                ).let { RenderedOrCompleteUnion.Rendered(it) }
+        } else {
+            vardef
+                .getCompleteByDateAndStatus(
+                    definitionId = definitionId,
+                    dateOfValidity = dateOfValidity,
+                )?.let { RenderedOrCompleteUnion.Complete(it) }
+        }?.let {
+            HttpResponse
+                .ok(it)
+                .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+        } ?: throw HttpStatusException(
+            HttpStatus.NOT_FOUND,
+            "Variable with ID $definitionId not found${if (dateOfValidity == null) "" else " for date $dateOfValidity"}",
+        )
 
     /**
      * Delete a variable definition.
@@ -196,10 +232,13 @@ class VariableDefinitionByIdController(
         val existingVariable = patches.latest(definitionId)
 
         when {
-            existingVariable.variableStatus.isPublished() -> throw HttpStatusException(
-                HttpStatus.METHOD_NOT_ALLOWED,
-                "The variable is published and cannot be updated with this method",
-            )
+            existingVariable.variableStatus.isPublished() -> {
+                throw HttpStatusException(
+                    HttpStatus.METHOD_NOT_ALLOWED,
+                    "The variable is published and cannot be updated with this method",
+                )
+            }
+
             vardef.isIllegalShortNameForPublishing(existingVariable, updateDraft) -> {
                 throw HttpStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -218,20 +257,26 @@ class VariableDefinitionByIdController(
                 updateDraft.shortName != null &&
                     updateDraft.shortName != existingVariable.shortName &&
                     vardef.doesShortNameExist(updateDraft.shortName)
-            ) ->
+            ) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The short name '${updateDraft.shortName}' is already in use by another variable definition.",
                 )
-            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, existingVariable) -> throw HttpStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Invalid date order",
-            )
-            !vardef.allLanguagesPresentForExternalPublication(updateDraft, existingVariable) ->
+            }
+
+            !vardef.isCorrectDateOrderComparedToSaved(updateDraft, existingVariable) -> {
+                throw HttpStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid date order",
+                )
+            }
+
+            !vardef.allLanguagesPresentForExternalPublication(updateDraft, existingVariable) -> {
                 throw HttpStatusException(
                     HttpStatus.CONFLICT,
                     "The variable must have translations for all languages for name, definition, comment before external publication.",
                 )
+            }
         }
         return vardef
             .update(existingVariable, updateDraft, authentication.name)

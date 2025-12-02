@@ -5,6 +5,8 @@ import ch.qos.logback.core.AppenderBase
 import io.micronaut.problem.ProblemJsonErrorResponseBodyProvider.APPLICATION_PROBLEM_JSON
 import io.restassured.builder.ResponseSpecBuilder
 import io.restassured.specification.ResponseSpecification
+import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.RenderedVariableDefinition
 import no.ssb.metadata.vardef.models.VariableStatus
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.params.provider.Arguments
@@ -97,6 +99,28 @@ object TestUtils {
             argumentSet("Published external", INCOME_TAX_VP1_P1.definitionId, "PUBLISHED_EXTERNAL"),
             argumentSet("Published internal", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId, "PUBLISHED_INTERNAL"),
             argumentSet("Draft", DRAFT_BUS_EXAMPLE.definitionId, "DRAFT"),
+        )
+
+    /**
+     * Formats for controller methods which have a `render` query parameter
+     */
+    @JvmStatic
+    fun returnFormats(): Stream<Arguments> =
+        Stream.of(
+            argumentSet("Rendered", true, RenderedVariableDefinition::class.java),
+            argumentSet("Not rendered", false, CompleteResponse::class.java),
+            argumentSet("Null", null, CompleteResponse::class.java),
+        )
+
+    /**
+     * Formats for controller methods which have a `render` query parameter
+     */
+    @JvmStatic
+    fun returnFormatsArrays(): Stream<Arguments> =
+        Stream.of(
+            argumentSet("Rendered", true, Array<RenderedVariableDefinition>::class.java),
+            argumentSet("Not rendered", false, Array<CompleteResponse>::class.java),
+            argumentSet("Null", null, Array<CompleteResponse>::class.java),
         )
 
     /**

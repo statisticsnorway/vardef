@@ -352,7 +352,7 @@ class UpdateTests : BaseVardefTest() {
             )
 
         val savedVariableDefinition =
-            variableDefinitionService.getCompleteByDate(
+            variableDefinitionService.getCompleteByDateAndStatus(
                 SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
             )
         assertThat(savedVariableDefinition?.owner?.team).isNotBlank()

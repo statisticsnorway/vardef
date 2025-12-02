@@ -74,7 +74,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     ) {
         assertThat(
             variableDefinitionService
-                .getCompleteByDate(definitionId, null, status),
+                .getCompleteByDateAndStatus(definitionId, null, status),
         ).usingRecursiveComparison()
             .ignoringFields("createdAt", "lastUpdatedAt")
             .isEqualTo(expectedResult)

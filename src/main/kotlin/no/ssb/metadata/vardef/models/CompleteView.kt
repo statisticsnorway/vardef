@@ -5,7 +5,6 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
-import java.net.URI
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime

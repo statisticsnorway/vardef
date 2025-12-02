@@ -260,6 +260,7 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     $KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
     ],
     "contains_special_categories_of_personal_data": true,
+    "variable_status": "PUBLISHED_INTERNAL",
     "measurement_type": null,
     "valid_from": "2003-01-01",
     "valid_until": null,
@@ -268,8 +269,15 @@ const val RENDERED_VARIABLE_DEFINITION_EXAMPLE = """{
     "related_variable_definition_uris": [
         "https://example.com/"
     ],
+    "owner": {
+        "team": "team-a",
+        "groups": ["team-a-developers"]
+    },
     "contact": $RENDERED_CONTACT_EXAMPLE,
-    "last_updated_at": "2024-06-12T10:39:41.038Z"
+    "created_at": "2024-06-11T08:15:19.038Z",
+    "created_by": "ano@ssb.no",
+    "last_updated_at": "2024-06-11T08:15:19.038Z",
+    "last_updated_by": "ano@ssb.no"
 }"""
 
 const val LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE = """[

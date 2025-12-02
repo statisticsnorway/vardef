@@ -85,14 +85,19 @@ data class SavedVariableDefinition(
             unitTypes = unitTypes.map { klassService.renderCode(UNIT_TYPES_KLASS_CODE, it, language) },
             subjectFields = subjectFields.map { klassService.renderCode(SUBJECT_FIELDS_KLASS_CODE, it, language) },
             containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData,
+            variableStatus = variableStatus,
             measurementType = measurementType?.let { klassService.renderCode(MEASUREMENT_TYPE_KLASS_CODE, it, language) },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,
             comment = comment?.getValue(language),
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
+            owner = owner,
             contact = contact.title.getValue(language)?.let { RenderedContact(it, contact.email) },
             lastUpdatedAt = lastUpdatedAt,
+            lastUpdatedBy = lastUpdatedBy,
+            createdAt = createdAt,
+            createdBy = createdBy,
         )
 
     fun toPatch(): Patch =

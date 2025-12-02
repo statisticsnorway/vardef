@@ -9,7 +9,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 /**
- * Render a Variable Definition in a specific language, for display to end users.
+ * Render a Variable Definition in a specific language,
+ * for display to end users.
  */
 @Schema(
     example = RENDERED_VARIABLE_DEFINITION_EXAMPLE,
@@ -25,12 +26,17 @@ data class RenderedVariableDefinition(
     val unitTypes: List<KlassReference?>,
     val subjectFields: List<KlassReference?>,
     val containsSpecialCategoriesOfPersonalData: Boolean,
+    var variableStatus: VariableStatus?,
     val measurementType: KlassReference?,
     val validFrom: LocalDate,
     val validUntil: LocalDate?,
     val externalReferenceUri: URL?,
     val comment: String?,
     val relatedVariableDefinitionUris: List<URL>?,
+    val owner: Owner,
     val contact: RenderedContact?,
+    var createdAt: LocalDateTime,
+    var createdBy: String,
     val lastUpdatedAt: LocalDateTime,
+    var lastUpdatedBy: String,
 )

@@ -187,7 +187,7 @@ class PublicController(
             )
         } else {
             HttpResponse
-                .ok(validityPeriods.listPublic(language, variableDefinitionId))
+                .ok(validityPeriods.listRendered(language, variableDefinitionId))
                 .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
                 .contentType(MediaType.APPLICATION_JSON)
         }

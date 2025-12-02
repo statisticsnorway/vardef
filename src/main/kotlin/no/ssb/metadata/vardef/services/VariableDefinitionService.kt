@@ -200,14 +200,10 @@ class VariableDefinitionService(
         dateOfValidity: LocalDate?,
         shortName: String?,
     ): List<RenderedView> =
-        if (shortName != null) {
-            variableDefinitionRepository
-                .findDistinctDefinitionIdByShortName(shortName)
-                .let { id -> listOfNotNull(id?.let { getRenderedByDateAndStatus(language, it, dateOfValidity) }) }
-        } else {
-            uniqueDefinitionIds()
-                .map { getRenderedByDateAndStatus(language, it, dateOfValidity) }
-        }.also { logger.info("Found ${it.size} valid variable definitions at date $dateOfValidity with shortName=$shortName.") }
+        listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
+            .map {
+                it.render(language = language, klassService = klassService)
+            }
 
     /**
      * One rendered *Variable Definition*, valid at the given date.

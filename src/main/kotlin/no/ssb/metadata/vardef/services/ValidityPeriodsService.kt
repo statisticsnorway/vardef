@@ -67,7 +67,7 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The list of rendered *Validity Periods*
      */
-    fun listPublic(
+    fun listRendered(
         language: SupportedLanguages,
         definitionId: String,
     ): List<RenderedView> =

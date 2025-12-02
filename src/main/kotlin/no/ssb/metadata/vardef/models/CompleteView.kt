@@ -4,6 +4,8 @@ import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import no.ssb.metadata.vardef.constants.*
+import no.ssb.metadata.vardef.integrations.klass.service.KlassService
+import java.net.URI
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -61,4 +63,40 @@ data class CompleteView(
     var lastUpdatedAt: LocalDateTime,
     @Schema(description = LAST_UPDATED_BY_FIELD_DESCRIPTION)
     var lastUpdatedBy: String,
-)
+) {
+    /**
+     * Render the variable definition, so it's suitable for display to humans.
+     *
+     * @param language The language to render in.
+     * @param klassService The service from which to obtain details for classification codes.
+     * @return The rendered object.
+     */
+    fun render(
+        language: SupportedLanguages,
+        klassService: KlassService,
+    ): RenderedView =
+        RenderedView(
+            id = id,
+            patchId = patchId,
+            name = name.getValue(language),
+            shortName = shortName,
+            definition = definition.getValue(language),
+            classificationUri = classificationReference?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
+            unitTypes = unitTypes.map { klassService.renderCode(UNIT_TYPES_KLASS_CODE, it, language) },
+            subjectFields = subjectFields.map { klassService.renderCode(SUBJECT_FIELDS_KLASS_CODE, it, language) },
+            containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData,
+            variableStatus = variableStatus,
+            measurementType = measurementType?.let { klassService.renderCode(MEASUREMENT_TYPE_KLASS_CODE, it, language) },
+            validFrom = validFrom,
+            validUntil = validUntil,
+            externalReferenceUri = externalReferenceUri,
+            comment = comment?.getValue(language),
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris,
+            owner = owner,
+            contact = contact.title.getValue(language)?.let { RenderedContact(it, contact.email) },
+            lastUpdatedAt = lastUpdatedAt,
+            lastUpdatedBy = lastUpdatedBy,
+            createdAt = createdAt,
+            createdBy = createdBy,
+        )
+}

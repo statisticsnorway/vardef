@@ -23,7 +23,7 @@ import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
-import no.ssb.metadata.vardef.models.ValidityPeriod
+import no.ssb.metadata.vardef.models.CreateValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_OWNER
@@ -77,12 +77,12 @@ class ValidityPeriodsController(
         @RequestBody(
             content = [
                 Content(
-                    examples = [ExampleObject(name = "Create validity period", value = VALIDITY_PERIOD_EXAMPLE)],
-                    schema = Schema(implementation = ValidityPeriod::class),
+                    examples = [ExampleObject(name = "Create validity period", value = CREATE_VALIDITY_PERIOD_EXAMPLE)],
+                    schema = Schema(implementation = CreateValidityPeriod::class),
                 ),
             ],
         )
-        newPeriod: ValidityPeriod,
+        newPeriod: CreateValidityPeriod,
         authentication: Authentication,
     ): CompleteView {
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)

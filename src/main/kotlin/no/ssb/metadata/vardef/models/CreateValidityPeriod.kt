@@ -22,9 +22,9 @@ import java.time.LocalDateTime
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = VALIDITY_PERIOD_EXAMPLE,
+    example = CREATE_VALIDITY_PERIOD_EXAMPLE,
 )
-data class ValidityPeriod(
+data class CreateValidityPeriod(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType

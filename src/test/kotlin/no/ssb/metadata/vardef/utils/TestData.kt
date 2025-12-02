@@ -206,7 +206,7 @@ val ALL_SAVED_INTERNAL_PATCHES =
     )
 
 val VALIDITY_PERIOD_TAX_EXAMPLE =
-    ValidityPeriod(
+    CreateValidityPeriod(
         name =
             LanguageStringType(
                 nb = "Inntektsskatt",

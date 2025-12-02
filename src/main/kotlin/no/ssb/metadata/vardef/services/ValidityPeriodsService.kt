@@ -175,7 +175,7 @@ class ValidityPeriodsService(
      */
     fun create(
         definitionId: String,
-        newPeriod: ValidityPeriod,
+        newPeriod: CreateValidityPeriod,
         userName: String,
     ): SavedVariableDefinition {
         val validityPeriodsMap = getAsMap(definitionId)
@@ -216,7 +216,7 @@ class ValidityPeriodsService(
      */
     private fun checkValidityPeriodInput(
         definitionId: String,
-        newPeriod: ValidityPeriod,
+        newPeriod: CreateValidityPeriod,
     ) {
         when {
             !isValidValidFromValue(definitionId, newPeriod.validFrom) -> {
@@ -247,7 +247,7 @@ class ValidityPeriodsService(
     /**
      * Check that a given date is not between any existing validity dates for the given variable definition.
      *
-     * If the [ValidityPeriod] is closed only valid 'validFrom' is before or the day after closed period.
+     * If the [CreateValidityPeriod] is closed only valid 'validFrom' is before or the day after closed period.
      * this to prevent gaps between validity periods.
      *
      * This is important to preserve metadata immutability, such that a consumer specifying a particular date
@@ -300,7 +300,7 @@ class ValidityPeriodsService(
      */
     private fun isNewDefinition(
         definitionId: String,
-        newPeriod: ValidityPeriod,
+        newPeriod: CreateValidityPeriod,
     ): Boolean {
         val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
         val newPeriodHasNoFewerLanguagesThanPrevious =

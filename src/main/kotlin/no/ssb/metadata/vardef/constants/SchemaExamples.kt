@@ -207,7 +207,7 @@ const val PATCH_EXAMPLE = """
     }
 }"""
 
-const val VALIDITY_PERIOD_EXAMPLE = """
+const val CREATE_VALIDITY_PERIOD_EXAMPLE = """
 {
     "name": {
         "en": "Country Background",

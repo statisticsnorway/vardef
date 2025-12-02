@@ -42,9 +42,9 @@ class SchemaExamplesTest {
                 ),
                 argumentSet("Patch example validates", PATCH_EXAMPLE, listOf(CreatePatch::class.java)),
                 argumentSet(
-                    "ValidityPeriod example validates",
-                    VALIDITY_PERIOD_EXAMPLE,
-                    listOf(ValidityPeriod::class.java),
+                    "CreateValidityPeriod example validates",
+                    CREATE_VALIDITY_PERIOD_EXAMPLE,
+                    listOf(CreateValidityPeriod::class.java),
                 ),
                 argumentSet(
                     "RenderedView example validates",

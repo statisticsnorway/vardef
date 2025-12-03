@@ -5,7 +5,7 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.allMandatoryFieldsChanged
 import no.ssb.metadata.vardef.controllers.validityperiods.CompanionObject.Companion.noneMandatoryFieldsChanged
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.containsString
@@ -336,7 +336,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create new validity period return complete response`(spec: RequestSpecification) {
+    fun `create new validity period return complete view`(spec: RequestSpecification) {
         val body =
             spec
                 .given()
@@ -350,10 +350,10 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
-        assertThat(completeResponse.lastUpdatedBy).isEqualTo(TEST_USER)
-        assertThat(completeResponse.createdBy).isEqualTo("me@example.com")
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView).isNotNull
+        assertThat(completeView.lastUpdatedBy).isEqualTo(TEST_USER)
+        assertThat(completeView.createdBy).isEqualTo("me@example.com")
     }
 
     @ParameterizedTest
@@ -380,7 +380,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         if (httpStatus == HTTP_CREATED) {
-            jsonMapper.readValue(body, CompleteResponse::class.java).apply {
+            jsonMapper.readValue(body, CompleteView::class.java).apply {
                 assertThat(this).isNotNull
                 assertThat(validFrom).isEqualTo(expectedValidFrom)
                 assertThat(validUntil).isEqualTo(expectedValidUntil)

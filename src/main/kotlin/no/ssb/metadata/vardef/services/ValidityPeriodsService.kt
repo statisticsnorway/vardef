@@ -67,25 +67,25 @@ class ValidityPeriodsService(
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The list of rendered *Validity Periods*
      */
-    fun listPublic(
+    fun listRendered(
         language: SupportedLanguages,
         definitionId: String,
-    ): List<RenderedVariableDefinition> =
+    ): List<RenderedView> =
         listLatestByValidityPeriod(definitionId)
             .map { it.render(language, klassService) }
 
     /**
      * List complete *Validity Periods*.
      *
-     * A list of the latest *Patch* in each *Validity Period*. These are the [CompleteResponse] and suitable
+     * A list of the latest *Patch* in each *Validity Period*. These are the [CompleteView] and suitable
      * for internal use.
      *
      * @param definitionId The ID of the *Variable Definition* of interest.
      * @return The list of *Validity Periods*
      */
-    fun listComplete(definitionId: String): List<CompleteResponse> =
+    fun listComplete(definitionId: String): List<CompleteView> =
         listLatestByValidityPeriod(definitionId)
-            .map { it.toCompleteResponse() }
+            .map { it.toCompleteView() }
 
     /**
      * Get a map over *Validity Periods*.
@@ -175,7 +175,7 @@ class ValidityPeriodsService(
      */
     fun create(
         definitionId: String,
-        newPeriod: ValidityPeriod,
+        newPeriod: CreateValidityPeriod,
         userName: String,
     ): SavedVariableDefinition {
         val validityPeriodsMap = getAsMap(definitionId)
@@ -216,7 +216,7 @@ class ValidityPeriodsService(
      */
     private fun checkValidityPeriodInput(
         definitionId: String,
-        newPeriod: ValidityPeriod,
+        newPeriod: CreateValidityPeriod,
     ) {
         when {
             !isValidValidFromValue(definitionId, newPeriod.validFrom) -> {
@@ -234,6 +234,7 @@ class ValidityPeriodsService(
                 )
                 throw DefinitionTextUnchangedException()
             }
+
             else -> {
                 logger.info(
                     "Validity period input is valid for definition: $definitionId",
@@ -246,7 +247,7 @@ class ValidityPeriodsService(
     /**
      * Check that a given date is not between any existing validity dates for the given variable definition.
      *
-     * If the [ValidityPeriod] is closed only valid 'validFrom' is before or the day after closed period.
+     * If the [CreateValidityPeriod] is closed only valid 'validFrom' is before or the day after closed period.
      * this to prevent gaps between validity periods.
      *
      * This is important to preserve metadata immutability, such that a consumer specifying a particular date
@@ -279,6 +280,7 @@ class ValidityPeriodsService(
             lastValidPeriod.second == null -> {
                 dateOfValidity.isBefore(firstValidFrom) || dateOfValidity.isAfter(upperBoundary)
             }
+
             else -> {
                 dateOfValidity.isBefore(firstValidFrom) || dateOfValidity == upperBoundary.plusDays(1)
             }
@@ -298,7 +300,7 @@ class ValidityPeriodsService(
      */
     private fun isNewDefinition(
         definitionId: String,
-        newPeriod: ValidityPeriod,
+        newPeriod: CreateValidityPeriod,
     ): Boolean {
         val lastValidityPeriod = getLatestPatchInLastValidityPeriod(definitionId)
         val newPeriodHasNoFewerLanguagesThanPrevious =

@@ -31,25 +31,25 @@ class SchemaExamplesTest {
                     listOf(Owner::class.java),
                 ),
                 argumentSet(
-                    "Draft example validates",
-                    DRAFT_EXAMPLE,
-                    listOf(Draft::class.java, UpdateDraft::class.java),
+                    "CreateDraft example validates",
+                    CREATE_DRAFT_EXAMPLE,
+                    listOf(CreateDraft::class.java, UpdateDraft::class.java),
                 ),
                 argumentSet(
-                    "CompleteResponse example validates",
-                    COMPLETE_RESPONSE_EXAMPLE,
-                    listOf(CompleteResponse::class.java),
+                    "CompleteView example validates",
+                    COMPLETE_VIEW_EXAMPLE,
+                    listOf(CompleteView::class.java),
                 ),
-                argumentSet("Patch example validates", PATCH_EXAMPLE, listOf(Patch::class.java)),
+                argumentSet("Patch example validates", PATCH_EXAMPLE, listOf(CreatePatch::class.java)),
                 argumentSet(
-                    "ValidityPeriod example validates",
-                    VALIDITY_PERIOD_EXAMPLE,
-                    listOf(ValidityPeriod::class.java),
+                    "CreateValidityPeriod example validates",
+                    CREATE_VALIDITY_PERIOD_EXAMPLE,
+                    listOf(CreateValidityPeriod::class.java),
                 ),
                 argumentSet(
-                    "RenderedVariableDefinition example validates",
-                    RENDERED_VARIABLE_DEFINITION_EXAMPLE,
-                    listOf(RenderedVariableDefinition::class.java),
+                    "RenderedView example validates",
+                    RENDERED_VIEW_EXAMPLE,
+                    listOf(RenderedView::class.java),
                 ),
             )
     }

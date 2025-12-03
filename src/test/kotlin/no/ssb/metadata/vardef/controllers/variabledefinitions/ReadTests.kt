@@ -4,8 +4,8 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.CompleteView
+import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
@@ -122,7 +122,7 @@ class ReadTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        assertThat(jsonMapper.readValue(body, Array<RenderedVariableDefinition>::class.java)).isNotNull
+        assertThat(jsonMapper.readValue(body, Array<RenderedView>::class.java)).isNotNull
     }
 
     @Test
@@ -156,7 +156,7 @@ class ReadTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
+        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
         val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
         assertThat(actualStatuses).containsAll(expectedStatuses)
     }
@@ -184,7 +184,7 @@ class ReadTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
+        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
         assertThat(variableDefinitions.size).isEqualTo(1)
         assertThat(variableDefinitions[0].shortName).isEqualTo(DRAFT_BUS_EXAMPLE.shortName)
         assertThat(variableDefinitions[0].patchId).isEqualTo(1)
@@ -207,7 +207,7 @@ class ReadTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteResponse>::class.java)
+        val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
         assertThat(variableDefinitions[0].patchId).isEqualTo(expectedPatchId)
     }
 

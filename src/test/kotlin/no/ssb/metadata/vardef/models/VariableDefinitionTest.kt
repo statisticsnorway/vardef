@@ -15,11 +15,11 @@ import kotlin.properties.Delegates
 class VariableDefinitionTest {
     private lateinit var variableDefinition: SavedVariableDefinition
     private var nanoIdSize by Delegates.notNull<Int>()
-    private lateinit var renderedVariableDefinition: RenderedVariableDefinition
-    private lateinit var completeResponseVariableDefinition: CompleteResponse
+    private lateinit var renderedView: RenderedView
+    private lateinit var completeViewVariableDefinition: CompleteView
 
-    private val draftExample =
-        Draft(
+    private val createDraftExample =
+        CreateDraft(
             name =
                 LanguageStringType(
                     nb = "Fly",
@@ -54,8 +54,8 @@ class VariableDefinitionTest {
     fun setUp() {
         variableDefinition = INCOME_TAX_VP1_P1
         nanoIdSize = 8
-        renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION_NULL_CONTACT
-        completeResponseVariableDefinition = COMPLETE_RESPONSE
+        renderedView = RENDERED_VIEW_NULL_CONTACT
+        completeViewVariableDefinition = COMPLETE_VIEW
     }
 
     @ParameterizedTest
@@ -99,13 +99,13 @@ class VariableDefinitionTest {
 
     @Test
     fun `rendered variable without contact information`() {
-        assertThat(renderedVariableDefinition.contact).isNull()
-        assertThat(renderedVariableDefinition.name).isEqualTo("Landbakgrunn")
+        assertThat(renderedView.contact).isNull()
+        assertThat(renderedView.name).isEqualTo("Landbakgrunn")
     }
 
     @Test
-    fun `complete response include owner`() {
-        assertThat(completeResponseVariableDefinition).hasFieldOrProperty("owner")
+    fun `complete view include owner`() {
+        assertThat(completeViewVariableDefinition).hasFieldOrProperty("owner")
     }
 
     @ParameterizedTest
@@ -118,7 +118,7 @@ class VariableDefinitionTest {
         group: String,
         expectedteam: String,
     ) {
-        val savedVariableDefinition = draftExample.toSavedVariableDefinition(group, TEST_USER)
+        val savedVariableDefinition = createDraftExample.toSavedVariableDefinition(group, TEST_USER)
         assertThat(savedVariableDefinition.owner.team).isEqualTo(expectedteam)
     }
 }

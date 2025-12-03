@@ -74,8 +74,8 @@ data class SavedVariableDefinition(
     fun render(
         language: SupportedLanguages,
         klassService: KlassService,
-    ): RenderedVariableDefinition =
-        RenderedVariableDefinition(
+    ): RenderedView =
+        RenderedView(
             id = definitionId,
             patchId = patchId,
             name = name.getValue(language),
@@ -100,8 +100,8 @@ data class SavedVariableDefinition(
             createdBy = createdBy,
         )
 
-    fun toPatch(): Patch =
-        Patch(
+    fun toPatch(): CreatePatch =
+        CreatePatch(
             name = name,
             definition = definition,
             classificationReference = classificationReference,
@@ -118,8 +118,8 @@ data class SavedVariableDefinition(
             contact = contact,
         )
 
-    fun toCompleteResponse(): CompleteResponse =
-        CompleteResponse(
+    fun toCompleteView(): CompleteView =
+        CompleteView(
             id = definitionId,
             patchId = patchId,
             name = name,

@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.models
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
-import no.ssb.metadata.vardef.constants.RENDERED_VARIABLE_DEFINITION_EXAMPLE
+import no.ssb.metadata.vardef.constants.RENDERED_VIEW_EXAMPLE
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -13,10 +13,10 @@ import java.time.LocalDateTime
  * for display to end users.
  */
 @Schema(
-    example = RENDERED_VARIABLE_DEFINITION_EXAMPLE,
+    example = RENDERED_VIEW_EXAMPLE,
 )
 @Serdeable(naming = SnakeCaseStrategy::class)
-data class RenderedVariableDefinition(
+data class RenderedView(
     val id: String,
     val patchId: Int,
     val name: String?,

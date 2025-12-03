@@ -10,7 +10,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 val DRAFT_COMPLEX_SHORT_NAME =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Buss",
@@ -41,7 +41,7 @@ val DRAFT_COMPLEX_SHORT_NAME =
             ),
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 val DRAFT_BUS_EXAMPLE =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Buss",
@@ -73,7 +73,7 @@ val DRAFT_BUS_EXAMPLE =
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
 val DRAFT_EXAMPLE_WITH_VALID_UNTIL =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Tog",
@@ -206,7 +206,7 @@ val ALL_SAVED_INTERNAL_PATCHES =
     )
 
 val VALIDITY_PERIOD_TAX_EXAMPLE =
-    ValidityPeriod(
+    CreateValidityPeriod(
         name =
             LanguageStringType(
                 nb = "Inntektsskatt",
@@ -407,8 +407,8 @@ val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
         lastUpdatedBy = "me@example.com",
     )
 
-val RENDERED_VARIABLE_DEFINITION =
-    RenderedVariableDefinition(
+val RENDERED_VIEW =
+    RenderedView(
         id = "",
         patchId = 1,
         name = "Landbakgrunn",
@@ -435,8 +435,8 @@ val RENDERED_VARIABLE_DEFINITION =
         lastUpdatedBy = "me@example.com",
     )
 
-val RENDERED_VARIABLE_DEFINITION_NULL_CONTACT =
-    RenderedVariableDefinition(
+val RENDERED_VIEW_NULL_CONTACT =
+    RenderedView(
         id = "",
         patchId = 1,
         name = "Landbakgrunn",
@@ -509,8 +509,8 @@ val SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME =
         lastUpdatedBy = "me@example.com",
     )
 
-val COMPLETE_RESPONSE =
-    CompleteResponse(
+val COMPLETE_VIEW =
+    CompleteView(
         id = "",
         patchId = 1,
         name =
@@ -615,7 +615,7 @@ val UPDATE_DRAFT_CLASSIFICATION_REFERENCE =
     )
 
 val SAVED_TO_PUBLISH =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Buss",
@@ -647,7 +647,7 @@ val SAVED_TO_PUBLISH =
     ).toSavedVariableDefinition(TEST_DEVELOPERS_GROUP, TEST_USER)
 
 val SAVED_TO_PUBLISH_ILLEGAL_CONTACT =
-    Draft(
+    CreateDraft(
         name =
             LanguageStringType(
                 nb = "Buss",

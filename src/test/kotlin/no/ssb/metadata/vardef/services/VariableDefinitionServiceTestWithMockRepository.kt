@@ -12,7 +12,7 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
-import no.ssb.metadata.vardef.utils.RENDERED_VARIABLE_DEFINITION
+import no.ssb.metadata.vardef.utils.RENDERED_VIEW
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -80,7 +80,7 @@ class VariableDefinitionServiceTestWithMockRepository {
 
         every { mockValidityPeriodsService.getForDate(variableDefinition.definitionId, today) } returns variableDefinition
 
-        val renderedVariableDefinition = RENDERED_VARIABLE_DEFINITION.copy(id = variableDefinition.definitionId)
+        val renderedVariableDefinition = RENDERED_VIEW.copy(id = variableDefinition.definitionId)
 
         val result =
             variableDefinitionService.listPublicForDate(SupportedLanguages.NB, today)

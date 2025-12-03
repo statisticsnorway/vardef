@@ -3,9 +3,9 @@ package no.ssb.metadata.vardef.services
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
+import no.ssb.metadata.vardef.models.CreateValidityPeriod
 import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
-import no.ssb.metadata.vardef.models.ValidityPeriod
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -65,7 +65,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @MethodSource("validFromTestCases")
     fun `validate valid_from values in new validity period`(
         definitionId: String,
-        inputObject: ValidityPeriod,
+        inputObject: CreateValidityPeriod,
         expectSuccess: Boolean,
     ) {
         if (!expectSuccess) {
@@ -91,7 +91,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("definitionTextTestCases")
     fun `validate updated definition texts in new validity period`(
-        inputObject: ValidityPeriod,
+        inputObject: CreateValidityPeriod,
         expectSuccess: Boolean,
     ) {
         if (!expectSuccess) {
@@ -116,7 +116,7 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
 
     @ParameterizedTest
     @MethodSource("createValidityPeriodsTestCases")
-    fun `save new validity period`(inputData: ValidityPeriod) {
+    fun `save new validity period`(inputData: CreateValidityPeriod) {
         val patchesBefore = patches.list(savedVariableDefinitionId)
         val newValidityPeriod =
             validityPeriods.create(

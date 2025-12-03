@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
@@ -44,13 +44,13 @@ class PublicController(
                 examples = [
                     ExampleObject(
                         name = "Specific date",
-                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                        value = LIST_OF_RENDERED_VIEWS_EXAMPLE,
                     ), ExampleObject(
                         name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
                 ],
-                array = ArraySchema(schema = Schema(implementation = RenderedVariableDefinition::class)),
+                array = ArraySchema(schema = Schema(implementation = RenderedView::class)),
             ),
         ],
     )
@@ -67,7 +67,7 @@ class PublicController(
             ],
         )
         dateOfValidity: LocalDate? = null,
-    ): HttpResponse<List<RenderedVariableDefinition>> =
+    ): HttpResponse<List<RenderedView>> =
         HttpResponse
             .ok(varDefService.listPublicForDate(language = language, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
@@ -84,10 +84,10 @@ class PublicController(
         content = [
             Content(
                 examples = [
-                    ExampleObject(name = "Date not specified", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
-                    ExampleObject(name = "Specific date", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
+                    ExampleObject(name = "Date not specified", value = RENDERED_VIEW_EXAMPLE),
+                    ExampleObject(name = "Specific date", value = RENDERED_VIEW_EXAMPLE),
                 ],
-                schema = Schema(implementation = RenderedVariableDefinition::class),
+                schema = Schema(implementation = RenderedView::class),
             ),
         ],
     )
@@ -121,7 +121,7 @@ class PublicController(
         )
         @QueryValue("date_of_validity")
         dateOfValidity: LocalDate? = null,
-    ): MutableHttpResponse<RenderedVariableDefinition> =
+    ): MutableHttpResponse<RenderedView> =
         if (!varDefService.isPublic(definitionId)) {
             throw HttpStatusException(
                 HttpStatus.NOT_FOUND,
@@ -156,10 +156,10 @@ class PublicController(
                 examples = [
                     ExampleObject(
                         name = "Validity periods",
-                        value = LIST_OF_RENDERED_VARIABLE_DEFINITIONS_EXAMPLE,
+                        value = LIST_OF_RENDERED_VIEWS_EXAMPLE,
                     ),
                 ],
-                array = ArraySchema(schema = Schema(implementation = RenderedVariableDefinition::class)),
+                array = ArraySchema(schema = Schema(implementation = RenderedView::class)),
             ),
         ],
     )
@@ -179,7 +179,7 @@ class PublicController(
         )
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
         language: SupportedLanguages,
-    ): MutableHttpResponse<List<RenderedVariableDefinition>>? =
+    ): MutableHttpResponse<List<RenderedView>>? =
         if (!varDefService.isPublic(variableDefinitionId)) {
             throw HttpStatusException(
                 HttpStatus.NOT_FOUND,
@@ -187,7 +187,7 @@ class PublicController(
             )
         } else {
             HttpResponse
-                .ok(validityPeriods.listPublic(language, variableDefinitionId))
+                .ok(validityPeriods.listRendered(language, variableDefinitionId))
                 .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
                 .contentType(MediaType.APPLICATION_JSON)
         }

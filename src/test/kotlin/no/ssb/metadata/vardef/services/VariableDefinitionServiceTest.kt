@@ -70,7 +70,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     fun `get by variable status`(
         definitionId: String,
         status: VariableStatus?,
-        expectedResult: CompleteResponse?,
+        expectedResult: CompleteView?,
     ) {
         assertThat(
             variableDefinitionService
@@ -133,7 +133,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("languagesForExternalPublicationWithPatch")
     fun `languages for external publication (Patch)`(
-        updates: Patch,
+        updates: CreatePatch,
         existingVariable: SavedVariableDefinition,
         expected: Boolean,
     ) {
@@ -167,7 +167,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
             Stream.of(
                 argumentSet(
                     "All languages present",
-                    Patch(
+                    CreatePatch(
                         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                     ),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
@@ -179,7 +179,7 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                 ),
                 argumentSet(
                     "One field all languages empty",
-                    Patch(
+                    CreatePatch(
                         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                     ),
                     SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
@@ -372,10 +372,10 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     "Published External matching",
                     INCOME_TAX_VP2_P6.definitionId,
                     VariableStatus.PUBLISHED_EXTERNAL,
-                    INCOME_TAX_VP2_P6.toCompleteResponse(),
+                    INCOME_TAX_VP2_P6.toCompleteView(),
                 ),
                 argumentSet(
-                    "Published External on Draft",
+                    "Published External on CreateDraft",
                     DRAFT_BUS_EXAMPLE.definitionId,
                     VariableStatus.PUBLISHED_EXTERNAL,
                     null,
@@ -387,16 +387,16 @@ class VariableDefinitionServiceTest : BaseVardefTest() {
                     null,
                 ),
                 argumentSet(
-                    "Draft matching",
+                    "CreateDraft matching",
                     DRAFT_BUS_EXAMPLE.definitionId,
                     VariableStatus.DRAFT,
-                    DRAFT_BUS_EXAMPLE.toCompleteResponse(),
+                    DRAFT_BUS_EXAMPLE.toCompleteView(),
                 ),
                 argumentSet(
                     "Published Internal matching",
                     SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId,
                     VariableStatus.PUBLISHED_INTERNAL,
-                    SAVED_INTERNAL_VARIABLE_DEFINITION.toCompleteResponse(),
+                    SAVED_INTERNAL_VARIABLE_DEFINITION.toCompleteView(),
                 ),
             )
 

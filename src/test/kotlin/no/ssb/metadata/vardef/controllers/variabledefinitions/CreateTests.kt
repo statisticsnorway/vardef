@@ -3,7 +3,7 @@ package no.ssb.metadata.vardef.controllers.variabledefinitions
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
@@ -204,7 +204,7 @@ class CreateTests : BaseVardefTest() {
     }
 
     @Test
-    fun `create variable definition returns complete response`(spec: RequestSpecification) {
+    fun `create variable definition returns complete view`(spec: RequestSpecification) {
         val shortName = "blink"
         val updatedJsonString =
             jsonTestInput()
@@ -225,9 +225,9 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
-        assertThat(completeResponse.shortName).isEqualTo(shortName)
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView).isNotNull
+        assertThat(completeView.shortName).isEqualTo(shortName)
     }
 
     @Test

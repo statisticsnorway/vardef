@@ -25,8 +25,8 @@ import jakarta.validation.Valid
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.ConflictApiResponse
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.CompleteResponse
-import no.ssb.metadata.vardef.models.Draft
+import no.ssb.metadata.vardef.models.CompleteView
+import no.ssb.metadata.vardef.models.CreateDraft
 import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
@@ -52,16 +52,16 @@ class VariableDefinitionsController(
                 examples = [
                     ExampleObject(
                         name = "Specific date",
-                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
+                        value = LIST_OF_COMPLETE_VIEW_EXAMPLE,
                     ), ExampleObject(
                         name = "Specific short_name",
-                        value = LIST_OF_COMPLETE_RESPONSE_EXAMPLE,
+                        value = LIST_OF_COMPLETE_VIEW_EXAMPLE,
                     ), ExampleObject(
                         name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
                 ],
-                array = ArraySchema(schema = Schema(implementation = CompleteResponse::class)),
+                array = ArraySchema(schema = Schema(implementation = CompleteView::class)),
             ),
         ],
     )
@@ -133,11 +133,11 @@ class VariableDefinitionsController(
             Content(
                 examples = [
                     ExampleObject(
-                        name = "Create draft",
-                        value = COMPLETE_RESPONSE_EXAMPLE,
+                        name = "Create Draft",
+                        value = COMPLETE_VIEW_EXAMPLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
+                schema = Schema(implementation = CompleteView::class),
             ),
         ],
     )
@@ -150,22 +150,22 @@ class VariableDefinitionsController(
                 Content(
                     examples = [
                         ExampleObject(
-                            name = "Create draft",
-                            value = DRAFT_EXAMPLE,
+                            name = "Create Draft",
+                            value = CREATE_DRAFT_EXAMPLE,
                         ),
                     ],
-                    schema = Schema(implementation = Draft::class),
+                    schema = Schema(implementation = CreateDraft::class),
                 ),
             ],
         )
         @Body
-        @Valid draft: Draft,
+        @Valid createDraft: CreateDraft,
         authentication: Authentication,
-    ): CompleteResponse {
-        if (vardef.doesShortNameExist(draft.shortName)) {
+    ): CompleteView {
+        if (vardef.doesShortNameExist(createDraft.shortName)) {
             throw HttpStatusException(
                 HttpStatus.CONFLICT,
-                "Short name ${draft.shortName} already exists.",
+                "Short name ${createDraft.shortName} already exists.",
             )
         }
 
@@ -177,7 +177,7 @@ class VariableDefinitionsController(
                 )
 
         return vardef
-            .create(draft.toSavedVariableDefinition(resolvedActiveGroup, authentication.name))
-            .toCompleteResponse()
+            .create(createDraft.toSavedVariableDefinition(resolvedActiveGroup, authentication.name))
+            .toCompleteView()
     }
 }

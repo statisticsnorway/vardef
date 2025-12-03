@@ -7,7 +7,6 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
-import jakarta.validation.constraints.NotNull
 import no.ssb.metadata.vardef.annotations.KlassCode
 import no.ssb.metadata.vardef.annotations.KlassId
 import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
@@ -17,57 +16,64 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 /**
- * Create a new Validity Period on a Published Variable Definition.
+ * Create a new Patch version on a Published Variable Definition.
  */
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)
 @Schema(
-    example = VALIDITY_PERIOD_EXAMPLE,
+    example = PATCH_EXAMPLE,
 )
-data class ValidityPeriod(
+data class CreatePatch(
     @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
-    val name: LanguageStringType?,
+    val name: LanguageStringType? = null,
     @Schema(description = DEFINITION_FIELD_DESCRIPTION)
-    @NotNull
+    @Nullable
     @NotEmptyLanguageStringType
-    val definition: LanguageStringType,
+    val definition: LanguageStringType? = null,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     @Nullable
     @KlassId
-    val classificationReference: String?,
+    val classificationReference: String? = null,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
     @Nullable
-    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) @NotEmpty String>?,
+    val unitTypes: List<@KlassCode(UNIT_TYPES_KLASS_CODE) @NotEmpty String>? = null,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) @NotEmpty String>?,
+    val subjectFields: List<@KlassCode(SUBJECT_FIELDS_KLASS_CODE) @NotEmpty String>? = null,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
-    val containsSpecialCategoriesOfPersonalData: Boolean?,
+    val containsSpecialCategoriesOfPersonalData: Boolean? = null,
+    @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
+    @Nullable
+    val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
     @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
-    val measurementType: String?,
-    @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
+    val measurementType: String? = null,
+    @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
+    @Nullable
     @Format(DATE_FORMAT)
-    @NotNull
-    val validFrom: LocalDate,
+    val validUntil: LocalDate? = null,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
-    val externalReferenceUri: URL?,
+    val externalReferenceUri: URL? = null,
     @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
-    val comment: LanguageStringType?,
+    val comment: LanguageStringType? = null,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
-    val relatedVariableDefinitionUris: List<URL>?,
+    val relatedVariableDefinitionUris: List<URL>? = null,
+    @Schema(description = OWNER_DESCRIPTION)
+    @Nullable
+    @Valid
+    val owner: Owner? = null,
     @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
     @Nullable
-    val contact: Contact?,
+    val contact: Contact? = null,
 ) {
     fun toSavedVariableDefinition(
         highestPatchId: Int,
@@ -77,18 +83,19 @@ data class ValidityPeriod(
         previousPatch.copy(
             patchId = highestPatchId + 1,
             name = name?.let { previousPatch.name.update(it) } ?: previousPatch.name,
-            definition = definition,
+            definition = definition?.let { previousPatch.definition.update(definition) } ?: previousPatch.definition,
             classificationReference = classificationReference ?: previousPatch.classificationReference,
             unitTypes = unitTypes ?: previousPatch.unitTypes,
             subjectFields = subjectFields ?: previousPatch.subjectFields,
             containsSpecialCategoriesOfPersonalData =
-            containsSpecialCategoriesOfPersonalData ?: previousPatch.containsSpecialCategoriesOfPersonalData,
-            variableStatus = previousPatch.variableStatus,
+                containsSpecialCategoriesOfPersonalData ?: previousPatch.containsSpecialCategoriesOfPersonalData,
+            variableStatus = variableStatus ?: previousPatch.variableStatus,
             measurementType = measurementType ?: previousPatch.measurementType,
-            validFrom = validFrom,
+            validUntil = validUntil ?: previousPatch.validUntil,
             externalReferenceUri = externalReferenceUri ?: previousPatch.externalReferenceUri,
-            comment = comment,
+            comment = comment?.let { previousPatch.comment?.update(comment) } ?: previousPatch.comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
+            owner = owner ?: previousPatch.owner,
             contact = contact ?: previousPatch.contact,
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),

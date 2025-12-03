@@ -11,7 +11,7 @@ import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
 import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
-import no.ssb.metadata.vardef.models.Patch
+import no.ssb.metadata.vardef.models.CreatePatch
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.canTransitionTo
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
@@ -52,7 +52,7 @@ class PatchesService(
      * @throws ClosedValidityPeriodException if attempt tp patch valid until on closed validity period
      */
     fun create(
-        patch: Patch,
+        patch: CreatePatch,
         definitionId: String,
         latestPatch: SavedVariableDefinition,
         userName: String,

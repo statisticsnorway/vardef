@@ -2,7 +2,7 @@ package no.ssb.metadata.vardef.controllers.patches
 
 import io.micronaut.http.HttpStatus
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
@@ -71,7 +71,7 @@ class ReadTests : BaseVardefTest() {
     }
 
     @Test
-    fun `get patch by id return complete response`(spec: RequestSpecification) {
+    fun `get patch by id return complete view`(spec: RequestSpecification) {
         val body =
             spec
                 .`when`()
@@ -83,8 +83,8 @@ class ReadTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponse = jsonMapper.readValue(body, CompleteResponse::class.java)
-        assertThat(completeResponse).isNotNull
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView).isNotNull
     }
 
     @ParameterizedTest
@@ -103,7 +103,7 @@ class ReadTests : BaseVardefTest() {
     }
 
     @Test
-    fun `get patches return complete response for each variable definition`(spec: RequestSpecification) {
+    fun `get patches return complete view for each variable definition`(spec: RequestSpecification) {
         val responseList =
             spec
                 .`when`()
@@ -115,8 +115,8 @@ class ReadTests : BaseVardefTest() {
                 .body()
                 .asString()
 
-        val completeResponseList = jsonMapper.readValue(responseList, Array<CompleteResponse>::class.java)
-        completeResponseList.map { completeResponse ->
+        val completeViewList = jsonMapper.readValue(responseList, Array<CompleteView>::class.java)
+        completeViewList.map { completeResponse ->
             assertThat(completeResponse).isNotNull
         }
     }

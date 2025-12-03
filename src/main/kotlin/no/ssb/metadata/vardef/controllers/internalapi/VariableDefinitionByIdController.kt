@@ -26,9 +26,9 @@ import no.ssb.metadata.vardef.annotations.ConflictApiResponse
 import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
-import no.ssb.metadata.vardef.models.RenderedVariableDefinition
+import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.VariableStatus
@@ -58,11 +58,11 @@ class VariableDefinitionByIdController(
         content = [
             Content(
                 examples = [
-                    ExampleObject(name = "Date not specified", value = COMPLETE_RESPONSE_EXAMPLE),
-                    ExampleObject(name = "Specific date", value = COMPLETE_RESPONSE_EXAMPLE),
-                    ExampleObject(name = "Rendered", value = RENDERED_VARIABLE_DEFINITION_EXAMPLE),
+                    ExampleObject(name = "Date not specified", value = COMPLETE_VIEW_EXAMPLE),
+                    ExampleObject(name = "Specific date", value = COMPLETE_VIEW_EXAMPLE),
+                    ExampleObject(name = "Rendered", value = RENDERED_VIEW_EXAMPLE),
                 ],
-                oneOf = [Schema(implementation = CompleteResponse::class), Schema(implementation = RenderedVariableDefinition::class)],
+                oneOf = [Schema(implementation = CompleteView::class), Schema(implementation = RenderedView::class)],
             ),
         ],
     )
@@ -184,10 +184,10 @@ class VariableDefinitionByIdController(
                 examples = [
                     ExampleObject(
                         name = "Update",
-                        value = COMPLETE_RESPONSE_EXAMPLE,
+                        value = COMPLETE_VIEW_EXAMPLE,
                     ),
                 ],
-                schema = Schema(implementation = CompleteResponse::class),
+                schema = Schema(implementation = CompleteView::class),
             ),
         ],
     )
@@ -228,7 +228,7 @@ class VariableDefinitionByIdController(
         @Valid
         updateDraft: UpdateDraft,
         authentication: Authentication,
-    ): CompleteResponse {
+    ): CompleteView {
         val existingVariable = patches.latest(definitionId)
 
         when {
@@ -280,6 +280,6 @@ class VariableDefinitionByIdController(
         }
         return vardef
             .update(existingVariable, updateDraft, authentication.name)
-            .toCompleteResponse()
+            .toCompleteView()
     }
 }

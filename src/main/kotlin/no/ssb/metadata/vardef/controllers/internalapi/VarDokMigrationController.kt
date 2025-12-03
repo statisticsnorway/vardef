@@ -27,7 +27,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
-import no.ssb.metadata.vardef.models.CompleteResponse
+import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -57,12 +57,12 @@ class VarDokMigrationController(
         content =
             [
                 Content(
-                    schema = Schema(implementation = CompleteResponse::class),
+                    schema = Schema(implementation = CompleteView::class),
                     mediaType = MediaType.APPLICATION_JSON,
                     examples = [
                         ExampleObject(
                             name = "Migrate Vardok",
-                            value = COMPLETE_RESPONSE_EXAMPLE,
+                            value = COMPLETE_VIEW_EXAMPLE,
                         ),
                     ],
                 ),
@@ -143,12 +143,12 @@ class VarDokMigrationController(
         content =
             [
                 Content(
-                    schema = Schema(oneOf = [CompleteResponse::class, VardokIdResponse::class]),
+                    schema = Schema(oneOf = [CompleteView::class, VardokIdResponse::class]),
                     mediaType = MediaType.APPLICATION_JSON,
                     examples = [
                         ExampleObject(
                             name = "Vardok id",
-                            value = COMPLETE_RESPONSE_EXAMPLE,
+                            value = COMPLETE_VIEW_EXAMPLE,
                         ),
                         ExampleObject(
                             name = "Vardef id",

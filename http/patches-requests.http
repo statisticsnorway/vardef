@@ -1,7 +1,7 @@
 # Choose an environment above
 # Define secrets in http-client.private.env.json
 
-# Create a draft
+# Create a Draft
 POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
@@ -19,7 +19,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 
 ###
-# Recreate a draft after delteting all patches
+# Recreate a Draft after deleting all patches
 POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json

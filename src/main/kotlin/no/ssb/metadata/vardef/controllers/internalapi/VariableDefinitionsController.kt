@@ -28,6 +28,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.CreateDraft
 import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
+import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
 import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
@@ -60,8 +61,9 @@ class VariableDefinitionsController(
                         name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
+                    ExampleObject(name = "Rendered", value = LIST_OF_RENDERED_VIEWS_EXAMPLE),
                 ],
-                array = ArraySchema(schema = Schema(implementation = CompleteView::class)),
+                array = ArraySchema(items = Schema(name = "Rendered Or Complete", oneOf = [CompleteView::class, RenderedView::class])),
             ),
         ],
     )

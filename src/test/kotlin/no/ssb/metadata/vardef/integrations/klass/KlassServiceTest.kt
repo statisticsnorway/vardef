@@ -6,6 +6,7 @@ import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
 import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
 import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
+import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
@@ -19,7 +20,7 @@ class KlassServiceTest {
     fun `get klass code item for unit types test`() {
         klassService
             .renderCode(UNIT_TYPES_KLASS_CODE, "01", SupportedLanguages.NB)
-            ?.let { klassItem ->
+            .let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("01")
                 assertThat(klassItem.title).isEqualTo("Adresse")
@@ -27,14 +28,14 @@ class KlassServiceTest {
 
         klassService
             .renderCode(UNIT_TYPES_KLASS_CODE, "17", SupportedLanguages.NB)
-            ?.let { klassItem ->
+            .let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("17")
                 assertThat(klassItem.title).isEqualTo("Kommune (geografisk)")
             }
 
         klassService
             .renderCode(UNIT_TYPES_KLASS_CODE, "17", SupportedLanguages.EN)
-            ?.let { klassItem ->
+            .let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/en/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("17")
                 assertThat(klassItem.title).isEqualTo(null)
@@ -42,13 +43,19 @@ class KlassServiceTest {
 
         klassService
             .renderCode(UNIT_TYPES_KLASS_CODE, "41", SupportedLanguages.NB)
-            ?.let { klassItem ->
-                assertThat(klassItem).isEqualTo(null)
+            .let { klassItem ->
+                assertThat(klassItem).isEqualTo(
+                    KlassReference(
+                        referenceUri = "https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE",
+                        code = null,
+                        title = null,
+                    ),
+                )
             }
 
         klassService
             .renderCode(UNIT_TYPES_KLASS_CODE, "01", SupportedLanguages.NN)
-            ?.let { klassItem ->
+            .let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("01")
                 assertThat(klassItem.title).isEqualTo(null)
@@ -59,7 +66,7 @@ class KlassServiceTest {
     fun `get klass code item for subject fields test`() {
         klassService
             .renderCode(SUBJECT_FIELDS_KLASS_CODE, "vf", SupportedLanguages.NB)
-            ?.let { klassItem ->
+            .let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("vf")
                 assertThat(klassItem.title).isEqualTo("Bedrifter, foretak og regnskap")
@@ -67,15 +74,21 @@ class KlassServiceTest {
 
         klassService
             .renderCode(SUBJECT_FIELDS_KLASS_CODE, "al", SupportedLanguages.NB)
-            ?.let { klassItem ->
+            .let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("al")
                 assertThat(klassItem.title).isEqualTo("Arbeid og lønn")
             }
 
         klassService
             .renderCode(SUBJECT_FIELDS_KLASS_CODE, "vgh", SupportedLanguages.NB)
-            ?.let { klassItem ->
-                assertThat(klassItem).isEqualTo(null)
+            .let { klassItem ->
+                assertThat(klassItem).isEqualTo(
+                    KlassReference(
+                        referenceUri = "https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE",
+                        code = null,
+                        title = null,
+                    ),
+                )
             }
     }
 

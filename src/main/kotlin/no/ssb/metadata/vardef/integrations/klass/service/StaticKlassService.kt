@@ -86,7 +86,7 @@ class StaticKlassService(
 
         val klassCode = classification.codes?.find { it.code == code }
         val name = if (language == SupportedLanguages.NB) klassCode?.name else null
-        return KlassReference(getKlassUrlForIdAndLanguage(classificationId, language), klassCode?.code, name)
+        return KlassReference(getKlassUrlForIdAndLanguage(classificationId, language), klassCode?.code ?: code, name)
     }
 
     override fun getKlassUrlForIdAndLanguage(

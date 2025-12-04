@@ -16,6 +16,17 @@ sdk home java 21.0.2-zulu
 
 You must have Docker running.
 
+## Release
+
+Follow these steps to release the project.
+
+1. Based on semantic versioning, decide whether it's a patch, minor or major release.
+2. Bump the version using the Gradle task e.g. `gradle versionPatch`
+3. Create a branch following the naming format `release/v9.9.9`
+4. Open a PR
+5. Merge the PR
+6. Automatic processes handle publishing the release and deploying to prod :rocket:
+
 ## HTTP Client
 
 See HTTP requests defined in the `http/` directory.

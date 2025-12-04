@@ -28,13 +28,11 @@ import java.time.LocalDateTime
 )
 @ValidDateOrder
 data class CreateDraft(
-    @Schema(description = NAME_FIELD_DESCRIPTION)
     @NotEmptyLanguageStringType
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
     @Pattern(regexp = VARDEF_SHORT_NAME_PATTERN)
     val shortName: String,
-    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     @NotEmptyLanguageStringType
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
@@ -61,14 +59,12 @@ data class CreateDraft(
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,
-    @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
     val comment: LanguageStringType?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
     val relatedVariableDefinitionUris: List<URL>?,
-    @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
     val contact: Contact,
 ) {

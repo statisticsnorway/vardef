@@ -7,7 +7,6 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
-import io.micronaut.openapi.annotation.OpenAPIExtraSchemas
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -19,7 +18,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid

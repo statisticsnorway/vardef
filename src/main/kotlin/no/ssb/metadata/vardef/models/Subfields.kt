@@ -8,7 +8,9 @@ import jakarta.validation.constraints.NotEmpty
 import no.ssb.metadata.vardef.annotations.DaplaGroup
 import no.ssb.metadata.vardef.annotations.DaplaTeam
 import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
+import no.ssb.metadata.vardef.constants.CONTACT_FIELD_DESCRIPTION
 import no.ssb.metadata.vardef.constants.KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
+import no.ssb.metadata.vardef.constants.OWNER_DESCRIPTION
 import no.ssb.metadata.vardef.constants.OWNER_EXAMPLE
 import no.ssb.metadata.vardef.constants.RENDERED_CONTACT_EXAMPLE
 
@@ -20,6 +22,7 @@ data class KlassReference(
     val title: String?,
 )
 
+@Schema(description = CONTACT_FIELD_DESCRIPTION)
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Contact(
     @param:NotEmptyLanguageStringType
@@ -35,7 +38,10 @@ data class Contact(
  * @property groups The groups with permission to modify this variable definition.
  *
  */
-@Schema(example = OWNER_EXAMPLE)
+@Schema(
+    description = OWNER_DESCRIPTION,
+    example = OWNER_EXAMPLE,
+)
 @Serdeable(naming = SnakeCaseStrategy::class)
 data class Owner(
     @param:NotEmpty

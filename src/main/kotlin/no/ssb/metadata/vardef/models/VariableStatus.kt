@@ -1,10 +1,12 @@
 package no.ssb.metadata.vardef.models
 
 import io.micronaut.serde.annotation.Serdeable
+import io.swagger.v3.oas.annotations.media.Schema
+import no.ssb.metadata.vardef.constants.VARIABLE_STATUS_FIELD_DESCRIPTION
 
-/**
- * Life cycle status of a variable definition.
- */
+@Schema(
+    description = VARIABLE_STATUS_FIELD_DESCRIPTION,
+)
 @Serdeable
 enum class VariableStatus {
     DRAFT,
@@ -30,10 +32,17 @@ fun VariableStatus.isPublic(): Boolean = this == VariableStatus.PUBLISHED_EXTERN
  */
 fun VariableStatus.canTransitionTo(targetStatus: VariableStatus): Boolean =
     when (targetStatus) {
-        VariableStatus.DRAFT -> this == VariableStatus.DRAFT
-        VariableStatus.PUBLISHED_INTERNAL -> this == VariableStatus.DRAFT || this == VariableStatus.PUBLISHED_INTERNAL
-        VariableStatus.PUBLISHED_EXTERNAL ->
+        VariableStatus.DRAFT -> {
+            this == VariableStatus.DRAFT
+        }
+
+        VariableStatus.PUBLISHED_INTERNAL -> {
+            this == VariableStatus.DRAFT || this == VariableStatus.PUBLISHED_INTERNAL
+        }
+
+        VariableStatus.PUBLISHED_EXTERNAL -> {
             this == VariableStatus.DRAFT ||
                 this == VariableStatus.PUBLISHED_INTERNAL ||
                 this == VariableStatus.PUBLISHED_EXTERNAL
+        }
     }

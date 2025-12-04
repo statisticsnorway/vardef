@@ -25,11 +25,9 @@ import java.time.LocalDateTime
     example = CREATE_VALIDITY_PERIOD_EXAMPLE,
 )
 data class CreateValidityPeriod(
-    @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
     val name: LanguageStringType?,
-    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     @NotNull
     @NotEmptyLanguageStringType
     val definition: LanguageStringType,
@@ -57,7 +55,6 @@ data class CreateValidityPeriod(
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL?,
-    @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
     val comment: LanguageStringType?,

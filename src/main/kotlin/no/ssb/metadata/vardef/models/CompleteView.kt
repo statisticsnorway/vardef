@@ -20,17 +20,9 @@ data class CompleteView(
     var id: String,
     @Schema(description = PATCH_ID_FIELD_DESCRIPTION, example = "1")
     var patchId: Int,
-    @Schema(
-        description = NAME_FIELD_DESCRIPTION,
-        implementation = LanguageStringType::class,
-    )
     val name: LanguageStringType,
     @Schema(description = SHORT_NAME_FIELD_DESCRIPTION)
     val shortName: String,
-    @Schema(
-        description = DEFINITION_FIELD_DESCRIPTION,
-        implementation = LanguageStringType::class,
-    )
     val definition: LanguageStringType,
     @Schema(description = CLASSIFICATION_REFERENCE_FIELD_DESCRIPTION)
     val classificationReference: String?,
@@ -40,10 +32,6 @@ data class CompleteView(
     val subjectFields: List<String>,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     val containsSpecialCategoriesOfPersonalData: Boolean,
-    @Schema(
-        description = VARIABLE_STATUS_FIELD_DESCRIPTION,
-        implementation = VariableStatus::class,
-    )
     var variableStatus: VariableStatus,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     val measurementType: String?,
@@ -53,22 +41,10 @@ data class CompleteView(
     val validUntil: LocalDate?,
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     val externalReferenceUri: URL?,
-    @Schema(
-        description = COMMENT_FIELD_DESCRIPTION,
-        implementation = LanguageStringType::class,
-    )
     val comment: LanguageStringType?,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     val relatedVariableDefinitionUris: List<URL>?,
-    @Schema(
-        description = OWNER_DESCRIPTION,
-        implementation = Owner::class,
-    )
     val owner: Owner,
-    @Schema(
-        description = CONTACT_FIELD_DESCRIPTION,
-        implementation = Contact::class,
-    )
     val contact: Contact,
     @Schema(description = CREATED_AT_FIELD_DESCRIPTION)
     var createdAt: LocalDateTime,

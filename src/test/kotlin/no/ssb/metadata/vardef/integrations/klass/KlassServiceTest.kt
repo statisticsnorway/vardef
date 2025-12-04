@@ -96,7 +96,7 @@ class KlassServiceTest {
     fun `get klass code item for measurement type test`() {
         klassService
             .renderCode(MEASUREMENT_TYPE_KLASS_CODE, "02", SupportedLanguages.NB)
-            ?.let { klassItem ->
+            .let { klassItem ->
                 assertThat(klassItem.referenceUri).isEqualTo("https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE")
                 assertThat(klassItem.code).isEqualTo("02")
                 assertThat(klassItem.title).isEqualTo("Antall")
@@ -104,7 +104,7 @@ class KlassServiceTest {
 
         klassService
             .renderCode(MEASUREMENT_TYPE_KLASS_CODE, "17.23", SupportedLanguages.NB)
-            ?.let { klassItem ->
+            .let { klassItem ->
                 assertThat(klassItem.code).isEqualTo("17.23")
                 assertThat(klassItem.title).isEqualTo("øre per kWh")
             }

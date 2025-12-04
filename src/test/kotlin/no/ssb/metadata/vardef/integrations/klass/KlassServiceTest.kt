@@ -47,7 +47,7 @@ class KlassServiceTest {
                 assertThat(klassItem).isEqualTo(
                     KlassReference(
                         referenceUri = "https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE",
-                        code = null,
+                        code = "41",
                         title = null,
                     ),
                 )
@@ -85,7 +85,7 @@ class KlassServiceTest {
                 assertThat(klassItem).isEqualTo(
                     KlassReference(
                         referenceUri = "https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE",
-                        code = null,
+                        code = "vgh",
                         title = null,
                     ),
                 )
@@ -111,8 +111,8 @@ class KlassServiceTest {
 
         klassService
             .renderCode(MEASUREMENT_TYPE_KLASS_CODE, "156.3", SupportedLanguages.NB)
-            ?.let { klassItem ->
-                assertThat(klassItem.code).isEqualTo(null)
+            .let { klassItem ->
+                assertThat(klassItem.code).isEqualTo("156.3")
             }
     }
 }

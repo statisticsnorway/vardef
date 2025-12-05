@@ -97,7 +97,7 @@ open class KlassApiService(
                 getCodeObjectsFor(classificationId.toInt(), language)
                     .firstOrNull { it.code == code }
         } catch (e: NoSuchElementException) {
-            logger.warn("Classification $classificationId no available for language $language", e)
+            logger.warn("Classification $classificationId not available for language $language", e)
             codeObject = null
         }
 

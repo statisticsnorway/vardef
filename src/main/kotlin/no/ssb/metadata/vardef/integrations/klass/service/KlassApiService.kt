@@ -90,16 +90,14 @@ open class KlassApiService(
         classificationId: String,
         code: String,
         language: SupportedLanguages,
-    ): KlassReference? {
+    ): KlassReference {
         var codeObject: Code?
         try {
             codeObject =
                 getCodeObjectsFor(classificationId.toInt(), language)
                     .firstOrNull { it.code == code }
-            // In this case the code doesn't exist in the code list
-            if (codeObject == null) return null
         } catch (e: NoSuchElementException) {
-            logger.warn("Classification $classificationId no available for language $language")
+            logger.warn("Classification $classificationId not available for language $language", e)
             codeObject = null
         }
 

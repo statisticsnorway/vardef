@@ -62,7 +62,8 @@ class VariableDefinitionByIdController(
                     ExampleObject(name = "Specific date", value = COMPLETE_VIEW_EXAMPLE),
                     ExampleObject(name = "Rendered", value = RENDERED_VIEW_EXAMPLE),
                 ],
-                oneOf = [Schema(implementation = CompleteView::class), Schema(implementation = RenderedView::class)],
+                schema =
+                    Schema(name = "Rendered Or Complete", oneOf = [CompleteView::class, RenderedView::class]),
             ),
         ],
     )

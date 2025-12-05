@@ -93,7 +93,7 @@ data class SavedVariableDefinition(
             comment = comment?.getValue(language),
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { URI(it).toURL() },
             owner = owner,
-            contact = contact.title.getValue(language)?.let { RenderedContact(it, contact.email) },
+            contact = contact.title.getValue(language).let { RenderedContact(it ?: "", contact.email) },
             lastUpdatedAt = lastUpdatedAt,
             lastUpdatedBy = lastUpdatedBy,
             createdAt = createdAt,

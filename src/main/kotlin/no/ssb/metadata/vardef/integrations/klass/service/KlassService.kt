@@ -16,7 +16,7 @@ interface KlassService {
         classificationId: String,
         code: String,
         language: SupportedLanguages,
-    ): KlassReference?
+    ): KlassReference
 
     fun getKlassUrlForIdAndLanguage(
         classificationId: String,

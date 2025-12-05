@@ -24,11 +24,9 @@ import java.time.LocalDateTime
     example = PATCH_EXAMPLE,
 )
 data class CreatePatch(
-    @Schema(description = NAME_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
     val name: LanguageStringType? = null,
-    @Schema(description = DEFINITION_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
     val definition: LanguageStringType? = null,
@@ -45,7 +43,6 @@ data class CreatePatch(
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
     val containsSpecialCategoriesOfPersonalData: Boolean? = null,
-    @Schema(description = VARIABLE_STATUS_FIELD_DESCRIPTION)
     @Nullable
     val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
@@ -59,18 +56,15 @@ data class CreatePatch(
     @Schema(description = EXTERNAL_REFERENCE_URI_FIELD_DESCRIPTION)
     @Nullable
     val externalReferenceUri: URL? = null,
-    @Schema(description = COMMENT_FIELD_DESCRIPTION)
     @Nullable
     @NotEmptyLanguageStringType
     val comment: LanguageStringType? = null,
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
     val relatedVariableDefinitionUris: List<URL>? = null,
-    @Schema(description = OWNER_DESCRIPTION)
     @Nullable
     @Valid
     val owner: Owner? = null,
-    @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
     @Nullable
     val contact: Contact? = null,

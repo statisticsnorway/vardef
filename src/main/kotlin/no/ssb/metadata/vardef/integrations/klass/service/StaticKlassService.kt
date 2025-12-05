@@ -80,15 +80,13 @@ class StaticKlassService(
         classificationId: String,
         code: String,
         language: SupportedLanguages,
-    ): KlassReference? {
+    ): KlassReference {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(classificationId))
 
         val klassCode = classification.codes?.find { it.code == code }
-        return klassCode?.let {
-            val name = if (language == SupportedLanguages.NB) it.name else null
-            KlassReference(getKlassUrlForIdAndLanguage(classificationId, language), it.code, name)
-        }
+        val name = if (language == SupportedLanguages.NB) klassCode?.name else null
+        return KlassReference(getKlassUrlForIdAndLanguage(classificationId, language), klassCode?.code ?: code, name)
     }
 
     override fun getKlassUrlForIdAndLanguage(

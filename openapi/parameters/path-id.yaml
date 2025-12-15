@@ -1,6 +1,0 @@
-name: id
-in: path
-description: Unique identifier for the variable definition
-required: true
-schema:
-  $ref: "../schemas/identifier.yaml"

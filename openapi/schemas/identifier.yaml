@@ -1,8 +1,0 @@
-title: Identifier
-description: Unique identifier for the variable definition
-type: string
-pattern: ^[a-zA-Z0-9-_]{8}$
-readOnly: true
-examples:
-  - "wypvb3wd"
-  - "i03qoh1e"

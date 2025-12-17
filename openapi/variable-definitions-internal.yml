@@ -335,10 +335,14 @@ paths:
       - name: Accept-Language
         in: header
         description: Render the variable definition in the given language.
-        required: true
+        allowEmptyValue: true
         schema:
-          $ref: "#/components/schemas/SupportedLanguages"
-        example: nb
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/SupportedLanguages"
+        examples:
+          Date not specified:
+            value: nb
       - name: date_of_validity
         in: query
         description: List only variable definitions which are valid on this date.
@@ -734,10 +738,14 @@ paths:
       - name: Accept-Language
         in: header
         description: Render the variable definition in the given language.
-        required: true
+        allowEmptyValue: true
         schema:
-          $ref: "#/components/schemas/SupportedLanguages"
-        example: nb
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/SupportedLanguages"
+        examples:
+          Date not specified:
+            value: nb
       - name: variable-definition-id
         in: path
         description: Unique identifier for the variable definition.
@@ -762,14 +770,8 @@ paths:
           format: date
           nullable: true
         examples:
-          Date not specified:
-            value: ""
           Specific date:
             value: 1970-01-01
-          Rendered:
-            value: ""
-          Not found:
-            value: ""
       - name: render
         in: query
         description: Render the Variable Definition for presentation in a frontend

@@ -70,9 +70,16 @@ class VariableDefinitionByIdController(
     @NotFoundApiResponse
     @Get
     fun getVariableDefinitionById(
-        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Parameter(
+            description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Date not specified", value = DEFAULT_LANGUAGE),
+            ],
+            required = false,
+            allowEmptyValue = true,
+        )
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
-        language: SupportedLanguages,
+        language: SupportedLanguages?,
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
             description = ID_FIELD_DESCRIPTION,
@@ -87,10 +94,7 @@ class VariableDefinitionByIdController(
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
-                ExampleObject(name = "Date not specified", value = ""),
                 ExampleObject(name = "Specific date", value = DATE_EXAMPLE),
-                ExampleObject(name = "Rendered", value = ""),
-                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ""),
             ],
         )
         @QueryValue("date_of_validity")
@@ -110,7 +114,7 @@ class VariableDefinitionByIdController(
         if (render == true) {
             vardef
                 .getRenderedByDateAndStatus(
-                    language = language,
+                    language = language ?: SupportedLanguages.DEFAULT,
                     definitionId = definitionId,
                     dateOfValidity = dateOfValidity,
                 ).let { RenderedOrCompleteUnion.Rendered(it) }

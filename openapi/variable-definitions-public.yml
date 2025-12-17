@@ -35,10 +35,14 @@ paths:
       - name: Accept-Language
         in: header
         description: Render the variable definition in the given language.
-        required: true
+        allowEmptyValue: true
         schema:
-          $ref: "#/components/schemas/SupportedLanguages"
-        example: nb
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/SupportedLanguages"
+        examples:
+          Date not specified:
+            value: nb
       - name: date_of_validity
         in: query
         description: List only variable definitions which are valid on this date.
@@ -133,9 +137,11 @@ paths:
       - name: Accept-Language
         in: header
         description: Render the variable definition in the given language.
-        required: true
+        allowEmptyValue: true
         schema:
-          $ref: "#/components/schemas/SupportedLanguages"
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/SupportedLanguages"
         examples:
           Date not specified:
             value: nb
@@ -276,11 +282,15 @@ paths:
       - name: Accept-Language
         in: header
         description: Render the variable definition in the given language.
-        required: true
+        allowEmptyValue: true
         schema:
-          $ref: "#/components/schemas/SupportedLanguages"
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/SupportedLanguages"
         examples:
           Validity periods:
+            value: nb
+          Not found:
             value: nb
       responses:
         "200":

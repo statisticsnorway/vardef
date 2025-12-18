@@ -16,7 +16,7 @@ const val MIGRATED_COUNT_METRIC = "ssb.variable-definitions.migrated"
 const val EDITED_MIGRATED_COUNT_METRIC = "ssb.variable.definitions.edited.migrated"
 const val SECTION_TAG_KEY = "section"
 
-//@Requires(env = ["naistest", "naisprod"])
+@Requires(env = ["naistest", "naisprod"])
 @Singleton
 class MetricsService(
     private val vardokIdMappingRepository: VardokIdMappingRepository,

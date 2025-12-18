@@ -13,10 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 
 const val MIGRATED_COUNT_METRIC = "ssb.variable-definitions.migrated"
-const val EDITED_MIGRATED_COUNT_METRIC = "ssb.variable-definitions.edited-migrated"
+const val EDITED_MIGRATED_COUNT_METRIC = "ssb.variable.definitions.edited.migrated"
 const val SECTION_TAG_KEY = "section"
 
-@Requires(env = ["naistest", "naisprod"])
+//@Requires(env = ["naistest", "naisprod"])
 @Singleton
 class MetricsService(
     private val vardokIdMappingRepository: VardokIdMappingRepository,
@@ -26,7 +26,7 @@ class MetricsService(
 ) {
     private val logger = LoggerFactory.getLogger(MetricsService::class.java)
     private val totalMigrated = AtomicInteger(0)
-    private val totalEditedMigrated = AtomicInteger(0)
+    //private val totalEditedMigrated = AtomicInteger(0)
 
     private val migrated: MultiGauge =
         MultiGauge
@@ -42,7 +42,7 @@ class MetricsService(
 
     init {
         meterRegistry.gauge(MIGRATED_COUNT_METRIC, Tags.of(SECTION_TAG_KEY, "total"), totalMigrated)
-        meterRegistry.gauge(EDITED_MIGRATED_COUNT_METRIC, Tags.of(SECTION_TAG_KEY, "total"), totalEditedMigrated)
+        meterRegistry.gauge(EDITED_MIGRATED_COUNT_METRIC, Tags.of(SECTION_TAG_KEY, "total"), totalMigrated)
     }
 
     private fun migratedVariablesBySection(): Map<String, List<SavedVariableDefinition>> =
@@ -74,7 +74,7 @@ class MetricsService(
     )
     fun exportMetrics() {
         totalMigrated.set(vardokIdMappingRepository.count().toInt())
-        totalEditedMigrated.set(vardokIdMappingRepository.count().toInt())
+        //totalEditedMigrated.set(vardokIdMappingRepository.count().toInt())
         logger.debug("Updating metrics.")
         migrated.register(
             countMigratedVariablesBySection()

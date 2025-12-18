@@ -38,6 +38,14 @@ Secret variables may be placed in `http/http-client.private.env.json` which is i
 The names of the secrets expected to be found are:
 - `OIDC_TOKEN`
 
+## OpenAPI schemas
+
+The schemas are kept in version control at [./openapi](./openapi). These are updated manually using the following Gradle tasks:
+
+- `gradle copyInternalOpenApiSpec`
+- `gradle copyPublicOpenApiSpec`
+
+
 
 ## Test resources
 MongoDB is automatically started for tests locally running.

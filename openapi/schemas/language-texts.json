@@ -1,9 +1,0 @@
-{
-  "$comment": "Language texts",
-    "type": "object",
-    "properties": {
-      "en": {"title": "English text", "type": "string"},
-      "nb": {"title": "Norwegian Bokmål text", "type": "string"},
-      "nn": {"title": "Norwegian Nynorsk text", "type": "string"}
-    }
-}

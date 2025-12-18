@@ -56,9 +56,16 @@ class PublicController(
     )
     @Get("/variable-definitions")
     fun listPublicVariableDefinitions(
-        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Parameter(
+            description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Date not specified", value = DEFAULT_LANGUAGE),
+            ],
+            required = false,
+            allowEmptyValue = true,
+        )
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
-        language: SupportedLanguages,
+        language: SupportedLanguages?,
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -69,7 +76,7 @@ class PublicController(
         dateOfValidity: LocalDate? = null,
     ): HttpResponse<List<RenderedView>> =
         HttpResponse
-            .ok(varDefService.listPublicForDate(language = language, dateOfValidity = dateOfValidity))
+            .ok(varDefService.listPublicForDate(language = language ?: SupportedLanguages.DEFAULT, dateOfValidity = dateOfValidity))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**
@@ -110,9 +117,11 @@ class PublicController(
                 ExampleObject(name = "Date not specified", value = DEFAULT_LANGUAGE),
                 ExampleObject(name = "Specific date", value = DEFAULT_LANGUAGE),
             ],
+            required = false,
+            allowEmptyValue = true,
         )
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
-        language: SupportedLanguages,
+        language: SupportedLanguages?,
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
             examples = [
@@ -133,7 +142,7 @@ class PublicController(
                     varDefService
                         .getRenderedByDateAndStatus(
                             definitionId = definitionId,
-                            language = language,
+                            language = language ?: SupportedLanguages.DEFAULT,
                             dateOfValidity = dateOfValidity,
                             variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
                         ),
@@ -175,10 +184,15 @@ class PublicController(
         variableDefinitionId: String,
         @Parameter(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
-            examples = [ExampleObject(name = "Validity periods", value = DEFAULT_LANGUAGE)],
+            examples = [
+                ExampleObject(name = "Validity periods", value = DEFAULT_LANGUAGE),
+                ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = DEFAULT_LANGUAGE),
+            ],
+            required = false,
+            allowEmptyValue = true,
         )
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
-        language: SupportedLanguages,
+        language: SupportedLanguages?,
     ): MutableHttpResponse<List<RenderedView>>? =
         if (!varDefService.isPublic(variableDefinitionId)) {
             throw HttpStatusException(
@@ -187,7 +201,7 @@ class PublicController(
             )
         } else {
             HttpResponse
-                .ok(validityPeriods.listRendered(language, variableDefinitionId))
+                .ok(validityPeriods.listRendered(language ?: SupportedLanguages.DEFAULT, variableDefinitionId))
                 .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
                 .contentType(MediaType.APPLICATION_JSON)
         }

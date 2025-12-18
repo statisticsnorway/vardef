@@ -69,9 +69,16 @@ class VariableDefinitionsController(
     )
     @Get
     fun listVariableDefinitions(
-        @Parameter(description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION, example = DEFAULT_LANGUAGE)
+        @Parameter(
+            description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Date not specified", value = DEFAULT_LANGUAGE),
+            ],
+            required = false,
+            allowEmptyValue = true,
+        )
         @Header(HttpHeaders.ACCEPT_LANGUAGE, defaultValue = DEFAULT_LANGUAGE)
-        language: SupportedLanguages,
+        language: SupportedLanguages?,
         @QueryValue("date_of_validity")
         @Parameter(
             description = DATE_OF_VALIDITY_QUERY_PARAMETER_DESCRIPTION,
@@ -105,8 +112,11 @@ class VariableDefinitionsController(
     ): MutableHttpResponse<List<RenderedOrCompleteUnion>> =
         if (render == true) {
             vardef
-                .listRenderedForDate(language = language, dateOfValidity = dateOfValidity, shortName = shortName)
-                .map { RenderedOrCompleteUnion.Rendered(it) }
+                .listRenderedForDate(
+                    language = language ?: SupportedLanguages.DEFAULT,
+                    dateOfValidity = dateOfValidity,
+                    shortName = shortName,
+                ).map { RenderedOrCompleteUnion.Rendered(it) }
         } else {
             vardef
                 .listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)

@@ -23,4 +23,8 @@ enum class SupportedLanguages {
     ;
 
     override fun toString() = name.lowercase()
+
+    companion object {
+        val DEFAULT = SupportedLanguages.NB
+    }
 }

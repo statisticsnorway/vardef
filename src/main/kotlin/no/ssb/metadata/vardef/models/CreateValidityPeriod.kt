@@ -61,7 +61,6 @@ data class CreateValidityPeriod(
     @Schema(description = RELATED_VARIABLE_DEFINITION_URIS_FIELD_DESCRIPTION)
     @Nullable
     val relatedVariableDefinitionUris: List<URL>?,
-    @Schema(description = CONTACT_FIELD_DESCRIPTION)
     @Valid
     @Nullable
     val contact: Contact?,

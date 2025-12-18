@@ -206,3 +206,13 @@ tasks.register("versionPatch") {
         bumpVersion("patch")
     }
 }
+
+tasks.register<Copy>("copyInternalOpenApiSpec") {
+    from(layout.buildDirectory.file("generated/ksp/main/resources/META-INF/swagger/variable-definitions-internal.yml"))
+    into(layout.projectDirectory.dir("openapi"))
+}
+
+tasks.register<Copy>("copyPublicOpenApiSpec") {
+    from(layout.buildDirectory.file("generated/ksp/main/resources/META-INF/swagger/variable-definitions-public.yml"))
+    into(layout.projectDirectory.dir("openapi"))
+}

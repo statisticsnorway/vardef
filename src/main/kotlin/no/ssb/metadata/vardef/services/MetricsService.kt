@@ -46,26 +46,27 @@ class MetricsService(
     }
 
     private fun migratedVariablesBySection(): Map<String, List<SavedVariableDefinition>> =
-        vardokIdMappingRepository.findAll()
+        vardokIdMappingRepository
+            .findAll()
             .map { (_, vardefId, _) ->
                 validityPeriodsService
                     .getLatestPatchInLastValidityPeriod(vardefId)
-            }
-            .groupBy { variable ->
+            }.groupBy { variable ->
                 val team = variable.owner.team
                 daplaTeamApiService.getTeam(team)?.sectionCode ?: "Unknown"
             }
 
+    private fun editedMigrated(): Map<String, List<SavedVariableDefinition>> =
+        migratedVariablesBySection()
+            .mapValues { (_, variables) -> variables.filter { it.createdAt != it.lastUpdatedAt } }
 
-    private fun editedMigrated(): Map<String,List<SavedVariableDefinition>> = migratedVariablesBySection()
-        .mapValues { (_, variables) -> variables.filter {it.createdAt != it.lastUpdatedAt} }
+    private fun countMigratedVariablesBySection(): Map<String, Int> =
+        migratedVariablesBySection()
+            .mapValues { (_, variables) -> variables.size }
 
-    private fun countMigratedVariablesBySection(): Map<String, Int> = migratedVariablesBySection()
-        .mapValues { (_, variables) -> variables.size }
-
-    private fun countEditedMigratedBySection(): Map<String, Int> = editedMigrated()
-        .mapValues { (_, variables) -> variables.size }
-
+    private fun countEditedMigratedBySection(): Map<String, Int> =
+        editedMigrated()
+            .mapValues { (_, variables) -> variables.size }
 
     @Scheduled(
         fixedRate = $$"${micronaut.metrics.custom.update-frequency:1h}",
@@ -84,12 +85,12 @@ class MetricsService(
             true,
         )
 
-        // Update editedMigrated MultiGauge per section
         editedMigrated.register(
-            countEditedMigratedBySection().map {
-                MultiGauge.Row.of(Tags.of(SECTION_TAG_KEY, it.key), it.value)
-            }.toList(),
-            true
+            countEditedMigratedBySection()
+                .map {
+                    MultiGauge.Row.of(Tags.of(SECTION_TAG_KEY, it.key), it.value)
+                }.toList(),
+            true,
         )
     }
 }

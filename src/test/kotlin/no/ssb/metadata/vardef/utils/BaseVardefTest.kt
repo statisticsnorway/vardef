@@ -10,6 +10,7 @@ import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import no.ssb.metadata.vardef.services.MetricsService
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -61,5 +62,6 @@ open class BaseVardefTest {
         variableDefinitionRepository.save(SAVED_TO_PUBLISH_ILLEGAL_CONTACT)
 
         vardokIdMappingRepository.save(VardokVardefIdPair("005", DRAFT_BUS_EXAMPLE.definitionId))
+        vardokIdMappingRepository.save(VardokVardefIdPair("006", ))
     }
 }

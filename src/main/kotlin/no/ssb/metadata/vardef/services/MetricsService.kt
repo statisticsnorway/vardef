@@ -44,6 +44,9 @@ class MetricsService(
         meterRegistry.gauge(EDITED_MIGRATED_COUNT_METRIC, Tags.of(SECTION_TAG_KEY, "total"), totalMigrated)
     }
 
+    /**
+     * Returns migrated variable definitions grouped by their team's section code.
+     */
     private fun migratedVariablesBySection(): Map<String, List<SavedVariableDefinition>> =
         vardokIdMappingRepository
             .findAll()
@@ -55,6 +58,10 @@ class MetricsService(
                 daplaTeamApiService.getTeam(team)?.sectionCode ?: "Unknown"
             }
 
+    /**
+     * Returns migrated variables that have been edited, grouped by section code.
+     * Only includes variables where `createdAt` differs from `lastUpdatedAt`.
+     */
     private fun editedMigrated(): Map<String, List<SavedVariableDefinition>> =
         migratedVariablesBySection()
             .mapValues { (_, variables) -> variables.filter { it.createdAt != it.lastUpdatedAt } }
@@ -63,9 +70,15 @@ class MetricsService(
         migratedVariablesBySection()
             .mapValues { (_, variables) -> variables.size }
 
+    /**
+     *  Counts the number of edited migrated variables per section.
+     *  A variable is considered edited if `createdAt` differs from `lastUpdatedAt`.
+     */
     private fun countEditedMigratedBySection(): Map<String, Int> =
-        editedMigrated()
-            .mapValues { (_, variables) -> variables.size }
+        migratedVariablesBySection()
+            .mapValues { (_, variables) ->
+                variables.count { it.createdAt != it.lastUpdatedAt }
+            }
 
     @Scheduled(
         fixedRate = $$"${micronaut.metrics.custom.update-frequency:1h}",

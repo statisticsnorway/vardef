@@ -30,6 +30,15 @@ class MigrationMetricsCalculator(
             }
 
     /**
+     * Count total edited migrated variables
+     */
+    fun countTotalEditedMigrated(): Int =
+        migratedVariablesBySection()
+            .values // all lists of variables per section
+            .flatten() // merge into a single list
+            .count { it.createdAt != it.lastUpdatedAt }
+
+    /**
      * Returns migrated variable definitions grouped by their team's section code.
      */
     private fun migratedVariablesBySection(): Map<String, List<SavedVariableDefinition>> =

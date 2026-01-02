@@ -23,6 +23,7 @@ class MetricsService(
 ) {
     private val logger = LoggerFactory.getLogger(MetricsService::class.java)
     private val totalMigrated = AtomicInteger(0)
+    private val totalEdited = AtomicInteger(0)
 
     private val migrated: MultiGauge =
         MultiGauge
@@ -38,7 +39,7 @@ class MetricsService(
 
     init {
         meterRegistry.gauge(MIGRATED_COUNT_METRIC, Tags.of(SECTION_TAG_KEY, "total"), totalMigrated)
-        meterRegistry.gauge(EDITED_MIGRATED_COUNT_METRIC, Tags.of(SECTION_TAG_KEY, "total"), totalMigrated)
+        meterRegistry.gauge(EDITED_MIGRATED_COUNT_METRIC, Tags.of(SECTION_TAG_KEY, "total"), totalEdited)
     }
 
     @Scheduled(
@@ -47,6 +48,7 @@ class MetricsService(
     )
     fun exportMetrics() {
         totalMigrated.set(vardokIdMappingRepository.count().toInt())
+        totalEdited.set(calculator.countTotalEditedMigrated())
 
         logger.debug("Updating metrics.")
         migrated.register(

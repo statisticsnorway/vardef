@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 
 class MetricsServiceTest : BaseVardefTest() {
-
     private val logger = LoggerFactory.getLogger(MetricsServiceTest::class.java)
+
     @Singleton
     @Replaces(DaplaTeamApiService::class)
     fun mockDaplaTeamService(): DaplaTeamService =
@@ -68,8 +68,9 @@ class MetricsServiceTest : BaseVardefTest() {
             .isEqualTo(2)
 
         assertThat(metricsCalculator.countMigratedVariablesBySection())
-            .withFailMessage("Count of migrated variables per section ${metricsCalculator.countMigratedVariablesBySection()} should match expected: $expected")
-            .isEqualTo(expected)
+            .withFailMessage(
+                "Count of migrated variables per section ${metricsCalculator.countMigratedVariablesBySection()} should match expected: $expected",
+            ).isEqualTo(expected)
     }
 
     @Test
@@ -80,8 +81,9 @@ class MetricsServiceTest : BaseVardefTest() {
                 "Unknown" to 0,
             )
         assertThat(metricsCalculator.countEditedMigratedBySection())
-            .withFailMessage("Count of edited migrated variables per section ${metricsCalculator.countEditedMigratedBySection()} should match expected: $expected")
-            .isEqualTo(expected)
+            .withFailMessage(
+                "Count of edited migrated variables per section ${metricsCalculator.countEditedMigratedBySection()} should match expected: $expected",
+            ).isEqualTo(expected)
 
         assertThat(metricsCalculator.countTotalEditedMigrated())
             .withFailMessage("Total edited migrated should be 1")

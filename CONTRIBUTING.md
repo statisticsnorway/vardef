@@ -49,3 +49,9 @@ The schemas are kept in version control at [./openapi](./openapi). These are upd
 
 ## Test resources
 MongoDB is automatically started for tests locally running.
+
+## Ktlint
+We use Ktlint for linting
+
+`./gradlew ktlintCheck`
+`./gradlew ktlintFormat`

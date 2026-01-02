@@ -61,6 +61,5 @@ open class BaseVardefTest {
         variableDefinitionRepository.save(SAVED_TO_PUBLISH_ILLEGAL_CONTACT)
 
         vardokIdMappingRepository.save(VardokVardefIdPair("005", DRAFT_BUS_EXAMPLE.definitionId))
-        vardokIdMappingRepository.save(VardokVardefIdPair("006", SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId))
     }
 }

@@ -8,7 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class MetricsServiceTest: BaseVardefTest() {
+class MetricsServiceTest : BaseVardefTest() {
     @Inject
     private lateinit var metricsCalculator: MigrationMetricsCalculator
 
@@ -19,18 +19,20 @@ class MetricsServiceTest: BaseVardefTest() {
 
         // DRAFT_BUS_EXAMPLE is assigned to team 724
         // and is edited after it was migrated
-        val editedVariable = DRAFT_BUS_EXAMPLE.copy(
-            lastUpdatedAt = DRAFT_BUS_EXAMPLE.lastUpdatedAt.plusSeconds(3600)
-        )
+        val editedVariable =
+            DRAFT_BUS_EXAMPLE.copy(
+                lastUpdatedAt = DRAFT_BUS_EXAMPLE.lastUpdatedAt.plusSeconds(3600),
+            )
         variableDefinitionRepository.update(editedVariable)
     }
 
     @Test
     fun `count migrated variables per section`() {
-        val expected = mapOf(
-            "724" to 1,
-            "Unknown" to 1
-        )
+        val expected =
+            mapOf(
+                "724" to 1,
+                "Unknown" to 1,
+            )
 
         assertThat(vardokIdMappingRepository.count())
             .withFailMessage("Repository should contain 2 variable mappings")
@@ -43,10 +45,11 @@ class MetricsServiceTest: BaseVardefTest() {
 
     @Test
     fun `count edited migrated variables per section`() {
-        val expected = mapOf(
-            "724" to 1,
-            "Unknown" to 0
-        )
+        val expected =
+            mapOf(
+                "724" to 1,
+                "Unknown" to 0,
+            )
         assertThat(metricsCalculator.countEditedMigratedBySection())
             .withFailMessage("Count of edited migrated variables per section should match $expected")
             .isEqualTo(expected)

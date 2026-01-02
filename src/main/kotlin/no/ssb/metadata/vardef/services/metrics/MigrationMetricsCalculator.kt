@@ -1,7 +1,7 @@
 package no.ssb.metadata.vardef.services.metrics
 
 import jakarta.inject.Singleton
-import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamApiService
+import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
@@ -10,7 +10,7 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 class MigrationMetricsCalculator(
     private val vardokIdMappingRepository: VardokIdMappingRepository,
     private val validityPeriodsService: ValidityPeriodsService,
-    private val daplaTeamApiService: DaplaTeamApiService,
+    private val daplaTeamService: DaplaTeamService,
 ) {
     /**
      * Counts migrated variable definitions grouped by their team's section code.
@@ -49,6 +49,6 @@ class MigrationMetricsCalculator(
                     .getLatestPatchInLastValidityPeriod(vardefId)
             }.groupBy { variable ->
                 val team = variable.owner.team
-                daplaTeamApiService.getTeam(team)?.sectionCode ?: "Unknown"
+                daplaTeamService.getTeam(team)?.sectionCode ?: "Unknown"
             }
 }

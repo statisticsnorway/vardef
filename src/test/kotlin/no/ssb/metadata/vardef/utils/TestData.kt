@@ -360,53 +360,6 @@ val ALL_INCOME_TAX_PATCHES =
         it.patchId
     }
 
-val EDITED_MIGRATED_VARIABLE =
-    SavedVariableDefinition(
-        id = ObjectId(),
-        definitionId = VariableDefinitionService.generateId(),
-        patchId = 1,
-        name =
-            LanguageStringType(
-                nb = "Dødvekt",
-                nn = "Dødvekt",
-                en = "Dead weight",
-            ),
-        shortName = "dvkt",
-        definition =
-            LanguageStringType(
-                nb = "Dødvekt er den største vekt skipet kan bære av last og beholdninger.",
-                nn = "Dødvekt er den største vekta skipet kan bera av last og behaldningar.",
-                en = "Dead weight",
-            ),
-        classificationReference = "91",
-        unitTypes = listOf("01", "02"),
-        subjectFields = listOf("he04"),
-        containsSpecialCategoriesOfPersonalData = false,
-        variableStatus = VariableStatus.DRAFT,
-        measurementType = "02.01",
-        validFrom = LocalDate.of(2021, 1, 1),
-        validUntil = null,
-        externalReferenceUri = URI("https://example.com/").toURL(),
-        comment =
-            LanguageStringType(
-                "Legger til merknad",
-                "Legger til merknad",
-                "Adding comment",
-            ),
-        relatedVariableDefinitionUris = listOf(),
-        owner =
-            Owner(TEST_USER, listOf("skip-stat-developers", TEST_DEVELOPERS_GROUP)),
-        contact =
-            Contact(
-                LanguageStringType("", "", ""),
-                "me@example.com",
-            ),
-        createdAt = LocalDateTime.parse("2023-06-11T08:15:19"),
-        createdBy = "me@example.com",
-        lastUpdatedAt = LocalDateTime.parse("2025-06-11T08:15:19"),
-        lastUpdatedBy = "me@example.com",
-    )
-
 val SAVED_DRAFT_DEADWEIGHT_EXAMPLE =
     SavedVariableDefinition(
         id = ObjectId(),

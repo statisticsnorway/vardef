@@ -7,10 +7,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class MetricsServiceTest : BaseVardefTest() {
-
     @Inject
     private lateinit var metricsCalculator: MigrationMetricsCalculator
-
 
     @Test
     fun `map migrated variables`() {

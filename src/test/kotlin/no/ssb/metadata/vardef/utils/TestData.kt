@@ -360,7 +360,6 @@ val ALL_INCOME_TAX_PATCHES =
         it.patchId
     }
 
-
 val EDITED_MIGRATED_VARIABLE =
     SavedVariableDefinition(
         id = ObjectId(),

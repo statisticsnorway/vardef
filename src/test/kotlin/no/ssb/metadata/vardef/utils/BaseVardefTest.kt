@@ -9,15 +9,12 @@ import io.restassured.filter.log.ResponseLoggingFilter
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
-import no.ssb.metadata.vardef.models.LanguageStringType
-import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
-import java.time.LocalDateTime
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

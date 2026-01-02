@@ -50,7 +50,8 @@ class MetricsService(
 
         logger.debug("Updating metrics.")
         migrated.register(
-            calculator.countMigratedVariablesBySection()
+            calculator
+                .countMigratedVariablesBySection()
                 .also { logger.debug(it.toString()) }
                 .map {
                     MultiGauge.Row.of(Tags.of(SECTION_TAG_KEY, it.key), it.value)
@@ -59,7 +60,8 @@ class MetricsService(
         )
 
         editedMigrated.register(
-            calculator.countEditedMigratedBySection()
+            calculator
+                .countEditedMigratedBySection()
                 .also { logger.debug(it.toString()) }
                 .map {
                     MultiGauge.Row.of(Tags.of(SECTION_TAG_KEY, it.key), it.value)

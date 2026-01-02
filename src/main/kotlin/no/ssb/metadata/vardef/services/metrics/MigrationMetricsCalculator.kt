@@ -11,8 +11,7 @@ class MigrationMetricsCalculator(
     private val vardokIdMappingRepository: VardokIdMappingRepository,
     private val validityPeriodsService: ValidityPeriodsService,
     private val daplaTeamApiService: DaplaTeamApiService,
-)  {
-
+) {
     /**
      * Counts migrated variable definitions grouped by their team's section code.
      */

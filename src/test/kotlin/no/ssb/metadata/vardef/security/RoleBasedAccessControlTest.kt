@@ -161,7 +161,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .`when`()
             .request(method, path)
             .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     companion object {

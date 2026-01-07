@@ -294,14 +294,7 @@ class CreateTests : BaseVardefTest() {
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(500)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Internal Server Error: getName(...) must not be null",
-                ),
-            )
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     @ParameterizedTest

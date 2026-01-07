@@ -31,7 +31,7 @@ import reactor.core.scheduler.Schedulers
  * principal has access to.
  *
  * Instead, the token lists which _groups_ the principal is a member of. In this class we make use of the [ACTIVE_GROUP]
- * query parameter. This can be trusted because it has already been verified in [LabIdTokenValidator] which provides
+ * query parameter. This can be trusted because it has already been verified in [LabIdTokenValidator] or [KeycloakTokenValidator] which provides
  * the [Authentication] and the roles contained within.
  *
  * The primary check that class performs is whether the provided `active_group` is present in the list of groups
@@ -102,7 +102,6 @@ class VariableOwnerSecurityRule(
      * @param authentication [Authentication]
      * @return a [SecurityRuleResult]
      */
-    @Suppress("ReactiveStreamsTooLongSameOperatorsChain") // Too little data to cause performance overhead
     override fun check(
         request: HttpRequest<*>?,
         authentication: Authentication?,

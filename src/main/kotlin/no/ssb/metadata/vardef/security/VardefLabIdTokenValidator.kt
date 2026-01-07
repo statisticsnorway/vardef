@@ -5,11 +5,10 @@ import com.nimbusds.jwt.JWTClaimsSet
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpRequest
 import io.micronaut.security.authentication.Authentication
-import io.micronaut.security.token.Claims
 import io.micronaut.security.token.jwt.validator.JsonWebTokenParser
 import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
-import no.ssb.metadata.vardef.constants.LABID_ACTIVE_GROUP
+import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.SSB_EMAIL
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
@@ -26,37 +25,30 @@ class VardefLabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
     @Property(name = "micronaut.security.token.jwt.claims-validators.audience")
     private lateinit var allowedAudiences: Set<String>
 
-    @Property(name = "micronaut.security.token.jwt.claims.keys.labid-dapla-group")
+    @Property(name = "micronaut.security.token.jwt.claims.keys.labid.dapla-group")
     private lateinit var activeGroupClaim: String
 
-    @Property(name = "micronaut.security.token.jwt.claims.keys.labid-dapla-groups")
+    @Property(name = "micronaut.security.token.jwt.claims.keys.labid.dapla-groups")
     private lateinit var daplaGroupsClaim: String
-
-    @Property(name = "micronaut.security.token.jwt.claims.keys.labid-username")
-    private lateinit var usernameClaim: String
-
-    @Property(name = "micronaut.security.token.jwt.claims.keys.issuer")
-    private lateinit var issuerClaim: String
 
     @Inject
     private lateinit var jsonWebTokenParser: JsonWebTokenParser<JWT>
 
-    @Suppress("UNCHECKED_CAST")
     private fun getDaplaGroups(token: JWT): List<String> =
         token
             .jwtClaimsSet
-            .getClaim(daplaGroupsClaim)
-            as? List<String> ?: emptyList()
+            .getStringListClaim(daplaGroupsClaim)
+            ?: emptyList()
 
-    private fun getActiveGroup(token: JWT): String? = token.jwtClaimsSet.getClaim(activeGroupClaim) as? String
+    private fun getActiveGroup(token: JWT): String? = token.jwtClaimsSet.getStringClaim(activeGroupClaim)
 
-    private fun usernameFromToken(token: JWT): String? = (token.jwtClaimsSet.getClaim(usernameClaim) as? String)?.plus(SSB_EMAIL)
+    private fun usernameFromToken(token: JWT): String? = token.jwtClaimsSet.subject?.plus(SSB_EMAIL)
 
     /**
      * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.
      */
     private fun isVariableOwner(claimsSet: JWTClaimsSet): Boolean =
-        claimsSet.getStringListClaim(Claims.AUDIENCE).any {
+        claimsSet.audience.any {
             it in allowedAudiences
         }
 
@@ -69,12 +61,9 @@ class VardefLabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
     ): Boolean = isVariableOwner(claimsSet) && DaplaTeamService.isDevelopers(activeGroup)
 
     /**
-     * @return `true` the token and request contain the fields necessary to assign roles.
+     * @return `true` the token has claims necessary to assign roles.
      */
-    private fun tokenAndRequestContainExpectedFields(
-        token: JWT,
-        request: R,
-    ): Boolean =
+    private fun tokenHasNecessaryClaims(token: JWT): Boolean =
         activeGroupClaim in token.jwtClaimsSet.claims &&
             daplaGroupsClaim in token.jwtClaimsSet.claims &&
             getDaplaGroups(token).isNotEmpty()
@@ -113,7 +102,7 @@ class VardefLabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
             return roles
         }
 
-        if (tokenAndRequestContainExpectedFields(token, request)) {
+        if (tokenHasNecessaryClaims(token)) {
             if (isVariableOwner(claimsSet)) {
                 roles.add(VARIABLE_OWNER)
                 logger.debug("User=$username assigned role=$VARIABLE_OWNER")
@@ -147,12 +136,12 @@ class VardefLabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValida
         return Mono
             .from(validate(token, request))
             .filter {
-                it.jwtClaimsSet.getStringClaim(issuerClaim) in allowedIssuers
+                it.jwtClaimsSet.issuer in allowedIssuers
             }.map {
                 val username = usernameFromToken(it)
                 logger.info("Validated LabID token for user=$username")
                 val attributes = it.jwtClaimsSet.claims.toMutableMap()
-                attributes["active_group"] = it.jwtClaimsSet.getStringClaim(LABID_ACTIVE_GROUP)
+                attributes[ACTIVE_GROUP] = it.jwtClaimsSet.getStringClaim(activeGroupClaim)
                 Authentication.build(
                     username,
                     assignRoles(it, request),

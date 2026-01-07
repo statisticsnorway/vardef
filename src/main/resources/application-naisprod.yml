@@ -1,4 +1,10 @@
 micronaut:
+  auth:
+    issuers:
+      labid:
+        - https://labid.lab.dapla-external.ssb.no
+      keycloak:
+        - https://auth.ssb.no
   http:
     services:
       dapla-team-api:

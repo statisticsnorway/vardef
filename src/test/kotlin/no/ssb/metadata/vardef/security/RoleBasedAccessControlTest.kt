@@ -82,7 +82,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .oauth2(LabIdTokenHelper.tokenSigned(includeActiveGroup = false).parsedString)
             .`when`()
             .request(method, path)
             .then()
@@ -108,7 +108,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                LabIdTokenHelper.labIdTokenSigned(daplaGroups = listOf(group), activeGroup = group).parsedString,
+                LabIdTokenHelper.tokenSigned(daplaGroups = listOf(group), activeGroup = group).parsedString,
             ).`when`()
             .request(method, path)
             .then()
@@ -133,7 +133,7 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             .given()
             .auth()
             .oauth2(
-                LabIdTokenHelper.labIdTokenSigned(activeGroup = "play-foeniks-a-developers").parsedString,
+                LabIdTokenHelper.tokenSigned(activeGroup = "play-foeniks-a-developers").parsedString,
             ).`when`()
             .request(method, path)
             .then()
@@ -157,11 +157,11 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
+            .oauth2(LabIdTokenHelper.tokenSigned(audienceClaim = listOf("random", "blah")).parsedString)
             .`when`()
             .request(method, path)
             .then()
-            .statusCode(HttpStatus.FORBIDDEN.code)
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     companion object {

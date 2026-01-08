@@ -28,7 +28,7 @@ class CreateTests : BaseVardefTest() {
             .auth()
             .oauth2(
                 LabIdTokenHelper
-                    .labIdTokenSigned(
+                    .tokenSigned(
                         activeGroup = "play-enhjoern-b-developers",
                         daplaGroups = listOf("play-enhjoern-b-developers"),
                     ).parsedString,
@@ -110,7 +110,7 @@ class CreateTests : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .oauth2(LabIdTokenHelper.tokenSigned(includeActiveGroup = false).parsedString)
             .contentType(ContentType.JSON)
             .body(allMandatoryFieldsChanged())
             .`when`()
@@ -127,7 +127,7 @@ class CreateTests : BaseVardefTest() {
             .auth()
             .oauth2(
                 LabIdTokenHelper
-                    .labIdTokenSigned(
+                    .tokenSigned(
                         activeGroup = "some-other-team-developers",
                         daplaGroups = listOf("some-other-team-developers"),
                     ).parsedString,

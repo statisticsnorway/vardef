@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.dapla.security
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpRequest
@@ -15,6 +16,7 @@ import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
+const val TOKEN_CACHE = "token"
 /**
  * Service for interacting with Keycloak to request access tokens.
  *
@@ -27,7 +29,7 @@ import org.slf4j.LoggerFactory
  * @property clientSecret The client secret used for authentication with Keycloak.
  */
 @Singleton
-class KeycloakService(
+open class KeycloakService(
     @Client(id = "keycloak") private val httpClient: HttpClient,
 ) {
     private val logger = LoggerFactory.getLogger(KeycloakService::class.java)
@@ -46,7 +48,8 @@ class KeycloakService(
      *
      * @return The access token as a `String`, or `null` if the token cannot be retrieved.
      */
-    fun requestAccessToken(): String? {
+    @Cacheable(TOKEN_CACHE)
+    open fun requestAccessToken(cacheKey: String = "$clientId:$clientSecret"): String? {
         val formData =
             mapOf(
                 "grant_type" to "client_credentials",

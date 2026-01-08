@@ -98,6 +98,10 @@ micronaut:
     codes:
       maximumSize: 3600
       expire-after-write: 24h
+    token:
+      maximumSize: 1000
+      expire-after-write: 9h
+      enabled: false
   auth:
     issuers:
       labid:

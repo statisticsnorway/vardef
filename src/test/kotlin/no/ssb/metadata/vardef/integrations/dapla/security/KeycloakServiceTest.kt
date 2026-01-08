@@ -2,15 +2,23 @@ package no.ssb.metadata.vardef.integrations.dapla.security
 
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
+import io.micronaut.cache.Cache
+import io.micronaut.cache.CacheManager
+import io.micronaut.cache.annotation.CacheInvalidate
+import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requires
+import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.mockk.mockk
 import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.utils.TestLogAppender
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
+import java.net.http.HttpClient
 
 @Requires(env = ["integration-test"])
 @MicronautTest
@@ -27,6 +35,7 @@ class KeycloakServiceTest {
     private val context = LoggerFactory.getILoggerFactory() as LoggerContext
     private val logger = context.getLogger(KeycloakService::class.java.name) as Logger
 
+
     @BeforeEach
     fun setup() {
         // Save original KeycloakService properties to ensure reset to valid values
@@ -37,6 +46,7 @@ class KeycloakServiceTest {
         logger.addAppender(testLogAppender)
     }
 
+
     @AfterEach
     fun cleanup() {
         // Stop and reset logger testlogAppender
@@ -46,11 +56,13 @@ class KeycloakServiceTest {
         // Reset KeycloakService properties
         keycloakService.clientId = originalKeyCloakClientId
         keycloakService.clientSecret = originalKeyCloakClientSecret
+
     }
 
     @Test
     fun `get keycloak token`() {
         val result = keycloakService.requestAccessToken()
+        print(result)
         testLogAppender.getLoggedMessages().isEmpty()
         assertThat(result).isNotBlank()
     }
@@ -78,4 +90,15 @@ class KeycloakServiceTest {
         ).isTrue()
         assertThat(result).isNull()
     }
+
+
+    @Test
+    fun `token is cached`() {
+        val token1 = keycloakService.requestAccessToken()
+        assertThat(token1).isNotBlank()
+        val token2 = keycloakService.requestAccessToken()
+
+        assertThat(token1).isEqualTo(token2)
+    }
+
 }

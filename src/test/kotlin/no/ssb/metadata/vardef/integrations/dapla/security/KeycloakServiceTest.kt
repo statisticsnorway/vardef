@@ -2,23 +2,15 @@ package no.ssb.metadata.vardef.integrations.dapla.security
 
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
-import io.micronaut.cache.Cache
-import io.micronaut.cache.CacheManager
-import io.micronaut.cache.annotation.CacheInvalidate
-import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requires
-import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.mockk.mockk
 import jakarta.inject.Inject
-import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.utils.TestLogAppender
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
-import java.net.http.HttpClient
 
 @Requires(env = ["integration-test"])
 @MicronautTest
@@ -62,7 +54,6 @@ class KeycloakServiceTest {
     @Test
     fun `get keycloak token`() {
         val result = keycloakService.requestAccessToken()
-        print(result)
         testLogAppender.getLoggedMessages().isEmpty()
         assertThat(result).isNotBlank()
     }
@@ -99,6 +90,21 @@ class KeycloakServiceTest {
         val token2 = keycloakService.requestAccessToken()
 
         assertThat(token1).isEqualTo(token2)
+    }
+
+    @Test
+    fun `token is not cached when credentials change`() {
+        val token1 = keycloakService.requestAccessToken()
+        testLogAppender.getLoggedMessages().isEmpty()
+        assertThat(token1).isNotBlank()
+        keycloakService.clientSecret = "jjjj"
+        val token2 = keycloakService.requestAccessToken()
+        assertThat(
+            testLogAppender.getLoggedMessages().any {
+                it.formattedMessage.contains("Client 'keycloak': Unauthorized")
+            },
+        ).isTrue()
+        assertThat(token2).isNull()
     }
 
 }

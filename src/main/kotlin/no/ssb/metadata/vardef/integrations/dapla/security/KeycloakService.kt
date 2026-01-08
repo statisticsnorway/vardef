@@ -18,6 +18,7 @@ import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 const val TOKEN_CACHE = "token"
+
 /**
  * Service for interacting with Keycloak to request access tokens.
  *

@@ -27,7 +27,6 @@ class KeycloakServiceTest {
     private val context = LoggerFactory.getILoggerFactory() as LoggerContext
     private val logger = context.getLogger(KeycloakService::class.java.name) as Logger
 
-
     @BeforeEach
     fun setup() {
         // Save original KeycloakService properties to ensure reset to valid values
@@ -50,7 +49,6 @@ class KeycloakServiceTest {
         // Reset KeycloakService properties
         keycloakService.clientId = originalKeyCloakClientId
         keycloakService.clientSecret = originalKeyCloakClientSecret
-
     }
 
     @Test
@@ -83,7 +81,6 @@ class KeycloakServiceTest {
         ).isTrue()
         assertThat(result).isNull()
     }
-
 
     @Test
     fun `token is cached`() {

@@ -11,16 +11,16 @@ import org.junit.jupiter.api.Test
 import reactor.core.publisher.Mono
 
 @MicronautTest
-class VardefLabIdTokenValidatorTest {
+class LabIdTokenValidatorTest {
     @Inject
-    lateinit var vardefLabidTokenValidator: VardefLabIdTokenValidator<MutableHttpRequest<*>>
+    lateinit var labidTokenValidator: LabIdTokenValidator<MutableHttpRequest<*>>
 
     @Test
     fun `request with malformed token`() {
         val auth =
             Mono
                 .from(
-                    vardefLabidTokenValidator.validateToken(
+                    labidTokenValidator.validateToken(
                         "not a token",
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
@@ -29,16 +29,17 @@ class VardefLabIdTokenValidatorTest {
     }
 
     @Test
-    fun `request comes from dapla lab and valid active group supplied`() {
+    fun `valid token`() {
         val auth =
             Mono
                 .from(
-                    vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned().parsedString,
+                    labidTokenValidator.validateToken(
+                        LabIdTokenHelper.tokenSigned().parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
         assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER, VARIABLE_OWNER, VARIABLE_CREATOR)
+        assertThat(auth?.name).isEqualTo(TEST_USER)
     }
 
     @Test
@@ -46,26 +47,12 @@ class VardefLabIdTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("blah")).parsedString,
+                    labidTokenValidator.validateToken(
+                        LabIdTokenHelper.tokenSigned(audienceClaim = listOf("blah")).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
-        assertThat(auth?.roles).doesNotContain(VARIABLE_OWNER)
-        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
-    }
-
-    @Test
-    fun `request token contains allowed audience`() {
-        val auth =
-            Mono
-                .from(
-                    vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(audienceClaim = listOf("blah", "vardef")).parsedString,
-                        HttpRequest.POST("/variable-definitions", ""),
-                    ),
-                ).block()
-        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER, VARIABLE_OWNER, VARIABLE_CREATOR)
+        assertThat(auth).isNull()
     }
 
     @Test
@@ -73,7 +60,7 @@ class VardefLabIdTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefLabidTokenValidator.validateToken(
+                    labidTokenValidator.validateToken(
                         null,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
@@ -87,8 +74,8 @@ class VardefLabIdTokenValidatorTest {
         val auth =
             Mono
                 .from(
-                    vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(daplaGroups = null).parsedString,
+                    labidTokenValidator.validateToken(
+                        LabIdTokenHelper.tokenSigned(daplaGroups = null).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
@@ -97,28 +84,15 @@ class VardefLabIdTokenValidatorTest {
     }
 
     @Test
-    fun `authentication object contains username`() {
-        val auth =
-            Mono
-                .from(
-                    vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned().parsedString,
-                        HttpRequest.POST("/variable-definitions", ""),
-                    ),
-                ).block()
-        assertThat(auth?.name).isEqualTo(TEST_USER)
-    }
-
-    @Test
     fun `authentication object does not contain username`() {
         val auth =
             Mono
                 .from(
-                    vardefLabidTokenValidator.validateToken(
-                        LabIdTokenHelper.labIdTokenSigned(includeUsername = false).parsedString,
+                    labidTokenValidator.validateToken(
+                        LabIdTokenHelper.tokenSigned(includeUsername = false).parsedString,
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
-        assertThat(auth?.name).isNull()
+        assertThat(auth).isNull()
     }
 }

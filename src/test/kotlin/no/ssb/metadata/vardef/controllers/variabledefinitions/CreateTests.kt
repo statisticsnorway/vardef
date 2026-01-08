@@ -290,18 +290,11 @@ class CreateTests : BaseVardefTest() {
             .contentType(ContentType.JSON)
             .body(updatedJsonString)
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeUsername = false).parsedString)
+            .oauth2(LabIdTokenHelper.tokenSigned(includeUsername = false).parsedString)
             .`when`()
             .post("/variable-definitions")
             .then()
-            .statusCode(500)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Internal Server Error: getName(...) must not be null",
-                ),
-            )
+            .statusCode(HttpStatus.UNAUTHORIZED.code)
     }
 
     @ParameterizedTest

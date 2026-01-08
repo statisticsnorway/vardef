@@ -63,7 +63,7 @@ class DeleteTests : BaseVardefTest() {
         spec
             .given()
             .auth()
-            .oauth2(LabIdTokenHelper.labIdTokenSigned(includeActiveGroup = false).parsedString)
+            .oauth2(LabIdTokenHelper.tokenSigned(includeActiveGroup = false).parsedString)
             .`when`()
             .delete("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()

@@ -1,6 +1,12 @@
 micronaut:
   application:
     name: vardef
+  auth:
+    issuers:
+      labid:
+        - https://labid.lab.dapla-external.ssb.no
+      keycloak:
+        - https://auth.ssb.no
   security:
     jwks:
       # Token signature verification is performed by the gateway
@@ -12,14 +18,13 @@ micronaut:
             - vardef
         claims:
           keys:
-            dapla: dapla
-            dapla-groups: groups
-            labid-dapla-groups: dapla.groups
-            labid-dapla-group: dapla.group
-            issuer: iss
-            labid-username: sub
-            dapla-teams: teams
-            username: preferred_username
+            labid:
+              dapla-groups: dapla.groups
+              dapla-group: dapla.group
+            keycloak:
+              dapla: dapla
+              dapla-groups: groups
+              dapla-teams: teams
     intercept-url-map:
       - pattern: /health/**
         http-method: GET
@@ -102,11 +107,6 @@ micronaut:
       maximumSize: 1000
       expire-after-write: 9h
       enabled: false
-  auth:
-    issuers:
-      labid:
-        - https://labid.lab.dapla-external.ssb.no
-        - https://labid.lab.dapla-test-external.ssb.no
   http:
     services:
       klass:

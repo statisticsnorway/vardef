@@ -9,7 +9,7 @@ import java.time.Instant
 
 class LabIdTokenHelper {
     companion object {
-        fun labIdTokenSigned(
+        fun tokenSigned(
             audienceClaim: List<String> =
                 listOf(
                     "vardef",

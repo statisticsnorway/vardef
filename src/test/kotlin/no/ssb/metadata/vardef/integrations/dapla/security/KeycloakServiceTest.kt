@@ -38,6 +38,8 @@ class KeycloakServiceTest {
         logger.addAppender(testLogAppender)
     }
 
+    @BeforeEach
+    fun invalidateCaches(): Unit = keycloakService.invalidateCaches()
 
     @AfterEach
     fun cleanup() {
@@ -93,10 +95,12 @@ class KeycloakServiceTest {
     }
 
     @Test
-    fun `token is not cached when credentials change`() {
+    fun `cached token when credentials change`() {
         val token1 = keycloakService.requestAccessToken()
         testLogAppender.getLoggedMessages().isEmpty()
         assertThat(token1).isNotBlank()
+
+        // Invalid client secret
         keycloakService.clientSecret = "jjjj"
         val token2 = keycloakService.requestAccessToken()
         assertThat(
@@ -106,5 +110,4 @@ class KeycloakServiceTest {
         ).isTrue()
         assertThat(token2).isNull()
     }
-
 }

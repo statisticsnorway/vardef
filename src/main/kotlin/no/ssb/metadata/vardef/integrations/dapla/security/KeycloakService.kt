@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.dapla.security
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.micronaut.cache.annotation.CacheInvalidate
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpHeaders
@@ -39,6 +40,9 @@ open class KeycloakService(
 
     @Property(name = "micronaut.http.services.keycloak.clientSecret")
     lateinit var clientSecret: String
+
+    @CacheInvalidate(value = [TOKEN_CACHE], all = true)
+    open fun invalidateCaches() = Unit
 
     /**
      * Requests an access token from Keycloak.

@@ -54,7 +54,7 @@ open class KeycloakService(
      * @return The access token as a `String`, or `null` if the token cannot be retrieved.
      */
     @Cacheable(TOKEN_CACHE)
-    open fun requestAccessToken(cacheKey: String = "$clientId:$clientSecret"): String? {
+    open fun requestAccessToken(cacheKey: String = clientId): String? {
         val formData =
             mapOf(
                 "grant_type" to "client_credentials",

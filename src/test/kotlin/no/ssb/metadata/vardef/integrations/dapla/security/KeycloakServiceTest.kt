@@ -66,7 +66,7 @@ class KeycloakServiceTest {
             testLogAppender.getLoggedMessages().any {
                 it.formattedMessage.contains("Client 'keycloak': Unauthorized")
             },
-        ).isTrue()
+        ).isTrue
         assertThat(result).isNull()
     }
 
@@ -78,7 +78,7 @@ class KeycloakServiceTest {
             testLogAppender.getLoggedMessages().any {
                 it.formattedMessage.contains("Client 'keycloak': Unauthorized")
             },
-        ).isTrue()
+        ).isTrue
         assertThat(result).isNull()
     }
 
@@ -97,14 +97,15 @@ class KeycloakServiceTest {
         testLogAppender.getLoggedMessages().isEmpty()
         assertThat(token1).isNotBlank()
 
-        // Invalid client secret
+        // Invalid client id
+        keycloakService.clientId = "test-client-id"
         keycloakService.clientSecret = "jjjj"
         val token2 = keycloakService.requestAccessToken()
         assertThat(
             testLogAppender.getLoggedMessages().any {
                 it.formattedMessage.contains("Client 'keycloak': Unauthorized")
             },
-        ).isTrue()
+        ).isTrue
         assertThat(token2).isNull()
     }
 }

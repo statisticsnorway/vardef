@@ -37,6 +37,9 @@ class KeycloakServiceTest {
         logger.addAppender(testLogAppender)
     }
 
+    @BeforeEach
+    fun invalidateCaches(): Unit = keycloakService.invalidateCaches()
+
     @AfterEach
     fun cleanup() {
         // Stop and reset logger testlogAppender
@@ -63,7 +66,7 @@ class KeycloakServiceTest {
             testLogAppender.getLoggedMessages().any {
                 it.formattedMessage.contains("Client 'keycloak': Unauthorized")
             },
-        ).isTrue()
+        ).isTrue
         assertThat(result).isNull()
     }
 
@@ -75,7 +78,34 @@ class KeycloakServiceTest {
             testLogAppender.getLoggedMessages().any {
                 it.formattedMessage.contains("Client 'keycloak': Unauthorized")
             },
-        ).isTrue()
+        ).isTrue
         assertThat(result).isNull()
+    }
+
+    @Test
+    fun `token is cached`() {
+        val token1 = keycloakService.requestAccessToken()
+        assertThat(token1).isNotBlank()
+        val token2 = keycloakService.requestAccessToken()
+
+        assertThat(token1).isEqualTo(token2)
+    }
+
+    @Test
+    fun `cached token when credentials change`() {
+        val token1 = keycloakService.requestAccessToken()
+        testLogAppender.getLoggedMessages().isEmpty()
+        assertThat(token1).isNotBlank()
+
+        // Invalid client id
+        keycloakService.clientId = "test-client-id"
+        keycloakService.clientSecret = "jjjj"
+        val token2 = keycloakService.requestAccessToken()
+        assertThat(
+            testLogAppender.getLoggedMessages().any {
+                it.formattedMessage.contains("Client 'keycloak': Unauthorized")
+            },
+        ).isTrue
+        assertThat(token2).isNull()
     }
 }

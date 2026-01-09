@@ -104,7 +104,7 @@ micronaut:
       maximumSize: 3600
       expire-after-write: 24h
     token:
-      maximumSize: 1000
+      maximumSize: 10
       expire-after-write: 9h
       enabled: false
   http:

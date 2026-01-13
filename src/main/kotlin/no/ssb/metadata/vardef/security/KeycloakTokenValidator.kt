@@ -92,15 +92,25 @@ class KeycloakTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator
         if (token == null) {
             return Mono.empty()
         }
+        logger.debug("Starting validation")
         return Mono
             .from(validate(token, request))
             .map { it.jwtClaimsSet }
             .filter {
-                it.issuer in allowedIssuers &&
-                    it.audience.any { aud ->
+                (it.issuer in allowedIssuers).also { result ->
+                    if (!result) logger.info("Rejected access token auth: {} not in {}", it.issuer, allowedIssuers)
+                }
+            }.filter {
+                it.audience
+                    .any { aud ->
                         aud in allowedAudiences
-                    } &&
-                    it.subject != null
+                    }.also { result ->
+                        if (!result) logger.debug("Rejected access token auth: {} not in {}", it.audience, allowedAudiences)
+                    }
+            }.filter {
+                (it.subject != null).also { result ->
+                    if (!result) logger.debug("Rejected access token auth: Subject claim not present in token")
+                }
             }.map {
                 val username = getUsername(it)
                 logger.info("Validated Keycloak token for user=$username")

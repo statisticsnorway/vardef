@@ -6,7 +6,7 @@ micronaut:
       labid:
         - https://labid.lab.dapla-external.ssb.no
       keycloak:
-        - https://auth.ssb.no
+        - https://auth.ssb.no/realms/ssb
   security:
     jwks:
       # Token signature verification is performed by the gateway

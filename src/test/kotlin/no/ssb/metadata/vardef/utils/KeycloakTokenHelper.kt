@@ -34,7 +34,7 @@ class KeycloakTokenHelper {
                 JWTClaimsSet
                     .Builder()
                     .audience(audienceClaim)
-                    .issuer("https://auth.ssb.no")
+                    .issuer("https://auth.ssb.no/realms/ssb")
                     .claim("scope", "all_groups,current_group")
                     .claim("dapla", daplaClaim)
                     .issueTime(Date.from(now))

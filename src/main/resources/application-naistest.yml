@@ -4,7 +4,7 @@ micronaut:
       labid:
         - https://labid.lab.dapla-test-external.ssb.no
       keycloak:
-        - https://auth.test.ssb.no
+        - https://auth.test.ssb.no/realms/ssb
   http:
     services:
       dapla-team-api:

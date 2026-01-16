@@ -2,7 +2,7 @@
 # Define secrets in http-client.private.env.json
 
 ###
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -15,7 +15,7 @@ Content-Type: application/json
 %}
 
 ###
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -28,7 +28,7 @@ Content-Type: application/json
 %}
 
 ###
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -41,7 +41,7 @@ Content-Type: application/json
 %}
 
 ###
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -54,7 +54,7 @@ Content-Type: application/json
 %}
 
 ###
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 

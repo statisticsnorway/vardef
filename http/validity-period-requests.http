@@ -1,7 +1,7 @@
 # Choose an environment above
 # Define secrets in http-client.private.env.json
 
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -10,7 +10,7 @@ Content-Type: application/json
 > {% client.global.set('variable-definition-id', response.body.id) %}
 
 ###
-PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -18,7 +18,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # Creating a new validity period after
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -33,7 +33,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # Creating a new validity period before
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -49,7 +49,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 ###
 # Can add query value: valid_from to specify to which period
 # Change status {"variable_status": "PUBLISHED_EXTERNAL"}
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/patches?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/patches
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -66,7 +66,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # Creating a new validity period in between
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -81,7 +81,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # Creating a new validity period but definition not supplied for a language
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -95,7 +95,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # Creating a new validity period but definition not changed for a language
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 

@@ -3,7 +3,7 @@
 
 #@variable-definition-id=-FE5d6h_
 
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -40,7 +40,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 %}
 
 ###
-PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -54,7 +54,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # We expect this to fail since the operation above published the variable
-DELETE {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+DELETE {{HOST}}/variable-definitions/{{variable-definition-id}}
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 

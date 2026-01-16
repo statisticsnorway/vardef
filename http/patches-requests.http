@@ -2,7 +2,7 @@
 # Define secrets in http-client.private.env.json
 
 # Create a Draft
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -13,14 +13,14 @@ Content-Type: application/json
 
 ###
 # Delete all patches for definition-id
-DELETE {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+DELETE {{HOST}}/variable-definitions/{{variable-definition-id}}
 Accept: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
 
 ###
 # Recreate a Draft after deleting all patches
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -31,7 +31,7 @@ Content-Type: application/json
 
 ###
 # Publish draft
-PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -40,7 +40,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # Make a patch
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/patches?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/patches
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -60,7 +60,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # Make a patch to change owner
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/patches?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/patches
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 

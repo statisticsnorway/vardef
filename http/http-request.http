@@ -1,10 +1,10 @@
 # Choose an environment above
 # Define secrets in http-client.private.env.json
-
+@variable-definition-id = b0zw8YAf
 ### Draft
 # Json body can be added directly or imported from file
 # Save id from response
-POST {{HOST}}/variable-definitions?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions
 Authorization: Bearer {{OIDC_TOKEN}}
 Content-Type: application/json
 
@@ -42,7 +42,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ###
 # Change status {"variable_status": "PUBLISHED_INTERNAL"}
-PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+PATCH  {{HOST}}/variable-definitions/{{variable-definition-id}}
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -68,7 +68,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 ###
 # Can add query value: valid_from to specify to which period
 # Change status {"variable_status": "PUBLISHED_EXTERNAL"}
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/patches?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/patches
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -113,7 +113,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 %}
 
 ###
-POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/variable-definitions/{{variable-definition-id}}/validity-periods
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -134,7 +134,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 
 ### Vardok migration
 @vardok-id = 134
-POST {{HOST}}/vardok-migration/{{vardok-id}}?active_group={{DAPLA_GROUP_CONTEXT}}
+POST {{HOST}}/vardok-migration/{{vardok-id}}
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 
@@ -145,7 +145,7 @@ Authorization: Bearer {{OIDC_TOKEN}}
 %}
 
 ###
-GET {{HOST}}/vardok-migration?active_group={{DAPLA_GROUP_CONTEXT}}
+GET {{HOST}}/vardok-migration
 Content-Type: application/json
 Authorization: Bearer {{OIDC_TOKEN}}
 

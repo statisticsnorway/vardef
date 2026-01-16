@@ -35,8 +35,27 @@ Non-secret variables may be placed in `http/http-client.env.json`.
 
 Secret variables may be placed in `http/http-client.private.env.json` which is ignored from version control.
 
-The names of the secrets expected to be found are:
-- `OIDC_TOKEN`
+Example private config:
+
+```json
+{
+  "dev": {
+    "OIDC_TOKEN": "access token goes here"
+  },
+  "nais-test": {
+    "OIDC_TOKEN": "access token goes here"
+  }
+}
+```
+
+Access tokens can be generated using [`dapla-cli`](https://github.com/statisticsnorway/dapla-cli):
+
+```shell
+dp auth login --client metadata-local --env test
+dp auth show-access-token --to-clipboard --client metadata-local --env test
+```
+
+:warning: The access tokens generated with this method do not contain the claims necessary to be assigned the `VARIABLE_CREATOR` role. So some requests will be rejected using this method.
 
 ## OpenAPI schemas
 

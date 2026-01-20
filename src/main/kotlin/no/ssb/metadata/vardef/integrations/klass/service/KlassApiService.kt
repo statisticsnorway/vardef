@@ -8,6 +8,7 @@ import io.micronaut.http.server.exceptions.HttpServerException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Code
+import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
@@ -43,9 +44,16 @@ open class KlassApiService(
     open fun getCodeObjectsFor(
         classificationId: Int,
         language: SupportedLanguages,
+        level: Int? = null,
     ): List<Code> {
         logger.info("Fetching codes for $classificationId")
-        val response = klassApiClient.listCodes(classificationId, LocalDate.now().toString(), language)
+        val response: HttpResponse<Codes>
+        if (level == null) {
+            response = klassApiClient.listCodes(classificationId, LocalDate.now().toString(), language)
+        } else {
+            response = klassApiClient.listCodesAtLevel(classificationId, LocalDate.now().toString(), language, level)
+        }
+
         handleErrorCodes(classificationId, response)
         return response.body().codes.ifEmpty {
             throw NoSuchElementException(
@@ -76,7 +84,13 @@ open class KlassApiService(
         }
     }
 
-    override fun getCodesFor(id: String): List<String> = getCodeObjectsFor(id.toInt(), SupportedLanguages.NB).map { it.code }
+    override fun getCodesFor(
+        id: String,
+        level: Int?,
+    ): List<String> =
+        getCodeObjectsFor(id.toInt(), SupportedLanguages.NB, level).map {
+            it.code
+        }
 
     override fun doesClassificationExist(id: String): Boolean =
         try {

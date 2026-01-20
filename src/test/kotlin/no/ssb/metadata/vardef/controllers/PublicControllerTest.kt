@@ -243,8 +243,8 @@ class PublicControllerTest : BaseVardefTest() {
                 equalTo(
                     "https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE",
                 ),
-            ).body("[0].measurement_type.code", equalTo("02.01"))
-            .body("[0].measurement_type.title", equalTo("antall"))
+            ).body("[0].measurement_type.code", equalTo("02"))
+            .body("[0].measurement_type.title", equalTo("Antall"))
             .body(
                 "[0].unit_types[0].reference_uri",
                 equalTo(

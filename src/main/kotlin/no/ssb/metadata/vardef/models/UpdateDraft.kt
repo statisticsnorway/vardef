@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
 import no.ssb.metadata.vardef.annotations.KlassCode
+import no.ssb.metadata.vardef.annotations.KlassCodeAtLevel
 import no.ssb.metadata.vardef.annotations.KlassId
 import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.annotations.ValidDateOrder
@@ -55,7 +56,7 @@ data class UpdateDraft(
     val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
-    @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
+    @KlassCodeAtLevel(MEASUREMENT_TYPE_KLASS_CODE, MEASUREMENT_TYPE_KLASS_LEVEL)
     val measurementType: String? = null,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Nullable

@@ -4,8 +4,10 @@ import io.micronaut.core.annotation.Introspected
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.validation.validator.Validator
 import no.ssb.metadata.vardef.annotations.KlassCode
+import no.ssb.metadata.vardef.annotations.KlassCodeAtLevel
 import no.ssb.metadata.vardef.annotations.KlassId
 import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
+import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_LEVEL
 import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
 import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
 import org.assertj.core.api.Assertions.assertThat
@@ -24,7 +26,7 @@ data class TestCodeObject(
             String,
             >? = null,
     var measurementType: List<
-            @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
+            @KlassCodeAtLevel(MEASUREMENT_TYPE_KLASS_CODE, MEASUREMENT_TYPE_KLASS_LEVEL)
             String,
             >? = null,
 )
@@ -51,8 +53,8 @@ class KlassApiCodeValidatorTest(
                     ),
                     listOf(
                         "05",
-                        "17.01",
-                        "06.01",
+                        "17",
+                        "06",
                     ),
                 ),
             ),

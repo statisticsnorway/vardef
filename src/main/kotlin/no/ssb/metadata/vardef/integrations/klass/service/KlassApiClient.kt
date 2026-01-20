@@ -32,4 +32,13 @@ interface KlassApiClient {
         @QueryValue codesAt: String,
         @QueryValue language: SupportedLanguages,
     ): HttpResponse<Codes>
+
+    @Get("classifications/{classificationId}/codesAt?date={codesAt}&language={language}&selectLevel={level}")
+    @SingleResult
+    fun listCodesAtLevel(
+        @PathVariable classificationId: Int,
+        @QueryValue codesAt: String,
+        @QueryValue language: SupportedLanguages,
+        @QueryValue level: Int,
+    ): HttpResponse<Codes>
 }

@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.annotations.KlassCode
+import no.ssb.metadata.vardef.annotations.KlassCodeAtLevel
 import no.ssb.metadata.vardef.annotations.KlassId
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import kotlin.jvm.optionals.getOrElse
@@ -24,6 +25,26 @@ class KlassValidationFactory(
                 klassService.getCodesFor(
                     annotationMetadata["id", String::class.java].getOrElse {
                         throw IllegalStateException("no id supplied on annotation")
+                    },
+                    null,
+                )
+        }
+
+    @Singleton
+    fun klassCodeAtLevelValidator(): ConstraintValidator<KlassCodeAtLevel, String> =
+        ConstraintValidator {
+            value,
+            annotationMetadata,
+            _,
+            ->
+            value == null ||
+                value in
+                klassService.getCodesFor(
+                    annotationMetadata["id", String::class.java].getOrElse {
+                        throw IllegalStateException("no id supplied on annotation")
+                    },
+                    annotationMetadata["level", Int::class.java].getOrElse {
+                        throw IllegalStateException("no level supplied on annotation")
                     },
                 )
         }

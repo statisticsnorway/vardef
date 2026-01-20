@@ -87,6 +87,30 @@ class CreateTests : BaseVardefTest() {
             .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 
+    @Test
+    fun `create variable definition with illegal measurement type`(spec: RequestSpecification) {
+        val updatedJsonString =
+            jsonTestInput()
+                .apply {
+                    put("measurement_type", "01.01")
+                }.toString()
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(updatedJsonString)
+            .`when`()
+            .post("/variable-definitions")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+            .spec(
+                buildProblemJsonResponseSpec(
+                    true,
+                    null,
+                    errorMessage = "Code 01.01 is not a member of classification with id 303",
+                ),
+            )
+    }
+
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.utils.TestUtils#invalidVariableDefinitions")
     fun `create variable definition with invalid inputs`(

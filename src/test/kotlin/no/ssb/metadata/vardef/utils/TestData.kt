@@ -259,7 +259,7 @@ val INCOME_TAX_VP1_P1 =
         subjectFields = listOf("he04"),
         containsSpecialCategoriesOfPersonalData = false,
         variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
-        measurementType = "02.01",
+        measurementType = "02",
         validFrom = LocalDate.of(1980, 1, 1),
         validUntil = null,
         externalReferenceUri = URI("https://example.com/").toURL(),
@@ -577,7 +577,7 @@ fun jsonTestInput() =
             "he04"
         ],
         "contains_special_categories_of_personal_data": true,
-        "measurement_type": "02.01",
+        "measurement_type": "02",
         "valid_from": "2024-06-05",
         "external_reference_uri": "https://example.com/",
         "related_variable_definition_uris": [

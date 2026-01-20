@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
-import no.ssb.metadata.vardef.annotations.KlassCode
-import no.ssb.metadata.vardef.annotations.KlassId
-import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
-import no.ssb.metadata.vardef.annotations.ValidDateOrder
+import no.ssb.metadata.vardef.annotations.*
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.net.URL
@@ -47,7 +44,7 @@ data class CreateDraft(
     val containsSpecialCategoriesOfPersonalData: Boolean = false,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
-    @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
+    @KlassCodeAtLevel(MEASUREMENT_TYPE_KLASS_CODE, MEASUREMENT_TYPE_KLASS_LEVEL)
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format(DATE_FORMAT)

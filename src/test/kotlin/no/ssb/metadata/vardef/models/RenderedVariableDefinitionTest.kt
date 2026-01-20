@@ -84,20 +84,20 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
         fun measurementTypes(): Stream<Arguments> =
             Stream.of(
                 arguments(
-                    "10.01",
-                    "Celsius",
+                    "10",
+                    "Temperatur",
                 ),
                 arguments(
                     "10.4",
                     null,
                 ),
                 arguments(
-                    "11.03",
-                    "Implisitt utslippsfaktor",
+                    "11",
+                    "Utslipp",
                 ),
                 arguments(
-                    "12.04",
-                    "euro",
+                    "12",
+                    "Valuta",
                 ),
                 arguments(
                     "06",
@@ -108,12 +108,12 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     "Masse (vekt)",
                 ),
                 arguments(
-                    "17.01",
-                    "antall per km²",
+                    "17",
+                    "Sammensatte måleenheter",
                 ),
                 arguments(
-                    "17.10",
-                    "kr per m³",
+                    "17",
+                    "Sammensatte måleenheter",
                 ),
             )
     }

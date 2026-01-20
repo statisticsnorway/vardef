@@ -59,7 +59,10 @@ class StaticKlassService(
     @Property(name = "micronaut.klass-web.url.en")
     private var klassUrlEn: String = ""
 
-    override fun getCodesFor(id: String): List<String> {
+    override fun getCodesFor(
+        id: String,
+        level: Int?,
+    ): List<String> {
         val classification: StaticClassification =
             beanContext.getBean(StaticClassification::class.java, Qualifiers.byName(id))
         return classification.codes

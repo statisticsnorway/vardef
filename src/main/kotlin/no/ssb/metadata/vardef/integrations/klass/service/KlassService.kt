@@ -8,7 +8,10 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 @Prototype
 @Introspected
 interface KlassService {
-    fun getCodesFor(id: String): List<String>
+    fun getCodesFor(
+        id: String,
+        level: Int? = null,
+    ): List<String>
 
     fun doesClassificationExist(id: String): Boolean
 

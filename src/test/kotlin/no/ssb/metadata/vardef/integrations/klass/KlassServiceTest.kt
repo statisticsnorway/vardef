@@ -103,10 +103,10 @@ class KlassServiceTest {
             }
 
         klassService
-            .renderCode(MEASUREMENT_TYPE_KLASS_CODE, "17.23", SupportedLanguages.NB)
+            .renderCode(MEASUREMENT_TYPE_KLASS_CODE, "17", SupportedLanguages.NB)
             .let { klassItem ->
-                assertThat(klassItem.code).isEqualTo("17.23")
-                assertThat(klassItem.title).isEqualTo("øre per kWh")
+                assertThat(klassItem.code).isEqualTo("17")
+                assertThat(klassItem.title).isEqualTo("Sammensatte måleenheter")
             }
 
         klassService

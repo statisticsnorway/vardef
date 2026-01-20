@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import no.ssb.metadata.vardef.annotations.KlassCode
+import no.ssb.metadata.vardef.annotations.KlassCodeAtLevel
 import no.ssb.metadata.vardef.annotations.KlassId
 import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
 import no.ssb.metadata.vardef.constants.*
@@ -47,7 +48,7 @@ data class CreatePatch(
     val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
-    @KlassCode(MEASUREMENT_TYPE_KLASS_CODE)
+    @KlassCodeAtLevel(MEASUREMENT_TYPE_KLASS_CODE, MEASUREMENT_TYPE_KLASS_LEVEL)
     val measurementType: String? = null,
     @Schema(description = VALID_UNTIL_FIELD_DESCRIPTION)
     @Nullable

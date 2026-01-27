@@ -45,7 +45,7 @@ const val CREATE_DRAFT_EXAMPLE = """{
     "unit_types": ["01", "02"],
     "subject_fields": ["he04"],
     "contains_special_categories_of_personal_data": true,
-    "measurement_type": null,
+    "measurement_type": "01",
     "valid_from": "2003-01-01",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
     "comment": {
@@ -89,7 +89,7 @@ const val COMPLETE_VIEW_EXAMPLE = """{
     "subject_fields": ["he04"],
     "contains_special_categories_of_personal_data": true,
     "variable_status": "DRAFT",
-    "measurement_type": null,
+    "measurement_type": "01",
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
@@ -139,7 +139,7 @@ const val COMPLETE_VIEW_EXAMPLE_PUBLISHED_VARIABLE = """{
     "subject_fields": ["he04"],
     "contains_special_categories_of_personal_data": true,
     "variable_status": "PUBLISHED_INTERNAL",
-    "measurement_type": null,
+    "measurement_type": "01",
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
@@ -186,7 +186,7 @@ const val PATCH_EXAMPLE = """
     "unit_types": ["01", "05"],
     "subject_fields": ["he04"],
     "contains_special_categories_of_personal_data": false,
-    "measurement_type": null,
+    "measurement_type": "01",
     "valid_until": "2026-01-01",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
     "comment": {
@@ -223,7 +223,7 @@ const val CREATE_VALIDITY_PERIOD_EXAMPLE = """
     "unit_types": ["01", "05"],
     "subject_fields": ["he04"],
     "contains_special_categories_of_personal_data": false,
-    "measurement_type": null,
+    "measurement_type": "01",
     "valid_from": "2026-01-02",
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
     "comment": {
@@ -261,7 +261,12 @@ const val RENDERED_VIEW_EXAMPLE = """{
     ],
     "contains_special_categories_of_personal_data": true,
     "variable_status": "PUBLISHED_INTERNAL",
-    "measurement_type": null,
+    "measurement_type": [{
+        "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE",
+        "code": "01",
+        "title": "Andel"
+        }
+    ],
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",

@@ -5,6 +5,7 @@ import com.mongodb.client.model.Filters.*
 import com.mongodb.reactivestreams.client.MongoDatabase
 import io.mongock.api.annotations.ChangeUnit
 import io.mongock.api.annotations.Execution
+import io.mongock.api.annotations.RollbackExecution
 import org.bson.Document
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -54,5 +55,12 @@ class MeasurementTypeUseLevelOne {
                 "MeasurementType migration successful, updated ${result.modifiedCount} documents",
             )
         }
+    }
+
+    /**
+     * Not possible to rollback but method is necessary
+     */
+    @RollbackExecution
+    fun rollback() {
     }
 }

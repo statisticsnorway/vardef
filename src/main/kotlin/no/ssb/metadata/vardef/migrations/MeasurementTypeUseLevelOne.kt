@@ -15,37 +15,37 @@ import reactor.core.publisher.Mono
     author = "cbi",
 )
 class MeasurementTypeUseLevelOne {
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @Execution
     fun execution(mongoDatabase: MongoDatabase) {
         val result =
-            Mono.from(
-                mongoDatabase
-                    .getCollection("SavedVariableDefinition")
-                    .updateMany(
-                        and(
-                            exists("measurementType"),
-                            regex("measurementType", "\\."),
-                        ),
-                        listOf(
-                            Document(
-                                "\$set",
+            Mono
+                .from(
+                    mongoDatabase
+                        .getCollection("SavedVariableDefinition")
+                        .updateMany(
+                            and(
+                                exists("measurementType"),
+                                regex("measurementType", "\\."),
+                            ),
+                            listOf(
                                 Document(
-                                    "measurementType",
+                                    "\$set",
                                     Document(
-                                        "\$arrayElemAt",
-                                        listOf(
-                                            Document("\$split", listOf("\$measurementType", ".")),
-                                            0,
+                                        "measurementType",
+                                        Document(
+                                            "\$arrayElemAt",
+                                            listOf(
+                                                Document("\$split", listOf("\$measurementType", ".")),
+                                                0,
+                                            ),
                                         ),
                                     ),
                                 ),
                             ),
                         ),
-                    ),
-            ).block()
+                ).block()
 
         if (result == null) {
             logger.error("MeasurementType migration result was null!")
@@ -56,4 +56,3 @@ class MeasurementTypeUseLevelOne {
         }
     }
 }
-

@@ -76,7 +76,7 @@ class MeasurementTypeUseLevelOneTest {
   ],
   "containsSpecialCategoriesOfPersonalData": false,
   "variableStatus": "DRAFT",
-  "measurementType": "01.02",
+  "measurementType": "01",
   "validFrom": "2011-12-03",
   "validUntil": "2020-12-03",
   "externalReferenceUri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",

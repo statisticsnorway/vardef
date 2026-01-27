@@ -261,12 +261,11 @@ const val RENDERED_VIEW_EXAMPLE = """{
     ],
     "contains_special_categories_of_personal_data": true,
     "variable_status": "PUBLISHED_INTERNAL",
-    "measurement_type": [{
+    "measurement_type": {
         "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE",
         "code": "01",
         "title": "Andel"
-        }
-    ],
+    },
     "valid_from": "2003-01-01",
     "valid_until": null,
     "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",

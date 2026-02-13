@@ -17,6 +17,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+        with:
+          version: v28.0.0
+
       - name: Set up Java
         uses: actions/setup-java@v5
         with:

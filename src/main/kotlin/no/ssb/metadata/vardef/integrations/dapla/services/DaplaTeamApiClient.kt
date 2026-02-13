@@ -16,10 +16,8 @@ import no.ssb.metadata.vardef.integrations.dapla.models.Team
  * A declarative client for the Dapla Team API
  */
 @Client(id = "dapla-team-api")
-@Headers(
-    Header(name = USER_AGENT, value = "VarDef API"),
-    Header(name = ACCEPT, value = "application/hal+json"),
-)
+@Header(name = USER_AGENT, value = $$"${micronaut.http.request-headers.user-agent}")
+@Header(name = ACCEPT, value = "application/hal+json")
 interface DaplaTeamApiClient {
     @Get("/teams/{teamId}")
     @SingleResult

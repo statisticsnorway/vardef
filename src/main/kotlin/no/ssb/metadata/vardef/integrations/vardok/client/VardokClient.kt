@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.vardok.client
 
 import io.micronaut.core.async.annotation.SingleResult
 import io.micronaut.http.HttpHeaders.ACCEPT
+import io.micronaut.http.HttpHeaders.USER_AGENT
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
@@ -10,6 +11,7 @@ import io.micronaut.http.client.annotation.Client
 
 @Client(id = "vardok")
 @Produces(MediaType.APPLICATION_XML)
+@Header(name = USER_AGENT, value = $$"${micronaut.http.request-headers.user-agent}")
 @Header(name = ACCEPT, value = "application/xml")
 interface VardokClient {
     @Produces(MediaType.APPLICATION_XML)

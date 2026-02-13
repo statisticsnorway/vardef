@@ -216,3 +216,16 @@ tasks.register<Copy>("copyPublicOpenApiSpec") {
     from(layout.buildDirectory.file("generated/ksp/main/resources/META-INF/swagger/variable-definitions-public.yml"))
     into(layout.projectDirectory.dir("openapi"))
 }
+
+val setVersionProperty by tasks.register<ProcessResources>("setVersionProperty") {
+    from(layout.projectDirectory.dir("src/main/resources")) {
+        include("**/application.yml")
+        filter {
+            it.replace("{{APP_VERSION}}", version.toString())
+        }
+    }
+    into(layout.buildDirectory.dir("resources/main"))
+}
+
+tasks.processResources { finalizedBy(setVersionProperty) }
+tasks.classes { mustRunAfter(setVersionProperty) }

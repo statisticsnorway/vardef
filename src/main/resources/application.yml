@@ -1,6 +1,7 @@
 micronaut:
   application:
     name: vardef
+    version: {{APP_VERSION}}  # Placeholder filled by the setVersionProperty task during the Gradle build
   auth:
     issuers:
       labid:
@@ -108,6 +109,8 @@ micronaut:
       expire-after-write: 9h
       enabled: false
   http:
+    request-headers:
+      user-agent: ${micronaut.application.name}/${micronaut.application.version} (metadata@ssb.no)
     services:
       klass:
         url: https://data.ssb.no/api/klass/v1/

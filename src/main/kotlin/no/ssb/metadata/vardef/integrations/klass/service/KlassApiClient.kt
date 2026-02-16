@@ -14,10 +14,8 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
  * A declarative client for the Klass API
  */
 @Client(id = "klass")
-@Headers(
-    Header(name = USER_AGENT, value = "VarDef API"),
-    Header(name = ACCEPT, value = "application/json"),
-)
+@Header(name = USER_AGENT, value = $$"${micronaut.http.request-headers.user-agent}")
+@Header(name = ACCEPT, value = "application/json")
 interface KlassApiClient {
     @Get("classifications/{classificationId}")
     @SingleResult

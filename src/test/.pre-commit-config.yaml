@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ktlint
+        name: ktlint-format
+        entry: ./gradlew ktlintFormat
+        language: system
+        types: [kotlin]

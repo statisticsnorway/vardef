@@ -28,6 +28,8 @@ class HomeController {
             .path("variable-definitions")
             .build()
 
+
+
     @Get
     fun redirectToDocs(): HttpResponse<Any> = HttpResponse.seeOther(docsUri)
 }

@@ -3,7 +3,6 @@ repos:
     hooks:
       - id: ktlint
         name: ktlint-check-and-format
-        entry: bash -c '
-          ./gradlew ktlintCheck || ./gradlew ktlintFormat'
+        entry: bash -c './gradlew ktlintCheck || ./gradlew ktlintFormat'
         language: system
         types: [kotlin]

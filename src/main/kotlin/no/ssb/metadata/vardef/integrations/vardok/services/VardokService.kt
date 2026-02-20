@@ -32,7 +32,7 @@ interface VardokService {
 
     fun getVardefIdByVardokId(vardokId: String): String?
 
-    fun getVardokIdByVardefId(vardokId: String): String?
+    fun getVardokIdByVardefId(vardefId: String): String?
 
     fun isAlreadyMigrated(vardokId: String): Boolean
 

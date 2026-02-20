@@ -1,34 +1,25 @@
-package no.ssb.metadata.vardef.controllers
+package no.ssb.metadata.vardef.controllers.vardokmigration
 
 import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
-import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
-import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
-import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteView
-import no.ssb.metadata.vardef.utils.*
+import no.ssb.metadata.vardef.utils.BaseVardefTest
+import no.ssb.metadata.vardef.utils.TEST_DEVELOPERS_GROUP
+import no.ssb.metadata.vardef.utils.TEST_TEAM
+import no.ssb.metadata.vardef.utils.buildProblemJsonResponseSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
-import java.net.URI
 import java.net.URL
 import java.time.LocalDate
-import java.util.stream.Stream
-import kotlin.collections.emptyList
 
-class VarDokMigrationControllerTest : BaseVardefTest() {
-    @Inject
-    lateinit var vardokService: VardokService
-
+class CreateTests : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
@@ -307,7 +298,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("mapConceptVariableRelations")
+    @MethodSource("no.ssb.metadata.vardef.controllers.vardokmigration.CompanionObject#mapConceptVariableRelations")
     fun `create vardok related variable uris`(
         id: String,
         expectedResult: List<String?>,
@@ -405,7 +396,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("mapExternalDocument")
+    @MethodSource("no.ssb.metadata.vardef.controllers.vardokmigration.CompanionObject#mapExternalDocument")
     fun `create vardok externalreference uri`(
         id: Int,
         expectedResult: URL?,
@@ -486,28 +477,8 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeView.subjectFields).isEqualTo(emptyList<String>())
     }
 
-    @Test
-    fun `vardok id is mapped to vardef id`(spec: RequestSpecification) {
-        val body =
-            spec
-                .given()
-                .contentType(ContentType.JSON)
-                .body("")
-                .`when`()
-                .post("/vardok-migration/2")
-                .then()
-                .statusCode(201)
-                .extract()
-                .body()
-                .asString()
-
-        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-
-        assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeView.id)
-    }
-
     @ParameterizedTest
-    @MethodSource("newNorwegianUnitTypes")
+    @MethodSource("no.ssb.metadata.vardef.controllers.vardokmigration.CompanionObject#newNorwegianUnitTypes")
     fun `create vardok has nn unit type`(
         id: Int,
         expectedUnitType: String,
@@ -531,7 +502,7 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
     }
 
     @ParameterizedTest
-    @MethodSource("newNorwegianMultilanguageFields")
+    @MethodSource("no.ssb.metadata.vardef.controllers.vardokmigration.CompanionObject#newNorwegianMultilanguageFields")
     fun `create vardok with nn as primary language`(
         id: Int,
         name: String,
@@ -559,184 +530,5 @@ class VarDokMigrationControllerTest : BaseVardefTest() {
         assertThat(completeView.definition.nb).isNull()
         assertThat(completeView.contact.title.nn).isEqualTo(contactTitle)
         assertThat(completeView.contact.title.nb).isNull()
-    }
-
-    @Test
-    fun `get vardef complete view by vardok id`(spec: RequestSpecification) {
-        val vardokId = "005"
-        val body =
-            spec
-                .given()
-                .`when`()
-                .get("/vardok-migration/$vardokId")
-                .then()
-                .statusCode(HttpStatus.OK.code)
-                .extract()
-                .body()
-                .asString()
-
-        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.shortName)
-            .isEqualTo("bus")
-    }
-
-    @Test
-    fun `not migrated vardok id`(spec: RequestSpecification) {
-        val vardokId = "555"
-        spec
-            .given()
-            .`when`()
-            .get("/vardok-migration/$vardokId")
-            .then()
-            .statusCode(HttpStatus.NOT_FOUND.code)
-    }
-
-    @Test
-    fun `get vardok id by vardef id`(spec: RequestSpecification) {
-        val vardokId = "005"
-        val definitionId = DRAFT_BUS_EXAMPLE.definitionId
-        val body =
-            spec
-                .given()
-                .`when`()
-                .get("/vardok-migration/$definitionId")
-                .then()
-                .statusCode(HttpStatus.OK.code)
-                .extract()
-                .body()
-                .asString()
-
-        val vardokIdResponse = jsonMapper.readValue(body, VardokIdResponse::class.java)
-        assertThat(vardokIdResponse.vardokId).isEqualTo(vardokId)
-    }
-
-    @Test
-    fun `variable has no mapping to vardef`(spec: RequestSpecification) {
-        val definitionId = DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId
-        spec
-            .given()
-            .`when`()
-            .get("/vardok-migration/$definitionId")
-            .then()
-            .statusCode(HttpStatus.NOT_FOUND.code)
-    }
-
-    @Test
-    fun `get vardef complete view by nonexistent vardef id`(spec: RequestSpecification) {
-        val vardefId = "vardefid"
-        spec
-            .given()
-            .`when`()
-            .get("/vardok-migration/$vardefId")
-            .then()
-            .statusCode(HttpStatus.NOT_FOUND.code)
-    }
-
-    @Test
-    fun `get vardok vardef mapping`(spec: RequestSpecification) {
-        val definitionId = DRAFT_BUS_EXAMPLE.definitionId
-        val body =
-            spec
-                .given()
-                .`when`()
-                .get("/vardok-migration")
-                .then()
-                .statusCode(HttpStatus.OK.code)
-                .extract()
-                .body()
-                .asString()
-
-        val vardokVardefIdPairResponse = jsonMapper.readValue(body, Array<VardokVardefIdPairResponse>::class.java)
-        assertThat(vardokVardefIdPairResponse.size).isEqualTo(1)
-        assertThat(vardokVardefIdPairResponse[0].vardefId).isEqualTo(definitionId)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newNorwegianUnitTypes(): Stream<Arguments> =
-            Stream.of(
-                argumentSet(
-                    "Verksemd",
-                    "2413",
-                    "13",
-                ),
-                argumentSet(
-                    "Hushald",
-                    "3135",
-                    "10",
-                ),
-            )
-
-        @JvmStatic
-        fun newNorwegianMultilanguageFields(): Stream<Arguments> =
-            Stream.of(
-                argumentSet(
-                    "Id 2413",
-                    "2413",
-                    "Sum utgifter",
-                    "Sum av utgifter til løn, innkjøp, refusjon og overføringar.",
-                    "${GENERATED_CONTACT_KEYWORD}_tittel",
-                ),
-                argumentSet(
-                    "Id 3135",
-                    "3135",
-                    "Egenbetaling, barnehagar",
-                    "Hushalds utgifter til barnehageplass i kommunale og private barnehagar",
-                    "${GENERATED_CONTACT_KEYWORD}_tittel",
-                ),
-            )
-
-        @JvmStatic
-        fun mapExternalDocument(): Stream<Arguments> =
-            Stream.of(
-                argumentSet(
-                    "Vardok id 2 has external document",
-                    "2",
-                    "http://www.ssb.no/emner/05/90/notat_200372/notat_200372.pdf",
-                ),
-                argumentSet(
-                    "Vardok id 130 has not external document",
-                    "130",
-                    null,
-                ),
-                argumentSet(
-                    "Vardok id 123 has external document",
-                    "123",
-                    "http://www.ssb.no/emner/02/01/10/innvbef/om.html",
-                ),
-                argumentSet(
-                    "Vardok id 1245 has invalid external document",
-                    "1245",
-                    null,
-                ),
-            )
-
-        @JvmStatic
-        fun mapConceptVariableRelations(): Stream<Arguments> =
-            Stream.of(
-                argumentSet(
-                    "Vardok id 2 has several ConceptVariableRelations",
-                    "2",
-                    listOf(
-                        "http://www.ssb.no/conceptvariable/vardok/571",
-                        "http://www.ssb.no/conceptvariable/vardok/49",
-                        "http://www.ssb.no/conceptvariable/vardok/10",
-                        "http://www.ssb.no/conceptvariable/vardok/12",
-                        "http://www.ssb.no/conceptvariable/vardok/11",
-                    ).map { URI(it).toURL() },
-                ),
-                argumentSet(
-                    "Vardok id 948 has none ConceptVariableRelations",
-                    "948",
-                    listOf<URL?>(),
-                ),
-                argumentSet(
-                    "Vardok id 1245 has one ConceptVariableRelation",
-                    "1245",
-                    listOf(
-                        "http://www.ssb.no/conceptvariable/vardok/1246",
-                    ).map { URI(it).toURL() },
-                ),
-            )
     }
 }

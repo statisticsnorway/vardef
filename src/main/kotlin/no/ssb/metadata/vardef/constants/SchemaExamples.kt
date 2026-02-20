@@ -292,13 +292,14 @@ const val LIST_OF_COMPLETE_VIEW_EXAMPLE = """[
     $COMPLETE_VIEW_EXAMPLE
 ]"""
 
-const val VARDOK_ID_RESPONSE_EXAMPLE = """{
-    "vardok_id": "25"
-}"""
+const val VARDOK_ID_RESPONSE_EXAMPLE = """1607"""
+
+const val VARDEF_ID_MIGRATED_EXAMPLE = ID_EXAMPLE
+const val VARDEF_ID_NOT_MIGRATED_EXAMPLE = """Xy9_7-Az"""
 
 const val VARDOK_VARDEF_ID_RESPONSE_EXAMPLE = """{
-    "vardok_id": "25",
-    "vardef_id": "A1699WWE"
+    "vardok_id": $VARDOK_ID_RESPONSE_EXAMPLE,
+    "vardef_id": $VARDEF_ID_MIGRATED_EXAMPLE
 }"""
 
 const val VARDOK_VARDEF_ID_LIST_RESPONSE_EXAMPLE = """[

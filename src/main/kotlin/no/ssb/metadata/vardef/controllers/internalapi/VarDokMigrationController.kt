@@ -192,9 +192,9 @@ class VarDokMigrationController(
                 .getVardokIdByVardefId(id)
                 ?.let { HttpResponse.ok(VardokIdResponse(it)) }
                 ?: throw HttpStatusException(
-                HttpStatus.NOT_FOUND,
-                "No vardok mapping for vardef id $id"
-            )
+                    HttpStatus.NOT_FOUND,
+                    "No vardok mapping for vardef id $id",
+                )
         }
 
     /**

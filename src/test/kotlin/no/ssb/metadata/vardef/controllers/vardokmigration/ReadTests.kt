@@ -15,9 +15,10 @@ import no.ssb.metadata.vardef.utils.buildProblemJsonResponseSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ReadTests: BaseVardefTest() {
+class ReadTests : BaseVardefTest() {
     @Inject
     lateinit var vardokService: VardokService
+
     @Test
     fun `vardok id is mapped to vardef id`(spec: RequestSpecification) {
         val body =
@@ -135,7 +136,6 @@ class ReadTests: BaseVardefTest() {
             )
     }
 
-
     @Test
     fun `Not migrated vardef id`(spec: RequestSpecification) {
         val definitionId = "Ab12-CD_"
@@ -153,5 +153,4 @@ class ReadTests: BaseVardefTest() {
                 ),
             )
     }
-
 }

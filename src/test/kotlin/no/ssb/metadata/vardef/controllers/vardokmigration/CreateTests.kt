@@ -18,9 +18,8 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.net.URL
 import java.time.LocalDate
-import kotlin.intArrayOf
 
-class CreateTests:  BaseVardefTest() {
+class CreateTests : BaseVardefTest() {
     @ParameterizedTest
     @ValueSource(
         ints = [
@@ -164,7 +163,7 @@ class CreateTests:  BaseVardefTest() {
                     null,
                     errorMessage =
                         "Cannot construct instance of " +
-                                "`no.ssb.metadata.vardef.integrations.vardok.models.Variable`",
+                            "`no.ssb.metadata.vardef.integrations.vardok.models.Variable`",
                 ),
             )
     }
@@ -477,8 +476,6 @@ class CreateTests:  BaseVardefTest() {
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
         assertThat(completeView.subjectFields).isEqualTo(emptyList<String>())
     }
-
-
 
     @ParameterizedTest
     @MethodSource("no.ssb.metadata.vardef.controllers.vardokmigration.CompanionObject#newNorwegianUnitTypes")

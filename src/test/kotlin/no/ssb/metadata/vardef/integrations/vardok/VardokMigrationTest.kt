@@ -23,7 +23,6 @@ import org.junit.jupiter.params.provider.ValueSource
 import java.net.URL
 import java.util.stream.Stream
 
-// @MicronautTest
 class VardokMigrationTest : BaseVardefTest() {
     @Inject
     lateinit var vardokService: VardokService

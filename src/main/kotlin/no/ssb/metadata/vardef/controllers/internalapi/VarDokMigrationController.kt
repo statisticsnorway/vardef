@@ -167,7 +167,15 @@ class VarDokMigrationController(
             examples = [
                 ExampleObject(
                     name = "Vardok id",
-                    value = "1607",
+                    value = VARDOK_ID_RESPONSE_EXAMPLE,
+                ),
+                ExampleObject(
+                    name = "Vardef id",
+                    value = VARDEF_ID_MIGRATED_EXAMPLE,
+                ),
+                ExampleObject(
+                    name = NOT_FOUND_EXAMPLE_NAME,
+                    value = VARDEF_ID_NOT_MIGRATED_EXAMPLE,
                 ),
             ],
         )

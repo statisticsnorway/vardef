@@ -88,7 +88,11 @@ paths:
                         ],
                         "contains_special_categories_of_personal_data": true,
                         "variable_status": "PUBLISHED_INTERNAL",
-                        "measurement_type": null,
+                        "measurement_type": {
+                            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/303",
+                            "code": "01",
+                            "title": "Andel"
+                        },
                         "valid_from": "2003-01-01",
                         "valid_until": null,
                         "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
@@ -189,6 +193,10 @@ paths:
                       title: Innvandrere
                     contains_special_categories_of_personal_data: true
                     variable_status: PUBLISHED_INTERNAL
+                    measurement_type:
+                      reference_uri: https://www.ssb.no/klass/klassifikasjoner/303
+                      code: "01"
+                      title: Andel
                     valid_from: 2003-01-01
                     external_reference_uri: https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb
                     comment: Fra og med 1.1.2003 ble definisjon endret til også å
@@ -229,6 +237,10 @@ paths:
                       title: Innvandrere
                     contains_special_categories_of_personal_data: true
                     variable_status: PUBLISHED_INTERNAL
+                    measurement_type:
+                      reference_uri: https://www.ssb.no/klass/klassifikasjoner/303
+                      code: "01"
+                      title: Andel
                     valid_from: 2003-01-01
                     external_reference_uri: https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb
                     comment: Fra og med 1.1.2003 ble definisjon endret til også å
@@ -326,7 +338,11 @@ paths:
                         ],
                         "contains_special_categories_of_personal_data": true,
                         "variable_status": "PUBLISHED_INTERNAL",
-                        "measurement_type": null,
+                        "measurement_type": {
+                            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/303",
+                            "code": "01",
+                            "title": "Andel"
+                        },
                         "valid_from": "2003-01-01",
                         "valid_until": null,
                         "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
@@ -536,7 +552,10 @@ components:
           title: Innvandrere
         contains_special_categories_of_personal_data: true
         variable_status: PUBLISHED_INTERNAL
-        measurement_type: null
+        measurement_type:
+          reference_uri: https://www.ssb.no/klass/klassifikasjoner/303
+          code: "01"
+          title: Andel
         valid_from: 2003-01-01
         valid_until: null
         external_reference_uri: https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb

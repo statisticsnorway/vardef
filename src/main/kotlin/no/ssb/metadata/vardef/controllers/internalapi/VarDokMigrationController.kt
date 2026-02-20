@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.runBlocking
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
+import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.vardok.models.VardefInput
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokIdResponse
@@ -139,6 +140,7 @@ class VarDokMigrationController(
      * Get one variable definition by vardok id or get the vardok id by vardef id.
      */
     @Get("/{id}")
+    @NotFoundApiResponse
     @ApiResponse(
         content =
             [
@@ -189,7 +191,10 @@ class VarDokMigrationController(
             vardokService
                 .getVardokIdByVardefId(id)
                 ?.let { HttpResponse.ok(VardokIdResponse(it)) }
-                ?: HttpResponse.notFound(HttpStatus.NOT_FOUND)
+                ?: throw HttpStatusException(
+                HttpStatus.NOT_FOUND,
+                "No vardok mapping for vardef id $id"
+            )
         }
 
     /**

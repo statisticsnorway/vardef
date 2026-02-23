@@ -1,8 +1,11 @@
 {
-  "uniform_name": "skip-stat",
-  "display_name": "Skip stat",
-  "division_name": "Økonomisk statistikk (Avdeling 200)",
-  "section_name": "Finansregnskap (211)",
-  "section_code": "211",
-  "autonomy_level": "SELF_MANAGED"
+  "data": {
+    "team": {
+      "slug": "skip-stat",
+      "section": {
+        "code": "724",
+        "name": "Finansregnskap (211)"
+      }
+    }
+  }
 }

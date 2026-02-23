@@ -1,25 +1,11 @@
 {
-  "uniform_name": "play-enhjoern-a",
-  "display_name": "Play Enhjørn A",
-  "division_name": "IT (Avdeling 700)",
-  "section_name": "Dataplattform (724)",
-  "section_code": "724",
-  "autonomy_level": "SELF_MANAGED",
-  "_links": {
-    "iac_repo": {
-      "href": "https://github.com/statisticsnorway/play-enhjoern-a-iac"
-    },
-    "self": {
-      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/teams/play-enhjoern-a"
-    },
-    "groups": {
-      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/teams/play-enhjoern-a/groups"
-    },
-    "users": {
-      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/teams/play-enhjoern-a/users"
-    },
-    "section_manager": {
-      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/users/amk%40ssb.no"
+  "data": {
+    "team": {
+      "slug": "play-enhjoern-a",
+      "section": {
+        "code": "724",
+        "name": "Dataplattform (724)"
+      }
     }
   }
 }

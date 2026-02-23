@@ -1,0 +1,10 @@
+# Team.graphql
+query GetTeam($slug: Slug!) {
+    team(slug: $slug) {
+        slug
+        section {
+            code
+            name
+        }
+    }
+}

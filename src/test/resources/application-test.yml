@@ -38,6 +38,8 @@ klass:
 # Dapla
 dapla:
   static-data-path: dapla
+  api:
+    token: test-token
 dapla-teams:
   static-data-path: dapla/teams
   teams:

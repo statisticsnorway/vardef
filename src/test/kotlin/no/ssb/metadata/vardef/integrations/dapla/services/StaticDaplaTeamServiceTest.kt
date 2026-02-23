@@ -44,7 +44,7 @@ class StaticDaplaTeamServiceTest {
     fun `test StaticDaplaTeam loads correct data`() {
         val team = daplaTeamApiStaticService.getTeam("dapla-felles")
         assertThat(testLogAppender.getLoggedMessages()).isEmpty()
-        assertEquals("dapla-felles", team?.uniformName)
+        assertEquals("dapla-felles", team?.slug)
     }
 
     @Test
@@ -77,6 +77,6 @@ class StaticDaplaTeamServiceTest {
                 it.formattedMessage.contains("No bean of type")
             },
         ).isFalse()
-        assertEquals("dapla-felles-developers", group?.uniformName)
+        assertEquals("dapla-felles-developers", group?.name)
     }
 }

@@ -56,7 +56,7 @@ data class Common(
     @field:JacksonXmlProperty(localName = "ContactPerson")
     val contactPerson: ContactPerson?,
     @field:JacksonXmlProperty(localName = "ContactDivision")
-    val contactDivision: ContactDivision,
+    val contactDivision: ContactDivision?,
     @field:JacksonXmlProperty(localName = "Notes")
     val notes: String? = null,
 )

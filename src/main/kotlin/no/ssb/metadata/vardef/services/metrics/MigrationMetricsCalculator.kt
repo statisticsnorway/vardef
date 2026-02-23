@@ -49,6 +49,6 @@ class MigrationMetricsCalculator(
                     .getLatestPatchInLastValidityPeriod(vardefId)
             }.groupBy { variable ->
                 val team = variable.owner.team
-                daplaTeamService.getTeam(team)?.sectionCode ?: "Unknown"
+                daplaTeamService.getTeam(team)?.section?.code ?: "Unknown"
             }
 }

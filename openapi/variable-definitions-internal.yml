@@ -102,8 +102,8 @@ paths:
                   value: |-
                     [
                         {
-                        "vardok_id": 1607,
-                        "vardef_id": wypvb3wd
+                        "vardok_id": "1607",
+                        "vardef_id": "wypvb3wd"
                     }
                     ]
       security:

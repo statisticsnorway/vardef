@@ -7,12 +7,12 @@ micronaut:
         - https://auth.ssb.no/realms/ssb
   http:
     services:
-      dapla-team-api:
-        url: http://dapla-team-api.dapla-platform
       keycloak:
         url: https://auth.ssb.no/
         clientId: vardef-to-dapla-team-api-m2m
         clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+      dapla-api:
+        url: https://dapla-ctrl.intern.ssb.no
 logger:
   config: logback-kubernetes.xml
 

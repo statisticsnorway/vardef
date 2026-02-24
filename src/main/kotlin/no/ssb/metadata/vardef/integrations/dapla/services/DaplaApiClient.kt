@@ -1,5 +1,7 @@
 package no.ssb.metadata.vardef.integrations.dapla.services
 
+import io.micronaut.http.HttpHeaders.ACCEPT
+import io.micronaut.http.HttpHeaders.USER_AGENT
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
@@ -12,6 +14,8 @@ import no.ssb.metadata.vardef.integrations.dapla.models.GroupData
 import no.ssb.metadata.vardef.integrations.dapla.models.TeamData
 
 @Client(id = "dapla-api")
+@Header(name = USER_AGENT, value = "\${micronaut.http.request-headers.user-agent}")
+@Header(name = ACCEPT, value = "application/hal+json")
 interface DaplaApiClient {
     @Post("/graphql", processes = [MediaType.APPLICATION_JSON])
     fun fetchTeam(

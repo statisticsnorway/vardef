@@ -2,6 +2,9 @@ package no.ssb.metadata.vardef.integrations.dapla.models
 
 import io.micronaut.serde.annotation.Serdeable
 
+/**
+ * Generic data class for dapla-api GraphQL response
+ */
 @Serdeable
 data class GraphQlResponse<T>(
     val data: T?,

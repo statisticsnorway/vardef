@@ -170,7 +170,3 @@ endpoints:
 jackson:
   xml:
     enabled: true
-
-dapla:
-  api:
-    token: ${DAPLA_API_TOKEN}

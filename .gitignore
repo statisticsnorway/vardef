@@ -17,3 +17,4 @@ out/
 .classpath
 .factorypath
 http-client.private.env.json
+src/test/resources/application-integration-test.yml

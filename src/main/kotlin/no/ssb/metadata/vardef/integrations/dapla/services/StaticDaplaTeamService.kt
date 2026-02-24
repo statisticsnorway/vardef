@@ -2,11 +2,16 @@ package no.ssb.metadata.vardef.integrations.dapla.services
 
 import io.micronaut.context.BeanContext
 import io.micronaut.context.annotation.*
+import io.micronaut.core.type.Argument
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.json.JsonMapper
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.integrations.dapla.models.GraphQlResponse
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
+import no.ssb.metadata.vardef.integrations.dapla.models.GroupData
+import no.ssb.metadata.vardef.integrations.dapla.models.Section
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
+import no.ssb.metadata.vardef.integrations.dapla.models.TeamData
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 
@@ -19,7 +24,8 @@ const val DAPLA_PROPERTY = "dapla"
  * static JSON files. This class is activated in the test environment (excluding integration tests)
  * and reads team configurations from JSON files based on the team name.
  *
- * @property uniformName The uniform name used to identify and load the team data.
+ * @property slug The slug used to identify and load the team data.
+ * @property sectionCode The section code associated with the team.
  * @property path The path to the directory where static team data JSON files are stored.
  * @property team The `Team` object populated from the JSON data.
  * @throws RuntimeException if the specified resource JSON file is not found.
@@ -28,7 +34,7 @@ const val DAPLA_PROPERTY = "dapla"
 @Requires(env = ["test"], notEnv = ["integration-test"], property = DAPLA_TEAM_PROPERTY_NAME)
 @EachProperty(DAPLA_TEAM_PROPERTY_NAME)
 class StaticDaplaTeam(
-    @param:Parameter val uniformName: String,
+    @param:Parameter val slug: String,
     @param:Parameter val sectionCode: String,
     @param:Parameter val sectionName: String,
     @param:Property(name = "dapla-teams.static-data-path")
@@ -38,12 +44,19 @@ class StaticDaplaTeam(
     val team: Team = loadTeamData()
 
     private fun loadTeamData(): Team {
-        val resourcePath = "$uniformName.json"
+        val resourcePath = "$slug.json"
         val resource =
             Thread.currentThread().contextClassLoader.getResource(path.resolve(resourcePath).toString())
                 ?: throw IllegalArgumentException("Resource not found: $resourcePath")
 
-        return jsonMapper.readValue(resource.readText(), Team::class.java)
+        @Suppress("UNCHECKED_CAST")
+        val response =
+            jsonMapper.readValue(
+                resource.readText(),
+                Argument.of(GraphQlResponse::class.java, TeamData::class.java),
+            ) as GraphQlResponse<TeamData>
+        return response.data?.team
+            ?: throw IllegalArgumentException("Team not found inside data for $resourcePath")
     }
 }
 
@@ -52,7 +65,7 @@ class StaticDaplaTeam(
  * from static JSON files. This class is activated in the test environment (excluding integration tests)
  * and reads group configurations from JSON files based on the group name.
  *
- * @property uniformName The uniform name used to identify and load the group data.
+ * @property name The name used to identify and load the group data.
  * @property path The path to the directory where static group data JSON files are stored.
  * @property group The `Group` object populated from the JSON data.
  * @throws RuntimeException if the specified resource JSON file is not found.
@@ -61,7 +74,7 @@ class StaticDaplaTeam(
 @Requires(env = ["test"], notEnv = ["integration-test"], property = DAPLA_GROUP_PROPERTY_NAME)
 @EachProperty(DAPLA_GROUP_PROPERTY_NAME)
 class StaticDaplaGroup(
-    @param:Parameter val uniformName: String,
+    @param:Parameter val name: String,
     @param:Property(name = "dapla-groups.static-data-path")
     private val path: Path,
     private val jsonMapper: JsonMapper,
@@ -69,12 +82,19 @@ class StaticDaplaGroup(
     val group: Group = loadGroupData()
 
     private fun loadGroupData(): Group {
-        val resourcePath = "$uniformName.json"
+        val resourcePath = "$name.json"
         val resource =
             Thread.currentThread().contextClassLoader.getResource(path.resolve(resourcePath).toString())
                 ?: throw IllegalArgumentException("Resource not found: $resourcePath")
 
-        return jsonMapper.readValue(resource.readText(), Group::class.java)
+        @Suppress("UNCHECKED_CAST")
+        val response =
+            jsonMapper.readValue(
+                resource.readText(),
+                Argument.of(GraphQlResponse::class.java, GroupData::class.java),
+            ) as GraphQlResponse<GroupData>
+        return response.data?.group
+            ?: throw IllegalArgumentException("Group not found inside data for $resourcePath")
     }
 }
 
@@ -99,15 +119,14 @@ class StaticDaplaTeamService(
      * Retrieves a `Team` instance based on the specified team name.
      *
      * @param teamName The name of the team to retrieve.
-     * @return The `Team` bean corresponding to the given team name.
+     * @return The `Team` object corresponding to the given team name, or null if not found.
      */
     override fun getTeam(teamName: String): Team? =
         runCatching {
-            val team: StaticDaplaTeam = beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName(teamName))
+            val staticTeam = beanContext.getBean(StaticDaplaTeam::class.java, Qualifiers.byName(teamName))
             Team(
-                uniformName = team.uniformName,
-                sectionCode = team.sectionCode,
-                sectionName = team.sectionName,
+                slug = staticTeam.slug,
+                section = Section(code = staticTeam.sectionCode, name = staticTeam.sectionName),
             )
         }.onFailure { e ->
             logger.error("Error fetching static team with name '$teamName': ${e.message}", e)
@@ -117,14 +136,13 @@ class StaticDaplaTeamService(
      * Retrieves a `Group` instance based on the specified group name.
      *
      * @param groupName The name of the group to retrieve.
-     * @return The `Group` bean corresponding to the given group name.
+     * @return The `Group` object corresponding to the given group name, or null if not found.
      */
     override fun getGroup(groupName: String): Group? =
         runCatching {
-            val group: StaticDaplaGroup =
-                beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName(groupName))
+            val staticGroup = beanContext.getBean(StaticDaplaGroup::class.java, Qualifiers.byName(groupName))
             Group(
-                uniformName = group.uniformName,
+                name = staticGroup.name,
             )
         }.onFailure { e ->
             logger.error("Error fetching static group with name '$groupName': ${e.message}", e)

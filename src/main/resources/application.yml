@@ -129,6 +129,11 @@ micronaut:
         clientSecret: ${KEYCLOAK_CLIENT_SECRET}
         health-check: true
         health-check-interval: 15s
+      dapla-api:
+        url:  https://dapla-ctrl.intern.ssb.no
+        health-check: true
+        health-check-interval: 15s
+        health-check-uri: /graphql
 
   klass-web:
     url:

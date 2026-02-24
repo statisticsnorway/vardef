@@ -74,3 +74,15 @@ We use Ktlint for linting
 
 `./gradlew ktlintCheck`
 `./gradlew ktlintFormat`
+
+
+
+## Running integration tests
+Add the file `src/test/resources/application-integration-test.yml` then add the following
+```
+dapla:
+  api:
+    token: DAPLA_API_TOKEN
+```
+
+The DAPLA_API_TOKEN token can be obtained from the `Dapla CLI` and using the defualt dapla-cli-client

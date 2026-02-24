@@ -1,0 +1,1862 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+"""
+A cursor for use in pagination
+
+Cursors are opaque strings that are returned by the server for paginated results, and used when performing backwards / forwards pagination.
+"""
+scalar Cursor
+"Date type in YYYY-MM-DD format."
+scalar Date
+"""
+The slug must:
+
+- contain only lowercase alphanumeric characters or hyphens
+- contain at least 3 characters and at most 17 characters
+- start with an alphabetic character
+- end with an alphanumeric character
+- not contain two hyphens in a row
+
+Examples of valid slugs:
+
+- `some-value`
+- `someothervalue`
+- `my-team-123`
+"""
+scalar Slug
+"Time is a string in [RFC 3339](https://rfc-editor.org/rfc/rfc3339.html) format, with sub-second precision added if present."
+scalar Time
+"Activity log connection."
+type ActivityLogEntryConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [ActivityLogEntry!]!
+  "List of edges."
+  edges: [ActivityLogEntryEdge!]!
+}
+"Activity log edge."
+type ActivityLogEntryEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The log entry."
+  node: ActivityLogEntry!
+}
+"The added group member."
+type AddGroupMemberPayload {
+  member: GroupMember
+}
+type AssignRoleToServiceAccountPayload {
+  "The service account that had a role assigned."
+  serviceAccount: ServiceAccount
+}
+type CreateGroupPayload {
+  "The newly created group."
+  group: Group
+}
+type CreateServiceAccountPayload {
+  "The created service account."
+  serviceAccount: ServiceAccount
+}
+type CreateServiceAccountTokenPayload {
+  "The service account that the token belongs to."
+  serviceAccount: ServiceAccount
+  "The created service account token."
+  serviceAccountToken: ServiceAccountToken
+  """
+  The secret of the service account token.
+  
+  This value is only returned once, and can not be retrieved at a later stage. If the secret is lost, a new token must be created.
+  
+  Once obtained, the secret can be used to authenticate as the service account using the HTTP `Authorization` request header:
+  
+  ```
+  Authorization: Bearer <secret>
+  ```
+  """
+  secret: String
+}
+type CreateTeamPayload {
+  "The newly created team."
+  team: Team
+}
+type DeleteServiceAccountPayload {
+  "Whether or not the service account was deleted."
+  serviceAccountDeleted: Boolean
+}
+type DeleteServiceAccountTokenPayload {
+  "The service account that the token belonged to."
+  serviceAccount: ServiceAccount
+  "Whether or not the service account token was deleted."
+  serviceAccountTokenDeleted: Boolean
+}
+"""
+Container for feature flags that control functionality in the API.
+
+Feature flags are used to enable or disable specific features without requiring code changes.
+"""
+type Features implements Node {
+  "Unique identifier for the feature container."
+  id: ID!
+}
+"The group type represents a group of the Dapla platform and the Dapla GraphQL API."
+type Group implements Node & ActivityLogger {
+  "The globally unique ID of the group."
+  id: ID!
+  "Full name of group."
+  name: String!
+  "The team the group belongs to."
+  teamSlug: Slug!
+  "Category of the group."
+  category: String!
+  "Suffix of the group."
+  suffix: String
+  "Group members."
+  members(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: UserOrder
+  ): GroupMemberConnection!
+  "Activity log associated with the team."
+  activityLog(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Filter items."
+    filter: ActivityLogFilter
+  ): ActivityLogEntryConnection!
+}
+"Group connection."
+type GroupConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [Group!]!
+  "List of edges."
+  edges: [GroupEdge!]!
+}
+type GroupCreatedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug!
+}
+"Group edge."
+type GroupEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The group."
+  node: Group!
+}
+type GroupMember {
+  "Group instance."
+  group: Group!
+  "User instance."
+  user: User!
+}
+type GroupMemberAddedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug!
+  "Data associated with the action."
+  data: GroupMemberAddedActivityLogEntryData!
+}
+type GroupMemberAddedActivityLogEntryData {
+  "The ID of the user that was added."
+  userID: ID!
+  "The email address of the user that was added."
+  userEmail: String!
+}
+type GroupMemberConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [GroupMember!]!
+  "List of edges."
+  edges: [GroupMemberEdge!]!
+}
+type GroupMemberEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The team member."
+  node: GroupMember!
+}
+type GroupMemberRemovedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug!
+  "Data associated with the action."
+  data: GroupMemberRemovedActivityLogEntryData!
+}
+type GroupMemberRemovedActivityLogEntryData {
+  "The ID of the user that was removed."
+  userID: ID!
+  "The email address of the user that was removed."
+  userEmail: String!
+}
+"The mutation root for the Dapla GraphQL API."
+type Mutation {
+  "Create a new team group"
+  createGroup(input: CreateGroupInput!): CreateGroupPayload!
+  """
+  Add a group member
+  
+  If the user is already a member or an owner of the team, the mutation will result in an error.
+  """
+  addGroupMember(input: AddGroupMemberInput!): AddGroupMemberPayload!
+  """
+  Remove a team member
+  
+  If the user is not already a member or an owner of the team, the mutation will result in an error.
+  """
+  removeGroupMember(input: RemoveGroupMemberInput!): RemoveGroupMemberPayload!
+  """
+  Enable a reconciler
+  
+  A reconciler must be fully configured before it can be enabled.
+  """
+  enableReconciler(input: EnableReconcilerInput!): Reconciler!
+  """
+  Disable a reconciler
+  
+  The reconciler configuration will be left intact.
+  """
+  disableReconciler(input: DisableReconcilerInput!): Reconciler!
+  "Configure a reconciler."
+  configureReconciler(input: ConfigureReconcilerInput!): Reconciler!
+  "Create a service account."
+  createServiceAccount(input: CreateServiceAccountInput!): CreateServiceAccountPayload!
+  "Update a service account."
+  updateServiceAccount(input: UpdateServiceAccountInput!): UpdateServiceAccountPayload!
+  "Delete a service account."
+  deleteServiceAccount(input: DeleteServiceAccountInput!): DeleteServiceAccountPayload!
+  "Assign a role to a service account."
+  assignRoleToServiceAccount(input: AssignRoleToServiceAccountInput!): AssignRoleToServiceAccountPayload!
+  "Revoke a role from a service account."
+  revokeRoleFromServiceAccount(input: RevokeRoleFromServiceAccountInput!): RevokeRoleFromServiceAccountPayload!
+  """
+  Create a service account token.
+  
+  The secret is automatically generated, and is returned as a part of the payload for this mutation. The secret can
+  not be retrieved at a later stage.
+  
+  A service account can have multiple active tokens at the same time.
+  """
+  createServiceAccountToken(input: CreateServiceAccountTokenInput!): CreateServiceAccountTokenPayload!
+  """
+  Update a service account token.
+  
+  Note that the secret itself can not be updated, only the metadata.
+  """
+  updateServiceAccountToken(input: UpdateServiceAccountTokenInput!): UpdateServiceAccountTokenPayload!
+  "Delete a service account token."
+  deleteServiceAccountToken(input: DeleteServiceAccountTokenInput!): DeleteServiceAccountTokenPayload!
+  """
+  Create a new Dapla team
+  
+  The user creating the team will be granted team ownership, unless the user is a service account, in which case the
+  team will not get an initial owner. To add one or more owners to the team, refer to the `addTeamOwners` mutation.
+  
+  Creation of a team will also create external resources for the team, which will be managed by the Dapla API
+  reconcilers. This will be done asynchronously.
+  """
+  createTeam(input: CreateTeamInput!): CreateTeamPayload!
+  """
+  Update an existing Dapla team
+  
+  This mutation can be used to update team metadata. It is not possible to update the team slug.
+  """
+  updateTeam(input: UpdateTeamInput!): UpdateTeamPayload!
+}
+"""
+This type is used for paginating the connection
+
+Learn more about how we have implemented pagination in the [GraphQL Best Practices documentation](https://graphql.org/learn/pagination/).
+"""
+type PageInfo {
+  "Whether or not there exists a next page in the connection."
+  hasNextPage: Boolean!
+  "The cursor for the last item in the edges. This cursor is used when paginating forwards."
+  endCursor: Cursor
+  "Whether or not there exists a previous page in the connection."
+  hasPreviousPage: Boolean!
+  "The cursor for the first item in the edges. This cursor is used when paginating backwards."
+  startCursor: Cursor
+  "The total amount of items in the connection."
+  totalCount: Int!
+  "The offset of the first item in the connection."
+  pageStart: Int!
+  "The offset of the last item in the connection."
+  pageEnd: Int!
+}
+"The query root for the Dapla GraphQL API."
+type Query {
+  "Fetch an object using its globally unique ID."
+  node(
+    "The ID of the object to fetch."
+    id: ID!
+  ): Node
+  "All activity logs across all teams and resources."
+  activityLog(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Filter items."
+    filter: ActivityLogFilter
+  ): ActivityLogEntryConnection!
+  "Get a list of roles."
+  roles(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor
+  ): RoleConnection!
+  """
+  Get feature flags configuration.
+  
+  Feature flags control which features are enabled or disabled in the API.
+  """
+  features: Features!
+  "Get a list of groups."
+  groups(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: GroupOrder,
+    "Filter the results"
+    filter: GroupFilter
+  ): GroupConnection!
+  "Get a group by its name."
+  group(name: String!): Group!
+  "Get a collection of reconcilers."
+  reconcilers(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor
+  ): ReconcilerConnection!
+  "Search for entities."
+  search(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Filter the search results."
+    filter: SearchFilter!
+  ): SearchNodeConnection!
+  "Get a list of sections."
+  sections(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: SectionOrder
+  ): SectionConnection!
+  "Get a section by its code, e.g. '724'."
+  section(code: String!): Section!
+  "Get a list of service accounts."
+  serviceAccounts(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor
+  ): ServiceAccountConnection!
+  "Returns a service account by its ID."
+  serviceAccount(
+    "ID of the service account."
+    id: ID!
+  ): ServiceAccount!
+  "Get a list of Shared Buckets."
+  sharedBuckets(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: SharedBucketOrder
+  ): SharedBucketConnection!
+  "Get a Shared Bucket by its name, e.g. 'ssb-my-team-data-delt-abc-prod'."
+  sharedBucket(name: String!): SharedBucket!
+  "Get a list of teams."
+  teams(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: TeamOrder
+  ): TeamConnection!
+  "Get a team by its slug."
+  team(slug: Slug!): Team!
+  "Get a list of users."
+  users(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: UserOrder
+  ): UserConnection!
+  "Get a user by an identifier."
+  user(email: String): User!
+  "The currently authenticated user."
+  me: AuthenticatedUser!
+  "Log entries from the user sync process."
+  userSyncLog(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor
+  ): UserSyncLogEntryConnection!
+}
+"""
+A reconciler manages external resources for teams.
+
+Reconcilers are responsible for creating, updating, and deleting external resources (such as groups, repositories, etc.) based on team configuration.
+"""
+type Reconciler implements Node & ActivityLogger {
+  "Unique identifier for the reconciler."
+  id: ID!
+  "The name of the reconciler."
+  name: String!
+  "The human-friendly name of the reconciler."
+  displayName: String!
+  "Description of what the reconciler is responsible for."
+  description: String!
+  "Whether or not the reconciler is enabled."
+  enabled: Boolean!
+  "Reconciler configuration keys and descriptions."
+  config: [ReconcilerConfig!]!
+  "Whether or not the reconciler is fully configured and ready to be enabled."
+  configured: Boolean!
+  "Potential errors that have occurred during the reconciler's operation."
+  errors(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor
+  ): ReconcilerErrorConnection!
+  "Activity log associated with the reconciler."
+  activityLog(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Filter items."
+    filter: ActivityLogFilter
+  ): ActivityLogEntryConnection!
+}
+"""
+Configuration for a reconciler.
+
+Reconcilers can be configured with various settings that control their behavior.
+"""
+type ReconcilerConfig {
+  "Configuration key."
+  key: String!
+  "The human-friendly name of the configuration key."
+  displayName: String!
+  "Configuration description."
+  description: String!
+  "Whether or not the configuration key has a value."
+  configured: Boolean!
+  "Whether or not the configuration value is considered a secret. Secret values will not be exposed through the API."
+  secret: Boolean!
+  "Configuration value. This will be set to null if the value is considered a secret."
+  value: String
+}
+"Activity log entry for when a reconciler is configured."
+type ReconcilerConfiguredActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug!
+  "Data associated with the update."
+  data: ReconcilerConfiguredActivityLogEntryData!
+}
+"Data associated with a reconciler configuration activity log entry."
+type ReconcilerConfiguredActivityLogEntryData {
+  "Keys that were updated."
+  updatedKeys: [String!]!
+}
+"Connection type for paginated reconciler results."
+type ReconcilerConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [Reconciler!]!
+  "List of edges."
+  edges: [ReconcilerEdge!]!
+}
+"Activity log entry for when a reconciler is disabled."
+type ReconcilerDisabledActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug!
+}
+"Edge type for reconciler connections."
+type ReconcilerEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The reconciler."
+  node: Reconciler!
+}
+"Activity log entry for when a reconciler is enabled."
+type ReconcilerEnabledActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug!
+}
+"""
+An error that occurred during a reconciler's operation.
+
+Reconciler errors are logged when a reconciler fails to perform its operations, such as creating or updating external resources.
+"""
+type ReconcilerError implements Node {
+  "Unique identifier for the reconciler error."
+  id: ID!
+  "The correlation ID for the reconciler error."
+  correlationID: String!
+  "Creation timestamp of the reconciler error."
+  createdAt: Time!
+  "The error message itself."
+  message: String!
+  "The team that the error belongs to."
+  team: Team!
+}
+"Connection type for paginated reconciler error results."
+type ReconcilerErrorConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [ReconcilerError!]!
+  "List of edges."
+  edges: [ReconcilerErrorEdge!]!
+}
+"Edge type for reconciler error connections."
+type ReconcilerErrorEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The reconciler error."
+  node: ReconcilerError!
+}
+type RemoveGroupMemberPayload {
+  "The user who was removed from the group."
+  user: User
+  "The group the user was removed from."
+  group: Group
+}
+type RevokeRoleFromServiceAccountPayload {
+  "The service account that had a role revoked."
+  serviceAccount: ServiceAccount
+}
+"""
+A role that can be assigned to users or service accounts.
+
+Roles define permissions and access levels within the API.
+"""
+type Role implements Node {
+  "The globally unique ID of the role."
+  id: ID!
+  "Name of the role."
+  name: String!
+  "Description of the role."
+  description: String!
+}
+type RoleAssignedToServiceAccountActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+  "Data associated with the entry."
+  data: RoleAssignedToServiceAccountActivityLogEntryData!
+}
+type RoleAssignedToServiceAccountActivityLogEntryData {
+  "The added role."
+  roleName: String!
+}
+"Assigned role to user log entry."
+type RoleAssignedUserSyncLogEntry implements UserSyncLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the log entry."
+  message: String!
+  "The ID of the user that was assigned a role."
+  userID: ID!
+  "The name of the user that was assigned a role."
+  userName: String!
+  "The email address of the user that was assigned a role."
+  userEmail: String!
+  "The name of the assigned role."
+  roleName: String!
+}
+"Connection type for paginated role results."
+type RoleConnection {
+  "A list of roles."
+  nodes: [Role!]!
+  "A list of role edges."
+  edges: [RoleEdge!]!
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+}
+"Edge type for role connections."
+type RoleEdge {
+  "The role."
+  node: Role!
+  "A cursor for use in pagination."
+  cursor: Cursor!
+}
+type RoleRevokedFromServiceAccountActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+  "Data associated with the entry."
+  data: RoleRevokedFromServiceAccountActivityLogEntryData!
+}
+type RoleRevokedFromServiceAccountActivityLogEntryData {
+  "The removed role."
+  roleName: String!
+}
+"Revoked role from user log entry."
+type RoleRevokedUserSyncLogEntry implements UserSyncLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the log entry."
+  message: String!
+  "The ID of the user that got a role revoked."
+  userID: ID!
+  "The name of the user that got a role revoked."
+  userName: String!
+  "The email address of the user that got a role revoked."
+  userEmail: String!
+  "The name of the revoked role."
+  roleName: String!
+}
+"Search node connection."
+type SearchNodeConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [SearchNode!]!
+  "List of edges."
+  edges: [SearchNodeEdge!]!
+}
+"Search node edge."
+type SearchNodeEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The SearchNode."
+  node: SearchNode!
+}
+"The section type represents a section of the Dapla platform and the Dapla GraphQL API."
+type Section implements Node {
+  "The globally unique ID of the section."
+  id: ID!
+  "Code of the section."
+  code: String!
+  "Full name of section."
+  name: String!
+  "The manager of the section."
+  manager: User
+}
+"section connection."
+type SectionConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [Section!]!
+  "List of edges."
+  edges: [SectionEdge!]!
+}
+"section edge."
+type SectionEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The section."
+  node: Section!
+}
+"""
+The service account type represents machine-users of the Dapla API.
+
+These types of users can be used to automate certain parts of the API, for instance team creation and managing team members.
+
+Service accounts are created using the `createServiceAccount` mutation, and authenticate using tokens generated by the `createServiceAccountToken` mutation.
+"""
+type ServiceAccount implements Node {
+  "The globally unique ID of the service account."
+  id: ID!
+  "The name of the service account."
+  name: String!
+  "The description of the service account."
+  description: String!
+  "Creation time of the service account."
+  createdAt: Time!
+  "When the service account was last updated."
+  updatedAt: Time!
+  "When the service account was last used for authentication."
+  lastUsedAt: Time
+  "The team that the service account belongs to."
+  team: Team
+  "The roles that are assigned to the service account."
+  roles(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor
+  ): RoleConnection!
+  "The service account tokens."
+  tokens(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor
+  ): ServiceAccountTokenConnection!
+}
+type ServiceAccountConnection {
+  "A list of service accounts."
+  nodes: [ServiceAccount!]!
+  "A list of edges."
+  edges: [ServiceAccountEdge!]!
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+}
+type ServiceAccountCreatedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+}
+type ServiceAccountDeletedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+}
+type ServiceAccountEdge {
+  "The service account."
+  node: ServiceAccount!
+  "A cursor for use in pagination."
+  cursor: Cursor!
+}
+type ServiceAccountToken implements Node {
+  "The globally unique ID of the service account token."
+  id: ID!
+  "The name of the service account token."
+  name: String!
+  "The description of the service account token."
+  description: String!
+  "When the service account token was created."
+  createdAt: Time!
+  "When the service account token was last updated."
+  updatedAt: Time!
+  "When the service account token was last used for authentication."
+  lastUsedAt: Time
+  "Expiry date of the token. If this value is empty the token never expires."
+  expiresAt: Date
+}
+type ServiceAccountTokenConnection {
+  "A list of service accounts tokens."
+  nodes: [ServiceAccountToken!]!
+  "A list of edges."
+  edges: [ServiceAccountTokenEdge!]!
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+}
+type ServiceAccountTokenCreatedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+  "Data associated with the entry."
+  data: ServiceAccountTokenCreatedActivityLogEntryData!
+}
+type ServiceAccountTokenCreatedActivityLogEntryData {
+  "The name of the service account token."
+  tokenName: String!
+}
+type ServiceAccountTokenDeletedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+  "Data associated with the entry."
+  data: ServiceAccountTokenDeletedActivityLogEntryData!
+}
+type ServiceAccountTokenDeletedActivityLogEntryData {
+  "The name of the service account token."
+  tokenName: String!
+}
+type ServiceAccountTokenEdge {
+  "The service account token."
+  node: ServiceAccountToken!
+  "A cursor for use in pagination."
+  cursor: Cursor!
+}
+type ServiceAccountTokenUpdatedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+  "Data associated with the entry."
+  data: ServiceAccountTokenUpdatedActivityLogEntryData!
+}
+type ServiceAccountTokenUpdatedActivityLogEntryData {
+  "Fields that were updated."
+  updatedFields: [ServiceAccountTokenUpdatedActivityLogEntryDataUpdatedField!]!
+}
+type ServiceAccountTokenUpdatedActivityLogEntryDataUpdatedField {
+  "The name of the field."
+  field: String!
+  "The old value of the field."
+  oldValue: String
+  "The new value of the field."
+  newValue: String
+}
+type ServiceAccountUpdatedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+  "Data associated with the entry."
+  data: ServiceAccountUpdatedActivityLogEntryData!
+}
+type ServiceAccountUpdatedActivityLogEntryData {
+  "Fields that were updated."
+  updatedFields: [ServiceAccountUpdatedActivityLogEntryDataUpdatedField!]!
+}
+type ServiceAccountUpdatedActivityLogEntryDataUpdatedField {
+  "The name of the field."
+  field: String!
+  "The old value of the field."
+  oldValue: String
+  "The new value of the field."
+  newValue: String
+}
+"The SharedBucket type represents a Shared Bucket of the Dapla platform and the Dapla GraphQL API."
+type SharedBucket implements Node {
+  "The globally unique ID of the SharedBucket."
+  id: ID!
+  """
+  Name of the Shared Bucket.
+  
+  This is equal to "ssb-<teamSlug>-data-delt-<shortName>-<env>"
+  """
+  name: String!
+  "The kind of the (standard/delomat)."
+  kind: String!
+  "Shortname of the bucket"
+  shortName: String!
+  "Which env the bucket is in (test/prod)"
+  env: String!
+  "The team that owns the bucket"
+  team: Team!
+  "List the groups who have access to the bucket."
+  groups(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: GroupOrder,
+    "Filter the results"
+    filter: GroupFilter
+  ): GroupConnection!
+  """
+  List the users who have access to the bucket.
+  
+  The entries are not unique, i.e. one user might show up multiple times if they have access
+  via multiple groups. Use uniqueUsers to get a list of unique users with access.
+  """
+  users(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: UserOrder
+  ): TeamMemberConnection!
+  "List the unique users who have access to the bucket."
+  uniqueUsers(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: UserOrder
+  ): UserConnection!
+  "List the teams that have access to the bucket."
+  teams(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: TeamOrder
+  ): TeamConnection!
+}
+"SharedBucketStopgap connection."
+type SharedBucketConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [SharedBucket!]!
+  "List of edges."
+  edges: [SharedBucketEdge!]!
+}
+"SharedBucket edge."
+type SharedBucketEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The SharedBucketStopgap."
+  node: SharedBucket!
+}
+"""
+The team type represents a team on the Dapla platform.
+
+External resources (e.g. entraIDGroupID, gitHubTeamSlug) are managed by Dapla API reconcilers.
+"""
+type Team implements Node & ActivityLogger {
+  "The globally unique ID of the team."
+  id: ID!
+  "Unique slug of the team."
+  slug: Slug!
+  "The human friendly name of the team"
+  displayName: String!
+  "Section who owns the team"
+  section: Section!
+  "The autonomy level of the team"
+  isManaged: Boolean!
+  "Team members."
+  members(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: UserOrder
+  ): TeamMemberConnection!
+  groups(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: GroupOrder,
+    "Filter the results"
+    filter: GroupFilter
+  ): GroupConnection!
+  sharedBuckets(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: SharedBucketOrder
+  ): SharedBucketConnection!
+  "Get the shared buckets the team has access to."
+  sharedBucketsAccess(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: SharedBucketOrder
+  ): SharedBucketConnection!
+  "Timestamp of the last successful synchronization of the team."
+  lastSuccessfulSync: Time
+  "Whether or not the team is currently being deleted."
+  deletionInProgress: Boolean!
+  "Whether or not the viewer is an owner of the team."
+  viewerIsOwner: Boolean!
+  "Whether or not the viewer is a member of the team."
+  viewerIsMember: Boolean!
+  "Activity log associated with the team."
+  activityLog(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Filter items."
+    filter: ActivityLogFilter
+  ): ActivityLogEntryConnection!
+}
+type TeamConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [Team!]!
+  "List of edges."
+  edges: [TeamEdge!]!
+}
+type TeamCreatedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug!
+}
+type TeamEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The team."
+  node: Team!
+}
+type TeamMember {
+  "Team instance."
+  team: Team!
+  "User instance."
+  user: User!
+  "Groups the user has in the team."
+  groups: [Group!]!
+}
+type TeamMemberConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [TeamMember!]!
+  "List of edges."
+  edges: [TeamMemberEdge!]!
+}
+type TeamMemberEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The team member."
+  node: TeamMember!
+}
+type TeamUpdatedActivityLogEntry implements ActivityLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug!
+  "Data associated with the update."
+  data: TeamUpdatedActivityLogEntryData!
+}
+type TeamUpdatedActivityLogEntryData {
+  "Fields that were updated."
+  updatedFields: [TeamUpdatedActivityLogEntryDataUpdatedField!]!
+}
+type TeamUpdatedActivityLogEntryDataUpdatedField {
+  "The name of the field."
+  field: String!
+  "The old value of the field."
+  oldValue: String
+  "The new value of the field."
+  newValue: String
+}
+type UpdateServiceAccountPayload {
+  "The updated service account."
+  serviceAccount: ServiceAccount
+}
+type UpdateServiceAccountTokenPayload {
+  "The service account that the token belongs to."
+  serviceAccount: ServiceAccount
+  "The updated service account token."
+  serviceAccountToken: ServiceAccountToken
+}
+type UpdateTeamPayload {
+  "The updated team."
+  team: Team
+}
+"The user type represents a user of the Dapla platform and the Dapla GraphQL API."
+type User implements Node {
+  "The globally unique ID of the user."
+  id: ID!
+  "The email address of the user."
+  email: String!
+  "The full name of the user."
+  name: String!
+  "The first name of the user."
+  firstName: String!
+  "The last name of the user."
+  lastName: String!
+  "The job title of the user."
+  jobTitle: String
+  "The external ID of the user. This value is managed by the Dapla API user synchronization."
+  externalID: String!
+  "The section the user belongs to, nullable in case the user has an invalid section, i.e. not synced to the database."
+  section: Section
+  "List of teams the user is connected to."
+  teams(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: TeamOrder
+  ): TeamMemberConnection!
+  "List of users the user is in a team with."
+  teamMembers(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: UserOrder
+  ): UserConnection!
+  "Get a list of the groups the user is a member of."
+  groups(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: GroupOrder,
+    "Filter the results"
+    filter: GroupFilter
+  ): GroupMemberConnection!
+  "Get the shared buckets the user has access to."
+  sharedBucketsAccess(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Ordering options for items returned from the connection."
+    orderBy: SharedBucketOrder
+  ): SharedBucketConnection!
+  "True if the user is global admin."
+  isAdmin: Boolean!
+  "True if the user is a section mnager."
+  isSectionManager: Boolean!
+}
+"User connection."
+type UserConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [User!]!
+  "List of edges."
+  edges: [UserEdge!]!
+}
+"User created log entry."
+type UserCreatedUserSyncLogEntry implements UserSyncLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the log entry."
+  message: String!
+  "The ID of the created user."
+  userID: ID!
+  "The name of the created user."
+  userName: String!
+  "The email address of the created user."
+  userEmail: String!
+}
+"User deleted log entry."
+type UserDeletedUserSyncLogEntry implements UserSyncLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the log entry."
+  message: String!
+  "The ID of the deleted user."
+  userID: ID!
+  "The name of the deleted user."
+  userName: String!
+  "The email address of the deleted user."
+  userEmail: String!
+}
+"User edge."
+type UserEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The user."
+  node: User!
+}
+"User sync log entry connection."
+type UserSyncLogEntryConnection {
+  "Pagination information."
+  pageInfo: PageInfo!
+  "List of nodes."
+  nodes: [UserSyncLogEntry!]!
+  "List of edges."
+  edges: [UserSyncLogEntryEdge!]!
+}
+"User sync log edge."
+type UserSyncLogEntryEdge {
+  "Cursor for this edge that can be used for pagination."
+  cursor: Cursor!
+  "The log entry."
+  node: UserSyncLogEntry!
+}
+"User updated log entry."
+type UserUpdatedUserSyncLogEntry implements UserSyncLogEntry & Node {
+  "ID of the entry."
+  id: ID!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the log entry."
+  message: String!
+  "The ID of the updated user."
+  userID: ID!
+  "The name of the updated user."
+  userName: String!
+  "The email address of the updated user."
+  userEmail: String!
+  "The old name of the user."
+  oldUserName: String!
+  "The old email address of the user."
+  oldUserEmail: String!
+}
+"Interface for activity log entries."
+interface ActivityLogEntry {
+  "ID of the entry."
+  id: ID!
+  "The identity of the actor who performed the action. The value is either the name of a service account, or the email address of a user."
+  actor: String!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the entry."
+  message: String!
+  "Type of the resource that was affected by the action."
+  resourceType: ActivityLogEntryResourceType!
+  "Name of the resource that was affected by the action."
+  resourceName: String!
+  "The team slug that the entry belongs to."
+  teamSlug: Slug
+}
+interface ActivityLogger {
+  "Activity log associated with the type."
+  activityLog(
+    "Get the first n items in the connection. This can be used in combination with the after parameter."
+    first: Int,
+    "Get items after this cursor."
+    after: Cursor,
+    "Get the last n items in the connection. This can be used in combination with the before parameter."
+    last: Int,
+    "Get items before this cursor."
+    before: Cursor,
+    "Filter items."
+    filter: ActivityLogFilter
+  ): ActivityLogEntryConnection!
+}
+"This interface is implemented by types that supports the [Global Object Identification specification](https://graphql.org/learn/global-object-identification/)."
+interface Node {
+  "Globally unique ID of the object."
+  id: ID!
+}
+"Interface for user sync log entries."
+interface UserSyncLogEntry {
+  "ID of the entry."
+  id: ID!
+  "Creation time of the entry."
+  createdAt: Time!
+  "Message that summarizes the log entry."
+  message: String!
+  "The ID of the affected user."
+  userID: ID!
+  "The name of the affected user."
+  userName: String!
+  "The email address of the affected user."
+  userEmail: String!
+}
+"Authenticated user type."
+union AuthenticatedUser = User | ServiceAccount
+"Types that can be searched for."
+union SearchNode = Team | Group | SharedBucket
+enum ActivityLogActivityType {
+  "Group was created."
+  GROUP_CREATED
+  "Group member was added."
+  GROUP_MEMBER_ADDED
+  "Group member was removed."
+  GROUP_MEMBER_REMOVED
+  "Reconciler enabled activity log entry."
+  RECONCILER_ENABLED
+  "Reconciler disabled activity log entry."
+  RECONCILER_DISABLED
+  "Reconciler configured activity log entry."
+  RECONCILER_CONFIGURED
+  "Team was created."
+  TEAM_CREATED
+  "Team was updated."
+  TEAM_UPDATED
+}
+"The type of the resource that was affected by the activity."
+enum ActivityLogEntryResourceType {
+  "Unknown type."
+  UNKNOWN
+  "All activity log entries related to groups will use this resource type."
+  GROUP
+  "All activity log entries related to reconcilers will use this resource type."
+  RECONCILER
+  SERVICE_ACCOUNT
+  "All activity log entries related to teams will use this resource type."
+  TEAM
+}
+"Possible fields to order groups by."
+enum GroupOrderField {
+  "The full name of the group."
+  NAME
+  "The team of the group."
+  TEAM
+  "The category of the group."
+  CATEGORY
+}
+"Possible directions in which to order a list of items."
+enum OrderDirection {
+  "Ascending sort order."
+  ASC
+  "Descending sort order."
+  DESC
+}
+"A list of possible search types."
+enum SearchType {
+  "Search for teams."
+  TEAM
+  GROUP
+  SHAREDBUCKET
+}
+"Possible fields to order sections by."
+enum SectionOrderField {
+  "The code of the section."
+  CODE
+}
+"Possible fields to order SharedBucket by."
+enum SharedBucketOrderField {
+  "The name of the shared bucket."
+  NAME
+  "The kind of the shared bucket."
+  KIND
+  "The short name of the shared bucket."
+  SHORT_NAME
+  "The environment of the shared bucket."
+  ENV
+  "The team who owns the shared bucket."
+  TEAM
+}
+"Possible fields to order teams by."
+enum TeamOrderField {
+  "The unique slug of the team."
+  SLUG
+  "The section code of the team."
+  SECTION_CODE
+}
+"Possible fields to order users by."
+enum UserOrderField {
+  "The name of the user."
+  NAME
+  "The email address of the user."
+  EMAIL
+  "The section code of the user."
+  SECTION_CODE
+}
+input ActivityLogFilter {
+  activityTypes: [ActivityLogActivityType!]
+}
+input AddGroupMemberInput {
+  "Name of the group that should receive a new member."
+  groupName: String!
+  "Email of the user to add to the group."
+  userEmail: String!
+}
+input AssignRoleToServiceAccountInput {
+  "The ID of the service account to assign the role to."
+  serviceAccountID: ID!
+  "The name of the role to assign."
+  roleName: String!
+}
+"Input for configuring a reconciler."
+input ConfigureReconcilerInput {
+  "The name of the reconciler to configure."
+  name: String!
+  "List of reconciler config inputs."
+  config: [ReconcilerConfigInput!]!
+}
+input ConfirmTeamDeletionInput {
+  "Slug of the team to confirm deletion for."
+  slug: Slug!
+  "Deletion key, acquired using the requestTeamDeletion mutation."
+  key: String!
+}
+input CreateGroupInput {
+  "Slug of the team the group belongs to."
+  teamSlug: Slug!
+  "Category of the group."
+  category: String!
+  "Suffix of the group."
+  suffix: String
+}
+input CreateServiceAccountInput {
+  "The name of the service account."
+  name: String!
+  "A description of the service account."
+  description: String!
+  "The team slug of whom owns the service account."
+  teamSlug: Slug!
+}
+input CreateServiceAccountTokenInput {
+  "The ID of the service account to create the token for."
+  serviceAccountID: ID!
+  "The name of the service account token."
+  name: String!
+  "The description of the service account token."
+  description: String!
+  """
+  Optional expiry date of the token.
+  
+  If not specified, the token will never expire.
+  """
+  expiresAt: Date
+}
+input CreateTeamInput {
+  """
+  Unique team slug.
+  
+  After creation, this value can not be changed. Also, after a potential deletion of the team, the slug can not be
+  reused, so please choose wisely.
+  """
+  slug: Slug!
+  "Human friendly name of the team."
+  displayName: String!
+  """
+  The code of the section the team belongs to.
+  
+  If this is not provided, it will be set to the user's section (if they are a section manager) or 724 if they are
+  Dapla Admins. Non-admins cannot set this to a custom value.
+  """
+  sectionCode: String
+  """
+  The autonomy level of the team.
+  
+  If this is not provided, it will be set to true.
+  """
+  isManaged: Boolean
+}
+input DeleteServiceAccountInput {
+  "The ID of the service account to delete."
+  serviceAccountID: ID!
+}
+input DeleteServiceAccountTokenInput {
+  "The ID of the service account token to delete."
+  serviceAccountTokenID: ID!
+}
+"Input for disabling a reconciler."
+input DisableReconcilerInput {
+  "The name of the reconciler to disable."
+  name: String!
+}
+"Input for enabling a reconciler."
+input EnableReconcilerInput {
+  "The name of the reconciler to enable."
+  name: String!
+}
+input GroupFilter {
+  "Filter by group categories, e.g. developers and data-admins"
+  categories: [String!]
+}
+"Ordering options when fetching users."
+input GroupOrder {
+  "The field to order items by."
+  field: GroupOrderField!
+  "The direction to order items by."
+  direction: OrderDirection!
+}
+"Input for configuring a reconciler."
+input ReconcilerConfigInput {
+  "Configuration key."
+  key: String!
+  "Configuration value."
+  value: String!
+}
+input RemoveGroupMemberInput {
+  "Name of the group that the member should be removed from."
+  groupName: String!
+  "Email of the user to remove from the group."
+  userEmail: String!
+}
+input RequestTeamDeletionInput {
+  "Slug of the team to request a team deletion key for."
+  slug: Slug!
+}
+input RevokeRoleFromServiceAccountInput {
+  "The ID of the service account to revoke the role from."
+  serviceAccountID: ID!
+  "The name of the role to revoke."
+  roleName: String!
+}
+"Search filter for filtering search results."
+input SearchFilter {
+  "The query string."
+  query: String!
+  "The type of entities to search for. If not specified, all types will be searched."
+  type: SearchType
+}
+"Ordering options when fetching sections."
+input SectionOrder {
+  "The field to order items by."
+  field: SectionOrderField!
+  "The direction to order items by."
+  direction: OrderDirection!
+}
+"Ordering options when fetching SharedBucket."
+input SharedBucketOrder {
+  "The field to order items by."
+  field: SharedBucketOrderField!
+  "The direction to order items by."
+  direction: OrderDirection!
+}
+"Ordering options when fetching teams."
+input TeamOrder {
+  "The field to order items by."
+  field: TeamOrderField!
+  "The direction to order items by."
+  direction: OrderDirection!
+}
+input UpdateServiceAccountInput {
+  "The ID of the service account to update."
+  serviceAccountID: ID!
+  """
+  The new description of the service account.
+  
+  If not specified, the description will remain unchanged.
+  """
+  description: String
+}
+input UpdateServiceAccountTokenInput {
+  "The ID of the service account token to update."
+  serviceAccountTokenID: ID!
+  """
+  The new name of the service account token.
+  
+  If not specified, the name will remain unchanged.
+  """
+  name: String
+  """
+  The new description of the service account token.
+  
+  If not specified, the description will remain unchanged.
+  """
+  description: String
+}
+input UpdateTeamInput {
+  "Slug of the team to update."
+  slug: Slug!
+  """
+  An optional new display name of the team.
+  
+  When omitted the existing value will not be updated.
+  """
+  displayName: String
+}
+"Ordering options when fetching users."
+input UserOrder {
+  "The field to order items by."
+  field: UserOrderField!
+  "The direction to order items by."
+  direction: OrderDirection!
+}
+"Directs the executor to defer this fragment when the `if` argument is true or undefined."
+directive @defer(
+    "Deferred when true or undefined."
+    if: Boolean = true,
+    "Unique name"
+    label: String
+  ) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+"Indicates exactly one field must be supplied and this field must not be `null`."
+directive @oneOf on INPUT_OBJECT
+"Exposes a URL that specifies the behavior of this scalar."
+directive @specifiedBy(
+    "The URL that specifies the behavior of this scalar."
+    url: String!
+  ) on SCALAR
+

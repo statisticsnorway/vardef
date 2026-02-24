@@ -12,9 +12,9 @@ import java.util.stream.Stream
 
 @Requires(env = ["integration-test"])
 @MicronautTest
-class DaplaTeamApiServiceTest {
+class DaplaApiServiceTest {
     @Inject
-    lateinit var daplaTeamApiService: DaplaTeamApiService
+    lateinit var daplaTeamApiService: DaplaApiService
 
     @ParameterizedTest
     @MethodSource("fetchTeam")
@@ -22,7 +22,7 @@ class DaplaTeamApiServiceTest {
         teamName: String,
         expectedResult: String?,
     ) {
-        assertThat(daplaTeamApiService.getTeam(teamName)?.uniformName).isEqualTo(expectedResult)
+        assertThat(daplaTeamApiService.getTeam(teamName)?.slug).isEqualTo(expectedResult)
     }
 
     @ParameterizedTest
@@ -31,7 +31,7 @@ class DaplaTeamApiServiceTest {
         groupName: String,
         expectedResult: String?,
     ) {
-        assertThat(daplaTeamApiService.getGroup(groupName)?.uniformName).isEqualTo(expectedResult)
+        assertThat(daplaTeamApiService.getGroup(groupName)?.name).isEqualTo(expectedResult)
     }
 
     @ParameterizedTest

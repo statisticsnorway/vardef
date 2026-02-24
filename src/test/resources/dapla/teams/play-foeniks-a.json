@@ -1,25 +1,11 @@
 {
-  "uniform_name": "play-foeniks-a",
-  "display_name": "Play Føniks A",
-  "division_name": "IT (Avdeling 700)",
-  "section_name": "Dataplattform (724)",
-  "section_code": "724",
-  "autonomy_level": "SELF_MANAGED",
-  "_links": {
-    "iac_repo": {
-      "href": "https://github.com/statisticsnorway/play-foeniks-a-iac"
-    },
-    "self": {
-      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/teams/play-foeniks-a"
-    },
-    "groups": {
-      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/teams/play-foeniks-a/groups"
-    },
-    "users": {
-      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/teams/play-foeniks-a/users"
-    },
-    "section_manager": {
-      "href": "https://dapla-team-api-v2.prod-bip-app.ssb.no/users/amk%40ssb.no"
+  "data": {
+    "team": {
+      "slug": "play-foeniks-a",
+      "section": {
+        "code": "724",
+        "name": "Dataplattform (724)"
+      }
     }
   }
 }

@@ -1,0 +1,5 @@
+query GetGroup($name: String!) {
+    group(name: $name) {
+        name
+    }
+}

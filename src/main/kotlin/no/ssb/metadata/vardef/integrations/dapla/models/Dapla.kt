@@ -1,22 +1,44 @@
 package no.ssb.metadata.vardef.integrations.dapla.models
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.micronaut.serde.annotation.Serdeable
-import io.micronaut.serde.config.naming.SnakeCaseStrategy
 
 /**
- * Data classes for dapla-team-api response
+ * Generic data class for dapla-api GraphQL response
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Serdeable(naming = SnakeCaseStrategy::class)
-data class Team(
-    val uniformName: String,
-    val sectionCode: String,
-    val sectionName: String,
+@Serdeable
+data class GraphQlResponse<T>(
+    val data: T?,
 )
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Serdeable(naming = SnakeCaseStrategy::class)
+@Serdeable
+data class GraphQlRequest(
+    val query: String,
+    val variables: Map<String, Any?> = emptyMap(),
+)
+
+@Serdeable
+data class GroupData(
+    val group: Group?,
+)
+
+@Serdeable
 data class Group(
-    val uniformName: String,
+    val name: String,
+)
+
+@Serdeable
+data class TeamData(
+    val team: Team?,
+)
+
+@Serdeable
+data class Team(
+    val slug: String,
+    val section: Section?,
+)
+
+@Serdeable
+data class Section(
+    val code: String,
+    val name: String?,
 )

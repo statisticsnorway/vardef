@@ -7,22 +7,26 @@ import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.integrations.dapla.models.GraphQlResponse
 import no.ssb.metadata.vardef.integrations.dapla.models.Group
+import no.ssb.metadata.vardef.integrations.dapla.models.GroupData
+import no.ssb.metadata.vardef.integrations.dapla.models.Section
 import no.ssb.metadata.vardef.integrations.dapla.models.Team
+import no.ssb.metadata.vardef.integrations.dapla.models.TeamData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 
 @MicronautTest
-class DaplaTeamApiMockkServiceTest {
-    private val mockkDaplaTeamApiClient: DaplaTeamApiClient = mockk<DaplaTeamApiClient>()
+class DaplaApiMockkServiceTest {
+    private val mockkDaplaTeamApiClient: DaplaApiClient = mockk<DaplaApiClient>()
 
     @Inject
-    private lateinit var daplaTeamApiService: DaplaTeamApiService
+    private lateinit var daplaTeamApiService: DaplaApiService
 
     @Primary
-    @MockBean(DaplaTeamApiClient::class)
-    fun mockkDaplaTeamApiClient(): DaplaTeamApiClient = mockkDaplaTeamApiClient
+    @MockBean(DaplaApiClient::class)
+    fun mockkDaplaTeamApiClient(): DaplaApiClient = mockkDaplaTeamApiClient
 
     @AfterEach
     internal fun tearDown() {
@@ -31,10 +35,11 @@ class DaplaTeamApiMockkServiceTest {
 
     @Test
     fun `valid team request`() {
-        val expectedTeam = Team("dapla-felles", sectionName = "Dapla", sectionCode = "724")
-        val mockResponse: HttpResponse<Team?> = mockk()
+        val expectedTeam = Team(slug = "dapla-felles", Section(code = "724", name = "Dataplattform (724)"))
+
+        val mockResponse: HttpResponse<GraphQlResponse<TeamData>> = mockk()
         every { mockResponse.status } returns HttpStatus.OK
-        every { mockResponse.body() } returns expectedTeam
+        every { mockResponse.body() } returns GraphQlResponse(data = TeamData(team = expectedTeam))
 
         every { mockkDaplaTeamApiClient.fetchTeam(any(), any()) } returns mockResponse
 
@@ -49,7 +54,7 @@ class DaplaTeamApiMockkServiceTest {
 
     @Test
     fun `invalid team request`() {
-        val mockResponse: HttpResponse<Team?> = mockk()
+        val mockResponse: HttpResponse<GraphQlResponse<TeamData>> = mockk()
         every { mockResponse.status } returns HttpStatus.NOT_FOUND
         every { mockResponse.body() } returns null
 
@@ -67,9 +72,10 @@ class DaplaTeamApiMockkServiceTest {
     @Test
     fun `valid group request`() {
         val expectedGroup = Group("dapla-felles-developers")
-        val mockResponse: HttpResponse<Group?> = mockk()
+
+        val mockResponse: HttpResponse<GraphQlResponse<GroupData>> = mockk()
         every { mockResponse.status } returns HttpStatus.OK
-        every { mockResponse.body() } returns expectedGroup
+        every { mockResponse.body() } returns GraphQlResponse(data = GroupData(group = expectedGroup))
 
         every { mockkDaplaTeamApiClient.fetchGroup(any(), any()) } returns mockResponse
 
@@ -83,7 +89,7 @@ class DaplaTeamApiMockkServiceTest {
 
     @Test
     fun `invalid group request`() {
-        val mockResponse: HttpResponse<Group?> = mockk()
+        val mockResponse: HttpResponse<GraphQlResponse<GroupData>> = mockk()
         every { mockResponse.status } returns HttpStatus.NOT_FOUND
         every { mockResponse.body() } returns null
 

@@ -128,7 +128,7 @@ micronaut:
         url:  https://dapla-ctrl.intern.ssb.no
         health-check: true
         health-check-interval: 15s
-        health-check-uri: /graphql
+        health-check-uri: /api-docs
 
   klass-web:
     url:

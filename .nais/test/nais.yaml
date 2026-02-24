@@ -45,6 +45,7 @@ spec:
 
   envFrom:
     - secret: metadata-vardef-test
+    - secret: vardef-dapla-api-sa-token
 
   env:
     - name: MICRONAUT_ENVIRONMENTS

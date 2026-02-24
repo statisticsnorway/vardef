@@ -47,7 +47,6 @@ spec:
     - secret: metadata-vardef-prod
     - secret: vardef-dapla-api-sa-token
 
-
   env:
     - name: MICRONAUT_ENVIRONMENTS
       value: naisprod

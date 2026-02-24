@@ -1,6 +1,5 @@
-# Team.graphql
-query GetTeam($slug: Slug!) {
-    team(slug: $slug) {
+{
+    team(slug: "dapla-felles") {
         slug
         section {
             code

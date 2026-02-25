@@ -29,6 +29,7 @@ spec:
         - host: www.ssb.no
         # Allow egress to auth
         - host: auth.test.ssb.no
+        - host: dapla-api.ssb.no
         # Allow egress to mongodb
         - host: metadata-test-shard-00-01.fuld2.mongodb.net
           ports:

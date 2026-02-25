@@ -12,7 +12,7 @@ micronaut:
         clientId: vardef-to-dapla-team-api-m2m
         clientSecret: ${KEYCLOAK_CLIENT_SECRET}
       dapla-api:
-        url: https://dapla-ctrl.intern.ssb.no
+        url: https://dapla-api.ssb.no
   metrics:
     custom:
       # Used for exporting custom business metrics

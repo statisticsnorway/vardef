@@ -125,7 +125,7 @@ micronaut:
         health-check: true
         health-check-interval: 15s
       dapla-api:
-        url:  https://dapla-ctrl.intern.ssb.no
+        url:  https://dapla-api.ssb.no
         read-timeout: 30s
         health-check: false
         health-check-interval: 15s

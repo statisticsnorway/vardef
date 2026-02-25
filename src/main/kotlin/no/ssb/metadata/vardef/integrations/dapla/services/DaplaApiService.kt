@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.integrations.dapla.services
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.dapla.models.GraphQlRequest
@@ -19,11 +20,13 @@ open class DaplaApiService(
 
     override fun getTeam(teamName: String): Team? =
         runCatching {
-            val request =
-                GraphQlRequest(
-                    query = loadQuery("Team.graphql"),
-                    variables = mapOf("slug" to teamName),
-                )
+            val request = GraphQlRequest(
+                query = loadQuery("Team.graphql"),
+                variables = mapOf("slug" to teamName),
+            )
+
+            val requestJson = jacksonObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(request)
+            logger.info("Sending GraphQL request:\n$requestJson")
 
             daplaGraphQlClient
                 .fetchTeam(request, getAuthToken())

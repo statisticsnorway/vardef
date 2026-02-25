@@ -20,10 +20,11 @@ open class DaplaApiService(
 
     override fun getTeam(teamName: String): Team? =
         runCatching {
-            val request = GraphQlRequest(
-                query = loadQuery("Team.graphql"),
-                variables = mapOf("slug" to teamName),
-            )
+            val request =
+                GraphQlRequest(
+                    query = loadQuery("Team.graphql"),
+                    variables = mapOf("slug" to teamName),
+                )
 
             val requestJson = jacksonObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(request)
             logger.info("Sending GraphQL request:\n$requestJson")

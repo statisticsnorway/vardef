@@ -27,8 +27,6 @@ spec:
         # Allow egress to Vardok
         - host: ssb.no
         - host: www.ssb.no
-        # Allow egress to auth
-        - host: auth.ssb.no
         # Allow egress to mongodb
         - host: metadata-prod-shard-00-01.9txq8.mongodb.net
           ports:

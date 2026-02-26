@@ -118,18 +118,12 @@ micronaut:
         health-check-interval: 15s
       vardok:
         url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
-      keycloak:
-        url: https://auth.test.ssb.no/
-        clientId: vardef-to-dapla-team-api-m2m
-        clientSecret: ${KEYCLOAK_CLIENT_SECRET}
-        health-check: true
-        health-check-interval: 15s
       dapla-api:
-        url:  https://dapla-ctrl.intern.ssb.no
+        url: https://dapla-api.ssb.no
         read-timeout: 30s
         health-check: false
         health-check-interval: 15s
-        health-check-uri: /graphql
+        health-check-uri: /healtz
 
   klass-web:
     url:

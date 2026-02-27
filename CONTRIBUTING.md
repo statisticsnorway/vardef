@@ -14,6 +14,11 @@ Go to File, Project structure... in IntelliJ and select this SDK. You can find t
 sdk home java 21.0.2-zulu
 ```
 
+Install the pre-commit hooks
+```bash
+pre-commit install
+```
+
 You must have Docker running.
 
 ## Release

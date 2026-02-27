@@ -50,7 +50,7 @@ jobs:
 
       - name: Publish release notes
         if: steps.check-version.outputs.tag
-        uses: release-drafter/release-drafter@v6.1.0
+        uses: release-drafter/release-drafter@v6.2.0
         with:
           publish: true
           tag: ${{ steps.check-version.outputs.tag }}

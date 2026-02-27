@@ -14,10 +14,6 @@ spec:
     inbound:
       rules:
         - application: metadata-api-gateway
-    outbound:
-      rules:
-        - application: dapla-team-api
-          namespace: dapla-platform
       external:
         # Allow egress to Klass
         - host: data.ssb.no

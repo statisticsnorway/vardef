@@ -158,8 +158,9 @@ class VarDokMigrationController(
     )
     fun getVardokByVardefId(
         @Parameter(
-            name = "Vardef ID",
-            description = "The Vardef ID.",
+            name = "vardef-id",
+            description = "The ID of a variable definition which has been migrated.",
+            schema = Schema(pattern = "[-a-zA-Z0-9_]{8}"),
             examples = [
                 ExampleObject(
                     name = "Vardef id",
@@ -204,8 +205,9 @@ class VarDokMigrationController(
     )
     fun getVardefByVardokId(
         @Parameter(
-            name = "Vardok ID",
+            name = "vardok-id",
             description = "The ID of the definition in Vardok.",
+            schema = Schema(pattern = "\\d{1,5}"),
             examples = [
                 ExampleObject(
                     name = "Vardok id",
@@ -252,5 +254,5 @@ class VarDokMigrationController(
             ),
         ],
     )
-    fun getVardokVardefMapping(): List<VardokVardefIdPairResponse> = vardokService.getVardokVardefIdMapping()
+    fun listVardokVardefMappings(): List<VardokVardefIdPairResponse> = vardokService.listVardokVardefMappings()
 }

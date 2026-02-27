@@ -87,7 +87,7 @@ paths:
       - Data Migration
       summary: Get a list of all vardok and vardef id mappings
       description: Get a list of all vardok and vardef id mappings
-      operationId: getVardokVardefMapping
+      operationId: listVardokVardefMappings
       responses:
         "200":
           description: OK response
@@ -116,22 +116,18 @@ paths:
       description: Get a vardok id by vardef id.
       operationId: getVardokByVardefId
       parameters:
-      - name: Vardef ID
+      - name: vardef-id
         in: path
-        description: The Vardef ID.
+        description: The ID of a variable definition which has been migrated.
         required: true
         schema:
+          pattern: "[-a-zA-Z0-9_]{8}"
           type: string
         examples:
           Vardef id:
             value: wypvb3wd
           Not found:
             value: Xy9_7-Az
-      - name: vardef-id
-        in: path
-        required: true
-        schema:
-          type: string
       responses:
         "404":
           description: Not found
@@ -166,22 +162,18 @@ paths:
       description: Get a variable definition by vardok id.
       operationId: getVardefByVardokId
       parameters:
-      - name: Vardok ID
+      - name: vardok-id
         in: path
         description: The ID of the definition in Vardok.
         required: true
         schema:
+          pattern: "\\d{1,5}"
           type: string
         examples:
           Vardok id:
             value: "1607"
           Not found:
             value: "9999"
-      - name: vardok-id
-        in: path
-        required: true
-        schema:
-          type: string
       responses:
         "404":
           description: Not found

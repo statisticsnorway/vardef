@@ -10,9 +10,6 @@ spec:
   image: "{{ image }}"  # Injected from the GitHub Action
   port: 8080
 
-  ingresses:
-    - https://vardef.intern.test.ssb.no
-
   accessPolicy:
     inbound:
       rules:

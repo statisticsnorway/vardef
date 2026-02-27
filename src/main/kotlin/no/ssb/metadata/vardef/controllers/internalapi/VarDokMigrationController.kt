@@ -34,6 +34,19 @@ import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.slf4j.LoggerFactory
 
+// This pattern can't use quantifiers due to a limitation in Micronaut where {} can't be used in patch matching
+// Ref discussion https://github.com/micronaut-projects/micronaut-core/discussions/5252
+// This pattern is equivalent to ^[a-zA-Z0-9-_]{8}
+private const val VARDEF_ID_PATH_PATTERN =
+    "[-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_]" +
+        "[-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_]"
+
+// This pattern can't use quantifiers due to a limitation in Micronaut where {} can't be used in patch matching
+// Ref discussion https://github.com/micronaut-projects/micronaut-core/discussions/5252
+// This pattern is equivalent to \d{1,5}
+private const val VARDOK_ID_PATH_PATTERN =
+    "\\d|\\d\\d|\\d\\d\\d|\\d\\d\\d\\d|\\d\\d\\d\\d\\d"
+
 @Tag(name = DATA_MIGRATION)
 @Validated
 @Controller("/vardok-migration")
@@ -139,8 +152,7 @@ class VarDokMigrationController(
     /**
      * Get a vardok id by vardef id.
      */
-    @Suppress("ktlint:standard:max-line-length")
-    @Get("{vardef-id:[-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_]}") // This pattern can't use quantifiers due to a limitation in Micronaut
+    @Get("{vardef-id:$VARDEF_ID_PATH_PATTERN}")
     @NotFoundApiResponse
     @ApiResponse(
         content =
@@ -161,7 +173,7 @@ class VarDokMigrationController(
         @Parameter(
             name = "vardef-id",
             description = "The ID of a variable definition which has been migrated.",
-            schema = Schema(pattern = "[-a-zA-Z0-9_]{8}"),
+            schema = Schema(pattern = VARDEF_ID_PATTERN),
             examples = [
                 ExampleObject(
                     name = "Vardef id",
@@ -187,8 +199,7 @@ class VarDokMigrationController(
     /**
      * Get a variable definition by vardok id.
      */
-    @Suppress("ktlint:standard:max-line-length")
-    @Get("{vardok-id:\\d|\\d\\d|\\d\\d\\d|\\d\\d\\d\\d|\\d\\d\\d\\d\\d}") // This pattern can't use quantifiers due to a limitation in Micronaut
+    @Get("{vardok-id:$VARDOK_ID_PATH_PATTERN}")
     @NotFoundApiResponse
     @ApiResponse(
         content =

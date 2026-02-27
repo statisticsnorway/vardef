@@ -8,7 +8,9 @@ on:
       - gradle/libs.versions.toml
       - build.gradle.kts
       - .github/workflows/run-tests.yml
-
+permissions:
+  contents: "read"
+  
 jobs:
   run-tests:
     name: Run tests

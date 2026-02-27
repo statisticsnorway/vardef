@@ -14,6 +14,10 @@ import no.ssb.metadata.vardef.utils.DRAFT_EXAMPLE_WITH_VALID_UNTIL
 import no.ssb.metadata.vardef.utils.buildProblemJsonResponseSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import java.util.stream.Stream
 
 class ReadTests : BaseVardefTest() {
     @Inject
@@ -150,6 +154,60 @@ class ReadTests : BaseVardefTest() {
                     false,
                     null,
                     errorMessage = "No vardok mapping for vardef id $definitionId",
+                ),
+            )
+    }
+
+    @ParameterizedTest
+    @MethodSource("vardokVardefIds")
+    fun `get by id path routing`(
+        id: String,
+        statusCode: Int,
+        spec: RequestSpecification,
+    ) {
+        spec
+            .given()
+            .`when`()
+            .get("/vardok-migration/$id")
+            .then()
+            .statusCode(statusCode)
+    }
+
+    companion object {
+        @JvmStatic
+        fun vardokVardefIds(): Stream<Arguments> =
+            Stream.of(
+                Arguments.arguments(
+                    DRAFT_BUS_EXAMPLE.definitionId,
+                    HttpStatus.OK.code,
+                ),
+                Arguments.arguments(
+                    "0".repeat(8),
+                    HttpStatus.NOT_FOUND.code,
+                ),
+                Arguments.arguments(
+                    "Ab12-CD_",
+                    HttpStatus.NOT_FOUND.code,
+                ),
+                Arguments.arguments(
+                    "0".repeat(7),
+                    HttpStatus.METHOD_NOT_ALLOWED.code,
+                ),
+                Arguments.arguments(
+                    "0".repeat(5),
+                    HttpStatus.NOT_FOUND.code,
+                ),
+                Arguments.arguments(
+                    "0",
+                    HttpStatus.NOT_FOUND.code,
+                ),
+                Arguments.arguments(
+                    "a",
+                    HttpStatus.METHOD_NOT_ALLOWED.code,
+                ),
+                Arguments.arguments(
+                    "005",
+                    HttpStatus.OK.code,
                 ),
             )
     }

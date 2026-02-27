@@ -28,7 +28,7 @@ interface VardokService {
         vardefId: String,
     ): VardokVardefIdPair
 
-    fun getVardokVardefIdMapping(): List<VardokVardefIdPairResponse>
+    fun listVardokVardefMappings(): List<VardokVardefIdPairResponse>
 
     fun getVardefIdByVardokId(vardokId: String): String?
 

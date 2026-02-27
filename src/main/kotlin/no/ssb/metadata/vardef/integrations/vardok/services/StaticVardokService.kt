@@ -36,7 +36,7 @@ class StaticVardokService(
         vardefId: String,
     ): VardokVardefIdPair = vardokIdMappingRepository.save(VardokVardefIdPair(vardokId, vardefId))
 
-    override fun getVardokVardefIdMapping(): List<VardokVardefIdPairResponse> =
+    override fun listVardokVardefMappings(): List<VardokVardefIdPairResponse> =
         vardokIdMappingRepository.findAll().map {
             it.toVardokVardefIdPairResponse()
         }

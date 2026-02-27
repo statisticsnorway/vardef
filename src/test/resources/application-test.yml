@@ -11,10 +11,6 @@ micronaut:
               - dapla-cli
               - onyxia-api
               - vardef
-  http:
-    services:
-      keycloak:
-        clientSecret: ${KEYCLOAK_CLIENT_SECRET:placeholder}
 
 endpoints:
   all:

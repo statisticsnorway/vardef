@@ -139,6 +139,7 @@ class VarDokMigrationController(
     /**
      * Get a vardok id by vardef id.
      */
+    @Suppress("ktlint:standard:max-line-length")
     @Get("{vardef-id:[-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_]}") // This pattern can't use quantifiers due to a limitation in Micronaut
     @NotFoundApiResponse
     @ApiResponse(
@@ -186,6 +187,7 @@ class VarDokMigrationController(
     /**
      * Get a variable definition by vardok id.
      */
+    @Suppress("ktlint:standard:max-line-length")
     @Get("{vardok-id:\\d|\\d\\d|\\d\\d\\d|\\d\\d\\d\\d|\\d\\d\\d\\d\\d}") // This pattern can't use quantifiers due to a limitation in Micronaut
     @NotFoundApiResponse
     @ApiResponse(

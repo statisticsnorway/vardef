@@ -108,29 +108,30 @@ paths:
                     ]
       security:
       - labid_token: []
-  /vardok-migration/{id}:
+  /vardok-migration/{vardef-id}:
     get:
       tags:
       - Data Migration
-      summary: Get one variable definition by vardok id or get the vardok id by vardef
-        id.
-      description: Get one variable definition by vardok id or get the vardok id by
-        vardef id.
-      operationId: getVardokVardefMappingById
+      summary: Get a vardok id by vardef id.
+      description: Get a vardok id by vardef id.
+      operationId: getVardokByVardefId
       parameters:
-      - name: id
+      - name: Vardef ID
         in: path
-        description: The ID of the definition in Vardok or Vardef.
+        description: The Vardef ID.
         required: true
         schema:
           type: string
         examples:
-          Vardok id:
-            value: "1607"
           Vardef id:
             value: wypvb3wd
           Not found:
             value: Xy9_7-Az
+      - name: vardef-id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         "404":
           description: Not found
@@ -150,9 +151,57 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                - $ref: "#/components/schemas/CompleteView"
-                - $ref: "#/components/schemas/VardokIdResponse"
+                $ref: "#/components/schemas/VardokIdResponse"
+              examples:
+                Vardef id:
+                  value:
+                    vardok_id: "1607"
+      security:
+      - labid_token: []
+  /vardok-migration/{vardok-id}:
+    get:
+      tags:
+      - Data Migration
+      summary: Get a variable definition by vardok id.
+      description: Get a variable definition by vardok id.
+      operationId: getVardefByVardokId
+      parameters:
+      - name: Vardok ID
+        in: path
+        description: The ID of the definition in Vardok.
+        required: true
+        schema:
+          type: string
+        examples:
+          Vardok id:
+            value: "1607"
+          Not found:
+            value: "9999"
+      - name: vardok-id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: https://opensource.zalando.com/restful-api-guidelines/models/problem-1.0.1.yaml#/Problem
+              examples:
+                Not found:
+                  value:
+                    type: about:blank
+                    status: 404
+                    detail: Not found
+                    parameters: {}
+        "200":
+          description: OK response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteView"
               examples:
                 Vardok id:
                   value:
@@ -221,11 +270,8 @@ paths:
                     created_by: ano@ssb.no
                     last_updated_at: 2024-06-11T08:15:19.038Z
                     last_updated_by: ano@ssb.no
-                Vardef id:
-                  value: "1607"
       security:
       - labid_token: []
-  /vardok-migration/{vardok-id}:
     post:
       tags:
       - Data Migration

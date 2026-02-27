@@ -137,21 +137,17 @@ class VarDokMigrationController(
     }
 
     /**
-     * Get one variable definition by vardok id or get the vardok id by vardef id.
+     * Get a vardok id by vardef id.
      */
-    @Get("/{id}")
+    @Get("{vardef-id:[-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_]}") // This pattern can't use quantifiers due to a limitation in Micronaut
     @NotFoundApiResponse
     @ApiResponse(
         content =
             [
                 Content(
-                    schema = Schema(oneOf = [CompleteView::class, VardokIdResponse::class]),
+                    schema = Schema(VardokIdResponse::class),
                     mediaType = MediaType.APPLICATION_JSON,
                     examples = [
-                        ExampleObject(
-                            name = "Vardok id",
-                            value = COMPLETE_VIEW_EXAMPLE,
-                        ),
                         ExampleObject(
                             name = "Vardef id",
                             value = VARDOK_ID_RESPONSE_EXAMPLE,
@@ -160,15 +156,11 @@ class VarDokMigrationController(
                 ),
             ],
     )
-    fun getVardokVardefMappingById(
+    fun getVardokByVardefId(
         @Parameter(
-            name = "id",
-            description = "The ID of the definition in Vardok or Vardef.",
+            name = "Vardef ID",
+            description = "The Vardef ID.",
             examples = [
-                ExampleObject(
-                    name = "Vardok id",
-                    value = VARDOK_ID_RESPONSE_EXAMPLE,
-                ),
                 ExampleObject(
                     name = "Vardef id",
                     value = VARDEF_ID_MIGRATED_EXAMPLE,
@@ -179,31 +171,68 @@ class VarDokMigrationController(
                 ),
             ],
         )
-        @PathVariable("id")
-        id: String,
-        httpRequest: HttpRequest<*>,
-    ): MutableHttpResponse<*> =
-        if (!VARDEF_ID_PATTERN.toRegex().containsMatchIn(id)) {
-            val vardefId = vardokService.getVardefIdByVardokId(id)
-            val request =
-                HttpRequest
-                    .GET<String>("/variable-definitions/$vardefId")
-                    .headers {
-                        it[AUTHORIZATION] = httpRequest.headers[AUTHORIZATION]
-                    }
+        @PathVariable("vardef-id")
+        vardefId: String,
+    ): VardokIdResponse =
+        vardokService
+            .getVardokIdByVardefId(vardefId)
+            ?.let { VardokIdResponse(it) }
+            ?: throw HttpStatusException(
+                HttpStatus.NOT_FOUND,
+                "No vardok mapping for vardef id $vardefId",
+            )
 
-            runBlocking {
-                httpClient.proxy(request).awaitFirst()
-            }
-        } else {
-            vardokService
-                .getVardokIdByVardefId(id)
-                ?.let { HttpResponse.ok(VardokIdResponse(it)) }
-                ?: throw HttpStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "No vardok mapping for vardef id $id",
-                )
+    /**
+     * Get a variable definition by vardok id.
+     */
+    @Get("{vardok-id:\\d|\\d\\d|\\d\\d\\d|\\d\\d\\d\\d|\\d\\d\\d\\d\\d}") // This pattern can't use quantifiers due to a limitation in Micronaut
+    @NotFoundApiResponse
+    @ApiResponse(
+        content =
+            [
+                Content(
+                    schema = Schema(CompleteView::class),
+                    mediaType = MediaType.APPLICATION_JSON,
+                    examples = [
+                        ExampleObject(
+                            name = "Vardok id",
+                            value = COMPLETE_VIEW_EXAMPLE,
+                        ),
+                    ],
+                ),
+            ],
+    )
+    fun getVardefByVardokId(
+        @Parameter(
+            name = "Vardok ID",
+            description = "The ID of the definition in Vardok.",
+            examples = [
+                ExampleObject(
+                    name = "Vardok id",
+                    value = "1607",
+                ),
+                ExampleObject(
+                    name = NOT_FOUND_EXAMPLE_NAME,
+                    value = "9999",
+                ),
+            ],
+        )
+        @PathVariable("vardok-id")
+        vardokId: String,
+        httpRequest: HttpRequest<*>,
+    ): MutableHttpResponse<*> {
+        val vardefId = vardokService.getVardefIdByVardokId(vardokId)
+        val request =
+            HttpRequest
+                .GET<String>("/variable-definitions/$vardefId")
+                .headers {
+                    it[AUTHORIZATION] = httpRequest.headers[AUTHORIZATION]
+                }
+
+        return runBlocking {
+            httpClient.proxy(request).awaitFirst()
         }
+    }
 
     /**
      * Get a list of all vardok and vardef id mappings
@@ -223,6 +252,5 @@ class VarDokMigrationController(
             ),
         ],
     )
-    fun getVardokVardefMapping(httpRequest: HttpRequest<*>): MutableHttpResponse<*> =
-        HttpResponse.ok(vardokService.getVardokVardefIdMapping())
+    fun getVardokVardefMapping(): List<VardokVardefIdPairResponse> = vardokService.getVardokVardefIdMapping()
 }

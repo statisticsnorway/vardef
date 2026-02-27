@@ -7,7 +7,6 @@ metadata:
   labels:
     team: dapla-metadata
 spec:
-  image: "{{ image }}"  # Injected from the GitHub Action
   port: 8080
 
   accessPolicy:
@@ -20,7 +19,6 @@ spec:
         # Allow egress to Vardok
         - host: ssb.no
         - host: www.ssb.no
-        # Allow egress to auth
         - host: dapla-api.ssb.no
         # Allow egress to mongodb
         - host: metadata-test-shard-00-01.fuld2.mongodb.net

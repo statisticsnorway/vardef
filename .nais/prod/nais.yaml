@@ -8,11 +8,11 @@ metadata:
     team: dapla-metadata
 spec:
   port: 8080
-
   accessPolicy:
     inbound:
       rules:
         - application: metadata-api-gateway
+    outbound:
       external:
         # Allow egress to Klass
         - host: data.ssb.no

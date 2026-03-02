@@ -96,5 +96,5 @@ jobs:
         env:
           CLUSTER: ${{ needs.docker-build.outputs.nais_cluster }}
           RESOURCE: ${{ needs.docker-build.outputs.nais_config_path }}
-          VAR: image=${{ env.DOCKER_IMAGE }}
+          WORKLOAD_IMAGE: ${{ env.DOCKER_IMAGE }}
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443

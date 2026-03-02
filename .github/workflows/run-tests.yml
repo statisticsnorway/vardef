@@ -3,11 +3,17 @@ name: Run tests
 
 on:
   push:
-    paths-ignore:
-      - README.md
+    paths:
+      - src
+      - gradle/libs.versions.toml
+      - build.gradle.kts
+      - .github/workflows/run-tests.yml
+permissions:
+  contents: "read"
 
 jobs:
-  build-branch:
+  run-tests:
+    name: Run tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -34,11 +40,33 @@ jobs:
       - name: Build and test project
         run: >
           ./gradlew
-          check
+          test
           jacocoTestReport
           --daemon --parallel --build-cache
-        env:
-          KEYCLOAK_CLIENT_SECRET: ${{ secrets.KEYCLOAK_CLIENT_SECRET }}
+
+  check-format-and-code-quality:
+    name: Check format and code quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: 'zulu'
+
+      - name: Set up gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Check format
+        run: >
+          ./gradlew
+          ktlintCheck
+          --daemon --parallel --build-cache
 
       - name: SonarQube Cloud Scan
         env:

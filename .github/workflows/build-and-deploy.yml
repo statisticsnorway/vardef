@@ -1,7 +1,6 @@
 name: Image Build and Deploy
 
 on:
-  pull_request:
   release:
     types: [published]
   push:

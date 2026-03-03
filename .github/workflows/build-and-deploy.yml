@@ -2,10 +2,20 @@ name: Image Build and Deploy
 
 on:
   release:
-    types: [ published ]
+    types: [published]
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: "Which cluster to deploy to?"
+        required: true
+        default: "test"
+        type: choice
+        options:
+          - test
+          - prod
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata
@@ -24,19 +34,26 @@ jobs:
       nais_config_path: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
-      - name: Set nais environment variables
-        id: nais-deploy-vars
-        run: |
-          if [[ ${{ github.event_name }} == "release" ]]; then
-            echo "nais_cluster=prod" >> "$GITHUB_OUTPUT"
-            echo "nais_config_path=.nais/prod/nais.yaml" >> "$GITHUB_OUTPUT"
-          else
-            echo "nais_cluster=test" >> "$GITHUB_OUTPUT"
-            echo "nais_config_path=.nais/test/nais.yaml" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Check what changed
+        id: changed-files
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/**/nais.yaml
+      - name: Check for test config changes
+        id: test-config-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/test/nais.yaml
+      - name: Check for prod config changes
+        id: prod-config-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/prod/nais.yaml
 
       - name: "Authenticate to Google Cloud"
         id: "auth"
@@ -83,18 +100,45 @@ jobs:
           # A future improvement could be to generate this and merge the BOMs
           sbom: build/reports/cyclonedx/bom.json
 
-  deploy:
-    name: Deploy to NAIS cluster
-    runs-on: ubuntu-latest
+
+  deploy-test:
+    name: Deploy to test
+    needs: docker-build
     permissions:
       contents: "read"
       id-token: "write"
-    needs: docker-build
+      packages: "read"
+    runs-on: ubuntu-latest
+    if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.docker-build.outputs.test-config-changed == 'true'
     steps:
-      - uses: actions/checkout@v6  # Needed for access to manifests
+      - name: Checkout
+        uses: actions/checkout@v6
+
       - uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: ${{ needs.docker-build.outputs.nais_cluster }}
-          RESOURCE: ${{ needs.docker-build.outputs.nais_config_path }}
-          WORKLOAD_IMAGE: ${{ env.DOCKER_IMAGE }}
+          CLUSTER: test
+          RESOURCE: .nais/test/nais.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
+
+  deploy-prod:
+    name: Deploy to prod
+    needs: docker-build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod
+          RESOURCE: .nais/prod/nais.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}

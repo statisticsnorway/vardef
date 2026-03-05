@@ -63,6 +63,9 @@ jobs:
         with:
           files: .nais/prod/nais.yaml
 
+      - name: Debug repo structure
+        run: ls -R
+
       - name: Set up Java
         uses: actions/setup-java@v5
         with:

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.micronaut.application)
     alias(libs.plugins.micronaut.test.resources)
     alias(libs.plugins.micronaut.aot)
+    alias(libs.plugins.shadow)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.jib)
     alias(libs.plugins.cyclonedx)

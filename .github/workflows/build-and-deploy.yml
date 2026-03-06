@@ -1,16 +1,21 @@
 name: Image Build and Deploy
 
 on:
+  pull_request:
   release:
     types: [published]
   push:
     branches:
       - main
     paths:
-      - "vadef/**"
-      - "metadata-shared/**"
+      - "src/**"
+      - "openapi/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle.properties"
+      - "gradle/**"
       - ".nais/**/nais.yaml"
-      - ".github/workflows/build-and-deploy.yaml"
+      - ".github/workflows/build-and-deploy.yml"
   workflow_dispatch:
     inputs:
       cluster:

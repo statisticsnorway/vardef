@@ -35,6 +35,7 @@ mongock = "5.5.1"
 nanoid = "1.0.1"
 reactor = "3.8.3"
 snakeyaml = "2.6"
+shadow = "8.3.7"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj"}
@@ -81,3 +82,4 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 micronaut-aot = { id = "io.micronaut.aot", version.ref = "micronautGradle" }
 micronaut-application = { id = "io.micronaut.application", version.ref = "micronautGradle" }
 micronaut-test-resources = { id = "io.micronaut.test-resources", version.ref = "micronautGradle" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

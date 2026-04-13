@@ -61,7 +61,7 @@ dependencies {
 
     // Force safe versions of vulnerable transitive dependencies until they are updated
     constraints {
-        implementation("tools.jackson.core:jackson-core:3.1.1") {
+        implementation("tools.jackson.core:jackson-core:3.1.2") {
             because("GHSA-72hv-8253-57qq, CVE-2026-29062: fix requires >= 3.1.0")
         }
         implementation("org.apache.commons:commons-lang3:3.20.0") {

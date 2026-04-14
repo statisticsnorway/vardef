@@ -4,7 +4,7 @@ name: Run tests
 on:
   push:
     paths:
-      - src
+      - src/**
       - gradle/libs.versions.toml
       - build.gradle.kts
       - .github/workflows/run-tests.yml

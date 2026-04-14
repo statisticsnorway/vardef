@@ -137,23 +137,38 @@ class VariableDefinitionService(
      *
      * @param language The language to render in.
      * @param dateOfValidity The date which *Variable Definitions* shall be valid at.
+     * @param shortName The shortname which one wants a variable definition for.
      * @return [List<RenderedView>] with status [VariableStatus.PUBLISHED_EXTERNAL] valid at the date.
      */
     fun listPublicForDate(
         language: SupportedLanguages,
         dateOfValidity: LocalDate?,
+        shortName: String? = null,
     ): List<RenderedView> {
         val results =
-            uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
-                .map {
-                    getRenderedByDateAndStatus(
-                        language,
-                        it,
-                        dateOfValidity,
-                        VariableStatus.PUBLISHED_EXTERNAL,
-                    )
-                }
-        logger.info("Found ${results.size} valid public variable definitions at date $dateOfValidity.")
+            if (shortName != null) {
+                variableDefinitionRepository
+                    .findDistinctDefinitionIdByShortName(shortName)
+                    .let { id ->
+                        listOfNotNull(
+                            id?.let {
+                                getCompleteByDateAndStatus(it, dateOfValidity, VariableStatus.PUBLISHED_EXTERNAL)
+                                    ?.render(language, klassService)
+                            },
+                        )
+                    }
+            } else {
+                uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
+                    .map {
+                        getRenderedByDateAndStatus(
+                            language,
+                            it,
+                            dateOfValidity,
+                            VariableStatus.PUBLISHED_EXTERNAL,
+                        )
+                    }
+            }
+        logger.info("Found ${results.size} valid public variable definitions at date $dateOfValidity with shortName=$shortName.")
         return results
     }
 

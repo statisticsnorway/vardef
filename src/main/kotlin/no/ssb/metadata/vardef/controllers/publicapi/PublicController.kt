@@ -74,9 +74,17 @@ class PublicController(
             ],
         )
         dateOfValidity: LocalDate? = null,
+        @QueryValue("short_name")
+        @Parameter(
+            description = SHORT_NAME_QUERY_PARAM_DESCRIPTION,
+            examples = [
+                ExampleObject(name = "Specific short_name", value = SHORT_NAME_EXAMPLE),
+            ],
+        )
+        shortName: String? = null,
     ): HttpResponse<List<RenderedView>> =
         HttpResponse
-            .ok(varDefService.listPublicForDate(language = language ?: SupportedLanguages.DEFAULT, dateOfValidity = dateOfValidity))
+            .ok(varDefService.listPublicForDate(language = language ?: SupportedLanguages.DEFAULT, dateOfValidity = dateOfValidity, shortName = shortName))
             .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**

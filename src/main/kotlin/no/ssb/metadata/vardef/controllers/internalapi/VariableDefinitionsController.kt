@@ -128,7 +128,6 @@ class VariableDefinitionsController(
                 .contentType(MediaType.APPLICATION_JSON)
         }
 
-
     /**
      * Create a variable definition.
      *

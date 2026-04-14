@@ -150,9 +150,12 @@ class VariableDefinitionService(
                 listOfNotNull(
                     variableDefinitionRepository
                         .findDistinctDefinitionIdByShortName(shortName)
-                        ?.let {
-                            getCompleteByDateAndStatus(it, dateOfValidity, VariableStatus.PUBLISHED_EXTERNAL)
-                                ?.render(language, klassService)
+                        ?.let { id ->
+                            getCompleteByDateAndStatus(
+                                id,
+                                dateOfValidity,
+                                VariableStatus.PUBLISHED_EXTERNAL,
+                            )?.render(language, klassService)
                         }
                 )
             } else {

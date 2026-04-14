@@ -84,8 +84,13 @@ class PublicController(
         shortName: String? = null,
     ): HttpResponse<List<RenderedView>> =
         HttpResponse
-            .ok(varDefService.listPublicForDate(language = language ?: SupportedLanguages.DEFAULT, dateOfValidity = dateOfValidity, shortName = shortName))
-            .header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
+            .ok(
+                varDefService.listPublicForDate(
+                    language = language ?: SupportedLanguages.DEFAULT,
+                    dateOfValidity = dateOfValidity,
+                    shortName = shortName,
+                ),
+            ).header(HttpHeaders.CONTENT_LANGUAGE, language.toString())
 
     /**
      * Get one variable definition.

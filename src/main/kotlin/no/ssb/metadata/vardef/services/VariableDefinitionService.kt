@@ -147,16 +147,14 @@ class VariableDefinitionService(
     ): List<RenderedView> {
         val results =
             if (shortName != null) {
-                variableDefinitionRepository
-                    .findDistinctDefinitionIdByShortName(shortName)
-                    .let { id ->
-                        listOfNotNull(
-                            id?.let {
-                                getCompleteByDateAndStatus(it, dateOfValidity, VariableStatus.PUBLISHED_EXTERNAL)
-                                    ?.render(language, klassService)
-                            },
-                        )
-                    }
+                listOfNotNull(
+                    variableDefinitionRepository
+                        .findDistinctDefinitionIdByShortName(shortName)
+                        ?.let {
+                            getCompleteByDateAndStatus(it, dateOfValidity, VariableStatus.PUBLISHED_EXTERNAL)
+                                ?.render(language, klassService)
+                        }
+                )
             } else {
                 uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)
                     .map {

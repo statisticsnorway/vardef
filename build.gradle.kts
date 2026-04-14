@@ -73,8 +73,8 @@ dependencies {
         implementation("io.netty:netty-codec-http2:4.2.10.Final") {
             because("CVE-2026-33871: fix requires > 4.2.9.Final")
         }
-        implementation("org.codehaus.plexus:plexus-utils:4.0.2") {
-            because("CVE-2025-67030: fix requires > 3.2.0")
+        implementation("org.codehaus.plexus:plexus-utils:4.0.3") {
+            because("CVE-2025-67030: fixed in 4.0.3")
         }
     }
 }

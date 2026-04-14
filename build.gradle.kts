@@ -62,10 +62,19 @@ dependencies {
     // Force safe versions of vulnerable transitive dependencies until they are updated
     constraints {
         implementation("tools.jackson.core:jackson-core:3.1.1") {
-            because("GHSA-72hv-8253-57qq, CVE-2026-29062: fix requires >= 3.1.0")
+            because("GHSA-72hv-8253-57qq, CVE-2026-29062, GHSA-2m67-wjpj-xhg9: fix requires >= 3.1.1")
         }
         implementation("org.apache.commons:commons-lang3:3.20.0") {
             because("CVE-2025-48924: fix requires >= 3.18.0")
+        }
+        implementation("io.netty:netty-codec-http:4.2.10.Final") {
+            because("CVE-2026-33870: fix requires > 4.2.9.Final")
+        }
+        implementation("io.netty:netty-codec-http2:4.2.10.Final") {
+            because("CVE-2026-33871: fix requires > 4.2.9.Final")
+        }
+        implementation("org.codehaus.plexus:plexus-utils:4.0.2") {
+            because("CVE-2025-67030: fix requires > 3.2.0")
         }
     }
 }
@@ -118,7 +127,7 @@ tasks.cyclonedxDirectBom {
 
 jib {
     from {
-        image = "gcr.io/distroless/java21-debian12@sha256:70e8a4991b6e37cb1eb8eac3b717ed0d68407d1150cf30235d50cd33b2c44f7e"
+        image = "gcr.io/distroless/java21-debian12@sha256:f34fd3e4e2d7a246d764d0614f5e6ffb3a735930723fac4cfc25a72798950262"
         platforms {
             platform {
                 architecture = "amd64"

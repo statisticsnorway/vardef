@@ -156,7 +156,7 @@ class VariableDefinitionService(
                                 dateOfValidity,
                                 VariableStatus.PUBLISHED_EXTERNAL,
                             )?.render(language, klassService)
-                        }
+                        },
                 )
             } else {
                 uniqueDefinitionIdsByStatus(VariableStatus.PUBLISHED_EXTERNAL)

@@ -261,12 +261,90 @@ class PublicControllerTest : BaseVardefTest() {
             .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))
     }
 
+    @Test
+    fun `list variable definitions by short name that does not exist`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("$publicVariableDefinitionsPath?short_name=nonexistent_shortname")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("size()", equalTo(0))
+    }
+
+    @Test
+    fun `list variable definitions by short name of published external variable`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("$publicVariableDefinitionsPath?short_name=${INCOME_TAX_VP2_P6.shortName}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("size()", equalTo(1))
+            .body("[0].short_name", equalTo(INCOME_TAX_VP2_P6.shortName))
+    }
+
+    @Test
+    fun `list variable definitions by short name of draft variable returns empty list`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("$publicVariableDefinitionsPath?short_name=${DRAFT_BUS_EXAMPLE.shortName}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("size()", equalTo(0))
+    }
+
+    @Test
+    fun `list variable definitions by short name of published internal variable returns empty list`(spec: RequestSpecification) {
+        spec
+            .`when`()
+            .get("$publicVariableDefinitionsPath?short_name=${SAVED_INTERNAL_VARIABLE_DEFINITION.shortName}")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+            .body("size()", equalTo(0))
+    }
+
+    @ParameterizedTest
+    @MethodSource("getByShortnames")
+    fun `list public variable definitions by short name with or without date`(
+        url: String,
+        expectedPatchId: Int,
+        spec: RequestSpecification,
+    ) {
+        val body =
+            spec
+                .`when`()
+                .get(url)
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val results = jsonMapper.readValue(body, Array<RenderedView>::class.java)
+        assertThat(results).hasSize(1)
+        assertThat(results[0].patchId).isEqualTo(expectedPatchId)
+    }
+
     companion object {
         @JvmStatic
         fun internalDefinitionIds(): Stream<Arguments> =
             Stream.of(
                 argumentSet("PUBLISHED_INTERNAL", SAVED_INTERNAL_VARIABLE_DEFINITION.definitionId),
                 argumentSet("DRAFT", DRAFT_BUS_EXAMPLE.definitionId),
+            )
+
+        @JvmStatic
+        fun getByShortnames(): Stream<Arguments> =
+            Stream.of(
+                argumentSet(
+                    "Short name and no date",
+                    "/public/variable-definitions?short_name=${INCOME_TAX_VP2_P6.shortName}",
+                    6,
+                ),
+                argumentSet(
+                    "Short name and date",
+                    "/public/variable-definitions?date_of_validity=1990-01-01&short_name=${INCOME_TAX_VP2_P6.shortName}",
+                    7,
+                ),
             )
     }
 }

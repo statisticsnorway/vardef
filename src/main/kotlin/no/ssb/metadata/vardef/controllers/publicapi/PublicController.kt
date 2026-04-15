@@ -46,6 +46,9 @@ class PublicController(
                         name = "Specific date",
                         value = LIST_OF_RENDERED_VIEWS_EXAMPLE,
                     ), ExampleObject(
+                        name = "Specific short_name",
+                        value = LIST_OF_RENDERED_VIEWS_EXAMPLE,
+                    ), ExampleObject(
                         name = "Date not specified",
                         value = EMPTY_LIST_EXAMPLE,
                     ),
@@ -60,6 +63,8 @@ class PublicController(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(name = "Date not specified", value = DEFAULT_LANGUAGE),
+                ExampleObject(name = "Specific date", value = DEFAULT_LANGUAGE),
+                ExampleObject(name = "Specific short_name", value = DEFAULT_LANGUAGE),
             ],
             required = false,
             allowEmptyValue = true,
@@ -171,6 +176,7 @@ class PublicController(
     @Get("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
     @Produces(MediaType.APPLICATION_JSON)
     @Tag(name = VALIDITY_PERIODS)
+    @NotFoundApiResponse
     @ApiResponse(
         responseCode = "200",
         content = [

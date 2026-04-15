@@ -28,7 +28,25 @@ import reactor.core.publisher.Mono
             info =
                 Info(
                     title = "Public Variable Definitions API",
-                    description = """Public Variable Definitions""",
+                    description = """
+## Introduction
+Variable Definitions are centralized definitions of concrete variables which are typically present in multiple datasets. Variable Definitions support standardization of data and metadata and facilitate sharing and joining of data by clarifying when variables have an identical definition.
+
+## Read Access
+This API exposes Variable Definitions with status `PUBLISHED_EXTERNAL`. No authentication is required.
+
+### Language
+Responses are rendered in the language given by the `Accept-Language` header. Supported values are `nb` (Norwegian Bokmål), `nn` (Norwegian Nynorsk) and `en` (English). The default is `nb`.
+
+### Immutability
+Variable Definitions are immutable. This means that any changes must be performed in a strict versioning system. Consumers can avoid being exposed to breaking changes by specifying a `date_of_validity` when they request a Variable Definition.
+
+#### Patches
+Patches are for changes which do not affect the fundamental meaning of the Variable Definition.
+
+#### Validity Periods
+Validity Periods are versions with a period defined by a `valid_from` date and optionally a `valid_until` date. A new Validity Period indicates that the fundamental meaning of the Variable Definition has changed from that date onwards.
+""",
                     version = "0.1",
                     license = License(name = "CC BY 4.0", url = "https://creativecommons.org/licenses/by/4.0/deed.no"),
                     contact = Contact(email = "metadata@ssb.no", name = "Team Metadata"),

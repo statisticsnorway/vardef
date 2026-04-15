@@ -63,8 +63,6 @@ class PublicController(
             description = ACCEPT_LANGUAGE_HEADER_PARAMETER_DESCRIPTION,
             examples = [
                 ExampleObject(name = "Date not specified", value = DEFAULT_LANGUAGE),
-                ExampleObject(name = "Specific date", value = DEFAULT_LANGUAGE),
-                ExampleObject(name = "Specific short_name", value = DEFAULT_LANGUAGE),
             ],
             required = false,
             allowEmptyValue = true,

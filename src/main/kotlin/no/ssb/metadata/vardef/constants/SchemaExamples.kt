@@ -246,8 +246,9 @@ const val CREATE_VALIDITY_PERIOD_EXAMPLE = """
 """
 const val RENDERED_VIEW_EXAMPLE = """{
     "id": "$ID_EXAMPLE",
+    "patch_id": 1,
     "name": "Landbakgrunn",
-    "short_name": "string",
+    "short_name": "landbak",
     "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
     "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
     "unit_types": [{
@@ -260,7 +261,7 @@ const val RENDERED_VIEW_EXAMPLE = """{
     $KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE
     ],
     "contains_special_categories_of_personal_data": true,
-    "variable_status": "PUBLISHED_INTERNAL",
+    "variable_status": "PUBLISHED_EXTERNAL",
     "measurement_type": {
         "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE",
         "code": "01",

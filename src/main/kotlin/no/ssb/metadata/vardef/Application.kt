@@ -41,9 +41,6 @@ Responses are rendered in the language given by the `Accept-Language` header. Su
 ### Immutability
 Variable Definitions are immutable. This means that any changes must be performed in a strict versioning system. Consumers can avoid being exposed to breaking changes by specifying a `date_of_validity` when they request a Variable Definition.
 
-#### Patches
-Patches are for changes which do not affect the fundamental meaning of the Variable Definition.
-
 #### Validity Periods
 Validity Periods are versions with a period defined by a `valid_from` date and optionally a `valid_until` date. A new Validity Period indicates that the fundamental meaning of the Variable Definition has changed from that date onwards.
 """,

@@ -200,8 +200,9 @@ class VarDokMigrationController(
      * Get a variable definition by vardok id.
      */
     @Get("{vardok-id:$VARDOK_ID_PATH_PATTERN}")
-    @NotFoundApiResponse
     @ApiResponse(
+        responseCode = "200",
+        description = "OK response",
         content =
             [
                 Content(
@@ -216,6 +217,7 @@ class VarDokMigrationController(
                 ),
             ],
     )
+    @NotFoundApiResponse
     fun getVardefByVardokId(
         @Parameter(
             name = "vardok-id",

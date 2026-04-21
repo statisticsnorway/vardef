@@ -55,6 +55,7 @@ class VariableDefinitionByIdController(
     @Produces(MediaType.APPLICATION_JSON)
     @ApiResponse(
         responseCode = "200",
+        description = "OK response",
         content = [
             Content(
                 examples = [

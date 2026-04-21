@@ -202,6 +202,7 @@ class VarDokMigrationController(
     @Get("{vardok-id:$VARDOK_ID_PATH_PATTERN}")
     @ApiResponse(
         responseCode = "200",
+        description = "OK response",
         content =
             [
                 Content(

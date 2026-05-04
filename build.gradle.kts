@@ -61,16 +61,16 @@ dependencies {
 
     // Force safe versions of vulnerable transitive dependencies until they are updated
     constraints {
-        implementation("tools.jackson.core:jackson-core:3.1.1") {
+        implementation("tools.jackson.core:jackson-core:3.1.3") {
             because("GHSA-72hv-8253-57qq, CVE-2026-29062, GHSA-2m67-wjpj-xhg9: fix requires >= 3.1.1")
         }
         implementation("org.apache.commons:commons-lang3:3.20.0") {
             because("CVE-2025-48924: fix requires >= 3.18.0")
         }
-        implementation("io.netty:netty-codec-http:4.2.10.Final") {
+        implementation("io.netty:netty-codec-http:4.2.12.Final") {
             because("CVE-2026-33870: fix requires > 4.2.9.Final")
         }
-        implementation("io.netty:netty-codec-http2:4.2.10.Final") {
+        implementation("io.netty:netty-codec-http2:4.2.12.Final") {
             because("CVE-2026-33871: fix requires > 4.2.9.Final")
         }
         implementation("org.codehaus.plexus:plexus-utils:4.0.3") {

@@ -183,4 +183,3 @@ data class UpdateDraftPatch(
         ): T = jsonMapper.readValue(node.toString(), argument)
     }
 }
-

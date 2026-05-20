@@ -169,4 +169,45 @@ data class SavedVariableDefinition(
             contact = varDefUpdates.contact ?: contact,
             lastUpdatedBy = userName,
         )
+
+    fun copyAndUpdate(
+        varDefUpdates: UpdateDraftPatch,
+        userName: String,
+    ): SavedVariableDefinition =
+        copy(
+            name =
+                when (val updates = varDefUpdates.name) {
+                    PatchField.Undefined -> name
+                    is PatchField.Present -> name.update(updates.value)
+                },
+            shortName = varDefUpdates.shortName.orElse(shortName),
+            definition =
+                when (val updates = varDefUpdates.definition) {
+                    PatchField.Undefined -> definition
+                    is PatchField.Present -> definition.update(updates.value)
+                },
+            classificationReference = varDefUpdates.classificationReference.applyNullable(classificationReference),
+            unitTypes = varDefUpdates.unitTypes.orElse(unitTypes),
+            subjectFields = varDefUpdates.subjectFields.orElse(subjectFields),
+            containsSpecialCategoriesOfPersonalData =
+                varDefUpdates.containsSpecialCategoriesOfPersonalData.orElse(containsSpecialCategoriesOfPersonalData),
+            variableStatus = varDefUpdates.variableStatus.orElse(variableStatus),
+            measurementType = varDefUpdates.measurementType.applyNullable(measurementType),
+            validFrom = varDefUpdates.validFrom.orElse(validFrom),
+            validUntil = varDefUpdates.validUntil.applyNullable(validUntil),
+            externalReferenceUri = varDefUpdates.externalReferenceUri.applyNullable(externalReferenceUri),
+            comment =
+                when (val updates = varDefUpdates.comment) {
+                    PatchField.Undefined -> comment
+                    is PatchField.Present -> updates.value?.let { comment?.update(it) ?: it }
+                },
+            relatedVariableDefinitionUris =
+                when (val updates = varDefUpdates.relatedVariableDefinitionUris) {
+                    PatchField.Undefined -> relatedVariableDefinitionUris
+                    is PatchField.Present -> updates.value?.map { it.toString() }
+                },
+            owner = varDefUpdates.owner.orElse(owner),
+            contact = varDefUpdates.contact.orElse(contact),
+            lastUpdatedBy = userName,
+        )
 }

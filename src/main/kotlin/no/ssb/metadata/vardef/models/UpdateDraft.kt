@@ -21,6 +21,8 @@ import java.time.LocalDate
  * Update variable definition
  *
  * Data structure with all fields optional for updating a Draft Variable Definition.
+ *
+ * Fields supplied with explicit null values will be deleted unless the field is required.
  */
 @Suppress("ktlint:standard:annotation", "ktlint:standard:indent") // ktlint disagrees with the formatter
 @Serdeable(naming = SnakeCaseStrategy::class)

@@ -1,5 +1,6 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
+import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -7,6 +8,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
+import io.micronaut.json.JsonMapper
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -20,7 +22,8 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
+import jakarta.validation.ConstraintViolationException
+import jakarta.validation.Validator
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.ConflictApiResponse
 import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
@@ -31,6 +34,7 @@ import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
 import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
+import no.ssb.metadata.vardef.models.UpdateDraftPatch
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
@@ -47,6 +51,8 @@ import java.time.LocalDate
 class VariableDefinitionByIdController(
     private val vardef: VariableDefinitionService,
     private val patches: PatchesService,
+    private val jsonMapper: JsonMapper,
+    private val validator: Validator,
 ) {
     /**
      * Get one variable definition.
@@ -179,6 +185,8 @@ class VariableDefinitionByIdController(
 
     /**
      * Update a variable definition. Only the fields which need updating should be supplied.
+     *
+     * Fields supplied with explicit null values will be deleted unless the field is required.
      */
     @Tag(name = DRAFT)
     @ApiResponse(
@@ -190,6 +198,10 @@ class VariableDefinitionByIdController(
                     ExampleObject(
                         name = "Update",
                         value = COMPLETE_VIEW_EXAMPLE,
+                    ),
+                    ExampleObject(
+                        name = "Delete field",
+                        value = COMPLETE_VIEW_DELETED_FIELD_EXAMPLE,
                     ),
                 ],
                 schema = Schema(implementation = CompleteView::class),
@@ -207,6 +219,7 @@ class VariableDefinitionByIdController(
             description = ID_FIELD_DESCRIPTION,
             examples = [
                 ExampleObject(name = "Update", value = ID_EXAMPLE),
+                ExampleObject(name = "Delete field", value = ID_EXAMPLE),
                 ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
             ],
         )
@@ -221,6 +234,10 @@ class VariableDefinitionByIdController(
                             value = UPDATE_DRAFT_EXAMPLE,
                         ),
                         ExampleObject(
+                            name = "Delete field",
+                            value = UPDATE_DRAFT_DELETE_FIELD_EXAMPLE,
+                        ),
+                        ExampleObject(
                             name = CONSTRAINT_VIOLATION_EXAMPLE_NAME,
                             value = UPDATE_DRAFT_CONSTRAINT_VIOLATION_EXAMPLE,
                         ),
@@ -230,10 +247,22 @@ class VariableDefinitionByIdController(
             ],
         )
         @Body
-        @Valid
-        updateDraft: UpdateDraft,
+        body: JsonNode,
         authentication: Authentication,
     ): CompleteView {
+        val updateDraftPatch =
+            try {
+                UpdateDraftPatch.fromJson(body, jsonMapper)
+            } catch (e: IllegalArgumentException) {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
+            }
+
+        val updateDraft = updateDraftPatch.toUpdateDraft()
+        val violations = validator.validate(updateDraft)
+        if (violations.isNotEmpty()) {
+            throw ConstraintViolationException(violations)
+        }
+
         val existingVariable = patches.latest(definitionId)
 
         when {
@@ -284,7 +313,7 @@ class VariableDefinitionByIdController(
             }
         }
         return vardef
-            .update(existingVariable, updateDraft, authentication.name)
+            .update(existingVariable, updateDraftPatch, authentication.name)
             .toCompleteView()
     }
 }

@@ -87,6 +87,34 @@ class VariableDefinitionService(
         return updatedVariable
     }
 
+    fun update(
+        savedDraft: SavedVariableDefinition,
+        updateDraft: UpdateDraftPatch,
+        userName: String,
+    ): SavedVariableDefinition {
+        updateDraft.owner
+            .definedValueOrNull()
+            .takeIf { it != savedDraft.owner }
+            ?.let {
+                if (!DaplaTeamService.containsDevelopersGroup(it)) {
+                    throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
+                }
+            }
+
+        val updatedVariable = variableDefinitionRepository.update(savedDraft.copyAndUpdate(updateDraft, userName))
+        logger.info(
+            "Successful updated variable with id: ${updatedVariable.definitionId}",
+            kv(DEFINITION_ID, updatedVariable.definitionId),
+        )
+        if (updatedVariable.variableStatus.isPublished()) {
+            logger.info(
+                "Successful published variable with id: ${updatedVariable.definitionId}",
+                kv(DEFINITION_ID, updatedVariable.definitionId),
+            )
+        }
+        return updatedVariable
+    }
+
     /**
      * List all objects in the repository
      */

@@ -284,6 +284,28 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
+    fun `update draft variable definition clear comment`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """
+                    {"comment": null}
+                    """.trimIndent(),
+                ).`when`()
+                .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.comment).isNull()
+    }
+
+    @Test
     fun `update draft variable definition return complete view`(spec: RequestSpecification) {
         val body =
             spec
@@ -523,6 +545,26 @@ class UpdateTests : BaseVardefTest() {
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
         assertThat(completeView.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
         assertThat(completeView.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
+    }
+
+    @Test
+    fun `update variable clear valid until`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """{"valid_until": null}""".trimIndent(),
+                ).`when`()
+                .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
+                .then()
+                .statusCode(HttpStatus.OK.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView.validUntil).isNull()
     }
 
     @Test

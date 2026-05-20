@@ -16,10 +16,18 @@ sealed interface PatchField<out T> {
     ) : PatchField<T>
 }
 
+/**
+ * Used for required fields where we don't allow the value to be set to null.
+ */
 fun <T> PatchField<T>.orElse(current: T): T =
     when (this) {
-        PatchField.Undefined -> current
-        is PatchField.Present -> value
+        is PatchField.Undefined -> current
+        is PatchField.Present -> {
+            when (value) {
+                null -> current
+                else -> value
+            }
+        }
     }
 
 fun <T> PatchField<T>.definedValueOrNull(): T? =
@@ -28,6 +36,9 @@ fun <T> PatchField<T>.definedValueOrNull(): T? =
         is PatchField.Present -> value
     }
 
+/**
+ * Used for nullable fields where it should be possible to set the value to null.
+ */
 fun <T> PatchField<T?>.applyNullable(current: T?): T? =
     when (this) {
         PatchField.Undefined -> current

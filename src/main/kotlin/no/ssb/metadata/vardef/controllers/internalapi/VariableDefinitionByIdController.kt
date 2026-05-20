@@ -185,6 +185,8 @@ class VariableDefinitionByIdController(
 
     /**
      * Update a variable definition. Only the fields which need updating should be supplied.
+     *
+     * Fields supplied with explicit null values will be deleted unless the field is required.
      */
     @Tag(name = DRAFT)
     @ApiResponse(
@@ -196,6 +198,10 @@ class VariableDefinitionByIdController(
                     ExampleObject(
                         name = "Update",
                         value = COMPLETE_VIEW_EXAMPLE,
+                    ),
+                    ExampleObject(
+                        name = "Delete field",
+                        value = COMPLETE_VIEW_DELETED_FIELD_EXAMPLE,
                     ),
                 ],
                 schema = Schema(implementation = CompleteView::class),
@@ -213,6 +219,7 @@ class VariableDefinitionByIdController(
             description = ID_FIELD_DESCRIPTION,
             examples = [
                 ExampleObject(name = "Update", value = ID_EXAMPLE),
+                ExampleObject(name = "Delete field", value = ID_EXAMPLE),
                 ExampleObject(name = NOT_FOUND_EXAMPLE_NAME, value = ID_INVALID_EXAMPLE),
             ],
         )
@@ -225,6 +232,10 @@ class VariableDefinitionByIdController(
                         ExampleObject(
                             name = "Update",
                             value = UPDATE_DRAFT_EXAMPLE,
+                        ),
+                        ExampleObject(
+                            name = "Delete field",
+                            value = UPDATE_DRAFT_DELETE_FIELD_EXAMPLE,
                         ),
                         ExampleObject(
                             name = CONSTRAINT_VIOLATION_EXAMPLE_NAME,

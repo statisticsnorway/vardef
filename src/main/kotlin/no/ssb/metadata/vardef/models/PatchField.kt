@@ -1,5 +1,13 @@
 package no.ssb.metadata.vardef.models
 
+/**
+ * Type safe implementation of "Tri-State Semantics" wherein a field can:
+ *
+ * - Not be present
+ * - Be present with a value supplied
+ * - Be present with a null value supplied
+ *
+ */
 sealed interface PatchField<out T> {
     data object Undefined : PatchField<Nothing>
 

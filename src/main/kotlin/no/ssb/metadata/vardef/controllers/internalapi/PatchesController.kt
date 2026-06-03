@@ -39,7 +39,6 @@ import java.time.LocalDate
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController(
     private val validityPeriods: ValidityPeriodsService,

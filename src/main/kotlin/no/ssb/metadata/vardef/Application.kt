@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import io.swagger.v3.oas.annotations.servers.Server
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -75,7 +76,7 @@ Variable Definitions are centralized definitions of concrete variables which are
 This API allows for creation, maintenance and access of Variable Definitions.
 
 ### Ownership
-Creation and maintenance of variables may only be performed by Statistics Norway employees representing a specific Dapla team, who are defined as the owners of a given Variable Definition. The team an owner represents must be specified when making a request through the `active_group` query parameter. All maintenance is to be performed by the owners, with no intervention from administrators.
+Creation and maintenance of variables may only be performed by Statistics Norway employees representing a specific Dapla team, who are defined as the owners of a given Variable Definition. In order to create variables, the single team an owner currently represents must be specified in the bearer token. This is currently only supported from the Dapla Lab platform. All maintenance is to be performed by the owners, with no intervention from administrators.
 
 ### Status
 All Variable Definitions have an associated status. The possible values for status are `DRAFT`, `PUBLISHED_INTERNAL` and `PUBLISHED_EXTERNAL`.
@@ -150,13 +151,25 @@ Validity Periods are versions with a period defined by a `valid_from` date and o
                 ),
                 Tag(name = DRAFT, description = "Create, update and delete variable definitions with DRAFT status."),
             ],
+            security = [
+                SecurityRequirement(name = SecuritySchemes.KEYCLOAK_TOKEN),
+                SecurityRequirement(name = SecuritySchemes.LABID_TOKEN),
+            ],
         ),
     securitySchemes = [
         SecurityScheme(
-            name = LABID_TOKEN_SCHEME,
+            name = SecuritySchemes.LABID_TOKEN,
             description =
                 "A token granted by Statistics Norway's LabID instance. May be obtained " +
-                    "from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service.",
+                    "from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service. Valid tokens may be granted all of the available roles.",
+            type = SecuritySchemeType.HTTP,
+            bearerFormat = "JWT",
+            scheme = "bearer",
+        ),
+        SecurityScheme(
+            name = SecuritySchemes.KEYCLOAK_TOKEN,
+            description =
+                "A token granted by Statistics Norway's Keycloak instance. The `aud` claim must include `vardef`. Valid tokens are by default granted the `VARIABLE_CONSUMER` role. In order to be assigned the `VARIABLE_OWNER` role, the token must contain the `dapla` claim with team details populated by <a href=https://github.com/statisticsnorway/keycloak-iac/blob/6d04379c4a311c039e71b2b4b0d60690c3de920c/pkl/GenericClient.pkl#L160>`DaplaUserinfoMapper`</a>. These tokens may not be granted the `VARIABLE_CREATOR` role.",
             type = SecuritySchemeType.HTTP,
             bearerFormat = "JWT",
             scheme = "bearer",

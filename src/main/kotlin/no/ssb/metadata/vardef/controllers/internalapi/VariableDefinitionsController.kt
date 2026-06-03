@@ -38,7 +38,6 @@ import java.time.LocalDate
 @Validated
 @Controller("/variable-definitions")
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionsController(
     private val vardef: VariableDefinitionService,
@@ -155,6 +154,7 @@ class VariableDefinitionsController(
     )
     @BadRequestApiResponse
     @ConflictApiResponse
+    @SecurityRequirement(name = SecuritySchemes.LABID_TOKEN)
     @Secured(VARIABLE_CREATOR)
     fun createVariableDefinition(
         @RequestBody(

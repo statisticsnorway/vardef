@@ -51,7 +51,6 @@ private const val VARDOK_ID_PATH_PATTERN =
 @Validated
 @Controller("/vardok-migration")
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController(
     private val vardokService: VardokService,
@@ -83,6 +82,7 @@ class VarDokMigrationController(
             ],
     )
     @BadRequestApiResponse
+    @SecurityRequirement(name = SecuritySchemes.LABID_TOKEN)
     @Secured(VARIABLE_CREATOR)
     fun createVariableDefinitionFromVarDok(
         @Parameter(

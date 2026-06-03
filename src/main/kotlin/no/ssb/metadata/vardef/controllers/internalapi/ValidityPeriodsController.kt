@@ -34,7 +34,6 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
 @Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = LABID_TOKEN_SCHEME)
 class ValidityPeriodsController(
     private val validityPeriods: ValidityPeriodsService,
 ) {

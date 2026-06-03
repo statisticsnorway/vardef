@@ -27,8 +27,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.CreatePatch
 import no.ssb.metadata.vardef.models.isPublished
-import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
-import no.ssb.metadata.vardef.security.VARIABLE_OWNER
+import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -38,7 +37,7 @@ import java.time.LocalDate
 @Tag(name = PATCHES)
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
-@Secured(VARIABLE_CONSUMER)
+@Secured(Roles.VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController(
     private val validityPeriods: ValidityPeriodsService,
@@ -154,7 +153,7 @@ class PatchesController(
     @NotFoundApiResponse
     @BadRequestApiResponse
     @MethodNotAllowedApiResponse
-    @Secured(VARIABLE_OWNER)
+    @Secured(Roles.VARIABLE_OWNER)
     fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(

@@ -26,7 +26,7 @@ import reactor.core.scheduler.Schedulers
 /**
  * Variable Owner security rule
  *
- * The [VARIABLE_OWNER] role is required on operations where a principal _modifies_ an existing resource. Due to our
+ * The [Roles.VARIABLE_OWNER] role is required on operations where a principal _modifies_ an existing resource. Due to our
  * authentication architecture, the bearer token does not contain information about which concrete resources the
  * principal has access to.
  *
@@ -57,9 +57,9 @@ class VariableOwnerSecurityRule(
     override fun getOrder(): Int = SecuredAnnotationRule.ORDER - 50
 
     /**
-     * Does the operation require the [VARIABLE_OWNER] role.
+     * Does the operation require the [Roles.VARIABLE_OWNER] role.
      *
-     * Here we're checking whether the operation is annotated with the [Secured] annotation, with [VARIABLE_OWNER]
+     * Here we're checking whether the operation is annotated with the [Secured] annotation, with [Roles.VARIABLE_OWNER]
      * supplied as one of the values.
      *
      * @param routeMatch the [RouteMatch] from Micronaut.
@@ -72,7 +72,7 @@ class VariableOwnerSecurityRule(
                 val optionalValue = routeMatch.getValue(Secured::class.java, Array<String>::class.java)
                 if (optionalValue.isPresent) {
                     val requiredRoles: List<String> = optionalValue.get().toList()
-                    return VARIABLE_OWNER in requiredRoles
+                    return Roles.VARIABLE_OWNER in requiredRoles
                 }
             }
         }
@@ -118,13 +118,13 @@ class VariableOwnerSecurityRule(
                 // Get active group from authentication attributes
                 val activeGroup = authentication.attributes[ACTIVE_GROUP] as String?
                 if (activeGroup == null) {
-                    logger.info("No active group found in request or authentication claims. Request: $request")
+                    logger.info("No active group found in request or authentication claims. Request: {}", request)
                     return@map false
                 }
                 variableDefinitionService.groupIsOwner(activeGroup, definitionId)
             }.handle { isOwner, sink ->
-                if (VARIABLE_OWNER !in authentication.roles) {
-                    logger.info("Rejected access. Principal does not have $VARIABLE_OWNER role. Request: $request")
+                if (Roles.VARIABLE_OWNER !in authentication.roles) {
+                    logger.info("Rejected access. Principal does not have {} role. Request: {}", Roles.VARIABLE_OWNER, request)
                     sink.next(SecurityRuleResult.REJECTED)
                     sink.complete()
                 } else {
@@ -133,13 +133,13 @@ class VariableOwnerSecurityRule(
                         sink.next(SecurityRuleResult.ALLOWED)
                         sink.complete()
                     } else {
-                        logger.info("Rejected access. Principal does not own the requested resource. Request: $request")
+                        logger.info("Rejected access. Principal does not own the requested resource. Request: {}", request)
                         sink.next(SecurityRuleResult.REJECTED)
                         sink.complete()
                     }
                 }
             }.switchIfEmpty(Mono.just(SecurityRuleResult.UNKNOWN))
-            .doOnError { logger.error("Error while authorizing for $VARIABLE_OWNER for $request", it) }
+            .doOnError { logger.error("Error while authorizing for {} for Request: {}", Roles.VARIABLE_OWNER, request, it) }
             .onErrorReturn(SecurityRuleResult.UNKNOWN)
     }
 }

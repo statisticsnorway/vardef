@@ -10,6 +10,7 @@ import io.micronaut.security.token.jwt.validator.ReactiveJsonWebTokenValidator
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.constants.SSB_EMAIL
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
+import no.ssb.metadata.vardef.security.Roles
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -41,7 +42,7 @@ class KeycloakTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator
     private fun getUsername(claims: JWTClaimsSet): String? = claims.subject?.plus(SSB_EMAIL)
 
     /**
-     * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.
+     * @return `true` if the principal can be assigned the [Roles.VARIABLE_OWNER] role.
      */
     private fun isVariableOwner(claimsSet: JWTClaimsSet): Boolean =
         daplaClaim in claimsSet.claims &&
@@ -55,7 +56,7 @@ class KeycloakTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator
      * The token is expected to have claims added by `oidc-dapla-userinfo-mapper` with the
      * `nested_teams` config set to `false`. Ref <https://github.com/statisticsnorway/keycloak-iac/blob/0c3362d7d31b9d34780cd88492c5fcd963fc4ef2/pkl/GenericClient.pkl#L182>
      *
-     * By default, authenticated users receive the [VARIABLE_CONSUMER] role. If they fulfill the
+     * By default, authenticated users receive the [Roles.VARIABLE_CONSUMER] role. If they fulfill the
      * requirements then they receive other roles in addition.
      *
      * @param claimsSet the parsed JWT token
@@ -64,14 +65,14 @@ class KeycloakTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator
      */
     private fun assignRoles(claimsSet: JWTClaimsSet): Set<String> {
         // If we arrive here the principal is authenticated. Give all principals a default role.
-        val roles = mutableSetOf(VARIABLE_CONSUMER)
+        val roles = mutableSetOf(Roles.VARIABLE_CONSUMER)
         val username = getUsername(claimsSet)
 
         logger.debug("Assigning roles for user=$username")
 
         if (isVariableOwner(claimsSet)) {
-            roles.add(VARIABLE_OWNER)
-            logger.debug("User=$username assigned role=$VARIABLE_OWNER")
+            roles.add(Roles.VARIABLE_OWNER)
+            logger.debug("User={} assigned role={}", username, Roles.VARIABLE_OWNER)
         }
 
         logger.info("User=$username assigned roles=$roles")

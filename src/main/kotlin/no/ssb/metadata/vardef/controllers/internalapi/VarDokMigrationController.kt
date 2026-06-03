@@ -29,8 +29,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokNotFoundException
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.services.VardokService
 import no.ssb.metadata.vardef.models.CompleteView
-import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
-import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
+import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.slf4j.LoggerFactory
 
@@ -50,7 +49,7 @@ private const val VARDOK_ID_PATH_PATTERN =
 @Tag(name = DATA_MIGRATION)
 @Validated
 @Controller("/vardok-migration")
-@Secured(VARIABLE_CONSUMER)
+@Secured(Roles.VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController(
     private val vardokService: VardokService,
@@ -83,7 +82,7 @@ class VarDokMigrationController(
     )
     @BadRequestApiResponse
     @SecurityRequirement(name = SecuritySchemes.LABID_TOKEN)
-    @Secured(VARIABLE_CREATOR)
+    @Secured(Roles.VARIABLE_CREATOR)
     fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",

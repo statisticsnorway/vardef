@@ -30,14 +30,13 @@ import no.ssb.metadata.vardef.models.CreateDraft
 import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
 import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
-import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
-import no.ssb.metadata.vardef.security.VARIABLE_CREATOR
+import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
 @Validated
 @Controller("/variable-definitions")
-@Secured(VARIABLE_CONSUMER)
+@Secured(Roles.VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionsController(
     private val vardef: VariableDefinitionService,
@@ -155,7 +154,7 @@ class VariableDefinitionsController(
     @BadRequestApiResponse
     @ConflictApiResponse
     @SecurityRequirement(name = SecuritySchemes.LABID_TOKEN)
-    @Secured(VARIABLE_CREATOR)
+    @Secured(Roles.VARIABLE_CREATOR)
     fun createVariableDefinition(
         @RequestBody(
             content = [

@@ -1,3 +1,8 @@
 package no.ssb.metadata.vardef.constants
 
-const val LABID_TOKEN_SCHEME = "labid_token"
+sealed class SecuritySchemes {
+    companion object {
+        const val KEYCLOAK_TOKEN = "keycloak_token"
+        const val LABID_TOKEN = "labid_token"
+    }
+}

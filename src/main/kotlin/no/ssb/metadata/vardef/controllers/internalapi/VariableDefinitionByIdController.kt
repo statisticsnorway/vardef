@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.ConstraintViolationException
 import jakarta.validation.Validator
@@ -37,16 +36,14 @@ import no.ssb.metadata.vardef.models.UpdateDraft
 import no.ssb.metadata.vardef.models.UpdateDraftPatch
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.models.isPublished
-import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
-import no.ssb.metadata.vardef.security.VARIABLE_OWNER
+import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.time.LocalDate
 
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}")
-@Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = LABID_TOKEN_SCHEME)
+@Secured(Roles.VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VariableDefinitionByIdController(
     private val vardef: VariableDefinitionService,
@@ -159,7 +156,7 @@ class VariableDefinitionByIdController(
     @MethodNotAllowedApiResponse
     @Status(HttpStatus.NO_CONTENT)
     @Delete
-    @Secured(VARIABLE_OWNER)
+    @Secured(Roles.VARIABLE_OWNER)
     fun deleteVariableDefinitionById(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
@@ -213,7 +210,7 @@ class VariableDefinitionByIdController(
     @MethodNotAllowedApiResponse
     @ConflictApiResponse
     @Patch
-    @Secured(VARIABLE_OWNER)
+    @Secured(Roles.VARIABLE_OWNER)
     fun updateVariableDefinitionById(
         @Parameter(
             description = ID_FIELD_DESCRIPTION,

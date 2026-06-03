@@ -4,6 +4,7 @@ import io.micronaut.http.HttpStatus
 import io.restassured.http.ContentType
 import io.restassured.http.Method
 import io.restassured.specification.RequestSpecification
+import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.utils.*
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
@@ -166,9 +167,9 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
 
     companion object {
         /**
-         * Tests cases for operations requiring the [VARIABLE_CREATOR] role.
+         * Tests cases for operations requiring [Roles.VARIABLE_CREATOR].
          *
-         * All operations annotated with `@Secured(VARIABLE_CREATOR)` should be included here.
+         * All operations annotated with `@Secured(Roles.VARIABLE_CREATOR)` should be included here.
          */
         @JvmStatic
         fun variableCreatorOperations(): Stream<Arguments> =
@@ -186,9 +187,9 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             )
 
         /**
-         * Tests cases for operations requiring the [VARIABLE_OWNER] role.
+         * Tests cases for operations requiring the [Roles.VARIABLE_OWNER] role.
          *
-         * All operations annotated with `@Secured(VARIABLE_OWNER)` should be included here.
+         * All operations annotated with `@Secured(Roles.VARIABLE_OWNER)` should be included here.
          */
         @JvmStatic
         fun variableOwnerOperations(): Stream<Arguments> =
@@ -237,9 +238,9 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
             )
 
         /**
-         * Tests cases for operations requiring the [VARIABLE_CONSUMER] role.
+         * Tests cases for operations requiring the [Roles.VARIABLE_CONSUMER] role.
          *
-         * All operations annotated with `@Secured(VARIABLE_CONSUMER)` should be included here.
+         * All operations annotated with `@Secured(Roles.VARIABLE_CONSUMER)` should be included here.
          * Only operations with the HTTP method GET should have this role.
          */
         @JvmStatic

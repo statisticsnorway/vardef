@@ -12,6 +12,7 @@ import no.ssb.metadata.vardef.constants.ACTIVE_GROUP
 import no.ssb.metadata.vardef.constants.SSB_EMAIL
 import no.ssb.metadata.vardef.exceptions.InvalidActiveGroupException
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
+import no.ssb.metadata.vardef.security.Roles
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -44,7 +45,7 @@ class LabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JW
     private fun getUsername(claimsSet: JWTClaimsSet): String? = claimsSet.subject?.plus(SSB_EMAIL)
 
     /**
-     * @return `true` if the principal can be assigned the [VARIABLE_OWNER] role.
+     * @return `true` if the principal can be assigned the [Roles.VARIABLE_OWNER] role.
      */
     private fun isVariableOwner(claimsSet: JWTClaimsSet): Boolean =
         activeGroupClaim in claimsSet.claims &&
@@ -52,7 +53,7 @@ class LabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JW
             getDaplaGroups(claimsSet).isNotEmpty()
 
     /**
-     * @return `true` if the principal can be assigned the [VARIABLE_CREATOR] role.
+     * @return `true` if the principal can be assigned the [Roles.VARIABLE_CREATOR] role.
      */
     private fun isVariableCreator(
         activeGroup: String?,
@@ -69,7 +70,7 @@ class LabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JW
      *
      * The roles are assigned based on claims in the token.
      *
-     * By default, authenticated users receive the [VARIABLE_CONSUMER] role. If they fulfill the
+     * By default, authenticated users receive the [Roles.VARIABLE_CONSUMER] role. If they fulfill the
      * requirements then they receive other roles in addition.
      *
      * @param claimsSet the claims from the JWT token
@@ -79,19 +80,19 @@ class LabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JW
     private fun assignRoles(claimsSet: JWTClaimsSet): Set<String> {
         // If we arrive here the principal is authenticated. Give all principals a default role.
 
-        val roles = mutableSetOf(VARIABLE_CONSUMER)
+        val roles = mutableSetOf(Roles.VARIABLE_CONSUMER)
         val username = getUsername(claimsSet)
         val activeGroup = getActiveGroup(claimsSet)
 
         logger.debug("Assigning roles for user=$username activeGroup=$activeGroup")
 
         if (isVariableOwner(claimsSet)) {
-            roles.add(VARIABLE_OWNER)
-            logger.debug("User=$username assigned role=$VARIABLE_OWNER")
+            roles.add(Roles.VARIABLE_OWNER)
+            logger.debug("User={} assigned role={}", username, Roles.VARIABLE_OWNER)
         }
         if (isVariableCreator(activeGroup, claimsSet)) {
-            roles.add(VARIABLE_CREATOR)
-            logger.debug("User=$username assigned role=$VARIABLE_CREATOR")
+            roles.add(Roles.VARIABLE_CREATOR)
+            logger.debug("User={} assigned role={}", username, Roles.VARIABLE_CREATOR)
         }
 
         logger.info("User=$username assigned roles=$roles")

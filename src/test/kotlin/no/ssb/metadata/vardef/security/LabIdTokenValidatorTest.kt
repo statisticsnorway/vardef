@@ -38,7 +38,7 @@ class LabIdTokenValidatorTest {
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
-        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER, VARIABLE_OWNER, VARIABLE_CREATOR)
+        assertThat(auth?.roles).containsExactly(Roles.VARIABLE_CONSUMER, Roles.VARIABLE_OWNER, Roles.VARIABLE_CREATOR)
         assertThat(auth?.name).isEqualTo(TEST_USER)
     }
 
@@ -80,7 +80,7 @@ class LabIdTokenValidatorTest {
                     ),
                 ).block()
 
-        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+        assertThat(auth?.roles).containsExactly(Roles.VARIABLE_CONSUMER)
     }
 
     @Test

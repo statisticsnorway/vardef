@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
@@ -27,8 +26,7 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.CreatePatch
 import no.ssb.metadata.vardef.models.isPublished
-import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
-import no.ssb.metadata.vardef.security.VARIABLE_OWNER
+import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.PatchesService
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 import no.ssb.metadata.vardef.services.VariableDefinitionService
@@ -38,8 +36,7 @@ import java.time.LocalDate
 @Tag(name = PATCHES)
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/patches")
-@Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = LABID_TOKEN_SCHEME)
+@Secured(Roles.VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class PatchesController(
     private val validityPeriods: ValidityPeriodsService,
@@ -155,7 +152,7 @@ class PatchesController(
     @NotFoundApiResponse
     @BadRequestApiResponse
     @MethodNotAllowedApiResponse
-    @Secured(VARIABLE_OWNER)
+    @Secured(Roles.VARIABLE_OWNER)
     fun createPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(

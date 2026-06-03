@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
@@ -25,16 +24,14 @@ import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.CreateValidityPeriod
 import no.ssb.metadata.vardef.models.isPublished
-import no.ssb.metadata.vardef.security.VARIABLE_CONSUMER
-import no.ssb.metadata.vardef.security.VARIABLE_OWNER
+import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
 
 @Tag(name = VALIDITY_PERIODS)
 @Validated
 @Controller("/variable-definitions/{$VARIABLE_DEFINITION_ID_PATH_VARIABLE}/validity-periods")
 @ExecuteOn(TaskExecutors.BLOCKING)
-@Secured(VARIABLE_CONSUMER)
-@SecurityRequirement(name = LABID_TOKEN_SCHEME)
+@Secured(Roles.VARIABLE_CONSUMER)
 class ValidityPeriodsController(
     private val validityPeriods: ValidityPeriodsService,
 ) {
@@ -61,7 +58,7 @@ class ValidityPeriodsController(
     @NotFoundApiResponse
     @BadRequestApiResponse
     @MethodNotAllowedApiResponse
-    @Secured(VARIABLE_OWNER)
+    @Secured(Roles.VARIABLE_OWNER)
     fun createValidityPeriod(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(

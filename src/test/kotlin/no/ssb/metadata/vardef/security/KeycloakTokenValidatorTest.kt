@@ -38,7 +38,7 @@ class KeycloakTokenValidatorTest {
                         HttpRequest.POST("/variable-definitions", ""),
                     ),
                 ).block()
-        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+        assertThat(auth?.roles).containsExactly(Roles.VARIABLE_CONSUMER)
         assertThat(auth?.name).isEqualTo(TEST_USER)
     }
 
@@ -80,7 +80,7 @@ class KeycloakTokenValidatorTest {
                     ),
                 ).block()
 
-        assertThat(auth?.roles).containsExactly(VARIABLE_CONSUMER)
+        assertThat(auth?.roles).containsExactly(Roles.VARIABLE_CONSUMER)
     }
 
     @Test

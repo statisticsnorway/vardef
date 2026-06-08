@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -51,6 +52,8 @@ class VariableDefinitionByIdController(
     private val jsonMapper: JsonMapper,
     private val validator: Validator,
 ) {
+    private val objectMapper = ObjectMapper()
+
     /**
      * Get one variable definition.
      */
@@ -244,12 +247,19 @@ class VariableDefinitionByIdController(
             ],
         )
         @Body
-        body: JsonNode,
+        body: String,
         authentication: Authentication,
     ): CompleteView {
+        val root =
+            try {
+                objectMapper.readTree(body)
+            } catch (_: Exception) {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Request body must be valid JSON")
+            }
+
         val updateDraftPatch =
             try {
-                UpdateDraftPatch.fromJson(body, jsonMapper)
+                UpdateDraftPatch.fromJson(root, jsonMapper)
             } catch (e: IllegalArgumentException) {
                 throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
             }

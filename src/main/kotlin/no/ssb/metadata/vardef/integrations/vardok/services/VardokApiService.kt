@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.services
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import jakarta.inject.Singleton
@@ -9,6 +8,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.*
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import org.slf4j.LoggerFactory
+import tools.jackson.dataformat.xml.XmlMapper
 
 @Singleton
 open class VardokApiService(
@@ -23,7 +23,7 @@ open class VardokApiService(
     override fun isDuplicate(name: String): Boolean =
         variableDefinitionRepository.existsByShortName(name.lowercase().replace("""[-\s]""".toRegex(), "_"))
 
-    private val xmlMapper = XmlMapper().registerKotlinModule()
+    private val xmlMapper = XmlMapper()
 
     override fun getVardokItem(id: String): VardokResponse? {
         try {

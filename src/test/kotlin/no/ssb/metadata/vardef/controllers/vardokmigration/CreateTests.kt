@@ -45,8 +45,8 @@ class CreateTests : BaseVardefTest() {
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
         assertThat(completeView).isNotNull
-        assertThat(completeView.contact.title.nb).contains(GENERATED_CONTACT_KEYWORD)
-        assertThat(completeView.contact.email).contains(GENERATED_CONTACT_KEYWORD)
+        assertThat(completeView?.contact?.title?.nb).contains(GENERATED_CONTACT_KEYWORD)
+        assertThat(completeView?.contact?.email).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test
@@ -64,7 +64,7 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .asString()
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.shortName).contains(GENERATED_CONTACT_KEYWORD)
+        assertThat(completeView?.shortName).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test
@@ -82,7 +82,7 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .asString()
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.shortName).contains(GENERATED_CONTACT_KEYWORD)
+        assertThat(completeView?.shortName).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test
@@ -100,7 +100,7 @@ class CreateTests : BaseVardefTest() {
                 .body()
                 .asString()
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.shortName).contains(GENERATED_CONTACT_KEYWORD)
+        assertThat(completeView?.shortName).contains(GENERATED_CONTACT_KEYWORD)
     }
 
     @Test
@@ -184,7 +184,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.validFrom).isEqualTo(LocalDate.of(+29456, 1, 27))
+        assertThat(completeView?.validFrom).isEqualTo(LocalDate.of(+29456, 1, 27))
     }
 
     @Test
@@ -219,8 +219,8 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
-        assertThat(completeView.validUntil).isNull()
+        assertThat(completeView?.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
+        assertThat(completeView?.validUntil).isNull()
     }
 
     @Test
@@ -274,8 +274,8 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
-        assertThat(completeView.validUntil).isNotNull()
+        assertThat(completeView?.validFrom).isEqualTo(LocalDate.of(1900, 1, 1))
+        assertThat(completeView?.validUntil).isNotNull()
     }
 
     @Test
@@ -294,7 +294,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.externalReferenceUri).isNull()
+        assertThat(completeView?.externalReferenceUri).isNull()
     }
 
     @ParameterizedTest
@@ -318,7 +318,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.relatedVariableDefinitionUris).isEqualTo(expectedResult)
+        assertThat(completeView?.relatedVariableDefinitionUris).isEqualTo(expectedResult)
     }
 
     @Test
@@ -370,9 +370,9 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.comment?.nb).isNotNull
-        assertThat(completeView.comment?.en).isNotNull
-        assertThat(completeView.comment?.nn).isNull()
+        assertThat(completeView?.comment?.nb).isNotNull
+        assertThat(completeView?.comment?.en).isNotNull
+        assertThat(completeView?.comment?.nn).isNull()
     }
 
     @Test
@@ -392,7 +392,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.validUntil).isEqualTo(LocalDate.of(2001, 12, 31))
+        assertThat(completeView?.validUntil).isEqualTo(LocalDate.of(2001, 12, 31))
     }
 
     @ParameterizedTest
@@ -416,7 +416,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.externalReferenceUri).isEqualTo(expectedResult)
+        assertThat(completeView?.externalReferenceUri).isEqualTo(expectedResult)
     }
 
     @Test
@@ -435,7 +435,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.unitTypes).isEqualTo(listOf("12", "13", "20"))
+        assertThat(completeView?.unitTypes).isEqualTo(listOf("12", "13", "20"))
     }
 
     @Test
@@ -454,7 +454,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.unitTypes).isEqualTo(listOf("29"))
+        assertThat(completeView?.unitTypes).isEqualTo(listOf("29"))
     }
 
     @Test
@@ -474,7 +474,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.subjectFields).isEqualTo(emptyList<String>())
+        assertThat(completeView?.subjectFields).isEqualTo(emptyList<String>())
     }
 
     @ParameterizedTest
@@ -498,7 +498,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.unitTypes).isEqualTo(listOf(expectedUnitType))
+        assertThat(completeView?.unitTypes).isEqualTo(listOf(expectedUnitType))
     }
 
     @ParameterizedTest
@@ -524,11 +524,11 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.name.nn).isEqualTo(name)
-        assertThat(completeView.name.nb).isNull()
-        assertThat(completeView.definition.nn).isEqualTo(description)
-        assertThat(completeView.definition.nb).isNull()
-        assertThat(completeView.contact.title.nn).isEqualTo(contactTitle)
-        assertThat(completeView.contact.title.nb).isNull()
+        assertThat(completeView?.name?.nn).isEqualTo(name)
+        assertThat(completeView?.name?.nb).isNull()
+        assertThat(completeView?.definition?.nn).isEqualTo(description)
+        assertThat(completeView?.definition?.nb).isNull()
+        assertThat(completeView?.contact?.title?.nn).isEqualTo(contactTitle)
+        assertThat(completeView?.contact?.title?.nb).isNull()
     }
 }

@@ -56,20 +56,6 @@ class LabIdTokenValidatorTest {
     }
 
     @Test
-    fun `token is null`() {
-        val auth =
-            Mono
-                .from(
-                    labidTokenValidator.validateToken(
-                        null,
-                        HttpRequest.POST("/variable-definitions", ""),
-                    ),
-                ).block()
-
-        assertThat(auth).isNull()
-    }
-
-    @Test
     fun `token does not contain dapla groups`() {
         val auth =
             Mono

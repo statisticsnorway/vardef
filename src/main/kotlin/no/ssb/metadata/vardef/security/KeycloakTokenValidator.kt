@@ -87,12 +87,9 @@ class KeycloakTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator
      * @return an [Authentication] containing the principals username, the assigned roles, the claims, and the active group.
      */
     override fun validateToken(
-        token: String?,
-        request: R,
+        token: String,
+        request: R?,
     ): Publisher<Authentication> {
-        if (token == null) {
-            return Mono.empty()
-        }
         logger.debug("Starting validation")
         return Mono
             .from(validate(token, request))
@@ -116,6 +113,9 @@ class KeycloakTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator
                 val username = getUsername(it)
                 logger.info("Validated Keycloak token for user=$username")
                 val attributes = it.claims.toMutableMap()
+                if (username == null) {
+                    return@map Authentication.build("", emptySet(), attributes)
+                }
                 Authentication.build(
                     username,
                     assignRoles(it),
@@ -128,8 +128,8 @@ class KeycloakTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator
      *  Parse the JWT token
      */
     override fun validate(
-        token: String?,
-        request: R,
+        token: String,
+        request: R?,
     ): Publisher<JWT> =
         Mono
             .just(jsonWebTokenParser.parse(token))

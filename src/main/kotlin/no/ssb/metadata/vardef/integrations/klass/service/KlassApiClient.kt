@@ -21,7 +21,7 @@ interface KlassApiClient {
     @SingleResult
     fun fetchClassification(
         @PathVariable classificationId: Int,
-    ): HttpResponse<Classification?>
+    ): HttpResponse<Classification>
 
     @Get("classifications/{classificationId}/codesAt?date={codesAt}&language={language}")
     @SingleResult

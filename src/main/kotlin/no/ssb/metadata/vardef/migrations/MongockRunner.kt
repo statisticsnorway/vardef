@@ -27,7 +27,7 @@ class MongockRunner(
 ) : ApplicationEventListener<StartupEvent> {
     private val logger: Logger = LoggerFactory.getLogger(MongockRunner::class.java)
 
-    override fun onApplicationEvent(event: StartupEvent?) {
+    override fun onApplicationEvent(event: StartupEvent) {
         val mongock =
             MongockStandalone
                 .builder()

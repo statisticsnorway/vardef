@@ -47,9 +47,9 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
         val body = jsonMapper.readValue(bodyString, CompleteView::class.java)
 
-        assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
-        assertThat(body.name).isEqualTo(expected.name)
-        assertThat(body.definition).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definition)
+        assertThat(body?.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
+        assertThat(body?.name).isEqualTo(expected.name)
+        assertThat(body?.definition).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definition)
 
         val updated: SavedVariableDefinition = patches.latest(expected.definitionId)
         assertThat(updated.definitionId).isEqualTo(expected.definitionId)
@@ -97,8 +97,8 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
 
         val body = jsonMapper.readValue(bodyString, CompleteView::class.java)
-        assertThat(body.shortName).isNotEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.shortName)
-        assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
+        assertThat(body?.shortName).isNotEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.shortName)
+        assertThat(body?.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
     }
 
     @Test
@@ -302,7 +302,7 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.comment).isNull()
+        assertThat(completeView?.comment).isNull()
     }
 
     @Test
@@ -427,10 +427,10 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
         val body = jsonMapper.readValue(bodyString, CompleteView::class.java)
 
-        assertThat(body.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
-        assertThat(body.name).isEqualTo(expected.name)
-        assertThat(body.definition).isEqualTo(expected.definition)
-        assertThat(body.comment).isEqualTo(expected.comment)
+        assertThat(body?.id).isEqualTo(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId)
+        assertThat(body?.name).isEqualTo(expected.name)
+        assertThat(body?.definition).isEqualTo(expected.definition)
+        assertThat(body?.comment).isEqualTo(expected.comment)
     }
 
     @Test
@@ -453,9 +453,9 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.createdBy).isEqualTo(createdBy)
-        assertThat(completeView.lastUpdatedBy).isNotEqualTo(createdBy)
-        assertThat(completeView.lastUpdatedBy).isEqualTo(TEST_USER)
+        assertThat(completeView?.createdBy).isEqualTo(createdBy)
+        assertThat(completeView?.lastUpdatedBy).isNotEqualTo(createdBy)
+        assertThat(completeView?.lastUpdatedBy).isEqualTo(TEST_USER)
     }
 
     @Test
@@ -543,8 +543,8 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
-        assertThat(completeView.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
+        assertThat(completeView?.variableStatus).isEqualTo(VariableStatus.PUBLISHED_INTERNAL)
+        assertThat(completeView?.validUntil).isEqualTo(LocalDate.of(2030, 9, 15))
     }
 
     @Test
@@ -564,7 +564,7 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.validUntil).isNull()
+        assertThat(completeView?.validUntil).isNull()
     }
 
     @Test
@@ -725,6 +725,6 @@ class UpdateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.containsSpecialCategoriesOfPersonalData).isEqualTo(false)
+        assertThat(completeView?.containsSpecialCategoriesOfPersonalData).isEqualTo(false)
     }
 }

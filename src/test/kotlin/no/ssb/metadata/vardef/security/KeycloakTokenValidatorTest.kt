@@ -56,20 +56,6 @@ class KeycloakTokenValidatorTest {
     }
 
     @Test
-    fun `token is null`() {
-        val auth =
-            Mono
-                .from(
-                    keycloakTokenValidator.validateToken(
-                        null,
-                        HttpRequest.POST("/variable-definitions", ""),
-                    ),
-                ).block()
-
-        assertThat(auth).isNull()
-    }
-
-    @Test
     fun `token does not contain dapla groups`() {
         val auth =
             Mono

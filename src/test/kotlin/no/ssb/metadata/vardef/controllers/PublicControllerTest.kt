@@ -67,7 +67,7 @@ class PublicControllerTest : BaseVardefTest() {
                 .body()
                 .asString()
 
-        jsonMapper.readValue(body, Array<RenderedView>::class.java).forEach {
+        jsonMapper.readValue(body, Array<RenderedView>::class.java)?.forEach {
             assertThat(validityPeriods.getLatestPatchInLastValidityPeriod(it.id).variableStatus)
                 .isEqualTo(VariableStatus.PUBLISHED_EXTERNAL)
         }
@@ -321,7 +321,7 @@ class PublicControllerTest : BaseVardefTest() {
 
         val results = jsonMapper.readValue(body, Array<RenderedView>::class.java)
         assertThat(results).hasSize(1)
-        assertThat(results[0].patchId).isEqualTo(expectedPatchId)
+        assertThat(results?.get(0)?.patchId).isEqualTo(expectedPatchId)
     }
 
     companion object {

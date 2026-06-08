@@ -157,7 +157,7 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
-        val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
+        val actualStatuses = variableDefinitions?.map { it.variableStatus }?.toSet()
         assertThat(actualStatuses).containsAll(expectedStatuses)
     }
 
@@ -185,9 +185,9 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
-        assertThat(variableDefinitions.size).isEqualTo(1)
-        assertThat(variableDefinitions[0].shortName).isEqualTo(DRAFT_BUS_EXAMPLE.shortName)
-        assertThat(variableDefinitions[0].patchId).isEqualTo(1)
+        assertThat(variableDefinitions?.size).isEqualTo(1)
+        assertThat(variableDefinitions?.get(0)?.shortName).isEqualTo(DRAFT_BUS_EXAMPLE.shortName)
+        assertThat(variableDefinitions?.get(0)?.patchId).isEqualTo(1)
     }
 
     @ParameterizedTest
@@ -208,7 +208,7 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
-        assertThat(variableDefinitions[0].patchId).isEqualTo(expectedPatchId)
+        assertThat(variableDefinitions?.get(0)?.patchId).isEqualTo(expectedPatchId)
     }
 
     companion object {

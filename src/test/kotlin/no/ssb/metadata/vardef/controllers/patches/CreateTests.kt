@@ -327,7 +327,7 @@ class CreateTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.patchId).isEqualTo(2)
+        assertThat(completeView?.patchId).isEqualTo(2)
     }
 
     @ParameterizedTest

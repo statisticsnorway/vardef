@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.services
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requires
@@ -12,6 +11,7 @@ import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPair
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokVardefIdPairResponse
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
+import tools.jackson.dataformat.xml.XmlMapper
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -21,7 +21,7 @@ import java.io.FileNotFoundException
 class StaticVardokService(
     private val vardokIdMappingRepository: VardokIdMappingRepository,
 ) : VardokService {
-    private val xmlMapper = XmlMapper().registerKotlinModule()
+    private val xmlMapper = XmlMapper()
 
     @Inject
     lateinit var variableDefinitionRepository: VariableDefinitionRepository

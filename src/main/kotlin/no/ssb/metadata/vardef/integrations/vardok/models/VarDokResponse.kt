@@ -1,11 +1,11 @@
 package no.ssb.metadata.vardef.integrations.vardok.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import com.fasterxml.jackson.annotation.JsonRootName
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.serde.annotation.Serdeable
+import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 @Serdeable
 @Introspected
@@ -75,7 +75,7 @@ data class Relations(
 @Serdeable
 @Introspected
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JacksonXmlRootElement(localName = "ClassificationRelation")
+@JsonRootName("ClassificationRelation")
 data class ClassificationRelation(
     val href: String?,
     val type: String?,
@@ -84,7 +84,7 @@ data class ClassificationRelation(
 @Serdeable
 @Introspected
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JacksonXmlRootElement(localName = "ConceptVariableRelation")
+@JsonRootName("ConceptVariableRelation")
 data class ConceptVariableRelation(
     val href: String?,
     val type: String?,
@@ -128,7 +128,7 @@ data class Variable(
 
 @Serdeable
 @Introspected
-@JacksonXmlRootElement(localName = "FIMD")
+@JsonRootName("FIMD")
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class VardokResponse(
     val createdOn: String,

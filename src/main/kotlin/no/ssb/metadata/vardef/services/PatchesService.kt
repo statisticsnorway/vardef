@@ -163,7 +163,10 @@ class PatchesService(
      */
     fun deleteAllForDefinitionId(definitionId: String) {
         list(definitionId).forEach { item ->
-            variableDefinitionRepository.deleteById(item.id)
+            val id = item.id
+            if (id != null) {
+                variableDefinitionRepository.deleteById(id)
+            }
         }
         if (existsVardokMapping(definitionId)) {
             vardokIdMappingRepository.deleteByVardefId(definitionId)

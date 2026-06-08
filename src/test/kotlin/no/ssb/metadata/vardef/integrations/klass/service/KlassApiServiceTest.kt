@@ -65,7 +65,7 @@ class KlassApiServiceTest {
                 ),
         )
 
-    private val getClassificationResponse: HttpResponse<Classification?> = HttpResponse.ok(classification)
+    private val getClassificationResponse: HttpResponse<Classification> = HttpResponse.ok(classification)
     private val listCodesResponse: HttpResponse<Codes> = HttpResponse.ok(codes)
 
     @BeforeEach

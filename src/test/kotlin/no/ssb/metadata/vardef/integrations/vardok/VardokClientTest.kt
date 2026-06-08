@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.context.annotation.Requires
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -15,6 +13,7 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import tools.jackson.dataformat.xml.XmlMapper
 
 @Requires(env = ["integration-test"])
 @MicronautTest
@@ -25,7 +24,7 @@ class VardokClientTest {
     @Inject
     lateinit var vardokApiService: VardokApiService
 
-    private val xmlMapper = XmlMapper().registerKotlinModule()
+    private val xmlMapper = XmlMapper()
 
     @Test
     fun `use xml mapper to read string http response vardok by id`() {

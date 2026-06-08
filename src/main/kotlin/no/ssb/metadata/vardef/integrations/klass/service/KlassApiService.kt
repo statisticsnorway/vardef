@@ -55,14 +55,16 @@ open class KlassApiService(
         }
 
         handleErrorCodes(classificationId, response)
-        return response.body().codes.ifEmpty {
+        val codes = response.body()?.codes
+        if (codes.isNullOrEmpty()) {
             throw NoSuchElementException(
                 "No codes found for $classificationId",
             )
         }
+        return codes
     }
 
-    private fun <T : Any?> handleErrorCodes(
+    private fun <T : Any> handleErrorCodes(
         classificationId: Int,
         response: HttpResponse<T>,
     ): HttpResponse<T> {

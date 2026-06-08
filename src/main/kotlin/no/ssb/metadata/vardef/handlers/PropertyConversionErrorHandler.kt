@@ -38,7 +38,7 @@ class PropertyConversionErrorHandler(
             ErrorContext
                 .builder(request)
                 .cause(exception)
-                .errorMessage(customiseMessage(exception))
+                .errorMessage(customiseMessage(exception) ?: "")
                 .build(),
             HttpResponse.badRequest<Any>(),
         )
@@ -47,11 +47,24 @@ class PropertyConversionErrorHandler(
 private fun customiseMessage(exception: ConversionErrorException): String? {
     val message = exception.cause?.message ?: ""
     return when {
-        "Unknown property [valid_from]" in message -> "valid_from may not be specified here"
-        "Unknown property [valid_until]" in message -> "valid_until may not be specified here"
-        "Unknown property [short_name]" in message -> "short_name may not be specified here"
-        "Unable to deserialize type [Owner owner]" in message ->
+        "Unknown property [valid_from]" in message -> {
+            "valid_from may not be specified here"
+        }
+
+        "Unknown property [valid_until]" in message -> {
+            "valid_until may not be specified here"
+        }
+
+        "Unknown property [short_name]" in message -> {
+            "short_name may not be specified here"
+        }
+
+        "Unable to deserialize type [Owner owner]" in message -> {
             "owner team and groups can not be null"
-        else -> exception.message
+        }
+
+        else -> {
+            exception.message
+        }
     }
 }

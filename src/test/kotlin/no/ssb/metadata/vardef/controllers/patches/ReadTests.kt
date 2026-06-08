@@ -116,7 +116,7 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val completeViewList = jsonMapper.readValue(responseList, Array<CompleteView>::class.java)
-        completeViewList.map { completeResponse ->
+        completeViewList?.map { completeResponse ->
             assertThat(completeResponse).isNotNull
         }
     }

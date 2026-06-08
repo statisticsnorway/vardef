@@ -57,7 +57,6 @@ micronaut:
       inclusion: always
   logger:
     config: logback.xml
-
   server:
     netty:
       access-logger:
@@ -86,10 +85,6 @@ micronaut:
     codes:
       maximumSize: 3600
       expire-after-write: 24h
-    token:
-      maximumSize: 10
-      expire-after-write: 9h
-      enabled: false
   http:
     request-headers:
       user-agent: ${micronaut.application.name}/${micronaut.application.version} (metadata@ssb.no)

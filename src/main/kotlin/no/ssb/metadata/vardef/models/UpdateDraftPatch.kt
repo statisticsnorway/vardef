@@ -111,7 +111,7 @@ data class UpdateDraftPatch(
             }
         }
 
-        private fun <T> requiredValue(
+        private fun <T : Any> requiredValue(
             root: JsonNode,
             fieldName: String,
             jsonMapper: JsonMapper,
@@ -123,7 +123,7 @@ data class UpdateDraftPatch(
             return PatchField.Present(decode(node, jsonMapper, argument))
         }
 
-        private fun <T> nullableValue(
+        private fun <T : Any> nullableValue(
             root: JsonNode,
             fieldName: String,
             jsonMapper: JsonMapper,
@@ -176,10 +176,10 @@ data class UpdateDraftPatch(
             }
         }
 
-        private fun <T> decode(
+        private fun <T : Any> decode(
             node: JsonNode,
             jsonMapper: JsonMapper,
             argument: Argument<T>,
-        ): T = jsonMapper.readValue(node.toString(), argument)
+        ): T = jsonMapper.readValue(node.toString(), argument)!!
     }
 }

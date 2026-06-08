@@ -49,24 +49,6 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /docs/swagger/variable-definitions/**
-  openapi:
-    groups:
-      public:
-        packages: no.ssb.metadata.vardef.controllers.publicapi
-        filename: variable-definitions-public
-        primary: true
-      internal:
-        packages: no.ssb.metadata.vardef.controllers.internalapi
-        filename: variable-definitions-internal
-    property:
-      naming:
-        strategy: SNAKE_CASE
-    views:
-      spec: |
-        mapping.path=/docs/openapi/variable-definitions/,
-        swagger-ui.enabled=true,
-        swagger-ui.js.url=/docs/swagger/variable-definitions/res/,
-        swagger-ui.tagsSorter=Function=(a => a),
   serde:
     deserialization:
       ignore-unknown: false

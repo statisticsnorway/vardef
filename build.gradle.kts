@@ -58,25 +58,6 @@ dependencies {
     testImplementation(libs.json)
     testImplementation(libs.logback.classic)
     aotPlugins(platform(libs.micronaut.platform))
-
-    // Force safe versions of vulnerable transitive dependencies until they are updated
-    constraints {
-        implementation("tools.jackson.core:jackson-core:3.1.1") {
-            because("GHSA-72hv-8253-57qq, CVE-2026-29062, GHSA-2m67-wjpj-xhg9: fix requires >= 3.1.1")
-        }
-        implementation("org.apache.commons:commons-lang3:3.20.0") {
-            because("CVE-2025-48924: fix requires >= 3.18.0")
-        }
-        implementation("io.netty:netty-codec-http:4.2.10.Final") {
-            because("CVE-2026-33870: fix requires > 4.2.9.Final")
-        }
-        implementation("io.netty:netty-codec-http2:4.2.10.Final") {
-            because("CVE-2026-33871: fix requires > 4.2.9.Final")
-        }
-        implementation("org.codehaus.plexus:plexus-utils:4.0.3") {
-            because("CVE-2025-67030: fixed in 4.0.3")
-        }
-    }
 }
 
 application {
@@ -89,8 +70,22 @@ kotlin {
 }
 
 ksp {
-    @OptIn(KspExperimental::class)
-    useKsp2 = true
+    arg("micronaut.openapi.project.dir", projectDir.toString())
+    arg("micronaut.openapi.property.naming.strategy", "SNAKE_CASE")
+    arg("micronaut.openapi.groups.public.packages", "no.ssb.metadata.vardef.controllers.publicapi")
+    arg("micronaut.openapi.groups.public.filename", "variable-definitions-public")
+    arg("micronaut.openapi.groups.public.primary", "true")
+    arg("micronaut.openapi.groups.internal.packages", "no.ssb.metadata.vardef.controllers.internalapi")
+    arg("micronaut.openapi.groups.internal.filename", "variable-definitions-internal")
+    arg(
+        "micronaut.openapi.views.spec",
+        """
+        mapping.path=/docs/openapi/variable-definitions/,
+        swagger-ui.enabled=true,
+        swagger-ui.js.url=/docs/swagger/variable-definitions/res/,
+        swagger-ui.tagsSorter=Function=(a => a),
+""",
+    )
 }
 
 graalvmNative.toolchainDetection = false

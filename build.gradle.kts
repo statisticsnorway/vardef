@@ -9,8 +9,6 @@ plugins {
     alias(libs.plugins.micronaut.aot)
     alias(libs.plugins.shadow)
     alias(libs.plugins.ktlint)
-    alias(libs.plugins.jib)
-    alias(libs.plugins.cyclonedx)
     id("jacoco")
 }
 
@@ -113,11 +111,6 @@ micronaut {
         // Prevent timeout when pulling/starting Docker images
         clientTimeout = 720
     }
-}
-
-tasks.cyclonedxDirectBom {
-    includeConfigs = listOf("runtimeClasspath")
-    projectType = org.cyclonedx.model.Component.Type.APPLICATION
 }
 
 tasks.withType<Jar> {

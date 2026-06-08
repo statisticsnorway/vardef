@@ -2,16 +2,16 @@
 
 ## How to set up your development environment
 
-Install SDKMAN https://sdkman.io/ and SDK java 21.0.2-zulu
+Install SDKMAN https://sdkman.io/ then run the following command from the root of this repo.
 
 ```console
-sdk install java 21.0.2-zulu
+sdk env install
 ```
 
 Go to File, Project structure... in IntelliJ and select this SDK. You can find the location with
 
 ```console
-sdk home java 21.0.2-zulu
+sdk home java
 ```
 
 You must have Docker running.

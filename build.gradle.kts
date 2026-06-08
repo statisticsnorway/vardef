@@ -83,7 +83,7 @@ application {
     mainClass = "no.ssb.metadata.vardef.ApplicationKt"
 }
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
     // See https://youtrack.jetbrains.com/issue/KT-73255
     compilerOptions.freeCompilerArgs.add("-Xannotation-default-target=param-property")
 }
@@ -125,22 +125,6 @@ tasks.cyclonedxDirectBom {
     projectType = org.cyclonedx.model.Component.Type.APPLICATION
 }
 
-jib {
-    from {
-        image = "gcr.io/distroless/java21-debian12@sha256:f34fd3e4e2d7a246d764d0614f5e6ffb3a735930723fac4cfc25a72798950262"
-        platforms {
-            platform {
-                architecture = "amd64"
-                os = "linux"
-            }
-            platform {
-                architecture = "arm64"
-                os = "linux"
-            }
-        }
-    }
-}
-
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "no.ssb.metadata.vardef.ApplicationKt"
@@ -163,10 +147,6 @@ tasks.withType<Jar> {
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     isZip64 = true
-}
-
-tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
-    jdkVersion = "21"
 }
 
 tasks.withType<Test> {

@@ -118,8 +118,9 @@ data class UpdateDraftInput(
             argument: Argument<T>,
         ): FieldPresence<T> {
             val node = root.get(fieldName) ?: return FieldPresence.Undefined
-            // Keep previous PATCH behavior when payloads include explicit null for optional fields.
-            if (node.isNull) return FieldPresence.Undefined
+            if (node.isNull) {
+                throw IllegalArgumentException("$fieldName can not be null")
+            }
             return FieldPresence.Present(decode(node, jsonMapper, argument))
         }
 
@@ -139,7 +140,7 @@ data class UpdateDraftInput(
             jsonMapper: JsonMapper,
         ): FieldPresence<LocalDate> {
             val node = root.get("valid_from") ?: return FieldPresence.Undefined
-            if (node.isNull) return FieldPresence.Undefined
+            if (node.isNull) throw IllegalArgumentException("valid_from can not be null")
             return runCatching {
                 FieldPresence.Present(decode(node, jsonMapper, Argument.of(LocalDate::class.java)))
             }.getOrElse {
@@ -152,7 +153,7 @@ data class UpdateDraftInput(
             jsonMapper: JsonMapper,
         ): FieldPresence<Owner> {
             val node = root.get("owner") ?: return FieldPresence.Undefined
-            if (node.isNull) return FieldPresence.Undefined
+            if (node.isNull) throw IllegalArgumentException("owner can not be null")
             if (node.isObject && !node.has("team")) {
                 throw IllegalArgumentException("owner team and groups can not be null")
             }

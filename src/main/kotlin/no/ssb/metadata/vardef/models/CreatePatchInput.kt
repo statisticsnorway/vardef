@@ -166,7 +166,9 @@ data class CreatePatchInput(
             argument: Argument<T>,
         ): FieldPresence<T> {
             val node = root.get(fieldName) ?: return FieldPresence.Undefined
-            if (node.isNull) return FieldPresence.Undefined
+            if (node.isNull) {
+                throw IllegalArgumentException("$fieldName can not be null")
+            }
             return FieldPresence.Present(decode(node, jsonMapper, argument))
         }
 

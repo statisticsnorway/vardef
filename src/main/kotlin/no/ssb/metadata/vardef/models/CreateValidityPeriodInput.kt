@@ -100,10 +100,17 @@ data class CreateValidityPeriodInput(
             root.fieldNames().forEachRemaining { fieldName ->
                 require(fieldName in allowedFields) {
                     when (fieldName) {
-                        "short_name" -> "short_name may not be specified here"
-                        "valid_until" -> "valid_until may not be specified here"
-                        else ->
+                        "short_name" -> {
+                            "short_name may not be specified here"
+                        }
+
+                        "valid_until" -> {
+                            "valid_until may not be specified here"
+                        }
+
+                        else -> {
                             "Unknown property [$fieldName] encountered during deserialization of type ${CreateValidityPeriod::class.qualifiedName}"
+                        }
                     }
                 }
             }
@@ -145,7 +152,9 @@ data class CreateValidityPeriodInput(
             argument: Argument<T>,
         ): FieldPresence<T> {
             val node = root.get(fieldName) ?: return FieldPresence.Undefined
-            if (node.isNull) return FieldPresence.Undefined
+            if (node.isNull) {
+                throw IllegalArgumentException("$fieldName can not be null")
+            }
             return FieldPresence.Present(decode(node, jsonMapper, argument))
         }
 
@@ -207,6 +216,11 @@ data class CreateValidityPeriodInput(
 
 private fun <T> FieldPresence<T>.requiredValue(): T =
     when (this) {
-        FieldPresence.Undefined -> throw IllegalArgumentException("Failed to convert argument [newPeriod] for value [null]")
-        is FieldPresence.Present -> value
+        FieldPresence.Undefined -> {
+            throw IllegalArgumentException("Value can not be null")
+        }
+
+        is FieldPresence.Present -> {
+            value ?: throw IllegalArgumentException("Value can not be null")
+        }
     }

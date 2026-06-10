@@ -306,6 +306,22 @@ class UpdateTests : BaseVardefTest() {
     }
 
     @Test
+    fun `update draft variable definition clear non-nullable field`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                JSONObject()
+                    .apply {
+                        put("name", JSONObject.NULL)
+                    }.toString(),
+            ).`when`()
+            .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
+    }
+
+    @Test
     fun `update draft variable definition return complete view`(spec: RequestSpecification) {
         val body =
             spec
@@ -573,7 +589,10 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                jsonMapper.writeValueAsString(UpdateDraft(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
+                JSONObject()
+                    .apply {
+                        put("variable_status", VariableStatus.PUBLISHED_EXTERNAL)
+                    }.toString(),
             ).`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
@@ -586,11 +605,10 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                jsonMapper.writeValueAsString(
-                    UpdateDraft(
-                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
-                    ),
-                ),
+                JSONObject()
+                    .apply {
+                        put("variable_status", VariableStatus.PUBLISHED_EXTERNAL)
+                    }.toString(),
             ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()
@@ -603,12 +621,19 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                jsonMapper.writeValueAsString(
-                    UpdateDraft(
-                        definition = LanguageStringType(nb = "something", nn = "something", "something"),
-                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
-                    ),
-                ),
+                JSONObject()
+                    .apply {
+                        put("variable_status", VariableStatus.PUBLISHED_EXTERNAL)
+                        put(
+                            "definition",
+                            JSONObject()
+                                .apply {
+                                    put("nb", "something")
+                                    put("nn", "something")
+                                    put("en", "something")
+                                },
+                        )
+                    }.toString(),
             ).`when`()
             .patch("/variable-definitions/${DRAFT_EXAMPLE_WITH_VALID_UNTIL.definitionId}")
             .then()
@@ -621,12 +646,19 @@ class UpdateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                jsonMapper.writeValueAsString(
-                    UpdateDraft(
-                        definition = LanguageStringType(nb = null, nn = "something", "something"),
-                        variableStatus = VariableStatus.PUBLISHED_EXTERNAL,
-                    ),
-                ),
+                JSONObject()
+                    .apply {
+                        put("variable_status", VariableStatus.PUBLISHED_EXTERNAL)
+                        put(
+                            "definition",
+                            JSONObject()
+                                .apply {
+                                    put("nb", JSONObject.NULL)
+                                    put("nn", "something")
+                                    put("en", "something")
+                                },
+                        )
+                    }.toString(),
             ).`when`()
             .patch("/variable-definitions/${SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId}")
             .then()

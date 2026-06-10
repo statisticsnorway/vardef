@@ -10,7 +10,7 @@ import no.ssb.metadata.vardef.integrations.dapla.utils.loadQuery
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-//@Requires(env = ["integration-test"])
+@Requires(env = ["integration-test"])
 @MicronautTest
 class DaplaApiClientTest {
     @Inject

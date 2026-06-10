@@ -200,12 +200,11 @@ data class CreatePatchInput(
         }
 
         private fun validateLanguageFields(root: JsonNode) {
-            val allowedLanguages = setOf("nb", "nn", "en")
             listOf("name", "definition", "comment").forEach { fieldName ->
                 val node = root.get(fieldName) ?: return@forEach
                 if (!node.isObject) return@forEach
                 node.fieldNames().forEachRemaining { languageField ->
-                    require(languageField in allowedLanguages) {
+                    require(languageField in SupportedLanguages.toSet()) {
                         "Unknown property [$languageField] encountered during deserialization of type ${LanguageStringType::class.qualifiedName} in field [$fieldName]"
                     }
                 }

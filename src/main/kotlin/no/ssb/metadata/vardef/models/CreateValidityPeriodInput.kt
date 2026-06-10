@@ -210,5 +210,3 @@ private fun <T> FieldPresence<T>.requiredValue(): T =
         FieldPresence.Undefined -> throw IllegalArgumentException("Failed to convert argument [newPeriod] for value [null]")
         is FieldPresence.Present -> value
     }
-
-

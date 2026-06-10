@@ -8,23 +8,26 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 /**
- * PATCH payload for create-patch endpoint with tri-state semantics for nullable fields.
+ * Input class which allows us to detect the following three cases:
+ * - Undefined (field missing): keep existing value
+ * - Present(value): set value
+ * - Present(null): clear value for nullable fields
  */
-data class CreatePatchPatch(
-    val name: PatchField<LanguageStringType> = PatchField.Undefined,
-    val definition: PatchField<LanguageStringType> = PatchField.Undefined,
-    val classificationReference: PatchField<String?> = PatchField.Undefined,
-    val unitTypes: PatchField<List<String>> = PatchField.Undefined,
-    val subjectFields: PatchField<List<String>> = PatchField.Undefined,
-    val containsSpecialCategoriesOfPersonalData: PatchField<Boolean> = PatchField.Undefined,
-    val variableStatus: PatchField<VariableStatus> = PatchField.Undefined,
-    val measurementType: PatchField<String?> = PatchField.Undefined,
-    val validUntil: PatchField<LocalDate?> = PatchField.Undefined,
-    val externalReferenceUri: PatchField<URL?> = PatchField.Undefined,
-    val comment: PatchField<LanguageStringType?> = PatchField.Undefined,
-    val relatedVariableDefinitionUris: PatchField<List<URL>?> = PatchField.Undefined,
-    val owner: PatchField<Owner> = PatchField.Undefined,
-    val contact: PatchField<Contact> = PatchField.Undefined,
+data class CreatePatchInput(
+    val name: FieldPresence<LanguageStringType> = FieldPresence.Undefined,
+    val definition: FieldPresence<LanguageStringType> = FieldPresence.Undefined,
+    val classificationReference: FieldPresence<String?> = FieldPresence.Undefined,
+    val unitTypes: FieldPresence<List<String>> = FieldPresence.Undefined,
+    val subjectFields: FieldPresence<List<String>> = FieldPresence.Undefined,
+    val containsSpecialCategoriesOfPersonalData: FieldPresence<Boolean> = FieldPresence.Undefined,
+    val variableStatus: FieldPresence<VariableStatus> = FieldPresence.Undefined,
+    val measurementType: FieldPresence<String?> = FieldPresence.Undefined,
+    val validUntil: FieldPresence<LocalDate?> = FieldPresence.Undefined,
+    val externalReferenceUri: FieldPresence<URL?> = FieldPresence.Undefined,
+    val comment: FieldPresence<LanguageStringType?> = FieldPresence.Undefined,
+    val relatedVariableDefinitionUris: FieldPresence<List<URL>?> = FieldPresence.Undefined,
+    val owner: FieldPresence<Owner> = FieldPresence.Undefined,
+    val contact: FieldPresence<Contact> = FieldPresence.Undefined,
 ) {
     fun toCreatePatch(): CreatePatch =
         CreatePatch(
@@ -53,13 +56,13 @@ data class CreatePatchPatch(
             patchId = highestPatchId + 1,
             name =
                 when (val updates = name) {
-                    PatchField.Undefined -> previousPatch.name
-                    is PatchField.Present -> previousPatch.name.update(updates.value)
+                    FieldPresence.Undefined -> previousPatch.name
+                    is FieldPresence.Present -> previousPatch.name.update(updates.value)
                 },
             definition =
                 when (val updates = definition) {
-                    PatchField.Undefined -> previousPatch.definition
-                    is PatchField.Present -> previousPatch.definition.update(updates.value)
+                    FieldPresence.Undefined -> previousPatch.definition
+                    is FieldPresence.Present -> previousPatch.definition.update(updates.value)
                 },
             classificationReference = classificationReference.applyNullable(previousPatch.classificationReference),
             unitTypes = unitTypes.orElse(previousPatch.unitTypes),
@@ -72,13 +75,13 @@ data class CreatePatchPatch(
             externalReferenceUri = externalReferenceUri.applyNullable(previousPatch.externalReferenceUri),
             comment =
                 when (val updates = comment) {
-                    PatchField.Undefined -> previousPatch.comment
-                    is PatchField.Present -> updates.value?.let { previousPatch.comment?.update(it) ?: it }
+                    FieldPresence.Undefined -> previousPatch.comment
+                    is FieldPresence.Present -> updates.value?.let { previousPatch.comment?.update(it) ?: it }
                 },
             relatedVariableDefinitionUris =
                 when (val updates = relatedVariableDefinitionUris) {
-                    PatchField.Undefined -> previousPatch.relatedVariableDefinitionUris
-                    is PatchField.Present -> updates.value?.map { it.toString() }
+                    FieldPresence.Undefined -> previousPatch.relatedVariableDefinitionUris
+                    is FieldPresence.Present -> updates.value?.map { it.toString() }
                 },
             owner = owner.orElse(previousPatch.owner),
             contact = contact.orElse(previousPatch.contact),
@@ -109,16 +112,23 @@ data class CreatePatchPatch(
         fun fromJson(
             root: JsonNode,
             jsonMapper: JsonMapper,
-        ): CreatePatchPatch {
+        ): CreatePatchInput {
             require(root.isObject) { "Request body must be a JSON object" }
 
             root.fieldNames().forEachRemaining { fieldName ->
                 require(fieldName in allowedFields) {
                     when (fieldName) {
-                        "short_name" -> "short_name may not be specified here"
-                        "valid_from" -> "valid_from may not be specified here"
-                        else ->
+                        "short_name" -> {
+                            "short_name may not be specified here"
+                        }
+
+                        "valid_from" -> {
+                            "valid_from may not be specified here"
+                        }
+
+                        else -> {
                             "Unknown property [$fieldName] encountered during deserialization of type ${CreatePatch::class.qualifiedName}"
+                        }
                     }
                 }
             }
@@ -126,7 +136,7 @@ data class CreatePatchPatch(
             validateLanguageFields(root)
 
             return runCatching {
-                CreatePatchPatch(
+                CreatePatchInput(
                     name = requiredValue(root, "name", jsonMapper, Argument.of(LanguageStringType::class.java)),
                     definition = requiredValue(root, "definition", jsonMapper, Argument.of(LanguageStringType::class.java)),
                     classificationReference = nullableValue(root, "classification_reference", jsonMapper, Argument.of(String::class.java)),
@@ -154,10 +164,10 @@ data class CreatePatchPatch(
             fieldName: String,
             jsonMapper: JsonMapper,
             argument: Argument<T>,
-        ): PatchField<T> {
-            val node = root.get(fieldName) ?: return PatchField.Undefined
-            if (node.isNull) return PatchField.Undefined
-            return PatchField.Present(decode(node, jsonMapper, argument))
+        ): FieldPresence<T> {
+            val node = root.get(fieldName) ?: return FieldPresence.Undefined
+            if (node.isNull) return FieldPresence.Undefined
+            return FieldPresence.Present(decode(node, jsonMapper, argument))
         }
 
         private fun <T : Any> nullableValue(
@@ -165,26 +175,26 @@ data class CreatePatchPatch(
             fieldName: String,
             jsonMapper: JsonMapper,
             argument: Argument<T>,
-        ): PatchField<T?> {
-            val node = root.get(fieldName) ?: return PatchField.Undefined
-            if (node.isNull) return PatchField.Present(null)
-            return PatchField.Present(decode(node, jsonMapper, argument))
+        ): FieldPresence<T?> {
+            val node = root.get(fieldName) ?: return FieldPresence.Undefined
+            if (node.isNull) return FieldPresence.Present(null)
+            return FieldPresence.Present(decode(node, jsonMapper, argument))
         }
 
         private fun ownerValue(
             root: JsonNode,
             jsonMapper: JsonMapper,
-        ): PatchField<Owner> {
-            val node = root.get("owner") ?: return PatchField.Undefined
-            if (node.isNull) return PatchField.Undefined
+        ): FieldPresence<Owner> {
+            val node = root.get("owner") ?: return FieldPresence.Undefined
+            if (node.isNull) return FieldPresence.Undefined
             if (node.isObject && !node.has("team")) {
                 throw IllegalArgumentException("owner team and groups can not be null")
             }
             if (node.isObject && !node.has("groups")) {
                 val team = decode(node.get("team"), jsonMapper, Argument.of(String::class.java))
-                return PatchField.Present(Owner(team = team, groups = emptyList()))
+                return FieldPresence.Present(Owner(team = team, groups = emptyList()))
             }
-            return PatchField.Present(decode(node, jsonMapper, Argument.of(Owner::class.java)))
+            return FieldPresence.Present(decode(node, jsonMapper, Argument.of(Owner::class.java)))
         }
 
         private fun validateLanguageFields(root: JsonNode) {
@@ -207,5 +217,3 @@ data class CreatePatchPatch(
         ): T = jsonMapper.readValue(node.toString(), argument)!!
     }
 }
-
-

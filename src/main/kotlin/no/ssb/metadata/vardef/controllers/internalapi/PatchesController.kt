@@ -28,7 +28,7 @@ import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.CreatePatch
-import no.ssb.metadata.vardef.models.CreatePatchPatch
+import no.ssb.metadata.vardef.models.CreatePatchInput
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.PatchesService
@@ -97,7 +97,7 @@ class PatchesController(
     @ApiResponse(
         responseCode = "200",
         content = [
-            io.swagger.v3.oas.annotations.media.Content(
+            Content(
                 examples = [
                     ExampleObject(
                         name = "Patch",
@@ -195,14 +195,14 @@ class PatchesController(
                 throw HttpStatusException(HttpStatus.BAD_REQUEST, "Request body must be valid JSON")
             }
 
-        val createPatchPatch =
+        val createPatchInput =
             try {
-                CreatePatchPatch.fromJson(root, jsonMapper)
+                CreatePatchInput.fromJson(root, jsonMapper)
             } catch (e: IllegalArgumentException) {
                 throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
             }
 
-        val createPatch = createPatchPatch.toCreatePatch()
+        val createPatch = createPatchInput.toCreatePatch()
         val violations = validator.validate(createPatch)
         if (violations.isNotEmpty()) {
             throw ConstraintViolationException(violations)
@@ -224,7 +224,7 @@ class PatchesController(
         }
         return patches
             .create(
-                createPatchPatch,
+                createPatchInput,
                 variableDefinitionId,
                 latestPatchOnValidityPeriod,
                 authentication.name,

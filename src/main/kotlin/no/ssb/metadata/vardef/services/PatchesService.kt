@@ -12,8 +12,8 @@ import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.models.CreatePatch
-import no.ssb.metadata.vardef.models.CreatePatchPatch
-import no.ssb.metadata.vardef.models.PatchField
+import no.ssb.metadata.vardef.models.CreatePatchInput
+import no.ssb.metadata.vardef.models.FieldPresence
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.canTransitionTo
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
@@ -54,7 +54,7 @@ class PatchesService(
      * @throws ClosedValidityPeriodException if attempt tp patch valid until on closed validity period
      */
     fun create(
-        patch: CreatePatchPatch,
+        patch: CreatePatchInput,
         definitionId: String,
         latestPatch: SavedVariableDefinition,
         userName: String,
@@ -126,35 +126,35 @@ class PatchesService(
         userName: String,
     ): SavedVariableDefinition =
         create(
-            patch = patch.toCreatePatchPatch(),
+            patch = patch.toCreatePatchInput(),
             definitionId = definitionId,
             latestPatch = latestPatch,
             userName = userName,
         )
 
-    private fun CreatePatch.toCreatePatchPatch(): CreatePatchPatch =
-        CreatePatchPatch(
-            name = name.toPatchField(),
-            definition = definition.toPatchField(),
-            classificationReference = classificationReference.toPatchField(),
-            unitTypes = unitTypes.toPatchField(),
-            subjectFields = subjectFields.toPatchField(),
-            containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData.toPatchField(),
-            variableStatus = variableStatus.toPatchField(),
-            measurementType = measurementType.toPatchField(),
-            validUntil = validUntil.toPatchField(),
-            externalReferenceUri = externalReferenceUri.toPatchField(),
-            comment = comment.toPatchField(),
-            relatedVariableDefinitionUris = relatedVariableDefinitionUris.toPatchField(),
-            owner = owner.toPatchField(),
-            contact = contact.toPatchField(),
+    private fun CreatePatch.toCreatePatchInput(): CreatePatchInput =
+        CreatePatchInput(
+            name = name.toFieldPresence(),
+            definition = definition.toFieldPresence(),
+            classificationReference = classificationReference.toFieldPresence(),
+            unitTypes = unitTypes.toFieldPresence(),
+            subjectFields = subjectFields.toFieldPresence(),
+            containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData.toFieldPresence(),
+            variableStatus = variableStatus.toFieldPresence(),
+            measurementType = measurementType.toFieldPresence(),
+            validUntil = validUntil.toFieldPresence(),
+            externalReferenceUri = externalReferenceUri.toFieldPresence(),
+            comment = comment.toFieldPresence(),
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris.toFieldPresence(),
+            owner = owner.toFieldPresence(),
+            contact = contact.toFieldPresence(),
         )
 
-    private fun <T> T?.toPatchField(): PatchField<T> =
+    private fun <T> T?.toFieldPresence(): FieldPresence<T> =
         if (this == null) {
-            PatchField.Undefined
+            FieldPresence.Undefined
         } else {
-            PatchField.Present(this)
+            FieldPresence.Present(this)
         }
 
     /**
@@ -205,7 +205,10 @@ class PatchesService(
      */
     fun deleteAllForDefinitionId(definitionId: String) {
         list(definitionId).forEach { item ->
-            variableDefinitionRepository.deleteById(item.id)
+            val id = item.id
+            if (id != null) {
+                variableDefinitionRepository.deleteById(id)
+            }
         }
         if (existsVardokMapping(definitionId)) {
             vardokIdMappingRepository.deleteByVardefId(definitionId)

@@ -1,8 +1,10 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
+import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
+import io.micronaut.json.JsonMapper
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -16,13 +18,15 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
+import jakarta.validation.ConstraintViolationException
+import jakarta.validation.Validator
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.CreateValidityPeriod
+import no.ssb.metadata.vardef.models.CreateValidityPeriodInput
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.ValidityPeriodsService
@@ -34,6 +38,8 @@ import no.ssb.metadata.vardef.services.ValidityPeriodsService
 @Secured(Roles.VARIABLE_CONSUMER)
 class ValidityPeriodsController(
     private val validityPeriods: ValidityPeriodsService,
+    private val jsonMapper: JsonMapper,
+    private val validator: Validator,
 ) {
     /**
      * Create a new validity period for a variable definition.
@@ -70,7 +76,6 @@ class ValidityPeriodsController(
         )
         variableDefinitionId: String,
         @Body
-        @Valid
         @RequestBody(
             content = [
                 Content(
@@ -79,16 +84,42 @@ class ValidityPeriodsController(
                 ),
             ],
         )
-        newPeriod: CreateValidityPeriod,
+        body: String,
         authentication: Authentication,
     ): CompleteView {
+        val root =
+            try {
+                jsonMapper.readValue(body, JsonNode::class.java)
+            } catch (_: Exception) {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Request body must be valid JSON")
+            }
+
+        val newPeriodInput =
+            try {
+                CreateValidityPeriodInput.fromJson(root, jsonMapper)
+            } catch (e: IllegalArgumentException) {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
+            }
+
+        val newPeriod =
+            try {
+                newPeriodInput.toCreateValidityPeriod()
+            } catch (e: IllegalArgumentException) {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
+            }
+
+        val violations = validator.validate(newPeriod)
+        if (violations.isNotEmpty()) {
+            throw ConstraintViolationException(violations)
+        }
+
         val latestExistingPatch = validityPeriods.getLatestPatchInLastValidityPeriod(variableDefinitionId)
 
         if (!latestExistingPatch.variableStatus.isPublished()) {
             throw HttpStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Only allowed for published variables.")
         }
 
-        return validityPeriods.create(variableDefinitionId, newPeriod, authentication.name).toCompleteView()
+        return validityPeriods.create(variableDefinitionId, newPeriodInput, authentication.name).toCompleteView()
     }
 
     /**

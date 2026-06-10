@@ -89,7 +89,7 @@ class VariableDefinitionService(
 
     fun update(
         savedDraft: SavedVariableDefinition,
-        updateDraft: UpdateDraftPatch,
+        updateDraft: UpdateDraftInput,
         userName: String,
     ): SavedVariableDefinition {
         updateDraft.owner

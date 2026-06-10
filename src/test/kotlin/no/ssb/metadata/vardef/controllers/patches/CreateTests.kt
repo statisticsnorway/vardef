@@ -340,10 +340,47 @@ class CreateTests : BaseVardefTest() {
             .given()
             .contentType(ContentType.JSON)
             .body(
-                jsonMapper.writeValueAsString(CreatePatch(variableStatus = VariableStatus.PUBLISHED_EXTERNAL)),
+                JSONObject()
+                    .apply {
+                        put("variable_status", VariableStatus.PUBLISHED_EXTERNAL)
+                    }.toString(),
             ).`when`()
             .post("/variable-definitions/$definitionId/patches")
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
+    }
+
+    @Test
+    fun `create patch clear nullable field`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """{"external_reference_uri": null}""".trimIndent(),
+                ).`when`()
+                .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
+                .then()
+                .statusCode(HttpStatus.CREATED.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView?.externalReferenceUri).isNull()
+    }
+
+    @Test
+    fun `create patch attempt to clear non-nullable field`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """{"name": null}""",
+                ).`when`()
+                .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 }

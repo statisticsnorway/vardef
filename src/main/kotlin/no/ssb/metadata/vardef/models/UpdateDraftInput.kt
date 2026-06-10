@@ -7,28 +7,28 @@ import java.net.URL
 import java.time.LocalDate
 
 /**
- * PATCH payload where each top-level field has tri-state semantics:
+ * Input class which allows us to detect the following three cases:
  * - Undefined (field missing): keep existing value
  * - Present(value): set value
  * - Present(null): clear value for nullable fields
  */
-data class UpdateDraftPatch(
-    val name: PatchField<LanguageStringType> = PatchField.Undefined,
-    val shortName: PatchField<String> = PatchField.Undefined,
-    val definition: PatchField<LanguageStringType> = PatchField.Undefined,
-    val classificationReference: PatchField<String?> = PatchField.Undefined,
-    val unitTypes: PatchField<List<String>> = PatchField.Undefined,
-    val subjectFields: PatchField<List<String>> = PatchField.Undefined,
-    val containsSpecialCategoriesOfPersonalData: PatchField<Boolean> = PatchField.Undefined,
-    val variableStatus: PatchField<VariableStatus> = PatchField.Undefined,
-    val measurementType: PatchField<String?> = PatchField.Undefined,
-    val validFrom: PatchField<LocalDate> = PatchField.Undefined,
-    val validUntil: PatchField<LocalDate?> = PatchField.Undefined,
-    val externalReferenceUri: PatchField<URL?> = PatchField.Undefined,
-    val comment: PatchField<LanguageStringType?> = PatchField.Undefined,
-    val relatedVariableDefinitionUris: PatchField<List<URL>?> = PatchField.Undefined,
-    val owner: PatchField<Owner> = PatchField.Undefined,
-    val contact: PatchField<Contact> = PatchField.Undefined,
+data class UpdateDraftInput(
+    val name: FieldPresence<LanguageStringType> = FieldPresence.Undefined,
+    val shortName: FieldPresence<String> = FieldPresence.Undefined,
+    val definition: FieldPresence<LanguageStringType> = FieldPresence.Undefined,
+    val classificationReference: FieldPresence<String?> = FieldPresence.Undefined,
+    val unitTypes: FieldPresence<List<String>> = FieldPresence.Undefined,
+    val subjectFields: FieldPresence<List<String>> = FieldPresence.Undefined,
+    val containsSpecialCategoriesOfPersonalData: FieldPresence<Boolean> = FieldPresence.Undefined,
+    val variableStatus: FieldPresence<VariableStatus> = FieldPresence.Undefined,
+    val measurementType: FieldPresence<String?> = FieldPresence.Undefined,
+    val validFrom: FieldPresence<LocalDate> = FieldPresence.Undefined,
+    val validUntil: FieldPresence<LocalDate?> = FieldPresence.Undefined,
+    val externalReferenceUri: FieldPresence<URL?> = FieldPresence.Undefined,
+    val comment: FieldPresence<LanguageStringType?> = FieldPresence.Undefined,
+    val relatedVariableDefinitionUris: FieldPresence<List<URL>?> = FieldPresence.Undefined,
+    val owner: FieldPresence<Owner> = FieldPresence.Undefined,
+    val contact: FieldPresence<Contact> = FieldPresence.Undefined,
 ) {
     fun toUpdateDraft(): UpdateDraft =
         UpdateDraft(
@@ -74,7 +74,7 @@ data class UpdateDraftPatch(
         fun fromJson(
             root: JsonNode,
             jsonMapper: JsonMapper,
-        ): UpdateDraftPatch {
+        ): UpdateDraftInput {
             require(root.isObject) { "Request body must be a JSON object" }
 
             root.fieldNames().forEachRemaining { fieldName ->
@@ -86,7 +86,7 @@ data class UpdateDraftPatch(
             validateLanguageFields(root)
 
             return runCatching {
-                UpdateDraftPatch(
+                UpdateDraftInput(
                     name = requiredValue(root, "name", jsonMapper, Argument.of(LanguageStringType::class.java)),
                     shortName = requiredValue(root, "short_name", jsonMapper, Argument.of(String::class.java)),
                     definition = requiredValue(root, "definition", jsonMapper, Argument.of(LanguageStringType::class.java)),
@@ -116,11 +116,12 @@ data class UpdateDraftPatch(
             fieldName: String,
             jsonMapper: JsonMapper,
             argument: Argument<T>,
-        ): PatchField<T> {
-            val node = root.get(fieldName) ?: return PatchField.Undefined
-            // Keep previous PATCH behavior when payloads include explicit null for optional fields.
-            if (node.isNull) return PatchField.Undefined
-            return PatchField.Present(decode(node, jsonMapper, argument))
+        ): FieldPresence<T> {
+            val node = root.get(fieldName) ?: return FieldPresence.Undefined
+            if (node.isNull) {
+                throw IllegalArgumentException("$fieldName can not be null")
+            }
+            return FieldPresence.Present(decode(node, jsonMapper, argument))
         }
 
         private fun <T> nullableValue(
@@ -128,20 +129,20 @@ data class UpdateDraftPatch(
             fieldName: String,
             jsonMapper: JsonMapper,
             argument: Argument<T>,
-        ): PatchField<T?> {
-            val node = root.get(fieldName) ?: return PatchField.Undefined
-            if (node.isNull) return PatchField.Present(null)
-            return PatchField.Present(decode(node, jsonMapper, argument))
+        ): FieldPresence<T?> {
+            val node = root.get(fieldName) ?: return FieldPresence.Undefined
+            if (node.isNull) return FieldPresence.Present(null)
+            return FieldPresence.Present(decode(node, jsonMapper, argument))
         }
 
         private fun validFromValue(
             root: JsonNode,
             jsonMapper: JsonMapper,
-        ): PatchField<LocalDate> {
-            val node = root.get("valid_from") ?: return PatchField.Undefined
-            if (node.isNull) return PatchField.Undefined
+        ): FieldPresence<LocalDate> {
+            val node = root.get("valid_from") ?: return FieldPresence.Undefined
+            if (node.isNull) throw IllegalArgumentException("valid_from can not be null")
             return runCatching {
-                PatchField.Present(decode(node, jsonMapper, Argument.of(LocalDate::class.java)))
+                FieldPresence.Present(decode(node, jsonMapper, Argument.of(LocalDate::class.java)))
             }.getOrElse {
                 throw IllegalArgumentException("Error decoding property [LocalDate validFrom]")
             }
@@ -150,26 +151,25 @@ data class UpdateDraftPatch(
         private fun ownerValue(
             root: JsonNode,
             jsonMapper: JsonMapper,
-        ): PatchField<Owner> {
-            val node = root.get("owner") ?: return PatchField.Undefined
-            if (node.isNull) return PatchField.Undefined
+        ): FieldPresence<Owner> {
+            val node = root.get("owner") ?: return FieldPresence.Undefined
+            if (node.isNull) throw IllegalArgumentException("owner can not be null")
             if (node.isObject && !node.has("team")) {
                 throw IllegalArgumentException("owner team and groups can not be null")
             }
             if (node.isObject && !node.has("groups")) {
                 val team = decode(node.get("team"), jsonMapper, Argument.of(String::class.java))
-                return PatchField.Present(Owner(team = team, groups = emptyList()))
+                return FieldPresence.Present(Owner(team = team, groups = emptyList()))
             }
-            return PatchField.Present(decode(node, jsonMapper, Argument.of(Owner::class.java)))
+            return FieldPresence.Present(decode(node, jsonMapper, Argument.of(Owner::class.java)))
         }
 
         private fun validateLanguageFields(root: JsonNode) {
-            val allowedLanguages = setOf("nb", "nn", "en")
             listOf("name", "definition", "comment").forEach { fieldName ->
                 val node = root.get(fieldName) ?: return@forEach
                 if (!node.isObject) return@forEach
                 node.fieldNames().forEachRemaining { languageField ->
-                    require(languageField in allowedLanguages) {
+                    require(languageField in SupportedLanguages.toSet()) {
                         "Unknown property [$languageField] encountered during deserialization of type ${LanguageStringType::class.qualifiedName} in field [$fieldName]"
                     }
                 }

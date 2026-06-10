@@ -12,6 +12,8 @@ import no.ssb.metadata.vardef.extensions.isEqualOrBefore
 import no.ssb.metadata.vardef.integrations.dapla.services.DaplaTeamService
 import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRepository
 import no.ssb.metadata.vardef.models.CreatePatch
+import no.ssb.metadata.vardef.models.CreatePatchInput
+import no.ssb.metadata.vardef.models.FieldPresence
 import no.ssb.metadata.vardef.models.SavedVariableDefinition
 import no.ssb.metadata.vardef.models.canTransitionTo
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
@@ -52,55 +54,57 @@ class PatchesService(
      * @throws ClosedValidityPeriodException if attempt tp patch valid until on closed validity period
      */
     fun create(
-        patch: CreatePatch,
+        patch: CreatePatchInput,
         definitionId: String,
         latestPatch: SavedVariableDefinition,
         userName: String,
     ): SavedVariableDefinition {
-        if (patch.validUntil != null) {
-            if (latestPatch.validUntil != null && patch.validUntil.compareTo(latestPatch.validUntil) != 0) {
+        val createPatch = patch.toCreatePatch()
+
+        if (createPatch.validUntil != null) {
+            if (latestPatch.validUntil != null && createPatch.validUntil.compareTo(latestPatch.validUntil) != 0) {
                 logger.error(
                     "Attempt to patch 'validUntil' on closed 'validityPeriod' for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
                 throw ClosedValidityPeriodException()
             }
-            if (latestPatch.validFrom.let { patch.validUntil.isEqualOrBefore(it) }) {
+            if (latestPatch.validFrom.let { createPatch.validUntil.isEqualOrBefore(it) }) {
                 logger.error(
-                    "Invalid 'validUntil' value ${patch.validUntil} for definition: $definitionId",
+                    "Invalid 'validUntil' value ${createPatch.validUntil} for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
                 throw InvalidValidDateException()
             }
         }
-        if (patch.owner != latestPatch.owner && patch.owner != null) {
+        if (createPatch.owner != latestPatch.owner && createPatch.owner != null) {
             logger.info(
-                "When creating patch owner has changed from ${latestPatch.owner} to ${patch.owner} for definition: $definitionId",
+                "When creating patch owner has changed from ${latestPatch.owner} to ${createPatch.owner} for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
             )
-            if (!DaplaTeamService.containsDevelopersGroup(patch.owner)) {
+            if (!DaplaTeamService.containsDevelopersGroup(createPatch.owner)) {
                 logger.warn(
-                    "Creating patch and ${patch.owner} not in developers-group for definition: $definitionId",
+                    "Creating patch and ${createPatch.owner} not in developers-group for definition: $definitionId",
                     kv(DEFINITION_ID, definitionId),
                 )
                 throw InvalidOwnerStructureError("Developers group of the owning team must be included in the groups list.")
             }
-            validityPeriodsService.updateOwnerOnOtherPeriods(definitionId, patch.owner, latestPatch.validFrom, userName)
+            validityPeriodsService.updateOwnerOnOtherPeriods(definitionId, createPatch.owner, latestPatch.validFrom, userName)
             logger.info(
-                "Creating patch and updating owner to ${patch.owner} on other periods for definition: $definitionId",
+                "Creating patch and updating owner to ${createPatch.owner} on other periods for definition: $definitionId",
                 kv(DEFINITION_ID, definitionId),
             )
         }
 
-        if (patch.variableStatus != null) {
-            if (!latestPatch.variableStatus.canTransitionTo(patch.variableStatus)) {
+        if (createPatch.variableStatus != null) {
+            if (!latestPatch.variableStatus.canTransitionTo(createPatch.variableStatus)) {
                 throw IllegalStatusChangeException(
-                    "Changing the status from ${latestPatch.variableStatus} to ${patch.variableStatus} is not allowed.",
+                    "Changing the status from ${latestPatch.variableStatus} to ${createPatch.variableStatus} is not allowed.",
                 )
             }
             validityPeriodsService.updateStatusOnOtherPeriods(
                 definitionId,
-                patch.variableStatus,
+                createPatch.variableStatus,
                 latestPatch.validFrom,
                 userName,
             )
@@ -114,6 +118,44 @@ class PatchesService(
         logger.debug("New patch {}", savedVariableDefinition)
         return savedVariableDefinition
     }
+
+    fun create(
+        patch: CreatePatch,
+        definitionId: String,
+        latestPatch: SavedVariableDefinition,
+        userName: String,
+    ): SavedVariableDefinition =
+        create(
+            patch = patch.toCreatePatchInput(),
+            definitionId = definitionId,
+            latestPatch = latestPatch,
+            userName = userName,
+        )
+
+    private fun CreatePatch.toCreatePatchInput(): CreatePatchInput =
+        CreatePatchInput(
+            name = name.toFieldPresence(),
+            definition = definition.toFieldPresence(),
+            classificationReference = classificationReference.toFieldPresence(),
+            unitTypes = unitTypes.toFieldPresence(),
+            subjectFields = subjectFields.toFieldPresence(),
+            containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData.toFieldPresence(),
+            variableStatus = variableStatus.toFieldPresence(),
+            measurementType = measurementType.toFieldPresence(),
+            validUntil = validUntil.toFieldPresence(),
+            externalReferenceUri = externalReferenceUri.toFieldPresence(),
+            comment = comment.toFieldPresence(),
+            relatedVariableDefinitionUris = relatedVariableDefinitionUris.toFieldPresence(),
+            owner = owner.toFieldPresence(),
+            contact = contact.toFieldPresence(),
+        )
+
+    private fun <T> T?.toFieldPresence(): FieldPresence<T> =
+        if (this == null) {
+            FieldPresence.Undefined
+        } else {
+            FieldPresence.Present(this)
+        }
 
     /**
      * List all Patches for a specific Variable Definition.
@@ -163,7 +205,10 @@ class PatchesService(
      */
     fun deleteAllForDefinitionId(definitionId: String) {
         list(definitionId).forEach { item ->
-            variableDefinitionRepository.deleteById(item.id)
+            val id = item.id
+            if (id != null) {
+                variableDefinitionRepository.deleteById(id)
+            }
         }
         if (existsVardokMapping(definitionId)) {
             vardokIdMappingRepository.deleteByVardefId(definitionId)

@@ -26,5 +26,7 @@ enum class SupportedLanguages {
 
     companion object {
         val DEFAULT = SupportedLanguages.NB
+
+        fun toSet(): Set<String> = SupportedLanguages.entries.map { it.toString().lowercase() }.toSet()
     }
 }

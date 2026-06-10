@@ -169,15 +169,16 @@ class ValidityPeriodsService(
      *  previous validity period.
      *  2. Saves the new validity period as a separate new patch with updated validity information.
      *
-     * @param newPeriod The new variable definition that specifies the start of a new validity period.
+     * @param newPeriodInput The new variable definition input that specifies the start of a new validity period.
      * @param definitionId The ID of the existing variable definition whose validity period will be updated.
      * @return The newly saved variable definition with the updated validity period.
      */
     fun create(
         definitionId: String,
-        newPeriod: CreateValidityPeriod,
+        newPeriodInput: CreateValidityPeriodInput,
         userName: String,
     ): SavedVariableDefinition {
+        val newPeriod = newPeriodInput.toCreateValidityPeriod()
         val validityPeriodsMap = getAsMap(definitionId)
 
         checkValidityPeriodInput(definitionId, newPeriod)
@@ -191,7 +192,7 @@ class ValidityPeriodsService(
             kv(DEFINITION_ID, definitionId),
         )
         return if (newPeriod.validFrom.isBefore(firstValidityPeriod.validFrom)) {
-            newPeriod
+            newPeriodInput
                 // A Validity Period to be created before all others uses the last one as base.
                 // We know this has the most recent ownership and other info.
                 // The user can Patch any values after creation.
@@ -200,12 +201,54 @@ class ValidityPeriodsService(
                 .let { variableDefinitionRepository.save(it) }
         } else {
             endLastValidityPeriod(definitionId, newPeriod.validFrom, userName)
-                .let { newPeriod.toSavedVariableDefinition(list(definitionId).last().patchId, it, userName) }
+                .let { newPeriodInput.toSavedVariableDefinition(list(definitionId).last().patchId, it, userName) }
                 // New validity period is always open-ended. A valid_until date may be set via a patch.
                 .apply { validUntil = null }
                 .let { variableDefinitionRepository.save(it) }
         }
     }
+
+    fun create(
+        definitionId: String,
+        newPeriod: CreateValidityPeriod,
+        userName: String,
+    ): SavedVariableDefinition =
+        create(
+            definitionId = definitionId,
+            newPeriodInput = newPeriod.toCreateValidityPeriodInput(),
+            userName = userName,
+        )
+
+    private fun CreateValidityPeriod.toCreateValidityPeriodInput(): CreateValidityPeriodInput =
+        CreateValidityPeriodInput(
+            name = name.toOptionalFieldPresence(),
+            definition = FieldPresence.Present(definition),
+            classificationReference = classificationReference.toNullableFieldPresence(),
+            unitTypes = unitTypes.toOptionalFieldPresence(),
+            subjectFields = subjectFields.toOptionalFieldPresence(),
+            containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData.toOptionalFieldPresence(),
+            measurementType = measurementType.toNullableFieldPresence(),
+            validFrom = FieldPresence.Present(validFrom),
+            externalReferenceUri = externalReferenceUri.toNullableFieldPresence(),
+            // Existing typed DTO behavior: null values clear these fields.
+            comment = FieldPresence.Present(comment),
+            relatedVariableDefinitionUris = FieldPresence.Present(relatedVariableDefinitionUris),
+            contact = contact.toOptionalFieldPresence(),
+        )
+
+    private fun <T> T?.toOptionalFieldPresence(): FieldPresence<T> =
+        if (this == null) {
+            FieldPresence.Undefined
+        } else {
+            FieldPresence.Present(this)
+        }
+
+    private fun <T> T?.toNullableFieldPresence(): FieldPresence<T?> =
+        if (this == null) {
+            FieldPresence.Undefined
+        } else {
+            FieldPresence.Present(this)
+        }
 
     /**
      * Check mandatory input for creating a new validity period

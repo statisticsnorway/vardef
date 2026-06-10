@@ -171,20 +171,20 @@ data class SavedVariableDefinition(
         )
 
     fun copyAndUpdate(
-        varDefUpdates: UpdateDraftPatch,
+        varDefUpdates: UpdateDraftInput,
         userName: String,
     ): SavedVariableDefinition =
         copy(
             name =
                 when (val updates = varDefUpdates.name) {
-                    PatchField.Undefined -> name
-                    is PatchField.Present -> name.update(updates.value)
+                    FieldPresence.Undefined -> name
+                    is FieldPresence.Present -> name.update(updates.value)
                 },
             shortName = varDefUpdates.shortName.orElse(shortName),
             definition =
                 when (val updates = varDefUpdates.definition) {
-                    PatchField.Undefined -> definition
-                    is PatchField.Present -> definition.update(updates.value)
+                    FieldPresence.Undefined -> definition
+                    is FieldPresence.Present -> definition.update(updates.value)
                 },
             classificationReference = varDefUpdates.classificationReference.applyNullable(classificationReference),
             unitTypes = varDefUpdates.unitTypes.orElse(unitTypes),
@@ -198,13 +198,13 @@ data class SavedVariableDefinition(
             externalReferenceUri = varDefUpdates.externalReferenceUri.applyNullable(externalReferenceUri),
             comment =
                 when (val updates = varDefUpdates.comment) {
-                    PatchField.Undefined -> comment
-                    is PatchField.Present -> updates.value?.let { comment?.update(it) ?: it }
+                    FieldPresence.Undefined -> comment
+                    is FieldPresence.Present -> updates.value?.let { comment?.update(it) ?: it }
                 },
             relatedVariableDefinitionUris =
                 when (val updates = varDefUpdates.relatedVariableDefinitionUris) {
-                    PatchField.Undefined -> relatedVariableDefinitionUris
-                    is PatchField.Present -> updates.value?.map { it.toString() }
+                    FieldPresence.Undefined -> relatedVariableDefinitionUris
+                    is FieldPresence.Present -> updates.value?.map { it.toString() }
                 },
             owner = varDefUpdates.owner.orElse(owner),
             contact = varDefUpdates.contact.orElse(contact),

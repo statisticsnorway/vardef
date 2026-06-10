@@ -346,4 +346,24 @@ class CreateTests : BaseVardefTest() {
             .then()
             .statusCode(HttpStatus.CONFLICT.code)
     }
+
+    @Test
+    fun `create patch clear nullable field`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    """{"external_reference_uri": null}""".trimIndent(),
+                ).`when`()
+                .post("/variable-definitions/${PATCH_MANDATORY_FIELDS.definitionId}/patches")
+                .then()
+                .statusCode(HttpStatus.CREATED.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView?.externalReferenceUri).isNull()
+    }
 }

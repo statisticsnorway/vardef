@@ -1,10 +1,12 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
+import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
+import io.micronaut.json.JsonMapper
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -18,13 +20,15 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
+import jakarta.validation.ConstraintViolationException
+import jakarta.validation.Validator
 import no.ssb.metadata.vardef.annotations.BadRequestApiResponse
 import no.ssb.metadata.vardef.annotations.MethodNotAllowedApiResponse
 import no.ssb.metadata.vardef.annotations.NotFoundApiResponse
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.CreatePatch
+import no.ssb.metadata.vardef.models.CreatePatchPatch
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.PatchesService
@@ -42,6 +46,8 @@ class PatchesController(
     private val validityPeriods: ValidityPeriodsService,
     private val patches: PatchesService,
     private val vardef: VariableDefinitionService,
+    private val jsonMapper: JsonMapper,
+    private val validator: Validator,
 ) {
     private val logger = LoggerFactory.getLogger(PatchesService::class.java)
 
@@ -179,10 +185,29 @@ class PatchesController(
             ],
         )
         @Body
-        @Valid
-        createPatch: CreatePatch,
+        body: String,
         authentication: Authentication,
     ): CompleteView {
+        val root =
+            try {
+                jsonMapper.readValue(body, JsonNode::class.java)
+            } catch (_: Exception) {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Request body must be valid JSON")
+            }
+
+        val createPatchPatch =
+            try {
+                CreatePatchPatch.fromJson(root, jsonMapper)
+            } catch (e: IllegalArgumentException) {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
+            }
+
+        val createPatch = createPatchPatch.toCreatePatch()
+        val violations = validator.validate(createPatch)
+        if (violations.isNotEmpty()) {
+            throw ConstraintViolationException(violations)
+        }
+
         logger.debug("Received patch {}", createPatch)
         val latestPatchOnValidityPeriod = validityPeriods.getMatchingOrLatest(variableDefinitionId, validFrom)
         when {
@@ -199,7 +224,7 @@ class PatchesController(
         }
         return patches
             .create(
-                createPatch,
+                createPatchPatch,
                 variableDefinitionId,
                 latestPatchOnValidityPeriod,
                 authentication.name,

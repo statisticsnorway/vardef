@@ -69,8 +69,11 @@ data class Relations(
     val classificationRelation: ClassificationRelation? = null,
     @field:JacksonXmlProperty(localName = "ConceptVariableRelation")
     @JacksonXmlElementWrapper(useWrapping = false)
-    val conceptVariableRelations: List<ConceptVariableRelation?> = emptyList(),
-)
+    private val conceptVariableRelationsRaw: List<ConceptVariableRelation?>? = null,
+) {
+    val conceptVariableRelations: List<ConceptVariableRelation?>
+        get() = conceptVariableRelationsRaw.orEmpty()
+}
 
 @Serdeable
 @Introspected

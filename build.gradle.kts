@@ -1,5 +1,3 @@
-import com.google.devtools.ksp.KspExperimental
-
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.allopen)

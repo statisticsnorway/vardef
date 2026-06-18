@@ -6,7 +6,6 @@ import io.micronaut.management.health.indicator.HealthResult
 import io.micronaut.management.health.indicator.annotation.Liveness
 import io.micronaut.openapi.annotation.OpenAPIGroupInfo
 import io.micronaut.runtime.Micronaut
-import io.micronaut.serde.annotation.SerdeImport
 import io.swagger.v3.oas.annotations.ExternalDocumentation
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType

@@ -226,8 +226,6 @@ data class CreatePatchInput(
             node: JsonNode,
             jsonMapper: JsonMapper,
             argument: Argument<T>,
-        ): T {
-            return jsonMapper.readValueFromTree(node, argument)!!
-        }
+        ): T = jsonMapper.readValueFromTree(node, argument)!!
     }
 }

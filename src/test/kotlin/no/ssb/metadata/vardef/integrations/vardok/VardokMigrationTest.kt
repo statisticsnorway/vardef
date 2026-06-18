@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import com.fasterxml.jackson.databind.JsonMappingException
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.conversions.StatisticalSubjects
 import no.ssb.metadata.vardef.integrations.vardok.conversions.getValidDates

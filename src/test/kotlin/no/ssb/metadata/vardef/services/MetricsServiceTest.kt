@@ -23,7 +23,11 @@ class MetricsServiceTest : BaseVardefTest() {
             DRAFT_BUS_EXAMPLE.copy(
                 lastUpdatedAt = DRAFT_BUS_EXAMPLE.lastUpdatedAt.plusSeconds(3600),
             )
-        val persistedVariable = variableDefinitionRepository.findByDefinitionIdAndPatchId(DRAFT_BUS_EXAMPLE.definitionId, DRAFT_BUS_EXAMPLE.patchId)
+        val persistedVariable =
+            variableDefinitionRepository.findByDefinitionIdAndPatchId(
+                DRAFT_BUS_EXAMPLE.definitionId,
+                DRAFT_BUS_EXAMPLE.patchId,
+            )
         variableDefinitionRepository.update(
             persistedVariable.copy(
                 lastUpdatedAt = persistedVariable.lastUpdatedAt.plusSeconds(3600),

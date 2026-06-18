@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.services
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.JsonMappingException
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requires
 import jakarta.inject.Inject

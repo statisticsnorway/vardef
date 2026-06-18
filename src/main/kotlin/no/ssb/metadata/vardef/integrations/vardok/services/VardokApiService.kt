@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok.services
 
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.vardok.client.VardokClient

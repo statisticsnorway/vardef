@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.integrations.vardok.services
 
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.JsonMappingException
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requires
 import jakarta.inject.Inject
@@ -13,7 +14,6 @@ import no.ssb.metadata.vardef.integrations.vardok.repositories.VardokIdMappingRe
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import tools.jackson.dataformat.xml.XmlMapper
 import java.io.File
-import java.io.FileNotFoundException
 
 @Primary
 @Requires(env = ["test"], notEnv = ["integration-test"])
@@ -48,32 +48,22 @@ class StaticVardokService(
     override fun isAlreadyMigrated(vardokId: String): Boolean = vardokIdMappingRepository.existsByVardokId(vardokId)
 
     override fun getVardokItem(id: String): VardokResponse {
-        try {
-            val xmlFile = File("src/test/resources/vardokFiles/$id.xml")
-            val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
-            return varDokResponse
-        } catch (e: Exception) {
-            if (e is FileNotFoundException) {
-                throw VardokNotFoundException("Vardok id $id not found")
-            }
-            throw e
+        val xmlFile = File("src/test/resources/vardokFiles/$id.xml")
+        if (!xmlFile.exists()) {
+            throw VardokNotFoundException("Vardok id $id not found")
         }
+        return xmlMapper.readValue(xmlFile, VardokResponse::class.java)
     }
 
     override fun getVardokByIdAndLanguage(
         id: String,
         language: String,
     ): VardokResponse {
-        try {
-            val xmlFile = File("src/test/resources/vardokFiles/${id}$language.xml")
-            val varDokResponse: VardokResponse = xmlMapper.readValue(xmlFile, VardokResponse::class.java)
-            return varDokResponse
-        } catch (e: Exception) {
-            if (e is FileNotFoundException) {
-                throw (VardokNotFoundException("Id $id in language: $language not found"))
-            }
-            throw e
+        val xmlFile = File("src/test/resources/vardokFiles/${id}$language.xml")
+        if (!xmlFile.exists()) {
+            throw VardokNotFoundException("Id $id in language: $language not found")
         }
+        return xmlMapper.readValue(xmlFile, VardokResponse::class.java)
     }
 
     override fun fetchMultipleVardokItemsByLanguage(id: String): MutableMap<String, VardokResponse> {

@@ -34,7 +34,7 @@ import no.ssb.metadata.vardef.models.RenderedOrCompleteUnion
 import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.UpdateDraft
-import no.ssb.metadata.vardef.models.UpdateDraftPatch
+import no.ssb.metadata.vardef.models.UpdateDraftInput
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.models.isPublished
 import no.ssb.metadata.vardef.security.Roles
@@ -250,21 +250,14 @@ class VariableDefinitionByIdController(
         body: String,
         authentication: Authentication,
     ): CompleteView {
-        val root =
+        val updateDraftInput =
             try {
-                objectMapper.readTree(body)
-            } catch (_: Exception) {
-                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Request body must be valid JSON")
-            }
-
-        val updateDraftPatch =
-            try {
-                UpdateDraftPatch.fromJson(root, jsonMapper)
+                UpdateDraftInput.fromJson(body, jsonMapper)
             } catch (e: IllegalArgumentException) {
                 throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
             }
 
-        val updateDraft = updateDraftPatch.toUpdateDraft()
+        val updateDraft = updateDraftInput.toUpdateDraft()
         val violations = validator.validate(updateDraft)
         if (violations.isNotEmpty()) {
             throw ConstraintViolationException(violations)
@@ -320,7 +313,7 @@ class VariableDefinitionByIdController(
             }
         }
         return vardef
-            .update(existingVariable, updateDraftPatch, authentication.name)
+            .update(existingVariable, updateDraftInput, authentication.name)
             .toCompleteView()
     }
 }

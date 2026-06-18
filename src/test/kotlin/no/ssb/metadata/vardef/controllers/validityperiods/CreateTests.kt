@@ -183,13 +183,6 @@ class CreateTests : BaseVardefTest() {
             .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
             .statusCode(400)
-            .spec(
-                buildProblemJsonResponseSpec(
-                    false,
-                    null,
-                    errorMessage = "Failed to convert argument [newPeriod] for value [null]",
-                ),
-            )
     }
 
     @Test
@@ -434,5 +427,63 @@ class CreateTests : BaseVardefTest() {
         assertThat(
             lastPatchInSecondToLastValidityPeriod?.validUntil,
         ).isEqualTo(lastPatch.validFrom.minusDays(1))
+    }
+
+    @Test
+    fun `create new validity period clear nullable field`(spec: RequestSpecification) {
+        val body =
+            spec
+                .given()
+                .contentType(ContentType.JSON)
+                .body(
+                    JSONObject()
+                        .apply {
+                            put("valid_from", "2024-01-11")
+                            put(
+                                "definition",
+                                JSONObject().apply {
+                                    put("nb", "Intektsskatt atter ny definisjon")
+                                    put("nn", "Intektsskatt atter ny definisjon")
+                                    put("en", "Yet another definition")
+                                },
+                            )
+                            put("external_reference_uri", JSONObject.NULL)
+                        }.toString(),
+                ).`when`()
+                .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+                .then()
+                .statusCode(HttpStatus.CREATED.code)
+                .extract()
+                .body()
+                .asString()
+
+        val completeView = jsonMapper.readValue(body, CompleteView::class.java)
+        assertThat(completeView?.externalReferenceUri).isNull()
+    }
+
+    @Test
+    fun `create validity period attempt to clear non-nullable field`(spec: RequestSpecification) {
+        spec
+            .given()
+            .contentType(ContentType.JSON)
+            .body(
+                JSONObject()
+                    .apply {
+                        put("name", JSONObject.NULL)
+                        put("valid_from", "2024-01-11")
+                        put(
+                            "definition",
+                            JSONObject().apply {
+                                put("nb", "Intektsskatt atter ny definisjon")
+                                put("nn", "Intektsskatt atter ny definisjon")
+                                put("en", "Yet another definition")
+                            },
+                        )
+                        put("external_reference_uri", JSONObject.NULL)
+                    }.toString(),
+            ).`when`()
+            .post("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.code)
     }
 }

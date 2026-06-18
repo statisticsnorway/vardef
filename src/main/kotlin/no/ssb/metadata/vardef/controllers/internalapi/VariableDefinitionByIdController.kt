@@ -1,7 +1,5 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -10,6 +8,7 @@ import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.json.JsonMapper
+import io.micronaut.json.tree.JsonNode
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -52,8 +51,6 @@ class VariableDefinitionByIdController(
     private val jsonMapper: JsonMapper,
     private val validator: Validator,
 ) {
-    private val objectMapper = ObjectMapper()
-
     /**
      * Get one variable definition.
      */
@@ -247,7 +244,7 @@ class VariableDefinitionByIdController(
             ],
         )
         @Body
-        body: String,
+        body: JsonNode,
         authentication: Authentication,
     ): CompleteView {
         val updateDraftInput =

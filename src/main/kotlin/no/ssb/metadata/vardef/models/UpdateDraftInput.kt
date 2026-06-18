@@ -1,8 +1,10 @@
 package no.ssb.metadata.vardef.models
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.core.type.Argument
 import io.micronaut.json.JsonMapper
+import io.micronaut.json.tree.JsonNode
+import no.ssb.metadata.vardef.extensions.fieldNames
+import no.ssb.metadata.vardef.extensions.has
 import java.net.URL
 import java.time.LocalDate
 
@@ -77,7 +79,7 @@ data class UpdateDraftInput(
         ): UpdateDraftInput {
             require(root.isObject) { "Request body must be a JSON object" }
 
-            root.fieldNames().forEachRemaining { fieldName ->
+            root.fieldNames().forEach { fieldName ->
                 require(fieldName in allowedFields) {
                     "Unknown property [$fieldName] encountered during deserialization of type ${UpdateDraft::class.qualifiedName}"
                 }
@@ -158,7 +160,12 @@ data class UpdateDraftInput(
                 throw IllegalArgumentException("owner team and groups can not be null")
             }
             if (node.isObject && !node.has("groups")) {
-                val team = decode(node.get("team"), jsonMapper, Argument.of(String::class.java))
+                val team =
+                    decode(
+                        node.get("team") ?: throw IllegalArgumentException("owner team can not be null"),
+                        jsonMapper,
+                        Argument.of(String::class.java),
+                    )
                 return FieldPresence.Present(Owner(team = team, groups = emptyList()))
             }
             return FieldPresence.Present(decode(node, jsonMapper, Argument.of(Owner::class.java)))
@@ -168,7 +175,7 @@ data class UpdateDraftInput(
             listOf("name", "definition", "comment").forEach { fieldName ->
                 val node = root.get(fieldName) ?: return@forEach
                 if (!node.isObject) return@forEach
-                node.fieldNames().forEachRemaining { languageField ->
+                node.fieldNames().forEach { languageField ->
                     require(languageField in SupportedLanguages.toSet()) {
                         "Unknown property [$languageField] encountered during deserialization of type ${LanguageStringType::class.qualifiedName} in field [$fieldName]"
                     }
@@ -180,6 +187,6 @@ data class UpdateDraftInput(
             node: JsonNode,
             jsonMapper: JsonMapper,
             argument: Argument<T>,
-        ): T = jsonMapper.readValue(node.toString(), argument)!!
+        ): T = jsonMapper.readValueFromTree(node, argument)!!
     }
 }

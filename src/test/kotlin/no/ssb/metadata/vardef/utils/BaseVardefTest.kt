@@ -16,7 +16,7 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
 
-@MicronautTest
+@MicronautTest(transactional = false)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 open class BaseVardefTest {
     init {

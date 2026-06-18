@@ -1,12 +1,12 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.json.JsonMapper
+import io.micronaut.json.tree.JsonNode
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -185,20 +185,14 @@ class PatchesController(
             ],
         )
         @Body
-        body: String,
+        body: JsonNode,
         authentication: Authentication,
     ): CompleteView {
-        val root =
-            try {
-                jsonMapper.readValue(body, JsonNode::class.java)
-            } catch (_: Exception) {
-                throw HttpStatusException(HttpStatus.BAD_REQUEST, "Request body must be valid JSON")
-            }
-
         val createPatchInput =
             try {
-                CreatePatchInput.fromJson(root, jsonMapper)
+                CreatePatchInput.fromJson(body, jsonMapper)
             } catch (e: IllegalArgumentException) {
+                logger.error("Illegal argument in request: $body", e)
                 throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
             }
 

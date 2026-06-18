@@ -11,12 +11,14 @@ micronaut:
               - dapla-cli
               - onyxia-api
               - vardef
-
+  serde:
+    jackson:
+      stream-read-features:
+        INCLUDE_SOURCE_IN_LOCATION: true
 endpoints:
   all:
     # Tests use a random port to avoid conflicts
     port: -1
-
 mongodb:
 # Micronaut needs to know which package is holding the models/entities
   package-names:
@@ -56,3 +58,6 @@ dapla-groups:
     my-oh-my-team-developers:
     pers-skatt-developers:
     skip-stat-developers:
+logger:
+  levels:
+    no.ssb: DEBUG

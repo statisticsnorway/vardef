@@ -11,6 +11,7 @@ import org.assertj.core.api.Assertions.within
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.*
 import org.json.JSONObject
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -18,6 +19,21 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 class UpdateTests : BaseVardefTest() {
+    @BeforeEach
+    fun alignFixtureTimestamps() {
+        val persisted =
+            variableDefinitionRepository.findByDefinitionIdAndPatchId(
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.definitionId,
+                SAVED_DRAFT_DEADWEIGHT_EXAMPLE.patchId,
+            )
+        variableDefinitionRepository.update(
+            persisted.copy(
+                createdAt = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.createdAt,
+                lastUpdatedAt = SAVED_DRAFT_DEADWEIGHT_EXAMPLE.lastUpdatedAt,
+            ),
+        )
+    }
+
     @Test
     fun `update variable definition`(spec: RequestSpecification) {
         val expected: SavedVariableDefinition =

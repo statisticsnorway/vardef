@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
@@ -173,7 +174,13 @@ class ReadTests : BaseVardefTest() {
 
     @Test
     fun `get variable definition by similar short names`(spec: RequestSpecification) {
-        variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE.copy(shortName = "bussrute"))
+        variableDefinitionRepository.save(
+            DRAFT_BUS_EXAMPLE.copy(
+                id = null,
+                definitionId = VariableDefinitionService.generateId(),
+                shortName = "bussrute",
+            ),
+        )
         val body =
             spec
                 .`when`()

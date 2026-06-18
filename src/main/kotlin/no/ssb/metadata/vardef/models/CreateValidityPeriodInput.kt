@@ -47,6 +47,7 @@ data class CreateValidityPeriodInput(
         userName: String,
     ): SavedVariableDefinition =
         previousPatch.copy(
+            id = null,
             patchId = highestPatchId + 1,
             name =
                 when (val updates = name) {
@@ -70,6 +71,8 @@ data class CreateValidityPeriodInput(
                     is FieldPresence.Present -> updates.value?.map { it.toString() }
                 },
             contact = contact.orElse(previousPatch.contact),
+            // Placeholder value, actual value set by data layer
+            createdAt = LocalDateTime.now(),
             // Placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
             lastUpdatedBy = userName,

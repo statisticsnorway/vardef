@@ -55,6 +55,7 @@ data class CreatePatchInput(
         userName: String,
     ): SavedVariableDefinition =
         previousPatch.copy(
+            id = null,
             patchId = highestPatchId + 1,
             name =
                 when (val updates = name) {
@@ -87,6 +88,8 @@ data class CreatePatchInput(
                 },
             owner = owner.orElse(previousPatch.owner),
             contact = contact.orElse(previousPatch.contact),
+            // Placeholder value, actual value set by persistence annotations.
+            createdAt = LocalDateTime.now(),
             // Placeholder values, actual timestamps are set by persistence annotations.
             lastUpdatedAt = LocalDateTime.now(),
             lastUpdatedBy = userName,

@@ -107,12 +107,9 @@ class LabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JW
      * @return an [Authentication] containing the principals username, the assigned roles, the claims, and the active group.
      */
     override fun validateToken(
-        token: String?,
-        request: R,
+        token: String,
+        request: R?,
     ): Publisher<Authentication> {
-        if (token == null) {
-            return Mono.empty()
-        }
         logger.debug("Starting validation")
         return Mono
             .from(validate(token, request))
@@ -137,6 +134,9 @@ class LabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JW
                 logger.info("Validated LabID token for user=$username")
                 val attributes = it.claims.toMutableMap()
                 attributes[ACTIVE_GROUP] = it.getStringClaim(activeGroupClaim)
+                if (username == null) {
+                    return@map Authentication.build("", emptySet(), attributes)
+                }
                 Authentication.build(
                     username,
                     assignRoles(it),
@@ -149,8 +149,8 @@ class LabIdTokenValidator<R : HttpRequest<*>> : ReactiveJsonWebTokenValidator<JW
      *  Parse the JWT token
      */
     override fun validate(
-        token: String?,
-        request: R,
+        token: String,
+        request: R?,
     ): Publisher<JWT> =
         Mono
             .just(jsonWebTokenParser.parse(token))

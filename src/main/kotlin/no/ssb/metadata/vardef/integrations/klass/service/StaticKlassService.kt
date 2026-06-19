@@ -41,8 +41,8 @@ class StaticClassification(
             throw RuntimeException("Resource not found: $resourcePath")
         } else {
             val classification = jsonMapper.readValue(resource.readText(), Classification::class.java)
-            name = LanguageStringType(nb = classification.name, en = null, nn = null)
-            codes = classification.codes
+            name = LanguageStringType(nb = classification?.name, en = null, nn = null)
+            codes = classification?.codes
         }
     }
 }

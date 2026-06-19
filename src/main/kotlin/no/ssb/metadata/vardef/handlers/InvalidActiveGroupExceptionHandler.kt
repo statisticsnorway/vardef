@@ -28,7 +28,7 @@ class InvalidActiveGroupExceptionHandler(
             ErrorContext
                 .builder(request)
                 .cause(exception)
-                .errorMessage(exception.message)
+                .errorMessage(exception.message ?: "")
                 .build(),
             HttpResponse.status<Any>(HttpStatus.UNAUTHORIZED),
         )

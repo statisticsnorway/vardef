@@ -251,7 +251,7 @@ class CreateTests : BaseVardefTest() {
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
         assertThat(completeView).isNotNull
-        assertThat(completeView.shortName).isEqualTo(shortName)
+        assertThat(completeView?.shortName).isEqualTo(shortName)
     }
 
     @Test

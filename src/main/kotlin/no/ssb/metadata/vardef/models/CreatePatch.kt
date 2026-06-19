@@ -76,6 +76,7 @@ data class CreatePatch(
         userName: String,
     ): SavedVariableDefinition =
         previousPatch.copy(
+            id = null,
             patchId = highestPatchId + 1,
             name = name?.let { previousPatch.name.update(it) } ?: previousPatch.name,
             definition = definition?.let { previousPatch.definition.update(definition) } ?: previousPatch.definition,
@@ -92,6 +93,8 @@ data class CreatePatch(
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             owner = owner ?: previousPatch.owner,
             contact = contact ?: previousPatch.contact,
+            // Provide a placeholder value, actual value set by data layer
+            createdAt = LocalDateTime.now(),
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
             lastUpdatedBy = userName,

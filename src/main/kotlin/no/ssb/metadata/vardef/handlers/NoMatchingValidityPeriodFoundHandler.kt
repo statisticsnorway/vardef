@@ -27,7 +27,7 @@ class NoMatchingValidityPeriodFoundHandler(
             ErrorContext
                 .builder(request)
                 .cause(exception)
-                .errorMessage(exception.message)
+                .errorMessage(exception.message ?: "")
                 .build(),
             HttpResponse.notFound<Any>(),
         )

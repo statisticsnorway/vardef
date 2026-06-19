@@ -1,8 +1,9 @@
 package no.ssb.metadata.vardef.models
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.core.type.Argument
 import io.micronaut.json.JsonMapper
+import io.micronaut.json.tree.JsonNode
+import no.ssb.metadata.vardef.extensions.fieldNames
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -46,6 +47,7 @@ data class CreateValidityPeriodInput(
         userName: String,
     ): SavedVariableDefinition =
         previousPatch.copy(
+            id = null,
             patchId = highestPatchId + 1,
             name =
                 when (val updates = name) {
@@ -69,6 +71,8 @@ data class CreateValidityPeriodInput(
                     is FieldPresence.Present -> updates.value?.map { it.toString() }
                 },
             contact = contact.orElse(previousPatch.contact),
+            // Placeholder value, actual value set by data layer
+            createdAt = LocalDateTime.now(),
             // Placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
             lastUpdatedBy = userName,
@@ -97,7 +101,7 @@ data class CreateValidityPeriodInput(
         ): CreateValidityPeriodInput {
             require(root.isObject) { "Request body must be a JSON object" }
 
-            root.fieldNames().forEachRemaining { fieldName ->
+            root.fieldNames().forEach { fieldName ->
                 require(fieldName in allowedFields) {
                     when (fieldName) {
                         "short_name" -> {
@@ -197,7 +201,7 @@ data class CreateValidityPeriodInput(
             listOf("name", "definition", "comment").forEach { fieldName ->
                 val node = root.get(fieldName) ?: return@forEach
                 if (!node.isObject) return@forEach
-                node.fieldNames().forEachRemaining { languageField ->
+                node.fieldNames().forEach { languageField ->
                     require(languageField in SupportedLanguages.toSet()) {
                         "Unknown property [$languageField] encountered during deserialization of type ${LanguageStringType::class.qualifiedName} in field [$fieldName]"
                     }
@@ -209,7 +213,7 @@ data class CreateValidityPeriodInput(
             node: JsonNode,
             jsonMapper: JsonMapper,
             argument: Argument<T>,
-        ): T = jsonMapper.readValue(node.toString(), argument)!!
+        ): T = jsonMapper.readValueFromTree(node, argument)!!
     }
 }
 

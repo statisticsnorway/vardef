@@ -1,18 +1,15 @@
 package no.ssb.metadata.vardef.integrations.vardok.utils
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.models.VardokResponse
 import org.junit.jupiter.api.BeforeEach
+import tools.jackson.dataformat.xml.XmlMapper
 
 @MicronautTest
 open class BaseVardokTest {
     @Inject
-    lateinit var xmlMapper: ObjectMapper
+    lateinit var xmlMapper: XmlMapper
 
     lateinit var vardokResponse1: VardokResponse
     lateinit var vardokResponse2: VardokResponse
@@ -25,14 +22,14 @@ open class BaseVardokTest {
 
     @BeforeEach
     open fun setUp() {
-        xmlMapper = XmlMapper().registerKotlinModule()
-        vardokResponse1 = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages)
-        vardokResponse2 = xmlMapper.readValue(vardokId49validUntilDate)
-        vardokResponse3 = xmlMapper.readValue(vardokId476validFromDateAndNNInOtherLanguages)
-        vardokResponse4 = xmlMapper.readValue(vardokId120validUntilDateAndOtherLanguages)
-        vardokResponse5 = xmlMapper.readValue(vardokId100NoValidDates)
-        vardokResponse6 = xmlMapper.readValue(vardokId123NoDataElementName)
-        vardokResponse7 = xmlMapper.readValue(vardokId2677UnitTypeList)
-        vardokResponse8 = xmlMapper.readValue(vardokId123NoDataElementNameEn)
+        xmlMapper = XmlMapper()
+        vardokResponse1 = xmlMapper.readValue(vardokId1466validFromDateAndOtherLanguages, VardokResponse::class.java)
+        vardokResponse2 = xmlMapper.readValue(vardokId49validUntilDate, VardokResponse::class.java)
+        vardokResponse3 = xmlMapper.readValue(vardokId476validFromDateAndNNInOtherLanguages, VardokResponse::class.java)
+        vardokResponse4 = xmlMapper.readValue(vardokId120validUntilDateAndOtherLanguages, VardokResponse::class.java)
+        vardokResponse5 = xmlMapper.readValue(vardokId100NoValidDates, VardokResponse::class.java)
+        vardokResponse6 = xmlMapper.readValue(vardokId123NoDataElementName, VardokResponse::class.java)
+        vardokResponse7 = xmlMapper.readValue(vardokId2677UnitTypeList, VardokResponse::class.java)
+        vardokResponse8 = xmlMapper.readValue(vardokId123NoDataElementNameEn, VardokResponse::class.java)
     }
 }

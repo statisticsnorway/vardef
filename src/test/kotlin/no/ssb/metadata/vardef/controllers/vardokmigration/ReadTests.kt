@@ -40,7 +40,7 @@ class ReadTests : BaseVardefTest() {
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
 
-        assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeView.id)
+        assertThat(vardokService.getVardefIdByVardokId("2")).isEqualTo(completeView?.id)
     }
 
     @Test
@@ -58,7 +58,7 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
-        assertThat(completeView.shortName)
+        assertThat(completeView?.shortName)
             .isEqualTo("bus")
     }
 
@@ -78,7 +78,7 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val vardokIdResponse = jsonMapper.readValue(body, VardokIdResponse::class.java)
-        assertThat(vardokIdResponse.vardokId).isEqualTo(vardokId)
+        assertThat(vardokIdResponse?.vardokId).isEqualTo(vardokId)
     }
 
     @Test
@@ -118,8 +118,8 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val vardokVardefIdPairResponse = jsonMapper.readValue(body, Array<VardokVardefIdPairResponse>::class.java)
-        assertThat(vardokVardefIdPairResponse.size).isEqualTo(1)
-        assertThat(vardokVardefIdPairResponse[0].vardefId).isEqualTo(definitionId)
+        assertThat(vardokVardefIdPairResponse?.size).isEqualTo(1)
+        assertThat(vardokVardefIdPairResponse?.get(0)?.vardefId).isEqualTo(definitionId)
     }
 
     @Test

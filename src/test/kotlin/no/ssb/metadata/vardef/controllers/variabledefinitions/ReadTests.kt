@@ -8,6 +8,7 @@ import no.ssb.metadata.vardef.models.CompleteView
 import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
+import no.ssb.metadata.vardef.services.VariableDefinitionService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
@@ -157,7 +158,7 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
-        val actualStatuses = variableDefinitions.map { it.variableStatus }.toSet()
+        val actualStatuses = variableDefinitions?.map { it.variableStatus }?.toSet()
         assertThat(actualStatuses).containsAll(expectedStatuses)
     }
 
@@ -173,7 +174,13 @@ class ReadTests : BaseVardefTest() {
 
     @Test
     fun `get variable definition by similar short names`(spec: RequestSpecification) {
-        variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE.copy(shortName = "bussrute"))
+        variableDefinitionRepository.save(
+            DRAFT_BUS_EXAMPLE.copy(
+                id = null,
+                definitionId = VariableDefinitionService.generateId(),
+                shortName = "bussrute",
+            ),
+        )
         val body =
             spec
                 .`when`()
@@ -185,9 +192,9 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
-        assertThat(variableDefinitions.size).isEqualTo(1)
-        assertThat(variableDefinitions[0].shortName).isEqualTo(DRAFT_BUS_EXAMPLE.shortName)
-        assertThat(variableDefinitions[0].patchId).isEqualTo(1)
+        assertThat(variableDefinitions?.size).isEqualTo(1)
+        assertThat(variableDefinitions?.get(0)?.shortName).isEqualTo(DRAFT_BUS_EXAMPLE.shortName)
+        assertThat(variableDefinitions?.get(0)?.patchId).isEqualTo(1)
     }
 
     @ParameterizedTest
@@ -208,7 +215,7 @@ class ReadTests : BaseVardefTest() {
                 .asString()
 
         val variableDefinitions = jsonMapper.readValue(body, Array<CompleteView>::class.java)
-        assertThat(variableDefinitions[0].patchId).isEqualTo(expectedPatchId)
+        assertThat(variableDefinitions?.get(0)?.patchId).isEqualTo(expectedPatchId)
     }
 
     companion object {

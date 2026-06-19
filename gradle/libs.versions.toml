@@ -5,9 +5,7 @@
 
 [versions]
 assertj = "3.27.7"
-cyclonedx = "3.2.4"
 jackson = "2.21.2"
-jib = "3.5.3"
 json = "20251224"
 junit = "6.0.3"
 kotlin = "2.3.20"
@@ -16,20 +14,8 @@ ksp = "2.3.6"
 ktlint = "14.2.0"
 logback = "1.5.32"
 logstash = "9.0"
-micronaut = "4.10.11"
-micronautCache = "5.3.0"
-micronautData = "4.14.3"
-micronautGradle = "4.6.2"
-micronautManagement = "4.10.21"
-micronautMicrometer = "5.13.2"
-micronautMongoDb = "5.7.0"
-micronautOpenapi = "6.20.0"
-micronautProblem = "3.9.0"
-micronautSecurity = "4.17.1"
-micronautSerde = "2.16.2"
-micronautTest = "4.10.3"
-micronautValidation = "4.12.0"
-micronautXml = "4.8.0"
+micronaut = "5.0.0"
+micronautGradle = "5.0.0"
 mockk = "1.14.9"
 mongock = "5.5.1"
 nanoid = "1.0.1"
@@ -47,24 +33,24 @@ kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versi
 kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinxCoroutines" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logstash" }
-micronaut-cache-caffeine = { module = "io.micronaut.cache:micronaut-cache-caffeine", version.ref = "micronautCache"}
-micronaut-data-document-processor = { module = "io.micronaut.data:micronaut-data-document-processor", version.ref = "micronautData" }
-micronaut-data-mongodb = { module = "io.micronaut.data:micronaut-data-mongodb", version.ref = "micronautData" }
-micronaut-http-client = { module = "io.micronaut:micronaut-http-client", version.ref = "micronaut" }
-micronaut-http-validation = { module = "io.micronaut:micronaut-http-validation", version.ref = "micronaut" }
-micronaut-management = { module = "io.micronaut:micronaut-management", version.ref = "micronautManagement" }
-micronaut-micrometer-registry-prometheus = { module = "io.micronaut.micrometer:micronaut-micrometer-registry-prometheus", version.ref = "micronautMicrometer" }
-micronaut-mongo-reactive = { module = "io.micronaut.mongodb:micronaut-mongo-reactive", version.ref = "micronautMongoDb" }
-micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi", version.ref = "micronautOpenapi" }
-micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations", version.ref = "micronautOpenapi" }
+micronaut-cache-caffeine = { module = "io.micronaut.cache:micronaut-cache-caffeine"}
+micronaut-data-document-processor = { module = "io.micronaut.data:micronaut-data-document-processor"}
+micronaut-data-mongodb = { module = "io.micronaut.data:micronaut-data-mongodb"}
+micronaut-http-client = { module = "io.micronaut:micronaut-http-client"}
+micronaut-http-validation = { module = "io.micronaut:micronaut-http-validation"}
+micronaut-management = { module = "io.micronaut:micronaut-management"}
+micronaut-micrometer-registry-prometheus = { module = "io.micronaut.micrometer:micronaut-micrometer-registry-prometheus"}
+micronaut-mongo-reactive = { module = "io.micronaut.mongodb:micronaut-mongo-reactive"}
+micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi"}
+micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations"}
 micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronaut" }
-micronaut-problem-json = { module = "io.micronaut.problem:micronaut-problem-json", version.ref = "micronautProblem" }
-micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt", version.ref = "micronautSecurity" }
-micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson", version.ref = "micronautSerde" }
-micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor", version.ref = "micronautSerde" }
-micronaut-test-rest-assured = { module = "io.micronaut.test:micronaut-test-rest-assured", version.ref = "micronautTest"}
-micronaut-validation-processor = { module = "io.micronaut.validation:micronaut-validation-processor", version.ref = "micronautValidation" }
-micronaut-jackson-xml = {module = "io.micronaut.xml:micronaut-jackson-xml", version.ref = "micronautXml"}
+micronaut-problem-json = { module = "io.micronaut.problem:micronaut-problem-json"}
+micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt"}
+micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson"}
+micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor"}
+micronaut-test-rest-assured = { module = "io.micronaut.test:micronaut-test-rest-assured"}
+micronaut-validation-processor = { module = "io.micronaut.validation:micronaut-validation-processor"}
+micronaut-jackson-xml = {module = "io.micronaut.xml:micronaut-jackson-xml"}
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mongock-standalone = { module = "io.mongock:mongock-standalone", version.ref = "mongock" }
 mongock-mongodb-reactive-driver = { module = "io.mongock:mongodb-reactive-driver", version.ref = "mongock" }
@@ -74,8 +60,6 @@ snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 
 [plugins]
 allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
-cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }
-jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

@@ -147,10 +147,18 @@ class ValidityPeriodsServiceTest : BaseVardefTest() {
     @Test
     fun `update status on all validity periods except current`() {
         variableDefinitionRepository.save(
-            SAVED_INTERNAL_VARIABLE_DEFINITION.copy(validFrom = LocalDate.of(2020, 1, 1), validUntil = LocalDate.of(2023, 12, 31)),
+            SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                id = null,
+                validFrom = LocalDate.of(2020, 1, 1),
+                validUntil = LocalDate.of(2023, 12, 31),
+            ),
         )
         variableDefinitionRepository.save(
-            SAVED_INTERNAL_VARIABLE_DEFINITION.copy(validFrom = LocalDate.of(2010, 1, 1), validUntil = LocalDate.of(2019, 12, 31)),
+            SAVED_INTERNAL_VARIABLE_DEFINITION.copy(
+                id = null,
+                validFrom = LocalDate.of(2010, 1, 1),
+                validUntil = LocalDate.of(2019, 12, 31),
+            ),
         )
 
         validityPeriodsService.updateStatusOnOtherPeriods(

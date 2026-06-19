@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.integrations.vardok
 
-import com.fasterxml.jackson.databind.JsonMappingException
 import jakarta.inject.Inject
 import no.ssb.metadata.vardef.integrations.vardok.conversions.StatisticalSubjects
 import no.ssb.metadata.vardef.integrations.vardok.conversions.getValidDates
@@ -14,12 +13,15 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.AssertionsForClassTypes
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.argumentSet
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
+import tools.jackson.core.exc.StreamReadException
+import tools.jackson.databind.exc.ValueInstantiationException
 import java.net.URL
 import java.util.stream.Stream
 
@@ -221,26 +223,23 @@ class VardokMigrationTest : BaseVardefTest() {
 
     @Test
     fun `Vardokresponse invalid characters`() {
-        assertThatThrownBy {
+        assertThrows<StreamReadException> {
             vardokService.getVardokItem("0001")
-        }.isInstanceOf(JsonMappingException::class.java)
-            .hasMessageContaining("Unexpected character")
+        }
     }
 
     @Test
     fun `Vardokresponse invalid characters by language`() {
-        assertThatThrownBy {
+        assertThrows<StreamReadException> {
             vardokService.getVardokByIdAndLanguage("0001", "en")
-        }.isInstanceOf(JsonMappingException::class.java)
-            .hasMessageContaining("Unexpected character")
+        }
     }
 
     @Test
     fun `Vardokresponse missing fields`() {
-        assertThatThrownBy {
+        assertThrows<ValueInstantiationException> {
             vardokService.getVardokItem("0002")
-        }.isInstanceOf(JsonMappingException::class.java)
-            .hasMessageContaining("Cannot construct instance of `no.ssb.metadata.vardef.integrations.vardok.models.Variable`")
+        }
     }
 
     @Test

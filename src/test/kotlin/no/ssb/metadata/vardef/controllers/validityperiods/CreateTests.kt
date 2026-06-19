@@ -345,8 +345,8 @@ class CreateTests : BaseVardefTest() {
 
         val completeView = jsonMapper.readValue(body, CompleteView::class.java)
         assertThat(completeView).isNotNull
-        assertThat(completeView.lastUpdatedBy).isEqualTo(TEST_USER)
-        assertThat(completeView.createdBy).isEqualTo("me@example.com")
+        assertThat(completeView?.lastUpdatedBy).isEqualTo(TEST_USER)
+        assertThat(completeView?.createdBy).isEqualTo("me@example.com")
     }
 
     @ParameterizedTest
@@ -375,8 +375,8 @@ class CreateTests : BaseVardefTest() {
         if (httpStatus == HTTP_CREATED) {
             jsonMapper.readValue(body, CompleteView::class.java).apply {
                 assertThat(this).isNotNull
-                assertThat(validFrom).isEqualTo(expectedValidFrom)
-                assertThat(validUntil).isEqualTo(expectedValidUntil)
+                assertThat(this?.validFrom).isEqualTo(expectedValidFrom)
+                assertThat(this?.validUntil).isEqualTo(expectedValidUntil)
             }
         }
         if (httpStatus == HTTP_BAD_REQUEST) {

@@ -23,12 +23,12 @@ class IllegalStatusChangeExceptionHandler(
     override fun handle(
         request: HttpRequest<*>,
         exception: IllegalStatusChangeException,
-    ): HttpResponse<*>? =
+    ): HttpResponse<*> =
         errorResponseProcessor.processResponse(
             ErrorContext
                 .builder(request)
                 .cause(exception)
-                .errorMessage(exception.message)
+                .errorMessage(exception.message ?: "")
                 .build(),
             HttpResponse.status<Any>(HttpStatus.BAD_REQUEST),
         )

@@ -1,5 +1,3 @@
-import com.google.devtools.ksp.KspExperimental
-
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.allopen)
@@ -9,8 +7,6 @@ plugins {
     alias(libs.plugins.micronaut.aot)
     alias(libs.plugins.shadow)
     alias(libs.plugins.ktlint)
-    alias(libs.plugins.jib)
-    alias(libs.plugins.cyclonedx)
     id("jacoco")
 }
 
@@ -58,39 +54,34 @@ dependencies {
     testImplementation(libs.json)
     testImplementation(libs.logback.classic)
     aotPlugins(platform(libs.micronaut.platform))
-
-    // Force safe versions of vulnerable transitive dependencies until they are updated
-    constraints {
-        implementation("tools.jackson.core:jackson-core:3.1.1") {
-            because("GHSA-72hv-8253-57qq, CVE-2026-29062, GHSA-2m67-wjpj-xhg9: fix requires >= 3.1.1")
-        }
-        implementation("org.apache.commons:commons-lang3:3.20.0") {
-            because("CVE-2025-48924: fix requires >= 3.18.0")
-        }
-        implementation("io.netty:netty-codec-http:4.2.10.Final") {
-            because("CVE-2026-33870: fix requires > 4.2.9.Final")
-        }
-        implementation("io.netty:netty-codec-http2:4.2.10.Final") {
-            because("CVE-2026-33871: fix requires > 4.2.9.Final")
-        }
-        implementation("org.codehaus.plexus:plexus-utils:4.0.3") {
-            because("CVE-2025-67030: fixed in 4.0.3")
-        }
-    }
 }
 
 application {
     mainClass = "no.ssb.metadata.vardef.ApplicationKt"
 }
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
     // See https://youtrack.jetbrains.com/issue/KT-73255
     compilerOptions.freeCompilerArgs.add("-Xannotation-default-target=param-property")
 }
 
 ksp {
-    @OptIn(KspExperimental::class)
-    useKsp2 = true
+    arg("micronaut.openapi.project.dir", projectDir.toString())
+    arg("micronaut.openapi.property.naming.strategy", "SNAKE_CASE")
+    arg("micronaut.openapi.groups.public.packages", "no.ssb.metadata.vardef.controllers.publicapi")
+    arg("micronaut.openapi.groups.public.filename", "variable-definitions-public")
+    arg("micronaut.openapi.groups.public.primary", "true")
+    arg("micronaut.openapi.groups.internal.packages", "no.ssb.metadata.vardef.controllers.internalapi")
+    arg("micronaut.openapi.groups.internal.filename", "variable-definitions-internal")
+    arg(
+        "micronaut.openapi.views.spec",
+        """
+        mapping.path=/docs/openapi/variable-definitions/,
+        swagger-ui.enabled=true,
+        swagger-ui.js.url=/docs/swagger/variable-definitions/res/,
+        swagger-ui.tagsSorter=Function=(a => a),
+""",
+    )
 }
 
 graalvmNative.toolchainDetection = false
@@ -120,27 +111,6 @@ micronaut {
     }
 }
 
-tasks.cyclonedxDirectBom {
-    includeConfigs = listOf("runtimeClasspath")
-    projectType = org.cyclonedx.model.Component.Type.APPLICATION
-}
-
-jib {
-    from {
-        image = "gcr.io/distroless/java21-debian12@sha256:f34fd3e4e2d7a246d764d0614f5e6ffb3a735930723fac4cfc25a72798950262"
-        platforms {
-            platform {
-                architecture = "amd64"
-                os = "linux"
-            }
-            platform {
-                architecture = "arm64"
-                os = "linux"
-            }
-        }
-    }
-}
-
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "no.ssb.metadata.vardef.ApplicationKt"
@@ -163,10 +133,6 @@ tasks.withType<Jar> {
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     isZip64 = true
-}
-
-tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
-    jdkVersion = "21"
 }
 
 tasks.withType<Test> {

@@ -116,7 +116,7 @@ class VarDokMigrationController(
             throw HttpStatusException(HttpStatus.NOT_FOUND, e.message)
         } catch (e: Exception) {
             // Other validation exceptions
-            throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
+            throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
         }
 
         val createVariableDefinitionResponse =
@@ -124,7 +124,7 @@ class VarDokMigrationController(
                 HttpRequest
                     .POST("/variable-definitions", vardefInput.toString())
                     .headers { entries: MutableHttpHeaders ->
-                        entries.set(AUTHORIZATION, httpRequest.headers.get(AUTHORIZATION))
+                        httpRequest.headers.get(AUTHORIZATION)?.let { entries.set(AUTHORIZATION, it) }
                     },
             )
 
@@ -238,11 +238,14 @@ class VarDokMigrationController(
         httpRequest: HttpRequest<*>,
     ): MutableHttpResponse<*> {
         val vardefId = vardokService.getVardefIdByVardokId(vardokId)
+        val authHeader = httpRequest.headers[AUTHORIZATION]
         val request =
             HttpRequest
                 .GET<String>("/variable-definitions/$vardefId")
                 .headers {
-                    it[AUTHORIZATION] = httpRequest.headers[AUTHORIZATION]
+                    if (authHeader != null) {
+                        it[AUTHORIZATION] = authHeader
+                    }
                 }
 
         return runBlocking {

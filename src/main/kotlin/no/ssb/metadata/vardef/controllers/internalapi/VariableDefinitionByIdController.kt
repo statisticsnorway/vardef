@@ -1,6 +1,5 @@
 package no.ssb.metadata.vardef.controllers.internalapi
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -9,6 +8,7 @@ import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.json.JsonMapper
+import io.micronaut.json.tree.JsonNode
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
@@ -177,7 +177,7 @@ class VariableDefinitionByIdController(
 
         patches.deleteAllForDefinitionId(definitionId)
         // Need to explicitly return a response as a workaround for https://github.com/micronaut-projects/micronaut-core/issues/9611
-        return HttpResponse.noContent<Unit>().contentType(null)
+        return HttpResponse.noContent()
     }
 
     /**
@@ -251,7 +251,7 @@ class VariableDefinitionByIdController(
             try {
                 UpdateDraftInput.fromJson(body, jsonMapper)
             } catch (e: IllegalArgumentException) {
-                throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message)
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, e.message ?: "")
             }
 
         val updateDraft = updateDraftInput.toUpdateDraft()

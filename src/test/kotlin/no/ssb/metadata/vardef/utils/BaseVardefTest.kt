@@ -16,7 +16,7 @@ import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
 
-@MicronautTest
+@MicronautTest(transactional = false)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 open class BaseVardefTest {
     init {
@@ -49,16 +49,16 @@ open class BaseVardefTest {
         variableDefinitionRepository.deleteAll()
         vardokIdMappingRepository.deleteAll()
 
-        ALL_INCOME_TAX_PATCHES.forEach { variableDefinitionRepository.save(it) }
-        variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE)
-        variableDefinitionRepository.save(DRAFT_EXAMPLE_WITH_VALID_UNTIL)
-        variableDefinitionRepository.save(DRAFT_COMPLEX_SHORT_NAME)
-        variableDefinitionRepository.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE)
-        ALL_SAVED_INTERNAL_PATCHES.forEach { variableDefinitionRepository.save(it) }
-        variableDefinitionRepository.save(SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME)
-        variableDefinitionRepository.save(SAVED_TO_PUBLISH)
-        variableDefinitionRepository.save(PATCH_MANDATORY_FIELDS)
-        variableDefinitionRepository.save(SAVED_TO_PUBLISH_ILLEGAL_CONTACT)
+        ALL_INCOME_TAX_PATCHES.forEach { variableDefinitionRepository.save(it.copy(id = null)) }
+        variableDefinitionRepository.save(DRAFT_BUS_EXAMPLE.copy(id = null))
+        variableDefinitionRepository.save(DRAFT_EXAMPLE_WITH_VALID_UNTIL.copy(id = null))
+        variableDefinitionRepository.save(DRAFT_COMPLEX_SHORT_NAME.copy(id = null))
+        variableDefinitionRepository.save(SAVED_DRAFT_DEADWEIGHT_EXAMPLE.copy(id = null))
+        ALL_SAVED_INTERNAL_PATCHES.forEach { variableDefinitionRepository.save(it.copy(id = null)) }
+        variableDefinitionRepository.save(SAVED_BYDEL_WITH_ILLEGAL_SHORTNAME.copy(id = null))
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH.copy(id = null))
+        variableDefinitionRepository.save(PATCH_MANDATORY_FIELDS.copy(id = null))
+        variableDefinitionRepository.save(SAVED_TO_PUBLISH_ILLEGAL_CONTACT.copy(id = null))
 
         vardokIdMappingRepository.save(VardokVardefIdPair("005", DRAFT_BUS_EXAMPLE.definitionId))
     }

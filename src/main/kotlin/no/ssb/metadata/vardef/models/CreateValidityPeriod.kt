@@ -72,6 +72,7 @@ data class CreateValidityPeriod(
         userName: String,
     ): SavedVariableDefinition =
         previousPatch.copy(
+            id = null,
             patchId = highestPatchId + 1,
             name = name?.let { previousPatch.name.update(it) } ?: previousPatch.name,
             definition = definition,
@@ -87,6 +88,8 @@ data class CreateValidityPeriod(
             comment = comment,
             relatedVariableDefinitionUris = relatedVariableDefinitionUris?.map { it.toString() },
             contact = contact ?: previousPatch.contact,
+            // Provide a placeholder value, actual value set by data layer
+            createdAt = LocalDateTime.now(),
             // Provide a placeholder value, actual value set by data layer
             lastUpdatedAt = LocalDateTime.now(),
             lastUpdatedBy = userName,

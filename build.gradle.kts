@@ -57,8 +57,8 @@ dependencies {
 
     constraints {
         implementation("org.codehaus.plexus:plexus-utils:4.0.3")
-        implementation("org.apache.commons:commons-lang3:3.18.0")
-        implementation("commons-codec:commons-codec:1.13")
+        implementation("org.apache.commons:commons-lang3:3.20.0")
+        implementation("commons-codec:commons-codec:1.22.0")
     }
 }
 

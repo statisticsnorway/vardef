@@ -18,3 +18,9 @@ updates:
       github-action-dependencies:
         patterns:
           - "*"
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7

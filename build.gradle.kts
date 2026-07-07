@@ -57,10 +57,10 @@ dependencies {
 
     constraints {
         implementation("org.codehaus.plexus:plexus-utils:4.0.3")
-        implementation("org.apache.commons:commons-lang3:3.18.0")
-        implementation("commons-codec:commons-codec:1.13")
+        implementation("org.apache.commons:commons-lang3:3.20.0")
+        implementation("commons-codec:commons-codec:1.22.0")
         // Fix CVE-2026-54512 and related CVEs (HIGH severity) in jackson-databind 3.x
-        implementation("tools.jackson.core:jackson-databind:3.1.4")
+        implementation("tools.jackson.core:jackson-databind:3.2.0")
     }
 }
 

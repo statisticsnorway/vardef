@@ -1,8 +1,6 @@
 name: Image Build and Deploy
 
 on:
-  release:
-    types: [published]
   push:
     branches:
       - main
@@ -25,6 +23,12 @@ on:
         options:
           - test
           - prod
+  workflow_call:
+    inputs:
+      cluster:
+        description: "Which cluster to deploy to?"
+        required: true
+        type: string
 
 jobs:
   docker-build:
@@ -74,13 +78,13 @@ jobs:
         uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
 
       - name: Build with Gradle
-        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
+        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod' || inputs.cluster == 'test' || inputs.cluster == 'prod'
         run: ./gradlew build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
+        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod' || inputs.cluster == 'test' || inputs.cluster == 'prod'
         uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
         id: docker-build-push
         with:
@@ -97,7 +101,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.docker-build.outputs.test-config-changed == 'true'
+    if: github.event.inputs.cluster == 'test' || inputs.cluster == 'test' || (github.event_name == 'push' && needs.docker-build.outputs.test-config-changed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -118,7 +122,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
+    if: github.event.inputs.cluster == 'prod' || inputs.cluster == 'prod' || (github.event_name == 'push' && needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

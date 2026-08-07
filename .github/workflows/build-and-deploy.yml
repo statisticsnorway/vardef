@@ -72,7 +72,7 @@ jobs:
         uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
         with:
           java-version: 25
-          distribution: 'zulu'
+          distribution: "zulu"
 
       - name: Set up gradle
         uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
@@ -92,7 +92,6 @@ jobs:
           dockerfile: Dockerfile
           docker_context: .
 
-
   deploy-test:
     name: Deploy to test
     needs: docker-build
@@ -101,7 +100,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event.inputs.cluster == 'test' || inputs.cluster == 'test' || (github.event_name == 'push' && needs.docker-build.outputs.test-config-changed == 'true')
+    if: github.event.inputs.cluster == 'test' || inputs.cluster == 'test' || github.event_name == 'push'
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

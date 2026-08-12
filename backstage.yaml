@@ -25,7 +25,7 @@ spec:
     - vardef-api
   consumesApis:
     - klass-api
-    - dapla-team-api
+    - dapla-api
   dependsOn:
     - resource:metadata-mongodb
     - component:vardok

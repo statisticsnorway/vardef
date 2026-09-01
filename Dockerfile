@@ -1,4 +1,4 @@
-FROM eclipse-temurin:25-jdk-jammy@sha256:c0e0be82836e51fc78c06db5ab2b4d440f1ce1672f4c4589c9c9ec2f3f432477 AS builder
+FROM eclipse-temurin:25-jdk-jammy@sha256:89565961a318534f01c971c7b1d030e60713c66995b887c94010cef938dbc53e AS builder
 WORKDIR /app
 COPY gradlew .
 COPY gradle gradle

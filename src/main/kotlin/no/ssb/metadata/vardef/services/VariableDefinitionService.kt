@@ -4,6 +4,7 @@ import io.micronaut.data.exceptions.EmptyResultException
 import io.viascom.nanoid.NanoId
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
+import no.ssb.metadata.vardef.config.KlassConfiguration
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.constants.GENERATED_CONTACT_KEYWORD
 import no.ssb.metadata.vardef.constants.ILLEGAL_SHORTNAME_KEYWORD
@@ -29,6 +30,7 @@ import java.time.LocalDate
 class VariableDefinitionService(
     private val variableDefinitionRepository: VariableDefinitionRepository,
     private val klassService: KlassService,
+    private val klassConfiguration: KlassConfiguration,
     private val validityPeriods: ValidityPeriodsService,
 ) {
     private val logger = LoggerFactory.getLogger(VariableDefinitionService::class.java)
@@ -183,7 +185,7 @@ class VariableDefinitionService(
                                 id,
                                 dateOfValidity,
                                 VariableStatus.PUBLISHED_EXTERNAL,
-                            )?.render(language, klassService)
+                            )?.render(language, klassService, klassConfiguration)
                         },
                 )
             } else {
@@ -246,7 +248,7 @@ class VariableDefinitionService(
     ): List<RenderedView> =
         listCompleteForDate(dateOfValidity = dateOfValidity, shortName = shortName)
             .map {
-                it.render(language = language, klassService = klassService)
+                it.render(language = language, klassService = klassService, klassConfiguration = klassConfiguration)
             }
 
     /**
@@ -268,7 +270,7 @@ class VariableDefinitionService(
         variableStatus: VariableStatus? = null,
     ): RenderedView =
         getByDateAndStatus(definitionId, dateOfValidity, variableStatus)
-            ?.render(language, klassService)
+            ?.render(language, klassService, klassConfiguration)
             ?: throw EmptyResultException()
 
     private fun getByDateAndStatus(

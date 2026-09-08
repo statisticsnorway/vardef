@@ -27,7 +27,6 @@ mongodb:
 # Configuration which applies under unit/integration tests (NOT the deployment environment called "test")
 klass:
   static-data-path: klass/classifications
-  codes-at: 2024-08-01
   classifications:
     702:
     618:

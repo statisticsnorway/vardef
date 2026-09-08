@@ -1,11 +1,9 @@
 package no.ssb.metadata.vardef.services
 
 import com.mongodb.assertions.Assertions.assertTrue
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
+import no.ssb.metadata.vardef.config.KlassClassificationConfiguration
+import no.ssb.metadata.vardef.config.KlassConfiguration
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
@@ -25,14 +23,38 @@ class VariableDefinitionServiceTestWithMockRepository {
     private lateinit var variableDefinitionService: VariableDefinitionService
     private lateinit var mockKlassService: KlassService
     private lateinit var mockValidityPeriodsService: ValidityPeriodsService
+    private lateinit var klassConfiguration: KlassConfiguration
 
     @BeforeEach
     fun setUp() {
         variableDefinitionMockRepository = mockk<VariableDefinitionRepository>()
         mockKlassService = mockk<KlassService>()
         mockValidityPeriodsService = mockk<ValidityPeriodsService>()
+        klassConfiguration =
+            KlassConfiguration(
+                listOf(
+                    KlassClassificationConfiguration("subject-fields").apply {
+                        id = "618"
+                        date = "today"
+                    },
+                    KlassClassificationConfiguration("unit-types").apply {
+                        id = "702"
+                        date = "today"
+                    },
+                    KlassClassificationConfiguration("measurement-type").apply {
+                        id = "303"
+                        date = "today"
+                        levels = listOf(1)
+                    },
+                ),
+            )
         variableDefinitionService =
-            VariableDefinitionService(variableDefinitionMockRepository, mockKlassService, mockValidityPeriodsService)
+            VariableDefinitionService(
+                variableDefinitionMockRepository,
+                mockKlassService,
+                klassConfiguration,
+                mockValidityPeriodsService,
+            )
     }
 
     @AfterEach

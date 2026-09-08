@@ -25,7 +25,7 @@ interface KlassApiClient {
 
     @Get("classifications/{classificationId}/codesAt?date={codesAt}&language={language}")
     @SingleResult
-    fun listCodes(
+    fun listCodesAtDate(
         @PathVariable classificationId: Int,
         @QueryValue codesAt: String,
         @QueryValue language: SupportedLanguages,
@@ -33,7 +33,7 @@ interface KlassApiClient {
 
     @Get("classifications/{classificationId}/codesAt?date={codesAt}&language={language}&selectLevel={level}")
     @SingleResult
-    fun listCodesAtLevel(
+    fun listCodesAtDateAndLevel(
         @PathVariable classificationId: Int,
         @QueryValue codesAt: String,
         @QueryValue language: SupportedLanguages,

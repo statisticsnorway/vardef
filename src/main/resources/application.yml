@@ -91,16 +91,13 @@ micronaut:
     services:
       klass:
         url: https://data.ssb.no/api/klass/v1/
-        health-check: true
-        health-check-interval: 15s
+        health-check: false
       vardok:
         url: https://www.ssb.no/a/xml/metadata/conceptvariable/vardok/
       dapla-api:
         url: https://dapla-api.ssb.no
         read-timeout: 30s
         health-check: false
-        health-check-interval: 15s
-        health-check-uri: /healthz
 
   klass-web:
     url:

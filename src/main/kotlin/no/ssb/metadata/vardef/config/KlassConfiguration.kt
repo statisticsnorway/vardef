@@ -38,8 +38,7 @@ class KlassConfiguration(
         return resolveCodesAt(configuredDate)
     }
 
-    private fun classificationByName(name: String): KlassClassificationConfiguration? =
-        classifications.firstOrNull { it.name == name }
+    private fun classificationByName(name: String): KlassClassificationConfiguration? = classifications.firstOrNull { it.name == name }
 
     private fun resolveCodesAt(value: String): String =
         if (value.equals(TODAY, ignoreCase = true)) {

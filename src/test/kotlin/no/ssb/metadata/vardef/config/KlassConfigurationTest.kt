@@ -18,9 +18,8 @@ class KlassConfigurationTest {
             this.levels = levels
         }
 
-    private fun configuration(
-        classifications: List<KlassClassificationConfiguration>,
-    ): KlassConfiguration = KlassConfiguration(classifications)
+    private fun configuration(classifications: List<KlassClassificationConfiguration>): KlassConfiguration =
+        KlassConfiguration(classifications)
 
     private fun configuredClassifications(): List<KlassClassificationConfiguration> =
         listOf(

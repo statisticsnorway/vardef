@@ -106,7 +106,7 @@ class CreateTests : BaseVardefTest() {
                 buildProblemJsonResponseSpec(
                     true,
                     null,
-                    errorMessage = "Code 01.01 is not a member of classification with id 303",
+                    errorMessage = "Code 01.01 is not a valid measurement type",
                 ),
             )
     }

@@ -9,6 +9,7 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -33,14 +34,14 @@ import no.ssb.metadata.vardef.security.Roles
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import org.slf4j.LoggerFactory
 
-// This pattern can't use quantifiers due to a limitation in Micronaut where {} can't be used in patch matching
+// This pattern can't use quantifiers due to a limitation in Micronaut where {} can't be used in path matching
 // Ref discussion https://github.com/micronaut-projects/micronaut-core/discussions/5252
 // This pattern is equivalent to ^[a-zA-Z0-9-_]{8}
 private const val VARDEF_ID_PATH_PATTERN =
     "[-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_]" +
         "[-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_][-a-zA-Z0-9_]"
 
-// This pattern can't use quantifiers due to a limitation in Micronaut where {} can't be used in patch matching
+// This pattern can't use quantifiers due to a limitation in Micronaut where {} can't be used in path matching
 // Ref discussion https://github.com/micronaut-projects/micronaut-core/discussions/5252
 // This pattern is equivalent to \d{1,5}
 private const val VARDOK_ID_PATH_PATTERN =
@@ -49,7 +50,6 @@ private const val VARDOK_ID_PATH_PATTERN =
 @Tag(name = DATA_MIGRATION)
 @Validated
 @Controller("/vardok-migration")
-@Secured(Roles.VARIABLE_CONSUMER)
 @ExecuteOn(TaskExecutors.BLOCKING)
 class VarDokMigrationController(
     private val vardokService: VardokService,
@@ -62,6 +62,7 @@ class VarDokMigrationController(
      * Create a variable definition from a VarDok variable definition.
      */
     @Post("/{vardok-id}")
+    @Secured(Roles.VARIABLE_CREATOR)
     @Status(HttpStatus.CREATED)
     @ApiResponse(
         responseCode = "201",
@@ -82,7 +83,6 @@ class VarDokMigrationController(
     )
     @BadRequestApiResponse
     @SecurityRequirement(name = SecuritySchemes.LABID_TOKEN)
-    @Secured(Roles.VARIABLE_CREATOR)
     fun createVariableDefinitionFromVarDok(
         @Parameter(
             name = "vardok-id",
@@ -152,6 +152,7 @@ class VarDokMigrationController(
      * Get a vardok id by vardef id.
      */
     @Get("{vardef-id:$VARDEF_ID_PATH_PATTERN}")
+    @Secured(SecurityRule.IS_ANONYMOUS)
     @NotFoundApiResponse
     @ApiResponse(
         content =
@@ -199,6 +200,7 @@ class VarDokMigrationController(
      * Get a variable definition by vardok id.
      */
     @Get("{vardok-id:$VARDOK_ID_PATH_PATTERN}")
+    @Secured(SecurityRule.IS_ANONYMOUS)
     @ApiResponse(
         responseCode = "200",
         description = "OK response",
@@ -258,6 +260,7 @@ class VarDokMigrationController(
      */
     @Produces(MediaType.APPLICATION_JSON)
     @Get()
+    @Secured(SecurityRule.IS_ANONYMOUS)
     @ApiResponse(
         content = [
             Content(

@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-@MockK
 class VariableDefinitionServiceTestWithMockRepository {
     private lateinit var variableDefinitionMockRepository: VariableDefinitionRepository
     private lateinit var variableDefinitionService: VariableDefinitionService

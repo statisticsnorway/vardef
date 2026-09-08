@@ -26,12 +26,13 @@ mongodb:
     - no.ssb.metadata.vardef.integrations.vardok.models
 # Configuration which applies under unit/integration tests (NOT the deployment environment called "test")
 klass:
-  static-data-path: klass/classifications
-  classifications:
-    702:
-    618:
-    303:
-    91:
+  static:
+    static-data-path: klass/classifications
+    classifications:
+      702:
+      618:
+      303:
+      91:
 # Dapla
 dapla:
   static-data-path: dapla

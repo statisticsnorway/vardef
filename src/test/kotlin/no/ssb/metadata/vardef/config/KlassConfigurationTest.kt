@@ -90,7 +90,7 @@ class KlassConfigurationTest {
             )
 
         assertThrows<IllegalStateException> {
-            configuration.codesAtForClassification("702")
+            configuration.codesAtForClassification("618")
         }
     }
 }

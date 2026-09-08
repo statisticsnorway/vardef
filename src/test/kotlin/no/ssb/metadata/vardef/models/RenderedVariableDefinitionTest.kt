@@ -1,6 +1,7 @@
 package no.ssb.metadata.vardef.models
 
 import jakarta.inject.Inject
+import no.ssb.metadata.vardef.config.KlassConfiguration
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import no.ssb.metadata.vardef.utils.*
 import org.assertj.core.api.Assertions.assertThat
@@ -17,6 +18,9 @@ import java.util.stream.Stream
 class RenderedVariableDefinitionTest : BaseVardefTest() {
     @Inject
     lateinit var klassService: KlassService
+
+    @Inject
+    lateinit var klassConfiguration: KlassConfiguration
 
     private val dates =
         listOf<LocalDate>(
@@ -130,7 +134,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     .copy(
                         unitTypes = listOf(code),
                         validFrom = date,
-                    ).render(SupportedLanguages.NB, klassService)
+                    ).render(SupportedLanguages.NB, klassService, klassConfiguration)
             assertThat(savedVariableDefinitionRendered.unitTypes[0]?.title).isEqualTo(title)
         }
     }
@@ -147,7 +151,7 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     .copy(
                         subjectFields = listOf(code),
                         validFrom = date,
-                    ).render(SupportedLanguages.NB, klassService)
+                    ).render(SupportedLanguages.NB, klassService, klassConfiguration)
             assertThat(savedVariableDefinitionRendered.subjectFields[0]?.title).isEqualTo(title)
         }
     }
@@ -164,14 +168,14 @@ class RenderedVariableDefinitionTest : BaseVardefTest() {
                     .copy(
                         measurementType = code,
                         validFrom = date,
-                    ).render(SupportedLanguages.NB, klassService)
+                    ).render(SupportedLanguages.NB, klassService, klassConfiguration)
             assertThat(savedVariableDefinitionRendered.measurementType?.title).isEqualTo(title)
         }
     }
 
     @Test
     fun `render generate a classificationUri`() {
-        val savedVariableRendered = DRAFT_BUS_EXAMPLE.render(SupportedLanguages.NB, klassService)
+        val savedVariableRendered = DRAFT_BUS_EXAMPLE.render(SupportedLanguages.NB, klassService, klassConfiguration)
         assertTrue(isUri(savedVariableRendered.classificationUri))
     }
 

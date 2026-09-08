@@ -6,13 +6,13 @@ import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.server.exceptions.HttpServerException
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.config.KlassConfiguration
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
 
 const val CODES_CACHE = "codes"
 const val CLASSIFICATIONS_CACHE = "classifications"
@@ -20,6 +20,7 @@ const val CLASSIFICATIONS_CACHE = "classifications"
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
+    private val klassConfiguration: KlassConfiguration,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
 
@@ -46,13 +47,14 @@ open class KlassApiService(
         language: SupportedLanguages,
         level: Int? = null,
     ): List<Code> {
-        logger.info("Fetching codes for $classificationId")
-        val response: HttpResponse<Codes>
-        if (level == null) {
-            response = klassApiClient.listCodes(classificationId, LocalDate.now().toString(), language)
-        } else {
-            response = klassApiClient.listCodesAtLevel(classificationId, LocalDate.now().toString(), language, level)
-        }
+        logger.debug("Fetching codes for $classificationId")
+        val codesAt = klassConfiguration.codesAtForClassification(classificationId.toString())
+        val response: HttpResponse<Codes> =
+            if (level == null) {
+                klassApiClient.listCodesAtDate(classificationId, codesAt, language)
+            } else {
+                klassApiClient.listCodesAtDateAndLevel(classificationId, codesAt, language, level)
+            }
 
         handleErrorCodes(classificationId, response)
         val codes = response.body()?.codes

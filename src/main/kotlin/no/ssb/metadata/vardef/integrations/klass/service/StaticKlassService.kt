@@ -13,7 +13,7 @@ import no.ssb.metadata.vardef.models.LanguageStringType
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import java.nio.file.Path
 
-const val KLASS_CLASSIFICATIONS_PROPERTY_NAME = "klass.classifications"
+const val KLASS_CLASSIFICATIONS_PROPERTY_NAME = "klass.static.classifications"
 
 @Serdeable
 data class StaticKlassCode(
@@ -27,7 +27,7 @@ data class StaticKlassCode(
 @EachProperty(KLASS_CLASSIFICATIONS_PROPERTY_NAME)
 class StaticClassification(
     @param:Parameter val id: String,
-    @Property(name = "klass.static-data-path")
+    @Property(name = "klass.static.static-data-path")
     private val path: Path,
     jsonMapper: JsonMapper,
 ) {

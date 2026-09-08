@@ -8,7 +8,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
-import no.ssb.metadata.vardef.annotations.*
+import no.ssb.metadata.vardef.annotations.KlassId
+import no.ssb.metadata.vardef.annotations.MeasurementTypeKlassCode
+import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
+import no.ssb.metadata.vardef.annotations.SubjectFieldsKlassCode
+import no.ssb.metadata.vardef.annotations.UnitTypesKlassCode
+import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.services.VariableDefinitionService
 import java.net.URL
@@ -37,14 +42,14 @@ data class CreateDraft(
     @KlassId
     val classificationReference: String?,
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) @NotEmpty String>,
+    val unitTypes: List<@UnitTypesKlassCode @NotEmpty String>,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
-    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) @NotEmpty String>,
+    val subjectFields: List<@SubjectFieldsKlassCode @NotEmpty String>,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION, defaultValue = false.toString())
     val containsSpecialCategoriesOfPersonalData: Boolean = false,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
-    @KlassCodeAtLevel(MEASUREMENT_TYPE_KLASS_CODE, MEASUREMENT_TYPE_KLASS_LEVEL)
+    @MeasurementTypeKlassCode
     val measurementType: String?,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Format(DATE_FORMAT)

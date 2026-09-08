@@ -269,7 +269,7 @@ class CompanionObject {
                         .apply {
                             put("unit_types", listOf(""))
                         }.toString(),
-                    "Code  is not a member of classification with id 702",
+                    "Code  is not a valid unit type",
                 ),
                 argumentSet(
                     "blank values in subject fields list",
@@ -277,7 +277,7 @@ class CompanionObject {
                         .apply {
                             put("subject_fields", listOf("", " "))
                         }.toString(),
-                    "Code  is not a member of classification with id 618",
+                    "Code  is not a valid subject field",
                 ),
                 argumentSet(
                     "empty subject fields list",

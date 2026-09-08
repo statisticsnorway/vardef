@@ -6,9 +6,7 @@ import io.micronaut.data.model.naming.NamingStrategies
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotNull
-import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
-import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
-import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
+import no.ssb.metadata.vardef.config.KlassConfiguration
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import org.bson.types.ObjectId
 import java.net.URI
@@ -74,6 +72,7 @@ data class SavedVariableDefinition(
     fun render(
         language: SupportedLanguages,
         klassService: KlassService,
+        klassConfiguration: KlassConfiguration,
     ): RenderedView =
         RenderedView(
             id = definitionId,
@@ -82,11 +81,14 @@ data class SavedVariableDefinition(
             shortName = shortName,
             definition = definition.getValue(language),
             classificationUri = classificationReference?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
-            unitTypes = unitTypes.map { klassService.renderCode(UNIT_TYPES_KLASS_CODE, it, language) },
-            subjectFields = subjectFields.map { klassService.renderCode(SUBJECT_FIELDS_KLASS_CODE, it, language) },
+            unitTypes = unitTypes.map { klassService.renderCode(klassConfiguration.unitTypesId(), it, language) },
+            subjectFields = subjectFields.map { klassService.renderCode(klassConfiguration.subjectFieldsId(), it, language) },
             containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData,
             variableStatus = variableStatus,
-            measurementType = measurementType?.let { klassService.renderCode(MEASUREMENT_TYPE_KLASS_CODE, it, language) },
+            measurementType =
+                measurementType?.let {
+                    klassService.renderCode(klassConfiguration.measurementTypeId(), it, language)
+                },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

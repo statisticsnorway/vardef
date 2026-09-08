@@ -119,6 +119,22 @@ micronaut:
         descriptions: true
         step: PT1M
 
+klass:
+  classifications:
+    subject-fields:
+      id: 618
+      date: today
+      levels: null
+    unit-types:
+      id: 702
+      date: today
+      levels: null
+    measurement-type:
+      id: 303
+      date: today
+      levels:
+        - 1
+
 endpoints:
   all:
     port: 8090

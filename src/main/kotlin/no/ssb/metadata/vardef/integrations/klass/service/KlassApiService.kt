@@ -96,16 +96,25 @@ open class KlassApiService(
         response: HttpResponse<T>,
     ): HttpResponse<T> {
         when (response.status.code) {
+            200 -> {
+                logger.info("Classification {} fetched", classificationId)
+                return response
+            }
+
             500 -> {
                 throw HttpServerException("$STATUS_500_MESSAGE classificationId $classificationId response $response")
             }
 
             404 -> {
-                throw KlassNotFoundException("Classification $classificationId not found")
+                throw KlassNotFoundException("Klass 404: Classification $classificationId not found")
             }
 
             else -> {
-                logger.info("Classification {} fetched", classificationId)
+                logger.warn(
+                    "Unexpected status code {} received for classificationId {}",
+                    response.status.code,
+                    classificationId,
+                )
                 return response
             }
         }
@@ -123,7 +132,7 @@ open class KlassApiService(
         try {
             getClassification(id.toInt())
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
 
@@ -179,7 +188,7 @@ open class KlassApiService(
         cacheManager
             .getCache(KLASS_NOT_FOUND_CACHE)
             .get(notFoundKey(classificationId, language, level), Boolean::class.java)
-            .orElse(false)
+            .orElse(false) == true
 
     private fun setNotFoundCooldown(
         classificationId: Int,

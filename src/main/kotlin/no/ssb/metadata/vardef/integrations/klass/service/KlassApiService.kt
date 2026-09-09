@@ -69,11 +69,12 @@ open class KlassApiService(
         val response: HttpResponse<Codes>
 
         try {
-            response = if (level == null) {
-                klassApiClient.listCodesAtDate(classificationId, codesAt, language)
-            } else {
-                klassApiClient.listCodesAtDateAndLevel(classificationId, codesAt, language, level)
-            }
+            response =
+                if (level == null) {
+                    klassApiClient.listCodesAtDate(classificationId, codesAt, language)
+                } else {
+                    klassApiClient.listCodesAtDateAndLevel(classificationId, codesAt, language, level)
+                }
 
             handleErrorCodes(classificationId, response)
         } catch (e: KlassNotFoundException) {

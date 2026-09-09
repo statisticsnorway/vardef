@@ -6,9 +6,7 @@ import io.micronaut.http.client.exceptions.HttpClientException
 import io.micronaut.http.server.exceptions.HttpServerException
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
@@ -22,7 +20,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @MicronautTest(startApplication = false)
@@ -32,8 +29,6 @@ class KlassApiServiceTest {
 
     @Inject
     private lateinit var klassApiMockkClient: KlassApiClient
-
-    private val codesAt = LocalDate.now().toString()
 
     @Primary
     @Singleton
@@ -88,7 +83,7 @@ class KlassApiServiceTest {
     @Test
     fun `fetch code list no codes returned`() {
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
+            klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language)
         } returns
             HttpResponse.ok(
                 Codes(
@@ -100,17 +95,21 @@ class KlassApiServiceTest {
             klassApiService.getCodeObjectsFor(testClassificationId, language)
         }
 
-        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
+        verify(exactly = 1) {
+            klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language)
+        }
     }
 
     @Test
     fun `fetch code list from klass api returns 200 OK`() {
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
+            klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language)
         } returns listCodesResponse
 
         val result = klassApiService.getCodeObjectsFor(testClassificationId, language)
-        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
+        verify(exactly = 1) {
+            klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language)
+        }
         assertEquals(2, result.size)
     }
 
@@ -168,11 +167,13 @@ class KlassApiServiceTest {
     @Test
     fun `get codes for returns a list of just the codes`() {
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
+            klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language)
         } returns listCodesResponse
 
         val result = klassApiService.getCodesFor(testClassificationId.toString())
-        verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
+        verify(exactly = 1) {
+            klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language)
+        }
         assertThat(result).containsExactly("1", "2")
     }
 
@@ -180,7 +181,7 @@ class KlassApiServiceTest {
     @EnumSource(SupportedLanguages::class)
     fun `get code item for language`(language: SupportedLanguages) {
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
+            klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language)
         } returns listCodesResponse
 
         assertThat(

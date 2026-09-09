@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.models
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.serde.config.naming.SnakeCaseStrategy
 import io.swagger.v3.oas.annotations.media.Schema
+import no.ssb.metadata.vardef.config.KlassConfiguration
 import no.ssb.metadata.vardef.constants.*
 import no.ssb.metadata.vardef.integrations.klass.service.KlassService
 import java.net.URL
@@ -65,6 +66,7 @@ data class CompleteView(
     fun render(
         language: SupportedLanguages,
         klassService: KlassService,
+        klassConfiguration: KlassConfiguration,
     ): RenderedView =
         RenderedView(
             id = id,
@@ -73,11 +75,14 @@ data class CompleteView(
             shortName = shortName,
             definition = definition.getValue(language),
             classificationUri = classificationReference?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
-            unitTypes = unitTypes.map { klassService.renderCode(UNIT_TYPES_KLASS_CODE, it, language) },
-            subjectFields = subjectFields.map { klassService.renderCode(SUBJECT_FIELDS_KLASS_CODE, it, language) },
+            unitTypes = unitTypes.map { klassService.renderCode(klassConfiguration.unitTypesId(), it, language) },
+            subjectFields = subjectFields.map { klassService.renderCode(klassConfiguration.subjectFieldsId(), it, language) },
             containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData,
             variableStatus = variableStatus,
-            measurementType = measurementType?.let { klassService.renderCode(MEASUREMENT_TYPE_KLASS_CODE, it, language) },
+            measurementType =
+                measurementType?.let {
+                    klassService.renderCode(klassConfiguration.measurementTypeId(), it, language)
+                },
             validFrom = validFrom,
             validUntil = validUntil,
             externalReferenceUri = externalReferenceUri,

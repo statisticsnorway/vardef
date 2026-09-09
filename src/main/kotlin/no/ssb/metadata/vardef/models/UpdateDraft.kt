@@ -8,10 +8,11 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
-import no.ssb.metadata.vardef.annotations.KlassCode
-import no.ssb.metadata.vardef.annotations.KlassCodeAtLevel
 import no.ssb.metadata.vardef.annotations.KlassId
+import no.ssb.metadata.vardef.annotations.MeasurementTypeKlassCode
 import no.ssb.metadata.vardef.annotations.NotEmptyLanguageStringType
+import no.ssb.metadata.vardef.annotations.SubjectFieldsKlassCode
+import no.ssb.metadata.vardef.annotations.UnitTypesKlassCode
 import no.ssb.metadata.vardef.annotations.ValidDateOrder
 import no.ssb.metadata.vardef.constants.*
 import java.net.URL
@@ -47,10 +48,10 @@ data class UpdateDraft(
     val classificationReference: String? = null,
     @Nullable
     @Schema(description = UNIT_TYPES_FIELD_DESCRIPTION)
-    val unitTypes: List<@KlassCode(id = UNIT_TYPES_KLASS_CODE) @NotEmpty String>? = null,
+    val unitTypes: List<@UnitTypesKlassCode @NotEmpty String>? = null,
     @Schema(description = SUBJECT_FIELDS_FIELD_DESCRIPTION)
     @Nullable
-    val subjectFields: List<@KlassCode(id = SUBJECT_FIELDS_KLASS_CODE) @NotEmpty String>? = null,
+    val subjectFields: List<@SubjectFieldsKlassCode @NotEmpty String>? = null,
     @Schema(description = CONTAINS_SPECIAL_CATEGORIES_OF_PERSONAL_DATA_FIELD_DESCRIPTION)
     @Nullable
     val containsSpecialCategoriesOfPersonalData: Boolean? = null,
@@ -58,7 +59,7 @@ data class UpdateDraft(
     val variableStatus: VariableStatus? = null,
     @Schema(description = MEASUREMENT_TYPE_FIELD_DESCRIPTION)
     @Nullable
-    @KlassCodeAtLevel(MEASUREMENT_TYPE_KLASS_CODE, MEASUREMENT_TYPE_KLASS_LEVEL)
+    @MeasurementTypeKlassCode
     val measurementType: String? = null,
     @Schema(description = VALID_FROM_FIELD_DESCRIPTION)
     @Nullable

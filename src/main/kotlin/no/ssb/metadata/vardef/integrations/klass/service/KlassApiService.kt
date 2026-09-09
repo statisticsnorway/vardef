@@ -9,13 +9,13 @@ import io.micronaut.http.client.exceptions.HttpClientException
 import io.micronaut.http.server.exceptions.HttpServerException
 import io.micronaut.retry.annotation.CircuitBreaker
 import jakarta.inject.Singleton
+import no.ssb.metadata.vardef.config.KlassConfiguration
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Code
 import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.models.KlassReference
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
 
 const val CODES_CACHE = "codes"
 const val CLASSIFICATIONS_CACHE = "classifications"
@@ -24,6 +24,7 @@ const val KLASS_NOT_FOUND_CACHE = "klass-not-found"
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
+    private val klassConfiguration: KlassConfiguration,
     private val cacheManager: CacheManager<Any>,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
@@ -63,13 +64,15 @@ open class KlassApiService(
             throw KlassNotFoundException("Classification $classificationId not found")
         }
 
-        logger.info("Fetching codes for $classificationId")
+        logger.debug("Fetching codes for $classificationId")
+        val codesAt = klassConfiguration.codesAtForClassification(classificationId.toString())
         val response: HttpResponse<Codes>
+
         try {
-            if (level == null) {
-                response = klassApiClient.listCodes(classificationId, LocalDate.now().toString(), language)
+            response = if (level == null) {
+                klassApiClient.listCodesAtDate(classificationId, codesAt, language)
             } else {
-                response = klassApiClient.listCodesAtLevel(classificationId, LocalDate.now().toString(), language, level)
+                klassApiClient.listCodesAtDateAndLevel(classificationId, codesAt, language, level)
             }
 
             handleErrorCodes(classificationId, response)

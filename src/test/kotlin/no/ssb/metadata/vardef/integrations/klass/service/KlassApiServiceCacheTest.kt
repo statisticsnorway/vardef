@@ -14,7 +14,6 @@ import no.ssb.metadata.vardef.integrations.klass.models.Codes
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @MicronautTest
@@ -24,8 +23,6 @@ class KlassApiServiceCacheTest {
 
     @Inject
     private lateinit var klassApiMockkClient: KlassApiClient
-
-    private val codesAt = LocalDate.now().toString()
 
     private val classificationId = 1
     private val language = SupportedLanguages.NB
@@ -48,7 +45,7 @@ class KlassApiServiceCacheTest {
     fun mockKlassApiClient(): KlassApiClient {
         val klassApiMockkClient = mockk<KlassApiClient>()
         every { klassApiMockkClient.fetchClassification(classificationId) } returns HttpResponse.ok(classification)
-        every { klassApiMockkClient.listCodes(classificationId, codesAt, language) } returns HttpResponse.ok(Codes(codes))
+        every { klassApiMockkClient.listCodesAtDate(classificationId, any(), language) } returns HttpResponse.ok(Codes(codes))
         return klassApiMockkClient
     }
 
@@ -63,9 +60,9 @@ class KlassApiServiceCacheTest {
     @Test
     fun `codes cache`() {
         assertThat(klassApiService.getCodeObjectsFor(classificationId, language)).isEqualTo(codes)
-        verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt, language) }
+        verify(exactly = 1) { klassApiMockkClient.listCodesAtDate(classificationId, any(), language) }
         assertThat(klassApiService.getCodeObjectsFor(classificationId, language)).isEqualTo(codes)
-        verify(exactly = 1) { klassApiMockkClient.listCodes(classificationId, codesAt, language) }
+        verify(exactly = 1) { klassApiMockkClient.listCodesAtDate(classificationId, any(), language) }
     }
 
     @Test

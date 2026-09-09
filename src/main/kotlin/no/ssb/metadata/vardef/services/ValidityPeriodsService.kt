@@ -3,6 +3,7 @@ package no.ssb.metadata.vardef.services
 import io.micronaut.data.exceptions.EmptyResultException
 import jakarta.inject.Singleton
 import net.logstash.logback.argument.StructuredArguments.kv
+import no.ssb.metadata.vardef.config.KlassConfiguration
 import no.ssb.metadata.vardef.constants.DEFINITION_ID
 import no.ssb.metadata.vardef.exceptions.DefinitionTextUnchangedException
 import no.ssb.metadata.vardef.exceptions.InvalidValidDateException
@@ -28,6 +29,7 @@ import java.util.*
 @Singleton
 class ValidityPeriodsService(
     private val klassService: KlassService,
+    private val klassConfiguration: KlassConfiguration,
     private val variableDefinitionRepository: VariableDefinitionRepository,
 ) {
     private val logger = LoggerFactory.getLogger(ValidityPeriodsService::class.java)
@@ -72,7 +74,7 @@ class ValidityPeriodsService(
         definitionId: String,
     ): List<RenderedView> =
         listLatestByValidityPeriod(definitionId)
-            .map { it.render(language, klassService) }
+            .map { it.render(language, klassService, klassConfiguration) }
 
     /**
      * List complete *Validity Periods*.

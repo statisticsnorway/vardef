@@ -64,4 +64,15 @@ class KlassApiServiceCacheTest {
         assertThat(klassApiService.getCodeObjectsFor(classificationId, language)).isEqualTo(codes)
         verify(exactly = 1) { klassApiMockkClient.listCodesAtDate(classificationId, any(), language) }
     }
+
+    @Test
+    fun `404 response is cached as cooldown to avoid repeated calls`() {
+        val missingClassificationId = 999999
+        every { klassApiMockkClient.listCodesAtDate(missingClassificationId, any(), language) } returns HttpResponse.notFound()
+
+        runCatching { klassApiService.getCodeObjectsFor(missingClassificationId, language) }
+        runCatching { klassApiService.getCodeObjectsFor(missingClassificationId, language) }
+
+        verify(exactly = 1) { klassApiMockkClient.listCodesAtDate(missingClassificationId, any(), language) }
+    }
 }

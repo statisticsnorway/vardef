@@ -85,6 +85,9 @@ micronaut:
     codes:
       maximumSize: 3600
       expire-after-write: 24h
+    klass-not-found:
+      maximumSize: 3600
+      expire-after-write: 5m
   http:
     request-headers:
       user-agent: ${micronaut.application.name}/${micronaut.application.version} (metadata@ssb.no)

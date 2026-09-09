@@ -10,6 +10,11 @@ micronaut:
       # Used for exporting custom business metrics
       update-frequency: 1m
       initial-delay: 0s
+  http:
+    services:
+      klass:
+        url: http://klass/api/klass/v1/
+
 logger:
   config: logback-kubernetes.xml
 

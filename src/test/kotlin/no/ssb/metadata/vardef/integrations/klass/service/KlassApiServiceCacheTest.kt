@@ -68,11 +68,11 @@ class KlassApiServiceCacheTest {
     @Test
     fun `404 response is cached as cooldown to avoid repeated calls`() {
         val missingClassificationId = 999999
-        every { klassApiMockkClient.listCodes(missingClassificationId, codesAt, language) } returns HttpResponse.notFound()
+        every { klassApiMockkClient.listCodesAtDate(missingClassificationId, any(), language) } returns HttpResponse.notFound()
 
         runCatching { klassApiService.getCodeObjectsFor(missingClassificationId, language) }
         runCatching { klassApiService.getCodeObjectsFor(missingClassificationId, language) }
 
-        verify(exactly = 1) { klassApiMockkClient.listCodes(missingClassificationId, codesAt, language) }
+        verify(exactly = 1) { klassApiMockkClient.listCodesAtDate(missingClassificationId, any(), language) }
     }
 }

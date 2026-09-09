@@ -116,12 +116,12 @@ class KlassApiServiceTest {
     @Test
     fun `fetch code list retries on transient client exception`() {
         every {
-            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
+            klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language)
         } throws HttpClientException("Temporary failure") andThen listCodesResponse
 
         val result = klassApiService.getCodeObjectsFor(testClassificationId, language)
 
-        verify(exactly = 2) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
+        verify(exactly = 2) { klassApiMockkClient.listCodesAtDate(testClassificationId, any(), language) }
         assertEquals(2, result.size)
     }
 

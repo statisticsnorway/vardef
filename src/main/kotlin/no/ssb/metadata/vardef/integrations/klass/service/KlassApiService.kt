@@ -1,10 +1,13 @@
 package no.ssb.metadata.vardef.integrations.klass.service
 
+import io.micronaut.cache.CacheManager
 import io.micronaut.cache.annotation.CacheInvalidate
 import io.micronaut.cache.annotation.Cacheable
 import io.micronaut.context.annotation.Property
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.client.exceptions.HttpClientException
 import io.micronaut.http.server.exceptions.HttpServerException
+import io.micronaut.retry.annotation.CircuitBreaker
 import jakarta.inject.Singleton
 import no.ssb.metadata.vardef.integrations.klass.models.Classification
 import no.ssb.metadata.vardef.integrations.klass.models.Code
@@ -16,10 +19,12 @@ import java.time.LocalDate
 
 const val CODES_CACHE = "codes"
 const val CLASSIFICATIONS_CACHE = "classifications"
+const val KLASS_NOT_FOUND_CACHE = "klass-not-found"
 
 @Singleton
 open class KlassApiService(
     private val klassApiClient: KlassApiClient,
+    private val cacheManager: CacheManager<Any>,
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
 
@@ -29,7 +34,7 @@ open class KlassApiService(
     @Property(name = "micronaut.klass-web.url.en")
     private lateinit var klassUrlEn: String
 
-    @CacheInvalidate(value = [CODES_CACHE, CLASSIFICATIONS_CACHE], all = true)
+    @CacheInvalidate(value = [CODES_CACHE, CLASSIFICATIONS_CACHE, KLASS_NOT_FOUND_CACHE], all = true)
     open fun invalidateCaches() = Unit
 
     @Cacheable(CLASSIFICATIONS_CACHE)
@@ -41,20 +46,38 @@ open class KlassApiService(
     }
 
     @Cacheable(CODES_CACHE)
+    @CircuitBreaker(
+        includes = [HttpClientException::class, HttpServerException::class],
+        excludes = [KlassNotFoundException::class, NoSuchElementException::class],
+        attempts = "2",
+        delay = "100ms",
+        maxDelay = "1s",
+        reset = "30s",
+    )
     open fun getCodeObjectsFor(
         classificationId: Int,
         language: SupportedLanguages,
         level: Int? = null,
     ): List<Code> {
-        logger.info("Fetching codes for $classificationId")
-        val response: HttpResponse<Codes>
-        if (level == null) {
-            response = klassApiClient.listCodes(classificationId, LocalDate.now().toString(), language)
-        } else {
-            response = klassApiClient.listCodesAtLevel(classificationId, LocalDate.now().toString(), language, level)
+        if (isInNotFoundCooldown(classificationId, language, level)) {
+            throw KlassNotFoundException("Classification $classificationId not found")
         }
 
-        handleErrorCodes(classificationId, response)
+        logger.info("Fetching codes for $classificationId")
+        val response: HttpResponse<Codes>
+        try {
+            if (level == null) {
+                response = klassApiClient.listCodes(classificationId, LocalDate.now().toString(), language)
+            } else {
+                response = klassApiClient.listCodesAtLevel(classificationId, LocalDate.now().toString(), language, level)
+            }
+
+            handleErrorCodes(classificationId, response)
+        } catch (e: KlassNotFoundException) {
+            setNotFoundCooldown(classificationId, language, level)
+            throw e
+        }
+
         val codes = response.body()?.codes
         if (codes.isNullOrEmpty()) {
             throw NoSuchElementException(
@@ -70,17 +93,15 @@ open class KlassApiService(
     ): HttpResponse<T> {
         when (response.status.code) {
             500 -> {
-                logger.error(STATUS_500_MESSAGE)
-                throw HttpServerException(STATUS_500_MESSAGE)
+                throw HttpServerException("$STATUS_500_MESSAGE classificationId $classificationId response $response")
             }
 
             404 -> {
-                logger.info("Classification $classificationId not found")
-                throw NoSuchElementException("Classification $classificationId not found")
+                throw KlassNotFoundException("Classification $classificationId not found")
             }
 
             else -> {
-                logger.info("Classification fetched")
+                logger.info("Classification {} fetched", classificationId)
                 return response
             }
         }
@@ -112,8 +133,14 @@ open class KlassApiService(
             codeObject =
                 getCodeObjectsFor(classificationId.toInt(), language)
                     .firstOrNull { it.code == code }
+        } catch (e: KlassNotFoundException) {
+            logger.error("Classification $classificationId not available for language $language", e)
+            codeObject = null
         } catch (e: NoSuchElementException) {
-            logger.warn("Classification $classificationId not available for language $language", e)
+            logger.error("Classification $classificationId not available for language $language", e)
+            codeObject = null
+        } catch (e: Exception) {
+            logger.error("Failed to fetch classification $classificationId for language $language", e)
             codeObject = null
         }
 
@@ -139,4 +166,34 @@ open class KlassApiService(
     companion object {
         private const val STATUS_500_MESSAGE = "Service is not available"
     }
+
+    private fun isInNotFoundCooldown(
+        classificationId: Int,
+        language: SupportedLanguages,
+        level: Int?,
+    ): Boolean =
+        cacheManager
+            .getCache(KLASS_NOT_FOUND_CACHE)
+            .get(notFoundKey(classificationId, language, level), Boolean::class.java)
+            .orElse(false)
+
+    private fun setNotFoundCooldown(
+        classificationId: Int,
+        language: SupportedLanguages,
+        level: Int?,
+    ) {
+        cacheManager
+            .getCache(KLASS_NOT_FOUND_CACHE)
+            .put(notFoundKey(classificationId, language, level), true)
+    }
+
+    private fun notFoundKey(
+        classificationId: Int,
+        language: SupportedLanguages,
+        level: Int?,
+    ): String = "$classificationId:$language:${level ?: "all"}"
 }
+
+class KlassNotFoundException(
+    message: String,
+) : NoSuchElementException(message)

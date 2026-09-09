@@ -45,6 +45,7 @@ micronaut-openapi = { module = "io.micronaut.openapi:micronaut-openapi"}
 micronaut-openapi-annotations = { module = "io.micronaut.openapi:micronaut-openapi-annotations"}
 micronaut-platform = { module = "io.micronaut.platform:micronaut-platform", version.ref = "micronaut" }
 micronaut-problem-json = { module = "io.micronaut.problem:micronaut-problem-json"}
+micronaut-retry = { module = "io.micronaut:micronaut-retry" }
 micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt"}
 micronaut-serde-jackson = { module = "io.micronaut.serde:micronaut-serde-jackson"}
 micronaut-serde-processor = { module = "io.micronaut.serde:micronaut-serde-processor"}

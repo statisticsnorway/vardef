@@ -2,6 +2,7 @@ package no.ssb.metadata.vardef.integrations.klass.service
 
 import io.micronaut.context.annotation.Primary
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.client.exceptions.HttpClientException
 import io.micronaut.http.server.exceptions.HttpServerException
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
@@ -110,6 +111,18 @@ class KlassApiServiceTest {
 
         val result = klassApiService.getCodeObjectsFor(testClassificationId, language)
         verify(exactly = 1) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
+        assertEquals(2, result.size)
+    }
+
+    @Test
+    fun `fetch code list retries on transient client exception`() {
+        every {
+            klassApiMockkClient.listCodes(testClassificationId, codesAt, language)
+        } throws HttpClientException("Temporary failure") andThen listCodesResponse
+
+        val result = klassApiService.getCodeObjectsFor(testClassificationId, language)
+
+        verify(exactly = 2) { klassApiMockkClient.listCodes(testClassificationId, codesAt, language) }
         assertEquals(2, result.size)
     }
 

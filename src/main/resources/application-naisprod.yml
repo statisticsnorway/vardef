@@ -5,6 +5,10 @@ micronaut:
         - https://labid.lab.dapla-external.ssb.no
       keycloak:
         - https://auth.ssb.no/realms/ssb
+  http:
+    services:
+      klass:
+        url: http://klass/api/klass/v1/
 logger:
   config: logback-kubernetes.xml
 

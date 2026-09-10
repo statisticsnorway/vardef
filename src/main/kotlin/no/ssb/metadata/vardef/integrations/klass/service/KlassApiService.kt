@@ -61,7 +61,7 @@ open class KlassApiService(
         level: Int? = null,
     ): List<Code> {
         if (isInNotFoundCooldown(classificationId, language, level)) {
-            throw KlassNotFoundException("Classification $classificationId not found")
+            throw KlassNotFoundException("Classification $classificationId not found for language $language")
         }
 
         logger.debug("Fetching codes for $classificationId")
@@ -78,6 +78,7 @@ open class KlassApiService(
 
             handleErrorCodes(classificationId, response)
         } catch (e: KlassNotFoundException) {
+            logger.warn("Classification $classificationId not found for language $language")
             setNotFoundCooldown(classificationId, language, level)
             throw e
         }
@@ -147,13 +148,13 @@ open class KlassApiService(
                 getCodeObjectsFor(classificationId.toInt(), language)
                     .firstOrNull { it.code == code }
         } catch (e: KlassNotFoundException) {
-            logger.error("Classification $classificationId not available for language $language", e)
+            logger.debug("Classification {} not found for language {}", classificationId, language, e)
             codeObject = null
         } catch (e: NoSuchElementException) {
-            logger.error("Classification $classificationId not available for language $language", e)
+            logger.debug("Classification {} not found for language {}", classificationId, language, e)
             codeObject = null
         } catch (e: Exception) {
-            logger.error("Failed to fetch classification $classificationId for language $language", e)
+            logger.warn("Failed to fetch classification $classificationId for language $language", e)
             codeObject = null
         }
 

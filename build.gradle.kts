@@ -10,7 +10,7 @@ plugins {
     id("jacoco")
 }
 
-version = "0.4.6"
+version = "0.4.7"
 group = "no.ssb.metadata.vardef"
 
 val kotlinVersion: String = libs.versions.kotlin.toString()

@@ -7,9 +7,10 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import no.ssb.metadata.vardef.constants.MEASUREMENT_TYPE_KLASS_CODE
-import no.ssb.metadata.vardef.constants.SUBJECT_FIELDS_KLASS_CODE
-import no.ssb.metadata.vardef.constants.UNIT_TYPES_KLASS_CODE
+import no.ssb.metadata.vardef.constants.KLASS_ID_MEASUREMENT_TYPE
+import no.ssb.metadata.vardef.constants.KLASS_ID_SUBJECT_FIELDS
+import no.ssb.metadata.vardef.constants.KLASS_ID_UNIT_TYPES
+import no.ssb.metadata.vardef.constants.KLASS_URL_WEB_BASE_DEFAULT
 import no.ssb.metadata.vardef.models.RenderedView
 import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
@@ -241,21 +242,21 @@ class PublicControllerTest : BaseVardefTest() {
             .body(
                 "[0].measurement_type.reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE",
+                    "${KLASS_URL_WEB_BASE_DEFAULT}/$KLASS_ID_MEASUREMENT_TYPE",
                 ),
             ).body("[0].measurement_type.code", equalTo("02"))
             .body("[0].measurement_type.title", equalTo("Antall"))
             .body(
                 "[0].unit_types[0].reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE",
+                    "${KLASS_URL_WEB_BASE_DEFAULT}/$KLASS_ID_UNIT_TYPES",
                 ),
             ).body("[0].unit_types[0].code", equalTo("01"))
             .body("[0].unit_types[0].title", equalTo("Adresse"))
             .body(
                 "[0].subject_fields[0].reference_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE",
+                    "${KLASS_URL_WEB_BASE_DEFAULT}/$KLASS_ID_SUBJECT_FIELDS",
                 ),
             ).body("[0].subject_fields[0].code", equalTo("he04"))
             .body("[0].subject_fields[0].title", equalTo("Helsetjenester"))

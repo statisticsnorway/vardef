@@ -14,7 +14,7 @@ const val BAD_REQUEST_EXAMPLE_NAME = "Bad request"
 const val CONSTRAINT_VIOLATION_EXAMPLE_NAME = "Constraint violation"
 
 const val KLASS_REFERENCE_SUBJECT_FIELD_EXAMPLE = """{
-            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/$SUBJECT_FIELDS_KLASS_CODE",
+            "reference_uri": "$KLASS_URL_WEB_BASE_DEFAULT/$KLASS_ID_SUBJECT_FIELDS",
             "code": "be07",
             "title": "Innvandrere"
         }"""
@@ -66,7 +66,7 @@ const val CREATE_DRAFT_EXAMPLE = """{
     }
 }"""
 
-const val UPDATE_DRAFT_EXAMPLE = """{"classification_reference": $UNIT_TYPES_KLASS_CODE}"""
+const val UPDATE_DRAFT_EXAMPLE = """{"classification_reference": $KLASS_ID_UNIT_TYPES}"""
 const val UPDATE_DRAFT_DELETE_FIELD_EXAMPLE = """{"classification_reference": "null"}"""
 
 const val UPDATE_DRAFT_CONSTRAINT_VIOLATION_EXAMPLE = """{"classification_reference": "incorrect"}"""
@@ -301,9 +301,9 @@ const val RENDERED_VIEW_EXAMPLE = """{
     "name": "Landbakgrunn",
     "short_name": "landbak",
     "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
-    "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
+    "classification_uri": "$KLASS_URL_WEB_BASE_DEFAULT/91",
     "unit_types": [{
-            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/$UNIT_TYPES_KLASS_CODE",
+            "reference_uri": "$KLASS_URL_WEB_BASE_DEFAULT/$KLASS_ID_UNIT_TYPES",
             "code": "20",
             "title": "Person"
         }
@@ -314,7 +314,7 @@ const val RENDERED_VIEW_EXAMPLE = """{
     "contains_special_categories_of_personal_data": true,
     "variable_status": "PUBLISHED_EXTERNAL",
     "measurement_type": {
-        "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/$MEASUREMENT_TYPE_KLASS_CODE",
+        "reference_uri": "$KLASS_URL_WEB_BASE_DEFAULT/$KLASS_ID_MEASUREMENT_TYPE",
         "code": "01",
         "title": "Andel"
     },

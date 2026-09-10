@@ -102,11 +102,6 @@ micronaut:
         read-timeout: 30s
         health-check: false
 
-  klass-web:
-    url:
-      en: https://www.ssb.no/en/klass
-      nb: https://www.ssb.no/klass
-
   metrics:
     sensitive: false
     enabled: true
@@ -123,6 +118,8 @@ micronaut:
         step: PT1M
 
 klass:
+  url:
+    web: "https://dataportal.ssb.no/classifications"
   classifications:
     subject-fields:
       id: 618

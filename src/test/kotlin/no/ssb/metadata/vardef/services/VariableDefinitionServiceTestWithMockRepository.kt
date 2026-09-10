@@ -10,6 +10,7 @@ import no.ssb.metadata.vardef.models.SupportedLanguages
 import no.ssb.metadata.vardef.models.VariableStatus
 import no.ssb.metadata.vardef.repositories.VariableDefinitionRepository
 import no.ssb.metadata.vardef.utils.INCOME_TAX_VP1_P1
+import no.ssb.metadata.vardef.utils.KLASS_URL_WEB_TEST_LANDBAK
 import no.ssb.metadata.vardef.utils.RENDERED_VIEW
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -86,11 +87,11 @@ class VariableDefinitionServiceTestWithMockRepository {
         every {
             mockKlassService.renderCode(any(), any(), any())
         } returns
-            KlassReference("https://www.ssb.no/en/klass/klassifikasjoner/91", "01", "Adresse")
+            KlassReference(KLASS_URL_WEB_TEST_LANDBAK, "01", "Adresse")
 
         every {
-            mockKlassService.getKlassUrlForIdAndLanguage(any(), any())
-        } returns "https://www.ssb.no/en/klass/klassifikasjoner/91"
+            mockKlassService.getKlassUrlWeb(any())
+        } returns KLASS_URL_WEB_TEST_LANDBAK
 
         every {
             variableDefinitionMockRepository.findDistinctDefinitionIdByVariableStatusInList(

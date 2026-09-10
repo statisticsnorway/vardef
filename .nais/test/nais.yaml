@@ -34,6 +34,7 @@ spec:
             - port: 27017
 
   envFrom:
+    - configmap: vardef-config
     - secret: metadata-vardef-test
     - secret: vardef-dapla-api-sa-token
 

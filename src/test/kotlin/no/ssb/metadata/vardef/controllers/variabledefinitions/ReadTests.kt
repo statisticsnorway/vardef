@@ -34,7 +34,7 @@ class ReadTests : BaseVardefTest() {
             .body(
                 "classification_uri",
                 equalTo(
-                    "https://www.ssb.no/klass/klassifikasjoner/91",
+                    KLASS_URL_WEB_TEST_LANDBAK,
                 ),
             )
     }

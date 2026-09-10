@@ -74,7 +74,7 @@ data class CompleteView(
             name = name.getValue(language),
             shortName = shortName,
             definition = definition.getValue(language),
-            classificationUri = classificationReference?.let { klassService.getKlassUrlForIdAndLanguage(it, language) },
+            classificationUri = classificationReference?.let { klassService.getKlassUrlWeb(it) },
             unitTypes = unitTypes.map { klassService.renderCode(klassConfiguration.unitTypesId(), it, language) },
             subjectFields = subjectFields.map { klassService.renderCode(klassConfiguration.subjectFieldsId(), it, language) },
             containsSpecialCategoriesOfPersonalData = containsSpecialCategoriesOfPersonalData,

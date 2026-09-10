@@ -15,12 +15,6 @@ import java.nio.file.Path
 
 const val KLASS_CLASSIFICATIONS_PROPERTY_NAME = "klass.static.classifications"
 
-@Serdeable
-data class StaticKlassCode(
-    val code: String,
-    val name: LanguageStringType,
-)
-
 // Deserializes test data from property in application-test.yaml
 @Serdeable
 @Requires(env = ["test"], notEnv = ["integration-test"], property = KLASS_CLASSIFICATIONS_PROPERTY_NAME)
@@ -53,11 +47,8 @@ class StaticClassification(
 class StaticKlassService(
     private val beanContext: BeanContext,
 ) : KlassService {
-    @Property(name = "micronaut.klass-web.url.nb")
-    private var klassUrlNb: String = ""
-
-    @Property(name = "micronaut.klass-web.url.en")
-    private var klassUrlEn: String = ""
+    @Property(name = "klass.url.web")
+    private lateinit var klassUrlWeb: String
 
     override fun getCodesFor(
         id: String,
@@ -89,19 +80,12 @@ class StaticKlassService(
 
         val klassCode = classification.codes?.find { it.code == code }
         val name = if (language == SupportedLanguages.NB) klassCode?.name else null
-        return KlassReference(getKlassUrlForIdAndLanguage(classificationId, language), klassCode?.code ?: code, name)
+        return KlassReference(
+            getKlassUrlWeb(classificationId),
+            klassCode?.code ?: code,
+            name,
+        )
     }
 
-    override fun getKlassUrlForIdAndLanguage(
-        classificationId: String,
-        language: SupportedLanguages,
-    ): String {
-        val baseUrl =
-            when (language) {
-                SupportedLanguages.NB -> klassUrlNb
-                SupportedLanguages.NN -> klassUrlNb
-                else -> klassUrlEn
-            }
-        return "$baseUrl/klassifikasjoner/$classificationId"
-    }
+    override fun getKlassUrlWeb(classificationId: String): String = "$klassUrlWeb/$classificationId"
 }

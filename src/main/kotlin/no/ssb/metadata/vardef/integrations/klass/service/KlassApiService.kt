@@ -29,11 +29,8 @@ open class KlassApiService(
 ) : KlassService {
     private val logger = LoggerFactory.getLogger(KlassApiService::class.java)
 
-    @Property(name = "micronaut.klass-web.url.nb")
-    private lateinit var klassUrlNb: String
-
-    @Property(name = "micronaut.klass-web.url.en")
-    private lateinit var klassUrlEn: String
+    @Property(name = "klass.url.web")
+    private lateinit var klassUrlWeb: String
 
     @CacheInvalidate(value = [CODES_CACHE, CLASSIFICATIONS_CACHE, KLASS_NOT_FOUND_CACHE], all = true)
     open fun invalidateCaches() = Unit
@@ -159,23 +156,13 @@ open class KlassApiService(
         }
 
         return KlassReference(
-            getKlassUrlForIdAndLanguage(classificationId, language),
+            getKlassUrlWeb(classificationId),
             codeObject?.code ?: code,
             codeObject?.name,
         )
     }
 
-    override fun getKlassUrlForIdAndLanguage(
-        classificationId: String,
-        language: SupportedLanguages,
-    ): String {
-        val baseUrl =
-            when (language) {
-                SupportedLanguages.NB, SupportedLanguages.NN -> klassUrlNb
-                SupportedLanguages.EN -> klassUrlEn
-            }
-        return "$baseUrl/klassifikasjoner/$classificationId"
-    }
+    override fun getKlassUrlWeb(classificationId: String): String = "$klassUrlWeb/$classificationId"
 
     companion object {
         private const val STATUS_500_MESSAGE = "Service is not available"

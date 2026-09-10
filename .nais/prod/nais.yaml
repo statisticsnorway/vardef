@@ -13,10 +13,9 @@ spec:
       rules:
         - application: metadata-api-gateway
     outbound:
+      rules:
+        - application: klass
       external:
-        # Allow egress to Klass
-        - host: data.ssb.no
-        # Allow egress to Vardok
         - host: ssb.no
         - host: www.ssb.no
         - host: dapla-api.ssb.no

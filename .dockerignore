@@ -1,23 +1,5 @@
-# Git
-.git
-.gitignore
+# Only include the built jar in the context
 
-# Gradle build output
-.gradle
-build
-out
-
-# IntelliJ
-.idea
-*.iml
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
-# Environment files
-.env
-.env.*
+*
+!build/libs/
+!build/libs/*-all.jar

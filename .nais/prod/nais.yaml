@@ -48,8 +48,10 @@ spec:
     max: 2
   resources:
     requests:
-      cpu: 20m
-      memory: 400Mi
+      cpu: 65m
+      memory: 1Gi
+    limits:
+      memory: 1Gi
 
   prometheus:
     enabled: true

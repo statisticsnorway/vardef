@@ -44,7 +44,6 @@ This ADR is `proposed`. No conditions are attached under which it should be acce
 * Schema changes become declared DDL, reviewable in pull requests and applied by a migration tool, rather than hand-written `updateMany` calls.
 * Migrations become transactional, so a failed migration leaves no partial state.
 * Test isolation can use transactional rollback, removing the delete-and-reseed cycle from every test method.
-* The twelve-minute Test Resources timeout can likely be reduced.
 * The database becomes a declarative block in the NAIS manifest, deleting six egress rules, two manually managed secrets and two Terraform files with their hand-seeded Atlas API keys.
 * Foreign keys to other variable definitions become enforceable by the datastore.
 * vardef stops being the only service in the organisation on MongoDB, and shares a datastore with `datadoc-service` in the same team.

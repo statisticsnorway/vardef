@@ -18,7 +18,7 @@ Data store: MongoDB Atlas
 
 ## Docker
 
-:warning: For running tests Docker versions before v29 must be used due to incompatibility in the API version used by Testcontainers. This will be resolved once we upgrade to Micronaut Test Resources v3+.
+Docker must be running to execute tests locally and in CI.
 
 ## Contributing
 

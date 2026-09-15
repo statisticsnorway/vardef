@@ -57,7 +57,7 @@ dependencies {
     aotPlugins(platform(libs.micronaut.platform))
 
     constraints {
-        implementation("io.netty:netty-bom:4.2.17.Final")
+        implementation("io.netty:netty-bom:4.2.18.Final")
         implementation("org.codehaus.plexus:plexus-utils:4.1.0")
         implementation("org.apache.commons:commons-lang3:3.20.0")
         implementation("commons-codec:commons-codec:1.22.1")

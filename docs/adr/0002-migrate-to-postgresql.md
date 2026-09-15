@@ -22,7 +22,6 @@ Listed strongest first. The organisational driver is the one that prompted this 
 * **Migrations are not safe.** `MongockRunner` runs with `setTransactional(false)`, so any migration that fails partway leaves the collection in a mixed state. One existing migration cannot be rolled back at all.
 * **Test isolation is expensive and structurally so.** Without transactions, `BaseVardefTest` deletes and re-saves the entire fixture set before every test method. This is not a test-code problem that can be fixed in test code.
 * **Infrastructure is hand-maintained where it could be declarative.** Six egress entries across two environments, manually managed secrets, and a duplicated Terraform stack with pre-seeded Atlas API keys — versus a `spec.gcp.sqlInstance` block with platform-injected credentials.
-* **The test toolchain is pinned to an old Docker.** Every developer must keep Docker below v29, with a twelve-minute container-start timeout configured to absorb the flakiness.
 * **Referential integrity is unenforceable.** References to KLASS entries and to other variable definitions are strings; nothing prevents them dangling.
 * **Being the only team on MongoDB is a standing risk.** There is no organisational mandate, and this has not yet caused a concrete problem. It is a risk rather than a driver: it affects platform support, on-call familiarity, review depth and the ease of moving people between services, and it is the kind of divergence that is cheapest to correct before it is forced.
 
@@ -45,7 +44,6 @@ This ADR is `proposed`. No conditions are attached under which it should be acce
 * Schema changes become declared DDL, reviewable in pull requests and applied by a migration tool, rather than hand-written `updateMany` calls.
 * Migrations become transactional, so a failed migration leaves no partial state.
 * Test isolation can use transactional rollback, removing the delete-and-reseed cycle from every test method.
-* The Docker version pin and the twelve-minute Test Resources timeout can both be dropped.
 * The database becomes a declarative block in the NAIS manifest, deleting six egress rules, two manually managed secrets and two Terraform files with their hand-seeded Atlas API keys.
 * Foreign keys to other variable definitions become enforceable by the datastore.
 * vardef stops being the only service in the organisation on MongoDB, and shares a datastore with `datadoc-service` in the same team.

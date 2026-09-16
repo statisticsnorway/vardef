@@ -10,7 +10,6 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule.IS_ANONYMOUS
-import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema

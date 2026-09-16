@@ -42,20 +42,3 @@ spec:
   type: service
   owner: 700_AM-utviklere
   lifecycle: production
----
-apiVersion: backstage.io/v1alpha1
-kind: API
-metadata:
-  name: vardef-api
-  title: Vardef API
-  description: |
-    Variable definitions API
-  tags:
-    - metadata
-spec:
-  type: openapi
-  system: metadata
-  owner: dapla-metadata-developers
-  lifecycle: experimental
-  definition:
-    $text: .

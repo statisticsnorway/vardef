@@ -63,6 +63,19 @@ class ReadTests : BaseVardefTest() {
     }
 
     @Test
+    fun `get vardef complete view by vardok id unauthenticated`(spec: RequestSpecification) {
+        val vardokId = "005"
+        spec
+            .given()
+            .auth()
+            .none()
+            .`when`()
+            .get("/vardok-migration/$vardokId")
+            .then()
+            .statusCode(HttpStatus.OK.code)
+    }
+
+    @Test
     fun `get vardok id by vardef id`(spec: RequestSpecification) {
         val vardokId = "005"
         val definitionId = DRAFT_BUS_EXAMPLE.definitionId

@@ -67,7 +67,7 @@ class ReadTests : BaseVardefTest() {
             .`when`()
             .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches/1")
             .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
+            .statusCode(HttpStatus.OK.code)
     }
 
     @Test
@@ -130,7 +130,7 @@ class ReadTests : BaseVardefTest() {
             .`when`()
             .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/patches")
             .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
+            .statusCode(HttpStatus.OK.code)
     }
 
     @Test

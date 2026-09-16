@@ -9,6 +9,7 @@ import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule.IS_ANONYMOUS
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
@@ -152,7 +153,7 @@ class VarDokMigrationController(
      * Get a vardok id by vardef id.
      */
     @Get("{vardef-id:$VARDEF_ID_PATH_PATTERN}")
-    @Secured(SecurityRule.IS_ANONYMOUS)
+    @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
     @NotFoundApiResponse
     @ApiResponse(
         content =
@@ -200,7 +201,7 @@ class VarDokMigrationController(
      * Get a variable definition by vardok id.
      */
     @Get("{vardok-id:$VARDOK_ID_PATH_PATTERN}")
-    @Secured(SecurityRule.IS_ANONYMOUS)
+    @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
     @ApiResponse(
         responseCode = "200",
         description = "OK response",
@@ -260,7 +261,7 @@ class VarDokMigrationController(
      */
     @Produces(MediaType.APPLICATION_JSON)
     @Get()
-    @Secured(SecurityRule.IS_ANONYMOUS)
+    @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
     @ApiResponse(
         content = [
             Content(

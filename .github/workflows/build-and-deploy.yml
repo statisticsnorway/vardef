@@ -13,6 +13,17 @@ on:
       - "gradle/**"
       - ".nais/**/nais.yaml"
       - ".github/workflows/build-and-deploy.yml"
+      - "Dockerfile"
+  pull_request:
+    paths:
+      - "src/**"
+      - "openapi/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle.properties"
+      - "gradle/**"
+      - ".github/workflows/build-and-deploy.yml"
+      - "Dockerfile"
   workflow_dispatch:
     inputs:
       cluster:

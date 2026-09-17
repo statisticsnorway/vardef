@@ -102,6 +102,7 @@ jobs:
           team: dapla-metadata
           dockerfile: Dockerfile
           docker_context: .
+          push_image: ${{ github.event_name != 'pull_request' }}
 
   deploy-test:
     name: Deploy to test

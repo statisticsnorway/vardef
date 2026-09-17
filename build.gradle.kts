@@ -61,6 +61,8 @@ dependencies {
         implementation("org.codehaus.plexus:plexus-utils:4.1.0")
         implementation("org.apache.commons:commons-lang3:3.20.0")
         implementation("commons-codec:commons-codec:1.22.1")
+        implementation("com.google.code.gson:gson:2.14.0")
+        implementation("org.apache.maven:maven-artifact:3.9.11")
         // Fix CVE-2026-54512 and related CVEs (HIGH severity) in jackson-databind 3.x
         implementation("tools.jackson.core:jackson-databind:3.2.2")
     }

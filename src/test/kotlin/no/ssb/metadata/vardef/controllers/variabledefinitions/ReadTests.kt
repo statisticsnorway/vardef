@@ -135,7 +135,7 @@ class ReadTests : BaseVardefTest() {
             .`when`()
             .get("/variable-definitions")
             .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
+            .statusCode(HttpStatus.OK.code)
     }
 
     @Test

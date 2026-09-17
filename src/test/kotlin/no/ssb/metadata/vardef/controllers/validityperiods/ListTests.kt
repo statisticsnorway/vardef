@@ -50,7 +50,7 @@ class ListTests : BaseVardefTest() {
             .`when`()
             .get("/variable-definitions/${INCOME_TAX_VP1_P1.definitionId}/validity-periods")
             .then()
-            .statusCode(HttpStatus.UNAUTHORIZED.code)
+            .statusCode(HttpStatus.OK.code)
     }
 
     @ParameterizedTest

@@ -18,7 +18,6 @@ class RoleBasedAccessControlTest : BaseVardefTest() {
     @ParameterizedTest
     @MethodSource("variableCreatorOperations")
     @MethodSource("variableOwnerOperations")
-    @MethodSource("variableConsumerOperations")
     fun `request unauthenticated`(
         method: Method,
         path: String,

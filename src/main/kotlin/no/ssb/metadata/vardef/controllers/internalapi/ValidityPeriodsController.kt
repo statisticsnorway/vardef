@@ -9,6 +9,7 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.Authentication
+import io.micronaut.security.rules.SecurityRule.IS_ANONYMOUS
 import io.micronaut.validation.Validated
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -119,6 +120,7 @@ class ValidityPeriodsController(
      * List all validity periods.
      */
     @Get
+    @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
     @ApiResponse(
         responseCode = "200",
         content = [

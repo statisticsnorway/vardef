@@ -11,7 +11,7 @@ info:
     This API allows for creation, maintenance and access of Variable Definitions.
 
     ### Ownership
-    Creation and maintenance of variables may only be performed by Statistics Norway employees representing a specific Dapla team, who are defined as the owners of a given Variable Definition. The team an owner represents must be specified when making a request through the `active_group` query parameter. All maintenance is to be performed by the owners, with no intervention from administrators.
+    Creation and maintenance of variables may only be performed by Statistics Norway employees representing a specific Dapla team, who are defined as the owners of a given Variable Definition. In order to create variables, the single team an owner currently represents must be specified in the bearer token. This is currently only supported from the Dapla Lab platform. All maintenance is to be performed by the owners, with no intervention from administrators.
 
     ### Status
     All Variable Definitions have an associated status. The possible values for status are `DRAFT`, `PUBLISHED_INTERNAL` and `PUBLISHED_EXTERNAL`.
@@ -67,7 +67,9 @@ servers:
   description: Internal test server
 - url: http://localhost:8080
   description: Local development
-security: []
+security:
+- keycloak_token: []
+- labid_token: []
 tags:
 - name: Validity Periods
   description: Create and access Validity Periods.
@@ -106,8 +108,6 @@ paths:
                         "vardef_id": "wypvb3wd"
                     }
                     ]
-      security:
-      - labid_token: []
   /vardok-migration/{vardef-id}:
     get:
       tags:
@@ -121,7 +121,7 @@ paths:
         description: The ID of a variable definition which has been migrated.
         required: true
         schema:
-          pattern: "[-a-zA-Z0-9_]{8}"
+          pattern: "^[a-zA-Z0-9-_]{8}$"
           type: string
         examples:
           Vardef id:
@@ -152,8 +152,6 @@ paths:
                 Vardef id:
                   value:
                     vardok_id: "1607"
-      security:
-      - labid_token: []
   /vardok-migration/{vardok-id}:
     get:
       tags:
@@ -175,19 +173,6 @@ paths:
           Not found:
             value: "9999"
       responses:
-        "404":
-          description: Not found
-          content:
-            application/problem+json:
-              schema:
-                $ref: https://opensource.zalando.com/restful-api-guidelines/models/problem-1.0.1.yaml#/Problem
-              examples:
-                Not found:
-                  value:
-                    type: about:blank
-                    status: 404
-                    detail: Not found
-                    parameters: {}
         "200":
           description: OK response
           content:
@@ -262,8 +247,19 @@ paths:
                     created_by: ano@ssb.no
                     last_updated_at: 2024-06-11T08:15:19.038Z
                     last_updated_by: ano@ssb.no
-      security:
-      - labid_token: []
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: https://opensource.zalando.com/restful-api-guidelines/models/problem-1.0.1.yaml#/Problem
+              examples:
+                Not found:
+                  value:
+                    type: about:blank
+                    status: 404
+                    detail: Not found
+                    parameters: {}
     post:
       tags:
       - Data Migration
@@ -393,9 +389,7 @@ paths:
         description: Render the variable definition in the given language.
         allowEmptyValue: true
         schema:
-          nullable: true
-          allOf:
-          - $ref: "#/components/schemas/SupportedLanguages"
+          $ref: "#/components/schemas/SupportedLanguages"
         examples:
           Date not specified:
             value: nb
@@ -561,27 +555,28 @@ paths:
                     [
                         {
                         "id": "wypvb3wd",
+                        "patch_id": 1,
                         "name": "Landbakgrunn",
-                        "short_name": "string",
+                        "short_name": "landbak",
                         "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
-                        "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
+                        "classification_uri": "https://dataportal.ssb.no/classifications/91",
                         "unit_types": [{
-                                "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/702",
+                                "reference_uri": "https://dataportal.ssb.no/classifications/702",
                                 "code": "20",
                                 "title": "Person"
                             }
                         ],
                         "subject_fields": [
                         {
-                                "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
+                                "reference_uri": "https://dataportal.ssb.no/classifications/618",
                                 "code": "be07",
                                 "title": "Innvandrere"
                             }
                         ],
                         "contains_special_categories_of_personal_data": true,
-                        "variable_status": "PUBLISHED_INTERNAL",
+                        "variable_status": "PUBLISHED_EXTERNAL",
                         "measurement_type": {
-                            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/303",
+                            "reference_uri": "https://dataportal.ssb.no/classifications/303",
                             "code": "01",
                             "title": "Andel"
                         },
@@ -606,8 +601,6 @@ paths:
                         "last_updated_by": "ano@ssb.no"
                     }
                     ]
-      security:
-      - labid_token: []
     post:
       tags:
       - Draft Variable Definitions
@@ -802,9 +795,7 @@ paths:
         description: Render the variable definition in the given language.
         allowEmptyValue: true
         schema:
-          nullable: true
-          allOf:
-          - $ref: "#/components/schemas/SupportedLanguages"
+          $ref: "#/components/schemas/SupportedLanguages"
         examples:
           Date not specified:
             value: nb
@@ -997,8 +988,9 @@ paths:
                 Rendered:
                   value:
                     id: wypvb3wd
+                    patch_id: 1
                     name: Landbakgrunn
-                    short_name: string
+                    short_name: landbak
                     definition: "For personer født i utlandet, er dette (med noen\
                       \ få unntak) eget fødeland. For personer født i Norge er det\
                       \ foreldrenes fødeland. I de tilfeller der foreldrene har ulikt\
@@ -1006,19 +998,19 @@ paths:
                       \ personen selv eller noen av foreldrene er utenlandsfødt, hentes\
                       \ landbakgrunn fra de første utenlandsfødte en treffer på i\
                       \ rekkefølgen mormor, morfar, farmor eller farfar."
-                    classification_uri: https://www.ssb.no/en/klass/klassifikasjoner/91
+                    classification_uri: https://dataportal.ssb.no/classifications/91
                     unit_types:
-                    - reference_uri: https://www.ssb.no/klass/klassifikasjoner/702
+                    - reference_uri: https://dataportal.ssb.no/classifications/702
                       code: "20"
                       title: Person
                     subject_fields:
-                    - reference_uri: https://www.ssb.no/klass/klassifikasjoner/618
+                    - reference_uri: https://dataportal.ssb.no/classifications/618
                       code: be07
                       title: Innvandrere
                     contains_special_categories_of_personal_data: true
-                    variable_status: PUBLISHED_INTERNAL
+                    variable_status: PUBLISHED_EXTERNAL
                     measurement_type:
-                      reference_uri: https://www.ssb.no/klass/klassifikasjoner/303
+                      reference_uri: https://dataportal.ssb.no/classifications/303
                       code: "01"
                       title: Andel
                     valid_from: 2003-01-01
@@ -1051,8 +1043,6 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
-      security:
-      - labid_token: []
     delete:
       tags:
       - Draft Variable Definitions
@@ -1104,14 +1094,13 @@ paths:
                     type: about:blank
                     status: 405
                     detail: Not allowed for variable definitions with this status.
-      security:
-      - labid_token: []
     patch:
       tags:
       - Draft Variable Definitions
       summary: Update a variable definition.
       description: Update a variable definition. Only the fields which need updating
-        should be supplied.
+        should be supplied. Fields supplied with explicit null values will be deleted
+        unless the field is required.
       operationId: updateVariableDefinitionById
       parameters:
       - name: variable-definition-id
@@ -1122,6 +1111,8 @@ paths:
           type: string
         examples:
           Update:
+            value: wypvb3wd
+          Delete field:
             value: wypvb3wd
           Not found:
             value: invalid id
@@ -1134,6 +1125,9 @@ paths:
               Update:
                 value:
                   classification_reference: 702
+              Delete field:
+                value:
+                  classification_reference: "null"
               Constraint violation:
                 value:
                   classification_reference: incorrect
@@ -1179,6 +1173,72 @@ paths:
                         \ landsbakgrunn frå dei første utenlandsfødte ein treffar\
                         \ på i rekkjefølgja mormor, morfar, farmor eller farfar."
                     classification_reference: "91"
+                    unit_types:
+                    - "01"
+                    - "02"
+                    subject_fields:
+                    - he04
+                    contains_special_categories_of_personal_data: true
+                    variable_status: DRAFT
+                    measurement_type: "01"
+                    valid_from: 2003-01-01
+                    external_reference_uri: https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb
+                    comment:
+                      nb: Fra og med 1.1.2003 ble definisjon endret til også å trekke
+                        inn besteforeldrenes fødeland.
+                      nn: Fra og med 1.1.2003 ble definisjon endret til også å trekke
+                        inn besteforeldrenes fødeland.
+                      en: "As of 1 January 2003, the definition was changed to also\
+                        \ include the grandparents' country of birth."
+                    related_variable_definition_uris:
+                    - https://example.com/
+                    owner:
+                      team: team-a
+                      groups:
+                      - team-a-developers
+                    contact:
+                      title:
+                        en: Division for population statistics
+                        nb: Seksjon for befolkningsstatistikk
+                        nn: Seksjon for befolkningsstatistikk
+                      email: s320@ssb.no
+                    created_at: 2024-06-11T08:15:19.038Z
+                    created_by: ano@ssb.no
+                    last_updated_at: 2024-06-11T08:15:19.038Z
+                    last_updated_by: ano@ssb.no
+                Delete field:
+                  value:
+                    id: wypvb3wd
+                    patch_id: 1
+                    name:
+                      en: Country Background
+                      nb: Landbakgrunn
+                      nn: Landbakgrunn
+                    short_name: landbak
+                    definition:
+                      en: "Country background is the person's own, the mother's or\
+                        \ possibly the father's country of birth. Persons without\
+                        \ an immigrant background always have Norway as country background.\
+                        \ In cases where the parents have different countries of birth\
+                        \ the mother's country of birth is chosen. If neither the\
+                        \ person nor the parents are born abroad, country background\
+                        \ is chosen from the first person born abroad in the order\
+                        \ mother's mother, mother's father, father's mother, father's\
+                        \ father."
+                      nb: "For personer født i utlandet, er dette (med noen få unntak)\
+                        \ eget fødeland. For personer født i Norge er det foreldrenes\
+                        \ fødeland. I de tilfeller der foreldrene har ulikt fødeland,\
+                        \ er det morens fødeland som blir valgt. Hvis ikke personen\
+                        \ selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn\
+                        \ fra de første utenlandsfødte en treffer på i rekkefølgen\
+                        \ mormor, morfar, farmor eller farfar."
+                      nn: "For personar fødd i utlandet, er dette (med nokre få unntak)\
+                        \ eige fødeland. For personar fødd i Noreg er det fødelandet\
+                        \ til foreldra. I dei tilfella der foreldra har ulikt fødeland,\
+                        \ er det fødelandet til mora som blir valt. Viss ikkje personen\
+                        \ sjølv eller nokon av foreldra er utenlandsfødt, blir henta\
+                        \ landsbakgrunn frå dei første utenlandsfødte ein treffar\
+                        \ på i rekkjefølgja mormor, morfar, farmor eller farfar."
                     unit_types:
                     - "01"
                     - "02"
@@ -1272,8 +1332,6 @@ paths:
                     type: about:blank
                     status: 409
                     detail: Short name is already in use by another variable definition.
-      security:
-      - labid_token: []
   /variable-definitions/{variable-definition-id}/patches:
     get:
       tags:
@@ -1370,8 +1428,6 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
-      security:
-      - labid_token: []
     post:
       tags:
       - Patches
@@ -1580,8 +1636,6 @@ paths:
                     type: about:blank
                     status: 405
                     detail: Not allowed for variable definitions with this status.
-      security:
-      - labid_token: []
   /variable-definitions/{variable-definition-id}/patches/{patch-id}:
     get:
       tags:
@@ -1702,8 +1756,6 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
-      security:
-      - labid_token: []
   /variable-definitions/{variable-definition-id}/validity-periods:
     get:
       tags:
@@ -1799,8 +1851,6 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
-      security:
-      - labid_token: []
     post:
       tags:
       - Validity Periods
@@ -1980,8 +2030,6 @@ paths:
                     type: about:blank
                     status: 405
                     detail: Not allowed for variable definitions with this status.
-      security:
-      - labid_token: []
 components:
   schemas:
     CompleteView:
@@ -2028,13 +2076,13 @@ components:
         unit_types:
           type: array
           description: "A list of one or more unit types, e.g. person, vehicle, household.\
-            \ Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702."
+            \ Must be defined as codes from https://dataportal.ssb.no/classifications/702."
           items:
             type: string
         subject_fields:
           type: array
           description: A list of subject fields that the variable is used in. Must
-            be defined as codes from https://www.ssb.no/klass/klassifikasjoner/618.
+            be defined as codes from https://dataportal.ssb.no/classifications/618.
           items:
             type: string
         contains_special_categories_of_personal_data:
@@ -2050,7 +2098,7 @@ components:
         measurement_type:
           type: string
           description: "Type of measurement for the variable, e.g. length, volume,\
-            \ currency. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303"
+            \ currency. Must be defined as codes from https://dataportal.ssb.no/classifications/303"
           nullable: true
         valid_from:
           type: string
@@ -2140,14 +2188,14 @@ components:
         unit_types:
           type: array
           description: "A list of one or more unit types, e.g. person, vehicle, household.\
-            \ Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702."
+            \ Must be defined as codes from https://dataportal.ssb.no/classifications/702."
           items:
             minLength: 1
             type: string
         subject_fields:
           type: array
           description: A list of subject fields that the variable is used in. Must
-            be defined as codes from https://www.ssb.no/klass/klassifikasjoner/618.
+            be defined as codes from https://dataportal.ssb.no/classifications/618.
           items:
             minLength: 1
             type: string
@@ -2163,7 +2211,7 @@ components:
         measurement_type:
           type: string
           description: "Type of measurement for the variable, e.g. length, volume,\
-            \ currency. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303"
+            \ currency. Must be defined as codes from https://dataportal.ssb.no/classifications/303"
           nullable: true
         valid_from:
           type: string
@@ -2266,7 +2314,7 @@ components:
         unit_types:
           type: array
           description: "A list of one or more unit types, e.g. person, vehicle, household.\
-            \ Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702."
+            \ Must be defined as codes from https://dataportal.ssb.no/classifications/702."
           nullable: true
           items:
             minLength: 1
@@ -2274,7 +2322,7 @@ components:
         subject_fields:
           type: array
           description: A list of subject fields that the variable is used in. Must
-            be defined as codes from https://www.ssb.no/klass/klassifikasjoner/618.
+            be defined as codes from https://dataportal.ssb.no/classifications/618.
           nullable: true
           items:
             minLength: 1
@@ -2295,7 +2343,7 @@ components:
         measurement_type:
           type: string
           description: "Type of measurement for the variable, e.g. length, volume,\
-            \ currency. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303"
+            \ currency. Must be defined as codes from https://dataportal.ssb.no/classifications/303"
           nullable: true
         valid_until:
           type: string
@@ -2397,7 +2445,7 @@ components:
         unit_types:
           type: array
           description: "A list of one or more unit types, e.g. person, vehicle, household.\
-            \ Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702."
+            \ Must be defined as codes from https://dataportal.ssb.no/classifications/702."
           nullable: true
           items:
             minLength: 1
@@ -2405,7 +2453,7 @@ components:
         subject_fields:
           type: array
           description: A list of subject fields that the variable is used in. Must
-            be defined as codes from https://www.ssb.no/klass/klassifikasjoner/618.
+            be defined as codes from https://dataportal.ssb.no/classifications/618.
           nullable: true
           items:
             minLength: 1
@@ -2422,7 +2470,7 @@ components:
         measurement_type:
           type: string
           description: "Type of measurement for the variable, e.g. length, volume,\
-            \ currency. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303"
+            \ currency. Must be defined as codes from https://dataportal.ssb.no/classifications/303"
           nullable: true
         valid_from:
           type: string
@@ -2668,27 +2716,28 @@ components:
         \ to end users."
       example:
         id: wypvb3wd
+        patch_id: 1
         name: Landbakgrunn
-        short_name: string
+        short_name: landbak
         definition: "For personer født i utlandet, er dette (med noen få unntak) eget\
           \ fødeland. For personer født i Norge er det foreldrenes fødeland. I de\
           \ tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som\
           \ blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfø\
           dt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefø\
           lgen mormor, morfar, farmor eller farfar."
-        classification_uri: https://www.ssb.no/en/klass/klassifikasjoner/91
+        classification_uri: https://dataportal.ssb.no/classifications/91
         unit_types:
-        - reference_uri: https://www.ssb.no/klass/klassifikasjoner/702
+        - reference_uri: https://dataportal.ssb.no/classifications/702
           code: "20"
           title: Person
         subject_fields:
-        - reference_uri: https://www.ssb.no/klass/klassifikasjoner/618
+        - reference_uri: https://dataportal.ssb.no/classifications/618
           code: be07
           title: Innvandrere
         contains_special_categories_of_personal_data: true
-        variable_status: PUBLISHED_INTERNAL
+        variable_status: PUBLISHED_EXTERNAL
         measurement_type:
-          reference_uri: https://www.ssb.no/klass/klassifikasjoner/303
+          reference_uri: https://dataportal.ssb.no/classifications/303
           code: "01"
           title: Andel
         valid_from: 2003-01-01
@@ -2744,7 +2793,7 @@ components:
         unit_types:
           type: array
           description: "A list of one or more unit types, e.g. person, vehicle, household.\
-            \ Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/702."
+            \ Must be defined as codes from https://dataportal.ssb.no/classifications/702."
           nullable: true
           items:
             minLength: 1
@@ -2752,7 +2801,7 @@ components:
         subject_fields:
           type: array
           description: A list of subject fields that the variable is used in. Must
-            be defined as codes from https://www.ssb.no/klass/klassifikasjoner/618.
+            be defined as codes from https://dataportal.ssb.no/classifications/618.
           nullable: true
           items:
             minLength: 1
@@ -2773,7 +2822,7 @@ components:
         measurement_type:
           type: string
           description: "Type of measurement for the variable, e.g. length, volume,\
-            \ currency. Must be defined as codes from https://www.ssb.no/klass/klassifikasjoner/303"
+            \ currency. Must be defined as codes from https://dataportal.ssb.no/classifications/303"
           nullable: true
         valid_from:
           type: string
@@ -2812,7 +2861,8 @@ components:
           allOf:
           - $ref: "#/components/schemas/Contact"
       description: Update variable definition Data structure with all fields optional
-        for updating a Draft Variable Definition.
+        for updating a Draft Variable Definition. Fields supplied with explicit null
+        values will be deleted unless the field is required.
       example:
         name:
           en: Country Background
@@ -2889,9 +2939,20 @@ components:
       - PUBLISHED_INTERNAL
       - PUBLISHED_EXTERNAL
   securitySchemes:
+    keycloak_token:
+      type: http
+      description: "A token granted by Statistics Norway's Keycloak instance. The\
+        \ `aud` claim must include `vardef`. Valid tokens are by default granted the\
+        \ `VARIABLE_CONSUMER` role. In order to be assigned the `VARIABLE_OWNER` role,\
+        \ the token must contain the `dapla` claim with team details populated by\
+        \ <a href=https://github.com/statisticsnorway/keycloak-iac/blob/6d04379c4a311c039e71b2b4b0d60690c3de920c/pkl/GenericClient.pkl#L160>`DaplaUserinfoMapper`</a>.\
+        \ These tokens may not be granted the `VARIABLE_CREATOR` role."
+      scheme: bearer
+      bearerFormat: JWT
     labid_token:
       type: http
       description: A token granted by Statistics Norway's LabID instance. May be obtained
-        from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service.
+        from a <a href=https://lab.dapla.ssb.no>Dapla Lab</a> service. Valid tokens
+        may be granted all of the available roles.
       scheme: bearer
       bearerFormat: JWT

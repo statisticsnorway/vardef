@@ -11,6 +11,7 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule.IS_ANONYMOUS
 import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
@@ -153,6 +154,7 @@ class VarDokMigrationController(
      */
     @Get("{vardef-id:$VARDEF_ID_PATH_PATTERN}")
     @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
+    @Operation(security = [])
     @NotFoundApiResponse
     @ApiResponse(
         content =
@@ -201,6 +203,7 @@ class VarDokMigrationController(
      */
     @Get("{vardok-id:$VARDOK_ID_PATH_PATTERN}")
     @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
+    @Operation(security = [])
     @ApiResponse(
         responseCode = "200",
         description = "OK response",
@@ -261,6 +264,7 @@ class VarDokMigrationController(
     @Produces(MediaType.APPLICATION_JSON)
     @Get()
     @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
+    @Operation(security = [])
     @ApiResponse(
         content = [
             Content(

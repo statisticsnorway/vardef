@@ -13,6 +13,7 @@ import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.rules.SecurityRule.IS_ANONYMOUS
 import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
@@ -75,6 +76,7 @@ class PatchesController(
     )
     @Get
     @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
+    @Operation(security = [])
     fun listPatches(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(
@@ -113,6 +115,7 @@ class PatchesController(
     @NotFoundApiResponse
     @Get("/{patch-id}")
     @Secured(IS_ANONYMOUS, Roles.VARIABLE_CONSUMER)
+    @Operation(security = [])
     fun getPatch(
         @PathVariable(VARIABLE_DEFINITION_ID_PATH_VARIABLE)
         @Parameter(

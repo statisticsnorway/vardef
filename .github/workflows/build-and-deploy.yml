@@ -72,7 +72,7 @@ jobs:
 
       - name: Build and push Docker image
         if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod' || inputs.cluster == 'test' || inputs.cluster == 'prod'
-        uses: nais/docker-build-push@0e73849f69ff260ee27597553c0a7848ca4e9795 # v0
+        uses: nais/docker-build-push@bfe52e3ad6d0e96fd1056a03acb7b619aaffb39d # v0
         id: docker-build-push
         with:
           team: dapla-metadata
@@ -92,7 +92,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
+      - uses: nais/deploy/actions/deploy@7ad7c2b833e1db74a80954e3ee6bb6ac060a8ae7 # v2
         env:
           CLUSTER: test
           RESOURCE: .nais/test/nais.yaml
@@ -113,7 +113,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
+      - uses: nais/deploy/actions/deploy@7ad7c2b833e1db74a80954e3ee6bb6ac060a8ae7 # v2
         env:
           CLUSTER: prod
           RESOURCE: .nais/prod/nais.yaml

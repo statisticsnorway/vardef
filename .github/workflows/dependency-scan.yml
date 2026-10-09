@@ -1,0 +1,22 @@
+name: Dependency scan
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *" # Runs every day at midnight
+  workflow_dispatch:
+
+jobs:
+  grype-scan:
+    uses: statisticsnorway/metadata-system/.github/workflows/dependency-scan.yaml@v1
+    permissions:
+      contents: read
+      packages: read
+      actions: read
+      security-events: write
+    with:
+      docker-context: .
+      dockerfile: Dockerfile
+      image: vardef:latest

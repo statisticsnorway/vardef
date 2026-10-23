@@ -9,7 +9,7 @@ RUN chmod +x ./gradlew
 COPY src src
 RUN ./gradlew shadowJar --no-daemon
 
-FROM gcr.io/distroless/java25-debian13@sha256:1d7a0cea4653f62be34a5b9b1da82a4dd097ae8935d1d3f4ab84146e0396fd2b
+FROM gcr.io/distroless/java25-debian13@sha256:227c14f972231e8db2ff9bfe0fe5c91fc80b689b35bafdce3f8d6b1204087a30
 WORKDIR /app
 COPY --from=builder /app/build/libs/*-all.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

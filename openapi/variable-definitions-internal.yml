@@ -61,6 +61,8 @@ info:
     url: https://creativecommons.org/licenses/by/4.0/deed.no
   version: "0.1"
 servers:
+- url: /
+  description: Current environment (same-origin)
 - url: https://metadata.intern.ssb.no
   description: Internal server
 - url: https://metadata.intern.test.ssb.no
@@ -108,6 +110,7 @@ paths:
                         "vardef_id": "wypvb3wd"
                     }
                     ]
+      security: []
   /vardok-migration/{vardef-id}:
     get:
       tags:
@@ -152,6 +155,7 @@ paths:
                 Vardef id:
                   value:
                     vardok_id: "1607"
+      security: []
   /vardok-migration/{vardok-id}:
     get:
       tags:
@@ -260,6 +264,7 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
+      security: []
     post:
       tags:
       - Data Migration
@@ -601,6 +606,7 @@ paths:
                         "last_updated_by": "ano@ssb.no"
                     }
                     ]
+      security: []
     post:
       tags:
       - Draft Variable Definitions
@@ -1043,6 +1049,7 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
+      security: []
     delete:
       tags:
       - Draft Variable Definitions
@@ -1428,6 +1435,7 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
+      security: []
     post:
       tags:
       - Patches
@@ -1756,6 +1764,7 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
+      security: []
   /variable-definitions/{variable-definition-id}/validity-periods:
     get:
       tags:
@@ -1851,6 +1860,7 @@ paths:
                     status: 404
                     detail: Not found
                     parameters: {}
+      security: []
     post:
       tags:
       - Validity Periods

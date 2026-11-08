@@ -50,6 +50,7 @@ Validity Periods are versions with a period defined by a `valid_from` date and o
                     contact = Contact(email = "metadata@ssb.no", name = "Team Metadata"),
                 ),
             servers = [
+                Server(url = "/", description = "Current environment (same-origin)"),
                 Server(url = "https://metadata.ssb.no", description = "Public server"),
                 Server(url = "https://metadata.test.ssb.no", description = "Public test server"),
                 Server(url = "http://localhost:8080", description = "Local development"),
@@ -124,6 +125,7 @@ Validity Periods are versions with a period defined by a `valid_from` date and o
                     contact = Contact(email = "metadata@ssb.no", name = "Team Metadata"),
                 ),
             servers = [
+                Server(url = "/", description = "Current environment (same-origin)"),
                 Server(
                     url = "https://metadata.intern.ssb.no",
                     description = "Internal server",

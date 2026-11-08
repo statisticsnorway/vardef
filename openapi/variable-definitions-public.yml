@@ -1,7 +1,22 @@
 openapi: 3.0.1
 info:
   title: Public Variable Definitions API
-  description: Public Variable Definitions
+  description: |2
+
+    ## Introduction
+    Variable Definitions are centralized definitions of concrete variables which are typically present in multiple datasets. Variable Definitions support standardization of data and metadata and facilitate sharing and joining of data by clarifying when variables have an identical definition.
+
+    ## Read Access
+    This API exposes Variable Definitions with status `PUBLISHED_EXTERNAL`. No authentication is required.
+
+    ### Language
+    Responses are rendered in the language given by the `Accept-Language` header. Supported values are `nb` (Norwegian Bokmål), `nn` (Norwegian Nynorsk) and `en` (English). The default is `nb`.
+
+    ### Immutability
+    Variable Definitions are immutable. This means that any changes must be performed in a strict versioning system. Consumers can avoid being exposed to breaking changes by specifying a `date_of_validity` when they request a Variable Definition.
+
+    #### Validity Periods
+    Validity Periods are versions with a period defined by a `valid_from` date and optionally a `valid_until` date. A new Validity Period indicates that the fundamental meaning of the Variable Definition has changed from that date onwards.
   contact:
     name: Team Metadata
     email: metadata@ssb.no
@@ -10,6 +25,8 @@ info:
     url: https://creativecommons.org/licenses/by/4.0/deed.no
   version: "0.1"
 servers:
+- url: /
+  description: Current environment (same-origin)
 - url: https://metadata.ssb.no
   description: Public server
 - url: https://metadata.test.ssb.no
@@ -37,9 +54,7 @@ paths:
         description: Render the variable definition in the given language.
         allowEmptyValue: true
         schema:
-          nullable: true
-          allOf:
-          - $ref: "#/components/schemas/SupportedLanguages"
+          $ref: "#/components/schemas/SupportedLanguages"
         examples:
           Date not specified:
             value: nb
@@ -54,6 +69,16 @@ paths:
         examples:
           Specific date:
             value: 1970-01-01
+      - name: short_name
+        in: query
+        description: List only the variable definition with the given short name.
+        explode: false
+        schema:
+          type: string
+          nullable: true
+        examples:
+          Specific short_name:
+            value: landbak
       responses:
         "200":
           description: OK response
@@ -69,27 +94,79 @@ paths:
                     [
                         {
                         "id": "wypvb3wd",
+                        "patch_id": 1,
                         "name": "Landbakgrunn",
-                        "short_name": "string",
+                        "short_name": "landbak",
                         "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
-                        "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
+                        "classification_uri": "https://dataportal.ssb.no/classifications/91",
                         "unit_types": [{
-                                "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/702",
+                                "reference_uri": "https://dataportal.ssb.no/classifications/702",
                                 "code": "20",
                                 "title": "Person"
                             }
                         ],
                         "subject_fields": [
                         {
-                                "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
+                                "reference_uri": "https://dataportal.ssb.no/classifications/618",
                                 "code": "be07",
                                 "title": "Innvandrere"
                             }
                         ],
                         "contains_special_categories_of_personal_data": true,
-                        "variable_status": "PUBLISHED_INTERNAL",
+                        "variable_status": "PUBLISHED_EXTERNAL",
                         "measurement_type": {
-                            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/303",
+                            "reference_uri": "https://dataportal.ssb.no/classifications/303",
+                            "code": "01",
+                            "title": "Andel"
+                        },
+                        "valid_from": "2003-01-01",
+                        "valid_until": null,
+                        "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+                        "comment": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+                        "related_variable_definition_uris": [
+                            "https://example.com/"
+                        ],
+                        "owner": {
+                            "team": "team-a",
+                            "groups": ["team-a-developers"]
+                        },
+                        "contact": {
+                            "title": "Seksjon for befolkningsstatistikk",
+                            "email": "s320@ssb.no"
+                        },
+                        "created_at": "2024-06-11T08:15:19.038Z",
+                        "created_by": "ano@ssb.no",
+                        "last_updated_at": "2024-06-11T08:15:19.038Z",
+                        "last_updated_by": "ano@ssb.no"
+                    }
+                    ]
+                Specific short_name:
+                  value: |-
+                    [
+                        {
+                        "id": "wypvb3wd",
+                        "patch_id": 1,
+                        "name": "Landbakgrunn",
+                        "short_name": "landbak",
+                        "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
+                        "classification_uri": "https://dataportal.ssb.no/classifications/91",
+                        "unit_types": [{
+                                "reference_uri": "https://dataportal.ssb.no/classifications/702",
+                                "code": "20",
+                                "title": "Person"
+                            }
+                        ],
+                        "subject_fields": [
+                        {
+                                "reference_uri": "https://dataportal.ssb.no/classifications/618",
+                                "code": "be07",
+                                "title": "Innvandrere"
+                            }
+                        ],
+                        "contains_special_categories_of_personal_data": true,
+                        "variable_status": "PUBLISHED_EXTERNAL",
+                        "measurement_type": {
+                            "reference_uri": "https://dataportal.ssb.no/classifications/303",
                             "code": "01",
                             "title": "Andel"
                         },
@@ -143,9 +220,7 @@ paths:
         description: Render the variable definition in the given language.
         allowEmptyValue: true
         schema:
-          nullable: true
-          allOf:
-          - $ref: "#/components/schemas/SupportedLanguages"
+          $ref: "#/components/schemas/SupportedLanguages"
         examples:
           Date not specified:
             value: nb
@@ -173,8 +248,9 @@ paths:
                 Date not specified:
                   value:
                     id: wypvb3wd
+                    patch_id: 1
                     name: Landbakgrunn
-                    short_name: string
+                    short_name: landbak
                     definition: "For personer født i utlandet, er dette (med noen\
                       \ få unntak) eget fødeland. For personer født i Norge er det\
                       \ foreldrenes fødeland. I de tilfeller der foreldrene har ulikt\
@@ -182,19 +258,19 @@ paths:
                       \ personen selv eller noen av foreldrene er utenlandsfødt, hentes\
                       \ landbakgrunn fra de første utenlandsfødte en treffer på i\
                       \ rekkefølgen mormor, morfar, farmor eller farfar."
-                    classification_uri: https://www.ssb.no/en/klass/klassifikasjoner/91
+                    classification_uri: https://dataportal.ssb.no/classifications/91
                     unit_types:
-                    - reference_uri: https://www.ssb.no/klass/klassifikasjoner/702
+                    - reference_uri: https://dataportal.ssb.no/classifications/702
                       code: "20"
                       title: Person
                     subject_fields:
-                    - reference_uri: https://www.ssb.no/klass/klassifikasjoner/618
+                    - reference_uri: https://dataportal.ssb.no/classifications/618
                       code: be07
                       title: Innvandrere
                     contains_special_categories_of_personal_data: true
-                    variable_status: PUBLISHED_INTERNAL
+                    variable_status: PUBLISHED_EXTERNAL
                     measurement_type:
-                      reference_uri: https://www.ssb.no/klass/klassifikasjoner/303
+                      reference_uri: https://dataportal.ssb.no/classifications/303
                       code: "01"
                       title: Andel
                     valid_from: 2003-01-01
@@ -217,8 +293,9 @@ paths:
                 Specific date:
                   value:
                     id: wypvb3wd
+                    patch_id: 1
                     name: Landbakgrunn
-                    short_name: string
+                    short_name: landbak
                     definition: "For personer født i utlandet, er dette (med noen\
                       \ få unntak) eget fødeland. For personer født i Norge er det\
                       \ foreldrenes fødeland. I de tilfeller der foreldrene har ulikt\
@@ -226,19 +303,19 @@ paths:
                       \ personen selv eller noen av foreldrene er utenlandsfødt, hentes\
                       \ landbakgrunn fra de første utenlandsfødte en treffer på i\
                       \ rekkefølgen mormor, morfar, farmor eller farfar."
-                    classification_uri: https://www.ssb.no/en/klass/klassifikasjoner/91
+                    classification_uri: https://dataportal.ssb.no/classifications/91
                     unit_types:
-                    - reference_uri: https://www.ssb.no/klass/klassifikasjoner/702
+                    - reference_uri: https://dataportal.ssb.no/classifications/702
                       code: "20"
                       title: Person
                     subject_fields:
-                    - reference_uri: https://www.ssb.no/klass/klassifikasjoner/618
+                    - reference_uri: https://dataportal.ssb.no/classifications/618
                       code: be07
                       title: Innvandrere
                     contains_special_categories_of_personal_data: true
-                    variable_status: PUBLISHED_INTERNAL
+                    variable_status: PUBLISHED_EXTERNAL
                     measurement_type:
-                      reference_uri: https://www.ssb.no/klass/klassifikasjoner/303
+                      reference_uri: https://dataportal.ssb.no/classifications/303
                       code: "01"
                       title: Andel
                     valid_from: 2003-01-01
@@ -296,9 +373,7 @@ paths:
         description: Render the variable definition in the given language.
         allowEmptyValue: true
         schema:
-          nullable: true
-          allOf:
-          - $ref: "#/components/schemas/SupportedLanguages"
+          $ref: "#/components/schemas/SupportedLanguages"
         examples:
           Validity periods:
             value: nb
@@ -319,27 +394,28 @@ paths:
                     [
                         {
                         "id": "wypvb3wd",
+                        "patch_id": 1,
                         "name": "Landbakgrunn",
-                        "short_name": "string",
+                        "short_name": "landbak",
                         "definition": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
-                        "classification_uri": "https://www.ssb.no/en/klass/klassifikasjoner/91",
+                        "classification_uri": "https://dataportal.ssb.no/classifications/91",
                         "unit_types": [{
-                                "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/702",
+                                "reference_uri": "https://dataportal.ssb.no/classifications/702",
                                 "code": "20",
                                 "title": "Person"
                             }
                         ],
                         "subject_fields": [
                         {
-                                "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/618",
+                                "reference_uri": "https://dataportal.ssb.no/classifications/618",
                                 "code": "be07",
                                 "title": "Innvandrere"
                             }
                         ],
                         "contains_special_categories_of_personal_data": true,
-                        "variable_status": "PUBLISHED_INTERNAL",
+                        "variable_status": "PUBLISHED_EXTERNAL",
                         "measurement_type": {
-                            "reference_uri": "https://www.ssb.no/klass/klassifikasjoner/303",
+                            "reference_uri": "https://dataportal.ssb.no/classifications/303",
                             "code": "01",
                             "title": "Andel"
                         },
@@ -364,6 +440,19 @@ paths:
                         "last_updated_by": "ano@ssb.no"
                     }
                     ]
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: https://opensource.zalando.com/restful-api-guidelines/models/problem-1.0.1.yaml#/Problem
+              examples:
+                Not found:
+                  value:
+                    type: about:blank
+                    status: 404
+                    detail: Not found
+                    parameters: {}
 components:
   schemas:
     KlassReference:
@@ -533,27 +622,28 @@ components:
         \ to end users."
       example:
         id: wypvb3wd
+        patch_id: 1
         name: Landbakgrunn
-        short_name: string
+        short_name: landbak
         definition: "For personer født i utlandet, er dette (med noen få unntak) eget\
           \ fødeland. For personer født i Norge er det foreldrenes fødeland. I de\
           \ tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som\
           \ blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfø\
           dt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefø\
           lgen mormor, morfar, farmor eller farfar."
-        classification_uri: https://www.ssb.no/en/klass/klassifikasjoner/91
+        classification_uri: https://dataportal.ssb.no/classifications/91
         unit_types:
-        - reference_uri: https://www.ssb.no/klass/klassifikasjoner/702
+        - reference_uri: https://dataportal.ssb.no/classifications/702
           code: "20"
           title: Person
         subject_fields:
-        - reference_uri: https://www.ssb.no/klass/klassifikasjoner/618
+        - reference_uri: https://dataportal.ssb.no/classifications/618
           code: be07
           title: Innvandrere
         contains_special_categories_of_personal_data: true
-        variable_status: PUBLISHED_INTERNAL
+        variable_status: PUBLISHED_EXTERNAL
         measurement_type:
-          reference_uri: https://www.ssb.no/klass/klassifikasjoner/303
+          reference_uri: https://dataportal.ssb.no/classifications/303
           code: "01"
           title: Andel
         valid_from: 2003-01-01

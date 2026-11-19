@@ -24,6 +24,10 @@ mongodb:
   package-names:
     - no.ssb.metadata.vardef.models
     - no.ssb.metadata.vardef.integrations.vardok.models
+test-resources:
+  containers:
+    mongodb:
+      image-name: mongo:8.3.17
 # Configuration which applies under unit/integration tests (NOT the deployment environment called "test")
 klass:
   static:

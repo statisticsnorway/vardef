@@ -7,7 +7,6 @@ on:
       - src/**
       - gradle/libs.versions.toml
       - build.gradle.kts
-      - Dockerfile
       - .github/workflows/run-tests.yml
 permissions:
   contents: "read"

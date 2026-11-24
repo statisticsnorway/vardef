@@ -35,19 +35,6 @@ spec:
             severity: critical
             environment: test
 
-        - alert: HighPriorityVulnerability
-          expr: nais_workload_vulnerabilities_priority{priority="HIGH", workload_namespace="dapla-metadata", workload_name="vardef"} > 0
-          for: 10m
-          annotations:
-            summary: "High-priority vulnerability detected in {{ $labels.workload_name }}"
-            consequence: "The workload has one or more HIGH priority vulnerabilities."
-            action: "Open Nais Console and handle the vulnerability for {{ $labels.workload_name }}."
-          labels:
-            service: vardef
-            namespace: dapla-metadata
-            severity: warning
-            environment: test
-
         - alert: A Vardef client is unavailable
           expr: rate(http_client_requests_seconds_count{app="vardef", status!="200"}[1m]) > 0
           for: 1m

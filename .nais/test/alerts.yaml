@@ -22,12 +22,12 @@ spec:
             severity: critical
             environment: test
 
-        - alert: KnownExploitedVulnerability
-          expr: nais_workload_vulnerabilities_kev{workload_namespace="dapla-metadata", workload_name="vardef"} > 0
+        - alert: HighPriorityVulnerability
+          expr: nais_workload_vulnerabilities_priority{priority="HIGH", workload_namespace="dapla-metadata", workload_name="vardef"} > 0
           for: 10m
           annotations:
-            summary: "Known exploited vulnerability detected in {{ $labels.workload_name }}"
-            consequence: "The workload has one or more vulnerabilities with known exploitation."
+            summary: "High-priority vulnerability detected in {{ $labels.workload_name }}"
+            consequence: "The workload has one or more HIGH priority vulnerabilities, including known exploitation, known ransomware use, or high predicted exploitation likelihood."
             action: "Open Nais Console and handle the vulnerability for {{ $labels.workload_name }}."
           labels:
             service: vardef

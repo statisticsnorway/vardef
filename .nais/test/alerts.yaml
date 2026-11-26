@@ -29,7 +29,7 @@ spec:
           annotations:
             summary: "Known exploited HIGH priority vulnerability detected in {{ $labels.workload_name }}"
             consequence: "The workload has one or more HIGH priority vulnerabilities with known exploitation listed in the CISA KEV catalog."
-            action: "Open Nais Console and handle the vulnerability for {{ $labels.workload_name }}."
+            action: "View and handle vulnerabilities in Nais Console: https://console.ssb.cloud.nais.io/team/dapla-metadata/test/app/vardef/vulnerabilities"
           labels:
             service: vardef
             namespace: dapla-metadata

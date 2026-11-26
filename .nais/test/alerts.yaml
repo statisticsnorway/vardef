@@ -22,6 +22,20 @@ spec:
             severity: critical
             environment: test
 
+        # KEV findings are always HIGH priority; exclude findings based only on predicted exploitation.
+        - alert: KnownExploitedVulnerability
+          expr: nais_workload_vulnerabilities_kev{workload_namespace="dapla-metadata", workload_name="vardef"} > 0
+          for: 10m
+          annotations:
+            summary: "Known exploited HIGH priority vulnerability detected in {{ $labels.workload_name }}"
+            consequence: "The workload has one or more HIGH priority vulnerabilities with known exploitation listed in the CISA KEV catalog."
+            action: "View and handle vulnerabilities in Nais Console: https://console.ssb.cloud.nais.io/team/dapla-metadata/test/app/vardef/vulnerabilities"
+          labels:
+            service: vardef
+            namespace: dapla-metadata
+            severity: critical
+            environment: test
+
         - alert: A Vardef client is unavailable
           expr: rate(http_client_requests_seconds_count{app="vardef", status!="200"}[1m]) > 0
           for: 1m
